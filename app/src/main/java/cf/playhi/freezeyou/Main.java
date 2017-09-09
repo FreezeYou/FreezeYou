@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -57,7 +59,7 @@ public class Main extends Activity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int ii) {
                                 createShortCut(getPackageManager().getApplicationLabel(applicationInfoF.get(i)).toString(),
-                                        applicationInfoF.get(i).packageName);
+                                        applicationInfoF.get(i).packageName,getPackageManager().getApplicationIcon(applicationInfoF.get(i)));
                             }
                         })
                         .create();
@@ -66,13 +68,14 @@ public class Main extends Activity {
         });
     }
 
-    public void createShortCut(String title,String pkgName){
+    public void createShortCut(String title, String pkgName, Drawable icon){
         Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
 //        Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.icon);
         Intent intent = new Intent(getApplicationContext(), Freeze.class);
         intent.putExtra("pkgName",pkgName);
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
-//        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, icon);
+        BitmapDrawable bd = (BitmapDrawable) icon;
+        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON,bd.getBitmap());
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
         sendBroadcast(addShortCut);
     }
