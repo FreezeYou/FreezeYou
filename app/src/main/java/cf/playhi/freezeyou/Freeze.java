@@ -3,6 +3,7 @@ package cf.playhi.freezeyou;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -43,7 +44,6 @@ public class Freeze extends Activity{
 //            while ((line = in.readLine()) != null) {
 //                backData += line + "\n";
 //            }
-                                Toast.makeText(getApplicationContext(),process.getInputStream().toString(),Toast.LENGTH_LONG).show();
                                 outputStream = new DataOutputStream(process.getOutputStream());
                                 outputStream.writeBytes("pm disable " + pkgName + "\n");
                                 outputStream.writeBytes("exit\n");
@@ -59,13 +59,12 @@ public class Freeze extends Activity{
                         }
                     }
                 })
-                .setPositiveButton("运行", new DialogInterface.OnClickListener() {
+                .setPositiveButton("解冻", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (backData.equals("backData")){
                             try {
                                 process = Runtime.getRuntime().exec("su");
-                                Toast.makeText(getApplicationContext(),process.getInputStream().toString(),Toast.LENGTH_LONG).show();
                                 outputStream = new DataOutputStream(process.getOutputStream());
                                 outputStream.writeBytes("pm enable " + pkgName + "\n");
                                 outputStream.writeBytes("exit\n");
@@ -76,8 +75,28 @@ public class Freeze extends Activity{
                                 Toast.makeText(getApplicationContext(),"异常 "+e.getMessage(),Toast.LENGTH_LONG).show();
                                 destroyProcess(true);
                             }
-                            Toast.makeText(getApplicationContext(),"执行完成",Toast.LENGTH_LONG).show();
-                            destroyProcess(true);
+//                            Toast.makeText(getApplicationContext(),"执行完成",Toast.LENGTH_LONG).show();
+//                            destroyProcess(true);
+                            AlertDialog alertDialog = new AlertDialog.Builder(Freeze.this)
+                                    .setTitle("提示")
+                                    .setMessage("已解冻，立即启动？")
+                                    .setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            destroyProcess(true);
+                                        }
+                                    })
+                                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int ii) {
+                                            startActivity(new Intent(
+                                                    getPackageManager().getLaunchIntentForPackage(pkgName)
+                                            ));
+                                            destroyProcess(true);
+                                        }
+                                    })
+                                    .create();
+                            alertDialog.show();
                         }
                     }
                 })
