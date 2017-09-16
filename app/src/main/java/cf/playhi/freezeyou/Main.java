@@ -36,30 +36,32 @@ public class Main extends Activity {
 
                 final ListView app_listView = findViewById(R.id.app_list);
                 final ProgressBar progressBar = findViewById(R.id.progressBar);
-                final List<Map<String, String>> AppList = new ArrayList<Map<String, String>>();
+                final List<Map<String, Object>> AppList = new ArrayList<>();
                 List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(0);
                 int size = applicationInfo.size();
                 for(int i=0;i<size;i++){
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
-                    Map<String, String> keyValuePair = new HashMap<String, String>();
+                    Map<String, Object> keyValuePair = new HashMap<>();
+                    keyValuePair.put("Img",getPackageManager().getApplicationIcon(applicationInfo.get(i)));
                     keyValuePair.put("Name", name);
                     keyValuePair.put("PackageName", packageName);
                     AppList.add(keyValuePair);
                 }
 
                 if (!AppList.isEmpty()) {
-                    Collections.sort(AppList, new Comparator<Map<String,String>>() {
+                    Collections.sort(AppList, new Comparator<Map<String,Object>>() {
+
                         @Override
-                        public int compare(Map<String, String> stringStringMap, Map<String, String> t1) {
-                            return ((String) stringStringMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
+                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
                         }
                     });
                 }
 
                 final ListAdapter adapter = new SimpleAdapter(Main.this, AppList,
-                        android.R.layout.simple_list_item_2, new String[] { "Name",
-                        "PackageName" }, new int[] { android.R.id.text1,android.R.id.text2 });
+                        R.layout.app_list_1, new String[] { "Img","Name",
+                        "PackageName" }, new int[] { R.id.img,R.id.name,R.id.pkgName});
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
