@@ -11,7 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -43,7 +43,11 @@ public class Main extends Activity {
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
                     Map<String, Object> keyValuePair = new HashMap<>();
-                    keyValuePair.put("Img",getPackageManager().getApplicationIcon(applicationInfo.get(i)));
+                    if (getPackageManager().getApplicationIcon(applicationInfo.get(i))!=null){
+                        keyValuePair.put("Img",getPackageManager().getApplicationIcon(applicationInfo.get(i)));
+                    }else {
+                        keyValuePair.put("Img",android.R.drawable.sym_def_app_icon);
+                    }
                     keyValuePair.put("Name", name);
                     keyValuePair.put("PackageName", packageName);
                     AppList.add(keyValuePair);
@@ -59,9 +63,22 @@ public class Main extends Activity {
                     });
                 }
 
-                final ListAdapter adapter = new SimpleAdapter(Main.this, AppList,
+                final SimpleAdapter adapter = new SimpleAdapter(Main.this, AppList,
                         R.layout.app_list_1, new String[] { "Img","Name",
                         "PackageName" }, new int[] { R.id.img,R.id.name,R.id.pkgName});
+
+                adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+                    public boolean setViewValue(View view, Object data,
+                                                String textRepresentation) {
+                        if (view instanceof ImageView && data instanceof Drawable) {
+                            ImageView imageView = (ImageView) view;
+                            imageView.setImageDrawable((Drawable) data);
+                            return true;
+                        } else
+                            return false;
+                    }
+                });
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -69,6 +86,7 @@ public class Main extends Activity {
                         app_listView.setAdapter(adapter);
                     }
                 });
+
 
                 app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
