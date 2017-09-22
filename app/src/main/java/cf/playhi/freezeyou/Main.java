@@ -12,9 +12,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,31 +28,38 @@ import java.util.Map;
 //com.ibm.icu.text.Collator
 
 public class Main extends Activity {
+    Thread initThread;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        new Thread(new Runnable() {
+        initThread = new Thread(new Runnable() {
             @Override
             public void run() {
 
                 final ListView app_listView = findViewById(R.id.app_list);
                 final ProgressBar progressBar = findViewById(R.id.progressBar);
+                final TextView textView = findViewById(R.id.textView);
+                final LinearLayout linearLayout = findViewById(R.id.layout2);
                 final List<Map<String, Object>> AppList = new ArrayList<>();
+                Drawable icon;
                 List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(0);
                 int size = applicationInfo.size();
                 for(int i=0;i<size;i++){
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
-                    Map<String, Object> keyValuePair = new HashMap<>();
-                    if (getPackageManager().getApplicationIcon(applicationInfo.get(i))!=null){
-                        keyValuePair.put("Img",getPackageManager().getApplicationIcon(applicationInfo.get(i)));
-                    }else {
-                        keyValuePair.put("Img",android.R.drawable.sym_def_app_icon);
+                    if (!(packageName.equals("android")||packageName.equals("cf.playhi.freezeyou"))){
+                        Map<String, Object> keyValuePair = new HashMap<>();
+                        icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
+                        if (icon!=null){
+                            keyValuePair.put("Img",icon);
+                        }else {
+                            keyValuePair.put("Img",android.R.drawable.sym_def_app_icon);
+                        }
+                        keyValuePair.put("Name", name);
+                        keyValuePair.put("PackageName", packageName);
+                        AppList.add(keyValuePair);
                     }
-                    keyValuePair.put("Name", name);
-                    keyValuePair.put("PackageName", packageName);
-                    AppList.add(keyValuePair);
                 }
 
                 if (!AppList.isEmpty()) {
@@ -83,6 +92,8 @@ public class Main extends Activity {
                     @Override
                     public void run() {
                         progressBar.setVisibility(View.GONE);
+                        textView.setVisibility(View.GONE);
+                        linearLayout.setVisibility(View.GONE);
                         app_listView.setAdapter(adapter);
                     }
                 });
@@ -118,7 +129,8 @@ public class Main extends Activity {
                     }
                 });
             }
-        }).start();
+        });
+        initThread.start();
     }
 
     public void createShortCut(String title, String pkgName, Drawable icon){
@@ -133,4 +145,5 @@ public class Main extends Activity {
         sendBroadcast(addShortCut);
         Toast.makeText(getApplicationContext(),"已发出创建请求",Toast.LENGTH_SHORT).show();
     }
+
 }
