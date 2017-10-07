@@ -140,10 +140,15 @@ public class Main extends Activity {
         intent.putExtra("pkgName",pkgName);
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
         BitmapDrawable bd = (BitmapDrawable) icon;
-        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON,bd.getBitmap());
+        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
-        sendBroadcast(addShortCut);
-        Toast.makeText(getApplicationContext(),"已发出创建请求",Toast.LENGTH_SHORT).show();
+        try{
+
+            sendBroadcast(addShortCut);
+            Toast.makeText(getApplicationContext(),"已发出创建请求",Toast.LENGTH_SHORT).show();
+        } catch (Exception e){
+            Toast.makeText(getApplicationContext(),"请求创建失败："+e.getMessage(),Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
