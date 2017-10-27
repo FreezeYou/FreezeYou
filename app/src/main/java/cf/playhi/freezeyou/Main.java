@@ -131,6 +131,16 @@ public class Main extends Activity {
             }
         });
         initThread.start();
+        AlertDialog alertDialog = new AlertDialog.Builder(Main.this)
+                .setTitle("警告")
+                .setMessage("不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！")
+                .setPositiveButton("好的", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int ii) {
+                    }
+                })
+                .create();
+        alertDialog.show();
     }
 
     public void createShortCut(String title, String pkgName, Drawable icon){
