@@ -7,13 +7,15 @@ android {
         applicationId "cf.playhi.freezeyou"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 20
-        versionName '1.4'
+        versionCode 22
+        versionName '1.5'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            zipAlignEnabled true
         }
     }
     productFlavors {

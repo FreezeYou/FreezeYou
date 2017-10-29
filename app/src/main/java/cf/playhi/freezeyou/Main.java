@@ -19,6 +19,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,6 +29,8 @@ import java.util.Map;
 //com.ibm.icu.text.Collator
 
 public class Main extends Activity {
+    DataOutputStream outputStream = null;
+    java.lang.Process process = null;
     Thread initThread;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,21 @@ public class Main extends Activity {
                     }
                 });
 
+                app_listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
+                        final String name=map.get("Name");
+                        final String pkgName=map.get("PackageName");
+
+                        if (getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
+                            Support.makeDialog2(name,"请选择具体操作",Main.this,false,"backData",pkgName);
+                        } else {
+                            Support.makeDialog(name,"请选择具体操作",Main.this,false,"backData",pkgName);
+                        }
+                        return true;
+                    }
+                });
 
                 app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -133,7 +151,7 @@ public class Main extends Activity {
         initThread.start();
         AlertDialog alertDialog = new AlertDialog.Builder(Main.this)
                 .setTitle("警告")
-                .setMessage("不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！")
+                .setMessage("不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n\n长按可以直接呼出冻结/解冻菜单\n短按请在桌面快捷方式执行冻结/解冻操作\n\n请谨慎操作！")
                 .setPositiveButton("好的", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int ii) {
@@ -160,5 +178,4 @@ public class Main extends Activity {
             Toast.makeText(getApplicationContext(),"请求创建失败："+e.getMessage(),Toast.LENGTH_SHORT).show();
         }
     }
-
 }
