@@ -13,7 +13,7 @@ public class Freeze extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pkgName = getIntent().getStringExtra("pkgName");
-        if (pkgName.equals("unknown")){
+        if (pkgName.equals("unknown")||pkgName.equals("")){
             Toast.makeText(getApplicationContext(),"参数错误",Toast.LENGTH_LONG).show();
             Freeze.this.finish();
         }

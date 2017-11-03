@@ -29,11 +29,14 @@ class Support {
                                 if (exitValue == 0) {
                                     Toast.makeText(activity,"执行完成",Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(activity,"似乎没有获得ROOT权限，或发生了其他异常",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity,"可能没有授予ROOT权限，或发生了其他异常",Toast.LENGTH_LONG).show();
                                 }
                             } catch (Exception e){
                                 e.printStackTrace();
                                 Toast.makeText(activity,"异常 "+e.getMessage(),Toast.LENGTH_LONG).show();
+                                if (e.getMessage().contains("Permission denied")){
+                                    Toast.makeText(activity,"该设备可能尚未ROOT",Toast.LENGTH_SHORT).show();
+                                }
                                 destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                             }
                             destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
@@ -71,7 +74,7 @@ class Support {
                                                         destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                                                     } else {
                                                         Toast.makeText(activity,
-                                                                "未找到程序入口或由于未获得ROOT权限导致解冻失败",
+                                                                "未找到程序入口或由于未获得或授予ROOT权限导致解冻失败",
                                                                 Toast.LENGTH_LONG).show();
                                                     }
                                                 }
@@ -85,12 +88,15 @@ class Support {
                                             .create();
                                     alertDialog.show();
                                 } else {
-                                    Toast.makeText(activity,"似乎没有获得ROOT权限，或发生了其他异常",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity,"可能没有授予ROOT权限，或发生了其他异常",Toast.LENGTH_LONG).show();
                                     destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                                 }
                             } catch (Exception e){
                                 e.printStackTrace();
                                 Toast.makeText(activity,"异常 "+e.getMessage(),Toast.LENGTH_LONG).show();
+                                if (e.getMessage().contains("Permission denied")){
+                                    Toast.makeText(activity,"该设备可能尚未ROOT",Toast.LENGTH_SHORT).show();
+                                }
                                 destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                             }
                         }
@@ -130,11 +136,14 @@ class Support {
                                 if (exitValue == 0) {
                                     Toast.makeText(activity,"执行完成",Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(activity,"似乎没有获得ROOT权限，或发生了其他异常",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity,"可能没有授予ROOT权限，或发生了其他异常",Toast.LENGTH_LONG).show();
                                 }
                             } catch (Exception e){
                                 e.printStackTrace();
                                 Toast.makeText(activity,"异常 "+e.getMessage(),Toast.LENGTH_LONG).show();
+                                if (e.getMessage().contains("Permission denied")){
+                                    Toast.makeText(activity,"该设备可能尚未ROOT",Toast.LENGTH_SHORT).show();
+                                }
                                 destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
                             }
                             destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);

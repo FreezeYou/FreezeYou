@@ -168,7 +168,6 @@ public class Main extends Activity {
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
         try{
-
             sendBroadcast(addShortCut);
             Toast.makeText(getApplicationContext(),"已发出创建请求",Toast.LENGTH_SHORT).show();
         } catch (Exception e){

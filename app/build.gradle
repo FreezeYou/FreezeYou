@@ -5,10 +5,10 @@ android {
     buildToolsVersion '27.0.0'
     defaultConfig {
         applicationId "cf.playhi.freezeyou"
-        minSdkVersion 15
+        minSdkVersion 14
         targetSdkVersion 27
-        versionCode 23
-        versionName '1.6'
+        versionCode 24
+        versionName '1.7'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
