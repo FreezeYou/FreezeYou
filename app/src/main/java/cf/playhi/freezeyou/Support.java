@@ -21,29 +21,21 @@ class Support {
                         if (backData.equals("backData")){
                             try {
                                 process = Runtime.getRuntime().exec("su");
-//                                BufferedReader in = new BufferedReader(
-//                                        new InputStreamReader(process.getInputStream()));
-//                                String line = in.readLine();
-//                                while (line!=null) {
-//                                    while(line.contains("Permission denied")){
-//                                        Toast.makeText(getApplicationContext(),"该功能需要ROOT权限",Toast.LENGTH_LONG).show();
-//                                        destroyProcess(false);
-//                                        makeDialog("提示","请选择具体操作");
-//                                    }
-//                                }
-//                                in.close();
-//
                                 outputStream = new DataOutputStream(process.getOutputStream());
                                 outputStream.writeBytes("pm disable " + pkgName + "\n");
                                 outputStream.writeBytes("exit\n");
                                 outputStream.flush();
-                                process.waitFor();
+                                int exitValue = process.waitFor();
+                                if (exitValue == 0) {
+                                    Toast.makeText(activity,"执行完成",Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(activity,"似乎没有获得ROOT权限，或发生了其他异常",Toast.LENGTH_LONG).show();
+                                }
                             } catch (Exception e){
                                 e.printStackTrace();
                                 Toast.makeText(activity,"异常 "+e.getMessage(),Toast.LENGTH_LONG).show();
                                 destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                             }
-                            Toast.makeText(activity,"执行完成",Toast.LENGTH_LONG).show();
                             destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                         }
                     }
@@ -58,44 +50,49 @@ class Support {
                                 outputStream.writeBytes("pm enable " + pkgName + "\n");
                                 outputStream.writeBytes("exit\n");
                                 outputStream.flush();
-                                process.waitFor();
+                                int exitValue = process.waitFor();
+                                if (exitValue == 0) {
+                                    AlertDialog alertDialog = new AlertDialog.Builder(activity)
+                                            .setTitle("提示")
+                                            .setMessage("已要求解冻，立即尝试启动？")
+                                            .setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
+                                                }
+                                            })
+                                            .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int ii) {
+                                                    if (activity.getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
+                                                        Intent intent = new Intent(
+                                                                activity.getPackageManager().getLaunchIntentForPackage(pkgName));
+                                                        activity.startActivity(intent);
+                                                        destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
+                                                    } else {
+                                                        Toast.makeText(activity,
+                                                                "未找到程序入口或由于未获得ROOT权限导致解冻失败",
+                                                                Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                            })
+                                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                                @Override
+                                                public void onCancel(DialogInterface dialogInterface) {
+                                                    destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
+                                                }
+                                            })
+                                            .create();
+                                    alertDialog.show();
+                                } else {
+                                    Toast.makeText(activity,"似乎没有获得ROOT权限，或发生了其他异常",Toast.LENGTH_LONG).show();
+                                    destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
+                                }
                             } catch (Exception e){
                                 e.printStackTrace();
                                 Toast.makeText(activity,"异常 "+e.getMessage(),Toast.LENGTH_LONG).show();
                                 destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                             }
-                            AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                                    .setTitle("提示")
-                                    .setMessage("已要求解冻，立即尝试启动？")
-                                    .setNegativeButton("否", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
-                                        }
-                                    })
-                                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int ii) {
-                                            if (activity.getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
-                                                Intent intent = new Intent(
-                                                        activity.getPackageManager().getLaunchIntentForPackage(pkgName));
-                                                activity.startActivity(intent);
-                                                destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
-                                            } else {
-                                                Toast.makeText(activity,
-                                                        "未找到程序入口或由于未获得ROOT权限导致解冻失败",
-                                                        Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                    })
-                                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                        @Override
-                                        public void onCancel(DialogInterface dialogInterface) {
-                                            destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
-                                        }
-                                    })
-                                    .create();
-                            alertDialog.show();
                         }
                     }
                 })
@@ -129,13 +126,17 @@ class Support {
                                 outputStream.writeBytes("pm disable " + pkgName + "\n");
                                 outputStream.writeBytes("exit\n");
                                 outputStream.flush();
-                                process.waitFor();
+                                int exitValue = process.waitFor();
+                                if (exitValue == 0) {
+                                    Toast.makeText(activity,"执行完成",Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(activity,"似乎没有获得ROOT权限，或发生了其他异常",Toast.LENGTH_LONG).show();
+                                }
                             } catch (Exception e){
                                 e.printStackTrace();
                                 Toast.makeText(activity,"异常 "+e.getMessage(),Toast.LENGTH_LONG).show();
                                 destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
                             }
-                            Toast.makeText(activity,"执行完成",Toast.LENGTH_LONG).show();
                             destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
                         }
                     }

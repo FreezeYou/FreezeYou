@@ -19,7 +19,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,8 +28,6 @@ import java.util.Map;
 //com.ibm.icu.text.Collator
 
 public class Main extends Activity {
-    DataOutputStream outputStream = null;
-    java.lang.Process process = null;
     Thread initThread;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
