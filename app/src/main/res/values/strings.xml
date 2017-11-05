@@ -1,3 +1,35 @@
 <resources>
-    <string name="app_name">FreezeYou!</string>
+    <string name="app_name" translatable="false">FreezeYou!</string>
+    <string name="oneKeyFreeze">一键冻结</string>
+    <string name="alertT1">注意！\n不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n请谨慎操作！</string>
+    <string name="cancel">取消</string>
+    <string name="chooseDetailAction">请选择具体操作</string>
+    <string name="added">已添加</string>
+    <string name="notice">提示</string>
+    <string name="freeze">冻结</string>
+    <string name="more">更多</string>
+    <string name="appDetail">应用详情</string>
+    <string name="removeFromOneKeyList">移出一键冻结列表</string>
+    <string name="removed">已移出</string>
+    <string name="removeFailed">移除失败</string>
+    <string name="addToOneKeyList">加入一键冻结列表</string>
+    <string name="addFailed">添加失败</string>
+    <string name="caution">警告</string>
+    <string name="cautionContent">不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n\n长按可以直接呼出冻结/解冻菜单\n短按请在桌面快捷方式执行冻结/解冻操作\n\n请谨慎操作！</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="createFreezeShortcutNotice">是否在桌面创建 冻结/解冻 的快捷方式？</string>
+    <string name="cannotFindApp">未找到该应用程序</string>
+    <string name="requested">已发出创建请求</string>
+    <string name="requestFailed">请求创建失败：</string>
+    <string name="createOneKeyFreezeShortcut">创建一键冻结快捷方式</string>
+    <string name="executed">执行完成</string>
+    <string name="exception">异常：</string>
+    <string name="cannotFindTheLaunchIntent">未找到程序入口</string>
+    <string name="launch">启动</string>
+    <string name="mayUnrooted">该设备可能尚未ROOT</string>
+    <string name="mayUnrootedOrOtherEx">可能没有授予ROOT权限，或发生了其他异常</string>
+    <string name="unfreeze">解冻</string>
+    <string name="unfreezedAndAskLaunch">已要求解冻，立即尝试启动？</string>
+    <string name="unrootedOrCannotFindTheLaunchIntent">未找到程序入口或由于未获得或授予ROOT权限导致解冻失败</string>
 </resources>

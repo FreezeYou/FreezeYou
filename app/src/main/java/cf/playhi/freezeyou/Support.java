@@ -15,7 +15,7 @@ class Support {
         AlertDialog alertDialog = new AlertDialog.Builder(activity)
                 .setTitle(title)
                 .setMessage(message)
-                .setNegativeButton("冻结", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (backData.equals("backData")){
@@ -27,15 +27,15 @@ class Support {
                                 outputStream.flush();
                                 int exitValue = process.waitFor();
                                 if (exitValue == 0) {
-                                    Toast.makeText(activity,"执行完成",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity,R.string.executed,Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(activity,"可能没有授予ROOT权限，或发生了其他异常",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity,R.string.mayUnrootedOrOtherEx,Toast.LENGTH_LONG).show();
                                 }
                             } catch (Exception e){
                                 e.printStackTrace();
-                                Toast.makeText(activity,"异常 "+e.getMessage(),Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity,activity.getString(R.string.exception)+e.getMessage(),Toast.LENGTH_LONG).show();
                                 if (e.getMessage().contains("Permission denied")){
-                                    Toast.makeText(activity,"该设备可能尚未ROOT",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(activity,R.string.mayUnrooted,Toast.LENGTH_SHORT).show();
                                 }
                                 destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                             }
@@ -43,7 +43,7 @@ class Support {
                         }
                     }
                 })
-                .setPositiveButton("解冻", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (backData.equals("backData")){
@@ -56,15 +56,15 @@ class Support {
                                 int exitValue = process.waitFor();
                                 if (exitValue == 0) {
                                     AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                                            .setTitle("提示")
-                                            .setMessage("已要求解冻，立即尝试启动？")
-                                            .setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                            .setTitle(R.string.notice)
+                                            .setMessage(R.string.unfreezedAndAskLaunch)
+                                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                                                 }
                                             })
-                                            .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int ii) {
                                                     if (activity.getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
@@ -74,7 +74,7 @@ class Support {
                                                         destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                                                     } else {
                                                         Toast.makeText(activity,
-                                                                "未找到程序入口或由于未获得或授予ROOT权限导致解冻失败",
+                                                                R.string.unrootedOrCannotFindTheLaunchIntent,
                                                                 Toast.LENGTH_LONG).show();
                                                     }
                                                 }
@@ -88,21 +88,21 @@ class Support {
                                             .create();
                                     alertDialog.show();
                                 } else {
-                                    Toast.makeText(activity,"可能没有授予ROOT权限，或发生了其他异常",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity,R.string.mayUnrootedOrOtherEx,Toast.LENGTH_LONG).show();
                                     destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                                 }
                             } catch (Exception e){
                                 e.printStackTrace();
-                                Toast.makeText(activity,"异常 "+e.getMessage(),Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity,activity.getString(R.string.exception)+e.getMessage(),Toast.LENGTH_LONG).show();
                                 if (e.getMessage().contains("Permission denied")){
-                                    Toast.makeText(activity,"该设备可能尚未ROOT",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(activity,R.string.mayUnrooted,Toast.LENGTH_SHORT).show();
                                 }
                                 destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                             }
                         }
                     }
                 })
-                .setNeutralButton("取消", new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
@@ -122,7 +122,7 @@ class Support {
         AlertDialog alertDialog = new AlertDialog.Builder(activity)
                 .setTitle(title)
                 .setMessage(message)
-                .setNegativeButton("冻结", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (backData.equals("backData")){
@@ -134,15 +134,15 @@ class Support {
                                 outputStream.flush();
                                 int exitValue = process.waitFor();
                                 if (exitValue == 0) {
-                                    Toast.makeText(activity,"执行完成",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity,R.string.executed,Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(activity,"可能没有授予ROOT权限，或发生了其他异常",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity,R.string.mayUnrootedOrOtherEx,Toast.LENGTH_LONG).show();
                                 }
                             } catch (Exception e){
                                 e.printStackTrace();
-                                Toast.makeText(activity,"异常 "+e.getMessage(),Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity,activity.getString(R.string.exception)+e.getMessage(),Toast.LENGTH_LONG).show();
                                 if (e.getMessage().contains("Permission denied")){
-                                    Toast.makeText(activity,"该设备可能尚未ROOT",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(activity,R.string.mayUnrooted,Toast.LENGTH_SHORT).show();
                                 }
                                 destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
                             }
@@ -150,7 +150,7 @@ class Support {
                         }
                     }
                 })
-                .setPositiveButton("启动", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.launch, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (activity.getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
@@ -160,12 +160,12 @@ class Support {
                             destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
                         } else {
                             Toast.makeText(activity,
-                                    "未找到程序入口",
+                                    R.string.cannotFindTheLaunchIntent,
                                     Toast.LENGTH_LONG).show();
                         }
                     }
                 })
-                .setNeutralButton("取消", new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
