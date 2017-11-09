@@ -4,4 +4,11 @@
     <item
         android:id="@+id/menu_createOneKeyFreezeShortCut"
         android:title="@string/createOneKeyFreezeShortcut" />
+
+    <item
+        android:id="@+id/menu_oneKeyFreezeImmediately"
+        android:title="@string/OneKeyFreezeImmediately" />
+    <item
+        android:id="@+id/menu_about"
+        android:title="@string/about" />
 </menu>

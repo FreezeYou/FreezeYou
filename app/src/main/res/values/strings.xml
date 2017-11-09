@@ -32,4 +32,8 @@
     <string name="unfreeze">解冻</string>
     <string name="unfreezedAndAskLaunch">已要求解冻，立即尝试启动？</string>
     <string name="unrootedOrCannotFindTheLaunchIntent">未找到程序入口或由于未获得或授予ROOT权限导致解冻失败</string>
+    <string name="frozen">已冻结</string>
+    <string name="OneKeyFreezeImmediately">一键冻结</string>
+    <string name="about">关于</string>
+    <string name="plsVisitPXXXX">请访问 https://app.playhi.cf/freezeyou</string>
 </resources>

@@ -63,7 +63,12 @@ public class Main extends Activity {
                         }else {
                             keyValuePair.put("Img",android.R.drawable.sym_def_app_icon);
                         }
-                        keyValuePair.put("Name", name);
+                        int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
+                        if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
+                            keyValuePair.put("Name", name+"("+getString(R.string.frozen)+")");
+                        } else {
+                            keyValuePair.put("Name", name);
+                        }
                         keyValuePair.put("PackageName", packageName);
                         AppList.add(keyValuePair);
                     }
@@ -111,11 +116,11 @@ public class Main extends Activity {
                         HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
                         final String name=map.get("Name");
                         final String pkgName=map.get("PackageName");
-
-                        if (getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
-                            Support.makeDialog2(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
-                        } else {
+                        int tmp = getPackageManager().getApplicationEnabledSetting(pkgName);
+                        if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
                             Support.makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
+                        } else {
+                            Support.makeDialog2(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
                         }
                         return true;
                     }
@@ -140,7 +145,7 @@ public class Main extends Activity {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int ii) {
                                         try{
-                                            createShortCut(name,pkgName,getPackageManager().getApplicationIcon(pkgName));
+                                            createShortCut(name.replace("("+getString(R.string.frozen)+")",""),pkgName,getPackageManager().getApplicationIcon(pkgName));
                                         }catch (PackageManager.NameNotFoundException e){
                                             Toast.makeText(getApplicationContext(),R.string.cannotFindApp,Toast.LENGTH_LONG).show();
                                         }
@@ -254,6 +259,18 @@ public class Main extends Activity {
                 } catch (Exception e){
                     Toast.makeText(getApplicationContext(),getString(R.string.requestFailed)+e.getMessage(),Toast.LENGTH_LONG).show();
                 }
+                return true;
+            case R.id.menu_about:
+                Uri webPage = Uri.parse("https://app.playhi.cf/freezeyou");
+                Intent about = new Intent(Intent.ACTION_VIEW, webPage);
+                if (about.resolveActivity(getPackageManager()) != null) {
+                    startActivity(about);
+                } else {
+                    Toast.makeText(getApplicationContext(),R.string.plsVisitPXXXX,Toast.LENGTH_LONG).show();
+                }
+                return true;
+            case R.id.menu_oneKeyFreezeImmediately:
+                startActivity(new Intent(this,OneKeyFreeze.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
