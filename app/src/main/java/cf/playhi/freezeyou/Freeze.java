@@ -8,6 +8,7 @@ public class Freeze extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.shortcut);
         String backData = "backData";
         String pkgName;
         pkgName = getIntent().getStringExtra("pkgName");

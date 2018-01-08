@@ -2,6 +2,7 @@
 
     package="cf.playhi.freezeyou">
 
+    <uses-permission android:name="android.permission.INSTALL_SHORTCUT"/>
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
 
     <application
@@ -17,6 +18,7 @@
             android:theme="@android:style/Theme.DeviceDefault">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -24,7 +26,7 @@
         <activity
             android:name=".Freeze"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc"
-            android:theme="@android:style/Theme.Dialog">
+            android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>

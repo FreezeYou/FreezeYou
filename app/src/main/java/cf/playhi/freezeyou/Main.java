@@ -163,7 +163,12 @@ public class Main extends Activity {
                                                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                                         Uri uri = Uri.fromParts("package", pkgName,null);
                                                         intent.setData(uri);
-                                                        startActivity(intent);
+                                                        try {
+                                                            startActivity(intent);
+                                                        } catch (NullPointerException e){
+                                                            e.printStackTrace();
+                                                            Toast.makeText(getApplicationContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                                                        }
                                                     }
                                                 });
                                         final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
