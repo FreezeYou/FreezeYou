@@ -2,8 +2,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/menu_createOneKeyFreezeShortCut"
-        android:title="@string/createOneKeyFreezeShortcut" />
+        android:id="@+id/menu_viewMode"
+        android:title="@string/viewMode">
+        <menu>
+            <item
+                android:id="@+id/menu_vM_onlyFrozen"
+                android:title="@string/onlyFrozen" />
+            <item
+                android:id="@+id/menu_vM_onlyUF"
+                android:title="@string/onlyUF" />
+            <item
+                android:id="@+id/menu_vM_all"
+                android:title="@string/displayAll" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_shortCut"
+        android:title="@string/shortCut">
+        <menu>
+            <item
+                android:id="@+id/menu_createOneKeyFreezeShortCut"
+                android:title="@string/createOneKeyFreezeShortcut" />
+            <!--<item-->
+                <!--android:id="@+id/menu_createOnlyFrozenShortCut"-->
+                <!--android:title="@string/createOnlyFrozenShortCut" />-->
+        </menu>
+    </item>
 
     <item
         android:id="@+id/menu_oneKeyFreezeImmediately"

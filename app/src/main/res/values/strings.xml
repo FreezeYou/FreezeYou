@@ -22,7 +22,7 @@
     <string name="cannotFindApp">未找到该应用程序</string>
     <string name="requested">已发出创建请求</string>
     <string name="requestFailed">请求创建失败：</string>
-    <string name="createOneKeyFreezeShortcut">创建一键冻结快捷方式</string>
+    <string name="createOneKeyFreezeShortcut">一键冻结</string>
     <string name="executed">执行完成</string>
     <string name="exception">异常：</string>
     <string name="cannotFindTheLaunchIntent">未找到程序入口</string>
@@ -34,6 +34,13 @@
     <string name="unrootedOrCannotFindTheLaunchIntent">未找到程序入口或由于未获得或授予ROOT权限导致解冻失败</string>
     <string name="frozen">已冻结</string>
     <string name="OneKeyFreezeImmediately">一键冻结</string>
-    <string name="about">关于</string>
+    <string name="about">关于软件</string>
     <string name="plsVisitPXXXX">请访问 https://app.playhi.cf/freezeyou</string>
+    <string name="viewMode">查看模式</string>
+    <string name="onlyFrozen">仅已冻结</string>
+    <string name="onlyUF">仅未冻结</string>
+    <string name="createOnlyFrozenShortCut">已冻结列表</string>
+    <string name="shortCut">快捷方式</string>
+    <string name="notAvailable">暂无</string>
+    <string name="displayAll">显示全部</string>
 </resources>

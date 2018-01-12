@@ -43,171 +43,7 @@ public class Main extends Activity {
         initThread = new Thread(new Runnable() {
             @Override
             public void run() {
-
-                final ListView app_listView = findViewById(R.id.app_list);
-                final ProgressBar progressBar = findViewById(R.id.progressBar);
-                final TextView textView = findViewById(R.id.textView);
-                final LinearLayout linearLayout = findViewById(R.id.layout2);
-                final List<Map<String, Object>> AppList = new ArrayList<>();
-                Drawable icon;
-                List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(0);
-                int size = applicationInfo.size();
-                for(int i=0;i<size;i++){
-                    String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
-                    String packageName = applicationInfo.get(i).packageName;
-                    if (!(packageName.equals("android")||packageName.equals("cf.playhi.freezeyou"))){
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
-                        if (icon!=null){
-                            keyValuePair.put("Img",icon);
-                        }else {
-                            keyValuePair.put("Img",android.R.drawable.sym_def_app_icon);
-                        }
-                        int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
-                        if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
-                            keyValuePair.put("Name", name+"("+getString(R.string.frozen)+")");
-                        } else {
-                            keyValuePair.put("Name", name);
-                        }
-                        keyValuePair.put("PackageName", packageName);
-                        AppList.add(keyValuePair);
-                    }
-                }
-
-                if (!AppList.isEmpty()) {
-                    Collections.sort(AppList, new Comparator<Map<String,Object>>() {
-
-                        @Override
-                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
-                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
-                        }
-                    });
-                }
-
-                final SimpleAdapter adapter = new SimpleAdapter(Main.this, AppList,
-                        R.layout.app_list_1, new String[] { "Img","Name",
-                        "PackageName" }, new int[] { R.id.img,R.id.name,R.id.pkgName});
-
-                adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
-                    public boolean setViewValue(View view, Object data,
-                                                String textRepresentation) {
-                        if (view instanceof ImageView && data instanceof Drawable) {
-                            ImageView imageView = (ImageView) view;
-                            imageView.setImageDrawable((Drawable) data);
-                            return true;
-                        } else
-                            return false;
-                    }
-                });
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.GONE);
-                        textView.setVisibility(View.GONE);
-                        linearLayout.setVisibility(View.GONE);
-                        app_listView.setAdapter(adapter);
-                    }
-                });
-
-                app_listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
-                        final String name=map.get("Name");
-                        final String pkgName=map.get("PackageName");
-                        int tmp = getPackageManager().getApplicationEnabledSetting(pkgName);
-                        if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
-                            Support.makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
-                        } else {
-                            Support.makeDialog2(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
-                        }
-                        return true;
-                    }
-                });
-
-                app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(final AdapterView<?> adapterView, View view, final int i, final long l) {
-                        HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
-                        final String name=map.get("Name");
-                        final String pkgName=map.get("PackageName");
-                        AlertDialog alertDialog = new AlertDialog.Builder(Main.this)
-                                .setTitle(name)
-                                .setMessage(R.string.createFreezeShortcutNotice)
-                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    }
-                                })
-                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int ii) {
-                                        try{
-                                            createShortCut(name.replace("("+getString(R.string.frozen)+")",""),pkgName,getPackageManager().getApplicationIcon(pkgName));
-                                        }catch (PackageManager.NameNotFoundException e){
-                                            Toast.makeText(getApplicationContext(),R.string.cannotFindApp,Toast.LENGTH_LONG).show();
-                                        }
-                                    }
-                                })
-                                .setNeutralButton(R.string.more, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        AlertDialog.Builder dialog = new AlertDialog.Builder(Main.this)
-                                                .setTitle(R.string.more)
-                                                .setMessage(getString(R.string.chooseDetailAction))
-                                                .setNeutralButton(R.string.appDetail, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                                        Uri uri = Uri.fromParts("package", pkgName,null);
-                                                        intent.setData(uri);
-                                                        try {
-                                                            startActivity(intent);
-                                                        } catch (NullPointerException e){
-                                                            e.printStackTrace();
-                                                            Toast.makeText(getApplicationContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
-                                                        }
-                                                    }
-                                                });
-                                        final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
-                                                "AutoFreezeApplicationList", Context.MODE_PRIVATE);
-                                        final String pkgNameList = sharedPreferences.getString("pkgName","");
-                                        if (pkgNameList.contains("|"+pkgName+"|")){
-                                            dialog.setPositiveButton(R.string.removeFromOneKeyList, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int ii) {
-                                                    if (sharedPreferences.edit()
-                                                            .putString(
-                                                                    "pkgName",
-                                                                    pkgNameList.replace("|"+pkgName+"|",""))
-                                                            .commit()) {
-                                                        Toast.makeText(getApplicationContext(), R.string.removed, Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        Toast.makeText(getApplicationContext(), R.string.removeFailed, Toast.LENGTH_LONG).show();
-                                                    }
-                                                }
-                                            });
-                                        } else {
-                                            dialog.setPositiveButton(R.string.addToOneKeyList, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int ii) {
-                                                    if (sharedPreferences.edit().putString("pkgName", pkgNameList+"|" + pkgName + "|").commit()) {
-                                                        Toast.makeText(getApplicationContext(), R.string.added, Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        Toast.makeText(getApplicationContext(), R.string.addFailed, Toast.LENGTH_LONG).show();
-                                                    }
-                                                }
-                                            });
-                                        }
-                                        dialog.create().show();
-                                    }
-                                })
-                                .create();
-                        alertDialog.show();
-                    }
-                });
+                generateList("all");
             }
         });
         initThread.start();
@@ -277,8 +113,263 @@ public class Main extends Activity {
             case R.id.menu_oneKeyFreezeImmediately:
                 startActivity(new Intent(this,OneKeyFreeze.class));
                 return true;
+            case R.id.menu_vM_onlyFrozen:
+                generateList("OF");
+                return true;
+            case R.id.menu_vM_onlyUF:
+                generateList("UF");
+                return true;
+            case R.id.menu_vM_all:
+                generateList("all");
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void generateList(String filter){
+        final ListView app_listView = findViewById(R.id.app_list);
+        final ProgressBar progressBar = findViewById(R.id.progressBar);
+        final TextView textView = findViewById(R.id.textView);
+        final LinearLayout linearLayout = findViewById(R.id.layout2);
+        final List<Map<String, Object>> AppList = new ArrayList<>();
+        Drawable icon;
+        List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(0);
+        int size = applicationInfo.size();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.VISIBLE);
+                app_listView.setVisibility(View.GONE);
+            }
+        });
+        switch (filter) {
+            case "all":
+                for (int i = 0; i < size; i++) {
+                    String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
+                    String packageName = applicationInfo.get(i).packageName;
+                    if (!(packageName.equals("android") || packageName.equals("cf.playhi.freezeyou"))) {
+                        Map<String, Object> keyValuePair = new HashMap<>();
+                        icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
+                        if (icon != null) {
+                            keyValuePair.put("Img", icon);
+                        } else {
+                            keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+                        }
+                        int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
+                        if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+                            keyValuePair.put("Name", name + "(" + getString(R.string.frozen) + ")");
+                        } else {
+                            keyValuePair.put("Name", name);
+                        }
+                        keyValuePair.put("PackageName", packageName);
+                        AppList.add(keyValuePair);
+                    } else if ((i+1==size)&&(AppList.size()==0)){
+                        Map<String, Object> keyValuePair = new HashMap<>();
+                        keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+                        keyValuePair.put("Name", getString(R.string.notAvailable));
+                        keyValuePair.put("PackageName", getString(R.string.notAvailable));
+                        AppList.add(keyValuePair);
+                    }
+                }
+                break;
+            case "OF":
+                for (int i = 0; i < size; i++) {
+                    String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
+                    String packageName = applicationInfo.get(i).packageName;
+                    if (!(packageName.equals("android") || packageName.equals("cf.playhi.freezeyou"))) {
+                        int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
+                        if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER ||
+                                tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+                            Map<String, Object> keyValuePair = new HashMap<>();
+                            icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
+                            if (icon != null) {
+                                keyValuePair.put("Img", icon);
+                            } else {
+                                keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+                            }
+                            keyValuePair.put("Name", name + "(" + getString(R.string.frozen) + ")");
+                            keyValuePair.put("PackageName", packageName);
+                            AppList.add(keyValuePair);
+                        } else if ((i+1==size)&&(AppList.size()==0)){
+                            Map<String, Object> keyValuePair = new HashMap<>();
+                            keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+                            keyValuePair.put("Name", getString(R.string.notAvailable));
+                            keyValuePair.put("PackageName", getString(R.string.notAvailable));
+                            AppList.add(keyValuePair);
+                        }
+                    }
+                }
+                break;
+            default:
+                for (int i = 0; i < size; i++) {
+                    String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
+                    String packageName = applicationInfo.get(i).packageName;
+                    if (!(packageName.equals("android") || packageName.equals("cf.playhi.freezeyou"))) {
+                        int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
+                        if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER &&
+                                tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+                            Map<String, Object> keyValuePair = new HashMap<>();
+                            icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
+                            if (icon != null) {
+                                keyValuePair.put("Img", icon);
+                            } else {
+                                keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+                            }
+                            keyValuePair.put("Name", name);
+                            keyValuePair.put("PackageName", packageName);
+                            AppList.add(keyValuePair);
+                        }
+                    } else if ((i+1==size)&&(AppList.size()==0)){
+                        Map<String, Object> keyValuePair = new HashMap<>();
+                        keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+                        keyValuePair.put("Name", getString(R.string.notAvailable));
+                        keyValuePair.put("PackageName", getString(R.string.notAvailable));
+                        AppList.add(keyValuePair);
+                    }
+                }
+                break;
+        }
+
+        if (!AppList.isEmpty()) {
+            Collections.sort(AppList, new Comparator<Map<String,Object>>() {
+
+                @Override
+                public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
+                    return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+                }
+            });
+        }
+
+        final SimpleAdapter adapter = new SimpleAdapter(Main.this, AppList,
+                R.layout.app_list_1, new String[] { "Img","Name",
+                "PackageName" }, new int[] { R.id.img,R.id.name,R.id.pkgName});
+
+        adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+            public boolean setViewValue(View view, Object data,
+                                        String textRepresentation) {
+                if (view instanceof ImageView && data instanceof Drawable) {
+                    ImageView imageView = (ImageView) view;
+                    imageView.setImageDrawable((Drawable) data);
+                    return true;
+                } else
+                    return false;
+            }
+        });
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+                textView.setVisibility(View.GONE);
+                linearLayout.setVisibility(View.GONE);
+                app_listView.setAdapter(adapter);
+                app_listView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        app_listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
+                final String name=map.get("Name");
+                final String pkgName=map.get("PackageName");
+                if (!name.equals(getString(R.string.notAvailable))){
+                    int tmp = getPackageManager().getApplicationEnabledSetting(pkgName);
+                    if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
+                        Support.makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
+                    } else {
+                        Support.makeDialog2(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
+                    }
+                }
+                return true;
+            }
+        });
+
+        app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> adapterView, View view, final int i, final long l) {
+                HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
+                final String name=map.get("Name");
+                final String pkgName=map.get("PackageName");
+                if (!name.equals(getString(R.string.notAvailable))) {
+                    AlertDialog alertDialog = new AlertDialog.Builder(Main.this)
+                            .setTitle(name)
+                            .setMessage(R.string.createFreezeShortcutNotice)
+                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int ii) {
+                                    try {
+                                        createShortCut(name.replace("(" + getString(R.string.frozen) + ")", ""), pkgName, getPackageManager().getApplicationIcon(pkgName));
+                                    } catch (PackageManager.NameNotFoundException e) {
+                                        Toast.makeText(getApplicationContext(), R.string.cannotFindApp, Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            })
+                            .setNeutralButton(R.string.more, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    AlertDialog.Builder dialog = new AlertDialog.Builder(Main.this)
+                                            .setTitle(R.string.more)
+                                            .setMessage(getString(R.string.chooseDetailAction))
+                                            .setNeutralButton(R.string.appDetail, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                                    Uri uri = Uri.fromParts("package", pkgName, null);
+                                                    intent.setData(uri);
+                                                    try {
+                                                        startActivity(intent);
+                                                    } catch (NullPointerException e) {
+                                                        e.printStackTrace();
+                                                        Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                            });
+                                    final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
+                                            "AutoFreezeApplicationList", Context.MODE_PRIVATE);
+                                    final String pkgNameList = sharedPreferences.getString("pkgName", "");
+                                    if (pkgNameList.contains("|" + pkgName + "|")) {
+                                        dialog.setPositiveButton(R.string.removeFromOneKeyList, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int ii) {
+                                                if (sharedPreferences.edit()
+                                                        .putString(
+                                                                "pkgName",
+                                                                pkgNameList.replace("|" + pkgName + "|", ""))
+                                                        .commit()) {
+                                                    Toast.makeText(getApplicationContext(), R.string.removed, Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), R.string.removeFailed, Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        dialog.setPositiveButton(R.string.addToOneKeyList, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int ii) {
+                                                if (sharedPreferences.edit().putString("pkgName", pkgNameList + "|" + pkgName + "|").commit()) {
+                                                    Toast.makeText(getApplicationContext(), R.string.added, Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), R.string.addFailed, Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+                                        });
+                                    }
+                                    dialog.create().show();
+                                }
+                            })
+                            .create();
+                    alertDialog.show();
+                }
+            }
+        });
     }
 }
