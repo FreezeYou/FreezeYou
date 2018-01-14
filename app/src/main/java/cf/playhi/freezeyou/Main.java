@@ -114,13 +114,28 @@ public class Main extends Activity {
                 startActivity(new Intent(this,OneKeyFreeze.class));
                 return true;
             case R.id.menu_vM_onlyFrozen:
-                generateList("OF");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList("OF");
+                    }
+                }).start();
                 return true;
             case R.id.menu_vM_onlyUF:
-                generateList("UF");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList("UF");
+                    }
+                }).start();
                 return true;
             case R.id.menu_vM_all:
-                generateList("all");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList("all");
+                    }
+                }).start();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -133,17 +148,17 @@ public class Main extends Activity {
         final TextView textView = findViewById(R.id.textView);
         final LinearLayout linearLayout = findViewById(R.id.layout2);
         final List<Map<String, Object>> AppList = new ArrayList<>();
-        Drawable icon;
-        List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(0);
-        int size = applicationInfo.size();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressBar.setVisibility(View.VISIBLE);
                 linearLayout.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
                 app_listView.setVisibility(View.GONE);
             }
         });
+        Drawable icon;
+        List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(0);
+        int size = applicationInfo.size();
         switch (filter) {
             case "all":
                 for (int i = 0; i < size; i++) {
@@ -327,7 +342,7 @@ public class Main extends Activity {
                                                     intent.setData(uri);
                                                     try {
                                                         startActivity(intent);
-                                                    } catch (NullPointerException e) {
+                                                    } catch (Exception e) {
                                                         e.printStackTrace();
                                                         Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                                                     }
