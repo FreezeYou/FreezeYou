@@ -1,4 +1,4 @@
-# FreezeYou
+# FreezeYou [![GitHub license](https://img.shields.io/github/license/Playhi/FreezeYou.svg)](https://github.com/Playhi/FreezeYou/blob/master/LICENSE)
 ## 介绍 Introduction
 * 冻结（需要ROOT权限），轻量级的应用程序
 ## 下载 Download
