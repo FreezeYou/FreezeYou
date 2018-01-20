@@ -1,6 +1,7 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -9,11 +10,18 @@ public class Freeze extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shortcut);
+        init();
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        init();
+    }
+
+    private void init(){
+
         String backData = "backData";
         String pkgName;
         pkgName = getIntent().getStringExtra("pkgName");
