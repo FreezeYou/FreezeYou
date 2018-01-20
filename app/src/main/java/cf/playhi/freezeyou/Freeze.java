@@ -9,6 +9,11 @@ public class Freeze extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shortcut);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         String backData = "backData";
         String pkgName;
         pkgName = getIntent().getStringExtra("pkgName");
@@ -32,6 +37,4 @@ public class Freeze extends Activity{
             }
         }
     }
-
-
 }
