@@ -59,10 +59,10 @@ public class Main extends Activity {
         alertDialog.show();
     }
 
-    private void createShortCut(String title, String pkgName, Drawable icon){
+    private void createShortCut(String title, String pkgName, Drawable icon,Class<?> cls){
         Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
 //        Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.icon);
-        Intent intent = new Intent(getApplicationContext(), Freeze.class);
+        Intent intent = new Intent(getApplicationContext(), cls);
         intent.putExtra("pkgName",pkgName);
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
         BitmapDrawable bd = (BitmapDrawable) icon;
@@ -87,19 +87,7 @@ public class Main extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_createOneKeyFreezeShortCut:
-                Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
-//        Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.icon);
-                Intent intent = new Intent(getApplicationContext(), OneKeyFreeze.class);
-                addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.oneKeyFreeze));
-                BitmapDrawable bd = (BitmapDrawable) getResources().getDrawable(R.mipmap.ic_launcher_round);
-                addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
-                addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
-                try{
-                    sendBroadcast(addShortCut);
-                    Support.makeToast(Main.this,R.string.requested);
-                } catch (Exception e){
-                    Support.makeToast(Main.this,getString(R.string.requestFailed)+e.getMessage());
-                }
+                createShortCut(getString(R.string.oneKeyFreeze),"",getResources().getDrawable(R.mipmap.ic_launcher_round),OneKeyFreeze.class);
                 return true;
             case R.id.menu_about:
                 Uri webPage = Uri.parse("https://app.playhi.cf/freezeyou");
@@ -322,7 +310,7 @@ public class Main extends Activity {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int ii) {
                                     try {
-                                        createShortCut(name.replace("(" + getString(R.string.frozen) + ")", ""), pkgName, getPackageManager().getApplicationIcon(pkgName));
+                                        createShortCut(name.replace("(" + getString(R.string.frozen) + ")", ""), pkgName, getPackageManager().getApplicationIcon(pkgName),Freeze.class);
                                     } catch (PackageManager.NameNotFoundException e) {
                                         Toast.makeText(getApplicationContext(), R.string.cannotFindApp, Toast.LENGTH_LONG).show();
                                     }
