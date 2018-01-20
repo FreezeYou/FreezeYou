@@ -2,6 +2,7 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.widget.Toast;
@@ -181,7 +182,7 @@ class Support {
         alertDialog.show();
     }
 
-    private static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity){
+    static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity){
         try {
             if (dataOutputStream != null) {
                 dataOutputStream.close();
@@ -195,5 +196,13 @@ class Support {
                 activity.finish();
             }
         }
+    }
+
+    static void makeToast(Context context,int id){
+        Toast.makeText(context,id,Toast.LENGTH_LONG).show();
+    }
+
+    static void makeToast(Context context,String string){
+        Toast.makeText(context,string,Toast.LENGTH_LONG).show();
     }
 }

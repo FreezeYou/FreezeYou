@@ -31,30 +31,30 @@ public class OneKeyFreeze extends Activity {
             } else {
                 Toast.makeText(activity,R.string.mayUnrootedOrOtherEx,Toast.LENGTH_LONG).show();
             }
-            destroyProcess(true,outputStream,process,activity);
+            Support.destroyProcess(true,outputStream,process,activity);
         } catch (Exception e){
             e.printStackTrace();
             Toast.makeText(activity,getString(R.string.exception)+e.getMessage(),Toast.LENGTH_LONG).show();
             if (e.getMessage().contains("Permission denied")){
                 Toast.makeText(activity,R.string.mayUnrooted,Toast.LENGTH_SHORT).show();
             }
-            destroyProcess(true,outputStream,process,activity);
+            Support.destroyProcess(true,outputStream,process,activity);
         }
     }
 
-    private static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity){
-        try {
-            if (dataOutputStream != null) {
-                dataOutputStream.close();
-            }
-            process1.destroy();
-            if (finish){
-                activity.finish();
-            }
-        } catch (Exception e) {
-            if (finish){
-                activity.finish();
-            }
-        }
-    }
+//    private static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity){
+//        try {
+//            if (dataOutputStream != null) {
+//                dataOutputStream.close();
+//            }
+//            process1.destroy();
+//            if (finish){
+//                activity.finish();
+//            }
+//        } catch (Exception e) {
+//            if (finish){
+//                activity.finish();
+//            }
+//        }
+//    }
 }

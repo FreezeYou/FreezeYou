@@ -70,9 +70,9 @@ public class Main extends Activity {
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
         try{
             sendBroadcast(addShortCut);
-            Toast.makeText(getApplicationContext(),R.string.requested,Toast.LENGTH_SHORT).show();
+            Support.makeToast(Main.this,R.string.requested);
         } catch (Exception e){
-            Toast.makeText(getApplicationContext(),getString(R.string.requestFailed)+e.getMessage(),Toast.LENGTH_SHORT).show();
+            Support.makeToast(Main.this,getString(R.string.requestFailed)+e.getMessage());
         }
     }
 
@@ -96,9 +96,9 @@ public class Main extends Activity {
                 addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
                 try{
                     sendBroadcast(addShortCut);
-                    Toast.makeText(getApplicationContext(),R.string.requested,Toast.LENGTH_SHORT).show();
+                    Support.makeToast(Main.this,R.string.requested);
                 } catch (Exception e){
-                    Toast.makeText(getApplicationContext(),getString(R.string.requestFailed)+e.getMessage(),Toast.LENGTH_LONG).show();
+                    Support.makeToast(Main.this,getString(R.string.requestFailed)+e.getMessage());
                 }
                 return true;
             case R.id.menu_about:
