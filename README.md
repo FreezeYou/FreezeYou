@@ -1,4 +1,4 @@
-# FreezeYou  [![GitHub license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/Playhi/FreezeYou/blob/master/LICENSE) [![Maintainability](https://api.codeclimate.com/v1/badges/727a63c38deeadb0c468/maintainability)](https://codeclimate.com/github/Playhi/FreezeYou/maintainability)
+# FreezeYou  [![GitHub license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/Playhi/FreezeYou/blob/master/LICENSE) [![Maintainability](https://api.codeclimate.com/v1/badges/727a63c38deeadb0c468/maintainability)](https://codeclimate.com/github/Playhi/FreezeYou/maintainability) [![GitHub release](https://img.shields.io/github/release/Playhi/FreezeYou.svg)](https://github.com/Playhi/FreezeYou/releases)
 ## 介绍 Introduction
 * 冻结（需要ROOT权限），轻量级的应用程序
 ## 下载 Download
