@@ -28,7 +28,7 @@
     <string name="cannotFindTheLaunchIntent">未找到程序入口</string>
     <string name="launch">启动</string>
     <string name="mayUnrooted">该设备可能尚未ROOT</string>
-    <string name="mayUnrootedOrOtherEx">可能没有授予ROOT权限，或发生了其他异常</string>
+    <string name="mayUnrootedOrOtherEx">可能没有授予ROOT权限、目标已卸载或发生了其它异常</string>
     <string name="unfreeze">解冻</string>
     <string name="unfreezedAndAskLaunch">已要求解冻，立即尝试启动？</string>
     <string name="unrootedOrCannotFindTheLaunchIntent">未找到程序入口或由于未获得或授予ROOT权限导致解冻失败</string>
@@ -43,4 +43,6 @@
     <string name="shortCut">快捷方式</string>
     <string name="notAvailable">暂无</string>
     <string name="displayAll">显示全部</string>
+    <string name="onlyOnekey">一键冻结</string>
+    <string name="uninstalled">已卸载</string>
 </resources>

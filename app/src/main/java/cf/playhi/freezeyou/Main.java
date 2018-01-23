@@ -125,6 +125,14 @@ public class Main extends Activity {
                     }
                 }).start();
                 return true;
+            case R.id.menu_vM_onlyOnekey:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList("OO");
+                    }
+                }).start();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -205,7 +213,7 @@ public class Main extends Activity {
                     }
                 }
                 break;
-            default:
+            case "UF":
                 for (int i = 0; i < size; i++) {
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
@@ -232,6 +240,49 @@ public class Main extends Activity {
                         AppList.add(keyValuePair);
                     }
                 }
+                break;
+            case "OO":
+                String[] pkgNameList = getApplicationContext().getSharedPreferences(
+                        "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
+                for (String aPkgNameList : pkgNameList) {
+                    aPkgNameList = aPkgNameList.replaceAll("\\|","");
+                    String name;
+                    try{
+                        name = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(aPkgNameList,0)).toString();
+                    } catch (Exception e){
+                        name = getResources().getString(R.string.uninstalled);
+                    }
+                    if (!(aPkgNameList.equals("android") || aPkgNameList.equals("cf.playhi.freezeyou") || aPkgNameList.equals(""))) {
+                        Map<String, Object> keyValuePair = new HashMap<>();
+                        try{
+                            icon = getPackageManager().getApplicationIcon(getPackageManager().getApplicationInfo(aPkgNameList,0));
+                        } catch (Exception e){
+                            icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
+                        }
+                        keyValuePair.put("Img", icon);
+                        int tmp;
+                        try{
+                            tmp = getPackageManager().getApplicationEnabledSetting(aPkgNameList);
+                        } catch (Exception e){
+                            tmp = -10086;
+                        }
+                        if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+                            keyValuePair.put("Name", name + "(" + getString(R.string.frozen) + ")");
+                        } else {
+                            keyValuePair.put("Name", name);
+                        }
+                        keyValuePair.put("PackageName", aPkgNameList);
+                        AppList.add(keyValuePair);
+                    } else if (pkgNameList.length==1||pkgNameList.length==0){
+                        Map<String, Object> keyValuePair = new HashMap<>();
+                        keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+                        keyValuePair.put("Name", getString(R.string.notAvailable));
+                        keyValuePair.put("PackageName", getString(R.string.notAvailable));
+                        AppList.add(keyValuePair);
+                    }
+                }
+                break;
+            default:
                 break;
         }
 
