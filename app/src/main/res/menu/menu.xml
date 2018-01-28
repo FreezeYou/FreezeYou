@@ -12,6 +12,9 @@
                 android:id="@+id/menu_vM_onlyUF"
                 android:title="@string/onlyUF" />
             <item
+                android:id="@+id/menu_vM_onlySA"
+                android:title="@string/onlySA" />
+            <item
                 android:id="@+id/menu_vM_onlyOnekey"
                 android:title="@string/onlyOnekey" />
             <item

@@ -133,6 +133,13 @@ public class Main extends Activity {
                     }
                 }).start();
                 return true;
+            case R.id.menu_vM_onlySA:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList("OS");
+                    }
+                }).start();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -274,6 +281,37 @@ public class Main extends Activity {
                         keyValuePair.put("PackageName", aPkgNameList);
                         AppList.add(keyValuePair);
                     } else if (pkgNameList.length==1||pkgNameList.length==0){
+                        Map<String, Object> keyValuePair = new HashMap<>();
+                        keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+                        keyValuePair.put("Name", getString(R.string.notAvailable));
+                        keyValuePair.put("PackageName", getString(R.string.notAvailable));
+                        AppList.add(keyValuePair);
+                    }
+                }
+                break;
+            case "OS":
+                for (int i = 0; i < size; i++) {
+                    String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
+                    String packageName = applicationInfo.get(i).packageName;
+                    if (!(packageName.equals("android") || packageName.equals("cf.playhi.freezeyou"))) {
+                        Map<String, Object> keyValuePair = new HashMap<>();
+                        icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
+                        if (icon != null) {
+                            keyValuePair.put("Img", icon);
+                        } else {
+                            keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+                        }
+                        if ((applicationInfo.get(i).flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM){
+                            int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
+                            if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+                                keyValuePair.put("Name", name + "(" + getString(R.string.frozen) + ")");
+                            } else {
+                                keyValuePair.put("Name", name);
+                            }
+                            keyValuePair.put("PackageName", packageName);
+                            AppList.add(keyValuePair);
+                        }
+                    } else if ((i+1==size)&&(AppList.size()==0)){
                         Map<String, Object> keyValuePair = new HashMap<>();
                         keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
                         keyValuePair.put("Name", getString(R.string.notAvailable));

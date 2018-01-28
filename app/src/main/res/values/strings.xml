@@ -45,4 +45,5 @@
     <string name="displayAll">显示全部</string>
     <string name="onlyOnekey">一键冻结</string>
     <string name="uninstalled">已卸载</string>
+    <string name="onlySA">系统应用</string>
 </resources>
