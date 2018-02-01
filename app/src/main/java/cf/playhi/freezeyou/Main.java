@@ -140,6 +140,10 @@ public class Main extends Activity {
                         generateList("OS");
                     }
                 }).start();
+                return true;
+            case R.id.menu_exit:
+                System.exit(0);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -367,7 +371,7 @@ public class Main extends Activity {
                 HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
                 final String name=map.get("Name");
                 final String pkgName=map.get("PackageName");
-                if (!name.equals(getString(R.string.notAvailable))){
+                if (!(name.equals(getString(R.string.notAvailable))||name.equals(getString(R.string.uninstalled)))){
                     int tmp = getPackageManager().getApplicationEnabledSetting(pkgName);
                     if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
                         Support.makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
