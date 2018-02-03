@@ -2,17 +2,26 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -59,14 +68,60 @@ public class Main extends Activity {
         alertDialog.show();
     }
 
-    private void createShortCut(String title, String pkgName, Drawable icon,Class<?> cls){
+
+    private void createShortCut(String title, String pkgName, Drawable icon,Class<?> cls,String id){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            createShortCut_OldApi(title,pkgName,icon,cls);
+        } else {
+            ShortcutManager mShortcutManager =
+                    this.getSystemService(ShortcutManager.class);
+            if (mShortcutManager!=null){
+                if (mShortcutManager.isRequestPinShortcutSupported()) {
+                    ShortcutInfo.Builder shortcutInfoBuilder =
+                            new ShortcutInfo.Builder(this, id);
+                    shortcutInfoBuilder.setIcon(Icon.createWithBitmap(getBitmapFromDrawable(icon)));
+                    shortcutInfoBuilder.setIntent(
+                            new Intent(getApplicationContext(), cls)
+                                    .setAction(Intent.ACTION_MAIN)
+                                    .putExtra("pkgName",pkgName)
+                    );
+                    shortcutInfoBuilder.setShortLabel(title);
+                    shortcutInfoBuilder.setLongLabel(title);
+                    // Assumes there's already a shortcut with the ID "my-shortcut".
+                    // The shortcut must be enabled.
+                    ShortcutInfo pinShortcutInfo = shortcutInfoBuilder.build();
+                    // Create the PendingIntent object only if your app needs to be notified
+                    // that the user allowed the shortcut to be pinned. Note that, if the
+                    // pinning operation fails, your app isn't notified. We assume here that the
+                    // app has implemented a method called createShortcutResultIntent() that
+                    // returns a broadcast intent.
+                    Intent pinnedShortcutCallbackIntent =
+                            mShortcutManager.createShortcutResultIntent(pinShortcutInfo);
+
+                    // Configure the intent so that your app's broadcast receiver gets
+                    // the callback successfully.
+                    PendingIntent successCallback = PendingIntent.getBroadcast(this, 0,
+                            pinnedShortcutCallbackIntent, 0);
+
+                    mShortcutManager.requestPinShortcut(pinShortcutInfo,
+                            successCallback.getIntentSender());
+                }else {
+                    createShortCut_OldApi(title,pkgName,icon,cls);
+                }
+            } else {
+                createShortCut_OldApi(title,pkgName,icon,cls);
+            }
+        }
+    }
+
+    private void createShortCut_OldApi(String title, String pkgName, Drawable icon,Class<?> cls){
         Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
 //        Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.icon);
         Intent intent = new Intent(getApplicationContext(), cls);
         intent.putExtra("pkgName",pkgName);
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
-        BitmapDrawable bd = (BitmapDrawable) icon;
-        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
+//        BitmapDrawable bd = (BitmapDrawable) icon;bd.getBitmap()
+        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, Bitmap.createScaledBitmap(getBitmapFromDrawable(icon),192,192,true));
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
         try{
             sendBroadcast(addShortCut);
@@ -74,6 +129,15 @@ public class Main extends Activity {
         } catch (Exception e){
             Support.makeToast(Main.this,getString(R.string.requestFailed)+e.getMessage());
         }
+    }
+
+    //https://stackoverflow.com/questions/44447056/convert-adaptiveicondrawable-to-bitmap-in-android-o-preview
+    private Bitmap getBitmapFromDrawable(Drawable drawable) {
+        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bmp);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bmp;
     }
 
     @Override
@@ -87,16 +151,39 @@ public class Main extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_createOneKeyFreezeShortCut:
-                createShortCut(getString(R.string.oneKeyFreeze),"",getResources().getDrawable(R.mipmap.ic_launcher_round),OneKeyFreeze.class);
+                createShortCut(
+                        getString(R.string.oneKeyFreeze),
+                        "",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),OneKeyFreeze.class,
+                        "OneKeyFreeze"
+                );
                 return true;
             case R.id.menu_about:
-                Uri webPage = Uri.parse("https://app.playhi.cf/freezeyou");
-                Intent about = new Intent(Intent.ACTION_VIEW, webPage);
-                if (about.resolveActivity(getPackageManager()) != null) {
-                    startActivity(about);
-                } else {
-                    Toast.makeText(getApplicationContext(),R.string.plsVisitPXXXX,Toast.LENGTH_LONG).show();
-                }
+                Support.buildAlertDialog(this,R.mipmap.ic_launcher_round,R.string.about_message,R.string.about)
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setNeutralButton(R.string.visitWebsite, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Uri webPage = Uri.parse("https://app.playhi.cf/freezeyou");
+                                Intent about = new Intent(Intent.ACTION_VIEW, webPage);
+                                if (about.resolveActivity(getPackageManager()) != null) {
+                                    startActivity(about);
+                                } else {
+                                    Toast.makeText(getApplicationContext(),R.string.plsVisitPXXXX,Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        })
+                        .setPositiveButton(R.string.addQQGroup, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Support.joinQQGroup(Main.this);
+                            }
+                        }).create().show();
                 return true;
             case R.id.menu_oneKeyFreezeImmediately:
                 startActivity(new Intent(this,OneKeyFreeze.class));
@@ -403,7 +490,13 @@ public class Main extends Activity {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int ii) {
                                     try {
-                                        createShortCut(name.replace("(" + getString(R.string.frozen) + ")", ""), pkgName, getPackageManager().getApplicationIcon(pkgName),Freeze.class);
+                                        createShortCut(
+                                                name.replace("(" + getString(R.string.frozen) + ")", ""),
+                                                pkgName,
+                                                getPackageManager().getApplicationIcon(pkgName),
+                                                Freeze.class,
+                                                "FreezeYou! "+pkgName
+                                        );
                                     } catch (PackageManager.NameNotFoundException e) {
                                         Toast.makeText(getApplicationContext(), R.string.cannotFindApp, Toast.LENGTH_LONG).show();
                                     }
