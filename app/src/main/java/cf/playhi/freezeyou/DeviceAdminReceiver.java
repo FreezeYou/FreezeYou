@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
@@ -25,4 +26,7 @@ public class DeviceAdminReceiver extends android.app.admin.DeviceAdminReceiver {
         showToast(context, "Disabled");
     }
 
+    public static ComponentName getComponentName(Context context) {
+        return new ComponentName(context.getApplicationContext(), DeviceAdminReceiver.class);
+    }
 }

@@ -125,9 +125,9 @@ public class Main extends Activity {
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
         try{
             sendBroadcast(addShortCut);
-            Support.makeToast(Main.this,R.string.requested);
+            Support.showToast(Main.this,R.string.requested);
         } catch (Exception e){
-            Support.makeToast(Main.this,getString(R.string.requestFailed)+e.getMessage());
+            Support.showToast(Main.this,getString(R.string.requestFailed)+e.getMessage());
         }
     }
 

@@ -2,6 +2,7 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -14,6 +15,14 @@ public class OneKeyFreeze extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Activity activity = this;
+//        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
+//            if (getDevicePolicyManager(activity).setApplicationHidden(
+//                    DeviceAdminReceiver.getComponentName(activity),pkgName,true)){
+//                makeToast(activity,"Success!");
+//            } else {
+//                makeToast(activity, "Failed!");
+//            }
+//        } else {
         try {
             process = Runtime.getRuntime().exec("su");
             outputStream = new DataOutputStream(process.getOutputStream());

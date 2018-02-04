@@ -1,7 +1,9 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.os.Build;
@@ -40,14 +42,18 @@ public class Freeze extends Activity{
                 Support.makeDialog2(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(pkgName,0)).toString(),getString(R.string.chooseDetailAction),Freeze.this,true,backData,pkgName);
             }catch (Exception e){
                 e.printStackTrace();
-                Support.makeDialog2(getString(R.string.notice),getString(R.string.chooseDetailAction),Freeze.this,true,backData,pkgName);
+                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
+                        "pkgName2Name", Context.MODE_PRIVATE);
+                Support.makeDialog2(sharedPreferences.getString(pkgName,getString(R.string.notice)),getString(R.string.chooseDetailAction),Freeze.this,true,backData,pkgName);
             }
         } else {
             try {
                 Support.makeDialog(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(pkgName, 0)).toString(), getString(R.string.chooseDetailAction), Freeze.this, true, backData, pkgName);
             } catch (Exception e) {
                 e.printStackTrace();
-                Support.makeDialog(getString(R.string.notice), getString(R.string.chooseDetailAction), Freeze.this, true, backData, pkgName);
+                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
+                        "pkgName2Name", Context.MODE_PRIVATE);
+                Support.makeDialog(sharedPreferences.getString(pkgName,getString(R.string.notice)), getString(R.string.chooseDetailAction), Freeze.this, true, backData, pkgName);
             }
         }
     }
