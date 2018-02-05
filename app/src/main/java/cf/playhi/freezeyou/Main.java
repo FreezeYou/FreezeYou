@@ -12,7 +12,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
@@ -39,6 +41,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static cf.playhi.freezeyou.Support.getBitmapFromLocalFile;
+import static cf.playhi.freezeyou.Support.showToast;
 //com.ibm.icu.text.Collator
 
 public class Main extends Activity {
@@ -123,9 +128,9 @@ public class Main extends Activity {
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
         try{
             sendBroadcast(addShortCut);
-            Support.showToast(Main.this,R.string.requested);
+            showToast(Main.this,R.string.requested);
         } catch (Exception e){
-            Support.showToast(Main.this,getString(R.string.requestFailed)+e.getMessage());
+            showToast(Main.this,getString(R.string.requestFailed)+e.getMessage());
         }
     }
 
@@ -288,6 +293,7 @@ public class Main extends Activity {
                         AppList.add(keyValuePair);
                     }
                 }
+                addMRootApplications(getApplicationContext(),AppList);
                 break;
             case "OF":
                 for (int i = 0; i < size; i++) {
@@ -316,6 +322,7 @@ public class Main extends Activity {
                         }
                     }
                 }
+                addMRootApplications(getApplicationContext(),AppList);
                 break;
             case "UF":
                 for (int i = 0; i < size; i++) {
@@ -597,5 +604,31 @@ public class Main extends Activity {
                 }
             }
         });
+    }
+
+    private static void addMRootApplications(Context context,List<Map<String, Object>> AppList){
+        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
+                "FrozenList", Context.MODE_PRIVATE);
+        final String pkgNameList = sharedPreferences.getString("pkgName", "");
+        String[] pkgNameListKeyValuePair = pkgNameList.split("\\|");
+        final SharedPreferences pkgName2NameSharedPreferences = context.getApplicationContext().getSharedPreferences(
+                "pkgName2Name", Context.MODE_PRIVATE);
+        for (String aPkgNameListKeyValuePair : pkgNameListKeyValuePair) {
+            if (!aPkgNameListKeyValuePair.equals("")){
+                Map<String, Object> keyValuePair = new HashMap<>();
+                Bitmap bitmap = getBitmapFromLocalFile(context.getFilesDir()+"/icon/"+aPkgNameListKeyValuePair+".png");
+                if (bitmap!=null){
+                    keyValuePair.put("Img", new BitmapDrawable(bitmap));
+                } else {
+                    keyValuePair.put("Img", R.mipmap.ic_launcher_round);
+                }
+                keyValuePair.put("Name",
+                        pkgName2NameSharedPreferences.getString(
+                                aPkgNameListKeyValuePair,
+                                context.getString(R.string.notAvailable)) + "(" + context.getString(R.string.frozen)+")");
+                keyValuePair.put("PackageName", aPkgNameListKeyValuePair);
+                AppList.add(keyValuePair);
+            }
+        }
     }
 }

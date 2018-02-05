@@ -8,12 +8,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.widget.Toast;
 
+import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 class Support {
     private static Process process = null;
@@ -333,6 +341,66 @@ class Support {
             e.printStackTrace();
         }
         sharedPreferences.edit().putString(pkgName, name).commit();
+        try{
+            realFolderCheck(context.getFilesDir()+"/icon");
+            writeBitmapToFile(context.getFilesDir()+"/icon/"+pkgName+".png",drawableToBitmap(packageManager.getApplicationIcon(pkgName)),100);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * 图片保存文件：
+     * 从Browser项目搬来的代码
+     * @param filePath filePath
+     * @param b bitmap
+     * @param quality quality
+     */
+    private static void writeBitmapToFile(String filePath, Bitmap b, int quality) {
+        try {
+            File desFile = new File(filePath);
+            FileOutputStream fos = new FileOutputStream(desFile);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            b.compress(Bitmap.CompressFormat.PNG, quality, bos);
+            bos.flush();
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //http://www.cnblogs.com/zhou2016/p/6281678.html
+    /**
+     * Drawable转Bitmap
+     *
+     * @param drawable drawable
+     * @return Bitmap
+     */
+    private static Bitmap drawableToBitmap(Drawable drawable) {
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    static Bitmap getBitmapFromLocalFile(String path){
+        return BitmapFactory.decodeFile(path);
+    }
+
+    static void realFolderCheck(String path) {
+        //检测文件夹是否存在
+        File file = new File(path);
+        if (file.exists()) {
+            if (!file.isDirectory()) {
+                throw new IllegalStateException(file.getAbsolutePath() +
+                        " already exists and is not a directory");
+            }
+        } else {
+            if (!file.mkdirs()) {
+                throw new IllegalStateException("Unable to create directory: " +
+                        file.getAbsolutePath());
+            }
+        }
+    }
 }
