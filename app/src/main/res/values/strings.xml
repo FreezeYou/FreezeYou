@@ -49,7 +49,7 @@
     <string name="onlyUA">用户应用</string>
     <string name="exit">退出软件</string>
     <string name="moreSettings">更多设置</string>
-    <string name="about_message">FreezeYou!\n冻住！不许动！\n这是一款轻量级的应用程序，它可以协助您的设备更流畅、更持久、更高效的运行。它不会在任何时候向您索要任何当时不必要的权限。\n使用方法：长按应用程序列表可以直接呼出冻结与解冻菜单，短按请在桌面快捷方式执行冻结或解冻操作。\n免ROOT：https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8（可点击 访问官网 查看） 官方QQ群：704086494\n官网：https://app.playhi.cf/freezeyou/\n本应用程序开源，地址：https://github.com/Playhi/FreezeYou</string>
+    <string name="about_message">FreezeYou!\n冻住！不许动！\n这是一款轻量级的应用程序，它可以协助您的设备更流畅、更持久、更高效的运行。它不会在任何时候向您索要任何当时不必要的权限。\n使用方法：长按应用程序列表可以直接呼出冻结与解冻菜单，短按请在桌面快捷方式执行冻结或解冻操作。\n免ROOT：https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8（可点击 访问官网 查看）\n官方QQ群：704086494\n官网：https://app.playhi.cf/freezeyou/\n本应用程序开源，地址：https://github.com/Playhi/FreezeYou</string>
     <string name="visitWebsite">访问官网</string>
     <string name="addQQGroup">加入QQ群</string>
 </resources>
