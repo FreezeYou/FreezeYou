@@ -4,6 +4,6 @@
 ## 下载 Download
 * [酷安(CoolApk)：http://www.coolapk.com/apk/165728](http://www.coolapk.com/apk/165728)
 ## 其它 Others
-* 欢迎转载，但转载时如非必要，请您不要修改应用程序或重打包，请直接使用 [Release](https://github.com/Playhi/FreezeYou/releases) 中包含的 安装包(APK)文件即可。
+* 欢迎转载，但转载时如非必要，请您不要修改应用程序或重打包，请直接使用 [Release](https://github.com/Playhi/FreezeYou/releases) 中包含的 安装包(APK)文件 即可。
 ## 翻译 Translation
 * [POEditor：https://poeditor.com/join/project/WSQOvTkNYK](https://poeditor.com/join/project/WSQOvTkNYK)
