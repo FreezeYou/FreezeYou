@@ -5,7 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
+
+import static cf.playhi.freezeyou.Support.showToast;
 
 public class Freeze extends Activity{
     @Override
@@ -28,10 +29,10 @@ public class Freeze extends Activity{
         String pkgName;
         pkgName = getIntent().getStringExtra("pkgName");
         if (pkgName==null){
-            Toast.makeText(getApplicationContext(),"参数错误",Toast.LENGTH_LONG).show();
+            showToast(getApplicationContext(),"参数错误");
             Freeze.this.finish();
         } else if (pkgName.equals("")){
-            Toast.makeText(getApplicationContext(),"参数错误",Toast.LENGTH_LONG).show();
+            showToast(getApplicationContext(),"参数错误");
             Freeze.this.finish();
         } else if (getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
             try{

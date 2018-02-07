@@ -2,10 +2,18 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import java.io.DataOutputStream;
+
+import static cf.playhi.freezeyou.Support.addFrozen;
+import static cf.playhi.freezeyou.Support.checkFrozen;
+import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
+import static cf.playhi.freezeyou.Support.isDeviceOwner;
+import static cf.playhi.freezeyou.Support.savePkgName2Name;
+import static cf.playhi.freezeyou.Support.showToast;
 
 public class OneKeyFreeze extends Activity {
     private static Process process = null;
@@ -14,40 +22,55 @@ public class OneKeyFreeze extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Activity activity = this;
-//        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
-//            if (getDevicePolicyManager(activity).setApplicationHidden(
-//                    DeviceAdminReceiver.getComponentName(activity),pkgName,true)){
-//                makeToast(activity,"Success!");
-//            } else {
-//                makeToast(activity, "Failed!");
-//            }
-//        } else {
-        try {
-            process = Runtime.getRuntime().exec("su");
-            outputStream = new DataOutputStream(process.getOutputStream());
-            String[] pkgNameList = getApplicationContext().getSharedPreferences(
-                    "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
-            for (String aPkgNameList : pkgNameList) {
-                outputStream.writeBytes(
-                        "pm disable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+        String[] pkgNameList = getApplicationContext().getSharedPreferences(
+                "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
+        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
+            try {
+                for (String aPkgNameList : pkgNameList) {
+                    if (!checkFrozen(activity,aPkgNameList)){
+                        savePkgName2Name(activity,aPkgNameList);
+                        if (getDevicePolicyManager(activity).setApplicationHidden(
+                                DeviceAdminReceiver.getComponentName(activity),aPkgNameList,true)){
+                            addFrozen(activity,aPkgNameList);
+                        } else {
+                            showToast(activity,aPkgNameList + " Failed!");
+                        }
+                    }
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+                showToast(activity,"发生了点异常，操作仍将继续:" + e.getLocalizedMessage());
             }
-            outputStream.writeBytes("exit\n");
-            outputStream.flush();
-            int exitValue = process.waitFor();
-            if (exitValue == 0) {
-                Toast.makeText(activity,R.string.executed,Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(activity,R.string.mayUnrootedOrOtherEx,Toast.LENGTH_LONG).show();
+        } else {
+            try {
+                process = Runtime.getRuntime().exec("su");
+                outputStream = new DataOutputStream(process.getOutputStream());
+                for (String aPkgNameList : pkgNameList) {
+                    int tmp = getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
+                    if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
+                        outputStream.writeBytes(
+                                "pm disable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                    }
+                }
+                outputStream.writeBytes("exit\n");
+                outputStream.flush();
+                int exitValue = process.waitFor();
+                if (exitValue == 0) {
+                    showToast(activity,R.string.executed);
+                } else {
+                    showToast(activity,R.string.mayUnrootedOrOtherEx);
+                }
+                Support.destroyProcess(true,outputStream,process,activity);
+            } catch (Exception e){
+                e.printStackTrace();
+                showToast(activity,getString(R.string.exception)+e.getMessage());
+                if (e.getMessage().contains("Permission denied")){
+                    showToast(activity,R.string.mayUnrooted);
+                }
+                Support.destroyProcess(true,outputStream,process,activity);
             }
-            Support.destroyProcess(true,outputStream,process,activity);
-        } catch (Exception e){
-            e.printStackTrace();
-            Toast.makeText(activity,getString(R.string.exception)+e.getMessage(),Toast.LENGTH_LONG).show();
-            if (e.getMessage().contains("Permission denied")){
-                Toast.makeText(activity,R.string.mayUnrooted,Toast.LENGTH_SHORT).show();
-            }
-            Support.destroyProcess(true,outputStream,process,activity);
         }
+
     }
 
 //    private static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity){

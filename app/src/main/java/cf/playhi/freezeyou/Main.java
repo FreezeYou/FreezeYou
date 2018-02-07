@@ -31,7 +31,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +41,6 @@ import java.util.Map;
 
 import static cf.playhi.freezeyou.Support.getBitmapFromLocalFile;
 import static cf.playhi.freezeyou.Support.showToast;
-//com.ibm.icu.text.Collator
 
 public class Main extends Activity {
     @Override
@@ -175,7 +173,7 @@ public class Main extends Activity {
                                 if (about.resolveActivity(getPackageManager()) != null) {
                                     startActivity(about);
                                 } else {
-                                    Toast.makeText(getApplicationContext(),R.string.plsVisitPXXXX,Toast.LENGTH_LONG).show();
+                                    showToast(getApplicationContext(),R.string.plsVisitPXXXX);
                                 }
                             }
                         })
@@ -523,7 +521,7 @@ public class Main extends Activity {
                                                 "FreezeYou! "+pkgName
                                         );
                                     } catch (PackageManager.NameNotFoundException e) {
-                                        Toast.makeText(getApplicationContext(), R.string.cannotFindApp, Toast.LENGTH_LONG).show();
+                                        showToast(getApplicationContext(), R.string.cannotFindApp);
                                     }
                                 }
                             })
@@ -543,7 +541,7 @@ public class Main extends Activity {
                                                         startActivity(intent);
                                                     } catch (Exception e) {
                                                         e.printStackTrace();
-                                                        Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                                        showToast(getApplicationContext(), e.getLocalizedMessage());
                                                     }
                                                 }
                                             });
@@ -559,9 +557,9 @@ public class Main extends Activity {
                                                                 "pkgName",
                                                                 pkgNameList.replace("|" + pkgName + "|", ""))
                                                         .commit()) {
-                                                    Toast.makeText(getApplicationContext(), R.string.removed, Toast.LENGTH_SHORT).show();
+                                                    showToast(getApplicationContext(), R.string.removed);
                                                 } else {
-                                                    Toast.makeText(getApplicationContext(), R.string.removeFailed, Toast.LENGTH_LONG).show();
+                                                    showToast(getApplicationContext(), R.string.removeFailed);
                                                 }
                                             }
                                         });
@@ -570,9 +568,9 @@ public class Main extends Activity {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int ii) {
                                                 if (sharedPreferences.edit().putString("pkgName", pkgNameList + "|" + pkgName + "|").commit()) {
-                                                    Toast.makeText(getApplicationContext(), R.string.added, Toast.LENGTH_SHORT).show();
+                                                    showToast(getApplicationContext(), R.string.added);
                                                 } else {
-                                                    Toast.makeText(getApplicationContext(), R.string.addFailed, Toast.LENGTH_LONG).show();
+                                                    showToast(getApplicationContext(), R.string.addFailed);
                                                 }
                                             }
                                         });

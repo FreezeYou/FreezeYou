@@ -157,7 +157,7 @@ class Support {
                                     }
                                 } catch (Exception e){
                                     e.printStackTrace();
-                                    Toast.makeText(activity,activity.getString(R.string.exception)+e.getMessage(),Toast.LENGTH_LONG).show();
+                                    showToast(activity,activity.getString(R.string.exception)+e.getMessage());
                                     if (e.getMessage().contains("Permission denied")){
                                         showToast(activity,R.string.mayUnrooted);
                                     }
@@ -177,9 +177,8 @@ class Support {
                             activity.startActivity(intent);
                             destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
                         } else {
-                            Toast.makeText(activity,
-                                    R.string.cannotFindTheLaunchIntent,
-                                    Toast.LENGTH_LONG).show();
+                            showToast(activity,
+                                    R.string.cannotFindTheLaunchIntent);
                         }
                     }
                 })
@@ -241,7 +240,7 @@ class Support {
 
     /****************
      *
-     * @return 返回true表示呼起手Q成功，返回fals表示呼起失败
+     * @return 返回true表示呼起手Q成功，返回false表示呼起失败
      ******************/
     static boolean joinQQGroup(Context context) {
         Intent intent = new Intent();
@@ -272,7 +271,7 @@ class Support {
         return (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
     }
 
-    private static void addFrozen(Context context,String pkgName){
+    static void addFrozen(Context context,String pkgName){
         final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
                 "FrozenList", Context.MODE_PRIVATE);
         final String pkgNameList = sharedPreferences.getString("pkgName", "");
@@ -320,9 +319,8 @@ class Support {
                             activity.startActivity(intent);
                             destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
                         } else {
-                            Toast.makeText(activity,
-                                    R.string.unrootedOrCannotFindTheLaunchIntent,
-                                    Toast.LENGTH_LONG).show();
+                            showToast(activity,
+                                    R.string.unrootedOrCannotFindTheLaunchIntent);
                             destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
                         }
                     }
@@ -337,7 +335,7 @@ class Support {
         alertDialog.show();
     }
 
-    private static void savePkgName2Name(Context context,String pkgName){
+    static void savePkgName2Name(Context context,String pkgName){
         final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
                 "pkgName2Name", Context.MODE_PRIVATE);
         String name = context.getString(R.string.notice);
