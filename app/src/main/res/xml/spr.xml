@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/dangerZone">
+        <Preference android:title="@string/uninstall" >
+            <intent
+                android:targetPackage="cf.playhi.freezeyou"
+                android:targetClass="cf.playhi.freezeyou.Uninstall"
+                android:data="Uninstall" />
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>

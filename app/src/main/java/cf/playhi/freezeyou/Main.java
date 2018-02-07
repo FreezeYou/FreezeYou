@@ -12,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -21,7 +20,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -241,6 +239,9 @@ public class Main extends Activity {
                 return true;
             case R.id.menu_exit:
                 System.exit(0);
+                return true;
+            case R.id.menu_moreSettings:
+                startActivity(new Intent(this,SettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -504,10 +505,10 @@ public class Main extends Activity {
                 final String pkgName=map.get("PackageName");
                 if (!(name.equals(getString(R.string.notAvailable))||name.equals(getString(R.string.uninstalled)))){
                     int tmp = getPackageManager().getApplicationEnabledSetting(pkgName);
-                    if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
-                        Support.makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
-                    } else {
+                    if (!(tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED)){
                         Support.makeDialog2(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
+                    } else {
+                        Support.makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
                     }
                 }
                 return true;

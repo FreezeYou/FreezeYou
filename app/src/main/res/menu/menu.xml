@@ -40,9 +40,9 @@
         </menu>
     </item>
 
-    <!--<item-->
-        <!--android:id="@+id/menu_moreSettings"-->
-        <!--android:title="@string/moreSettings"/>-->
+    <item
+        android:id="@+id/menu_moreSettings"
+        android:title="@string/moreSettings"/>
     <item
         android:id="@+id/menu_oneKeyFreezeImmediately"
         android:title="@string/OneKeyFreezeImmediately" />

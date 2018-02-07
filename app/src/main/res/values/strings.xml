@@ -52,4 +52,8 @@
     <string name="about_message">FreezeYou!\n冻住！不许动！\n这是一款轻量级的应用程序，它可以协助您的设备更流畅、更持久、更高效的运行。它不会在任何时候向您索要任何当时不必要的权限。\n使用方法：长按应用程序列表可以直接呼出冻结与解冻菜单，短按请在桌面快捷方式执行冻结或解冻操作。\n免ROOT：https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8（可点击 访问官网 查看）\n官方QQ群：704086494\n官网：https://app.playhi.cf/freezeyou/\n本应用程序开源，地址：https://github.com/Playhi/FreezeYou</string>
     <string name="visitWebsite">访问官网</string>
     <string name="addQQGroup">加入QQ群</string>
+    <string name="uninstall">卸载</string>
+    <string name="dangerZone">危险区</string>
+    <string name="disableMRootMode">解除免ROOT</string>
+    <string name="disableMRootModeEx">如果启用免ROOT模式成功，需要解除后才能正常卸载本应用程序。</string>
 </resources>

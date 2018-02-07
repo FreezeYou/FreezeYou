@@ -4,11 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 public class Freeze extends Activity{

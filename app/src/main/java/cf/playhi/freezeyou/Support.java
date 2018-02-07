@@ -223,16 +223,16 @@ class Support {
         Toast.makeText(context,string,Toast.LENGTH_LONG).show();
     }
 
-    static AlertDialog.Builder buildAlertDialog(Activity activity,int icon,int message,int title){
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+    static AlertDialog.Builder buildAlertDialog(Context context,int icon,int message,int title){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setIcon(icon);
         builder.setTitle(title);
         builder.setMessage(message);
         return builder;
     }
 
-    static AlertDialog.Builder buildAlertDialog(Activity activity, Drawable icon, CharSequence message,CharSequence title){
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+    static AlertDialog.Builder buildAlertDialog(Context context, Drawable icon, CharSequence message,CharSequence title){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setIcon(icon);
         builder.setTitle(title);
         builder.setMessage(message);
@@ -264,11 +264,11 @@ class Support {
         }
     }
 
-    private static boolean isDeviceOwner(Context context) {
+    static boolean isDeviceOwner(Context context) {
         return Build.VERSION.SDK_INT >= 18 && getDevicePolicyManager(context).isDeviceOwnerApp(context.getPackageName());
     }
 
-    private static DevicePolicyManager getDevicePolicyManager(Context context){
+    static DevicePolicyManager getDevicePolicyManager(Context context){
         return (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
     }
 
@@ -403,4 +403,38 @@ class Support {
             }
         }
     }
+//
+//    static int getVersionCode(Context context) {
+//        PackageManager packageManager = context.getPackageManager();
+//        String packageName = context.getPackageName();
+//        int flags = 0;
+//        PackageInfo packageInfo = null;
+//        try {
+//            packageInfo = packageManager.getPackageInfo(packageName, flags);
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (packageInfo != null) {
+//            return packageInfo.versionCode;
+//        }
+//        return 0;
+//    }
+//
+//    static String getVersionName(Context context) {
+//        PackageManager packageManager = context.getPackageManager();
+//        String packageName = context.getPackageName();
+//        int flags = 0;
+//        PackageInfo packageInfo = null;
+//        try {
+//            packageInfo = packageManager.getPackageInfo(packageName, flags);
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (packageInfo != null) {
+//            return packageInfo.versionName;
+//        }
+//        return "";
+//    }
 }
