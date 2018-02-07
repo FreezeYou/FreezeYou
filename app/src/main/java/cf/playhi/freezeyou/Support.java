@@ -294,6 +294,16 @@ class Support {
         }
     }
 
+    static boolean checkFrozen(Context context,String pkgName){
+        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
+                "FrozenList", Context.MODE_PRIVATE);
+        final String pkgNameList = sharedPreferences.getString("pkgName", "");
+        if (pkgNameList.contains("|"+pkgName+"|")){
+            return true;
+        }
+        return false;
+    }
+
     private static void askRun(final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String pkgName){
         AlertDialog alertDialog = new AlertDialog.Builder(activity)
                 .setTitle(R.string.notice)

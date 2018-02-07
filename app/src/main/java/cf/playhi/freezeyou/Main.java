@@ -267,6 +267,7 @@ public class Main extends Activity {
         int size = applicationInfo.size();
         switch (filter) {
             case "all":
+                addMRootApplications(getApplicationContext(),AppList);
                 for (int i = 0; i < size; i++) {
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
@@ -287,16 +288,12 @@ public class Main extends Activity {
                         keyValuePair.put("PackageName", packageName);
                         AppList.add(keyValuePair);
                     } else if ((i+1==size)&&(AppList.size()==0)){
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-                        keyValuePair.put("Name", getString(R.string.notAvailable));
-                        keyValuePair.put("PackageName", getString(R.string.notAvailable));
-                        AppList.add(keyValuePair);
+                        addNotAvailablePair(getApplicationContext(),AppList);
                     }
                 }
-                addMRootApplications(getApplicationContext(),AppList);
                 break;
             case "OF":
+                addMRootApplications(getApplicationContext(),AppList);
                 for (int i = 0; i < size; i++) {
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
@@ -323,7 +320,6 @@ public class Main extends Activity {
                         }
                     }
                 }
-                addMRootApplications(getApplicationContext(),AppList);
                 break;
             case "UF":
                 for (int i = 0; i < size; i++) {
@@ -345,11 +341,7 @@ public class Main extends Activity {
                             AppList.add(keyValuePair);
                         }
                     } else if ((i+1==size)&&(AppList.size()==0)){
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-                        keyValuePair.put("Name", getString(R.string.notAvailable));
-                        keyValuePair.put("PackageName", getString(R.string.notAvailable));
-                        AppList.add(keyValuePair);
+                        addNotAvailablePair(getApplicationContext(),AppList);
                     }
                 }
                 break;
@@ -386,11 +378,7 @@ public class Main extends Activity {
                         keyValuePair.put("PackageName", aPkgNameList);
                         AppList.add(keyValuePair);
                     } else if (pkgNameList.length==1||pkgNameList.length==0){
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-                        keyValuePair.put("Name", getString(R.string.notAvailable));
-                        keyValuePair.put("PackageName", getString(R.string.notAvailable));
-                        AppList.add(keyValuePair);
+                        addNotAvailablePair(getApplicationContext(),AppList);
                     }
                 }
                 break;
@@ -417,11 +405,7 @@ public class Main extends Activity {
                             AppList.add(keyValuePair);
                         }
                     } else if ((i+1==size)&&(AppList.size()==0)){
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-                        keyValuePair.put("Name", getString(R.string.notAvailable));
-                        keyValuePair.put("PackageName", getString(R.string.notAvailable));
-                        AppList.add(keyValuePair);
+                        addNotAvailablePair(getApplicationContext(),AppList);
                     }
                 }
                 break;
@@ -448,11 +432,7 @@ public class Main extends Activity {
                             AppList.add(keyValuePair);
                         }
                     } else if ((i+1==size)&&(AppList.size()==0)){
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-                        keyValuePair.put("Name", getString(R.string.notAvailable));
-                        keyValuePair.put("PackageName", getString(R.string.notAvailable));
-                        AppList.add(keyValuePair);
+                        addNotAvailablePair(getApplicationContext(),AppList);
                     }
                 }
                 break;
@@ -505,10 +485,10 @@ public class Main extends Activity {
                 final String pkgName=map.get("PackageName");
                 if (!(name.equals(getString(R.string.notAvailable))||name.equals(getString(R.string.uninstalled)))){
                     int tmp = getPackageManager().getApplicationEnabledSetting(pkgName);
-                    if (!(tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED)){
-                        Support.makeDialog2(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
-                    } else {
+                    if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED||Support.checkFrozen(Main.this,pkgName)){
                         Support.makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
+                    } else {
+                        Support.makeDialog2(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
                     }
                 }
                 return true;
@@ -631,5 +611,13 @@ public class Main extends Activity {
                 AppList.add(keyValuePair);
             }
         }
+    }
+
+    private static void addNotAvailablePair(Context context,List<Map<String,Object>> AppList){
+        Map<String, Object> keyValuePair = new HashMap<>();
+        keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+        keyValuePair.put("Name", context.getString(R.string.notAvailable));
+        keyValuePair.put("PackageName", context.getString(R.string.notAvailable));
+        AppList.add(keyValuePair);
     }
 }

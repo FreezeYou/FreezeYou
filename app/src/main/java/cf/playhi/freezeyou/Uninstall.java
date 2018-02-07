@@ -38,6 +38,12 @@ public class Uninstall extends Activity{
                         finish();
                     }
                 })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        finish();
+                    }
+                })
                 .create()
                 .show();
     }
