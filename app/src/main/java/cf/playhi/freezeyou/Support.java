@@ -298,10 +298,7 @@ class Support {
         final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
                 "FrozenList", Context.MODE_PRIVATE);
         final String pkgNameList = sharedPreferences.getString("pkgName", "");
-        if (pkgNameList.contains("|"+pkgName+"|")){
-            return true;
-        }
-        return false;
+        return pkgNameList.contains("|" + pkgName + "|");
     }
 
     private static void askRun(final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String pkgName){
@@ -398,7 +395,7 @@ class Support {
         return BitmapFactory.decodeFile(path);
     }
 
-    static void realFolderCheck(String path) {
+    private static void realFolderCheck(String path) {
         //检测文件夹是否存在
         File file = new File(path);
         if (file.exists()) {
