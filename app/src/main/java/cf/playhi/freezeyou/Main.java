@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static cf.playhi.freezeyou.Support.checkFrozen;
 import static cf.playhi.freezeyou.Support.getBitmapFromLocalFile;
 import static cf.playhi.freezeyou.Support.getVersionCode;
 import static cf.playhi.freezeyou.Support.showToast;
@@ -362,14 +363,29 @@ public class Main extends Activity {
                     try{
                         name = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(aPkgNameList,0)).toString();
                     } catch (Exception e){
-                        name = getResources().getString(R.string.uninstalled);
+                        if (checkFrozen(getApplicationContext(),aPkgNameList)){
+                            final SharedPreferences sharedPreferences = getApplicationContext().getApplicationContext().getSharedPreferences(
+                                    "pkgName2Name", Context.MODE_PRIVATE);
+                            name = sharedPreferences.getString(aPkgNameList,getResources().getString(R.string.notice));
+                        } else {
+                            name = getResources().getString(R.string.uninstalled);
+                        }
                     }
                     if (!(aPkgNameList.equals("android") || aPkgNameList.equals("cf.playhi.freezeyou") || aPkgNameList.equals(""))) {
                         Map<String, Object> keyValuePair = new HashMap<>();
                         try{
                             icon = getPackageManager().getApplicationIcon(getPackageManager().getApplicationInfo(aPkgNameList,0));
                         } catch (Exception e){
-                            icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
+                            if (checkFrozen(getApplicationContext(),aPkgNameList)){
+                                Bitmap bitmap = getBitmapFromLocalFile(getApplicationContext().getFilesDir()+"/icon/"+aPkgNameList+".png");
+                                if (bitmap!=null){
+                                    icon = new BitmapDrawable(bitmap);
+                                } else {
+                                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                                }
+                            } else {
+                                icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
+                            }
                         }
                         keyValuePair.put("Img", icon);
                         int tmp;
@@ -378,7 +394,7 @@ public class Main extends Activity {
                         } catch (Exception e){
                             tmp = -10086;
                         }
-                        if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+                        if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED || checkFrozen(getApplicationContext(),aPkgNameList)) {
                             keyValuePair.put("Name", name + "(" + getString(R.string.frozen) + ")");
                         } else {
                             keyValuePair.put("Name", name);
