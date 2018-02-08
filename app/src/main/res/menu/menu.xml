@@ -47,6 +47,9 @@
         android:id="@+id/menu_oneKeyFreezeImmediately"
         android:title="@string/OneKeyFreezeImmediately" />
     <item
+        android:id="@+id/menu_update"
+        android:title="@string/update" />
+    <item
         android:id="@+id/menu_about"
         android:title="@string/about" />
     <item

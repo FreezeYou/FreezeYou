@@ -4,7 +4,7 @@
     <PreferenceCategory
         android:title="@string/dangerZone">
         <Preference
-            android:title="@string/uninstall"
+            android:title="@string/disableMRootMode"
             android:summary="@string/disableMRootModeEx">
             <intent
                 android:targetPackage="cf.playhi.freezeyou"
@@ -12,4 +12,5 @@
                 android:data="Uninstall" />
         </Preference>
     </PreferenceCategory>
+
 </PreferenceScreen>

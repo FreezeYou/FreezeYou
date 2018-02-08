@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -408,23 +409,23 @@ class Support {
             }
         }
     }
-//
-//    static int getVersionCode(Context context) {
-//        PackageManager packageManager = context.getPackageManager();
-//        String packageName = context.getPackageName();
-//        int flags = 0;
-//        PackageInfo packageInfo = null;
-//        try {
-//            packageInfo = packageManager.getPackageInfo(packageName, flags);
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (packageInfo != null) {
-//            return packageInfo.versionCode;
-//        }
-//        return 0;
-//    }
+
+    static int getVersionCode(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        String packageName = context.getPackageName();
+        int flags = 0;
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = packageManager.getPackageInfo(packageName, flags);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (packageInfo != null) {
+            return packageInfo.versionCode;
+        }
+        return 0;
+    }
 //
 //    static String getVersionName(Context context) {
 //        PackageManager packageManager = context.getPackageManager();

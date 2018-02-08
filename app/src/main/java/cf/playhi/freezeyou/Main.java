@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 import static cf.playhi.freezeyou.Support.getBitmapFromLocalFile;
+import static cf.playhi.freezeyou.Support.getVersionCode;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class Main extends Activity {
@@ -234,6 +235,15 @@ public class Main extends Activity {
                         generateList("OU");
                     }
                 }).start();
+                return true;
+            case R.id.menu_update:
+                Uri webPage = Uri.parse("https://app.playhi.cf/freezeyou/checkupdate.php?v=" + getVersionCode(this));
+                Intent about = new Intent(Intent.ACTION_VIEW, webPage);
+                if (about.resolveActivity(getPackageManager()) != null) {
+                    startActivity(about);
+                } else {
+                    showToast(this,"请访问 https://app.playhi.cf/freezeyou/checkupdate.php?v=" + getVersionCode(this));
+                }
                 return true;
             case R.id.menu_exit:
                 System.exit(0);

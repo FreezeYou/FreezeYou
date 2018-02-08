@@ -25,22 +25,24 @@ public class OneKeyFreeze extends Activity {
         String[] pkgNameList = getApplicationContext().getSharedPreferences(
                 "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
         if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
-            try {
-                for (String aPkgNameList : pkgNameList) {
-                    if (!checkFrozen(activity,aPkgNameList)){
-                        savePkgName2Name(activity,aPkgNameList);
+            for (String aPkgNameList : pkgNameList) {
+                String tmp = aPkgNameList.replaceAll("\\|", "");
+                try {
+                    if (!checkFrozen(activity, tmp)) {
+                        savePkgName2Name(activity, tmp);
                         if (getDevicePolicyManager(activity).setApplicationHidden(
-                                DeviceAdminReceiver.getComponentName(activity),aPkgNameList,true)){
-                            addFrozen(activity,aPkgNameList);
+                                DeviceAdminReceiver.getComponentName(activity), tmp, true)) {
+                            addFrozen(activity, tmp);
                         } else {
-                            showToast(activity,aPkgNameList + " Failed!");
+                            showToast(activity, tmp + " Failed!");
                         }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showToast(activity, "发生了点异常，操作仍将继续:" + e.getLocalizedMessage());
                 }
-            } catch (Exception e){
-                e.printStackTrace();
-                showToast(activity,"发生了点异常，操作仍将继续:" + e.getLocalizedMessage());
             }
+            finish();
         } else {
             try {
                 process = Runtime.getRuntime().exec("su");

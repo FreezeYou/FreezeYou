@@ -56,4 +56,5 @@
     <string name="dangerZone">危险区</string>
     <string name="disableMRootMode">解除免ROOT</string>
     <string name="disableMRootModeEx">如果启用免ROOT模式成功，需要解除后才能正常卸载本应用程序。</string>
+    <string name="update">检查更新</string>
 </resources>
