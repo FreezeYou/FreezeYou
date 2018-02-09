@@ -57,4 +57,10 @@
     <string name="disableMRootMode">解除免ROOT</string>
     <string name="disableMRootModeEx">如果启用免ROOT模式成功，需要解除后才能正常卸载本应用程序。</string>
     <string name="update">检查更新</string>
+    <string name="common">常规</string>
+    <string name="openImmediately">立即打开</string>
+    <string name="openImmediatelyEx">解冻后直接打开应用程序，不再询问</string>
+    <string name="hMRoot">如何免ROOT</string>
+    <string name="openAndUFImmediately">快捷方式立即解冻并启动</string>
+    <string name="openAndUFImmediatelyEx">损失快捷方式冻结的便利（可利用 一键冻结）</string>
 </resources>

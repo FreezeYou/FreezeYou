@@ -42,6 +42,7 @@ public class OneKeyFreeze extends Activity {
                     showToast(activity, "发生了点异常，操作仍将继续:" + e.getLocalizedMessage());
                 }
             }
+            showToast(activity,R.string.executed);
             finish();
         } else {
             try {

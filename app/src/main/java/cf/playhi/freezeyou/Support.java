@@ -16,6 +16,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
@@ -34,79 +35,75 @@ class Support {
                 .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (backData.equals("backData")){
-                            if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
-                                savePkgName2Name(activity,pkgName);
-                                if (getDevicePolicyManager(activity).setApplicationHidden(
-                                        DeviceAdminReceiver.getComponentName(activity),pkgName,true)){
-                                    addFrozen(activity,pkgName);
-                                } else {
-                                    showToast(activity, "Failed!");
-                                }
+                        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
+                            savePkgName2Name(activity,pkgName);
+                            if (getDevicePolicyManager(activity).setApplicationHidden(
+                                    DeviceAdminReceiver.getComponentName(activity),pkgName,true)) {
+                                addFrozen(activity, pkgName);
                             } else {
-                                try {
-                                    process = Runtime.getRuntime().exec("su");
-                                    outputStream = new DataOutputStream(process.getOutputStream());
-                                    outputStream.writeBytes("pm disable " + pkgName + "\n");
-                                    outputStream.writeBytes("exit\n");
-                                    outputStream.flush();
-                                    int exitValue = process.waitFor();
-                                    if (exitValue == 0) {
-                                        showToast(activity, R.string.executed);
-                                    } else {
-                                        showToast(activity, R.string.mayUnrootedOrOtherEx);
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    showToast(activity, activity.getString(R.string.exception) + e.getMessage());
-                                    if (e.getMessage().contains("Permission denied")) {
-                                        showToast(activity, R.string.mayUnrooted);
-                                    }
-                                    destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                                }
+                                showToast(activity, "Failed!");
                             }
-                            destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
+                        } else {
+                            try {
+                                process = Runtime.getRuntime().exec("su");
+                                outputStream = new DataOutputStream(process.getOutputStream());
+                                outputStream.writeBytes("pm disable " + pkgName + "\n");
+                                outputStream.writeBytes("exit\n");
+                                outputStream.flush();
+                                int exitValue = process.waitFor();
+                                if (exitValue == 0) {
+                                    showToast(activity, R.string.executed);
+                                } else {
+                                    showToast(activity, R.string.mayUnrootedOrOtherEx);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                showToast(activity, activity.getString(R.string.exception) + e.getMessage());
+                                if (e.getMessage().contains("Permission denied")) {
+                                    showToast(activity, R.string.mayUnrooted);
+                                }
+                                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+                            }
                         }
+                        destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                     }
                 })
                 .setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (backData.equals("backData")){
-                            final SharedPreferences sharedPreferences = activity.getApplicationContext().getSharedPreferences(
-                                    "FrozenList", Context.MODE_PRIVATE);
-                            final String pkgNameList = sharedPreferences.getString("pkgName", "");
-                            if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && (title.equals(activity.getString(R.string.notice))||pkgNameList.contains("|" + pkgName + "|"))){
-                                if (getDevicePolicyManager(activity).setApplicationHidden(
-                                        DeviceAdminReceiver.getComponentName(activity),pkgName,false)){
-                                    removeFrozen(activity,pkgName);
-                                    askRun(activity,SelfCloseWhenDestroyProcess,pkgName);
-                                } else {
-                                    showToast(activity, "Failed!");
-                                    destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
-                                }
+                        final SharedPreferences sharedPreferences = activity.getApplicationContext().getSharedPreferences(
+                                "FrozenList", Context.MODE_PRIVATE);
+                        final String pkgNameList = sharedPreferences.getString("pkgName", "");
+                        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && (title.equals(activity.getString(R.string.notice))||pkgNameList.contains("|" + pkgName + "|"))) {
+                            if (getDevicePolicyManager(activity).setApplicationHidden(
+                                    DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
+                                removeFrozen(activity, pkgName);
+                                askRun(activity, SelfCloseWhenDestroyProcess, pkgName);
                             } else {
-                                try {
-                                    process = Runtime.getRuntime().exec("su");
-                                    outputStream = new DataOutputStream(process.getOutputStream());
-                                    outputStream.writeBytes("pm enable " + pkgName + "\n");
-                                    outputStream.writeBytes("exit\n");
-                                    outputStream.flush();
-                                    int exitValue = process.waitFor();
-                                    if (exitValue == 0) {
+                                showToast(activity, "Failed!");
+                                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+                            }
+                        } else {
+                            try {
+                                process = Runtime.getRuntime().exec("su");
+                                outputStream = new DataOutputStream(process.getOutputStream());
+                                outputStream.writeBytes("pm enable " + pkgName + "\n");
+                                outputStream.writeBytes("exit\n");
+                                outputStream.flush();
+                                int exitValue = process.waitFor();
+                                if (exitValue == 0) {
                                         askRun(activity,SelfCloseWhenDestroyProcess,pkgName);
-                                    } else {
-                                        showToast(activity, R.string.mayUnrootedOrOtherEx);
-                                        destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    showToast(activity, activity.getString(R.string.exception) + e.getMessage());
-                                    if (e.getMessage().contains("Permission denied")) {
-                                        showToast(activity, R.string.mayUnrooted);
-                                    }
+                                } else {
+                                    showToast(activity, R.string.mayUnrootedOrOtherEx);
                                     destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                showToast(activity, activity.getString(R.string.exception) + e.getMessage());
+                                if (e.getMessage().contains("Permission denied")) {
+                                    showToast(activity, R.string.mayUnrooted);
+                                }
+                                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
                             }
                         }
                     }
@@ -134,39 +131,37 @@ class Support {
                 .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (backData.equals("backData")){
-                            if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
-                                savePkgName2Name(activity,pkgName);
-                                if (getDevicePolicyManager(activity).setApplicationHidden(
-                                        DeviceAdminReceiver.getComponentName(activity),pkgName,true)){
-                                    addFrozen(activity,pkgName);
-                                } else {
-                                    showToast(activity, "Failed!");
-                                }
+                        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(activity)) {
+                            savePkgName2Name(activity, pkgName);
+                            if (getDevicePolicyManager(activity).setApplicationHidden(
+                                    DeviceAdminReceiver.getComponentName(activity), pkgName, true)) {
+                                addFrozen(activity, pkgName);
                             } else {
-                                try {
-                                    process = Runtime.getRuntime().exec("su");
-                                    outputStream = new DataOutputStream(process.getOutputStream());
-                                    outputStream.writeBytes("pm disable " + pkgName + "\n");
-                                    outputStream.writeBytes("exit\n");
-                                    outputStream.flush();
-                                    int exitValue = process.waitFor();
-                                    if (exitValue == 0) {
-                                        showToast(activity,R.string.executed);
-                                    } else {
-                                        showToast(activity,R.string.mayUnrootedOrOtherEx);
-                                    }
-                                } catch (Exception e){
-                                    e.printStackTrace();
-                                    showToast(activity,activity.getString(R.string.exception)+e.getMessage());
-                                    if (e.getMessage().contains("Permission denied")){
-                                        showToast(activity,R.string.mayUnrooted);
-                                    }
-                                    destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
-                                }
+                                showToast(activity, "Failed!");
                             }
-                            destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
+                        } else {
+                            try {
+                                process = Runtime.getRuntime().exec("su");
+                                outputStream = new DataOutputStream(process.getOutputStream());
+                                outputStream.writeBytes("pm disable " + pkgName + "\n");
+                                outputStream.writeBytes("exit\n");
+                                outputStream.flush();
+                                int exitValue = process.waitFor();
+                                if (exitValue == 0) {
+                                    showToast(activity, R.string.executed);
+                                } else {
+                                    showToast(activity, R.string.mayUnrootedOrOtherEx);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                showToast(activity, activity.getString(R.string.exception) + e.getMessage());
+                                if (e.getMessage().contains("Permission denied")) {
+                                    showToast(activity, R.string.mayUnrooted);
+                                }
+                                destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
+                            }
                         }
+                        destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
                     }
                 })
                 .setPositiveButton(R.string.launch, new DialogInterface.OnClickListener() {
@@ -302,38 +297,124 @@ class Support {
     }
 
     private static void askRun(final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String pkgName){
-        AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                .setTitle(R.string.notice)
-                .setMessage(R.string.unfreezedAndAskLaunch)
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                    }
-                })
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int ii) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+        if (sharedPref.getBoolean("openImmediately",false)){
+            if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
+                Intent intent = new Intent(
+                        activity.getPackageManager().getLaunchIntentForPackage(pkgName));
+                activity.startActivity(intent);
+                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+            } else {
+                showToast(activity,
+                        R.string.unrootedOrCannotFindTheLaunchIntent);
+                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+            }
+        } else {
+            AlertDialog alertDialog = new AlertDialog.Builder(activity)
+                    .setTitle(R.string.notice)
+                    .setMessage(R.string.unfreezedAndAskLaunch)
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+                        }
+                    })
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int ii) {
+                            if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
+                                Intent intent = new Intent(
+                                        activity.getPackageManager().getLaunchIntentForPackage(pkgName));
+                                activity.startActivity(intent);
+                                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+                            } else {
+                                showToast(activity,
+                                        R.string.unrootedOrCannotFindTheLaunchIntent);
+                                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+                            }
+                        }
+                    })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
+                            destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+                        }
+                    })
+                    .create();
+            alertDialog.show();
+        }
+    }
+
+    static void shortcutMakeDialog(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess,final String backData,final String pkgName,int ot){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+        if (sharedPref.getBoolean("openAndUFImmediately",false)){
+            if (ot==2){
+                if (activity.getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
+                    Intent intent = new Intent(
+                            activity.getPackageManager().getLaunchIntentForPackage(pkgName));
+                    activity.startActivity(intent);
+                    destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
+                } else {
+                    showToast(activity,
+                            R.string.cannotFindTheLaunchIntent);
+                }
+            } else {
+                final SharedPreferences sharedPreferences = activity.getApplicationContext().getSharedPreferences(
+                        "FrozenList", Context.MODE_PRIVATE);
+                final String pkgNameList = sharedPreferences.getString("pkgName", "");
+                if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && (title.equals(activity.getString(R.string.notice))||pkgNameList.contains("|" + pkgName + "|"))) {
+                    if (getDevicePolicyManager(activity).setApplicationHidden(
+                            DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
+                        removeFrozen(activity, pkgName);
                         if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
                             Intent intent = new Intent(
                                     activity.getPackageManager().getLaunchIntentForPackage(pkgName));
                             activity.startActivity(intent);
-                            destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+                            destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
                         } else {
                             showToast(activity,
                                     R.string.unrootedOrCannotFindTheLaunchIntent);
-                            destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+                            destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
                         }
+                    } else {
+                        showToast(activity, "Failed!");
+                        destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
                     }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialogInterface) {
-                        destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+                } else {
+                    try {
+                        process = Runtime.getRuntime().exec("su");
+                        outputStream = new DataOutputStream(process.getOutputStream());
+                        outputStream.writeBytes("pm enable " + pkgName + "\n");
+                        outputStream.writeBytes("exit\n");
+                        outputStream.flush();
+                        int exitValue = process.waitFor();
+                        if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
+                            Intent intent = new Intent(
+                                    activity.getPackageManager().getLaunchIntentForPackage(pkgName));
+                            activity.startActivity(intent);
+                            destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
+                        } else {
+                            showToast(activity,
+                                    R.string.unrootedOrCannotFindTheLaunchIntent);
+                            destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        showToast(activity, activity.getString(R.string.exception) + e.getMessage());
+                        if (e.getMessage().contains("Permission denied")) {
+                            showToast(activity, R.string.mayUnrooted);
+                        }
+                        destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
                     }
-                })
-                .create();
-        alertDialog.show();
+                }
+            }
+        } else {
+            if (ot==2){
+                makeDialog2(title,message,activity,selfCloseWhenDestroyProcess,backData,pkgName);
+            } else {
+                makeDialog(title,message,activity,selfCloseWhenDestroyProcess,backData,pkgName);
+            }
+        }
     }
 
     static void savePkgName2Name(Context context,String pkgName){

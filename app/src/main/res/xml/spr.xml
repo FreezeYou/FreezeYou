@@ -2,6 +2,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
+        android:title="@string/common">
+        <CheckBoxPreference
+            android:title="@string/openImmediately"
+            android:summary="@string/openImmediatelyEx"
+            android:key="openImmediately"
+            android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:title="@string/openAndUFImmediately"
+            android:summary="@string/openAndUFImmediatelyEx"
+            android:key="openAndUFImmediately"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/dangerZone">
         <Preference
             android:title="@string/disableMRootMode"

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import static cf.playhi.freezeyou.Support.shortcutMakeDialog;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class Freeze extends Activity{
@@ -25,7 +26,7 @@ public class Freeze extends Activity{
 
     private void init(){
 
-        String backData = "backData";
+        String backData = "shortCut";
         String pkgName;
         pkgName = getIntent().getStringExtra("pkgName");
         if (pkgName==null){
@@ -36,21 +37,21 @@ public class Freeze extends Activity{
             Freeze.this.finish();
         } else if (getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
             try{
-                Support.makeDialog2(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(pkgName,0)).toString(),getString(R.string.chooseDetailAction),Freeze.this,true,backData,pkgName);
+                shortcutMakeDialog(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(pkgName,0)).toString(),getString(R.string.chooseDetailAction),Freeze.this,true,backData,pkgName,2);
             }catch (Exception e){
                 e.printStackTrace();
                 SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
                         "pkgName2Name", Context.MODE_PRIVATE);
-                Support.makeDialog2(sharedPreferences.getString(pkgName,getString(R.string.notice)),getString(R.string.chooseDetailAction),Freeze.this,true,backData,pkgName);
+                shortcutMakeDialog(sharedPreferences.getString(pkgName,getString(R.string.notice)),getString(R.string.chooseDetailAction),Freeze.this,true,backData,pkgName,2);
             }
         } else {
             try {
-                Support.makeDialog(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(pkgName, 0)).toString(), getString(R.string.chooseDetailAction), Freeze.this, true, backData, pkgName);
+                shortcutMakeDialog(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(pkgName, 0)).toString(), getString(R.string.chooseDetailAction), Freeze.this, true, backData, pkgName,1);
             } catch (Exception e) {
                 e.printStackTrace();
                 SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
                         "pkgName2Name", Context.MODE_PRIVATE);
-                Support.makeDialog(sharedPreferences.getString(pkgName,getString(R.string.notice)), getString(R.string.chooseDetailAction), Freeze.this, true, backData, pkgName);
+                shortcutMakeDialog(sharedPreferences.getString(pkgName,getString(R.string.notice)), getString(R.string.chooseDetailAction), Freeze.this, true, backData, pkgName,1);
             }
         }
     }

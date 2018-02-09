@@ -65,6 +65,18 @@ public class Main extends Activity {
                     public void onClick(DialogInterface dialogInterface, int ii) {
                     }
                 })
+                .setNeutralButton(R.string.hMRoot, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Uri webPage = Uri.parse("https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8");
+                        Intent about = new Intent(Intent.ACTION_VIEW, webPage);
+                        if (about.resolveActivity(getPackageManager()) != null) {
+                            startActivity(about);
+                        } else {
+                            showToast(getApplicationContext(),R.string.plsVisitPXXXX);
+                        }
+                    }
+                })
                 .create();
         alertDialog.show();
     }
