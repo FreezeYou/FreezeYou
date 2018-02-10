@@ -53,7 +53,30 @@ public class Main extends Activity {
         initThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                generateList("all");
+                String mode = getIntent().getStringExtra("pkgName");
+                if (mode == null){
+                    mode = "all";
+                }
+                switch (mode){
+                    case "OF":
+                        generateList("OF");
+                        break;
+                    case "UF":
+                        generateList("UF");
+                        break;
+                    case "OO":
+                        generateList("OO");
+                        break;
+                    case "OS":
+                        generateList("OS");
+                        break;
+                    case "OU":
+                        generateList("OU");
+                        break;
+                    default:
+                        generateList("all");
+                        break;
+                }
             }
         });
         initThread.start();
@@ -169,6 +192,30 @@ public class Main extends Activity {
                         "",
                         getResources().getDrawable(R.mipmap.ic_launcher_round),OneKeyFreeze.class,
                         "OneKeyFreeze"
+                );
+                return true;
+            case R.id.menu_createOnlyFrozenShortCut:
+                createShortCut(
+                        getString(R.string.onlyFrozen),
+                        "OF",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),Main.class,
+                        "OF"
+                );
+                return true;
+            case R.id.menu_createOnlyUFShortCut:
+                createShortCut(
+                        getString(R.string.onlyUF),
+                        "UF",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),Main.class,
+                        "UF"
+                );
+                return true;
+            case R.id.menu_createOnlyOnekeyShortCut:
+                createShortCut(
+                        getString(R.string.onlyOnekey),
+                        "OO",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),Main.class,
+                        "OO"
                 );
                 return true;
             case R.id.menu_about:

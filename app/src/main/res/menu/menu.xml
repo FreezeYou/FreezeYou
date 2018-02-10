@@ -34,9 +34,21 @@
             <item
                 android:id="@+id/menu_createOneKeyFreezeShortCut"
                 android:title="@string/createOneKeyFreezeShortcut" />
-            <!--<item-->
-                <!--android:id="@+id/menu_createOnlyFrozenShortCut"-->
-                <!--android:title="@string/createOnlyFrozenShortCut" />-->
+            <item
+                android:id="@+id/menu_quickView"
+                android:title="@string/quickView">
+                <menu>
+                    <item
+                        android:id="@+id/menu_createOnlyFrozenShortCut"
+                        android:title="@string/onlyFrozen" />
+                    <item
+                        android:id="@+id/menu_createOnlyUFShortCut"
+                        android:title="@string/onlyUF" />
+                    <item
+                        android:id="@+id/menu_createOnlyOnekeyShortCut"
+                        android:title="@string/onlyOnekey" />
+                </menu>
+            </item>
         </menu>
     </item>
 
