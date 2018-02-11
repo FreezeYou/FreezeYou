@@ -27,9 +27,11 @@ android:
 #  sudo: required
 
   before_install:
+    - echo “before_install”
     - chmod +x gradlew
 
   before_script:
+    - echo “before_script”
     - chmod +x gradlew
 
   script:
