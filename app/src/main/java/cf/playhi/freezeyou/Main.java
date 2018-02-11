@@ -67,12 +67,6 @@ public class Main extends Activity {
                     case "OO":
                         generateList("OO");
                         break;
-                    case "OS":
-                        generateList("OS");
-                        break;
-                    case "OU":
-                        generateList("OU");
-                        break;
                     default:
                         generateList("all");
                         break;

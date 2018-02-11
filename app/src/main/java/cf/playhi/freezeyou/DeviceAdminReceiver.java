@@ -3,7 +3,6 @@ package cf.playhi.freezeyou;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import static cf.playhi.freezeyou.Support.showToast;
 
