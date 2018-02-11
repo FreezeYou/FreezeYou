@@ -33,4 +33,5 @@ android:
 #    - chmod +x gradlew
 
   script:
+    - chmod +x ./gradlew build connectedCheck
     - ./gradlew assembleRelease --stacktrace
