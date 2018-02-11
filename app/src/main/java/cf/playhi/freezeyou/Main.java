@@ -101,7 +101,7 @@ public class Main extends Activity {
 
     private void createShortCut(String title, String pkgName, Drawable icon,Class<?> cls,String id){
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
-            createShortCut_OldApi(title,pkgName,icon,cls);
+            createShortCutOldApi(title,pkgName,icon,cls);
         } else {
             ShortcutManager mShortcutManager =
                     this.getSystemService(ShortcutManager.class);
@@ -136,15 +136,15 @@ public class Main extends Activity {
                     mShortcutManager.requestPinShortcut(pinShortcutInfo,
                             successCallback.getIntentSender());
                 }else {
-                    createShortCut_OldApi(title,pkgName,icon,cls);
+                    createShortCutOldApi(title,pkgName,icon,cls);
                 }
             } else {
-                createShortCut_OldApi(title,pkgName,icon,cls);
+                createShortCutOldApi(title,pkgName,icon,cls);
             }
         }
     }
 
-    private void createShortCut_OldApi(String title, String pkgName, Drawable icon,Class<?> cls){
+    private void createShortCutOldApi(String title, String pkgName, Drawable icon,Class<?> cls){
         Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
 //        Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.icon);
         Intent intent = new Intent(getApplicationContext(), cls);
