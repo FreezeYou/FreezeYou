@@ -24,6 +24,8 @@ android:
     # - sys-img-armeabi-v7a-android-26
     # - sys-img-armeabi-v7a-android-17
 
+  sudo: required
+
   before_install:
     - chmod +x gradlew
 
@@ -31,4 +33,4 @@ android:
     - chmod +x gradlew
 
   script:
-    - ./gradlew assembleRelease
+    - ./gradlew assembleRelease --stacktrace
