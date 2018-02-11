@@ -32,7 +32,7 @@ public class Freeze extends Activity{
         if (pkgName==null){
             showToast(getApplicationContext(),"参数错误");
             Freeze.this.finish();
-        } else if (pkgName.equals("")){
+        } else if ("".equals(pkgName)){
             showToast(getApplicationContext(),"参数错误");
             Freeze.this.finish();
         } else if (getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
