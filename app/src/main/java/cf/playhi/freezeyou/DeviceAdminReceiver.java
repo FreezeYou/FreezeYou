@@ -5,11 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-public class DeviceAdminReceiver extends android.app.admin.DeviceAdminReceiver {
+import static cf.playhi.freezeyou.Support.showToast;
 
-    void showToast(Context context, String msg) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-    }
+public class DeviceAdminReceiver extends android.app.admin.DeviceAdminReceiver {
 
     @Override
     public void onEnabled(Context context, Intent intent) {
