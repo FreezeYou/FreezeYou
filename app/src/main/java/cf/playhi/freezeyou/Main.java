@@ -562,7 +562,7 @@ public class Main extends Activity {
                 final String pkgName=map.get("PackageName");
                 if (!(getString(R.string.notAvailable).equals(name) || getString(R.string.uninstalled).equals(name))){
                     int tmp = getPackageManager().getApplicationEnabledSetting(pkgName);
-                    if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED||Support.checkFrozen(Main.this,pkgName)){
+                    if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED||checkFrozen(Main.this,pkgName)){
                         Support.makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
                     } else {
                         Support.makeDialog2(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
