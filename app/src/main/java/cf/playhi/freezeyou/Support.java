@@ -74,7 +74,7 @@ class Support {
                         final SharedPreferences sharedPreferences = activity.getApplicationContext().getSharedPreferences(
                                 "FrozenList", Context.MODE_PRIVATE);
                         final String pkgNameList = sharedPreferences.getString("pkgName", "");
-                        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && (title.equals(activity.getString(R.string.notice))||pkgNameList.contains("|" + pkgName + "|"))) {
+                        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && (activity.getString(R.string.notice).equals(title) ||pkgNameList.contains("|" + pkgName + "|"))) {
                             if (getDevicePolicyManager(activity).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
                                 removeFrozen(activity, pkgName);
@@ -362,7 +362,7 @@ class Support {
                 final SharedPreferences sharedPreferences = activity.getApplicationContext().getSharedPreferences(
                         "FrozenList", Context.MODE_PRIVATE);
                 final String pkgNameList = sharedPreferences.getString("pkgName", "");
-                if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && (title.equals(activity.getString(R.string.notice))||pkgNameList.contains("|" + pkgName + "|"))) {
+                if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && (activity.getString(R.string.notice).equals(title) ||pkgNameList.contains("|" + pkgName + "|"))) {
                     if (getDevicePolicyManager(activity).setApplicationHidden(
                             DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
                         removeFrozen(activity, pkgName);
