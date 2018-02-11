@@ -300,7 +300,7 @@ public class Main extends Activity {
                 }
                 return true;
             case R.id.menu_exit:
-                System.exit(0);
+                finish();
                 return true;
             case R.id.menu_moreSettings:
                 startActivity(new Intent(this,SettingsActivity.class));
