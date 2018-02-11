@@ -333,7 +333,7 @@ public class Main extends Activity {
                 for (int i = 0; i < size; i++) {
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
-                    if (!(packageName.equals("android") || packageName.equals("cf.playhi.freezeyou"))) {
+                    if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
                         Map<String, Object> keyValuePair = new HashMap<>();
                         icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
                         if (icon != null) {
@@ -359,7 +359,7 @@ public class Main extends Activity {
                 for (int i = 0; i < size; i++) {
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
-                    if (!(packageName.equals("android") || packageName.equals("cf.playhi.freezeyou"))) {
+                    if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
                         int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
                         if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER ||
                                 tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
@@ -387,7 +387,7 @@ public class Main extends Activity {
                 for (int i = 0; i < size; i++) {
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
-                    if (!(packageName.equals("android") || packageName.equals("cf.playhi.freezeyou"))) {
+                    if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
                         int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
                         if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER &&
                                 tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
@@ -424,7 +424,7 @@ public class Main extends Activity {
                             name = getResources().getString(R.string.uninstalled);
                         }
                     }
-                    if (!(aPkgNameList.equals("android") || aPkgNameList.equals("cf.playhi.freezeyou") || aPkgNameList.equals(""))) {
+                    if (!("android".equals(aPkgNameList) || "cf.playhi.freezeyou".equals(aPkgNameList) || "".equals(aPkgNameList))) {
                         Map<String, Object> keyValuePair = new HashMap<>();
                         try{
                             icon = getPackageManager().getApplicationIcon(getPackageManager().getApplicationInfo(aPkgNameList,0));
@@ -463,7 +463,7 @@ public class Main extends Activity {
                 for (int i = 0; i < size; i++) {
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
-                    if (!(packageName.equals("android") || packageName.equals("cf.playhi.freezeyou"))) {
+                    if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
                         Map<String, Object> keyValuePair = new HashMap<>();
                         icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
                         if (icon != null) {
@@ -490,7 +490,7 @@ public class Main extends Activity {
                 for (int i = 0; i < size; i++) {
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
-                    if (!(packageName.equals("android") || packageName.equals("cf.playhi.freezeyou"))) {
+                    if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
                         Map<String, Object> keyValuePair = new HashMap<>();
                         icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
                         if (icon != null) {
@@ -560,7 +560,7 @@ public class Main extends Activity {
                 HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
                 final String name=map.get("Name");
                 final String pkgName=map.get("PackageName");
-                if (!(name.equals(getString(R.string.notAvailable))||name.equals(getString(R.string.uninstalled)))){
+                if (!(getString(R.string.notAvailable).equals(name) || getString(R.string.uninstalled).equals(name))){
                     int tmp = getPackageManager().getApplicationEnabledSetting(pkgName);
                     if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED||Support.checkFrozen(Main.this,pkgName)){
                         Support.makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
@@ -578,7 +578,7 @@ public class Main extends Activity {
                 HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
                 final String name=map.get("Name");
                 final String pkgName=map.get("PackageName");
-                if (!name.equals(getString(R.string.notAvailable))) {
+                if (!getString(R.string.notAvailable).equals(name)) {
                     AlertDialog alertDialog = new AlertDialog.Builder(Main.this)
                             .setTitle(name)
                             .setMessage(R.string.createFreezeShortcutNotice)
@@ -672,7 +672,7 @@ public class Main extends Activity {
         final SharedPreferences pkgName2NameSharedPreferences = context.getApplicationContext().getSharedPreferences(
                 "pkgName2Name", Context.MODE_PRIVATE);
         for (String aPkgNameListKeyValuePair : pkgNameListKeyValuePair) {
-            if (!aPkgNameListKeyValuePair.equals("")){
+            if (!"".equals(aPkgNameListKeyValuePair)){
                 Map<String, Object> keyValuePair = new HashMap<>();
                 Bitmap bitmap = getBitmapFromLocalFile(context.getFilesDir()+"/icon/"+aPkgNameListKeyValuePair+".png");
                 if (bitmap!=null){
