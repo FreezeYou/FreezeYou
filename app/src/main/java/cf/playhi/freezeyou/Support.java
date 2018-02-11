@@ -387,7 +387,7 @@ class Support {
                         outputStream.writeBytes("pm enable " + pkgName + "\n");
                         outputStream.writeBytes("exit\n");
                         outputStream.flush();
-                        int exitValue = process.waitFor();
+                        process.waitFor();
                         if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
                             Intent intent = new Intent(
                                     activity.getPackageManager().getLaunchIntentForPackage(pkgName));
