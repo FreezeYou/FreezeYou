@@ -39,9 +39,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static cf.playhi.freezeyou.Support.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkFrozen;
+import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getBitmapFromLocalFile;
 import static cf.playhi.freezeyou.Support.getVersionCode;
+import static cf.playhi.freezeyou.Support.makeDialog;
+import static cf.playhi.freezeyou.Support.makeDialog2;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class Main extends Activity {
@@ -563,9 +567,9 @@ public class Main extends Activity {
                 if (!(getString(R.string.notAvailable).equals(name) || getString(R.string.uninstalled).equals(name))){
                     int tmp = getPackageManager().getApplicationEnabledSetting(pkgName);
                     if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED||checkFrozen(Main.this,pkgName)){
-                        Support.makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
+                        makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
                     } else {
-                        Support.makeDialog2(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
+                        makeDialog2(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
                     }
                 }
                 return true;
@@ -579,9 +583,7 @@ public class Main extends Activity {
                 final String name=map.get("Name");
                 final String pkgName=map.get("PackageName");
                 if (!getString(R.string.notAvailable).equals(name)) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(Main.this)
-                            .setTitle(name)
-                            .setMessage(R.string.createFreezeShortcutNotice)
+                    buildAlertDialog(Main.this,getApplicationIcon(Main.this,pkgName,null),getResources().getString(R.string.createFreezeShortcutNotice),name)
                             .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -657,8 +659,7 @@ public class Main extends Activity {
                                     dialog.create().show();
                                 }
                             })
-                            .create();
-                    alertDialog.show();
+                            .create().show();
                 }
             }
         });

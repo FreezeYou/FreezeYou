@@ -7,12 +7,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -29,9 +32,7 @@ class Support {
     private static Process process = null;
     private static DataOutputStream outputStream = null;
     static void makeDialog(final String title, String message, final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String backData, final String pkgName){
-        AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                .setTitle(title)
-                .setMessage(message)
+        buildAlertDialog(activity,getApplicationIcon(activity,pkgName,null),message,title)
                 .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -120,14 +121,11 @@ class Support {
                         destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                     }
                 })
-                .create();
-        alertDialog.show();
+                .create().show();
     }
 
     static void makeDialog2(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess,final String backData,final String pkgName){
-        AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                .setTitle(title)
-                .setMessage(message)
+        buildAlertDialog(activity,getApplicationIcon(activity,pkgName,null),message,title)
                 .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -190,8 +188,7 @@ class Support {
                         destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
                     }
                 })
-                .create();
-        alertDialog.show();
+                .create().show();
     }
 
     static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity){
@@ -310,9 +307,7 @@ class Support {
                 destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
             }
         } else {
-            AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                    .setTitle(R.string.notice)
-                    .setMessage(R.string.unfreezedAndAskLaunch)
+            buildAlertDialog(activity,getApplicationIcon(activity,pkgName,null),activity.getResources().getString(R.string.unfreezedAndAskLaunch),activity.getResources().getString(R.string.notice))
                     .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -340,8 +335,7 @@ class Support {
                             destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
                         }
                     })
-                    .create();
-            alertDialog.show();
+                    .create().show();
         }
     }
 
@@ -506,6 +500,24 @@ class Support {
             return packageInfo.versionCode;
         }
         return 0;
+    }
+
+    static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo){
+        if (applicationInfo!=null){
+            return context.getPackageManager().getApplicationIcon(applicationInfo);
+        } else if (!"".equals(pkgName)){
+            try {
+                return context.getPackageManager().getApplicationIcon(pkgName);
+            } catch (Exception e){
+                Bitmap bitmap = getBitmapFromLocalFile(context.getFilesDir()+"/icon/"+pkgName+".png");
+                if (bitmap!=null){
+                    return new BitmapDrawable(bitmap);
+                } else {
+                    return context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
+                }
+            }
+        }
+        return context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
     }
 //
 //    static String getVersionName(Context context) {
