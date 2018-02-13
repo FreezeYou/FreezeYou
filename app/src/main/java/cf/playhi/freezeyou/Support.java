@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -45,12 +46,7 @@ class Support {
                             }
                         } else {
                             try {
-                                process = Runtime.getRuntime().exec("su");
-                                outputStream = new DataOutputStream(process.getOutputStream());
-                                outputStream.writeBytes("pm disable " + pkgName + "\n");
-                                outputStream.writeBytes("exit\n");
-                                outputStream.flush();
-                                int exitValue = process.waitFor();
+                                int exitValue = FAURoot(pkgName,false);
                                 if (exitValue == 0) {
                                     showToast(activity, R.string.executed);
                                 } else {
@@ -85,12 +81,7 @@ class Support {
                             }
                         } else {
                             try {
-                                process = Runtime.getRuntime().exec("su");
-                                outputStream = new DataOutputStream(process.getOutputStream());
-                                outputStream.writeBytes("pm enable " + pkgName + "\n");
-                                outputStream.writeBytes("exit\n");
-                                outputStream.flush();
-                                int exitValue = process.waitFor();
+                                int exitValue = FAURoot(pkgName,true);
                                 if (exitValue == 0) {
                                         askRun(activity,SelfCloseWhenDestroyProcess,pkgName);
                                 } else {
@@ -138,12 +129,7 @@ class Support {
                             }
                         } else {
                             try {
-                                process = Runtime.getRuntime().exec("su");
-                                outputStream = new DataOutputStream(process.getOutputStream());
-                                outputStream.writeBytes("pm disable " + pkgName + "\n");
-                                outputStream.writeBytes("exit\n");
-                                outputStream.flush();
-                                int exitValue = process.waitFor();
+                                int exitValue = FAURoot(pkgName,false);
                                 if (exitValue == 0) {
                                     showToast(activity, R.string.executed);
                                 } else {
@@ -375,12 +361,7 @@ class Support {
                     }
                 } else {
                     try {
-                        process = Runtime.getRuntime().exec("su");
-                        outputStream = new DataOutputStream(process.getOutputStream());
-                        outputStream.writeBytes("pm enable " + pkgName + "\n");
-                        outputStream.writeBytes("exit\n");
-                        outputStream.flush();
-                        process.waitFor();
+                        FAURoot(pkgName,true);
                         if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
                             Intent intent = new Intent(
                                     activity.getPackageManager().getLaunchIntentForPackage(pkgName));
@@ -502,21 +483,41 @@ class Support {
     }
 
     static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo){
+        Drawable drawable = context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
         if (applicationInfo!=null){
-            return context.getPackageManager().getApplicationIcon(applicationInfo);
+            drawable = context.getPackageManager().getApplicationIcon(applicationInfo);
         } else if (!"".equals(pkgName)){
             try {
-                return context.getPackageManager().getApplicationIcon(pkgName);
+                drawable = context.getPackageManager().getApplicationIcon(pkgName);
             } catch (Exception e){
                 Bitmap bitmap = getBitmapFromLocalFile(context.getFilesDir()+"/icon/"+pkgName+".png");
                 if (bitmap!=null){
-                    return new BitmapDrawable(bitmap);
+                    drawable = new BitmapDrawable(bitmap);
                 } else {
-                    return context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
+                    drawable = context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
                 }
             }
         }
-        return context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
+        int width = drawable.getIntrinsicWidth();
+        int height= drawable.getIntrinsicHeight();
+        Matrix matrix = new Matrix();
+        float scaleWidth = ((float)72 / width);
+        float scaleHeight = ((float)72 / height);
+        matrix.postScale(scaleWidth, scaleHeight);
+        return new BitmapDrawable(Bitmap.createBitmap(drawableToBitmap(drawable), 0, 0, width, height, matrix, true));
+    }
+
+    private static int FAURoot(String pkgName,Boolean enable) throws Exception{
+        process = Runtime.getRuntime().exec("su");
+        outputStream = new DataOutputStream(process.getOutputStream());
+        if (enable){
+            outputStream.writeBytes("pm enable " + pkgName + "\n");
+        } else {
+            outputStream.writeBytes("pm disable " + pkgName + "\n");
+        }
+        outputStream.writeBytes("exit\n");
+        outputStream.flush();
+        return process.waitFor();
     }
 //
 //    static String getVersionName(Context context) {

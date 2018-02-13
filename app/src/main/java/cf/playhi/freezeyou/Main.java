@@ -564,12 +564,16 @@ public class Main extends Activity {
                 HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
                 final String name=map.get("Name");
                 final String pkgName=map.get("PackageName");
-                if (!(getString(R.string.notAvailable).equals(name) || getString(R.string.uninstalled).equals(name))){
-                    int tmp = getPackageManager().getApplicationEnabledSetting(pkgName);
-                    if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED||checkFrozen(Main.this,pkgName)){
+                if (!(getString(R.string.notAvailable).equals(name))){
+                    try {
+                        int tmp = getPackageManager().getApplicationEnabledSetting(pkgName);
+                        if (tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER||tmp==PackageManager.COMPONENT_ENABLED_STATE_DISABLED||checkFrozen(Main.this,pkgName)){
+                            makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
+                        } else {
+                            makeDialog2(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
+                        }
+                    } catch (Exception e){
                         makeDialog(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
-                    } else {
-                        makeDialog2(name,getString(R.string.chooseDetailAction),Main.this,false,"backData",pkgName);
                     }
                 }
                 return true;
