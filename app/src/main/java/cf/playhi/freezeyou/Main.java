@@ -217,7 +217,7 @@ public class Main extends Activity {
                 );
                 return true;
             case R.id.menu_about:
-                Support.buildAlertDialog(this,R.mipmap.ic_launcher_round,R.string.about_message,R.string.about)
+                buildAlertDialog(this,R.mipmap.ic_launcher_round,R.string.about_message,R.string.about)
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
