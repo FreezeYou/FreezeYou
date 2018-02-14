@@ -13,6 +13,11 @@
             android:summary="@string/openAndUFImmediatelyEx"
             android:key="openAndUFImmediately"
             android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:title="@string/nSCaution"
+            android:summary="@string/nSCaution"
+            android:key="noCaution"
+            android:defaultValue="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory

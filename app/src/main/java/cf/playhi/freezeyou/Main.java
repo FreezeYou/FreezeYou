@@ -19,6 +19,7 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -78,30 +79,35 @@ public class Main extends Activity {
             }
         });
         initThread.start();
-        AlertDialog alertDialog = new AlertDialog.Builder(Main.this)
-                .setTitle(R.string.caution)
-                .setMessage(R.string.cautionContent)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int ii) {
-                    }
-                })
-                .setNeutralButton(R.string.hMRoot, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Uri webPage = Uri.parse("https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8");
-                        Intent about = new Intent(Intent.ACTION_VIEW, webPage);
-                        if (about.resolveActivity(getPackageManager()) != null) {
-                            startActivity(about);
-                        } else {
-                            showToast(getApplicationContext(),R.string.plsVisitPXXXX);
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
+        if (!sharedPref.getBoolean("noCaution",false)){
+            buildAlertDialog(Main.this,R.mipmap.ic_launcher_round,R.string.cautionContent,R.string.caution)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int ii) {
                         }
-                    }
-                })
-                .create();
-        alertDialog.show();
+                    })
+                    .setNeutralButton(R.string.hMRoot, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Uri webPage = Uri.parse("https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8");
+                            Intent about = new Intent(Intent.ACTION_VIEW, webPage);
+                            if (about.resolveActivity(getPackageManager()) != null) {
+                                startActivity(about);
+                            } else {
+                                showToast(getApplicationContext(),R.string.plsVisitPXXXX);
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.nCaution, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sharedPref.edit().putBoolean("noCaution",true).apply();
+                        }
+                    })
+                    .create().show();
+        }
     }
-
 
     private void createShortCut(String title, String pkgName, Drawable icon,Class<?> cls,String id){
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
