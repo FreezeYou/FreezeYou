@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,6 +35,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -353,9 +355,9 @@ public class Main extends Activity {
                         }
                         int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
                         if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                            keyValuePair.put("Name", name + "(" + getString(R.string.frozen) + ")");
+                            keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
                         } else {
-                            keyValuePair.put("Name", name);
+                            keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
                         }
                         keyValuePair.put("PackageName", packageName);
                         AppList.add(keyValuePair);
@@ -380,7 +382,7 @@ public class Main extends Activity {
                             } else {
                                 keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
                             }
-                            keyValuePair.put("Name", name + "(" + getString(R.string.frozen) + ")");
+                            keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
                         } else if ((i+1==size)&&(AppList.size()==0)){
@@ -408,7 +410,7 @@ public class Main extends Activity {
                             } else {
                                 keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
                             }
-                            keyValuePair.put("Name", name);
+                            keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
                         }
@@ -484,9 +486,9 @@ public class Main extends Activity {
                         if ((applicationInfo.get(i).flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM){
                             int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
                             if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                                keyValuePair.put("Name", name + "(" + getString(R.string.frozen) + ")");
+                                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
                             } else {
-                                keyValuePair.put("Name", name);
+                                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
                             }
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
@@ -511,9 +513,9 @@ public class Main extends Activity {
                         if ((applicationInfo.get(i).flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM){
                             int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
                             if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                                keyValuePair.put("Name", name + "(" + getString(R.string.frozen) + ")");
+                                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
                             } else {
-                                keyValuePair.put("Name", name);
+                                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
                             }
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
@@ -692,9 +694,12 @@ public class Main extends Activity {
                     keyValuePair.put("Img", R.mipmap.ic_launcher_round);
                 }
                 keyValuePair.put("Name",
-                        pkgName2NameSharedPreferences.getString(
+                        addIfOnekeyFreezeList(context,pkgName2NameSharedPreferences.getString(
                                 aPkgNameListKeyValuePair,
-                                context.getString(R.string.notAvailable)) + "(" + context.getString(R.string.frozen)+")");
+                                context.getString(R.string.notAvailable)) + "(" + context.getString(R.string.frozen)+")",
+                                aPkgNameListKeyValuePair
+                        )
+                );
                 keyValuePair.put("PackageName", aPkgNameListKeyValuePair);
                 AppList.add(keyValuePair);
             }
@@ -707,5 +712,17 @@ public class Main extends Activity {
         keyValuePair.put("Name", context.getString(R.string.notAvailable));
         keyValuePair.put("PackageName", context.getString(R.string.notAvailable));
         AppList.add(keyValuePair);
+    }
+
+    private static String addIfOnekeyFreezeList(Context context,String name,String pkgName){
+        for(String s: context.getSharedPreferences(
+                "AutoFreezeApplicationList", Context.MODE_PRIVATE)
+                .getString("pkgName", "")
+                .split("\\|\\|")){
+            if(s.replaceAll("\\|","").equals(pkgName)){
+                return name + "(" + context.getResources().getString(R.string.oneKeyFreeze) + ")";
+            }
+        }
+        return name;
     }
 }
