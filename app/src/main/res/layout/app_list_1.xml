@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="5dp"
     android:orientation="horizontal">
 
     <ImageView
@@ -20,39 +20,61 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/img"
+        android:layout_toLeftOf="@+id/isAutoFreezeList"
         android:layout_toRightOf="@+id/img"
-        android:layout_toStartOf="@+id/isFrozen"
+        android:layout_toStartOf="@+id/isAutoFreezeList"
         android:marqueeRepeatLimit="marquee_forever"
         android:maxLines="1"
         android:scrollHorizontally="true"
         android:singleLine="true"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_toLeftOf="@+id/isFrozen" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/pkgName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/name"
+        android:layout_marginTop="1dp"
         android:layout_toEndOf="@+id/img"
+        android:layout_toLeftOf="@+id/isAutoFreezeList"
         android:layout_toRightOf="@+id/img"
-        android:layout_toStartOf="@+id/isFrozen"
+        android:layout_toStartOf="@+id/isAutoFreezeList"
         android:marqueeRepeatLimit="marquee_forever"
         android:maxLines="1"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:textSize="12sp"
-        android:layout_toLeftOf="@+id/isFrozen" />
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/isAutoFreezeList"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_toLeftOf="@+id/isFrozen"
+        android:layout_toStartOf="@+id/isFrozen"
+        android:contentDescription="@string/more"
+        android:src="@mipmap/ic_launcher" />
 
     <ImageView
         android:id="@+id/isFrozen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/more"
+        android:src="@drawable/greendot" />
 
 </RelativeLayout>

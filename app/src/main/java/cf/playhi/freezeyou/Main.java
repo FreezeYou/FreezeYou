@@ -21,7 +21,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,7 +34,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -356,8 +354,10 @@ public class Main extends Activity {
                         int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
                         if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
                             keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
+                            keyValuePair.put("isFrozen",R.drawable.bluedot);
                         } else {
                             keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
+                            keyValuePair.put("isFrozen",R.drawable.greendot);
                         }
                         keyValuePair.put("PackageName", packageName);
                         AppList.add(keyValuePair);
@@ -383,14 +383,11 @@ public class Main extends Activity {
                                 keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
                             }
                             keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
+                            keyValuePair.put("isFrozen",R.drawable.bluedot);
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
                         } else if ((i+1==size)&&(AppList.size()==0)){
-                            Map<String, Object> keyValuePair = new HashMap<>();
-                            keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-                            keyValuePair.put("Name", getString(R.string.notAvailable));
-                            keyValuePair.put("PackageName", getString(R.string.notAvailable));
-                            AppList.add(keyValuePair);
+                            addNotAvailablePair(getApplicationContext(),AppList);
                         }
                     }
                 }
@@ -411,6 +408,7 @@ public class Main extends Activity {
                                 keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
                             }
                             keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
+                            keyValuePair.put("isFrozen",R.drawable.greendot);
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
                         }
@@ -461,6 +459,7 @@ public class Main extends Activity {
                         }
                         if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED || checkFrozen(getApplicationContext(),aPkgNameList)) {
                             keyValuePair.put("Name", name + "(" + getString(R.string.frozen) + ")");
+                            keyValuePair.put("isFrozen",R.drawable.bluedot);
                         } else {
                             keyValuePair.put("Name", name);
                         }
@@ -487,8 +486,10 @@ public class Main extends Activity {
                             int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
                             if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
                                 keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
+                                keyValuePair.put("isFrozen",R.drawable.bluedot);
                             } else {
                                 keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
+                                keyValuePair.put("isFrozen",R.drawable.greendot);
                             }
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
@@ -514,8 +515,10 @@ public class Main extends Activity {
                             int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
                             if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
                                 keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
+                                keyValuePair.put("isFrozen",R.drawable.bluedot);
                             } else {
                                 keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
+                                keyValuePair.put("isFrozen",R.drawable.greendot);
                             }
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
@@ -541,7 +544,7 @@ public class Main extends Activity {
 
         final SimpleAdapter adapter = new SimpleAdapter(Main.this, AppList,
                 R.layout.app_list_1, new String[] { "Img","Name",
-                "PackageName" }, new int[] { R.id.img,R.id.name,R.id.pkgName});
+                "PackageName", "isFrozen" }, new int[] { R.id.img,R.id.name,R.id.pkgName,R.id.isFrozen});//isFrozen传图片资源id
 
         adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
             public boolean setViewValue(View view, Object data,
@@ -700,6 +703,7 @@ public class Main extends Activity {
                                 aPkgNameListKeyValuePair
                         )
                 );
+                keyValuePair.put("isFrozen",R.drawable.bluedot);
                 keyValuePair.put("PackageName", aPkgNameListKeyValuePair);
                 AppList.add(keyValuePair);
             }
