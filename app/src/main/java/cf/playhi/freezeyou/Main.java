@@ -739,4 +739,6 @@ public class Main extends Activity {
     private static String addIfOnekeyFreezeList(Context context,String name,String pkgName){
         return ifOnekeyFreezeList(context,pkgName) ? name + "(" + context.getResources().getString(R.string.oneKeyFreeze) + ")" : name;
     }
+
+    //TODO:运行中亮绿灯（列表、与白点、蓝点并列，覆盖是否已冻结状态）//高考
 }
