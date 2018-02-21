@@ -357,8 +357,9 @@ public class Main extends Activity {
                             keyValuePair.put("isFrozen",R.drawable.bluedot);
                         } else {
                             keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
-                            keyValuePair.put("isFrozen",R.drawable.greendot);
+                            keyValuePair.put("isFrozen",R.drawable.whitedot);
                         }
+                        keyValuePair.put("isAutoList", ifOnekeyFreezeList(Main.this, packageName) ? R.drawable.bluedot : R.drawable.whitedot);
                         keyValuePair.put("PackageName", packageName);
                         AppList.add(keyValuePair);
                     } else if ((i+1==size)&&(AppList.size()==0)){
@@ -383,6 +384,7 @@ public class Main extends Activity {
                                 keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
                             }
                             keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
+                            keyValuePair.put("isAutoList", ifOnekeyFreezeList(Main.this, packageName) ? R.drawable.bluedot : R.drawable.whitedot);
                             keyValuePair.put("isFrozen",R.drawable.bluedot);
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
@@ -408,7 +410,8 @@ public class Main extends Activity {
                                 keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
                             }
                             keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
-                            keyValuePair.put("isFrozen",R.drawable.greendot);
+                            keyValuePair.put("isAutoList", ifOnekeyFreezeList(Main.this, packageName) ? R.drawable.bluedot : R.drawable.whitedot);
+                            keyValuePair.put("isFrozen",R.drawable.whitedot);
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
                         }
@@ -460,6 +463,7 @@ public class Main extends Activity {
                         if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED || checkFrozen(getApplicationContext(),aPkgNameList)) {
                             keyValuePair.put("Name", name + "(" + getString(R.string.frozen) + ")");
                             keyValuePair.put("isFrozen",R.drawable.bluedot);
+                            keyValuePair.put("isAutoList", ifOnekeyFreezeList(Main.this, aPkgNameList) ? R.drawable.bluedot : R.drawable.whitedot);
                         } else {
                             keyValuePair.put("Name", name);
                         }
@@ -489,8 +493,9 @@ public class Main extends Activity {
                                 keyValuePair.put("isFrozen",R.drawable.bluedot);
                             } else {
                                 keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
-                                keyValuePair.put("isFrozen",R.drawable.greendot);
+                                keyValuePair.put("isFrozen",R.drawable.whitedot);
                             }
+                            keyValuePair.put("isAutoList", ifOnekeyFreezeList(Main.this, packageName) ? R.drawable.bluedot : R.drawable.whitedot);
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
                         }
@@ -518,8 +523,9 @@ public class Main extends Activity {
                                 keyValuePair.put("isFrozen",R.drawable.bluedot);
                             } else {
                                 keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
-                                keyValuePair.put("isFrozen",R.drawable.greendot);
+                                keyValuePair.put("isFrozen",R.drawable.whitedot);
                             }
+                            keyValuePair.put("isAutoList", ifOnekeyFreezeList(Main.this, packageName) ? R.drawable.bluedot : R.drawable.whitedot);
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
                         }
@@ -544,7 +550,7 @@ public class Main extends Activity {
 
         final SimpleAdapter adapter = new SimpleAdapter(Main.this, AppList,
                 R.layout.app_list_1, new String[] { "Img","Name",
-                "PackageName", "isFrozen" }, new int[] { R.id.img,R.id.name,R.id.pkgName,R.id.isFrozen});//isFrozen传图片资源id
+                "PackageName", "isFrozen", "isAutoList"}, new int[] { R.id.img,R.id.name,R.id.pkgName,R.id.isFrozen,R.id.isAutoFreezeList});//isFrozen、isAutoList传图像资源id
 
         adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
             public boolean setViewValue(View view, Object data,
@@ -703,6 +709,7 @@ public class Main extends Activity {
                                 aPkgNameListKeyValuePair
                         )
                 );
+                keyValuePair.put("isAutoList", ifOnekeyFreezeList(context, aPkgNameListKeyValuePair) ? R.drawable.bluedot : R.drawable.whitedot);
                 keyValuePair.put("isFrozen",R.drawable.bluedot);
                 keyValuePair.put("PackageName", aPkgNameListKeyValuePair);
                 AppList.add(keyValuePair);
@@ -718,15 +725,18 @@ public class Main extends Activity {
         AppList.add(keyValuePair);
     }
 
-    private static String addIfOnekeyFreezeList(Context context,String name,String pkgName){
+    private static boolean ifOnekeyFreezeList(Context context,String pkgName){
         for(String s: context.getSharedPreferences(
                 "AutoFreezeApplicationList", Context.MODE_PRIVATE)
                 .getString("pkgName", "")
                 .split("\\|\\|")){
-            if(s.replaceAll("\\|","").equals(pkgName)){
-                return name + "(" + context.getResources().getString(R.string.oneKeyFreeze) + ")";
-            }
+            if(s.replaceAll("\\|","").equals(pkgName))
+                return true;
         }
-        return name;
+        return false;
+    }
+
+    private static String addIfOnekeyFreezeList(Context context,String name,String pkgName){
+        return ifOnekeyFreezeList(context,pkgName) ? name + "(" + context.getResources().getString(R.string.oneKeyFreeze) + ")" : name;
     }
 }

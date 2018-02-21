@@ -62,7 +62,7 @@
         android:layout_toLeftOf="@+id/isFrozen"
         android:layout_toStartOf="@+id/isFrozen"
         android:contentDescription="@string/more"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/whitedot" />
 
     <ImageView
         android:id="@+id/isFrozen"
@@ -75,6 +75,6 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="20dp"
         android:contentDescription="@string/more"
-        android:src="@drawable/greendot" />
+        android:src="@drawable/whitedot" />
 
 </RelativeLayout>
