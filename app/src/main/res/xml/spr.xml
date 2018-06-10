@@ -21,6 +21,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/advance">
+        <Preference
+            android:title="@string/manualMode"
+            android:summary="@string/manualMode">
+            <intent
+                android:targetPackage="cf.playhi.freezeyou"
+                android:targetClass="cf.playhi.freezeyou.ManualMode"
+                android:data="ManualMode" />
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/dangerZone">
         <Preference
             android:title="@string/disableMRootMode"

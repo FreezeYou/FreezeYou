@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/manualModeWarning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/manualModeWarning"
+        android:textColor="@android:color/holo_orange_dark" />
+
+    <EditText
+        android:id="@+id/packageNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="@string/packageName"
+        android:inputType="text"
+        android:singleLine="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <Button
+            android:id="@+id/disable_MRoot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/disable_MRoot" />
+
+        <Button
+            android:id="@+id/disable_Root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/disable_MRoot"
+            android:layout_toEndOf="@+id/disable_MRoot"
+            android:text="@string/disable_Root" />
+
+        <Button
+            android:id="@+id/enable_Root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/disable_Root"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/enable_MRoot"
+            android:layout_toEndOf="@+id/enable_MRoot"
+            android:text="@string/enable_Root" />
+
+        <Button
+            android:id="@+id/enable_MRoot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/disable_MRoot"
+            android:text="@string/enable_MRoot" />
+    </RelativeLayout>
+</LinearLayout>

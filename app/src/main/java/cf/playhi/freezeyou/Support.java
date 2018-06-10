@@ -46,7 +46,7 @@ class Support {
                             }
                         } else {
                             try {
-                                int exitValue = fAURoot(pkgName,false);
+                                int exitValue = fAURoot(pkgName,false,process,outputStream);
                                 if (exitValue == 0) {
                                     showToast(activity, R.string.executed);
                                 } else {
@@ -81,7 +81,7 @@ class Support {
                             }
                         } else {
                             try {
-                                int exitValue = fAURoot(pkgName,true);
+                                int exitValue = fAURoot(pkgName,true,process,outputStream);
                                 if (exitValue == 0) {
                                         askRun(activity,SelfCloseWhenDestroyProcess,pkgName);
                                 } else {
@@ -129,7 +129,7 @@ class Support {
                             }
                         } else {
                             try {
-                                int exitValue = fAURoot(pkgName,false);
+                                int exitValue = fAURoot(pkgName,false,process,outputStream);
                                 if (exitValue == 0) {
                                     showToast(activity, R.string.executed);
                                 } else {
@@ -361,7 +361,7 @@ class Support {
                     }
                 } else {
                     try {
-                        fAURoot(pkgName,true);
+                        fAURoot(pkgName,true,process,outputStream);
                         if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
                             Intent intent = new Intent(
                                     activity.getPackageManager().getLaunchIntentForPackage(pkgName));
@@ -507,7 +507,7 @@ class Support {
         return new BitmapDrawable(Bitmap.createBitmap(drawableToBitmap(drawable), 0, 0, width, height, matrix, true));
     }
 
-    private static int fAURoot(String pkgName,Boolean enable) throws Exception{
+    static int fAURoot(String pkgName,Boolean enable,Process process,DataOutputStream outputStream) throws Exception{
         process = Runtime.getRuntime().exec("su");
         outputStream = new DataOutputStream(process.getOutputStream());
         if (enable){

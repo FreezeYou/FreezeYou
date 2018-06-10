@@ -47,6 +47,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ManualMode"
+            android:label="@string/manualMode"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"/>
+        <activity
             android:name=".SettingsActivity"
             android:label="@string/moreSettings"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"/>

@@ -163,14 +163,25 @@ public class Main extends Activity {
         Intent intent = new Intent(getApplicationContext(), cls);
         intent.putExtra("pkgName",pkgName);
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
-//        BitmapDrawable bd = (BitmapDrawable) icon;bd.getBitmap()
-        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, Bitmap.createScaledBitmap(getBitmapFromDrawable(icon),192,192,true));
+        BitmapDrawable bd = (BitmapDrawable) icon;
+        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
         try{
             sendBroadcast(addShortCut);
             showToast(Main.this,R.string.requested);
         } catch (Exception e){
-            showToast(Main.this,getString(R.string.requestFailed)+e.getMessage());
+            Intent addShortCut2 = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+            Intent intent2 = new Intent(getApplicationContext(), cls);
+            intent2.putExtra("pkgName",pkgName);
+            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
+            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_ICON, Bitmap.createScaledBitmap(getBitmapFromDrawable(icon),192,192,true));
+            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
+            try {
+                sendBroadcast(addShortCut2);
+                showToast(Main.this, R.string.requested);
+            }catch (Exception ee){
+                showToast(Main.this,getString(R.string.requestFailed)+ee.getMessage());
+            }
         }
     }
 
