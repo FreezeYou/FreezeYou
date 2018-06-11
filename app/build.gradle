@@ -8,7 +8,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 50
-        versionName '2.8.20180611'
+        versionName '2.9.20180611'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
