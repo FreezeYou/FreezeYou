@@ -1,26 +1,18 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,7 +34,7 @@ import java.util.Map;
 
 import static cf.playhi.freezeyou.Support.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkFrozen;
-import static cf.playhi.freezeyou.Support.getApplicationIcon;
+import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getBitmapFromLocalFile;
 import static cf.playhi.freezeyou.Support.getVersionCode;
 import static cf.playhi.freezeyou.Support.makeDialog;
@@ -112,88 +104,6 @@ public class Main extends Activity {
         }
     }
 
-    private void createShortCut(String title, String pkgName, Drawable icon,Class<?> cls,String id){
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
-            createShortCutOldApi(title,pkgName,icon,cls);
-        } else {
-            ShortcutManager mShortcutManager =
-                    this.getSystemService(ShortcutManager.class);
-            if (mShortcutManager!=null){
-                if (mShortcutManager.isRequestPinShortcutSupported()) {
-                    ShortcutInfo.Builder shortcutInfoBuilder =
-                            new ShortcutInfo.Builder(this, id);
-                    shortcutInfoBuilder.setIcon(Icon.createWithBitmap(getBitmapFromDrawable(icon)));
-                    shortcutInfoBuilder.setIntent(
-                            new Intent(getApplicationContext(), cls)
-                                    .setAction(Intent.ACTION_MAIN)
-                                    .putExtra("pkgName",pkgName)
-                    );
-                    shortcutInfoBuilder.setShortLabel(title);
-                    shortcutInfoBuilder.setLongLabel(title);
-                    // Assumes there's already a shortcut with the ID "my-shortcut".
-                    // The shortcut must be enabled.
-                    ShortcutInfo pinShortcutInfo = shortcutInfoBuilder.build();
-                    // Create the PendingIntent object only if your app needs to be notified
-                    // that the user allowed the shortcut to be pinned. Note that, if the
-                    // pinning operation fails, your app isn't notified. We assume here that the
-                    // app has implemented a method called createShortcutResultIntent() that
-                    // returns a broadcast intent.
-                    Intent pinnedShortcutCallbackIntent =
-                            mShortcutManager.createShortcutResultIntent(pinShortcutInfo);
-
-                    // Configure the intent so that your app's broadcast receiver gets
-                    // the callback successfully.
-                    PendingIntent successCallback = PendingIntent.getBroadcast(this, 0,
-                            pinnedShortcutCallbackIntent, 0);
-
-                    mShortcutManager.requestPinShortcut(pinShortcutInfo,
-                            successCallback.getIntentSender());
-                }else {
-                    createShortCutOldApi(title,pkgName,icon,cls);
-                }
-            } else {
-                createShortCutOldApi(title,pkgName,icon,cls);
-            }
-        }
-    }
-
-    private void createShortCutOldApi(String title, String pkgName, Drawable icon,Class<?> cls){
-        Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
-//        Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.icon);
-        Intent intent = new Intent(getApplicationContext(), cls);
-        intent.putExtra("pkgName",pkgName);
-        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
-        BitmapDrawable bd = (BitmapDrawable) icon;
-        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
-        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
-        try{
-            sendBroadcast(addShortCut);
-            showToast(Main.this,R.string.requested);
-        } catch (Exception e){
-            Intent addShortCut2 = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
-            Intent intent2 = new Intent(getApplicationContext(), cls);
-            intent2.putExtra("pkgName",pkgName);
-            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
-            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_ICON, Bitmap.createScaledBitmap(getBitmapFromDrawable(icon),192,192,true));
-            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
-            try {
-                sendBroadcast(addShortCut2);
-                showToast(Main.this, R.string.requested);
-            }catch (Exception ee){
-                showToast(Main.this,getString(R.string.requestFailed)+ee.getMessage());
-            }
-        }
-    }
-
-    //https://stackoverflow.com/questions/44447056/convert-adaptiveicondrawable-to-bitmap-in-android-o-preview
-    private Bitmap getBitmapFromDrawable(Drawable drawable) {
-        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(bmp);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bmp;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -209,7 +119,8 @@ public class Main extends Activity {
                         getString(R.string.oneKeyFreeze),
                         "",
                         getResources().getDrawable(R.mipmap.ic_launcher_round),OneKeyFreeze.class,
-                        "OneKeyFreeze"
+                        "OneKeyFreeze",
+                        this
                 );
                 return true;
             case R.id.menu_createOnlyFrozenShortCut:
@@ -217,7 +128,8 @@ public class Main extends Activity {
                         getString(R.string.onlyFrozen),
                         "OF",
                         getResources().getDrawable(R.mipmap.ic_launcher_round),Main.class,
-                        "OF"
+                        "OF",
+                        this
                 );
                 return true;
             case R.id.menu_createOnlyUFShortCut:
@@ -225,7 +137,8 @@ public class Main extends Activity {
                         getString(R.string.onlyUF),
                         "UF",
                         getResources().getDrawable(R.mipmap.ic_launcher_round),Main.class,
-                        "UF"
+                        "UF",
+                        this
                 );
                 return true;
             case R.id.menu_createOnlyOnekeyShortCut:
@@ -233,7 +146,8 @@ public class Main extends Activity {
                         getString(R.string.onlyOnekey),
                         "OO",
                         getResources().getDrawable(R.mipmap.ic_launcher_round),Main.class,
-                        "OO"
+                        "OO",
+                        this
                 );
                 return true;
             case R.id.menu_about:
@@ -611,83 +525,100 @@ public class Main extends Activity {
 
         app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(final AdapterView<?> adapterView, View view, final int i, final long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
                 final String name=map.get("Name");
                 final String pkgName=map.get("PackageName");
                 if (!getString(R.string.notAvailable).equals(name)) {
-                    buildAlertDialog(Main.this,getApplicationIcon(Main.this,pkgName,null),getResources().getString(R.string.createFreezeShortcutNotice),name)
-                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            })
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int ii) {
-                                    try {
-                                        createShortCut(
-                                                name.replace("(" + getString(R.string.frozen) + ")", ""),
-                                                pkgName,
-                                                getPackageManager().getApplicationIcon(pkgName),
-                                                Freeze.class,
-                                                "FreezeYou! "+pkgName
-                                        );
-                                    } catch (PackageManager.NameNotFoundException e) {
-                                        showToast(getApplicationContext(), R.string.cannotFindApp);
-                                    }
-                                }
-                            })
-                            .setNeutralButton(R.string.more, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    AlertDialog.Builder dialog = new AlertDialog.Builder(Main.this)
-                                            .setTitle(R.string.more)
-                                            .setMessage(getString(R.string.chooseDetailAction))
-                                            .setNeutralButton(R.string.appDetail, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                                    Uri uri = Uri.fromParts("package", pkgName, null);
-                                                    intent.setData(uri);
-                                                    try {
-                                                        startActivity(intent);
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
-                                                        showToast(getApplicationContext(), e.getLocalizedMessage());
-                                                    }
-                                                }
-                                            });
-                                    final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
-                                            "AutoFreezeApplicationList", Context.MODE_PRIVATE);
-                                    final String pkgNameList = sharedPreferences.getString("pkgName", "");
-                                    if (pkgNameList.contains("|" + pkgName + "|")) {
-                                        dialog.setPositiveButton(R.string.removeFromOneKeyList, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int ii) {
-                                                showToast(getApplicationContext(), sharedPreferences.edit()
-                                                        .putString(
-                                                                "pkgName",
-                                                                pkgNameList.replace("|" + pkgName + "|", ""))
-                                                        .commit() ? R.string.removed : R.string.removeFailed);
-                                            }
-                                        });
-                                    } else {
-                                        dialog.setPositiveButton(R.string.addToOneKeyList, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int ii) {
-                                                showToast(getApplicationContext(), sharedPreferences.edit().putString("pkgName", pkgNameList + "|" + pkgName + "|").commit() ? R.string.added : R.string.addFailed);
-                                            }
-                                        });
-                                    }
-                                    dialog.create().show();
-                                }
-                            })
-                            .create().show();
+                    startActivityForResult(
+                            new Intent(Main.this, SelectOperation.class).
+                                    putExtra("Name",name).
+                                    putExtra("pkgName",pkgName),
+                            1092
+                    );
                 }
             }
         });
+
+//        app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(final AdapterView<?> adapterView, View view, final int i, final long l) {
+//                HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
+//                final String name=map.get("Name");
+//                final String pkgName=map.get("PackageName");
+//                if (!getString(R.string.notAvailable).equals(name)) {
+//                    buildAlertDialog(Main.this,getApplicationIcon(Main.this,pkgName,null),getResources().getString(R.string.createFreezeShortcutNotice),name)
+//                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                                }
+//                            })
+//                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int ii) {
+//                                    try {
+//                                        createShortCut(
+//                                                name.replace("(" + getString(R.string.frozen) + ")", ""),
+//                                                pkgName,
+//                                                getPackageManager().getApplicationIcon(pkgName),
+//                                                Freeze.class,
+//                                                "FreezeYou! "+pkgName
+//                                        );
+//                                    } catch (PackageManager.NameNotFoundException e) {
+//                                        showToast(getApplicationContext(), R.string.cannotFindApp);
+//                                    }
+//                                }
+//                            })
+//                            .setNeutralButton(R.string.more, new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    AlertDialog.Builder dialog = new AlertDialog.Builder(Main.this)
+//                                            .setTitle(R.string.more)
+//                                            .setMessage(getString(R.string.chooseDetailAction))
+//                                            .setNeutralButton(R.string.appDetail, new DialogInterface.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                                                    Uri uri = Uri.fromParts("package", pkgName, null);
+//                                                    intent.setData(uri);
+//                                                    try {
+//                                                        startActivity(intent);
+//                                                    } catch (Exception e) {
+//                                                        e.printStackTrace();
+//                                                        showToast(getApplicationContext(), e.getLocalizedMessage());
+//                                                    }
+//                                                }
+//                                            });
+//                                    final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
+//                                            "AutoFreezeApplicationList", Context.MODE_PRIVATE);
+//                                    final String pkgNameList = sharedPreferences.getString("pkgName", "");
+//                                    if (pkgNameList.contains("|" + pkgName + "|")) {
+//                                        dialog.setPositiveButton(R.string.removeFromOneKeyList, new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialogInterface, int ii) {
+//                                                showToast(getApplicationContext(), sharedPreferences.edit()
+//                                                        .putString(
+//                                                                "pkgName",
+//                                                                pkgNameList.replace("|" + pkgName + "|", ""))
+//                                                        .commit() ? R.string.removed : R.string.removeFailed);
+//                                            }
+//                                        });
+//                                    } else {
+//                                        dialog.setPositiveButton(R.string.addToOneKeyList, new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialogInterface, int ii) {
+//                                                showToast(getApplicationContext(), sharedPreferences.edit().putString("pkgName", pkgNameList + "|" + pkgName + "|").commit() ? R.string.added : R.string.addFailed);
+//                                            }
+//                                        });
+//                                    }
+//                                    dialog.create().show();
+//                                }
+//                            })
+//                            .create().show();
+//                }
+//            }
+//        });
     }
 
     private static void addMRootApplications(Context context,List<Map<String, Object>> AppList){

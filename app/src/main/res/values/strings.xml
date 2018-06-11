@@ -15,7 +15,7 @@
     <string name="addToOneKeyList">加入一键冻结列表</string>
     <string name="addFailed">添加失败</string>
     <string name="caution">警告</string>
-    <string name="cautionContent">不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n\n长按可以直接呼出冻结/解冻菜单\n短按请在桌面快捷方式执行冻结/解冻操作\n\n请谨慎操作！</string>
+    <string name="cautionContent">不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n\n长按可以直接呼出冻结/解冻菜单\n\n请谨慎操作！</string>
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="createFreezeShortcutNotice">是否在桌面创建 冻结/解冻 的快捷方式？</string>
@@ -74,4 +74,7 @@
     <string name="manualModeWarning">在此处执行的操作将不会被记录！如非必要请不要在此处进行手动操作——这可能导致软件功能异常！</string>
     <string name="failed">失败</string>
     <string name="success">成功</string>
+    <string name="disableAEnable">冻结/解冻</string>
+    <string name="copyPkgName">复制包名</string>
+    <string name="createDisEnableShortCut">创建冻结解冻快捷方式</string>
 </resources>

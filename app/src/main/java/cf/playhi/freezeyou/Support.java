@@ -2,6 +2,7 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +11,8 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,6 +20,7 @@ import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -430,6 +434,15 @@ class Support {
         }
     }
 
+    //https://stackoverflow.com/questions/44447056/convert-adaptiveicondrawable-to-bitmap-in-android-o-preview
+    static Bitmap getBitmapFromDrawable(Drawable drawable) {
+        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bmp);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bmp;
+    }
+
     //http://www.cnblogs.com/zhou2016/p/6281678.html
     /**
      * Drawable转Bitmap
@@ -519,6 +532,80 @@ class Support {
         outputStream.flush();
         return process.waitFor();
     }
+
+    static void createShortCut(String title, String pkgName, Drawable icon,Class<?> cls,String id,Context context){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            createShortCutOldApi(title,pkgName,icon,cls,context);
+        } else {
+            ShortcutManager mShortcutManager =
+                    context.getSystemService(ShortcutManager.class);
+            if (mShortcutManager!=null){
+                if (mShortcutManager.isRequestPinShortcutSupported()) {
+                    ShortcutInfo.Builder shortcutInfoBuilder =
+                            new ShortcutInfo.Builder(context, id);
+                    shortcutInfoBuilder.setIcon(Icon.createWithBitmap(getBitmapFromDrawable(icon)));
+                    shortcutInfoBuilder.setIntent(
+                            new Intent(context, cls)
+                                    .setAction(Intent.ACTION_MAIN)
+                                    .putExtra("pkgName",pkgName)
+                    );
+                    shortcutInfoBuilder.setShortLabel(title);
+                    shortcutInfoBuilder.setLongLabel(title);
+                    // Assumes there's already a shortcut with the ID "my-shortcut".
+                    // The shortcut must be enabled.
+                    ShortcutInfo pinShortcutInfo = shortcutInfoBuilder.build();
+                    // Create the PendingIntent object only if your app needs to be notified
+                    // that the user allowed the shortcut to be pinned. Note that, if the
+                    // pinning operation fails, your app isn't notified. We assume here that the
+                    // app has implemented a method called createShortcutResultIntent() that
+                    // returns a broadcast intent.
+                    Intent pinnedShortcutCallbackIntent =
+                            mShortcutManager.createShortcutResultIntent(pinShortcutInfo);
+
+                    // Configure the intent so that your app's broadcast receiver gets
+                    // the callback successfully.
+                    PendingIntent successCallback = PendingIntent.getBroadcast(context, 0,
+                            pinnedShortcutCallbackIntent, 0);
+
+                    mShortcutManager.requestPinShortcut(pinShortcutInfo,
+                            successCallback.getIntentSender());
+                }else {
+                    createShortCutOldApi(title,pkgName,icon,cls,context);
+                }
+            } else {
+                createShortCutOldApi(title,pkgName,icon,cls,context);
+            }
+        }
+    }
+
+    private static void createShortCutOldApi(String title, String pkgName, Drawable icon,Class<?> cls,Context context){
+        Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+//        Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.icon);
+        Intent intent = new Intent(context, cls);
+        intent.putExtra("pkgName",pkgName);
+        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
+        BitmapDrawable bd = (BitmapDrawable) icon;
+        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
+        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
+        try{
+            context.sendBroadcast(addShortCut);
+            showToast(context,R.string.requested);
+        } catch (Exception e){
+            Intent addShortCut2 = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+            Intent intent2 = new Intent(context, cls);
+            intent2.putExtra("pkgName",pkgName);
+            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
+            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_ICON, Bitmap.createScaledBitmap(getBitmapFromDrawable(icon),192,192,true));
+            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
+            try {
+                context.sendBroadcast(addShortCut2);
+                showToast(context, R.string.requested);
+            }catch (Exception ee){
+                showToast(context,context.getString(R.string.requestFailed)+ee.getMessage());
+            }
+        }
+    }
+
 //
 //    static String getVersionName(Context context) {
 //        PackageManager packageManager = context.getPackageManager();
