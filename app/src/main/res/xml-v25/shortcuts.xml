@@ -3,7 +3,7 @@
     <shortcut
         android:shortcutId="main"
         android:enabled="true"
-        android:icon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/ic_launcher_new_round"
         android:shortcutShortLabel="@string/app_name"
         android:shortcutLongLabel="@string/app_name"
         android:shortcutDisabledMessage="@string/app_name">
@@ -20,7 +20,7 @@
     <shortcut
         android:shortcutId="onekeyFreeze"
         android:enabled="true"
-        android:icon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/ic_launcher_new_round"
         android:shortcutShortLabel="@string/oneKeyFreeze"
         android:shortcutLongLabel="@string/oneKeyFreeze"
         android:shortcutDisabledMessage="@string/oneKeyFreeze">

@@ -18,9 +18,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import static cf.playhi.freezeyou.Support.checkFrozen;
-import static cf.playhi.freezeyou.Support.makeDialog;
-import static cf.playhi.freezeyou.Support.makeDialog2;
 import static cf.playhi.freezeyou.Support.showToast;
 import static cf.playhi.freezeyou.Support.createShortCut;
 
