@@ -58,12 +58,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 }
                 fw.write("\n");
                 fw.close();
-                // 上传错误信息到服务器
-                // uploadToServer();
             } catch (Exception e) {
                 Log.e("crash handler", "load file failed...", e.getCause());
             }
         }
+        // 上传错误信息到服务器
+        // uploadToServer();
+        //TODO:自动上报
         throwable.printStackTrace();
         android.os.Process.killProcess(android.os.Process.myPid());
     }

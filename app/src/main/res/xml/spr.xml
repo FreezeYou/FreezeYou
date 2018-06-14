@@ -21,6 +21,29 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/iconAEntry">
+        <CheckBoxPreference
+            android:icon="@mipmap/ic_launcher"
+            android:key="firstIconEnabled"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:icon="@mipmap/ic_launcher_round"
+            android:key="secondIconEnabled"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:icon="@mipmap/ic_launcher_new_round"
+            android:key="thirdIconEnabled"
+            android:defaultValue="true"/>
+        <Preference
+            android:title="@string/dialEntry"
+            android:summary="@string/dialEntry_Ex">
+            <intent
+                android:action="android.intent.action.DIAL"
+                android:data="tel:*#*#373393968#*#*" />
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/advance">
         <Preference
             android:title="@string/manualMode"

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import static cf.playhi.freezeyou.Support.showToast;
 import static cf.playhi.freezeyou.Support.createShortCut;
+import static cf.playhi.freezeyou.Support.getApplicationIcon;
 
 public class SelectOperation extends Activity {
     @Override
@@ -66,18 +67,14 @@ public class SelectOperation extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0:
-                        try {
-                            createShortCut(
-                                    name.replace("(" + getString(R.string.frozen) + ")", ""),
-                                    pkgName,
-                                    getPackageManager().getApplicationIcon(pkgName),
-                                    Freeze.class,
-                                    "FreezeYou! "+pkgName,
-                                    SelectOperation.this
-                            );
-                        } catch (PackageManager.NameNotFoundException e) {
-                            showToast(getApplicationContext(), R.string.cannotFindApp);
-                        }
+                        createShortCut(
+                                name.replace("(" + getString(R.string.frozen) + ")", "").replace("(" + getString(R.string.oneKeyFreeze) + ")",""),
+                                pkgName,
+                                getApplicationIcon(SelectOperation.this,pkgName,null),
+                                Freeze.class,
+                                "FreezeYou! "+pkgName,
+                                SelectOperation.this
+                        );
                         finish();
                         break;
                     case 1:
