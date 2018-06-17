@@ -12,7 +12,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,6 +27,11 @@ import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,6 +54,11 @@ public class Main extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        try {
+            manageCrashLog();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         autoFreezePkgNameList = getApplicationContext().getSharedPreferences(
                 "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
         Thread initThread;
@@ -102,6 +114,7 @@ public class Main extends Activity {
                     })
                     .create().show();
         }
+//        throw new RuntimeException("自定义异常：仅于异常上报测试中使用");//发版前务必注释
     }
 
     @Override
@@ -672,6 +685,52 @@ public class Main extends Activity {
         return ifOnekeyFreezeList(pkgName) ? name + "(" + context.getResources().getString(R.string.oneKeyFreeze) + ")" : name;
     }
 
+    private void manageCrashLog() throws Exception{
+        File crashCheck = new File(Environment.getDataDirectory().getPath()
+                + File.separator
+                + "data"
+                + File.separator
+                +"cf.playhi.freezeyou"
+                + File.separator
+                + "log"
+                + File.separator
+                + "NeedUpload.log");
+        if (crashCheck.exists()){
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(crashCheck));
+            String filePath = bufferedReader.readLine();
+            bufferedReader.close();
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[fileInputStream.available()];
+            fileInputStream.read(buffer);
+            byteArrayOutputStream.write(buffer);
+            fileInputStream.close();
+            buildAlertDialog(Main.this,R.mipmap.ic_launcher_new_round,R.string.ifUploadCrashLog,R.string.notice)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Uri webPage = Uri.parse("https://app.playhi.cf/freezeyou/crashReport.php?data="+ Base64.encodeToString(byteArrayOutputStream.toByteArray(),Base64.DEFAULT));
+                            Intent about = new Intent(Intent.ACTION_VIEW, webPage);
+                            if (about.resolveActivity(getPackageManager()) != null) {
+                                startActivity(about);
+                            } else {
+                                showToast(Main.this,R.string.failed);
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .create()
+                    .show();
+            //删除数据
+            new File(filePath).delete();
+            crashCheck.delete();
+        }
+    }
     //TODO:运行中亮绿灯（列表、与白点、蓝点并列，覆盖是否已冻结状态）//高考
     //TODO:Main.java查看列表icon等代码整理&复用//高考
 }

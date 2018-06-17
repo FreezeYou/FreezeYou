@@ -80,4 +80,5 @@
     <string name="dialEntry">拨号盘进入</string>
     <string name="dialEntry_Ex">*#*#373393968#*#*(*#*#FreezeYou#*#*)(大部分安卓系统支持)</string>
     <string name="ciFinishedToast">已提交，请等待桌面刷新或重启桌面。</string>
+    <string name="ifUploadCrashLog">检测到存在发生过但并未提交的异常日志，是否上传日志？</string>
 </resources>
