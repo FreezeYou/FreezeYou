@@ -3,6 +3,7 @@ package cf.playhi.freezeyou;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -628,15 +629,32 @@ class Support {
                         "pkgName2Name", Context.MODE_PRIVATE);
                 mBuilder.setContentTitle(sharedPreferences.getString(pkgName,context.getString(R.string.notice)));
             }
-            mBuilder.setContentText(context.getString(R.string.chooseDetailAction));
+            mBuilder.setContentText(context.getString(R.string.disableAEnable));
+            mBuilder.setAutoCancel(true);
+            // Create the NotificationChannel, but only on API 26+ because
+            // the NotificationChannel class is new and not in the support library
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                String CHANNEL_ID = "FAUf";
+                CharSequence name = context.getString(R.string.disableAEnable);
+                String description = context.getString(R.string.disableAEnable);
+                int importance = NotificationManager.IMPORTANCE_LOW;
+                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+                channel.setDescription(description);
+                // Register the channel with the system; you can't change the importance
+                // or other notification behaviors after this
+                NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+                if (notificationManager!=null)
+                    notificationManager.createNotificationChannel(channel);
+                mBuilder.setChannelId(CHANNEL_ID);
+            }
             // Create an Intent for the activity you want to start
             Intent resultIntent = new Intent(context, Freeze.class).putExtra("pkgName",pkgName);
             // Create the TaskStackBuilder and add the intent, which inflates the back stack
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-            stackBuilder.addNextIntentWithParentStack(resultIntent);
+            stackBuilder.addNextIntent(resultIntent);
             // Get the PendingIntent containing the entire back stack
             PendingIntent resultPendingIntent =
-                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                    stackBuilder.getPendingIntent(mId, PendingIntent.FLAG_UPDATE_CURRENT);
             mBuilder.setContentIntent(resultPendingIntent);
             NotificationManager mNotificationManager =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
