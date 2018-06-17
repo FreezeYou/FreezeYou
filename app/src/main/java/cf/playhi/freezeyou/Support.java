@@ -2,7 +2,10 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,6 +34,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 class Support {
     private static Process process = null;
@@ -45,6 +49,7 @@ class Support {
                             if (getDevicePolicyManager(activity).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(activity),pkgName,true)) {
                                 addFrozen(activity, pkgName);
+                                deleteNotification(activity,pkgName);
                             } else {
                                 showToast(activity, "Failed!");
                             }
@@ -53,6 +58,7 @@ class Support {
                                 int exitValue = fAURoot(pkgName,false,process,outputStream);
                                 if (exitValue == 0) {
                                     showToast(activity, R.string.executed);
+                                    deleteNotification(activity,pkgName);
                                 } else {
                                     showToast(activity, R.string.mayUnrootedOrOtherEx);
                                 }
@@ -79,6 +85,7 @@ class Support {
                                     DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
                                 removeFrozen(activity, pkgName);
                                 askRun(activity, SelfCloseWhenDestroyProcess, pkgName);
+                                createNotification(activity,pkgName,R.mipmap.ic_launcher_new_round);
                             } else {
                                 showToast(activity, "Failed!");
                                 destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
@@ -87,7 +94,8 @@ class Support {
                             try {
                                 int exitValue = fAURoot(pkgName,true,process,outputStream);
                                 if (exitValue == 0) {
-                                        askRun(activity,SelfCloseWhenDestroyProcess,pkgName);
+                                    askRun(activity,SelfCloseWhenDestroyProcess,pkgName);
+                                    createNotification(activity,pkgName,R.mipmap.ic_launcher_new_round);
                                 } else {
                                     showToast(activity, R.string.mayUnrootedOrOtherEx);
                                     destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
@@ -128,6 +136,7 @@ class Support {
                             if (getDevicePolicyManager(activity).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(activity), pkgName, true)) {
                                 addFrozen(activity, pkgName);
+                                deleteNotification(activity,pkgName);
                             } else {
                                 showToast(activity, "Failed!");
                             }
@@ -136,6 +145,7 @@ class Support {
                                 int exitValue = fAURoot(pkgName,false,process,outputStream);
                                 if (exitValue == 0) {
                                     showToast(activity, R.string.executed);
+                                    deleteNotification(activity,pkgName);
                                 } else {
                                     showToast(activity, R.string.mayUnrootedOrOtherEx);
                                 }
@@ -606,6 +616,51 @@ class Support {
         }
     }
 
+    private static void createNotification(Context context,String pkgName,int iconResId){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+            Notification.Builder mBuilder = new Notification.Builder(context);
+            int mId = new Date().hashCode();
+            mBuilder.setSmallIcon(iconResId);
+            try {
+                mBuilder.setContentTitle(context.getPackageManager().getApplicationLabel(context.getPackageManager().getApplicationInfo(pkgName,0)).toString());
+            } catch (Exception e){
+                SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
+                        "pkgName2Name", Context.MODE_PRIVATE);
+                mBuilder.setContentTitle(sharedPreferences.getString(pkgName,context.getString(R.string.notice)));
+            }
+            mBuilder.setContentText(context.getString(R.string.chooseDetailAction));
+            // Create an Intent for the activity you want to start
+            Intent resultIntent = new Intent(context, Freeze.class).putExtra("pkgName",pkgName);
+            // Create the TaskStackBuilder and add the intent, which inflates the back stack
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+            stackBuilder.addNextIntentWithParentStack(resultIntent);
+            // Get the PendingIntent containing the entire back stack
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.setContentIntent(resultPendingIntent);
+            NotificationManager mNotificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
+                    "notificationId", Context.MODE_PRIVATE);
+            if (!sharedPreferences.edit().putInt(pkgName, mId).commit()){
+                sharedPreferences.edit().putInt(pkgName, mId).commit();
+            }
+            if (mNotificationManager!=null){
+                // mId allows you to update the notification later on.
+                mNotificationManager.notify(mId, mBuilder.build());
+            }
+        }
+    }
+
+    private static void deleteNotification(Context context,String pkgName){
+        SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
+                "notificationId", Context.MODE_PRIVATE);
+        NotificationManager mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (mNotificationManager!=null){
+            mNotificationManager.cancel(sharedPreferences.getInt(pkgName,0));
+        }
+    }
 //
 //    static String getVersionName(Context context) {
 //        PackageManager packageManager = context.getPackageManager();
