@@ -86,7 +86,7 @@ class Support {
                                     DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
                                 removeFrozen(activity, pkgName);
                                 askRun(activity, SelfCloseWhenDestroyProcess, pkgName);
-                                createNotification(activity,pkgName,R.mipmap.ic_launcher_new_round);
+                                createNotification(activity,pkgName,R.drawable.ic_notification);
                             } else {
                                 showToast(activity, "Failed!");
                                 destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
@@ -96,7 +96,7 @@ class Support {
                                 int exitValue = fAURoot(pkgName,true,process,outputStream);
                                 if (exitValue == 0) {
                                     askRun(activity,SelfCloseWhenDestroyProcess,pkgName);
-                                    createNotification(activity,pkgName,R.mipmap.ic_launcher_new_round);
+                                    createNotification(activity,pkgName,R.drawable.ic_notification);
                                 } else {
                                     showToast(activity, R.string.mayUnrootedOrOtherEx);
                                     destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
@@ -622,6 +622,7 @@ class Support {
             Notification.Builder mBuilder = new Notification.Builder(context);
             int mId = new Date().hashCode();
             mBuilder.setSmallIcon(iconResId);
+            mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_notification));
             try {
                 mBuilder.setContentTitle(context.getPackageManager().getApplicationLabel(context.getPackageManager().getApplicationInfo(pkgName,0)).toString());
             } catch (Exception e){

@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import java.io.DataOutputStream;
 
+import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.showToast;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.fAURoot;
@@ -31,7 +32,7 @@ public class ManualMode extends Activity {
         disable_MRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT>=21) {
+                if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)) {
                     String pkgName = packageNameEditText.getText().toString();
                     if (getDevicePolicyManager(activity).setApplicationHidden(
                         DeviceAdminReceiver.getComponentName(activity), pkgName, true)){
@@ -47,7 +48,7 @@ public class ManualMode extends Activity {
         enable_MRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT>=21) {
+                if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)) {
                     String pkgName = packageNameEditText.getText().toString();
                     if (getDevicePolicyManager(activity).setApplicationHidden(
                             DeviceAdminReceiver.getComponentName(activity), pkgName, false)){
