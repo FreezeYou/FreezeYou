@@ -82,4 +82,21 @@
     <string name="ciFinishedToast">已提交，请等待桌面刷新或重启桌面。</string>
     <string name="ifUploadCrashLog">检测到存在发生过但并未提交的异常日志，是否上传日志？</string>
     <string name="search">搜索</string>
+    <string name="launchMode">启动模式</string>
+    <string-array name="launchModeSelection">
+        <item>显示全部</item>
+        <item>仅已冻结</item>
+        <item>仅未冻结</item>
+        <item>系统预装</item>
+        <item>用户应用</item>
+        <item>一键冻结</item>
+    </string-array>
+    <string-array name="launchModeSelectionValues" translatable="false">
+        <item>all</item>
+        <item>OF</item>
+        <item>UF</item>
+        <item>OS</item>
+        <item>OU</item>
+        <item>OO</item>
+    </string-array>
 </resources>

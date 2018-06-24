@@ -14,12 +14,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -65,9 +70,9 @@ public class Main extends Activity {
         initThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String mode = getIntent().getStringExtra("pkgName");
+                String mode = getIntent().getStringExtra("pkgName");//快捷方式提供
                 if (mode == null){
-                    mode = "all";
+                    mode = PreferenceManager.getDefaultSharedPreferences(Main.this).getString("launchMode","all");
                 }
                 switch (mode){
                     case "OF":
@@ -78,6 +83,12 @@ public class Main extends Activity {
                         break;
                     case "OO":
                         generateList("OO");
+                        break;
+                    case "OS":
+                        generateList("OS");
+                        break;
+                    case "OU":
+                        generateList("OU");
                         break;
                     default:
                         generateList("all");
@@ -267,6 +278,7 @@ public class Main extends Activity {
         final TextView textView = findViewById(R.id.textView);
         final LinearLayout linearLayout = findViewById(R.id.layout2);
         final List<Map<String, Object>> AppList = new ArrayList<>();
+        final EditText search_editText = findViewById(R.id.search_editText);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -503,13 +515,51 @@ public class Main extends Activity {
             }
         });
 
+        search_editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {//setFilterText报错不断，simpleAdapter这类似问题网上似乎隐隐约约也有人提出过……自己写一个蹩脚的筛选吧
+                if (TextUtils.isEmpty(charSequence)){
+                    app_listView.setAdapter(adapter);
+                } else {
+                    SimpleAdapter processedAdapter = new SimpleAdapter(Main.this, processListFilter(charSequence,AppList),
+                            R.layout.app_list_1, new String[] { "Img","Name",
+                            "PackageName", "isFrozen", "isAutoList"}, new int[] { R.id.img,R.id.name,R.id.pkgName,R.id.isFrozen,R.id.isAutoFreezeList});
+
+                    processedAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+                        public boolean setViewValue(View view, Object data,
+                                                    String textRepresentation) {
+                            if (view instanceof ImageView && data instanceof Drawable) {
+                                ImageView imageView = (ImageView) view;
+                                imageView.setImageDrawable((Drawable) data);
+                                return true;
+                            } else
+                                return false;
+                        }
+                    });
+                    app_listView.setAdapter(processedAdapter);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 progressBar.setVisibility(View.GONE);
                 textView.setVisibility(View.GONE);
                 linearLayout.setVisibility(View.GONE);
+                app_listView.setTextFilterEnabled(true);
                 app_listView.setAdapter(adapter);
+                app_listView.setTextFilterEnabled(true);
                 app_listView.setVisibility(View.VISIBLE);
             }
         });
@@ -546,7 +596,8 @@ public class Main extends Activity {
                     startActivityForResult(
                             new Intent(Main.this, SelectOperation.class).
                                     putExtra("Name",name).
-                                    putExtra("pkgName",pkgName),
+                                    putExtra("pkgName",pkgName).
+                                    putExtra("index",i),
                             1092
                     );
                 }
@@ -731,6 +782,31 @@ public class Main extends Activity {
             crashCheck.delete();
         }
     }
+
+    private List<Map<String, Object>> processListFilter(CharSequence prefix,List<Map<String, Object>> unfilteredValues){
+
+        String prefixString = prefix.toString().toLowerCase();
+
+        if (unfilteredValues!=null){
+            int count = unfilteredValues.size();
+
+            List<Map<String, Object>> newValues = new ArrayList<>(count);
+            for (int i = 0; i < count; i++) {
+                try{
+                    Map<String, Object> h = unfilteredValues.get(i);
+                    if (((String) h.get("Name")).toLowerCase().contains(prefixString)) {
+                        newValues.add(h);
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            return newValues;
+        }
+
+        return new ArrayList<>();
+    }
+
     //TODO:运行中亮绿灯（列表、与白点、蓝点并列，覆盖是否已冻结状态）//高考
     //TODO:Main.java查看列表icon等代码整理&复用//高考
 }

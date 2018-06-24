@@ -3,6 +3,12 @@
 
     <PreferenceCategory
         android:title="@string/common">
+        <ListPreference
+            android:defaultValue="all"
+            android:entries="@array/launchModeSelection"
+            android:entryValues="@array/launchModeSelectionValues"
+            android:key="launchMode"
+            android:title="@string/launchMode" />
         <CheckBoxPreference
             android:title="@string/openImmediately"
             android:summary="@string/openImmediatelyEx"

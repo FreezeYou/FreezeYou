@@ -18,6 +18,7 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:launchMode="singleTask"
             android:icon="@mipmap/ic_launcher_new_round"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.DeviceDefault">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
