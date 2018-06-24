@@ -117,6 +117,9 @@ public class SelectOperation extends Activity {
                         }
                         finish();
                         break;
+                    default:
+                        finish();
+                        break;
                 }
             }
         });
