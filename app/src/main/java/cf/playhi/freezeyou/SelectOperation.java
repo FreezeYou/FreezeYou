@@ -124,4 +124,10 @@ public class SelectOperation extends Activity {
             }
         });
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        this.overridePendingTransition(R.anim.pullup,R.anim.pulldown);
+    }
 }

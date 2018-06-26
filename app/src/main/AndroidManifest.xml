@@ -105,7 +105,7 @@
         <activity
             android:name=".SelectOperation"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@style/AppTheme.Translucent.NoTitleBar"/>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/moreSettings"

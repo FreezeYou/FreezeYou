@@ -599,6 +599,7 @@ public class Main extends Activity {
                                     putExtra("index",i),
                             1092
                     );
+                    overridePendingTransition(R.anim.pullup,R.anim.pulldown);
                 }
             }
         });
