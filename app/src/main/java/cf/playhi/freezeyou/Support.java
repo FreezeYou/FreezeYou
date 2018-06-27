@@ -275,7 +275,7 @@ class Support {
         }
     }
 
-    private static void removeFrozen(Context context,String pkgName){
+    static void removeFrozen(Context context,String pkgName){
         final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
                 "FrozenList", Context.MODE_PRIVATE);
         final String pkgNameList = sharedPreferences.getString("pkgName", "");

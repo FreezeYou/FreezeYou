@@ -134,6 +134,16 @@
                 <data android:scheme="android_secret_code" android:host="373393968"/>
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".UninstallReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

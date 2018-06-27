@@ -63,8 +63,8 @@ public class Main extends Activity {
         } catch (Exception e){
             e.printStackTrace();
         }
-        autoFreezePkgNameList = getApplicationContext().getSharedPreferences(
-                "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
+//        autoFreezePkgNameList = getApplicationContext().getSharedPreferences(
+//                "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
         Thread initThread;
         initThread = new Thread(new Runnable() {
             @Override
@@ -289,6 +289,8 @@ public class Main extends Activity {
         Drawable icon;
         List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(0);
         int size = applicationInfo.size();
+        autoFreezePkgNameList = getApplicationContext().getSharedPreferences(
+                "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
         switch (filter) {
             case "all":
                 addMRootApplications(getApplicationContext(),AppList);
