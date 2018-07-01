@@ -35,7 +35,6 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
 
 class Support {
     private static Process process = null;
@@ -620,7 +619,7 @@ class Support {
     private static void createNotification(Context context,String pkgName,int iconResId){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
             Notification.Builder mBuilder = new Notification.Builder(context);
-            int mId = new Date().hashCode();
+            int mId = pkgName.hashCode();
             mBuilder.setSmallIcon(iconResId);
             mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_notification));
             try {
