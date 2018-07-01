@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import java.io.DataOutputStream;
 
-import static cf.playhi.freezeyou.Support.addFrozen;
 import static cf.playhi.freezeyou.Support.checkFrozen;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
@@ -30,10 +29,8 @@ public class OneKeyFreeze extends Activity {
                 try {
                     if (!checkFrozen(activity, tmp)) {
                         savePkgName2Name(activity, tmp);
-                        if (getDevicePolicyManager(activity).setApplicationHidden(
+                        if (!getDevicePolicyManager(activity).setApplicationHidden(
                                 DeviceAdminReceiver.getComponentName(activity), tmp, true)) {
-                            addFrozen(activity, tmp);
-                        } else {
                             showToast(activity, tmp + " Failed!");
                         }
                     }

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -20,7 +19,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -310,7 +308,7 @@ public class Main extends Activity {
                         keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
                         keyValuePair.put("PackageName", packageName);
                         try {
-                            if (R.drawable.bluedot == (int) keyValuePair.get("isFrozen")) {
+                            if (R.drawable.whitedot == (int) keyValuePair.get("isFrozen")) {
                                 AppList.add(keyValuePair);
                             }
                         } catch (Exception e) {

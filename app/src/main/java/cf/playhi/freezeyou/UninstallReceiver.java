@@ -23,7 +23,6 @@ public class UninstallReceiver extends BroadcastReceiver {
                                     pkgNameList.replace("|" + pkgName + "|", ""))
                             .apply();
                 }
-                Support.removeFrozen(context,pkgName);
             }
         }
     }

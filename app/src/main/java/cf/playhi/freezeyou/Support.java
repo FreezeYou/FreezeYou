@@ -48,7 +48,7 @@ class Support {
                             savePkgName2Name(activity,pkgName);
                             if (getDevicePolicyManager(activity).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(activity),pkgName,true)) {
-                                addFrozen(activity, pkgName);
+//                                addFrozen(activity, pkgName);
                                 deleteNotification(activity,pkgName);
                             } else {
                                 showToast(activity, "Failed!");
@@ -77,13 +77,10 @@ class Support {
                 .setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        final SharedPreferences sharedPreferences = activity.getApplicationContext().getSharedPreferences(
-                                "FrozenList", Context.MODE_PRIVATE);
-                        final String pkgNameList = sharedPreferences.getString("pkgName", "");
-                        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && (activity.getString(R.string.notice).equals(title) ||pkgNameList.contains("|" + pkgName + "|"))) {
+                        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && checkFrozen(activity,pkgName)) {
                             if (getDevicePolicyManager(activity).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
-                                removeFrozen(activity, pkgName);
+//                                removeFrozen(activity, pkgName);
                                 askRun(activity, SelfCloseWhenDestroyProcess, pkgName);
                                 createNotification(activity,pkgName,R.drawable.ic_notification);
                             } else {
@@ -135,7 +132,7 @@ class Support {
                             savePkgName2Name(activity, pkgName);
                             if (getDevicePolicyManager(activity).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(activity), pkgName, true)) {
-                                addFrozen(activity, pkgName);
+//                                addFrozen(activity, pkgName);
                                 deleteNotification(activity,pkgName);
                             } else {
                                 showToast(activity, "Failed!");
@@ -263,27 +260,27 @@ class Support {
         return (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
     }
 
-    static void addFrozen(Context context,String pkgName){
-        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-                "FrozenList", Context.MODE_PRIVATE);
-        final String pkgNameList = sharedPreferences.getString("pkgName", "");
-        if (!sharedPreferences.edit().putString("pkgName", pkgNameList + "|" + pkgName + "|").commit()) {
-            if (!sharedPreferences.edit().putString("pkgName", pkgNameList + "|" + pkgName + "|").commit()) {
-                showToast(context.getApplicationContext(), "数据异常");
-            }
-        }
-    }
+//    static void addFrozen(Context context,String pkgName){
+//        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
+//                "FrozenList", Context.MODE_PRIVATE);
+//        final String pkgNameList = sharedPreferences.getString("pkgName", "");
+//        if (!sharedPreferences.edit().putString("pkgName", pkgNameList + "|" + pkgName + "|").commit()) {
+//            if (!sharedPreferences.edit().putString("pkgName", pkgNameList + "|" + pkgName + "|").commit()) {
+//                showToast(context.getApplicationContext(), "数据异常");
+//            }
+//        }
+//    }
 
-    static void removeFrozen(Context context,String pkgName){
-        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-                "FrozenList", Context.MODE_PRIVATE);
-        final String pkgNameList = sharedPreferences.getString("pkgName", "");
-        if (!sharedPreferences.edit().putString("pkgName", pkgNameList.replace("|" + pkgName + "|", "")).commit()) {
-            if (!sharedPreferences.edit().putString("pkgName", pkgNameList.replace("|" + pkgName + "|", "")).commit()) {
-                showToast(context.getApplicationContext(), "数据异常");
-            }
-        }
-    }
+//    static void removeFrozen(Context context,String pkgName){
+//        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
+//                "FrozenList", Context.MODE_PRIVATE);
+//        final String pkgNameList = sharedPreferences.getString("pkgName", "");
+//        if (!sharedPreferences.edit().putString("pkgName", pkgNameList.replace("|" + pkgName + "|", "")).commit()) {
+//            if (!sharedPreferences.edit().putString("pkgName", pkgNameList.replace("|" + pkgName + "|", "")).commit()) {
+//                showToast(context.getApplicationContext(), "数据异常");
+//            }
+//        }
+//    }
 
     static boolean checkFrozen(Context context,String pkgName) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(context) && getDevicePolicyManager(context).isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
@@ -349,13 +346,10 @@ class Support {
                             R.string.cannotFindTheLaunchIntent);
                 }
             } else {
-                final SharedPreferences sharedPreferences = activity.getApplicationContext().getSharedPreferences(
-                        "FrozenList", Context.MODE_PRIVATE);
-                final String pkgNameList = sharedPreferences.getString("pkgName", "");
-                if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && (activity.getString(R.string.notice).equals(title) ||pkgNameList.contains("|" + pkgName + "|"))) {
+                if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && checkFrozen(activity,pkgName)) {
                     if (getDevicePolicyManager(activity).setApplicationHidden(
                             DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
-                        removeFrozen(activity, pkgName);
+//                        removeFrozen(activity, pkgName);
                         if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
                             Intent intent = new Intent(
                                     activity.getPackageManager().getLaunchIntentForPackage(pkgName));
