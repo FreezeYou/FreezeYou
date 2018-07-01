@@ -285,11 +285,8 @@ class Support {
         }
     }
 
-    static boolean checkFrozen(Context context,String pkgName){
-        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-                "FrozenList", Context.MODE_PRIVATE);
-        final String pkgNameList = sharedPreferences.getString("pkgName", "");
-        return pkgNameList.contains("|" + pkgName + "|");
+    static boolean checkFrozen(Context context,String pkgName) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(context) && getDevicePolicyManager(context).isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
     }
 
     private static void askRun(final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String pkgName){

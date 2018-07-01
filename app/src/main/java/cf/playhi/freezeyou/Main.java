@@ -6,11 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -18,6 +20,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,7 +50,9 @@ import static cf.playhi.freezeyou.Support.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkFrozen;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getBitmapFromLocalFile;
+import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.getVersionCode;
+import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.makeDialog;
 import static cf.playhi.freezeyou.Support.makeDialog2;
 import static cf.playhi.freezeyou.Support.showToast;
@@ -234,13 +239,12 @@ public class Main extends Activity {
             }
         });
         Drawable icon;
-        List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(0);
+        List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
         int size = applicationInfo.size();
         autoFreezePkgNameList = getApplicationContext().getSharedPreferences(
                 "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
         switch (filter) {
             case "all":
-                addMRootApplications(getApplicationContext(),AppList);
                 for (int i = 0; i < size; i++) {
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
@@ -252,47 +256,42 @@ public class Main extends Activity {
                         } else {
                             keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
                         }
-                        int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
-                        if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                            keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
-                            keyValuePair.put("isFrozen",R.drawable.bluedot);
-                        } else {
-                            keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
-                            keyValuePair.put("isFrozen",R.drawable.whitedot);
-                        }
+                        processFrozenStatus(keyValuePair,name,packageName);
                         keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
                         keyValuePair.put("PackageName", packageName);
                         AppList.add(keyValuePair);
-                    } else if ((i+1==size)&&(AppList.size()==0)){
-                        addNotAvailablePair(getApplicationContext(),AppList);
                     }
+                }
+                if (AppList.size()==0) {
+                    addNotAvailablePair(getApplicationContext(), AppList);
                 }
                 break;
             case "OF":
-                addMRootApplications(getApplicationContext(),AppList);
                 for (int i = 0; i < size; i++) {
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
                     if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
-                        int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
-                        if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER ||
-                                tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                            Map<String, Object> keyValuePair = new HashMap<>();
-                            icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
-                            if (icon != null) {
-                                keyValuePair.put("Img", icon);
-                            } else {
-                                keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+                        Map<String, Object> keyValuePair = new HashMap<>();
+                        icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
+                        if (icon != null) {
+                            keyValuePair.put("Img", icon);
+                        } else {
+                            keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+                        }
+                        processFrozenStatus(keyValuePair,name,packageName);
+                        keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
+                        keyValuePair.put("PackageName", packageName);
+                        try {
+                            if (R.drawable.bluedot == (int)keyValuePair.get("isFrozen")){
+                                AppList.add(keyValuePair);
                             }
-                            keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
-                            keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
-                            keyValuePair.put("isFrozen",R.drawable.bluedot);
-                            keyValuePair.put("PackageName", packageName);
-                            AppList.add(keyValuePair);
-                        } else if ((i+1==size)&&(AppList.size()==0)){
-                            addNotAvailablePair(getApplicationContext(),AppList);
+                        } catch (Exception e){
+                            e.printStackTrace();
                         }
                     }
+                }
+                if (AppList.size()==0){
+                    addNotAvailablePair(getApplicationContext(),AppList);
                 }
                 break;
             case "UF":
@@ -300,25 +299,27 @@ public class Main extends Activity {
                     String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
                     String packageName = applicationInfo.get(i).packageName;
                     if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
-                        int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
-                        if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER &&
-                                tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                            Map<String, Object> keyValuePair = new HashMap<>();
-                            icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
-                            if (icon != null) {
-                                keyValuePair.put("Img", icon);
-                            } else {
-                                keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-                            }
-                            keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
-                            keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
-                            keyValuePair.put("isFrozen",R.drawable.whitedot);
-                            keyValuePair.put("PackageName", packageName);
-                            AppList.add(keyValuePair);
+                        Map<String, Object> keyValuePair = new HashMap<>();
+                        icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
+                        if (icon != null) {
+                            keyValuePair.put("Img", icon);
+                        } else {
+                            keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
                         }
-                    } else if ((i+1==size)&&(AppList.size()==0)){
-                        addNotAvailablePair(getApplicationContext(),AppList);
+                        processFrozenStatus(keyValuePair, name, packageName);
+                        keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
+                        keyValuePair.put("PackageName", packageName);
+                        try {
+                            if (R.drawable.bluedot == (int) keyValuePair.get("isFrozen")) {
+                                AppList.add(keyValuePair);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
+                }
+                if (AppList.size()==0){
+                    addNotAvailablePair(getApplicationContext(),AppList);
                 }
                 break;
             case "OO":
@@ -353,24 +354,14 @@ public class Main extends Activity {
                             }
                         }
                         keyValuePair.put("Img", icon);
-                        int tmp;
-                        try{
-                            tmp = getPackageManager().getApplicationEnabledSetting(aPkgNameList);
-                        } catch (Exception e){
-                            tmp = -10086;
-                        }
-                        if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED || checkFrozen(getApplicationContext(),aPkgNameList)) {
-                            keyValuePair.put("Name", name + "(" + getString(R.string.frozen) + ")");
-                            keyValuePair.put("isFrozen",R.drawable.bluedot);
-                            keyValuePair.put("isAutoList", ifOnekeyFreezeList(aPkgNameList) ? R.drawable.bluedot : R.drawable.whitedot);
-                        } else {
-                            keyValuePair.put("Name", name);
-                        }
+                        processFrozenStatus(keyValuePair,name,aPkgNameList);
+                        keyValuePair.put("isAutoList", ifOnekeyFreezeList(aPkgNameList) ? R.drawable.bluedot : R.drawable.whitedot);
                         keyValuePair.put("PackageName", aPkgNameList);
                         AppList.add(keyValuePair);
-                    } else if (autoFreezePkgNameList.length==1||autoFreezePkgNameList.length==0){
-                        addNotAvailablePair(getApplicationContext(),AppList);
                     }
+                }
+                if (AppList.size()==0) {
+                    addNotAvailablePair(getApplicationContext(), AppList);
                 }
                 break;
             case "OS":
@@ -386,21 +377,15 @@ public class Main extends Activity {
                             keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
                         }
                         if ((applicationInfo.get(i).flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM){
-                            int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
-                            if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
-                                keyValuePair.put("isFrozen",R.drawable.bluedot);
-                            } else {
-                                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
-                                keyValuePair.put("isFrozen",R.drawable.whitedot);
-                            }
+                            processFrozenStatus(keyValuePair,name,packageName);
                             keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
                         }
-                    } else if ((i+1==size)&&(AppList.size()==0)){
-                        addNotAvailablePair(getApplicationContext(),AppList);
                     }
+                }
+                if (AppList.size()==0) {
+                    addNotAvailablePair(getApplicationContext(), AppList);
                 }
                 break;
             case "OU":
@@ -416,21 +401,15 @@ public class Main extends Activity {
                             keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
                         }
                         if ((applicationInfo.get(i).flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM){
-                            int tmp = getPackageManager().getApplicationEnabledSetting(packageName);
-                            if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
-                                keyValuePair.put("isFrozen",R.drawable.bluedot);
-                            } else {
-                                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
-                                keyValuePair.put("isFrozen",R.drawable.whitedot);
-                            }
+                            processFrozenStatus(keyValuePair,name,packageName);
                             keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
                             keyValuePair.put("PackageName", packageName);
                             AppList.add(keyValuePair);
                         }
-                    } else if ((i+1==size)&&(AppList.size()==0)){
-                        addNotAvailablePair(getApplicationContext(),AppList);
                     }
+                }
+                if (AppList.size()==0) {
+                    addNotAvailablePair(getApplicationContext(), AppList);
                 }
                 break;
             default:
@@ -635,34 +614,34 @@ public class Main extends Activity {
     }
 
     private static void addMRootApplications(Context context,List<Map<String, Object>> AppList){
-        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-                "FrozenList", Context.MODE_PRIVATE);
-        final String pkgNameList = sharedPreferences.getString("pkgName", "");
-        String[] pkgNameListKeyValuePair = pkgNameList.split("\\|");
-        final SharedPreferences pkgName2NameSharedPreferences = context.getApplicationContext().getSharedPreferences(
-                "pkgName2Name", Context.MODE_PRIVATE);
-        for (String aPkgNameListKeyValuePair : pkgNameListKeyValuePair) {
-            if (!"".equals(aPkgNameListKeyValuePair)){
-                Map<String, Object> keyValuePair = new HashMap<>();
-                Bitmap bitmap = getBitmapFromLocalFile(context.getFilesDir()+"/icon/"+aPkgNameListKeyValuePair+".png");
-                if (bitmap!=null){
-                    keyValuePair.put("Img", new BitmapDrawable(bitmap));
-                } else {
-                    keyValuePair.put("Img", R.mipmap.ic_launcher_round);
-                }
-                keyValuePair.put("Name",
-                        addIfOnekeyFreezeList(context,pkgName2NameSharedPreferences.getString(
-                                aPkgNameListKeyValuePair,
-                                context.getString(R.string.notAvailable)) + "(" + context.getString(R.string.frozen)+")",
-                                aPkgNameListKeyValuePair
-                        )
-                );
-                keyValuePair.put("isAutoList", ifOnekeyFreezeList(aPkgNameListKeyValuePair) ? R.drawable.bluedot : R.drawable.whitedot);
-                keyValuePair.put("isFrozen",R.drawable.bluedot);
-                keyValuePair.put("PackageName", aPkgNameListKeyValuePair);
-                AppList.add(keyValuePair);
-            }
-        }
+//        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
+//                "FrozenList", Context.MODE_PRIVATE);
+//        final String pkgNameList = sharedPreferences.getString("pkgName", "");
+//        String[] pkgNameListKeyValuePair = pkgNameList.split("\\|");
+//        final SharedPreferences pkgName2NameSharedPreferences = context.getApplicationContext().getSharedPreferences(
+//                "pkgName2Name", Context.MODE_PRIVATE);
+//        for (String aPkgNameListKeyValuePair : pkgNameListKeyValuePair) {
+//            if (!"".equals(aPkgNameListKeyValuePair)){
+//                Map<String, Object> keyValuePair = new HashMap<>();
+//                Bitmap bitmap = getBitmapFromLocalFile(context.getFilesDir()+"/icon/"+aPkgNameListKeyValuePair+".png");
+//                if (bitmap!=null){
+//                    keyValuePair.put("Img", new BitmapDrawable(bitmap));
+//                } else {
+//                    keyValuePair.put("Img", R.mipmap.ic_launcher_round);
+//                }
+//                keyValuePair.put("Name",
+//                        addIfOnekeyFreezeList(context,pkgName2NameSharedPreferences.getString(
+//                                aPkgNameListKeyValuePair,
+//                                context.getString(R.string.notAvailable)) + "(" + context.getString(R.string.frozen)+")",
+//                                aPkgNameListKeyValuePair
+//                        )
+//                );
+//                keyValuePair.put("isAutoList", ifOnekeyFreezeList(aPkgNameListKeyValuePair) ? R.drawable.bluedot : R.drawable.whitedot);
+//                keyValuePair.put("isFrozen",R.drawable.bluedot);
+//                keyValuePair.put("PackageName", aPkgNameListKeyValuePair);
+//                AppList.add(keyValuePair);
+//            }
+//        }
     }
 
     private static void addNotAvailablePair(Context context,List<Map<String,Object>> AppList){
@@ -826,6 +805,32 @@ public class Main extends Activity {
                         }
                     })
                     .create().show();
+        }
+    }
+
+    private void processFrozenStatus(Map<String, Object> keyValuePair,String name,String packageName){
+        int tmp;
+        try {
+            tmp = getPackageManager().getApplicationEnabledSetting(packageName);
+        } catch (Exception e){
+            tmp = -1;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(getApplicationContext())){
+            if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED || getDevicePolicyManager(Main.this).isApplicationHidden(cf.playhi.freezeyou.DeviceAdminReceiver.getComponentName(getApplicationContext()),packageName)){
+                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
+                keyValuePair.put("isFrozen",R.drawable.bluedot);
+            } else {
+                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
+                keyValuePair.put("isFrozen",R.drawable.whitedot);
+            }
+        } else {
+            if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED ) {
+                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
+                keyValuePair.put("isFrozen",R.drawable.bluedot);
+            } else {
+                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
+                keyValuePair.put("isFrozen",R.drawable.whitedot);
+            }
         }
     }
     //TODO:运行中亮绿灯（列表、与白点、蓝点并列，覆盖是否已冻结状态）//高考
