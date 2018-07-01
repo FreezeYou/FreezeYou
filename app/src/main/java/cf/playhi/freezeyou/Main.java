@@ -62,69 +62,16 @@ public class Main extends Activity {
             manageCrashLog();
         } catch (Exception e){
             e.printStackTrace();
+            go();
         }
-//        autoFreezePkgNameList = getApplicationContext().getSharedPreferences(
-//                "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
-        Thread initThread;
-        initThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String mode = getIntent().getStringExtra("pkgName");//快捷方式提供
-                if (mode == null){
-                    mode = PreferenceManager.getDefaultSharedPreferences(Main.this).getString("launchMode","all");
-                }
-                switch (mode){
-                    case "OF":
-                        generateList("OF");
-                        break;
-                    case "UF":
-                        generateList("UF");
-                        break;
-                    case "OO":
-                        generateList("OO");
-                        break;
-                    case "OS":
-                        generateList("OS");
-                        break;
-                    case "OU":
-                        generateList("OU");
-                        break;
-                    default:
-                        generateList("all");
-                        break;
-                }
-            }
-        });
-        initThread.start();
-        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
-        if (!sharedPref.getBoolean("noCaution",false)){
-            buildAlertDialog(Main.this,R.mipmap.ic_launcher_round,R.string.cautionContent,R.string.caution)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int ii) {
-                        }
-                    })
-                    .setNeutralButton(R.string.hMRoot, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Uri webPage = Uri.parse("https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8");
-                            Intent about = new Intent(Intent.ACTION_VIEW, webPage);
-                            if (about.resolveActivity(getPackageManager()) != null) {
-                                startActivity(about);
-                            } else {
-                                showToast(getApplicationContext(),R.string.plsVisitPXXXX);
-                            }
-                        }
-                    })
-                    .setNegativeButton(R.string.nCaution, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            sharedPref.edit().putBoolean("noCaution",true).apply();
-                        }
-                    })
-                    .create().show();
-        }
-//        throw new RuntimeException("自定义异常：仅于异常上报测试中使用");//发版前务必注释
+        //throw new RuntimeException("自定义异常：仅于异常上报测试中使用");//发版前务必注释
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        go();
     }
 
     @Override
@@ -763,18 +710,25 @@ public class Main extends Activity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Uri webPage = Uri.parse("https://app.playhi.cf/freezeyou/crashReport.php?data="+ Base64.encodeToString(byteArrayOutputStream.toByteArray(),Base64.DEFAULT));
-                            Intent about = new Intent(Intent.ACTION_VIEW, webPage);
-                            if (about.resolveActivity(getPackageManager()) != null) {
-                                startActivity(about);
+                            Intent report = new Intent(Intent.ACTION_VIEW, webPage);
+                            if (report.resolveActivity(getPackageManager()) != null) {
+                                startActivity(report);
                             } else {
                                 showToast(Main.this,R.string.failed);
                             }
+                            go();
                         }
                     })
                     .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
+                            go();
+                        }
+                    })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
+                            go();
                         }
                     })
                     .create()
@@ -782,6 +736,8 @@ public class Main extends Activity {
             //删除数据
             new File(filePath).delete();
             crashCheck.delete();
+        } else {
+            go();
         }
     }
 
@@ -809,6 +765,69 @@ public class Main extends Activity {
         return new ArrayList<>();
     }
 
+    private void go(){
+//        autoFreezePkgNameList = getApplicationContext().getSharedPreferences(
+//                "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
+        Thread initThread;
+        initThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String mode = getIntent().getStringExtra("pkgName");//快捷方式提供
+                if (mode == null){
+                    mode = PreferenceManager.getDefaultSharedPreferences(Main.this).getString("launchMode","all");
+                }
+                switch (mode){
+                    case "OF":
+                        generateList("OF");
+                        break;
+                    case "UF":
+                        generateList("UF");
+                        break;
+                    case "OO":
+                        generateList("OO");
+                        break;
+                    case "OS":
+                        generateList("OS");
+                        break;
+                    case "OU":
+                        generateList("OU");
+                        break;
+                    default:
+                        generateList("all");
+                        break;
+                }
+            }
+        });
+        initThread.start();
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
+        if (!sharedPref.getBoolean("noCaution",false)){
+            buildAlertDialog(Main.this,R.mipmap.ic_launcher_round,R.string.cautionContent,R.string.caution)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int ii) {
+                        }
+                    })
+                    .setNeutralButton(R.string.hMRoot, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Uri webPage = Uri.parse("https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8");
+                            Intent about = new Intent(Intent.ACTION_VIEW, webPage);
+                            if (about.resolveActivity(getPackageManager()) != null) {
+                                startActivity(about);
+                            } else {
+                                showToast(getApplicationContext(),R.string.plsVisitPXXXX);
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.nCaution, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sharedPref.edit().putBoolean("noCaution",true).apply();
+                        }
+                    })
+                    .create().show();
+        }
+    }
     //TODO:运行中亮绿灯（列表、与白点、蓝点并列，覆盖是否已冻结状态）//高考
     //TODO:Main.java查看列表icon等代码整理&复用//高考
 }
