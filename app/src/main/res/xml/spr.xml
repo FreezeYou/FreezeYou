@@ -58,10 +58,6 @@
                 android:targetClass="cf.playhi.freezeyou.ManualMode"
                 android:data="ManualMode" />
         </Preference>
-        <Preference
-            android:title="@string/completelyExit"
-            android:key="completelyExit">
-        </Preference>
     </PreferenceCategory>
 
     <PreferenceCategory

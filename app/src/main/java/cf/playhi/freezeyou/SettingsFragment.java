@@ -68,13 +68,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         }
     }
 
-    @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        if ("completelyExit".equals(preference.getKey())){
-            android.os.Process.killProcess(android.os.Process.myPid());
-        }
-        return super.onPreferenceTreeClick(preferenceScreen, preference);
-    }
+//    @Override
+//    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+//        if ("completelyExit".equals(preference.getKey())){
+//            android.os.Process.killProcess(android.os.Process.myPid());
+//        }
+//        return super.onPreferenceTreeClick(preferenceScreen, preference);
+//    }
 
     @Override
     public void onPause() {
