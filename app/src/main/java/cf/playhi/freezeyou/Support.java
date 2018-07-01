@@ -406,7 +406,7 @@ class Support {
         } catch (Exception e){
             e.printStackTrace();
         }
-        sharedPreferences.edit().putString(pkgName, name).commit();
+        sharedPreferences.edit().putString(pkgName, name).apply();
         try{
             realFolderCheck(context.getFilesDir()+"/icon");
             writeBitmapToFile(context.getFilesDir()+"/icon/"+pkgName+".png",drawableToBitmap(packageManager.getApplicationIcon(pkgName)),100);
@@ -436,7 +436,7 @@ class Support {
     }
 
     //https://stackoverflow.com/questions/44447056/convert-adaptiveicondrawable-to-bitmap-in-android-o-preview
-    static Bitmap getBitmapFromDrawable(Drawable drawable) {
+    private static Bitmap getBitmapFromDrawable(Drawable drawable) {
         final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(bmp);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -651,9 +651,7 @@ class Support {
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
                     "notificationId", Context.MODE_PRIVATE);
-            if (!sharedPreferences.edit().putInt(pkgName, mId).commit()){
-                sharedPreferences.edit().putInt(pkgName, mId).commit();
-            }
+            sharedPreferences.edit().putInt(pkgName, mId).apply();
             if (mNotificationManager!=null){
                 // mId allows you to update the notification later on.
                 mNotificationManager.notify(mId, mBuilder.build());

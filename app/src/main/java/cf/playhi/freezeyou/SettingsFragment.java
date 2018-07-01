@@ -4,16 +4,14 @@ import android.content.ComponentName;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    PackageManager pm;
+    private PackageManager pm;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

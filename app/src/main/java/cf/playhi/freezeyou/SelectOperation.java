@@ -85,10 +85,10 @@ public class SelectOperation extends Activity {
                     case 2:
                         ClipboardManager copy = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText(pkgName, pkgName);
-                        try{
+                        if (copy != null){
                             copy.setPrimaryClip(clip);
                             showToast(SelectOperation.this,R.string.success);
-                        }catch (Exception e){
+                        } else {
                             showToast(SelectOperation.this,R.string.failed);
                         }
                         finish();

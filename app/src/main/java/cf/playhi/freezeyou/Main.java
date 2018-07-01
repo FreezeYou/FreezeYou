@@ -611,36 +611,36 @@ public class Main extends Activity {
 //        });
     }
 
-    private static void addMRootApplications(Context context,List<Map<String, Object>> AppList){
-//        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-//                "FrozenList", Context.MODE_PRIVATE);
-//        final String pkgNameList = sharedPreferences.getString("pkgName", "");
-//        String[] pkgNameListKeyValuePair = pkgNameList.split("\\|");
-//        final SharedPreferences pkgName2NameSharedPreferences = context.getApplicationContext().getSharedPreferences(
-//                "pkgName2Name", Context.MODE_PRIVATE);
-//        for (String aPkgNameListKeyValuePair : pkgNameListKeyValuePair) {
-//            if (!"".equals(aPkgNameListKeyValuePair)){
-//                Map<String, Object> keyValuePair = new HashMap<>();
-//                Bitmap bitmap = getBitmapFromLocalFile(context.getFilesDir()+"/icon/"+aPkgNameListKeyValuePair+".png");
-//                if (bitmap!=null){
-//                    keyValuePair.put("Img", new BitmapDrawable(bitmap));
-//                } else {
-//                    keyValuePair.put("Img", R.mipmap.ic_launcher_round);
-//                }
-//                keyValuePair.put("Name",
-//                        addIfOnekeyFreezeList(context,pkgName2NameSharedPreferences.getString(
-//                                aPkgNameListKeyValuePair,
-//                                context.getString(R.string.notAvailable)) + "(" + context.getString(R.string.frozen)+")",
-//                                aPkgNameListKeyValuePair
-//                        )
-//                );
-//                keyValuePair.put("isAutoList", ifOnekeyFreezeList(aPkgNameListKeyValuePair) ? R.drawable.bluedot : R.drawable.whitedot);
-//                keyValuePair.put("isFrozen",R.drawable.bluedot);
-//                keyValuePair.put("PackageName", aPkgNameListKeyValuePair);
-//                AppList.add(keyValuePair);
-//            }
-//        }
-    }
+//    private static void addMRootApplications(Context context,List<Map<String, Object>> AppList){
+////        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
+////                "FrozenList", Context.MODE_PRIVATE);
+////        final String pkgNameList = sharedPreferences.getString("pkgName", "");
+////        String[] pkgNameListKeyValuePair = pkgNameList.split("\\|");
+////        final SharedPreferences pkgName2NameSharedPreferences = context.getApplicationContext().getSharedPreferences(
+////                "pkgName2Name", Context.MODE_PRIVATE);
+////        for (String aPkgNameListKeyValuePair : pkgNameListKeyValuePair) {
+////            if (!"".equals(aPkgNameListKeyValuePair)){
+////                Map<String, Object> keyValuePair = new HashMap<>();
+////                Bitmap bitmap = getBitmapFromLocalFile(context.getFilesDir()+"/icon/"+aPkgNameListKeyValuePair+".png");
+////                if (bitmap!=null){
+////                    keyValuePair.put("Img", new BitmapDrawable(bitmap));
+////                } else {
+////                    keyValuePair.put("Img", R.mipmap.ic_launcher_round);
+////                }
+////                keyValuePair.put("Name",
+////                        addIfOnekeyFreezeList(context,pkgName2NameSharedPreferences.getString(
+////                                aPkgNameListKeyValuePair,
+////                                context.getString(R.string.notAvailable)) + "(" + context.getString(R.string.frozen)+")",
+////                                aPkgNameListKeyValuePair
+////                        )
+////                );
+////                keyValuePair.put("isAutoList", ifOnekeyFreezeList(aPkgNameListKeyValuePair) ? R.drawable.bluedot : R.drawable.whitedot);
+////                keyValuePair.put("isFrozen",R.drawable.bluedot);
+////                keyValuePair.put("PackageName", aPkgNameListKeyValuePair);
+////                AppList.add(keyValuePair);
+////            }
+////        }
+//    }
 
     private static void addNotAvailablePair(Context context,List<Map<String,Object>> AppList){
         Map<String, Object> keyValuePair = new HashMap<>();

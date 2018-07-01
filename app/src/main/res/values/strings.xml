@@ -18,7 +18,6 @@
     <string name="cautionContent">不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n\n长按可以直接呼出冻结/解冻菜单\n\n请谨慎操作！</string>
     <string name="yes">是</string>
     <string name="no">否</string>
-    <string name="cannotFindApp">未找到该应用程序</string>
     <string name="requested">已发出创建请求</string>
     <string name="requestFailed">请求创建失败：</string>
     <string name="createOneKeyFreezeShortcut">一键冻结</string>
@@ -83,7 +82,6 @@
     <string name="ifUploadCrashLog">检测到存在发生过但并未提交的异常日志，是否上传日志？</string>
     <string name="search">搜索</string>
     <string name="launchMode">启动模式</string>
-    <string name="completelyExit">完全退出/重新启动</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>

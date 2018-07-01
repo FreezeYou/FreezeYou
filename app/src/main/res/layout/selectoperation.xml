@@ -3,7 +3,6 @@
     android:id="@+id/so_body"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#b0000000"
     android:gravity="bottom"
     android:orientation="vertical">
 
