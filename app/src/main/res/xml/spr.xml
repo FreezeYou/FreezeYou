@@ -52,12 +52,15 @@
     <PreferenceCategory
         android:title="@string/advance">
         <Preference
-            android:title="@string/manualMode"
-            android:summary="@string/manualMode">
+            android:title="@string/manualMode">
             <intent
                 android:targetPackage="cf.playhi.freezeyou"
                 android:targetClass="cf.playhi.freezeyou.ManualMode"
                 android:data="ManualMode" />
+        </Preference>
+        <Preference
+            android:title="@string/completelyExit"
+            android:key="completelyExit">
         </Preference>
     </PreferenceCategory>
 

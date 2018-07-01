@@ -4,8 +4,10 @@ import android.content.ComponentName;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 
 import static cf.playhi.freezeyou.Support.showToast;
 
@@ -64,6 +66,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        if ("completelyExit".equals(preference.getKey())){
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
+        return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
     @Override
