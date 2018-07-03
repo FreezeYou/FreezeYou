@@ -244,19 +244,12 @@ public class Main extends Activity {
         switch (filter) {
             case "all":
                 for (int i = 0; i < size; i++) {
-                    String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
-                    String packageName = applicationInfo.get(i).packageName;
-                    if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
-                        if (icon != null) {
-                            keyValuePair.put("Img", icon);
-                        } else {
-                            keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-                        }
-                        processFrozenStatus(keyValuePair,name,packageName);
-                        keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
-                        keyValuePair.put("PackageName", packageName);
+                    Map<String, Object> keyValuePair = processAppStatus(
+                            getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString(),
+                            applicationInfo.get(i).packageName,
+                            applicationInfo.get(i)
+                    );
+                    if (keyValuePair!=null){
                         AppList.add(keyValuePair);
                     }
                 }
@@ -266,24 +259,17 @@ public class Main extends Activity {
                 break;
             case "OF":
                 for (int i = 0; i < size; i++) {
-                    String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
-                    String packageName = applicationInfo.get(i).packageName;
-                    if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
-                        if (icon != null) {
-                            keyValuePair.put("Img", icon);
-                        } else {
-                            keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-                        }
-                        processFrozenStatus(keyValuePair,name,packageName);
-                        keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
-                        keyValuePair.put("PackageName", packageName);
+                    Map<String, Object> keyValuePair = processAppStatus(
+                            getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString(),
+                            applicationInfo.get(i).packageName,
+                            applicationInfo.get(i)
+                    );
+                    if (keyValuePair!=null){
                         try {
-                            if (R.drawable.bluedot == (int)keyValuePair.get("isFrozen")){
+                            if (R.drawable.bluedot == (int) keyValuePair.get("isFrozen")) {
                                 AppList.add(keyValuePair);
                             }
-                        } catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -294,19 +280,12 @@ public class Main extends Activity {
                 break;
             case "UF":
                 for (int i = 0; i < size; i++) {
-                    String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
-                    String packageName = applicationInfo.get(i).packageName;
-                    if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
-                        if (icon != null) {
-                            keyValuePair.put("Img", icon);
-                        } else {
-                            keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-                        }
-                        processFrozenStatus(keyValuePair, name, packageName);
-                        keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
-                        keyValuePair.put("PackageName", packageName);
+                    Map<String, Object> keyValuePair = processAppStatus(
+                            getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString(),
+                            applicationInfo.get(i).packageName,
+                            applicationInfo.get(i)
+                    );
+                    if (keyValuePair!=null){
                         try {
                             if (R.drawable.whitedot == (int) keyValuePair.get("isFrozen")) {
                                 AppList.add(keyValuePair);
@@ -364,20 +343,14 @@ public class Main extends Activity {
                 break;
             case "OS":
                 for (int i = 0; i < size; i++) {
-                    String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
-                    String packageName = applicationInfo.get(i).packageName;
-                    if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
-                        if (icon != null) {
-                            keyValuePair.put("Img", icon);
-                        } else {
-                            keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-                        }
-                        if ((applicationInfo.get(i).flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM){
-                            processFrozenStatus(keyValuePair,name,packageName);
-                            keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
-                            keyValuePair.put("PackageName", packageName);
+                    ApplicationInfo applicationInfo1 = applicationInfo.get(i);
+                    if ((applicationInfo1.flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM) {
+                        Map<String, Object> keyValuePair = processAppStatus(
+                                getPackageManager().getApplicationLabel(applicationInfo1).toString(),
+                                applicationInfo1.packageName,
+                                applicationInfo1
+                        );
+                        if (keyValuePair != null) {
                             AppList.add(keyValuePair);
                         }
                     }
@@ -388,20 +361,14 @@ public class Main extends Activity {
                 break;
             case "OU":
                 for (int i = 0; i < size; i++) {
-                    String name = getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString();
-                    String packageName = applicationInfo.get(i).packageName;
-                    if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        icon = getPackageManager().getApplicationIcon(applicationInfo.get(i));
-                        if (icon != null) {
-                            keyValuePair.put("Img", icon);
-                        } else {
-                            keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-                        }
-                        if ((applicationInfo.get(i).flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM){
-                            processFrozenStatus(keyValuePair,name,packageName);
-                            keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
-                            keyValuePair.put("PackageName", packageName);
+                    ApplicationInfo applicationInfo1 = applicationInfo.get(i);
+                    if ((applicationInfo1.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
+                        Map<String, Object> keyValuePair = processAppStatus(
+                                getPackageManager().getApplicationLabel(applicationInfo1).toString(),
+                                applicationInfo1.packageName,
+                                applicationInfo1
+                        );
+                        if (keyValuePair != null) {
                             AppList.add(keyValuePair);
                         }
                     }
@@ -830,6 +797,23 @@ public class Main extends Activity {
                 keyValuePair.put("isFrozen",R.drawable.whitedot);
             }
         }
+    }
+
+    private Map<String, Object> processAppStatus(String name,String packageName,ApplicationInfo applicationInfo){
+        if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
+            Map<String, Object> keyValuePair = new HashMap<>();
+            Drawable icon = getPackageManager().getApplicationIcon(applicationInfo);
+            if (icon != null) {
+                keyValuePair.put("Img", icon);
+            } else {
+                keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
+            }
+            processFrozenStatus(keyValuePair, name, packageName);
+            keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
+            keyValuePair.put("PackageName", packageName);
+            return keyValuePair;
+        }
+        return null;
     }
     //TODO:运行中亮绿灯（列表、与白点、蓝点并列，覆盖是否已冻结状态）//高考
     //TODO:Main.java查看列表icon等代码整理&复用//高考
