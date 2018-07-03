@@ -5,13 +5,6 @@
     android:orientation="vertical"
     android:padding="5dp">
 
-    <TextView
-        android:id="@+id/manualModeWarning"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/manualModeWarning"
-        android:textColor="@android:color/holo_orange_dark" />
-
     <EditText
         android:id="@+id/packageNameEditText"
         android:layout_width="match_parent"

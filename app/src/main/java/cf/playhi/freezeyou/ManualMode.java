@@ -10,13 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.io.DataOutputStream;
-
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
+import static cf.playhi.freezeyou.Support.processRootAction;
 import static cf.playhi.freezeyou.Support.showToast;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
-import static cf.playhi.freezeyou.Support.fAURoot;
-import static cf.playhi.freezeyou.Support.destroyProcess;
 
 public class ManualMode extends Activity {
     @Override
@@ -29,8 +26,6 @@ public class ManualMode extends Activity {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        final Process process = null;
-        final DataOutputStream outputStream = null;
         final EditText packageNameEditText = findViewById(R.id.packageNameEditText);
         Button disable_MRoot = findViewById(R.id.disable_MRoot);
         Button disable_Root = findViewById(R.id.disable_Root);
@@ -52,27 +47,23 @@ public class ManualMode extends Activity {
         disable_Root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                processRootedOperation(
+                processRootAction(
                         packageNameEditText.getText().toString(),
-                        false,
-                        false,
-                        process,
-                        outputStream,
                         context,
-                        ManualMode.this);
+                        ManualMode.this,
+                        false,
+                        false);
             }
         });
         enable_Root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                processRootedOperation(
+                processRootAction(
                         packageNameEditText.getText().toString(),
-                        true,
-                        false,
-                        process,
-                        outputStream,
                         context,
-                        ManualMode.this);
+                        ManualMode.this,
+                        true,
+                        false);
             }
         });
     }
@@ -85,24 +76,6 @@ public class ManualMode extends Activity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void processRootedOperation(String pkgName,boolean enable,boolean finish,Process process,DataOutputStream outputStream,Context context,Activity activity) {
-        try {
-            int exitValue = fAURoot(pkgName, enable, process, outputStream);
-            if (exitValue == 0) {
-                showToast(context, R.string.executed);
-            } else {
-                showToast(context, R.string.mayUnrootedOrOtherEx);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showToast(context, context.getString(R.string.exception) + e.getMessage());
-            if (e.getMessage().contains("Permission denied")) {
-                showToast(context, R.string.mayUnrooted);
-            }
-            destroyProcess(finish, outputStream, process, activity);
         }
     }
 

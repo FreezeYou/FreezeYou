@@ -48,30 +48,13 @@ class Support {
                             savePkgName2Name(activity,pkgName);
                             if (getDevicePolicyManager(activity).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(activity),pkgName,true)) {
-//                                addFrozen(activity, pkgName);
                                 deleteNotification(activity,pkgName);
                             } else {
                                 showToast(activity, "Failed!");
                             }
                         } else {
-                            try {
-                                int exitValue = fAURoot(pkgName,false,process,outputStream);
-                                if (exitValue == 0) {
-                                    showToast(activity, R.string.executed);
-                                    deleteNotification(activity,pkgName);
-                                } else {
-                                    showToast(activity, R.string.mayUnrootedOrOtherEx);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                showToast(activity, activity.getString(R.string.exception) + e.getMessage());
-                                if (e.getMessage().contains("Permission denied")) {
-                                    showToast(activity, R.string.mayUnrooted);
-                                }
-                                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                            }
+                            processRootAction(pkgName,activity,activity,false,SelfCloseWhenDestroyProcess);
                         }
-                        destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
                     }
                 })
                 .setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
@@ -88,23 +71,7 @@ class Support {
                                 destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
                             }
                         } else {
-                            try {
-                                int exitValue = fAURoot(pkgName,true,process,outputStream);
-                                if (exitValue == 0) {
-                                    askRun(activity,SelfCloseWhenDestroyProcess,pkgName);
-                                    createNotification(activity,pkgName,R.drawable.ic_notification);
-                                } else {
-                                    showToast(activity, R.string.mayUnrootedOrOtherEx);
-                                    destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                showToast(activity, activity.getString(R.string.exception) + e.getMessage());
-                                if (e.getMessage().contains("Permission denied")) {
-                                    showToast(activity, R.string.mayUnrooted);
-                                }
-                                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                            }
+                            processRootAction(pkgName,activity,activity,true,SelfCloseWhenDestroyProcess);
                         }
                     }
                 })
@@ -138,24 +105,8 @@ class Support {
                                 showToast(activity, "Failed!");
                             }
                         } else {
-                            try {
-                                int exitValue = fAURoot(pkgName,false,process,outputStream);
-                                if (exitValue == 0) {
-                                    showToast(activity, R.string.executed);
-                                    deleteNotification(activity,pkgName);
-                                } else {
-                                    showToast(activity, R.string.mayUnrootedOrOtherEx);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                showToast(activity, activity.getString(R.string.exception) + e.getMessage());
-                                if (e.getMessage().contains("Permission denied")) {
-                                    showToast(activity, R.string.mayUnrooted);
-                                }
-                                destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
-                            }
+                            processRootAction(pkgName,activity,activity,false,selfCloseWhenDestroyProcess);
                         }
-                        destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
                     }
                 })
                 .setPositiveButton(R.string.launch, new DialogInterface.OnClickListener() {
@@ -366,7 +317,7 @@ class Support {
                     }
                 } else {
                     try {
-                        fAURoot(pkgName,true,process,outputStream);
+                        fAURoot(pkgName,true);
                         if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
                             Intent intent = new Intent(
                                     activity.getPackageManager().getLaunchIntentForPackage(pkgName));
@@ -521,7 +472,7 @@ class Support {
         return new BitmapDrawable(Bitmap.createBitmap(drawableToBitmap(drawable), 0, 0, width, height, matrix, true));
     }
 
-    static int fAURoot(String pkgName,Boolean enable,Process process,DataOutputStream outputStream) throws Exception{
+    static int fAURoot(String pkgName,Boolean enable) throws Exception{
         process = Runtime.getRuntime().exec("su");
         outputStream = new DataOutputStream(process.getOutputStream());
         if (enable){
@@ -685,4 +636,47 @@ class Support {
 //        }
 //        return "";
 //    }
+
+    static void processRootAction(final String pkgName,final Context context,final Activity activity,final boolean enable,final boolean SelfCloseWhenDestroyProcess){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final int exitValue = fAURoot(pkgName,enable);
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (exitValue == 0) {
+                                if (enable){
+                                    askRun(activity, SelfCloseWhenDestroyProcess, pkgName);
+                                    createNotification(context, pkgName, R.drawable.ic_notification);
+                                } else {
+                                    showToast(context, R.string.executed);
+                                    deleteNotification(context,pkgName);
+                                    destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
+                                }
+                            } else {
+                                showToast(context, R.string.mayUnrootedOrOtherEx);
+                                destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
+                            }
+
+                        }
+                    });
+                } catch (final Exception e) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            e.printStackTrace();
+                            showToast(context, context.getString(R.string.exception) + e.getMessage());
+                            if (e.getMessage().contains("Permission denied")) {
+                                showToast(context, R.string.mayUnrooted);
+                            }
+                            destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
 }

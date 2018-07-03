@@ -69,7 +69,6 @@
     <string name="disable_Root">冻结 - ROOT</string>
     <string name="enable_MRoot">解冻 - 免ROOT</string>
     <string name="enable_Root">解冻 - ROOT</string>
-    <string name="manualModeWarning">在此处执行的操作将不会被记录！如非必要请不要在此处进行手动操作——这可能导致软件功能异常！</string>
     <string name="failed">失败</string>
     <string name="success">成功</string>
     <string name="disableAEnable">冻结/解冻</string>
