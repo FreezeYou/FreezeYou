@@ -52,6 +52,7 @@ class Support {
                             } else {
                                 showToast(activity, "Failed!");
                             }
+                            activity.finish();
                         } else {
                             processRootAction(pkgName,activity,activity,false,SelfCloseWhenDestroyProcess);
                         }
@@ -104,6 +105,7 @@ class Support {
                             } else {
                                 showToast(activity, "Failed!");
                             }
+                            activity.finish();
                         } else {
                             processRootAction(pkgName,activity,activity,false,selfCloseWhenDestroyProcess);
                         }
