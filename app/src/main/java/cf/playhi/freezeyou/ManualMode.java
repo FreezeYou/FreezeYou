@@ -36,79 +36,43 @@ public class ManualMode extends Activity {
         Button disable_Root = findViewById(R.id.disable_Root);
         Button enable_MRoot = findViewById(R.id.enable_MRoot);
         Button enable_Root = findViewById(R.id.enable_Root);
-        final Context activity = getApplicationContext();
+        final Context context = getApplicationContext();
         disable_MRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)) {
-                    String pkgName = packageNameEditText.getText().toString();
-                    if (getDevicePolicyManager(activity).setApplicationHidden(
-                        DeviceAdminReceiver.getComponentName(activity), pkgName, true)){
-                        showToast(ManualMode.this,R.string.success);
-                    } else {
-                        showToast(ManualMode.this,R.string.failed);
-                    }
-                } else {
-                    showToast(ManualMode.this,R.string.failed);
-                }
+                processMRootOperation(packageNameEditText.getText().toString(),context,true);
             }
         });
         enable_MRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)) {
-                    String pkgName = packageNameEditText.getText().toString();
-                    if (getDevicePolicyManager(activity).setApplicationHidden(
-                            DeviceAdminReceiver.getComponentName(activity), pkgName, false)){
-                        showToast(ManualMode.this,R.string.success);
-                    } else {
-                        showToast(ManualMode.this,R.string.failed);
-                    }
-                } else {
-                    showToast(ManualMode.this,R.string.failed);
-                }
+                processMRootOperation(packageNameEditText.getText().toString(),context,false);
             }
         });
         disable_Root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String pkgName = packageNameEditText.getText().toString();
-                try {
-                    int exitValue = fAURoot(pkgName,false,process,outputStream);
-                    if (exitValue == 0) {
-                        showToast(activity, R.string.executed);
-                    } else {
-                        showToast(activity, R.string.mayUnrootedOrOtherEx);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showToast(activity, activity.getString(R.string.exception) + e.getMessage());
-                    if (e.getMessage().contains("Permission denied")) {
-                        showToast(activity, R.string.mayUnrooted);
-                    }
-                    destroyProcess(false, outputStream, process, ManualMode.this);
-                }
+                processRootedOperation(
+                        packageNameEditText.getText().toString(),
+                        false,
+                        false,
+                        process,
+                        outputStream,
+                        context,
+                        ManualMode.this);
             }
         });
         enable_Root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String pkgName = packageNameEditText.getText().toString();
-                try {
-                    int exitValue = fAURoot(pkgName,true,process,outputStream);
-                    if (exitValue == 0) {
-                        showToast(activity, R.string.executed);
-                    } else {
-                        showToast(activity, R.string.mayUnrootedOrOtherEx);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showToast(activity, activity.getString(R.string.exception) + e.getMessage());
-                    if (e.getMessage().contains("Permission denied")) {
-                        showToast(activity, R.string.mayUnrooted);
-                    }
-                    destroyProcess(false, outputStream, process, ManualMode.this);
-                }
+                processRootedOperation(
+                        packageNameEditText.getText().toString(),
+                        true,
+                        false,
+                        process,
+                        outputStream,
+                        context,
+                        ManualMode.this);
             }
         });
     }
@@ -121,6 +85,37 @@ public class ManualMode extends Activity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void processRootedOperation(String pkgName,boolean enable,boolean finish,Process process,DataOutputStream outputStream,Context context,Activity activity) {
+        try {
+            int exitValue = fAURoot(pkgName, enable, process, outputStream);
+            if (exitValue == 0) {
+                showToast(context, R.string.executed);
+            } else {
+                showToast(context, R.string.mayUnrootedOrOtherEx);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showToast(context, context.getString(R.string.exception) + e.getMessage());
+            if (e.getMessage().contains("Permission denied")) {
+                showToast(context, R.string.mayUnrooted);
+            }
+            destroyProcess(finish, outputStream, process, activity);
+        }
+    }
+
+    private void processMRootOperation(String pkgName,Context context,boolean hidden){
+        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(context)) {
+            if (getDevicePolicyManager(context).setApplicationHidden(
+                    DeviceAdminReceiver.getComponentName(context), pkgName, hidden)){
+                showToast(context,R.string.success);
+            } else {
+                showToast(context,R.string.failed);
+            }
+        } else {
+            showToast(context,R.string.failed);
         }
     }
 }
