@@ -237,6 +237,7 @@ public class Main extends Activity {
             }
         });
         Drawable icon;
+        ApplicationInfo applicationInfo1;
         List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
         int size = applicationInfo.size();
         autoFreezePkgNameList = getApplicationContext().getSharedPreferences(
@@ -244,10 +245,11 @@ public class Main extends Activity {
         switch (filter) {
             case "all":
                 for (int i = 0; i < size; i++) {
+                    applicationInfo1 = applicationInfo.get(i);
                     Map<String, Object> keyValuePair = processAppStatus(
-                            getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString(),
-                            applicationInfo.get(i).packageName,
-                            applicationInfo.get(i)
+                            getPackageManager().getApplicationLabel(applicationInfo1).toString(),
+                            applicationInfo1.packageName,
+                            applicationInfo1
                     );
                     if (keyValuePair!=null){
                         AppList.add(keyValuePair);
@@ -259,10 +261,11 @@ public class Main extends Activity {
                 break;
             case "OF":
                 for (int i = 0; i < size; i++) {
+                    applicationInfo1 = applicationInfo.get(i);
                     Map<String, Object> keyValuePair = processAppStatus(
-                            getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString(),
-                            applicationInfo.get(i).packageName,
-                            applicationInfo.get(i)
+                            getPackageManager().getApplicationLabel(applicationInfo1).toString(),
+                            applicationInfo1.packageName,
+                            applicationInfo1
                     );
                     if (keyValuePair!=null){
                         try {
@@ -280,10 +283,11 @@ public class Main extends Activity {
                 break;
             case "UF":
                 for (int i = 0; i < size; i++) {
+                    applicationInfo1 = applicationInfo.get(i);
                     Map<String, Object> keyValuePair = processAppStatus(
-                            getPackageManager().getApplicationLabel(applicationInfo.get(i)).toString(),
-                            applicationInfo.get(i).packageName,
-                            applicationInfo.get(i)
+                            getPackageManager().getApplicationLabel(applicationInfo1).toString(),
+                            applicationInfo1.packageName,
+                            applicationInfo1
                     );
                     if (keyValuePair!=null){
                         try {
@@ -343,7 +347,7 @@ public class Main extends Activity {
                 break;
             case "OS":
                 for (int i = 0; i < size; i++) {
-                    ApplicationInfo applicationInfo1 = applicationInfo.get(i);
+                    applicationInfo1 = applicationInfo.get(i);
                     if ((applicationInfo1.flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM) {
                         Map<String, Object> keyValuePair = processAppStatus(
                                 getPackageManager().getApplicationLabel(applicationInfo1).toString(),
@@ -361,7 +365,7 @@ public class Main extends Activity {
                 break;
             case "OU":
                 for (int i = 0; i < size; i++) {
-                    ApplicationInfo applicationInfo1 = applicationInfo.get(i);
+                    applicationInfo1 = applicationInfo.get(i);
                     if ((applicationInfo1.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
                         Map<String, Object> keyValuePair = processAppStatus(
                                 getPackageManager().getApplicationLabel(applicationInfo1).toString(),
