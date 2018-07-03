@@ -472,7 +472,7 @@ class Support {
         return new BitmapDrawable(Bitmap.createBitmap(drawableToBitmap(drawable), 0, 0, width, height, matrix, true));
     }
 
-    static int fAURoot(String pkgName,Boolean enable) throws Exception{
+    private static int fAURoot(String pkgName, Boolean enable) throws Exception{
         process = Runtime.getRuntime().exec("su");
         outputStream = new DataOutputStream(process.getOutputStream());
         if (enable){
