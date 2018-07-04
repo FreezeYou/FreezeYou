@@ -3,5 +3,7 @@
     <style name="AppTheme.Translucent.NoTitleBar" parent="android:Theme.DeviceDefault.NoActionBar">
         <item name="android:windowBackground">@color/translucentBackground</item>
         <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 </resources>

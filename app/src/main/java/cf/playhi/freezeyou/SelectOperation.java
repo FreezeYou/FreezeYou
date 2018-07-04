@@ -69,7 +69,7 @@ public class SelectOperation extends Activity {
                         createShortCut(
                                 name.replace("(" + getString(R.string.frozen) + ")", "").replace("(" + getString(R.string.oneKeyFreeze) + ")",""),
                                 pkgName,
-                                getApplicationIcon(SelectOperation.this,pkgName,null),
+                                getApplicationIcon(SelectOperation.this,pkgName,null,false),
                                 Freeze.class,
                                 "FreezeYou! "+pkgName,
                                 SelectOperation.this

@@ -39,8 +39,8 @@ import java.io.IOException;
 class Support {
     private static Process process = null;
     private static DataOutputStream outputStream = null;
-    static void makeDialog(final String title, String message, final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String backData, final String pkgName){
-        buildAlertDialog(activity,getApplicationIcon(activity,pkgName,null),message,title)
+    private static void makeDialog(final String title, String message, final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final String pkgName){
+        buildAlertDialog(activity,getApplicationIcon(activity,pkgName,applicationInfo,true),message,title)
                 .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -54,7 +54,7 @@ class Support {
                             }
                             activity.finish();
                         } else {
-                            processRootAction(pkgName,activity,activity,false,SelfCloseWhenDestroyProcess);
+                            processRootAction(pkgName,activity,activity,false,SelfCloseWhenDestroyProcess,applicationInfo);
                         }
                     }
                 })
@@ -65,14 +65,14 @@ class Support {
                             if (getDevicePolicyManager(activity).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
 //                                removeFrozen(activity, pkgName);
-                                askRun(activity, SelfCloseWhenDestroyProcess, pkgName);
+                                askRun(activity, SelfCloseWhenDestroyProcess, pkgName,applicationInfo);
                                 createNotification(activity,pkgName,R.drawable.ic_notification);
                             } else {
                                 showToast(activity, "Failed!");
                                 destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
                             }
                         } else {
-                            processRootAction(pkgName,activity,activity,true,SelfCloseWhenDestroyProcess);
+                            processRootAction(pkgName,activity,activity,true,SelfCloseWhenDestroyProcess,applicationInfo);
                         }
                     }
                 })
@@ -91,8 +91,8 @@ class Support {
                 .create().show();
     }
 
-    static void makeDialog2(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess,final String backData,final String pkgName){
-        buildAlertDialog(activity,getApplicationIcon(activity,pkgName,null),message,title)
+    private static void makeDialog2(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess,final ApplicationInfo applicationInfo,final String pkgName){
+        buildAlertDialog(activity,getApplicationIcon(activity,pkgName,applicationInfo,true),message,title)
                 .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -107,7 +107,7 @@ class Support {
                             }
                             activity.finish();
                         } else {
-                            processRootAction(pkgName,activity,activity,false,selfCloseWhenDestroyProcess);
+                            processRootAction(pkgName,activity,activity,false,selfCloseWhenDestroyProcess,applicationInfo);
                         }
                     }
                 })
@@ -239,7 +239,7 @@ class Support {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(context) && getDevicePolicyManager(context).isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
     }
 
-    private static void askRun(final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String pkgName){
+    private static void askRun(final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String pkgName,final ApplicationInfo applicationInfo){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
         if (sharedPref.getBoolean("openImmediately",false)){
             if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
@@ -253,7 +253,7 @@ class Support {
                 destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
             }
         } else {
-            buildAlertDialog(activity,getApplicationIcon(activity,pkgName,null),activity.getResources().getString(R.string.unfreezedAndAskLaunch),activity.getResources().getString(R.string.notice))
+            buildAlertDialog(activity,getApplicationIcon(activity,pkgName,applicationInfo,true),activity.getResources().getString(R.string.unfreezedAndAskLaunch),activity.getResources().getString(R.string.notice))
                     .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -285,7 +285,7 @@ class Support {
         }
     }
 
-    static void shortcutMakeDialog(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess,final String backData,final String pkgName,int ot){
+    static void shortcutMakeDialog(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess,final ApplicationInfo applicationInfo,final String pkgName,int ot){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
         if (sharedPref.getBoolean("openAndUFImmediately",false)){
             if (ot==2){
@@ -342,9 +342,9 @@ class Support {
             }
         } else {
             if (ot==2){
-                makeDialog2(title,message,activity,selfCloseWhenDestroyProcess,backData,pkgName);
+                makeDialog2(title,message,activity,selfCloseWhenDestroyProcess,applicationInfo,pkgName);
             } else {
-                makeDialog(title,message,activity,selfCloseWhenDestroyProcess,backData,pkgName);
+                makeDialog(title,message,activity,selfCloseWhenDestroyProcess,applicationInfo,pkgName);
             }
         }
     }
@@ -362,7 +362,7 @@ class Support {
         sharedPreferences.edit().putString(pkgName, name).apply();
         try{
             realFolderCheck(context.getFilesDir()+"/icon");
-            writeBitmapToFile(context.getFilesDir()+"/icon/"+pkgName+".png",drawableToBitmap(packageManager.getApplicationIcon(pkgName)),100);
+            writeBitmapToFile(context.getFilesDir()+"/icon/"+pkgName+".png",getBitmapFromDrawable(packageManager.getApplicationIcon(pkgName)),100);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -388,29 +388,36 @@ class Support {
         }
     }
 
-    //https://stackoverflow.com/questions/44447056/convert-adaptiveicondrawable-to-bitmap-in-android-o-preview
-    private static Bitmap getBitmapFromDrawable(Drawable drawable) {
-        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(bmp);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bmp;
-    }
-
-    //http://www.cnblogs.com/zhou2016/p/6281678.html
+    //最初参考 http://www.cnblogs.com/zhou2016/p/6281678.html
     /**
      * Drawable转Bitmap
      *
      * @param drawable drawable
      * @return Bitmap
      */
-    private static Bitmap drawableToBitmap(Drawable drawable) {
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        drawable.draw(canvas);
-        return bitmap;
+    private static Bitmap getBitmapFromDrawable(Drawable drawable) {
+        try {
+            return ((BitmapDrawable)drawable).getBitmap();
+        }catch (Exception e) {
+            Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            drawable.draw(canvas);
+            return bitmap;
+        }
     }
+
+//    private static Drawable zoomDrawable(Drawable drawable, int w, int h) {
+//        Bitmap oldBmp = getBitmapFromDrawable(drawable);
+//        int width = oldBmp.getWidth();
+//        int height = oldBmp.getHeight();
+//        Matrix matrix = new Matrix();//创建 Matrix 对象
+//        float scaleWidth = ((float)w / width);//计算缩放比例
+//        float scaleHeight = ((float)h / height);
+//        matrix.postScale(scaleWidth, scaleHeight);//缩放比例
+//        Bitmap newbmp = Bitmap.createBitmap(oldBmp, 0, 0, width, height, matrix, true);
+//        return new BitmapDrawable(newbmp);
+//    }
 
     static Bitmap getBitmapFromLocalFile(String path){
         return BitmapFactory.decodeFile(path);
@@ -449,7 +456,7 @@ class Support {
         return 0;
     }
 
-    static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo){
+    static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo,boolean resize){
         Drawable drawable = context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
         if (applicationInfo!=null){
             drawable = context.getPackageManager().getApplicationIcon(applicationInfo);
@@ -465,13 +472,17 @@ class Support {
                 }
             }
         }
-        int width = drawable.getIntrinsicWidth();
-        int height= drawable.getIntrinsicHeight();
-        Matrix matrix = new Matrix();
-        float scaleWidth = ((float)72 / width);
-        float scaleHeight = ((float)72 / height);
-        matrix.postScale(scaleWidth, scaleHeight);
-        return new BitmapDrawable(Bitmap.createBitmap(drawableToBitmap(drawable), 0, 0, width, height, matrix, true));
+        if (resize){
+            int width = drawable.getIntrinsicWidth();
+            int height= drawable.getIntrinsicHeight();
+            Matrix matrix = new Matrix();
+            float scaleWidth = ((float)72 / width);
+            float scaleHeight = ((float)72 / height);
+            matrix.postScale(scaleWidth, scaleHeight);
+            return new BitmapDrawable(Bitmap.createBitmap(getBitmapFromDrawable(drawable), 0, 0, width, height, matrix, true));
+        } else {
+            return new BitmapDrawable(Bitmap.createBitmap(getBitmapFromDrawable(drawable)));
+        }
     }
 
     private static int fAURoot(String pkgName, Boolean enable) throws Exception{
@@ -639,7 +650,7 @@ class Support {
 //        return "";
 //    }
 
-    static void processRootAction(final String pkgName,final Context context,final Activity activity,final boolean enable,final boolean SelfCloseWhenDestroyProcess){
+    static void processRootAction(final String pkgName,final Context context,final Activity activity,final boolean enable,final boolean SelfCloseWhenDestroyProcess,final ApplicationInfo applicationInfo){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -650,7 +661,7 @@ class Support {
                         public void run() {
                             if (exitValue == 0) {
                                 if (enable){
-                                    askRun(activity, SelfCloseWhenDestroyProcess, pkgName);
+                                    askRun(activity, SelfCloseWhenDestroyProcess, pkgName,applicationInfo);
                                     createNotification(context, pkgName, R.drawable.ic_notification);
                                 } else {
                                     showToast(context, R.string.executed);

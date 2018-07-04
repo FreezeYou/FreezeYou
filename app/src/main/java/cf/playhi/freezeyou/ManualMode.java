@@ -52,7 +52,8 @@ public class ManualMode extends Activity {
                         context,
                         ManualMode.this,
                         false,
-                        false);
+                        false,
+                        null);
             }
         });
         enable_Root.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +64,8 @@ public class ManualMode extends Activity {
                         context,
                         ManualMode.this,
                         true,
-                        false);
+                        false,
+                        null);
             }
         });
     }
