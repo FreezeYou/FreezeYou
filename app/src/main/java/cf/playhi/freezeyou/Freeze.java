@@ -1,9 +1,7 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 
@@ -43,9 +41,7 @@ public class Freeze extends Activity{
                 shortcutMakeDialog(getPackageManager().getApplicationLabel(applicationInfo).toString(),getString(R.string.chooseDetailAction),Freeze.this,true,applicationInfo,pkgName,2,auto);
             }catch (Exception e){
                 e.printStackTrace();
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
-                        "pkgName2Name", Context.MODE_PRIVATE);
-                shortcutMakeDialog(sharedPreferences.getString(pkgName,getString(R.string.notice)),getString(R.string.chooseDetailAction),Freeze.this,true,applicationInfo,pkgName,2,auto);
+                shortcutMakeDialog(getString(R.string.notice),getString(R.string.chooseDetailAction),Freeze.this,true,applicationInfo,pkgName,2,auto);
             }
         } else {
             try {
@@ -53,9 +49,7 @@ public class Freeze extends Activity{
                 shortcutMakeDialog(getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(pkgName, GET_UNINSTALLED_PACKAGES)).toString(), getString(R.string.chooseDetailAction), Freeze.this, true, applicationInfo, pkgName,1,auto);
             } catch (Exception e) {
                 e.printStackTrace();
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
-                        "pkgName2Name", Context.MODE_PRIVATE);
-                shortcutMakeDialog(sharedPreferences.getString(pkgName,getString(R.string.notice)), getString(R.string.chooseDetailAction), Freeze.this, true, applicationInfo, pkgName,1,auto);
+                shortcutMakeDialog(getString(R.string.notice), getString(R.string.chooseDetailAction), Freeze.this, true, applicationInfo, pkgName,1,auto);
             }
         }
     }

@@ -11,7 +11,6 @@ import java.io.DataOutputStream;
 import static cf.playhi.freezeyou.Support.checkFrozen;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
-import static cf.playhi.freezeyou.Support.savePkgName2Name;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class OneKeyFreeze extends Activity {
@@ -28,7 +27,6 @@ public class OneKeyFreeze extends Activity {
                 String tmp = aPkgNameList.replaceAll("\\|", "");
                 try {
                     if (!checkFrozen(activity, tmp)) {
-                        savePkgName2Name(activity, tmp);
                         if (!getDevicePolicyManager(activity).setApplicationHidden(
                                 DeviceAdminReceiver.getComponentName(activity), tmp, true)) {
                             showToast(activity, tmp + " Failed!");
@@ -64,7 +62,7 @@ public class OneKeyFreeze extends Activity {
             } catch (Exception e){
                 e.printStackTrace();
                 showToast(activity,getString(R.string.exception)+e.getMessage());
-                if (e.getMessage().contains("Permission denied")){
+                if (e.getMessage().toLowerCase().contains("permission denied")||e.getMessage().toLowerCase().contains("not found")){
                     showToast(activity,R.string.mayUnrooted);
                 }
                 Support.destroyProcess(true,outputStream,process,activity);

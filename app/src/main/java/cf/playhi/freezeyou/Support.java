@@ -29,11 +29,9 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
-import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
+import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
 class Support {
     private static Process process = null;
@@ -44,7 +42,7 @@ class Support {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
-                            savePkgName2Name(activity,pkgName);
+//                            savePkgName2Name(activity,pkgName);
                             if (getDevicePolicyManager(activity).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(activity),pkgName,true)) {
                                 deleteNotification(activity,pkgName);
@@ -96,7 +94,7 @@ class Support {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(activity)) {
-                            savePkgName2Name(activity, pkgName);
+//                            savePkgName2Name(activity, pkgName);
                             if (getDevicePolicyManager(activity).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(activity), pkgName, true)) {
 //                                addFrozen(activity, pkgName);
@@ -313,7 +311,7 @@ class Support {
                             destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
                         }
                     } else {
-                        showToast(activity, "Failed!");
+                        showToast(activity, R.string.mayUnrootedOrOtherEx);
                         destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
                     }
                 } else {
@@ -332,7 +330,7 @@ class Support {
                     } catch (Exception e) {
                         e.printStackTrace();
                         showToast(activity, activity.getString(R.string.exception) + e.getMessage());
-                        if (e.getMessage().contains("Permission denied")) {
+                        if (e.getMessage().toLowerCase().contains("permission denied")||e.getMessage().toLowerCase().contains("not found")) {
                             showToast(activity, R.string.mayUnrooted);
                         }
                         destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
@@ -348,44 +346,44 @@ class Support {
         }
     }
 
-    static void savePkgName2Name(Context context,String pkgName){
-        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-                "pkgName2Name", Context.MODE_PRIVATE);
-        String name = context.getString(R.string.notice);
-        PackageManager packageManager = context.getPackageManager();
-        try{
-            name = packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkgName,0)).toString();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        sharedPreferences.edit().putString(pkgName, name).apply();
-        try{
-            realFolderCheck(context.getFilesDir()+"/icon");
-            writeBitmapToFile(context.getFilesDir()+"/icon/"+pkgName+".png",getBitmapFromDrawable(packageManager.getApplicationIcon(pkgName)),100);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+//    static void savePkgName2Name(Context context,String pkgName){
+//        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
+//                "pkgName2Name", Context.MODE_PRIVATE);
+//        String name = context.getString(R.string.notice);
+//        PackageManager packageManager = context.getPackageManager();
+//        try{
+//            name = packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkgName,0)).toString();
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        sharedPreferences.edit().putString(pkgName, name).apply();
+//        try{
+//            realFolderCheck(context.getFilesDir()+"/icon");
+//            writeBitmapToFile(context.getFilesDir()+"/icon/"+pkgName+".png",getBitmapFromDrawable(packageManager.getApplicationIcon(pkgName)),100);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 
-    /**
-     * 图片保存文件：
-     * 从Browser项目搬来的代码
-     * @param filePath filePath
-     * @param b bitmap
-     * @param quality quality
-     */
-    private static void writeBitmapToFile(String filePath, Bitmap b, int quality) {
-        try {
-            File desFile = new File(filePath);
-            FileOutputStream fos = new FileOutputStream(desFile);
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            b.compress(Bitmap.CompressFormat.PNG, quality, bos);
-            bos.flush();
-            bos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    /**
+//     * 图片保存文件：
+//     * 从Browser项目搬来的代码
+//     * @param filePath filePath
+//     * @param b bitmap
+//     * @param quality quality
+//     */
+//    private static void writeBitmapToFile(String filePath, Bitmap b, int quality) {
+//        try {
+//            File desFile = new File(filePath);
+//            FileOutputStream fos = new FileOutputStream(desFile);
+//            BufferedOutputStream bos = new BufferedOutputStream(fos);
+//            b.compress(Bitmap.CompressFormat.PNG, quality, bos);
+//            bos.flush();
+//            bos.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     //最初参考 http://www.cnblogs.com/zhou2016/p/6281678.html
     /**
@@ -406,37 +404,25 @@ class Support {
         }
     }
 
-//    private static Drawable zoomDrawable(Drawable drawable, int w, int h) {
-//        Bitmap oldBmp = getBitmapFromDrawable(drawable);
-//        int width = oldBmp.getWidth();
-//        int height = oldBmp.getHeight();
-//        Matrix matrix = new Matrix();//创建 Matrix 对象
-//        float scaleWidth = ((float)w / width);//计算缩放比例
-//        float scaleHeight = ((float)h / height);
-//        matrix.postScale(scaleWidth, scaleHeight);//缩放比例
-//        Bitmap newbmp = Bitmap.createBitmap(oldBmp, 0, 0, width, height, matrix, true);
-//        return new BitmapDrawable(newbmp);
+//    static Bitmap getBitmapFromLocalFile(String path){
+//        return BitmapFactory.decodeFile(path);
 //    }
 
-    static Bitmap getBitmapFromLocalFile(String path){
-        return BitmapFactory.decodeFile(path);
-    }
-
-    private static void realFolderCheck(String path) {
-        //检测文件夹是否存在
-        File file = new File(path);
-        if (file.exists()) {
-            if (!file.isDirectory()) {
-                throw new IllegalStateException(file.getAbsolutePath() +
-                        " already exists and is not a directory");
-            }
-        } else {
-            if (!file.mkdirs()) {
-                throw new IllegalStateException("Unable to create directory: " +
-                        file.getAbsolutePath());
-            }
-        }
-    }
+//    private static void realFolderCheck(String path) {
+//        //检测文件夹是否存在
+//        File file = new File(path);
+//        if (file.exists()) {
+//            if (!file.isDirectory()) {
+//                throw new IllegalStateException(file.getAbsolutePath() +
+//                        " already exists and is not a directory");
+//            }
+//        } else {
+//            if (!file.mkdirs()) {
+//                throw new IllegalStateException("Unable to create directory: " +
+//                        file.getAbsolutePath());
+//            }
+//        }
+//    }
 
     static int getVersionCode(Context context) {
         PackageManager packageManager = context.getPackageManager();
@@ -463,12 +449,12 @@ class Support {
             try {
                 drawable = context.getPackageManager().getApplicationIcon(pkgName);
             } catch (Exception e){
-                Bitmap bitmap = getBitmapFromLocalFile(context.getFilesDir()+"/icon/"+pkgName+".png");
-                if (bitmap!=null){
-                    drawable = new BitmapDrawable(bitmap);
-                } else {
-                    drawable = context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
-                }
+//                Bitmap bitmap = getBitmapFromLocalFile(context.getFilesDir()+"/icon/"+pkgName+".png");
+//                if (bitmap!=null){
+//                    drawable = new BitmapDrawable(bitmap);
+//                } else {
+                drawable = context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
+//                }
             }
         }
         if (resize){
@@ -533,7 +519,7 @@ class Support {
 
                     mShortcutManager.requestPinShortcut(pinShortcutInfo,
                             successCallback.getIntentSender());
-                }else {
+                } else {
                     createShortCutOldApi(title,pkgName,icon,cls,context);
                 }
             } else {
@@ -543,24 +529,24 @@ class Support {
     }
 
     private static void createShortCutOldApi(String title, String pkgName, Drawable icon,Class<?> cls,Context context){
-        Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
-//        Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.icon);
-        Intent intent = new Intent(context, cls);
-        intent.putExtra("pkgName",pkgName);
-        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
-        BitmapDrawable bd = (BitmapDrawable) icon;
-        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
-        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
-        try{
+        try {
+            Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+//            Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.icon);
+            Intent intent = new Intent(context, cls);
+            intent.putExtra("pkgName", pkgName);
+            addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
+            BitmapDrawable bd = (BitmapDrawable) icon;
+            addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
+            addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
             context.sendBroadcast(addShortCut);
-            showToast(context,R.string.requested);
+            showToast(context, R.string.requested);
         } catch (Exception e){
             Intent addShortCut2 = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
             Intent intent2 = new Intent(context, cls);
             intent2.putExtra("pkgName",pkgName);
             addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
             addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_ICON, Bitmap.createScaledBitmap(getBitmapFromDrawable(icon),192,192,true));
-            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
+            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent2);
             try {
                 context.sendBroadcast(addShortCut2);
                 showToast(context, R.string.requested);
@@ -577,11 +563,9 @@ class Support {
             mBuilder.setSmallIcon(iconResId);
             mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_notification));
             try {
-                mBuilder.setContentTitle(context.getPackageManager().getApplicationLabel(context.getPackageManager().getApplicationInfo(pkgName,0)).toString());
+                mBuilder.setContentTitle(context.getPackageManager().getApplicationLabel(context.getPackageManager().getApplicationInfo(pkgName,PackageManager.GET_UNINSTALLED_PACKAGES)).toString());
             } catch (Exception e){
-                SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-                        "pkgName2Name", Context.MODE_PRIVATE);
-                mBuilder.setContentTitle(sharedPreferences.getString(pkgName,context.getString(R.string.notice)));
+                mBuilder.setContentTitle(context.getString(R.string.notice));
             }
             mBuilder.setContentText(context.getString(R.string.disableAEnable));
             mBuilder.setAutoCancel(true);
@@ -680,7 +664,7 @@ class Support {
                         public void run() {
                             e.printStackTrace();
                             showToast(context, context.getString(R.string.exception) + e.getMessage());
-                            if (e.getMessage().contains("Permission denied")) {
+                            if (e.getMessage().toLowerCase().contains("permission denied")||e.getMessage().toLowerCase().contains("not found")) {
                                 showToast(context, R.string.mayUnrooted);
                             }
                             destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
@@ -690,5 +674,15 @@ class Support {
                 }
             }
         }).start();
+    }
+
+    static ApplicationInfo getApplicationInfoFromPkgName(String pkgName,Context context){
+        ApplicationInfo applicationInfo = null;
+        try{
+            applicationInfo = context.getPackageManager().getApplicationInfo(pkgName,GET_UNINSTALLED_PACKAGES);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return applicationInfo;
     }
 }

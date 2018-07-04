@@ -14,6 +14,7 @@ import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.processRootAction;
 import static cf.playhi.freezeyou.Support.showToast;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
+import static cf.playhi.freezeyou.Support.getApplicationInfoFromPkgName;
 
 public class ManualMode extends Activity {
     @Override
@@ -53,7 +54,7 @@ public class ManualMode extends Activity {
                         ManualMode.this,
                         false,
                         false,
-                        null);
+                        getApplicationInfoFromPkgName(packageNameEditText.getText().toString(),context));
             }
         });
         enable_Root.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +66,7 @@ public class ManualMode extends Activity {
                         ManualMode.this,
                         true,
                         false,
-                        null);
+                        getApplicationInfoFromPkgName(packageNameEditText.getText().toString(),context));
             }
         });
     }

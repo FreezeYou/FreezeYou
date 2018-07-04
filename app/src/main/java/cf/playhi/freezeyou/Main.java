@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -45,9 +43,7 @@ import java.util.List;
 import java.util.Map;
 
 import static cf.playhi.freezeyou.Support.buildAlertDialog;
-import static cf.playhi.freezeyou.Support.checkFrozen;
 import static cf.playhi.freezeyou.Support.createShortCut;
-import static cf.playhi.freezeyou.Support.getBitmapFromLocalFile;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.getVersionCode;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
@@ -306,31 +302,31 @@ public class Main extends Activity {
                     aPkgNameList = aPkgNameList.replaceAll("\\|","");
                     String name;
                     try{
-                        name = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(aPkgNameList,0)).toString();
+                        name = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES)).toString();
                     } catch (Exception e){
-                        if (checkFrozen(getApplicationContext(),aPkgNameList)){
-                            final SharedPreferences sharedPreferences = getApplicationContext().getApplicationContext().getSharedPreferences(
-                                    "pkgName2Name", Context.MODE_PRIVATE);
-                            name = sharedPreferences.getString(aPkgNameList,getResources().getString(R.string.notice));
-                        } else {
-                            name = getResources().getString(R.string.uninstalled);
-                        }
+//                        if (checkFrozen(getApplicationContext(),aPkgNameList)){
+////                            final SharedPreferences sharedPreferences = getApplicationContext().getApplicationContext().getSharedPreferences(
+////                                    "pkgName2Name", Context.MODE_PRIVATE);
+////                            name = sharedPreferences.getString(aPkgNameList,getResources().getString(R.string.notice));
+////                        } else {
+                        name = getResources().getString(R.string.uninstalled);
+//                        }
                     }
                     if (!("android".equals(aPkgNameList) || "cf.playhi.freezeyou".equals(aPkgNameList) || "".equals(aPkgNameList))) {
                         Map<String, Object> keyValuePair = new HashMap<>();
                         try{
-                            icon = getPackageManager().getApplicationIcon(getPackageManager().getApplicationInfo(aPkgNameList,0));
+                            icon = getPackageManager().getApplicationIcon(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES));
                         } catch (Exception e){
-                            if (checkFrozen(getApplicationContext(),aPkgNameList)){
-                                Bitmap bitmap = getBitmapFromLocalFile(getApplicationContext().getFilesDir()+"/icon/"+aPkgNameList+".png");
-                                if (bitmap!=null){
-                                    icon = new BitmapDrawable(bitmap);
-                                } else {
-                                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
-                                }
-                            } else {
-                                icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
-                            }
+//                            if (checkFrozen(getApplicationContext(),aPkgNameList)){
+//                                Bitmap bitmap = getBitmapFromLocalFile(getApplicationContext().getFilesDir()+"/icon/"+aPkgNameList+".png");
+//                                if (bitmap!=null){
+//                                    icon = new BitmapDrawable(bitmap);
+//                                } else {
+//                                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+//                                }
+//                            } else {
+                            icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
+//                            }
                         }
                         keyValuePair.put("Img", icon);
                         processFrozenStatus(keyValuePair,name,aPkgNameList);

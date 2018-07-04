@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -17,6 +18,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.showToast;
@@ -66,10 +68,16 @@ public class SelectOperation extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0:
+                        ApplicationInfo applicationInfo = null;
+                        try{
+                            applicationInfo = getPackageManager().getApplicationInfo(pkgName,GET_UNINSTALLED_PACKAGES);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         createShortCut(
                                 name.replace("(" + getString(R.string.frozen) + ")", "").replace("(" + getString(R.string.oneKeyFreeze) + ")",""),
                                 pkgName,
-                                getApplicationIcon(SelectOperation.this,pkgName,null,false),
+                                getApplicationIcon(SelectOperation.this,pkgName,applicationInfo,false),
                                 Freeze.class,
                                 "FreezeYou! "+pkgName,
                                 SelectOperation.this
