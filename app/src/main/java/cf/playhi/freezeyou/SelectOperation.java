@@ -78,7 +78,7 @@ public class SelectOperation extends Activity {
                         break;
                     case 1:
                         if (!(getString(R.string.notAvailable).equals(name))){
-                            startActivity(new Intent(SelectOperation.this,Freeze.class).putExtra("pkgName",pkgName));
+                            startActivity(new Intent(SelectOperation.this,Freeze.class).putExtra("pkgName",pkgName).putExtra("auto",false));
                         }
                         finish();
                         break;

@@ -465,7 +465,7 @@ public class Main extends Activity {
                 final String name=map.get("Name");
                 final String pkgName=map.get("PackageName");
                 if (!(getString(R.string.notAvailable).equals(name))){
-                    startActivity(new Intent(Main.this,Freeze.class).putExtra("pkgName",pkgName));
+                    startActivity(new Intent(Main.this,Freeze.class).putExtra("pkgName",pkgName).putExtra("auto",false));
                 }
                 return true;
             }

@@ -285,9 +285,9 @@ class Support {
         }
     }
 
-    static void shortcutMakeDialog(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess,final ApplicationInfo applicationInfo,final String pkgName,int ot){
+    static void shortcutMakeDialog(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess,final ApplicationInfo applicationInfo,final String pkgName,int ot,boolean auto){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
-        if (sharedPref.getBoolean("openAndUFImmediately",false)){
+        if (sharedPref.getBoolean("openAndUFImmediately",false) && auto){
             if (ot==2){
                 if (activity.getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
                     Intent intent = new Intent(
