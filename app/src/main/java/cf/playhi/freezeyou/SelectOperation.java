@@ -42,14 +42,22 @@ public class SelectOperation extends Activity {
                 getResources().getString(R.string.disableAEnable),
                 getResources().getString(R.string.copyPkgName),
                 getResources().getString(R.string.addToOneKeyList),
+                getResources().getString(R.string.addToOneKeyUFList),
                 getResources().getString(R.string.appDetail)
         };
 
         final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
-                                            "AutoFreezeApplicationList", Context.MODE_PRIVATE);
+                "AutoFreezeApplicationList", Context.MODE_PRIVATE);
         final String pkgNameList = sharedPreferences.getString("pkgName", "");
         if (pkgNameList.contains("|" + pkgName + "|")) {
             operationData[3] = getResources().getString(R.string.removeFromOneKeyList);
+        }
+
+        final SharedPreferences UFSharedPreferences = getApplicationContext().getSharedPreferences(
+                "OneKeyUFApplicationList", Context.MODE_PRIVATE);
+        final String UFPkgNameList = UFSharedPreferences.getString("pkgName", "");
+        if (UFPkgNameList.contains("|" + pkgName + "|")) {
+            operationData[4] = getResources().getString(R.string.removeFromOneKeyUFList);
         }
 
         ListAdapter adapt = new ArrayAdapter<>(SelectOperation.this, R.layout.so_item, operationData);
@@ -107,6 +115,22 @@ public class SelectOperation extends Activity {
                         finish();
                         break;
                     case 4:
+                        if (UFPkgNameList.contains("|" + pkgName + "|")) {
+                            showToast(getApplicationContext(), UFSharedPreferences.edit()
+                                    .putString(
+                                            "pkgName",
+                                            UFPkgNameList.replace("|" + pkgName + "|", ""))
+                                    .commit() ? R.string.removed : R.string.removeFailed);
+                        } else {
+                            showToast(getApplicationContext(), UFSharedPreferences.edit()
+                                    .putString(
+                                            "pkgName",
+                                            UFPkgNameList + "|" + pkgName + "|")
+                                    .commit() ? R.string.added : R.string.addFailed);
+                        }
+                        finish();
+                        break;
+                    case 5:
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", pkgName, null);
                         intent.setData(uri);

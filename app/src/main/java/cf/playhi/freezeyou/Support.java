@@ -556,14 +556,14 @@ class Support {
         }
     }
 
-    private static void createNotification(Context context,String pkgName,int iconResId){
+    static void createNotification(Context context,String pkgName,int iconResId){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
             Notification.Builder mBuilder = new Notification.Builder(context);
             int mId = pkgName.hashCode();
             mBuilder.setSmallIcon(iconResId);
             mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_notification));
             try {
-                mBuilder.setContentTitle(context.getPackageManager().getApplicationLabel(context.getPackageManager().getApplicationInfo(pkgName,PackageManager.GET_UNINSTALLED_PACKAGES)).toString());
+                mBuilder.setContentTitle(context.getPackageManager().getApplicationLabel(context.getPackageManager().getApplicationInfo(pkgName,GET_UNINSTALLED_PACKAGES)).toString());
             } catch (Exception e){
                 mBuilder.setContentTitle(context.getString(R.string.notice));
             }
@@ -606,7 +606,7 @@ class Support {
         }
     }
 
-    private static void deleteNotification(Context context,String pkgName){
+    static void deleteNotification(Context context,String pkgName){
         SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
                 "notificationId", Context.MODE_PRIVATE);
         NotificationManager mNotificationManager =

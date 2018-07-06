@@ -19,6 +19,9 @@
                 android:id="@+id/menu_vM_onlyOnekey"
                 android:title="@string/onlyOnekey" />
             <item
+                android:id="@+id/menu_vM_onlyOnekeyUF"
+                android:title="@string/oneKeyUF" />
+            <item
                 android:id="@+id/menu_vM_all"
                 android:title="@string/displayAll" />
         </menu>
@@ -29,6 +32,9 @@
             <item
                 android:id="@+id/menu_createOneKeyFreezeShortCut"
                 android:title="@string/createOneKeyFreezeShortcut" />
+            <item
+                android:id="@+id/menu_createOneKeyUFShortCut"
+                android:title="@string/oneKeyUF" />
             <item android:title="@string/quickView">
                 <menu>
                     <item
@@ -40,6 +46,9 @@
                     <item
                         android:id="@+id/menu_createOnlyOnekeyShortCut"
                         android:title="@string/onlyOnekey" />
+                    <item
+                        android:id="@+id/menu_createOnlyOnekeyUFShortCut"
+                        android:title="@string/oneKeyUF" />
                 </menu>
             </item>
         </menu>
@@ -51,6 +60,9 @@
     <item
         android:id="@+id/menu_oneKeyFreezeImmediately"
         android:title="@string/OneKeyFreezeImmediately" />
+    <item
+        android:id="@+id/menu_oneKeyUFImmediately"
+        android:title="@string/oneKeyUF" />
     <item
         android:id="@+id/menu_update"
         android:title="@string/update" />

@@ -90,6 +90,15 @@ public class Main extends Activity {
                         this
                 );
                 return true;
+            case R.id.menu_createOneKeyUFShortCut:
+                createShortCut(
+                        getString(R.string.oneKeyUF),
+                        "",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),OneKeyUF.class,
+                        "OneKeyUF",
+                        this
+                );
+                return true;
             case R.id.menu_createOnlyFrozenShortCut:
                 createShortCut(
                         getString(R.string.onlyFrozen),
@@ -114,6 +123,15 @@ public class Main extends Activity {
                         "OO",
                         getResources().getDrawable(R.mipmap.ic_launcher_round),Main.class,
                         "OO",
+                        this
+                );
+                return true;
+            case R.id.menu_createOnlyOnekeyUFShortCut:
+                createShortCut(
+                        getString(R.string.oneKeyUF),
+                        "OOU",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),Main.class,
+                        "OOU",
                         this
                 );
                 return true;
@@ -147,6 +165,9 @@ public class Main extends Activity {
             case R.id.menu_oneKeyFreezeImmediately:
                 startActivity(new Intent(this,OneKeyFreeze.class));
                 return true;
+            case R.id.menu_oneKeyUFImmediately:
+                startActivity(new Intent(this,OneKeyUF.class));
+                return true;
             case R.id.menu_vM_onlyFrozen:
                 new Thread(new Runnable() {
                     @Override
@@ -176,6 +197,14 @@ public class Main extends Activity {
                     @Override
                     public void run() {
                         generateList("OO");
+                    }
+                }).start();
+                return true;
+            case R.id.menu_vM_onlyOnekeyUF:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList("OOU");
                     }
                 }).start();
                 return true;
@@ -327,6 +356,35 @@ public class Main extends Activity {
 //                            } else {
                             icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
 //                            }
+                        }
+                        keyValuePair.put("Img", icon);
+                        processFrozenStatus(keyValuePair,name,aPkgNameList);
+                        keyValuePair.put("isAutoList", ifOnekeyFreezeList(aPkgNameList) ? R.drawable.bluedot : R.drawable.whitedot);
+                        keyValuePair.put("PackageName", aPkgNameList);
+                        AppList.add(keyValuePair);
+                    }
+                }
+                if (AppList.size()==0) {
+                    addNotAvailablePair(getApplicationContext(), AppList);
+                }
+                break;
+            case "OOU":
+                String[] autoUFPkgNameList = getApplicationContext().getSharedPreferences(
+                        "OneKeyUFApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
+                for (String aPkgNameList : autoUFPkgNameList) {
+                    aPkgNameList = aPkgNameList.replaceAll("\\|","");
+                    String name;
+                    try{
+                        name = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES)).toString();
+                    } catch (Exception e){
+                        name = getResources().getString(R.string.uninstalled);
+                    }
+                    if (!("android".equals(aPkgNameList) || "cf.playhi.freezeyou".equals(aPkgNameList) || "".equals(aPkgNameList))) {
+                        Map<String, Object> keyValuePair = new HashMap<>();
+                        try{
+                            icon = getPackageManager().getApplicationIcon(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES));
+                        } catch (Exception e){
+                            icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
                         }
                         keyValuePair.put("Img", icon);
                         processFrozenStatus(keyValuePair,name,aPkgNameList);
@@ -718,6 +776,9 @@ public class Main extends Activity {
                         break;
                     case "OO":
                         generateList("OO");
+                        break;
+                    case "OOU":
+                        generateList("OOU");
                         break;
                     case "OS":
                         generateList("OS");

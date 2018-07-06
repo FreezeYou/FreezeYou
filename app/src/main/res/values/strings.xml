@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FreezeYou!</string>
     <string name="oneKeyFreeze">一键冻结</string>
+    <string name="oneKeyUF">一键解冻</string>
     <string name="alertT1">注意！\n不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n请谨慎操作！</string>
     <string name="cancel">取消</string>
     <string name="chooseDetailAction">请选择具体操作</string>
@@ -10,9 +11,11 @@
     <string name="more">更多</string>
     <string name="appDetail">应用详情</string>
     <string name="removeFromOneKeyList">移出一键冻结列表</string>
+    <string name="removeFromOneKeyUFList">移出一键解冻列表</string>
     <string name="removed">已移出</string>
     <string name="removeFailed">移除失败</string>
     <string name="addToOneKeyList">加入一键冻结列表</string>
+    <string name="addToOneKeyUFList">加入一键解冻列表</string>
     <string name="addFailed">添加失败</string>
     <string name="caution">警告</string>
     <string name="cautionContent">不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n\n长按可以直接呼出冻结/解冻菜单\n\n请谨慎操作！</string>
