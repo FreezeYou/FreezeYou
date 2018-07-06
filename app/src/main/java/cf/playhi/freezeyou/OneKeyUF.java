@@ -10,7 +10,6 @@ import java.io.DataOutputStream;
 
 import static cf.playhi.freezeyou.Support.checkFrozen;
 import static cf.playhi.freezeyou.Support.createNotification;
-import static cf.playhi.freezeyou.Support.deleteNotification;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.showToast;

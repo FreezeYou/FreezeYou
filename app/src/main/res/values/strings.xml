@@ -91,6 +91,7 @@
         <item>系统预装</item>
         <item>用户应用</item>
         <item>一键冻结</item>
+        <item>一键解冻</item>
     </string-array>
     <string-array name="launchModeSelectionValues" translatable="false">
         <item>all</item>
@@ -99,5 +100,6 @@
         <item>OS</item>
         <item>OU</item>
         <item>OO</item>
+        <item>OOU</item>
     </string-array>
 </resources>
