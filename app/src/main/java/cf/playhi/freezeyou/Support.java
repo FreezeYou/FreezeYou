@@ -138,7 +138,7 @@ class Support {
                 .create().show();
     }
 
-    static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity){
+    private static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity){
         try {
             if (dataOutputStream != null) {
                 dataOutputStream.close();
@@ -233,7 +233,7 @@ class Support {
 //        }
 //    }
 
-    static boolean checkFrozen(Context context,String pkgName) {
+    private static boolean checkFrozen(Context context,String pkgName) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(context) && getDevicePolicyManager(context).isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
     }
 
@@ -557,7 +557,7 @@ class Support {
         }
     }
 
-    static void createNotification(Context context,String pkgName,int iconResId){
+    private static void createNotification(Context context,String pkgName,int iconResId){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
             Notification.Builder mBuilder = new Notification.Builder(context);
             int mId = pkgName.hashCode();
@@ -607,7 +607,7 @@ class Support {
         }
     }
 
-    static void deleteNotification(Context context,String pkgName){
+    private static void deleteNotification(Context context,String pkgName){
         SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
                 "notificationId", Context.MODE_PRIVATE);
         NotificationManager mNotificationManager =
