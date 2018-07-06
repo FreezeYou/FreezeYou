@@ -259,7 +259,6 @@ public class Main extends Activity {
                 app_listView.setVisibility(View.GONE);
             }
         });
-        Drawable icon;
         ApplicationInfo applicationInfo1;
         List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
         int size = applicationInfo.size();
@@ -278,9 +277,7 @@ public class Main extends Activity {
                         AppList.add(keyValuePair);
                     }
                 }
-                if (AppList.size()==0) {
-                    addNotAvailablePair(getApplicationContext(), AppList);
-                }
+                checkAndAddNotAvailablePair(AppList);
                 break;
             case "OF":
                 for (int i = 0; i < size; i++) {
@@ -300,9 +297,7 @@ public class Main extends Activity {
                         }
                     }
                 }
-                if (AppList.size()==0){
-                    addNotAvailablePair(getApplicationContext(),AppList);
-                }
+                checkAndAddNotAvailablePair(AppList);
                 break;
             case "UF":
                 for (int i = 0; i < size; i++) {
@@ -322,80 +317,17 @@ public class Main extends Activity {
                         }
                     }
                 }
-                if (AppList.size()==0){
-                    addNotAvailablePair(getApplicationContext(),AppList);
-                }
+                checkAndAddNotAvailablePair(AppList);
                 break;
             case "OO":
-                for (String aPkgNameList : autoFreezePkgNameList) {
-                    aPkgNameList = aPkgNameList.replaceAll("\\|","");
-                    String name;
-                    try{
-                        name = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES)).toString();
-                    } catch (Exception e){
-//                        if (checkFrozen(getApplicationContext(),aPkgNameList)){
-////                            final SharedPreferences sharedPreferences = getApplicationContext().getApplicationContext().getSharedPreferences(
-////                                    "pkgName2Name", Context.MODE_PRIVATE);
-////                            name = sharedPreferences.getString(aPkgNameList,getResources().getString(R.string.notice));
-////                        } else {
-                        name = getResources().getString(R.string.uninstalled);
-//                        }
-                    }
-                    if (!("android".equals(aPkgNameList) || "cf.playhi.freezeyou".equals(aPkgNameList) || "".equals(aPkgNameList))) {
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        try{
-                            icon = getPackageManager().getApplicationIcon(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES));
-                        } catch (Exception e){
-//                            if (checkFrozen(getApplicationContext(),aPkgNameList)){
-//                                Bitmap bitmap = getBitmapFromLocalFile(getApplicationContext().getFilesDir()+"/icon/"+aPkgNameList+".png");
-//                                if (bitmap!=null){
-//                                    icon = new BitmapDrawable(bitmap);
-//                                } else {
-//                                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
-//                                }
-//                            } else {
-                            icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
-//                            }
-                        }
-                        keyValuePair.put("Img", icon);
-                        processFrozenStatus(keyValuePair,name,aPkgNameList);
-                        keyValuePair.put("isAutoList", ifOnekeyFreezeList(aPkgNameList) ? R.drawable.bluedot : R.drawable.whitedot);
-                        keyValuePair.put("PackageName", aPkgNameList);
-                        AppList.add(keyValuePair);
-                    }
-                }
-                if (AppList.size()==0) {
-                    addNotAvailablePair(getApplicationContext(), AppList);
-                }
+                oneKeyListGenerate(autoFreezePkgNameList,AppList);
+                checkAndAddNotAvailablePair(AppList);
                 break;
             case "OOU":
                 String[] autoUFPkgNameList = getApplicationContext().getSharedPreferences(
                         "OneKeyUFApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
-                for (String aPkgNameList : autoUFPkgNameList) {
-                    aPkgNameList = aPkgNameList.replaceAll("\\|","");
-                    String name;
-                    try{
-                        name = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES)).toString();
-                    } catch (Exception e){
-                        name = getResources().getString(R.string.uninstalled);
-                    }
-                    if (!("android".equals(aPkgNameList) || "cf.playhi.freezeyou".equals(aPkgNameList) || "".equals(aPkgNameList))) {
-                        Map<String, Object> keyValuePair = new HashMap<>();
-                        try{
-                            icon = getPackageManager().getApplicationIcon(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES));
-                        } catch (Exception e){
-                            icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
-                        }
-                        keyValuePair.put("Img", icon);
-                        processFrozenStatus(keyValuePair,name,aPkgNameList);
-                        keyValuePair.put("isAutoList", ifOnekeyFreezeList(aPkgNameList) ? R.drawable.bluedot : R.drawable.whitedot);
-                        keyValuePair.put("PackageName", aPkgNameList);
-                        AppList.add(keyValuePair);
-                    }
-                }
-                if (AppList.size()==0) {
-                    addNotAvailablePair(getApplicationContext(), AppList);
-                }
+                oneKeyListGenerate(autoUFPkgNameList,AppList);
+                checkAndAddNotAvailablePair(AppList);
                 break;
             case "OS":
                 for (int i = 0; i < size; i++) {
@@ -411,9 +343,7 @@ public class Main extends Activity {
                         }
                     }
                 }
-                if (AppList.size()==0) {
-                    addNotAvailablePair(getApplicationContext(), AppList);
-                }
+                checkAndAddNotAvailablePair(AppList);
                 break;
             case "OU":
                 for (int i = 0; i < size; i++) {
@@ -429,9 +359,7 @@ public class Main extends Activity {
                         }
                     }
                 }
-                if (AppList.size()==0) {
-                    addNotAvailablePair(getApplicationContext(), AppList);
-                }
+                checkAndAddNotAvailablePair(AppList);
                 break;
             default:
                 break;
@@ -864,6 +792,38 @@ public class Main extends Activity {
             return keyValuePair;
         }
         return null;
+    }
+
+    private void oneKeyListGenerate(String[] source, List<Map<String, Object>> AppList){
+        Drawable icon;
+        for (String aPkgNameList : source) {
+            aPkgNameList = aPkgNameList.replaceAll("\\|","");
+            String name;
+            try{
+                name = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES)).toString();
+            } catch (Exception e){
+                name = getResources().getString(R.string.uninstalled);
+            }
+            if (!("android".equals(aPkgNameList) || "cf.playhi.freezeyou".equals(aPkgNameList) || "".equals(aPkgNameList))) {
+                Map<String, Object> keyValuePair = new HashMap<>();
+                try{
+                    icon = getPackageManager().getApplicationIcon(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES));
+                } catch (Exception e){
+                    icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
+                }
+                keyValuePair.put("Img", icon);
+                processFrozenStatus(keyValuePair,name,aPkgNameList);
+                keyValuePair.put("isAutoList", ifOnekeyFreezeList(aPkgNameList) ? R.drawable.bluedot : R.drawable.whitedot);
+                keyValuePair.put("PackageName", aPkgNameList);
+                AppList.add(keyValuePair);
+            }
+        }
+    }
+
+    private void checkAndAddNotAvailablePair(List<Map<String, Object>> AppList){
+        if (AppList.size()==0) {
+            addNotAvailablePair(getApplicationContext(), AppList);
+        }
     }
     //TODO:运行中亮绿灯（列表、与白点、蓝点并列，覆盖是否已冻结状态）//高考
     //TODO:Main.java查看列表icon等代码整理&复用//高考
