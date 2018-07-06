@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -684,5 +685,86 @@ class Support {
             e.printStackTrace();
         }
         return applicationInfo;
+    }
+
+    static void oneKeyAction_Root(Context context,Activity activity,boolean freeze,String[] pkgNameList){
+        try {
+            process = Runtime.getRuntime().exec("su");
+            outputStream = new DataOutputStream(process.getOutputStream());
+            if (freeze){
+                for (String aPkgNameList : pkgNameList) {
+                    int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
+                    if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
+                        outputStream.writeBytes(
+                                "pm disable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                    }
+                }
+            } else {
+                for (String aPkgNameList : pkgNameList) {
+                    int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
+                    if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
+                        outputStream.writeBytes(
+                                "pm enable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                    }
+                }
+            }
+            outputStream.writeBytes("exit\n");
+            outputStream.flush();
+            int exitValue = process.waitFor();
+            if (exitValue == 0) {
+                if (freeze){
+                    for (String aPkgNameList : pkgNameList) {
+                        deleteNotification(activity,aPkgNameList.replaceAll("\\|", ""));
+                    }
+                } else {
+                    for (String aPkgNameList : pkgNameList) {
+                        createNotification(context,aPkgNameList.replaceAll("\\|", ""),R.drawable.ic_notification);
+                    }
+                }
+                showToast(context,R.string.executed);
+            } else {
+                showToast(context,R.string.mayUnrootedOrOtherEx);
+            }
+            destroyProcess(true,outputStream,process,activity);
+        } catch (Exception e){
+            e.printStackTrace();
+            showToast(activity,context.getString(R.string.exception) + e.getMessage());
+            if (e.getMessage().toLowerCase().contains("permission denied")||e.getMessage().toLowerCase().contains("not found")){
+                showToast(activity,R.string.mayUnrooted);
+            }
+            destroyProcess(true,outputStream,process,activity);
+        }
+    }
+
+    @TargetApi(21)
+    static void oneKeyAction_MRoot(Context context,Activity activity,boolean freeze,String[] pkgNameList){
+        for (String aPkgNameList : pkgNameList) {
+            String tmp = aPkgNameList.replaceAll("\\|", "");
+            try {
+                if (freeze){
+                    if (!checkFrozen(activity, tmp)) {
+                        if (!getDevicePolicyManager(activity).setApplicationHidden(
+                                DeviceAdminReceiver.getComponentName(activity), tmp, true)) {
+                            showToast(activity, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                        } else {
+                            deleteNotification(activity,tmp);
+                        }
+                    }
+                } else {
+                    if (checkFrozen(activity, tmp)) {
+                        if (!getDevicePolicyManager(activity).setApplicationHidden(
+                                DeviceAdminReceiver.getComponentName(activity), tmp, false)) {
+                            showToast(activity, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                        } else {
+                            createNotification(activity,tmp,R.drawable.ic_notification);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showToast(activity, "发生了点异常，操作仍将继续:" + e.getLocalizedMessage());
+            }
+        }
+        showToast(activity,R.string.executed);
     }
 }
