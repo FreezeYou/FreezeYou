@@ -6,8 +6,8 @@ import android.os.Build;
 import android.os.Bundle;
 
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
-import static cf.playhi.freezeyou.Support.oneKeyAction_MRoot;
-import static cf.playhi.freezeyou.Support.oneKeyAction_Root;
+import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
+import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
 
 public class OneKeyFreeze extends Activity {
     @Override
@@ -17,10 +17,10 @@ public class OneKeyFreeze extends Activity {
         String[] pkgNameList = getApplicationContext().getSharedPreferences(
                 "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
         if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
-            oneKeyAction_MRoot(activity,activity,true,pkgNameList);
+            oneKeyActionMRoot(activity,activity,true,pkgNameList);
             finish();
         } else {
-            oneKeyAction_Root(activity,activity,true,pkgNameList);
+            oneKeyActionRoot(activity,activity,true,pkgNameList);
         }
 
     }

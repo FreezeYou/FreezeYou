@@ -687,7 +687,7 @@ class Support {
         return applicationInfo;
     }
 
-    static void oneKeyAction_Root(Context context,Activity activity,boolean freeze,String[] pkgNameList){
+    static void oneKeyActionRoot(Context context,Activity activity,boolean freeze,String[] pkgNameList){
         try {
             process = Runtime.getRuntime().exec("su");
             outputStream = new DataOutputStream(process.getOutputStream());
@@ -737,7 +737,7 @@ class Support {
     }
 
     @TargetApi(21)
-    static void oneKeyAction_MRoot(Context context,Activity activity,boolean freeze,String[] pkgNameList){
+    static void oneKeyActionMRoot(Context context,Activity activity,boolean freeze,String[] pkgNameList){
         for (String aPkgNameList : pkgNameList) {
             String tmp = aPkgNameList.replaceAll("\\|", "");
             try {
