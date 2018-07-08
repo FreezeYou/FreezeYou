@@ -458,6 +458,9 @@ class Support {
 //                }
             }
         }
+        if ((drawable == null)||(drawable.getIntrinsicWidth()<=0)||(drawable.getIntrinsicHeight()<=0)){
+            drawable = context.getResources().getDrawable(R.mipmap.ic_launcher_round);
+        }
         if (resize){
             int width = drawable.getIntrinsicWidth();
             int height= drawable.getIntrinsicHeight();

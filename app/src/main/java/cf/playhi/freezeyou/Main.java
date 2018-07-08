@@ -44,6 +44,7 @@ import java.util.Map;
 
 import static cf.playhi.freezeyou.Support.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.createShortCut;
+import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.getVersionCode;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
@@ -780,12 +781,8 @@ public class Main extends Activity {
     private Map<String, Object> processAppStatus(String name,String packageName,ApplicationInfo applicationInfo){
         if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
             Map<String, Object> keyValuePair = new HashMap<>();
-            Drawable icon = getPackageManager().getApplicationIcon(applicationInfo);
-            if (icon != null) {
-                keyValuePair.put("Img", icon);
-            } else {
-                keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
-            }
+            Drawable icon = getApplicationIcon(Main.this,packageName,applicationInfo,false);
+            keyValuePair.put("Img", icon);
             processFrozenStatus(keyValuePair, name, packageName);
             keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
             keyValuePair.put("PackageName", packageName);
