@@ -43,6 +43,8 @@ import java.util.List;
 import java.util.Map;
 
 import static cf.playhi.freezeyou.Support.buildAlertDialog;
+import static cf.playhi.freezeyou.Support.checkMRootFrozen;
+import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
@@ -753,28 +755,12 @@ public class Main extends Activity {
     }
 
     private void processFrozenStatus(Map<String, Object> keyValuePair,String name,String packageName){
-        int tmp;
-        try {
-            tmp = getPackageManager().getApplicationEnabledSetting(packageName);
-        } catch (Exception e){
-            tmp = -1;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(getApplicationContext())){
-            if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED || getDevicePolicyManager(Main.this).isApplicationHidden(cf.playhi.freezeyou.DeviceAdminReceiver.getComponentName(getApplicationContext()),packageName)){
-                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
-                keyValuePair.put("isFrozen",R.drawable.bluedot);
-            } else {
-                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
-                keyValuePair.put("isFrozen",R.drawable.whitedot);
-            }
+        if (checkRootFrozen(Main.this,packageName)|| checkMRootFrozen(Main.this,packageName)){
+            keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
+            keyValuePair.put("isFrozen",R.drawable.bluedot);
         } else {
-            if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED ) {
-                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name + "(" + getString(R.string.frozen) + ")",packageName));
-                keyValuePair.put("isFrozen",R.drawable.bluedot);
-            } else {
-                keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this,name,packageName));
-                keyValuePair.put("isFrozen",R.drawable.whitedot);
-            }
+            keyValuePair.put("Name", addIfOnekeyFreezeList(Main.this, name, packageName));
+            keyValuePair.put("isFrozen", R.drawable.whitedot);
         }
     }
 

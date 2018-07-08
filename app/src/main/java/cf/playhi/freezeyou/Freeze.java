@@ -6,6 +6,8 @@ import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
+import static cf.playhi.freezeyou.Support.checkMRootFrozen;
+import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.shortcutMakeDialog;
 import static cf.playhi.freezeyou.Support.showToast;
 
@@ -35,7 +37,7 @@ public class Freeze extends Activity{
         } else if ("".equals(pkgName)){
             showToast(getApplicationContext(),"参数错误");
             Freeze.this.finish();
-        } else if (getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
+        } else if ((!checkRootFrozen(Freeze.this,pkgName))&&(!checkMRootFrozen(Freeze.this,pkgName))){
             try{
                 applicationInfo = getPackageManager().getApplicationInfo(pkgName,GET_UNINSTALLED_PACKAGES);
                 shortcutMakeDialog(getPackageManager().getApplicationLabel(applicationInfo).toString(),getString(R.string.chooseDetailAction),Freeze.this,true,applicationInfo,pkgName,2,auto);

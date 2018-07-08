@@ -43,14 +43,7 @@ class Support {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
-//                            savePkgName2Name(activity,pkgName);
-                            if (getDevicePolicyManager(activity).setApplicationHidden(
-                                    DeviceAdminReceiver.getComponentName(activity),pkgName,true)) {
-                                deleteNotification(activity,pkgName);
-                            } else {
-                                showToast(activity, "Failed!");
-                            }
-                            activity.finish();
+                            processMRootAction(activity,activity,pkgName,true,applicationInfo,SelfCloseWhenDestroyProcess);
                         } else {
                             processRootAction(pkgName,activity,activity,false,SelfCloseWhenDestroyProcess,applicationInfo);
                         }
@@ -59,16 +52,8 @@ class Support {
                 .setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && checkFrozen(activity,pkgName)) {
-                            if (getDevicePolicyManager(activity).setApplicationHidden(
-                                    DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
-//                                removeFrozen(activity, pkgName);
-                                askRun(activity, SelfCloseWhenDestroyProcess, pkgName,applicationInfo);
-                                createNotification(activity,pkgName,R.drawable.ic_notification);
-                            } else {
-                                showToast(activity, "Failed!");
-                                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                            }
+                        if (checkMRootFrozen(activity,pkgName)) {
+                            processMRootAction(activity,activity,pkgName,false,applicationInfo,SelfCloseWhenDestroyProcess);
                         } else {
                             processRootAction(pkgName,activity,activity,true,SelfCloseWhenDestroyProcess,applicationInfo);
                         }
@@ -95,15 +80,7 @@ class Support {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(activity)) {
-//                            savePkgName2Name(activity, pkgName);
-                            if (getDevicePolicyManager(activity).setApplicationHidden(
-                                    DeviceAdminReceiver.getComponentName(activity), pkgName, true)) {
-//                                addFrozen(activity, pkgName);
-                                deleteNotification(activity,pkgName);
-                            } else {
-                                showToast(activity, "Failed!");
-                            }
-                            activity.finish();
+                            processMRootAction(activity,activity,pkgName,true,applicationInfo,selfCloseWhenDestroyProcess);
                         } else {
                             processRootAction(pkgName,activity,activity,false,selfCloseWhenDestroyProcess,applicationInfo);
                         }
@@ -112,15 +89,16 @@ class Support {
                 .setPositiveButton(R.string.launch, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (activity.getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
-                            Intent intent = new Intent(
-                                    activity.getPackageManager().getLaunchIntentForPackage(pkgName));
-                            activity.startActivity(intent);
-                            destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
-                        } else {
-                            showToast(activity,
-                                    R.string.cannotFindTheLaunchIntent);
-                        }
+                        checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
+//                        if (activity.getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
+//                            Intent intent = new Intent(
+//                                    activity.getPackageManager().getLaunchIntentForPackage(pkgName));
+//                            activity.startActivity(intent);
+//                            destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
+//                        } else {
+//                            showToast(activity,
+//                                    R.string.cannotFindTheLaunchIntent);
+//                        }
                     }
                 })
                 .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -143,7 +121,9 @@ class Support {
             if (dataOutputStream != null) {
                 dataOutputStream.close();
             }
-            process1.destroy();
+            if (process1 != null){
+                process1.destroy();
+            }
             if (finish){
                 activity.finish();
             }
@@ -233,23 +213,24 @@ class Support {
 //        }
 //    }
 
-    private static boolean checkFrozen(Context context,String pkgName) {
+    static boolean checkMRootFrozen(Context context,String pkgName) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(context) && getDevicePolicyManager(context).isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
+    }
+
+    static boolean checkRootFrozen(Context context,String pkgName) {
+        int tmp;
+        try {
+            tmp = context.getPackageManager().getApplicationEnabledSetting(pkgName);
+        } catch (Exception e){
+            tmp = -1;
+        }
+        return ((tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER )|| (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED));
     }
 
     private static void askRun(final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String pkgName,final ApplicationInfo applicationInfo){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
         if (sharedPref.getBoolean("openImmediately",false)){
-            if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
-                Intent intent = new Intent(
-                        activity.getPackageManager().getLaunchIntentForPackage(pkgName));
-                activity.startActivity(intent);
-                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-            } else {
-                showToast(activity,
-                        R.string.unrootedOrCannotFindTheLaunchIntent);
-                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-            }
+            checkAndStartApp(activity,activity,pkgName,SelfCloseWhenDestroyProcess);
         } else {
             buildAlertDialog(activity,getApplicationIcon(activity,pkgName,applicationInfo,true),activity.getResources().getString(R.string.unfreezedAndAskLaunch),activity.getResources().getString(R.string.notice))
                     .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -261,16 +242,7 @@ class Support {
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int ii) {
-                            if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
-                                Intent intent = new Intent(
-                                        activity.getPackageManager().getLaunchIntentForPackage(pkgName));
-                                activity.startActivity(intent);
-                                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                            } else {
-                                showToast(activity,
-                                        R.string.unrootedOrCannotFindTheLaunchIntent);
-                                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                            }
+                            checkAndStartApp(activity,activity,pkgName,SelfCloseWhenDestroyProcess);
                         }
                     })
                     .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -283,51 +255,27 @@ class Support {
         }
     }
 
-    static void shortcutMakeDialog(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess,final ApplicationInfo applicationInfo,final String pkgName,int ot,boolean auto){
+    @TargetApi(21)
+    static void shortcutMakeDialog(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final String pkgName, int ot, boolean auto){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
         if (sharedPref.getBoolean("openAndUFImmediately",false) && auto){
             if (ot==2){
-                if (activity.getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
-                    Intent intent = new Intent(
-                            activity.getPackageManager().getLaunchIntentForPackage(pkgName));
-                    activity.startActivity(intent);
-                    destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
-                } else {
-                    showToast(activity,
-                            R.string.cannotFindTheLaunchIntent);
-                }
+                checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
             } else {
-                if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity) && checkFrozen(activity,pkgName)) {
-                    if (getDevicePolicyManager(activity).setApplicationHidden(
-                            DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
-//                        removeFrozen(activity, pkgName);
-                        if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
-                            Intent intent = new Intent(
-                                    activity.getPackageManager().getLaunchIntentForPackage(pkgName));
-                            activity.startActivity(intent);
-                            destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
-                        } else {
-                            showToast(activity,
-                                    R.string.unrootedOrCannotFindTheLaunchIntent);
-                            destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
-                        }
-                    } else {
-                        showToast(activity, R.string.mayUnrootedOrOtherEx);
-                        destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
-                    }
+                if (checkMRootFrozen(activity,pkgName)) {
+                    processMRootAction(activity,activity,pkgName,false,applicationInfo,selfCloseWhenDestroyProcess);
+//                    if (getDevicePolicyManager(activity).setApplicationHidden(
+//                            DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
+////                        removeFrozen(activity, pkgName);
+//                        checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
+//                    } else {
+//                        showToast(activity, R.string.mayUnrootedOrOtherEx);
+//                        destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
+//                    }
                 } else {
                     try {
                         fAURoot(pkgName,true);
-                        if (activity.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
-                            Intent intent = new Intent(
-                                    activity.getPackageManager().getLaunchIntentForPackage(pkgName));
-                            activity.startActivity(intent);
-                            destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
-                        } else {
-                            showToast(activity,
-                                    R.string.unrootedOrCannotFindTheLaunchIntent);
-                            destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
-                        }
+                        checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
                     } catch (Exception e) {
                         e.printStackTrace();
                         showToast(activity, activity.getString(R.string.exception) + e.getMessage());
@@ -680,6 +628,38 @@ class Support {
         }).start();
     }
 
+    @TargetApi(21)
+    private static void processMRootAction(Context context,Activity activity,String pkgName,boolean hidden,ApplicationInfo applicationInfo,boolean finish){
+        if (getDevicePolicyManager(context).setApplicationHidden(
+                DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
+            if (hidden){
+                deleteNotification(context,pkgName);
+                activity.finish();
+            } else {
+                askRun(activity, finish, pkgName,applicationInfo);
+                createNotification(activity,pkgName,R.drawable.ic_notification);
+            }
+        } else {
+            showToast(context, "Failed!");
+            if (finish){
+                activity.finish();
+            }
+        }
+    }
+
+    private static void checkAndStartApp(Context context,Activity activity,String pkgName,boolean finish){
+        if (context.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
+            Intent intent = new Intent(
+                    context.getPackageManager().getLaunchIntentForPackage(pkgName));
+            activity.startActivity(intent);
+            destroyProcess(finish, outputStream, process, activity);
+        } else {
+            showToast(context,
+                    R.string.unrootedOrCannotFindTheLaunchIntent);
+            destroyProcess(finish, outputStream, process, activity);
+        }
+    }
+
     static ApplicationInfo getApplicationInfoFromPkgName(String pkgName,Context context){
         ApplicationInfo applicationInfo = null;
         try{
@@ -745,7 +725,7 @@ class Support {
             String tmp = aPkgNameList.replaceAll("\\|", "");
             try {
                 if (freeze){
-                    if (!checkFrozen(activity, tmp)) {
+                    if (!checkMRootFrozen(activity, tmp)) {
                         if (!getDevicePolicyManager(activity).setApplicationHidden(
                                 DeviceAdminReceiver.getComponentName(activity), tmp, true)) {
                             showToast(activity, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
@@ -754,7 +734,7 @@ class Support {
                         }
                     }
                 } else {
-                    if (checkFrozen(activity, tmp)) {
+                    if (checkMRootFrozen(activity, tmp)) {
                         if (!getDevicePolicyManager(activity).setApplicationHidden(
                                 DeviceAdminReceiver.getComponentName(activity), tmp, false)) {
                             showToast(activity, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
