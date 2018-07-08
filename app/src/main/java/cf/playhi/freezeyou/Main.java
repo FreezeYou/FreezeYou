@@ -9,7 +9,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -47,9 +46,7 @@ import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
-import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.getVersionCode;
-import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class Main extends Activity {

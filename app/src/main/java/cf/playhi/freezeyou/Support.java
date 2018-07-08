@@ -229,7 +229,7 @@ class Support {
 
     private static void askRun(final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String pkgName,final ApplicationInfo applicationInfo){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
-        if (sharedPref.getBoolean("openImmediately",false)){
+        if ((sharedPref.getBoolean("openImmediately",false))||(sharedPref.getBoolean("openAndUFImmediately",false))){
             checkAndStartApp(activity,activity,pkgName,SelfCloseWhenDestroyProcess);
         } else {
             buildAlertDialog(activity,getApplicationIcon(activity,pkgName,applicationInfo,true),activity.getResources().getString(R.string.unfreezedAndAskLaunch),activity.getResources().getString(R.string.notice))
@@ -264,18 +264,9 @@ class Support {
             } else {
                 if (checkMRootFrozen(activity,pkgName)) {
                     processMRootAction(activity,activity,pkgName,false,applicationInfo,selfCloseWhenDestroyProcess);
-//                    if (getDevicePolicyManager(activity).setApplicationHidden(
-//                            DeviceAdminReceiver.getComponentName(activity), pkgName, false)) {
-////                        removeFrozen(activity, pkgName);
-//                        checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
-//                    } else {
-//                        showToast(activity, R.string.mayUnrootedOrOtherEx);
-//                        destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
-//                    }
                 } else {
                     try {
-                        fAURoot(pkgName,true);
-                        checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
+                        processRootAction(pkgName,activity,activity,true,selfCloseWhenDestroyProcess,applicationInfo);
                     } catch (Exception e) {
                         e.printStackTrace();
                         showToast(activity, activity.getString(R.string.exception) + e.getMessage());
@@ -294,25 +285,6 @@ class Support {
             }
         }
     }
-
-//    static void savePkgName2Name(Context context,String pkgName){
-//        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-//                "pkgName2Name", Context.MODE_PRIVATE);
-//        String name = context.getString(R.string.notice);
-//        PackageManager packageManager = context.getPackageManager();
-//        try{
-//            name = packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkgName,0)).toString();
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        sharedPreferences.edit().putString(pkgName, name).apply();
-//        try{
-//            realFolderCheck(context.getFilesDir()+"/icon");
-//            writeBitmapToFile(context.getFilesDir()+"/icon/"+pkgName+".png",getBitmapFromDrawable(packageManager.getApplicationIcon(pkgName)),100);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
 
 //    /**
 //     * 图片保存文件：
@@ -353,26 +325,6 @@ class Support {
         }
     }
 
-//    static Bitmap getBitmapFromLocalFile(String path){
-//        return BitmapFactory.decodeFile(path);
-//    }
-
-//    private static void realFolderCheck(String path) {
-//        //检测文件夹是否存在
-//        File file = new File(path);
-//        if (file.exists()) {
-//            if (!file.isDirectory()) {
-//                throw new IllegalStateException(file.getAbsolutePath() +
-//                        " already exists and is not a directory");
-//            }
-//        } else {
-//            if (!file.mkdirs()) {
-//                throw new IllegalStateException("Unable to create directory: " +
-//                        file.getAbsolutePath());
-//            }
-//        }
-//    }
-
     static int getVersionCode(Context context) {
         PackageManager packageManager = context.getPackageManager();
         String packageName = context.getPackageName();
@@ -398,12 +350,7 @@ class Support {
             try {
                 drawable = context.getPackageManager().getApplicationIcon(pkgName);
             } catch (Exception e){
-//                Bitmap bitmap = getBitmapFromLocalFile(context.getFilesDir()+"/icon/"+pkgName+".png");
-//                if (bitmap!=null){
-//                    drawable = new BitmapDrawable(bitmap);
-//                } else {
                 drawable = context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
-//                }
             }
         }
         if ((drawable == null)||(drawable.getIntrinsicWidth()<=0)||(drawable.getIntrinsicHeight()<=0)){
@@ -538,7 +485,7 @@ class Support {
                 mBuilder.setChannelId(CHANNEL_ID);
             }
             // Create an Intent for the activity you want to start
-            Intent resultIntent = new Intent(context, Freeze.class).putExtra("pkgName",pkgName);
+            Intent resultIntent = new Intent(context, Freeze.class).putExtra("pkgName",pkgName).putExtra("auto",false);
             // Create the TaskStackBuilder and add the intent, which inflates the back stack
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
             stackBuilder.addNextIntent(resultIntent);
