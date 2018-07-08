@@ -265,16 +265,7 @@ class Support {
                 if (checkMRootFrozen(activity,pkgName)) {
                     processMRootAction(activity,activity,pkgName,false,applicationInfo,selfCloseWhenDestroyProcess);
                 } else {
-                    try {
-                        processRootAction(pkgName,activity,activity,true,selfCloseWhenDestroyProcess,applicationInfo);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        showToast(activity, activity.getString(R.string.exception) + e.getMessage());
-                        if (e.getMessage().toLowerCase().contains("permission denied")||e.getMessage().toLowerCase().contains("not found")) {
-                            showToast(activity, R.string.mayUnrooted);
-                        }
-                        destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
-                    }
+                    processRootAction(pkgName,activity,activity,true,selfCloseWhenDestroyProcess,applicationInfo);
                 }
             }
         } else {
