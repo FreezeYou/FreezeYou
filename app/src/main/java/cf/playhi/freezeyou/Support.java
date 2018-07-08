@@ -42,21 +42,13 @@ class Support {
                 .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
-                            processMRootAction(activity,activity,pkgName,true,applicationInfo,SelfCloseWhenDestroyProcess);
-                        } else {
-                            processRootAction(pkgName,activity,activity,false,SelfCloseWhenDestroyProcess,applicationInfo);
-                        }
+                        processFreezeAction(activity,activity,pkgName,applicationInfo,SelfCloseWhenDestroyProcess);
                     }
                 })
                 .setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (checkMRootFrozen(activity,pkgName)) {
-                            processMRootAction(activity,activity,pkgName,false,applicationInfo,SelfCloseWhenDestroyProcess);
-                        } else {
-                            processRootAction(pkgName,activity,activity,true,SelfCloseWhenDestroyProcess,applicationInfo);
-                        }
+                        processUnfreezeAction(activity,activity,pkgName,applicationInfo,SelfCloseWhenDestroyProcess);
                     }
                 })
                 .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -79,11 +71,7 @@ class Support {
                 .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(activity)) {
-                            processMRootAction(activity,activity,pkgName,true,applicationInfo,selfCloseWhenDestroyProcess);
-                        } else {
-                            processRootAction(pkgName,activity,activity,false,selfCloseWhenDestroyProcess,applicationInfo);
-                        }
+                        processFreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess);
                     }
                 })
                 .setPositiveButton(R.string.launch, new DialogInterface.OnClickListener() {
@@ -262,11 +250,7 @@ class Support {
             if (ot==2){
                 checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
             } else {
-                if (checkMRootFrozen(activity,pkgName)) {
-                    processMRootAction(activity,activity,pkgName,false,applicationInfo,selfCloseWhenDestroyProcess);
-                } else {
-                    processRootAction(pkgName,activity,activity,true,selfCloseWhenDestroyProcess,applicationInfo);
-                }
+                processUnfreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess);
             }
         } else {
             if (ot==2){
@@ -595,6 +579,22 @@ class Support {
             showToast(context,
                     R.string.unrootedOrCannotFindTheLaunchIntent);
             destroyProcess(finish, outputStream, process, activity);
+        }
+    }
+
+    private static void processUnfreezeAction(Context context,Activity activity,String pkgName,ApplicationInfo applicationInfo,boolean finish){
+        if (checkMRootFrozen(context,pkgName)) {
+            processMRootAction(context,activity,pkgName,false,applicationInfo,finish);
+        } else {
+            processRootAction(pkgName,context,activity,true,finish,applicationInfo);
+        }
+    }
+
+    private static void processFreezeAction(Context context,Activity activity,String pkgName,ApplicationInfo applicationInfo,boolean finish){
+        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(activity)) {
+            processMRootAction(context,activity,pkgName,true,applicationInfo,finish);
+        } else {
+            processRootAction(pkgName,context,activity,false,finish,applicationInfo);
         }
     }
 
