@@ -49,7 +49,7 @@
     <string name="onlyUA">用户应用</string>
     <string name="exit">退出软件</string>
     <string name="moreSettings">更多设置</string>
-    <string name="about_message">FreezeYou!\n冻住！不许动！\n这是一款轻量级的应用程序，它可以协助您的设备更流畅、更持久、更高效的运行。它免费并且没有任何广告，也不会在任何时候向您索要任何当时不必要的权限。\n使用方法：长按应用程序列表可以直接呼出冻结与解冻菜单。\n提示：若发生本程序闪退的情况，请手动至系统设置中给予FreezeYou存储空间权限，日志将会在下次发生异常时存储在手机存储卡 FreezeYou/Log 目录中。\n免ROOT：请点击下方 访问官网 查看\n官方QQ群：704086494\n官网：https://app.playhi.cf/freezeyou/\n本应用程序开源，地址：https://github.com/Playhi/FreezeYou</string>
+    <string name="about_message">FreezeYou!\n冻住！不许动！\n先感谢一下提供过很大帮助的用户：wcedla 。\n这是一款轻量级的应用程序，它可以协助您的设备更流畅、更持久、更高效的运行。它免费并且没有任何广告，也不会在任何时候向您索要任何当时不必要的权限。\n使用方法：长按或单击应用程序列表即可。\n免ROOT：请点击下方 访问官网 查看\n官方QQ群：704086494\n官网：https://app.playhi.cf/freezeyou/\n本应用程序开源，地址：https://github.com/Playhi/FreezeYou</string>
     <string name="visitWebsite">访问官网</string>
     <string name="addQQGroup">加入QQ群</string>
     <string name="dangerZone">危险区</string>
