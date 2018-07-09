@@ -51,6 +51,8 @@ import static cf.playhi.freezeyou.Support.showToast;
 
 public class Main extends Activity {
     private static String[] autoFreezePkgNameList = new String[0];
+    private Drawable icon;
+    private static Map<String, Object> keyValuePair;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -349,7 +351,7 @@ public class Main extends Activity {
                 for (int i = 0; i < size; i++) {
                     applicationInfo1 = applicationInfo.get(i);
                     if ((applicationInfo1.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
-                        Map<String, Object> keyValuePair = processAppStatus(
+                        keyValuePair = processAppStatus(
                                 getPackageManager().getApplicationLabel(applicationInfo1).toString(),
                                 applicationInfo1.packageName,
                                 applicationInfo1
@@ -437,6 +439,7 @@ public class Main extends Activity {
                 app_listView.setAdapter(adapter);
                 app_listView.setTextFilterEnabled(true);
                 app_listView.setVisibility(View.VISIBLE);
+                Support.drawable = null;
             }
         });
 
@@ -585,7 +588,7 @@ public class Main extends Activity {
 //    }
 
     private static void addNotAvailablePair(Context context,List<Map<String,Object>> AppList){
-        Map<String, Object> keyValuePair = new HashMap<>();
+        keyValuePair = new HashMap<>();
         keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
         keyValuePair.put("Name", context.getString(R.string.notAvailable));
         keyValuePair.put("PackageName", context.getString(R.string.notAvailable));
@@ -764,7 +767,7 @@ public class Main extends Activity {
     private Map<String, Object> processAppStatus(String name,String packageName,ApplicationInfo applicationInfo){
         if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
             Map<String, Object> keyValuePair = new HashMap<>();
-            Drawable icon = getApplicationIcon(Main.this,packageName,applicationInfo,false);
+            icon = getApplicationIcon(Main.this,packageName,applicationInfo,true);
             keyValuePair.put("Img", icon);
             processFrozenStatus(keyValuePair, name, packageName);
             keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
@@ -775,10 +778,9 @@ public class Main extends Activity {
     }
 
     private void oneKeyListGenerate(String[] source, List<Map<String, Object>> AppList){
-        Drawable icon;
+        String name;
         for (String aPkgNameList : source) {
             aPkgNameList = aPkgNameList.replaceAll("\\|","");
-            String name;
             try{
                 name = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES)).toString();
             } catch (Exception e){
@@ -787,7 +789,7 @@ public class Main extends Activity {
             if (!("android".equals(aPkgNameList) || "cf.playhi.freezeyou".equals(aPkgNameList) || "".equals(aPkgNameList))) {
                 Map<String, Object> keyValuePair = new HashMap<>();
                 try{
-                    icon = getPackageManager().getApplicationIcon(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES));
+                    icon = getApplicationIcon(Main.this,aPkgNameList,getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES),true);
                 } catch (Exception e){
                     icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
                 }

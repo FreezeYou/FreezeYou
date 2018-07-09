@@ -37,6 +37,7 @@ import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 class Support {
     private static Process process = null;
     private static DataOutputStream outputStream = null;
+    static Drawable drawable;
     private static void makeDialog(final String title, String message, final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final String pkgName){
         buildAlertDialog(activity,getApplicationIcon(activity,pkgName,applicationInfo,true),message,title)
                 .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
@@ -318,7 +319,7 @@ class Support {
     }
 
     static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo,boolean resize){
-        Drawable drawable = context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
+        drawable = context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
         if (applicationInfo!=null){
             drawable = context.getPackageManager().getApplicationIcon(applicationInfo);
         } else if (!"".equals(pkgName)){

@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -110,10 +111,13 @@ public class SelectOperation extends Activity {
                                             pkgNameList.replace("|" + pkgName + "|", ""))
                                     .commit() ? R.string.removed : R.string.removeFailed);
                         } else {
+                            String tmp = pkgNameList + "|" + pkgName + "|";
+                            Log.e("生成结果",tmp);
+                            showToast(getApplicationContext(), tmp);
                             showToast(getApplicationContext(), sharedPreferences.edit()
                                     .putString(
                                             "pkgName",
-                                            pkgNameList + "|" + pkgName + "|")
+                                            tmp)
                                     .commit() ? R.string.added : R.string.addFailed);
                         }
                         finish();
