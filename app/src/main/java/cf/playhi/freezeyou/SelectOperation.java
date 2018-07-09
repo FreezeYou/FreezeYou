@@ -111,13 +111,10 @@ public class SelectOperation extends Activity {
                                             pkgNameList.replace("|" + pkgName + "|", ""))
                                     .commit() ? R.string.removed : R.string.removeFailed);
                         } else {
-                            String tmp = pkgNameList + "|" + pkgName + "|";
-                            Log.e("生成结果",tmp);
-                            showToast(getApplicationContext(), tmp);
                             showToast(getApplicationContext(), sharedPreferences.edit()
                                     .putString(
                                             "pkgName",
-                                            tmp)
+                                            pkgNameList + "|" + pkgName + "|")
                                     .commit() ? R.string.added : R.string.addFailed);
                         }
                         finish();
