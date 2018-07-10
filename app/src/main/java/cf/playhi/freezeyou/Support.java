@@ -262,26 +262,6 @@ class Support {
         }
     }
 
-//    /**
-//     * 图片保存文件：
-//     * 从Browser项目搬来的代码
-//     * @param filePath filePath
-//     * @param b bitmap
-//     * @param quality quality
-//     */
-//    private static void writeBitmapToFile(String filePath, Bitmap b, int quality) {
-//        try {
-//            File desFile = new File(filePath);
-//            FileOutputStream fos = new FileOutputStream(desFile);
-//            BufferedOutputStream bos = new BufferedOutputStream(fos);
-//            b.compress(Bitmap.CompressFormat.PNG, quality, bos);
-//            bos.flush();
-//            bos.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     //最初参考 http://www.cnblogs.com/zhou2016/p/6281678.html
     /**
      * Drawable转Bitmap
@@ -394,6 +374,7 @@ class Support {
 
                     mShortcutManager.requestPinShortcut(pinShortcutInfo,
                             successCallback.getIntentSender());
+                    showToast(context, R.string.requested);
                 } else {
                     createShortCutOldApi(title,pkgName,icon,cls,context);
                 }
