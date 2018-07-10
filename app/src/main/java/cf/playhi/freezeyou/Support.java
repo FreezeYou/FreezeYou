@@ -79,15 +79,6 @@ class Support {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
-//                        if (activity.getPackageManager().getLaunchIntentForPackage(pkgName)!=null){
-//                            Intent intent = new Intent(
-//                                    activity.getPackageManager().getLaunchIntentForPackage(pkgName));
-//                            activity.startActivity(intent);
-//                            destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
-//                        } else {
-//                            showToast(activity,
-//                                    R.string.cannotFindTheLaunchIntent);
-//                        }
                     }
                 })
                 .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -179,28 +170,6 @@ class Support {
     static DevicePolicyManager getDevicePolicyManager(Context context){
         return (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
     }
-
-//    static void addFrozen(Context context,String pkgName){
-//        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-//                "FrozenList", Context.MODE_PRIVATE);
-//        final String pkgNameList = sharedPreferences.getString("pkgName", "");
-//        if (!sharedPreferences.edit().putString("pkgName", pkgNameList + "|" + pkgName + "|").commit()) {
-//            if (!sharedPreferences.edit().putString("pkgName", pkgNameList + "|" + pkgName + "|").commit()) {
-//                showToast(context.getApplicationContext(), "数据异常");
-//            }
-//        }
-//    }
-
-//    static void removeFrozen(Context context,String pkgName){
-//        final SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-//                "FrozenList", Context.MODE_PRIVATE);
-//        final String pkgNameList = sharedPreferences.getString("pkgName", "");
-//        if (!sharedPreferences.edit().putString("pkgName", pkgNameList.replace("|" + pkgName + "|", "")).commit()) {
-//            if (!sharedPreferences.edit().putString("pkgName", pkgNameList.replace("|" + pkgName + "|", "")).commit()) {
-//                showToast(context.getApplicationContext(), "数据异常");
-//            }
-//        }
-//    }
 
     static boolean checkMRootFrozen(Context context,String pkgName) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(context) && getDevicePolicyManager(context).isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
@@ -385,29 +354,39 @@ class Support {
     }
 
     private static void createShortCutOldApi(String title, String pkgName, Drawable icon,Class<?> cls,Context context){
+        Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+        Intent intent = new Intent(context, cls);
+        intent.putExtra("pkgName", pkgName);
+        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
+        addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
         try {
-            Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
-//            Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.drawable.icon);
-            Intent intent = new Intent(context, cls);
-            intent.putExtra("pkgName", pkgName);
-            addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
             BitmapDrawable bd = (BitmapDrawable) icon;
             addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
-            addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
             context.sendBroadcast(addShortCut);
             showToast(context, R.string.requested);
         } catch (Exception e){
-            Intent addShortCut2 = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
-            Intent intent2 = new Intent(context, cls);
-            intent2.putExtra("pkgName",pkgName);
-            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
-            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_ICON, Bitmap.createScaledBitmap(getBitmapFromDrawable(icon),192,192,true));
-            addShortCut2.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent2);
+            e.printStackTrace();
             try {
-                context.sendBroadcast(addShortCut2);
+                Matrix matrix = new Matrix();
+                matrix.setScale(0.5f, 0.5f);
+                Bitmap bitmap = getBitmapFromDrawable(icon);
+                addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON,
+                        Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true));
+                context.sendBroadcast(addShortCut);
                 showToast(context, R.string.requested);
             }catch (Exception ee){
-                showToast(context,context.getString(R.string.requestFailed)+ee.getMessage());
+                ee.printStackTrace();
+                try {
+                    Matrix matrix = new Matrix();
+                    matrix.setScale(0.2f, 0.2f);
+                    Bitmap bitmap = getBitmapFromDrawable(icon);
+                    addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON,
+                            Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true));
+                    context.sendBroadcast(addShortCut);
+                    showToast(context, R.string.requested);
+                } catch (Exception eee){
+                    showToast(context,context.getString(R.string.requestFailed)+eee.getMessage());
+                }
             }
         }
     }
