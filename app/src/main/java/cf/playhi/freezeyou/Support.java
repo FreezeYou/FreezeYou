@@ -38,63 +38,73 @@ class Support {
     private static Process process = null;
     private static DataOutputStream outputStream = null;
     static Drawable drawable;
-    private static void makeDialog(final String title, String message, final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final String pkgName){
-        buildAlertDialog(activity,getApplicationIcon(activity,pkgName,applicationInfo,true),message,title)
-                .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        processFreezeAction(activity,activity,pkgName,applicationInfo,SelfCloseWhenDestroyProcess);
-                    }
-                })
-                .setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        processUnfreezeAction(activity,activity,pkgName,applicationInfo,SelfCloseWhenDestroyProcess);
-                    }
-                })
-                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
-                    }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialogInterface) {
-                        destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
-                    }
-                })
-                .create().show();
+    private static void makeDialog(final String title,final String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final String pkgName,final boolean enabled) {
+        AlertDialog.Builder builder =
+                buildAlertDialog(activity, getApplicationIcon(activity, pkgName, applicationInfo, true), message, title)
+                        .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                processFreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess);
+                            }
+                        })
+                        .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
+                            }
+                        })
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialogInterface) {
+                                destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
+                            }
+                        });
+        if (enabled) {
+            builder.setPositiveButton(R.string.launch, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    checkAndStartApp(activity, activity, pkgName, selfCloseWhenDestroyProcess);
+                }
+            });
+        } else {
+            builder.setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    processUnfreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess);
+                }
+            });
+        }
+        builder.create().show();
     }
 
-    private static void makeDialog2(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess,final ApplicationInfo applicationInfo,final String pkgName){
-        buildAlertDialog(activity,getApplicationIcon(activity,pkgName,applicationInfo,true),message,title)
-                .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        processFreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess);
-                    }
-                })
-                .setPositiveButton(R.string.launch, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
-                    }
-                })
-                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
-                    }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialogInterface) {
-                        destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
-                    }
-                })
-                .create().show();
-    }
+//    private static void makeDialog2(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess,final ApplicationInfo applicationInfo,final String pkgName){
+//        buildAlertDialog(activity,getApplicationIcon(activity,pkgName,applicationInfo,true),message,title)
+//                .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        processFreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess);
+//                    }
+//                })
+//                .setPositiveButton(R.string.launch, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
+//                    }
+//                })
+//                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
+//                    }
+//                })
+//                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+//                    @Override
+//                    public void onCancel(DialogInterface dialogInterface) {
+//                        destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
+//                    }
+//                })
+//                .create().show();
+//    }
 
     private static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity){
         try {
@@ -223,11 +233,7 @@ class Support {
                 processUnfreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess);
             }
         } else {
-            if (ot==2){
-                makeDialog2(title,message,activity,selfCloseWhenDestroyProcess,applicationInfo,pkgName);
-            } else {
-                makeDialog(title,message,activity,selfCloseWhenDestroyProcess,applicationInfo,pkgName);
-            }
+            makeDialog(title, message, activity, selfCloseWhenDestroyProcess, applicationInfo, pkgName, ot == 2);
         }
     }
 
