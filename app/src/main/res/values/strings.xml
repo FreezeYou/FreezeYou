@@ -26,7 +26,6 @@
     <string name="createOneKeyFreezeShortcut">一键冻结</string>
     <string name="executed">执行完成</string>
     <string name="exception">异常：</string>
-    <string name="cannotFindTheLaunchIntent">未找到程序入口</string>
     <string name="launch">启动</string>
     <string name="mayUnrooted">可能尚未ROOT或免ROOT模式未启用成功</string>
     <string name="mayUnrootedOrOtherEx">可能没有授予权限、目标已卸载或发生了其它异常</string>
