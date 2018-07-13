@@ -624,7 +624,7 @@ public class Main extends Activity {
                     .setNeutralButton(R.string.hMRoot, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Uri webPage = Uri.parse("https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8");
+                            Uri webPage = Uri.parse("https://freezeyou.playhi.cf/MRootUse.html");
                             Intent about = new Intent(Intent.ACTION_VIEW, webPage);
                             if (about.resolveActivity(getPackageManager()) != null) {
                                 startActivity(about);
