@@ -581,18 +581,28 @@ class Support {
             outputStream = new DataOutputStream(process.getOutputStream());
             if (freeze){
                 for (String aPkgNameList : pkgNameList) {
-                    int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
-                    if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
-                        outputStream.writeBytes(
-                                "pm disable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                    try{
+                        int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
+                        if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
+                            outputStream.writeBytes(
+                                    "pm disable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        showToast(context,R.string.plsRemoveUninstalledApplications);
                     }
                 }
             } else {
                 for (String aPkgNameList : pkgNameList) {
-                    int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
-                    if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
-                        outputStream.writeBytes(
-                                "pm enable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                    try {
+                        int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
+                        if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
+                            outputStream.writeBytes(
+                                    "pm enable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        showToast(context, R.string.plsRemoveUninstalledApplications);
                     }
                 }
             }
