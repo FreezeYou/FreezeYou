@@ -227,7 +227,7 @@ public class Main extends Activity {
                 }).start();
                 return true;
             case R.id.menu_update:
-                Uri webPage = Uri.parse("https://app.playhi.cf/freezeyou/checkupdate.php?v=" + getVersionCode(this));
+                Uri webPage = Uri.parse("https://freezeyou.playhi.cf/checkupdate.php?v=" + getVersionCode(this));
                 Intent about = new Intent(Intent.ACTION_VIEW, webPage);
                 if (about.resolveActivity(getPackageManager()) != null) {
                     startActivity(about);
@@ -446,11 +446,11 @@ public class Main extends Activity {
         app_listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                HashMap<String,String> map=(HashMap<String,String>)app_listView.getItemAtPosition(i);
-                final String name=map.get("Name");
-                final String pkgName=map.get("PackageName");
-                if (!(getString(R.string.notAvailable).equals(name))){
-                    startActivity(new Intent(Main.this,Freeze.class).putExtra("pkgName",pkgName).putExtra("auto",false));
+                HashMap<String, String> map = (HashMap<String, String>) app_listView.getItemAtPosition(i);
+                final String name = map.get("Name");
+                final String pkgName = map.get("PackageName");
+                if (!(getString(R.string.notAvailable).equals(name))) {
+                    startActivity(new Intent(Main.this, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false));
                 }
                 return true;
             }
