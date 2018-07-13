@@ -148,7 +148,7 @@ public class Main extends Activity {
                         .setNeutralButton(R.string.visitWebsite, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Uri webPage = Uri.parse("https://app.playhi.cf/freezeyou");
+                                Uri webPage = Uri.parse("https://freezeyou.playhi.cf/");
                                 Intent about = new Intent(Intent.ACTION_VIEW, webPage);
                                 if (about.resolveActivity(getPackageManager()) != null) {
                                     startActivity(about);
