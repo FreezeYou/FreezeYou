@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="100"/>
-    <item android:title="200"/>
-    <item android:title="300"/>
-    <item android:title="400"/>
+    <item
+        android:showAsAction="never"
+        android:id="@+id/list_menu_freezeImmediately"
+        android:title="@string/freezeImmediately"/>
+    <item
+        android:showAsAction="never"
+        android:id="@+id/list_menu_UFImmediately"
+        android:title="@string/UFImmediately"/>
+    <item
+        android:showAsAction="never"
+        android:id="@+id/list_menu_addToOneKeyFreezeList"
+        android:title="@string/addToOneKeyList"/>
+    <item
+        android:showAsAction="never"
+        android:id="@+id/list_menu_addToOneKeyUFList"
+        android:title="@string/addToOneKeyUFList"/>
+    <item
+        android:showAsAction="never"
+        android:id="@+id/list_menu_removeFromOneKeyFreezeList"
+        android:title="@string/removeFromOneKeyList"/>
+    <item
+        android:showAsAction="never"
+        android:id="@+id/list_menu_removeFromOneKeyUFList"
+        android:title="@string/removeFromOneKeyUFList"/>
 </menu>

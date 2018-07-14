@@ -16,10 +16,12 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -53,6 +55,7 @@ public class Main extends Activity {
     private static String[] autoFreezePkgNameList = new String[0];
     private Drawable icon;
     private static Map<String, Object> keyValuePair;
+    private HashMap<String, String> map;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -443,18 +446,49 @@ public class Main extends Activity {
             }
         });
 
-        app_listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        app_listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                HashMap<String, String> map = (HashMap<String, String>) app_listView.getItemAtPosition(i);
-                final String name = map.get("Name");
+            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                map = (HashMap<String, String>) app_listView.getItemAtPosition(i);
                 final String pkgName = map.get("PackageName");
-                if (!(getString(R.string.notAvailable).equals(name))) {
-                    startActivity(new Intent(Main.this, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false));
-                }
+                showToast(Main.this,Integer.toString(i));
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                MenuInflater inflater = getMenuInflater();
+                inflater.inflate(R.menu.multichoicemenu, menu);
                 return true;
             }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode) {
+
+            }
         });
+
+//        app_listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                HashMap<String, String> map = (HashMap<String, String>) app_listView.getItemAtPosition(i);
+//                final String name = map.get("Name");
+//                final String pkgName = map.get("PackageName");
+//                if (!(getString(R.string.notAvailable).equals(name))) {
+//                    startActivity(new Intent(Main.this, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false));
+//                }
+//                return true;
+//            }
+//        });
 
         app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

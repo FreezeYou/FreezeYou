@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="translucentBackground">#80000000</color>
+    <color name="translucentGreyBackground">#80696969</color>
 </resources>
