@@ -17,9 +17,11 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import static cf.playhi.freezeyou.Support.addToOneKeyList;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getApplicationInfoFromPkgName;
+import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class SelectOperation extends Activity {
@@ -60,7 +62,7 @@ public class SelectOperation extends Activity {
             operationData[4] = getResources().getString(R.string.removeFromOneKeyUFList);
         }
 
-        ListAdapter adapt = new ArrayAdapter<>(SelectOperation.this, R.layout.so_item, operationData);
+        final ListAdapter adapt = new ArrayAdapter<>(SelectOperation.this, R.layout.so_item, operationData);
         listView.setAdapter(adapt);
 
         so_body.setOnClickListener(new View.OnClickListener() {
@@ -104,33 +106,49 @@ public class SelectOperation extends Activity {
                         break;
                     case 3:
                         if (pkgNameList.contains("|" + pkgName + "|")) {
-                            showToast(getApplicationContext(), sharedPreferences.edit()
-                                    .putString(
-                                            "pkgName",
-                                            pkgNameList.replace("|" + pkgName + "|", ""))
-                                    .commit() ? R.string.removed : R.string.removeFailed);
+                            showToast(getApplicationContext(),
+                                    removeFromOneKeyList(getApplicationContext(),
+                                            "AutoFreezeApplicationList",
+                                            pkgName)? R.string.removed : R.string.removeFailed);
+//                            sharedPreferences.edit()
+//                                    .putString(
+//                                            "pkgName",
+//                                            pkgNameList.replace("|" + pkgName + "|", ""))
+//                                    .commit()
                         } else {
-                            showToast(getApplicationContext(), sharedPreferences.edit()
-                                    .putString(
-                                            "pkgName",
-                                            pkgNameList + "|" + pkgName + "|")
-                                    .commit() ? R.string.added : R.string.addFailed);
+                            showToast(getApplicationContext(),
+                                    addToOneKeyList(getApplicationContext(),
+                                            "AutoFreezeApplicationList",
+                                            pkgName)? R.string.added : R.string.addFailed);
+//                            showToast(getApplicationContext(), sharedPreferences.edit()
+//                                    .putString(
+//                                            "pkgName",
+//                                            pkgNameList + "|" + pkgName + "|")
+//                                    .commit() ? R.string.added : R.string.addFailed);
                         }
                         finish();
                         break;
                     case 4:
                         if (UFPkgNameList.contains("|" + pkgName + "|")) {
-                            showToast(getApplicationContext(), UFSharedPreferences.edit()
-                                    .putString(
-                                            "pkgName",
-                                            UFPkgNameList.replace("|" + pkgName + "|", ""))
-                                    .commit() ? R.string.removed : R.string.removeFailed);
+                            showToast(getApplicationContext(),
+                                    removeFromOneKeyList(getApplicationContext(),
+                                            "OneKeyUFApplicationList",
+                                            pkgName) ? R.string.removed : R.string.removeFailed);
+//                            UFSharedPreferences.edit()
+//                                    .putString(
+//                                            "pkgName",
+//                                            UFPkgNameList.replace("|" + pkgName + "|", ""))
+//                                    .commit()
                         } else {
-                            showToast(getApplicationContext(), UFSharedPreferences.edit()
-                                    .putString(
-                                            "pkgName",
-                                            UFPkgNameList + "|" + pkgName + "|")
-                                    .commit() ? R.string.added : R.string.addFailed);
+                            showToast(getApplicationContext(),
+                                    addToOneKeyList(getApplicationContext(),
+                                            "OneKeyUFApplicationList",
+                                            pkgName) ? R.string.added : R.string.addFailed);
+//                            UFSharedPreferences.edit()
+//                                    .putString(
+//                                            "pkgName",
+//                                            UFPkgNameList + "|" + pkgName + "|")
+//                                    .commit()
                         }
                         finish();
                         break;

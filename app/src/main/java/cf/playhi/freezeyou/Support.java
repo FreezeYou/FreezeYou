@@ -28,6 +28,7 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.DataOutputStream;
@@ -575,7 +576,7 @@ class Support {
         return applicationInfo;
     }
 
-    static void oneKeyActionRoot(Context context,Activity activity,boolean freeze,String[] pkgNameList){
+    static void oneKeyActionRoot(Context context,Activity activity,boolean freeze,String[] pkgNameList,boolean finish){
         try {
             process = Runtime.getRuntime().exec("su");
             outputStream = new DataOutputStream(process.getOutputStream());
@@ -623,14 +624,14 @@ class Support {
             } else {
                 showToast(context,R.string.mayUnrootedOrOtherEx);
             }
-            destroyProcess(true,outputStream,process,activity);
+            destroyProcess(finish,outputStream,process,activity);
         } catch (Exception e){
             e.printStackTrace();
             showToast(activity,context.getString(R.string.exception) + e.getMessage());
             if (e.getMessage().toLowerCase().contains("permission denied")||e.getMessage().toLowerCase().contains("not found")){
                 showToast(activity,R.string.mayUnrooted);
             }
-            destroyProcess(true,outputStream,process,activity);
+            destroyProcess(finish,outputStream,process,activity);
         }
     }
 
@@ -664,5 +665,33 @@ class Support {
             }
         }
         showToast(activity,R.string.executed);
+    }
+
+    static boolean addToOneKeyList(Context context,String freezeOrUF,String pkgName){
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(
+                freezeOrUF, Context.MODE_PRIVATE);
+        final String pkgNameList = sharedPreferences.getString("pkgName", "");
+        if (!pkgNameList.contains("|" + pkgName + "|")) {
+            return sharedPreferences.edit()
+                    .putString(
+                            "pkgName",
+                            pkgNameList + "|" + pkgName + "|")
+                    .commit();
+        }
+        return true;
+    }
+
+    static boolean removeFromOneKeyList(Context context,String freezeOrUF,String pkgName){
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(
+                freezeOrUF, Context.MODE_PRIVATE);
+        final String pkgNameList = sharedPreferences.getString("pkgName", "");
+        if (pkgNameList.contains("|" + pkgName + "|")){
+            return sharedPreferences.edit()
+                    .putString(
+                            "pkgName",
+                            pkgNameList.replace("|" + pkgName + "|", ""))
+                    .commit();
+        }
+        return true;
     }
 }

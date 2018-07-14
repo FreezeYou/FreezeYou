@@ -9,6 +9,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -16,6 +17,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,19 +45,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static cf.playhi.freezeyou.Support.addToOneKeyList;
 import static cf.playhi.freezeyou.Support.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getVersionCode;
+import static cf.playhi.freezeyou.Support.isDeviceOwner;
+import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
+import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
+import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class Main extends Activity {
     private static String[] autoFreezePkgNameList = new String[0];
     private Drawable icon;
     private static Map<String, Object> keyValuePair;
-    private HashMap<String, String> map;
+    private ArrayList<String> selectedPackages = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -449,15 +456,17 @@ public class Main extends Activity {
         app_listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
             public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
-                map = (HashMap<String, String>) app_listView.getItemAtPosition(i);
-                final String pkgName = map.get("PackageName");
-                showToast(Main.this,Integer.toString(i));
+                final String pkgName = ((HashMap<String, String>) app_listView.getItemAtPosition(i)).get("PackageName");
+                if (b){
+                    selectedPackages.add(pkgName);
+                } else {
+                    selectedPackages.remove(pkgName);
+                }
             }
 
             @Override
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-                MenuInflater inflater = getMenuInflater();
-                inflater.inflate(R.menu.multichoicemenu, menu);
+                Main.this.getMenuInflater().inflate(R.menu.multichoicemenu, menu);
                 return true;
             }
 
@@ -468,12 +477,75 @@ public class Main extends Activity {
 
             @Override
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                return false;
+                int size;
+                switch (menuItem.getItemId()){
+                    case R.id.list_menu_addToOneKeyFreezeList:
+                        Log.e("10086","Hi!");
+                        size = selectedPackages.size();
+                        for(int i = 0 ; i < size ; i++) {
+                            Log.e("10086",selectedPackages.get(i));
+                            if (!addToOneKeyList(getApplicationContext(),"AutoFreezeApplicationList",selectedPackages.get(i))) {
+                                showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
+                            }
+                        }
+                        return true;
+                    case R.id.list_menu_addToOneKeyUFList:
+                        size = selectedPackages.size();
+                        for(int i = 0 ; i < size ; i++) {
+                            if (!addToOneKeyList(getApplicationContext(),"OneKeyUFApplicationList",selectedPackages.get(i))) {
+                                showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
+                            }
+                        }
+                        return true;
+                    case R.id.list_menu_removeFromOneKeyFreezeList:
+                        size = selectedPackages.size();
+                        for(int i = 0 ; i < size ; i++) {
+                            if (!removeFromOneKeyList(getApplicationContext(),"AutoFreezeApplicationList",selectedPackages.get(i))) {
+                                showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
+                            }
+                        }
+                        return true;
+                    case R.id.list_menu_removeFromOneKeyUFList:
+                        size = selectedPackages.size();
+                        for(int i = 0 ; i < size ; i++) {
+                            if (!removeFromOneKeyList(getApplicationContext(),"OneKeyUFApplicationList",selectedPackages.get(i))) {
+                                showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
+                            }
+                        }
+                        return true;
+                    case R.id.list_menu_freezeImmediately:
+                        size = selectedPackages.size();
+                        String[] pkgNameList = new String[size];
+                        for(int i = 0 ; i < size ; i++) {
+                            pkgNameList[i] = "|" + selectedPackages.get(i) + "|";
+                        }
+                        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(Main.this)){
+                            oneKeyActionMRoot(Main.this,Main.this,true,pkgNameList);
+                            finish();
+                        } else {
+                            oneKeyActionRoot(Main.this,Main.this,true,pkgNameList,false);
+                        }
+                        return true;
+                    case R.id.list_menu_UFImmediately:
+                        size = selectedPackages.size();
+                        String[] UFPkgNameList = new String[size];
+                        for(int i = 0 ; i < size ; i++) {
+                            UFPkgNameList[i] = "|" + selectedPackages.get(i) + "|";
+                        }
+                        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(Main.this)){
+                            oneKeyActionMRoot(Main.this,Main.this,false,UFPkgNameList);
+                        } else {
+                            oneKeyActionRoot(Main.this,Main.this,false,UFPkgNameList,false);
+                        }
+                        return true;
+                    default:
+                        return false;
+                }
             }
 
             @Override
             public void onDestroyActionMode(ActionMode actionMode) {
-
+                selectedPackages.clear();
             }
         });
 

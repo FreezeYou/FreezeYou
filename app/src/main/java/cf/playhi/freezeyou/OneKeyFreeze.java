@@ -20,7 +20,7 @@ public class OneKeyFreeze extends Activity {
             oneKeyActionMRoot(activity,activity,true,pkgNameList);
             finish();
         } else {
-            oneKeyActionRoot(activity,activity,true,pkgNameList);
+            oneKeyActionRoot(activity,activity,true,pkgNameList,true);
         }
 
     }

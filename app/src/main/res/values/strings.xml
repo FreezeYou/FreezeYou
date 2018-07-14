@@ -18,7 +18,7 @@
     <string name="addToOneKeyUFList">加入一键解冻列表</string>
     <string name="addFailed">添加失败</string>
     <string name="caution">警告</string>
-    <string name="cautionContent">不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n\n长按可以直接呼出冻结/解冻菜单\n\n请谨慎操作！</string>
+    <string name="cautionContent">不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n\n长按可以多选\n\n请谨慎操作！</string>
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="requested">已发出创建请求</string>

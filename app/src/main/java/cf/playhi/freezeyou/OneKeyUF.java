@@ -20,7 +20,7 @@ public class OneKeyUF extends Activity {
             oneKeyActionMRoot(activity,activity,false,pkgNameList);
             finish();
         } else {
-            oneKeyActionRoot(activity,activity,false,pkgNameList);
+            oneKeyActionRoot(activity,activity,false,pkgNameList,true);
         }
     }
 }
