@@ -17,7 +17,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -480,10 +479,8 @@ public class Main extends Activity {
                 int size;
                 switch (menuItem.getItemId()){
                     case R.id.list_menu_addToOneKeyFreezeList:
-                        Log.e("10086","Hi!");
                         size = selectedPackages.size();
                         for(int i = 0 ; i < size ; i++) {
-                            Log.e("10086",selectedPackages.get(i));
                             if (!addToOneKeyList(getApplicationContext(),"AutoFreezeApplicationList",selectedPackages.get(i))) {
                                 showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
                             }
