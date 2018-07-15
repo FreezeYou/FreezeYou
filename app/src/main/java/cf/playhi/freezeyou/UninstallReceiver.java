@@ -3,7 +3,8 @@ package cf.playhi.freezeyou;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+
+import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
 
 public class UninstallReceiver extends BroadcastReceiver {
     @Override
@@ -13,37 +14,39 @@ public class UninstallReceiver extends BroadcastReceiver {
             String pkgName = intent.getDataString();
             if (pkgName!=null){
                 pkgName = pkgName.replace("package:","");
-                if (checkOnekeyList(context,pkgName,"AutoFreezeApplicationList")){
-                    SharedPreferences sharedPreferences = context.getSharedPreferences(
-                            "AutoFreezeApplicationList", Context.MODE_PRIVATE);
-                    String pkgNameList = sharedPreferences.getString("pkgName", "");
-                    sharedPreferences.edit()
-                            .putString(
-                                    "pkgName",
-                                    pkgNameList.replace("|" + pkgName + "|", ""))
-                            .apply();
-                }
-                if (checkOnekeyList(context,pkgName,"OneKeyUFApplicationList")){
-                    SharedPreferences sharedPreferences = context.getSharedPreferences(
-                            "OneKeyUFApplicationList", Context.MODE_PRIVATE);
-                    String pkgNameList = sharedPreferences.getString("pkgName", "");
-                    sharedPreferences.edit()
-                            .putString(
-                                    "pkgName",
-                                    pkgNameList.replace("|" + pkgName + "|", ""))
-                            .apply();
-                }
+                removeFromOneKeyList(context,"AutoFreezeApplicationList",pkgName);
+                removeFromOneKeyList(context,"OneKeyUFApplicationList",pkgName);
+//                if (checkOnekeyList(context,pkgName,"AutoFreezeApplicationList")){
+//                    SharedPreferences sharedPreferences = context.getSharedPreferences(
+//                            "AutoFreezeApplicationList", Context.MODE_PRIVATE);
+//                    String pkgNameList = sharedPreferences.getString("pkgName", "");
+//                    sharedPreferences.edit()
+//                            .putString(
+//                                    "pkgName",
+//                                    pkgNameList.replace("|" + pkgName + "|", ""))
+//                            .apply();
+//                }
+//                if (checkOnekeyList(context,pkgName,"OneKeyUFApplicationList")){
+//                    SharedPreferences sharedPreferences = context.getSharedPreferences(
+//                            "OneKeyUFApplicationList", Context.MODE_PRIVATE);
+//                    String pkgNameList = sharedPreferences.getString("pkgName", "");
+//                    sharedPreferences.edit()
+//                            .putString(
+//                                    "pkgName",
+//                                    pkgNameList.replace("|" + pkgName + "|", ""))
+//                            .apply();
+//                }
             }
         }
     }
-
-    private boolean checkOnekeyList(Context context,String pkgName,String UFF){
-        String[] autoFreezePkgNameList = context.getSharedPreferences(
-                UFF, Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
-        for(String s: autoFreezePkgNameList){
-            if(s.replaceAll("\\|","").equals(pkgName))
-                return true;
-        }
-        return false;
-    }
+//
+//    private boolean checkOnekeyList(Context context,String pkgName,String UFF){
+//        String[] autoFreezePkgNameList = context.getSharedPreferences(
+//                UFF, Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
+//        for(String s: autoFreezePkgNameList){
+//            if(s.replaceAll("\\|","").equals(pkgName))
+//                return true;
+//        }
+//        return false;
+//    }
 }
