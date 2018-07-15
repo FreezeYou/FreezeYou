@@ -479,60 +479,22 @@ public class Main extends Activity {
                 int size;
                 switch (menuItem.getItemId()){
                     case R.id.list_menu_addToOneKeyFreezeList:
-                        size = selectedPackages.size();
-                        for(int i = 0 ; i < size ; i++) {
-                            if (!addToOneKeyList(getApplicationContext(),"AutoFreezeApplicationList",selectedPackages.get(i))) {
-                                showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
-                            }
-                        }
+                        processAddToOneKeyList(true);
                         return true;
                     case R.id.list_menu_addToOneKeyUFList:
-                        size = selectedPackages.size();
-                        for(int i = 0 ; i < size ; i++) {
-                            if (!addToOneKeyList(getApplicationContext(),"OneKeyUFApplicationList",selectedPackages.get(i))) {
-                                showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
-                            }
-                        }
+                        processAddToOneKeyList(false);
                         return true;
                     case R.id.list_menu_removeFromOneKeyFreezeList:
-                        size = selectedPackages.size();
-                        for(int i = 0 ; i < size ; i++) {
-                            if (!removeFromOneKeyList(getApplicationContext(),"AutoFreezeApplicationList",selectedPackages.get(i))) {
-                                showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
-                            }
-                        }
+                        processRemoveFromOneKeyList(true);
                         return true;
                     case R.id.list_menu_removeFromOneKeyUFList:
-                        size = selectedPackages.size();
-                        for(int i = 0 ; i < size ; i++) {
-                            if (!removeFromOneKeyList(getApplicationContext(),"OneKeyUFApplicationList",selectedPackages.get(i))) {
-                                showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
-                            }
-                        }
+                        processRemoveFromOneKeyList(false);
                         return true;
                     case R.id.list_menu_freezeImmediately:
-                        size = selectedPackages.size();
-                        String[] pkgNameList = new String[size];
-                        for(int i = 0 ; i < size ; i++) {
-                            pkgNameList[i] = "|" + selectedPackages.get(i) + "|";
-                        }
-                        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(Main.this)){
-                            oneKeyActionMRoot(Main.this,Main.this,true,pkgNameList);
-                        } else {
-                            oneKeyActionRoot(Main.this,Main.this,true,pkgNameList,false);
-                        }
+                        processDisableAndEnableImmediately(true);
                         return true;
                     case R.id.list_menu_UFImmediately:
-                        size = selectedPackages.size();
-                        String[] UFPkgNameList = new String[size];
-                        for(int i = 0 ; i < size ; i++) {
-                            UFPkgNameList[i] = "|" + selectedPackages.get(i) + "|";
-                        }
-                        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(Main.this)){
-                            oneKeyActionMRoot(Main.this,Main.this,false,UFPkgNameList);
-                        } else {
-                            oneKeyActionRoot(Main.this,Main.this,false,UFPkgNameList,false);
-                        }
+                        processDisableAndEnableImmediately(false);
                         return true;
                     default:
                         return false;
@@ -796,6 +758,37 @@ public class Main extends Activity {
     private void checkAndAddNotAvailablePair(List<Map<String, Object>> AppList){
         if (AppList.size()==0) {
             addNotAvailablePair(getApplicationContext(), AppList);
+        }
+    }
+
+    private void processAddToOneKeyList(boolean freeze){
+        int size = selectedPackages.size();
+        for(int i = 0 ; i < size ; i++) {
+            if (!addToOneKeyList(getApplicationContext(),freeze ? "AutoFreezeApplicationList" : "OneKeyUFApplicationList",selectedPackages.get(i))) {
+                showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
+            }
+        }
+    }
+
+    private void processRemoveFromOneKeyList(boolean freeze){
+        int size = selectedPackages.size();
+        for(int i = 0 ; i < size ; i++) {
+            if (!removeFromOneKeyList(getApplicationContext(),freeze ? "AutoFreezeApplicationList" : "OneKeyUFApplicationList",selectedPackages.get(i))) {
+                showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
+            }
+        }
+    }
+
+    private void processDisableAndEnableImmediately(boolean freeze){
+        int size = selectedPackages.size();
+        String[] pkgNameList = new String[size];
+        for(int i = 0 ; i < size ; i++) {
+            pkgNameList[i] = "|" + selectedPackages.get(i) + "|";
+        }
+        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(Main.this)){
+            oneKeyActionMRoot(Main.this,Main.this,freeze,pkgNameList);
+        } else {
+            oneKeyActionRoot(Main.this,Main.this,freeze,pkgNameList,false);
         }
     }
     //TODO:运行中亮绿灯（列表、与白点、蓝点并列，覆盖是否已冻结状态）//高考
