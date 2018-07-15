@@ -230,8 +230,10 @@ class Support {
             if (ot==2){
                 checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
             } else {
-                processUnfreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess);
+                processUnfreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess);//ot==1
             }
+        } else if (ot==3){
+            processFreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess);
         } else {
             makeDialog(title, message, activity, selfCloseWhenDestroyProcess, applicationInfo, pkgName, ot == 2);
         }
@@ -399,6 +401,13 @@ class Support {
 
     private static void createNotification(Context context,String pkgName,int iconResId){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+            String description;
+            boolean notificationBarFreezeImmediately = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notificationBarFreezeImmediately",true);
+            if (notificationBarFreezeImmediately){
+                description = context.getString(R.string.freezeImmediately);
+            } else {
+                description = context.getString(R.string.disableAEnable);
+            }
             Notification.Builder mBuilder = new Notification.Builder(context);
             int mId = pkgName.hashCode();
             mBuilder.setSmallIcon(iconResId);
@@ -408,16 +417,16 @@ class Support {
             } catch (Exception e){
                 mBuilder.setContentTitle(context.getString(R.string.notice));
             }
-            mBuilder.setContentText(context.getString(R.string.disableAEnable));
+            mBuilder.setContentText(description);
             mBuilder.setAutoCancel(true);
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 String CHANNEL_ID = "FAUf";
-                CharSequence name = context.getString(R.string.disableAEnable);
-                String description = context.getString(R.string.disableAEnable);
+//                CharSequence name = context.getString(R.string.disableAEnable);
+//                String description = context.getString(R.string.disableAEnable);
                 int importance = NotificationManager.IMPORTANCE_LOW;
-                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, description, importance);
                 channel.setDescription(description);
                 // Register the channel with the system; you can't change the importance
                 // or other notification behaviors after this
@@ -427,7 +436,12 @@ class Support {
                 mBuilder.setChannelId(CHANNEL_ID);
             }
             // Create an Intent for the activity you want to start
-            Intent resultIntent = new Intent(context, Freeze.class).putExtra("pkgName",pkgName).putExtra("auto",false);
+            Intent resultIntent;
+            if (notificationBarFreezeImmediately){
+                resultIntent = new Intent(context, Freeze.class).putExtra("pkgName",pkgName).putExtra("auto",false).putExtra("ot",3);
+            } else {
+                resultIntent = new Intent(context, Freeze.class).putExtra("pkgName",pkgName).putExtra("auto",false);
+            }
             // Create the TaskStackBuilder and add the intent, which inflates the back stack
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
             stackBuilder.addNextIntent(resultIntent);

@@ -24,6 +24,11 @@
             android:summary="@string/nSCaution"
             android:key="noCaution"
             android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:title="@string/notificationBarFreezeImmediately"
+            android:summary="@string/notificationBarFreezeImmediately"
+            android:key="notificationBarFreezeImmediately"
+            android:defaultValue="true"/>
     </PreferenceCategory>
 
     <PreferenceCategory

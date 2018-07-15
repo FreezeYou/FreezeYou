@@ -37,6 +37,14 @@ public class Freeze extends Activity{
         } else if ("".equals(pkgName)){
             showToast(getApplicationContext(),"参数错误");
             Freeze.this.finish();
+        } else if (3 == getIntent().getIntExtra("ot",0)) {
+            try {
+                applicationInfo = getPackageManager().getApplicationInfo(pkgName, GET_UNINSTALLED_PACKAGES);
+                shortcutMakeDialog(getPackageManager().getApplicationLabel(applicationInfo).toString(), getString(R.string.chooseDetailAction), Freeze.this, true, applicationInfo, pkgName, 3, auto);
+            } catch (Exception e) {
+                e.printStackTrace();
+                shortcutMakeDialog(getString(R.string.notice), getString(R.string.chooseDetailAction), Freeze.this, true, applicationInfo, pkgName, 3, auto);
+            }
         } else if ((!checkRootFrozen(Freeze.this,pkgName))&&(!checkMRootFrozen(Freeze.this,pkgName))){
             try{
                 applicationInfo = getPackageManager().getApplicationInfo(pkgName,GET_UNINSTALLED_PACKAGES);
