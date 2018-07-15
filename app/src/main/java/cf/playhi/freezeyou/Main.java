@@ -518,7 +518,6 @@ public class Main extends Activity {
                         }
                         if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(Main.this)){
                             oneKeyActionMRoot(Main.this,Main.this,true,pkgNameList);
-                            finish();
                         } else {
                             oneKeyActionRoot(Main.this,Main.this,true,pkgNameList,false);
                         }
