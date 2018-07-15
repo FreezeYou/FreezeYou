@@ -476,7 +476,6 @@ public class Main extends Activity {
 
             @Override
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                int size;
                 switch (menuItem.getItemId()){
                     case R.id.list_menu_addToOneKeyFreezeList:
                         processAddToOneKeyList(true);
