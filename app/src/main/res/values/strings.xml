@@ -18,7 +18,7 @@
     <string name="addToOneKeyUFList">加入一键解冻列表</string>
     <string name="addFailed">添加失败</string>
     <string name="caution">警告</string>
-    <string name="cautionContent">不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n\n长按可以多选\n\n请谨慎操作！</string>
+    <string name="cautionContent">不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n\n长按可以多选\n\n右侧蓝白点为是否已冻结</string>
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="requested">已发出创建请求</string>
@@ -87,6 +87,11 @@
     <string name="UFImmediately">立即解冻</string>
     <string name="plsRemoveUninstalledApplications">[提示]可以将已卸载的应用程序移出一键冻结/解冻列表</string>
     <string name="notificationBarFreezeImmediately">点击通知栏快捷操作立即冻结</string>
+    <string name="onClickFunction">单击功能</string>
+    <string name="chooseAction">选择操作</string>
+    <string name="autoUFOrFreeze">自动冻解</string>
+    <string name="freezeCompleted">已冻结</string>
+    <string name="UFCompleted">已解冻</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>

@@ -54,6 +54,23 @@
         </menu>
     </item>
 
+    <item android:title="@string/onClickFunction">
+        <menu>
+            <item
+                android:id="@+id/menu_onClickFunc_chooseAction"
+                android:title="@string/chooseAction" />
+            <item
+                android:id="@+id/menu_onClickFunc_freezeImmediately"
+                android:title="@string/freezeImmediately" />
+            <item
+                android:id="@+id/menu_onClickFunc_UFImmediately"
+                android:title="@string/UFImmediately" />
+            <item
+                android:id="@+id/menu_onClickFunc_autoUFOrFreeze"
+                android:title="@string/autoUFOrFreeze" />
+        </menu>
+    </item>
+
     <item
         android:id="@+id/menu_moreSettings"
         android:title="@string/moreSettings"/>

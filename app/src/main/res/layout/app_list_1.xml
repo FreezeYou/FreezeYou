@@ -24,9 +24,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/img"
-        android:layout_toLeftOf="@+id/isAutoFreezeList"
+        android:layout_toLeftOf="@+id/isFrozen"
         android:layout_toRightOf="@+id/img"
-        android:layout_toStartOf="@+id/isAutoFreezeList"
+        android:layout_toStartOf="@+id/isFrozen"
         android:marqueeRepeatLimit="marquee_forever"
         android:maxLines="1"
         android:scrollHorizontally="true"
@@ -41,29 +41,29 @@
         android:layout_below="@+id/name"
         android:layout_marginTop="1dp"
         android:layout_toEndOf="@+id/img"
-        android:layout_toLeftOf="@+id/isAutoFreezeList"
+        android:layout_toLeftOf="@+id/isFrozen"
         android:layout_toRightOf="@+id/img"
-        android:layout_toStartOf="@+id/isAutoFreezeList"
+        android:layout_toStartOf="@+id/isFrozen"
         android:marqueeRepeatLimit="marquee_forever"
         android:maxLines="1"
         android:scrollHorizontally="true"
         android:singleLine="true"
         android:textSize="12sp" />
 
-    <ImageView
-        android:id="@+id/isAutoFreezeList"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="20dp"
-        android:layout_toLeftOf="@+id/isFrozen"
-        android:layout_toStartOf="@+id/isFrozen"
-        android:contentDescription="@string/more"
-        android:src="@drawable/whitedot" />
+    <!--<ImageView-->
+        <!--android:id="@+id/isAutoFreezeList"-->
+        <!--android:layout_width="10dp"-->
+        <!--android:layout_height="10dp"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:layout_marginEnd="5dp"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:layout_marginStart="5dp"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:layout_toLeftOf="@+id/isFrozen"-->
+        <!--android:layout_toStartOf="@+id/isFrozen"-->
+        <!--android:contentDescription="@string/more"-->
+        <!--android:src="@drawable/whitedot" />-->
 
     <ImageView
         android:id="@+id/isFrozen"

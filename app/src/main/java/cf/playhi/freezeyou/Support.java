@@ -44,7 +44,7 @@ class Support {
                         .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                processFreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess);
+                                processFreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess,true);
                             }
                         })
                         .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -70,7 +70,7 @@ class Support {
             builder.setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    processUnfreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess);
+                    processUnfreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess,true);
                 }
             });
         }
@@ -230,10 +230,10 @@ class Support {
             if (ot==2){
                 checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
             } else {
-                processUnfreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess);//ot==1
+                processUnfreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess,true);//ot==1
             }
         } else if (ot==3){
-            processFreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess);
+            processFreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess,true);
         } else {
             makeDialog(title, message, activity, selfCloseWhenDestroyProcess, applicationInfo, pkgName, ot == 2);
         }
@@ -276,7 +276,6 @@ class Support {
     }
 
     static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo,boolean resize){
-        drawable = context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
         if (applicationInfo!=null){
             drawable = context.getPackageManager().getApplicationIcon(applicationInfo);
         } else if (!"".equals(pkgName)){
@@ -488,7 +487,7 @@ class Support {
 //        return "";
 //    }
 
-    static void processRootAction(final String pkgName,final Context context,final Activity activity,final boolean enable,final boolean SelfCloseWhenDestroyProcess,final ApplicationInfo applicationInfo){
+    static void processRootAction(final String pkgName, final Context context, final Activity activity, final boolean enable, final boolean SelfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final boolean askRun){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -499,8 +498,11 @@ class Support {
                         public void run() {
                             if (exitValue == 0) {
                                 if (enable){
-                                    askRun(activity, SelfCloseWhenDestroyProcess, pkgName,applicationInfo);
+                                    showToast(context, R.string.executed);
                                     createNotification(context, pkgName, R.drawable.ic_notification);
+                                    if (askRun){
+                                        askRun(activity, SelfCloseWhenDestroyProcess, pkgName,applicationInfo);
+                                    }
                                 } else {
                                     showToast(context, R.string.executed);
                                     deleteNotification(context,pkgName);
@@ -532,18 +534,22 @@ class Support {
     }
 
     @TargetApi(21)
-    private static void processMRootAction(Context context,Activity activity,String pkgName,boolean hidden,ApplicationInfo applicationInfo,boolean finish){
+    private static void processMRootAction(Context context,Activity activity,String pkgName,boolean hidden,ApplicationInfo applicationInfo,boolean finish,boolean askRun){
         if (getDevicePolicyManager(context).setApplicationHidden(
                 DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
             if (hidden){
+                showToast(context,R.string.freezeCompleted);
                 deleteNotification(context,pkgName);
                 activity.finish();
             } else {
-                askRun(activity, finish, pkgName,applicationInfo);
-                createNotification(activity,pkgName,R.drawable.ic_notification);
+                showToast(context,R.string.UFCompleted);
+                createNotification(activity, pkgName, R.drawable.ic_notification);
+                if(askRun){
+                    askRun(activity, finish, pkgName, applicationInfo);
+                }
             }
         } else {
-            showToast(context, "Failed!");
+            showToast(context, R.string.failed);
             if (finish){
                 activity.finish();
             }
@@ -563,19 +569,19 @@ class Support {
         }
     }
 
-    private static void processUnfreezeAction(Context context,Activity activity,String pkgName,ApplicationInfo applicationInfo,boolean finish){
-        if (checkMRootFrozen(context,pkgName)) {
-            processMRootAction(context,activity,pkgName,false,applicationInfo,finish);
+    static void processUnfreezeAction(Context context,Activity activity,String pkgName,ApplicationInfo applicationInfo,boolean finish,boolean askRun) {
+        if (checkMRootFrozen(context, pkgName)) {
+            processMRootAction(context, activity, pkgName, false, applicationInfo, finish, askRun);
         } else {
-            processRootAction(pkgName,context,activity,true,finish,applicationInfo);
+            processRootAction(pkgName, context, activity, true, finish, applicationInfo, askRun);
         }
     }
 
-    private static void processFreezeAction(Context context,Activity activity,String pkgName,ApplicationInfo applicationInfo,boolean finish){
+    static void processFreezeAction(Context context,Activity activity,String pkgName,ApplicationInfo applicationInfo,boolean finish,boolean askRun) {
         if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(activity)) {
-            processMRootAction(context,activity,pkgName,true,applicationInfo,finish);
+            processMRootAction(context, activity, pkgName, true, applicationInfo, finish, askRun);
         } else {
-            processRootAction(pkgName,context,activity,false,finish,applicationInfo);
+            processRootAction(pkgName, context, activity, false, finish, applicationInfo, askRun);
         }
     }
 

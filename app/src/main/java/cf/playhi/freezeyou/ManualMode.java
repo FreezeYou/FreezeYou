@@ -54,7 +54,8 @@ public class ManualMode extends Activity {
                         ManualMode.this,
                         false,
                         false,
-                        getApplicationInfoFromPkgName(packageNameEditText.getText().toString(),context));
+                        getApplicationInfoFromPkgName(packageNameEditText.getText().toString(),context),
+                        false);
             }
         });
         enable_Root.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +67,8 @@ public class ManualMode extends Activity {
                         ManualMode.this,
                         true,
                         false,
-                        getApplicationInfoFromPkgName(packageNameEditText.getText().toString(),context));
+                        getApplicationInfoFromPkgName(packageNameEditText.getText().toString(),context),
+                        false);
             }
         });
     }
