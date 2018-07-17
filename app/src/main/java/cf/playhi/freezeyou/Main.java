@@ -709,16 +709,16 @@ public class Main extends Activity {
         initThread.start();
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
         if (!sharedPref.getBoolean("noCaution",false)){
-            buildAlertDialog(Main.this,R.mipmap.ic_launcher_round,R.string.cautionContent,R.string.caution)
+            buildAlertDialog(Main.this,R.mipmap.ic_launcher_new_round,R.string.cautionContent,R.string.caution)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int ii) {
                         }
                     })
-                    .setNeutralButton(R.string.hMRoot, new DialogInterface.OnClickListener() {
+                    .setNeutralButton(R.string.hToUse, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Uri webPage = Uri.parse("https://freezeyou.playhi.cf/MRootUse.html");
+                            Uri webPage = Uri.parse("https://freezeyou.playhi.cf/");
                             Intent about = new Intent(Intent.ACTION_VIEW, webPage);
                             if (about.resolveActivity(getPackageManager()) != null) {
                                 startActivity(about);

@@ -10,6 +10,11 @@
             android:key="launchMode"
             android:title="@string/launchMode" />
         <CheckBoxPreference
+            android:title="@string/nSCaution"
+            android:summary="@string/nSCaution"
+            android:key="noCaution"
+            android:defaultValue="false"/>
+        <CheckBoxPreference
             android:title="@string/openImmediately"
             android:summary="@string/openImmediatelyEx"
             android:key="openImmediately"
@@ -20,15 +25,16 @@
             android:key="openAndUFImmediately"
             android:defaultValue="false"/>
         <CheckBoxPreference
-            android:title="@string/nSCaution"
-            android:summary="@string/nSCaution"
-            android:key="noCaution"
-            android:defaultValue="false"/>
-        <CheckBoxPreference
             android:title="@string/notificationBarFreezeImmediately"
             android:summary="@string/notificationBarFreezeImmediately"
             android:key="notificationBarFreezeImmediately"
             android:defaultValue="true"/>
+        <ListPreference
+            android:defaultValue="nothing"
+            android:title="@string/shortCutOneKeyFreezeAdditionalOptions"
+            android:key="shortCutOneKeyFreezeAdditionalOptions"
+            android:entries="@array/shortCutOneKeyFreezeAdditionalOptionsSelection"
+            android:entryValues="@array/shortCutOneKeyFreezeAdditionalOptionsSelectionValues"/>
     </PreferenceCategory>
 
     <PreferenceCategory
