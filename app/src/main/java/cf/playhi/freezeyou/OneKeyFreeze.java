@@ -19,15 +19,19 @@ public class OneKeyFreeze extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        boolean auto = getIntent().getBooleanExtra("autoCheckAndLockScreen",true);
         Activity activity = this;
         String[] pkgNameList = getApplicationContext().getSharedPreferences(
                 "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
         if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
             oneKeyActionMRoot(activity,activity,true,pkgNameList);
-            checkAndLockScreen(activity,true);
+            if (auto){
+                checkAndLockScreen(activity,true);
+            }
         } else {
             oneKeyActionRoot(activity,activity,true,pkgNameList,true);
-            checkAndLockScreen(activity,false);
+            if (auto)
+                checkAndLockScreen(activity,false);
         }
     }
 

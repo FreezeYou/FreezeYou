@@ -181,7 +181,7 @@ public class Main extends Activity {
                         }).create().show();
                 return true;
             case R.id.menu_oneKeyFreezeImmediately:
-                startActivity(new Intent(this,OneKeyFreeze.class));
+                startActivity(new Intent(this,OneKeyFreeze.class).putExtra("autoCheckAndLockScreen",false));
                 return true;
             case R.id.menu_oneKeyUFImmediately:
                 startActivity(new Intent(this,OneKeyUF.class));

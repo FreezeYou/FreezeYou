@@ -92,7 +92,7 @@
         <activity
             android:name=".OneKeyFreeze"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>
