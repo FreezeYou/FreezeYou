@@ -76,6 +76,6 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="20dp"
         android:contentDescription="@string/more"
-        android:src="@drawable/whitedot" />
+        android:src="@drawable/shapedotwhite" />
 
 </RelativeLayout>

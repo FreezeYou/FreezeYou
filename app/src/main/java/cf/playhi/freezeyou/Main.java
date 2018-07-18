@@ -71,6 +71,7 @@ public class Main extends Activity {
 
     private final ArrayList<String> selectedPackages = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
+    private int customThemeDisabledDot = R.drawable.shapedotblue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -287,6 +288,30 @@ public class Main extends Activity {
                 app_listView.setVisibility(View.GONE);
             }
         });
+        try{
+            switch (PreferenceManager.getDefaultSharedPreferences(Main.this).getString("uiStyleSelection","default")){
+                case "blue":
+                    customThemeDisabledDot = R.drawable.shapedotblue;
+                    break;
+                case "orange":
+                    customThemeDisabledDot = R.drawable.shapedotblue;
+                    break;
+                case "green":
+                    customThemeDisabledDot = R.drawable.shapedotblue;
+                    break;
+                case "pink":
+                    customThemeDisabledDot = R.drawable.shapedotblue;
+                    break;
+                case "yellow":
+                    customThemeDisabledDot = R.drawable.shapedotblue;
+                    break;
+                default:
+                    customThemeDisabledDot = R.drawable.shapedotblue;
+                    break;
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         ApplicationInfo applicationInfo1;
         PackageManager packageManager = getApplicationContext().getPackageManager();
         List<ApplicationInfo> applicationInfo = packageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
@@ -314,7 +339,7 @@ public class Main extends Activity {
                             applicationInfo1.packageName,
                             applicationInfo1
                     );
-                    if (keyValuePair != null && R.drawable.bluedot == (int) keyValuePair.get("isFrozen")) {
+                    if ((keyValuePair != null) && (R.drawable.shapedotwhite != (int) keyValuePair.get("isFrozen"))) {
                         AppList.add(keyValuePair);
                     }
                 }
@@ -328,7 +353,7 @@ public class Main extends Activity {
                             applicationInfo1.packageName,
                             applicationInfo1
                     );
-                    if (keyValuePair != null && R.drawable.whitedot == (int) keyValuePair.get("isFrozen")) {
+                    if (keyValuePair != null && R.drawable.shapedotwhite == (int) keyValuePair.get("isFrozen")) {
                         AppList.add(keyValuePair);
                     }
                 }
@@ -544,10 +569,10 @@ public class Main extends Activity {
                             overridePendingTransition(R.anim.pullup,R.anim.pulldown);
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
-                            if (R.drawable.bluedot==(int)map.get("isFrozen")){
-                                processUnfreezeAction(Main.this,Main.this,pkgName,null,false,false);
-                            } else {
+                            if (R.drawable.shapedotwhite==(int)map.get("isFrozen")){
                                 processFreezeAction(Main.this,Main.this,pkgName,null,false,false);
+                            } else {
+                                processUnfreezeAction(Main.this,Main.this,pkgName,null,false,false);
                             }
                             break;
                         case APPListViewOnClickMode_freezeImmediately:
@@ -775,7 +800,7 @@ public class Main extends Activity {
     private void processFrozenStatus(Map<String, Object> keyValuePair,String packageName) {
         keyValuePair.put("isFrozen",
                 (checkRootFrozen(Main.this, packageName) || checkMRootFrozen(Main.this, packageName))
-                        ? R.drawable.bluedot : R.drawable.whitedot);
+                        ? customThemeDisabledDot : R.drawable.shapedotwhite);
     }
 
     private Map<String, Object> processAppStatus(String name,String packageName,ApplicationInfo applicationInfo){
@@ -864,6 +889,6 @@ public class Main extends Activity {
             showToast(this,"请访问 https://app.playhi.cf/freezeyou/checkupdate.php?v=" + getVersionCode(this));
         }
     }
-    //TODO:运行中亮绿灯（列表、与白点、蓝点并列，覆盖是否已冻结状态）//高考
-    //TODO:Main.java查看列表icon等代码整理&复用//高考
+    //TODO:运行中亮绿灯（列表、与白点、蓝点并列，覆盖是否已冻结状态）//高考(好像并没有多大必要)
+    //TODO:Main.java查看列表icon等代码整理&复用//高考（已完成）
 }

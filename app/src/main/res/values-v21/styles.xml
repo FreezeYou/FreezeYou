@@ -10,7 +10,7 @@
     <style name="AppTheme.Default.Blue" parent="android:Theme.DeviceDefault.Light.DarkActionBar">
         <item name="android:colorPrimary">#0383E9</item>
         <item name="android:colorPrimaryDark">#026FDE</item>
-        <item name="android:colorAccent">#4800FF</item>
+        <item name="android:colorAccent">#0800EF</item>
         <item name="android:navigationBarColor">#026FDE</item>
     </style>
     <style name="AppTheme.Default.Pink" parent="android:Theme.DeviceDefault.Light.DarkActionBar">
