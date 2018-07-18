@@ -67,11 +67,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             case "shortCutOneKeyFreezeAdditionalOptions":
                 if (!"nothing".equals(sharedPreferences.getString(s, "nothing"))) {
                     DevicePolicyManager devicePolicyManager = getDevicePolicyManager(getActivity());
-                    if (devicePolicyManager!=null){
-                        if (!devicePolicyManager.isAdminActive(
-                                new ComponentName(getActivity(), DeviceAdminReceiver.class))) {
-                            openDevicePolicyManager(getActivity());
-                        }
+                    if (devicePolicyManager != null && !devicePolicyManager.isAdminActive(
+                            new ComponentName(getActivity(), DeviceAdminReceiver.class))) {
+                        openDevicePolicyManager(getActivity());
                     }
                 }
                 break;
