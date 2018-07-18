@@ -316,10 +316,8 @@ public class Main extends Activity {
                             applicationInfo1.packageName,
                             applicationInfo1
                     );
-                    if (keyValuePair!=null) {
-                        if (R.drawable.bluedot == (int) keyValuePair.get("isFrozen")) {
-                            AppList.add(keyValuePair);
-                        }
+                    if (keyValuePair != null && R.drawable.bluedot == (int) keyValuePair.get("isFrozen")) {
+                        AppList.add(keyValuePair);
                     }
                 }
                 checkAndAddNotAvailablePair(AppList);
@@ -332,10 +330,8 @@ public class Main extends Activity {
                             applicationInfo1.packageName,
                             applicationInfo1
                     );
-                    if (keyValuePair!=null) {
-                        if (R.drawable.whitedot == (int) keyValuePair.get("isFrozen")) {
-                            AppList.add(keyValuePair);
-                        }
+                    if (keyValuePair != null && R.drawable.whitedot == (int) keyValuePair.get("isFrozen")) {
+                        AppList.add(keyValuePair);
                     }
                 }
                 checkAndAddNotAvailablePair(AppList);
