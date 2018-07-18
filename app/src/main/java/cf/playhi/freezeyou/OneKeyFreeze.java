@@ -14,6 +14,7 @@ import static cf.playhi.freezeyou.Support.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
 import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
+import static cf.playhi.freezeyou.Support.openDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class OneKeyFreeze extends Activity {
@@ -83,10 +84,7 @@ public class OneKeyFreeze extends Activity {
             if (devicePolicyManager.isAdminActive(componentName)){
                 devicePolicyManager.lockNow();
             } else {
-                showToast(context,R.string.devicePolicyManagerNotActivated);
-                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
-                startActivity(intent);
+                openDevicePolicyManager(context);
             }
         } else {
             showToast(context,R.string.devicePolicyManagerNotFound);

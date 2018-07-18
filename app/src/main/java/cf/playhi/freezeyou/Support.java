@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -712,5 +713,13 @@ class Support {
                     .commit();
         }
         return true;
+    }
+
+    static void openDevicePolicyManager(Context context){
+        showToast(context,R.string.devicePolicyManagerNotActivated);
+        ComponentName componentName = new ComponentName(context.getApplicationContext(), DeviceAdminReceiver.class);
+        Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
+        context.startActivity(intent);
     }
 }
