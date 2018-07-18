@@ -57,6 +57,7 @@ import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
 import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
 import static cf.playhi.freezeyou.Support.processFreezeAction;
+import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.processUnfreezeAction;
 import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
 import static cf.playhi.freezeyou.Support.showToast;
@@ -73,6 +74,7 @@ public class Main extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         try {

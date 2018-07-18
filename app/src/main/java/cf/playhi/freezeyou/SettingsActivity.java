@@ -6,9 +6,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import static cf.playhi.freezeyou.Support.processSetTheme;
+
 public class SettingsActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        processSetTheme(this);
         super.onCreate(savedInstanceState);
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()

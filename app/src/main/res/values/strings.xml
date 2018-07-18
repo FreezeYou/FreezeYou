@@ -100,6 +100,8 @@
     <string name="disableConfirmation">确定取消？</string>
     <string name="disabled">已停用</string>
     <string name="notUpdatedForALongTimeMessage">已经很久没有更新过了，是否立即检查更新？</string>
+    <string name="uiStyle">界面风格</string>
+    <string name="willTakeEffectsNextLaunch">将会在下次启动应用时生效</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
@@ -127,5 +129,23 @@
         <item>nothing</item>
         <item>askLockScreen</item>
         <item>lockScreenImmediately</item>
+    </string-array>
+    <string-array name="uiStyleSelection">
+        <item>默认</item>
+        <item>黑色</item>
+        <item>蓝色</item>
+        <item>粉红</item>
+        <item>绿色</item>
+        <item>黄色</item>
+        <item>橙色</item>
+    </string-array>
+    <string-array name="uiStyleSelectionValues">
+        <item>default</item>
+        <item>black</item>
+        <item>blue</item>
+        <item>pink</item>
+        <item>green</item>
+        <item>yellow</item>
+        <item>orange</item>
     </string-array>
 </resources>

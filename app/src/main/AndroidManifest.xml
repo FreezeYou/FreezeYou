@@ -19,7 +19,7 @@
             android:launchMode="singleTask"
             android:icon="@mipmap/ic_launcher_new_round"
             android:windowSoftInputMode="stateHidden"
-            android:theme="@android:style/Theme.DeviceDefault">
+            android:theme="@style/AppTheme.Default" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
@@ -33,7 +33,7 @@
             android:targetActivity=".Main"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.DeviceDefault" >
+            android:theme="@style/AppTheme.Default" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
@@ -51,7 +51,7 @@
             android:targetActivity=".Main"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.DeviceDefault" >
+            android:theme="@style/AppTheme.Default" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
@@ -69,7 +69,7 @@
             android:targetActivity=".Main"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.DeviceDefault" >
+            android:theme="@style/AppTheme.Default" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
@@ -110,7 +110,8 @@
         <activity
             android:name=".ManualMode"
             android:label="@string/manualMode"
-            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"/>
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:theme="@style/AppTheme.Default"/>
         <activity
             android:name=".SelectOperation"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
@@ -118,6 +119,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/moreSettings"
+            android:theme="@style/AppTheme.Default"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"/>
         <activity
             android:name=".Uninstall"

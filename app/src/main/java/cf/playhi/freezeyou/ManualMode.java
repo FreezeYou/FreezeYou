@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.processRootAction;
+import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.showToast;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.getApplicationInfoFromPkgName;
@@ -19,6 +20,7 @@ import static cf.playhi.freezeyou.Support.getApplicationInfoFromPkgName;
 public class ManualMode extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manualmode);
         ActionBar actionBar = getActionBar();

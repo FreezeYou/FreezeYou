@@ -4,6 +4,12 @@
     <PreferenceCategory
         android:title="@string/common">
         <ListPreference
+            android:defaultValue="default"
+            android:entries="@array/uiStyleSelection"
+            android:entryValues="@array/uiStyleSelectionValues"
+            android:key="uiStyleSelection"
+            android:title="@string/uiStyle" />
+        <ListPreference
             android:defaultValue="all"
             android:entries="@array/launchModeSelection"
             android:entryValues="@array/launchModeSelectionValues"

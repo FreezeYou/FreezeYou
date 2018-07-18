@@ -722,4 +722,31 @@ class Support {
         intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
         context.startActivity(intent);
     }
+
+    static void processSetTheme(Context context){
+        try{
+            switch (PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection","default")){
+                case "blue":
+                    context.setTheme(R.style.AppTheme_Default_Blue);
+                    break;
+                case "orange":
+                    context.setTheme(R.style.AppTheme_Default_Orange);
+                    break;
+                case "green":
+                    context.setTheme(R.style.AppTheme_Default_Green);
+                    break;
+                case "pink":
+                    context.setTheme(R.style.AppTheme_Default_Pink);
+                    break;
+                case "yellow":
+                    context.setTheme(R.style.AppTheme_Default_Yellow);
+                    break;
+                default:
+                    context.setTheme(R.style.AppTheme_Default);
+                    break;
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

@@ -4,4 +4,45 @@
         <item name="android:windowBackground">@color/translucentBackground</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+    <style name="AppTheme.Default" parent="android:Theme.DeviceDefault"/>
+    <style name="AppTheme.Default.Blue" parent="android:Theme.DeviceDefault.Light">
+        <item name="android:actionBarStyle">@style/ActionBarStyle.Blue</item>
+    </style>
+    <style name="AppTheme.Default.Yellow" parent="android:Theme.DeviceDefault.Light">
+        <item name="android:actionBarStyle">@style/ActionBarStyle.Yellow</item>
+    </style>
+    <style name="AppTheme.Default.Orange" parent="android:Theme.DeviceDefault.Light">
+        <item name="android:actionBarStyle">@style/ActionBarStyle.Orange</item>
+    </style>
+    <style name="AppTheme.Default.Green" parent="android:Theme.DeviceDefault.Light">
+        <item name="android:actionBarStyle">@style/ActionBarStyle.Green</item>
+    </style>
+    <style name="AppTheme.Default.Pink" parent="android:Theme.DeviceDefault.Light">
+        <item name="android:actionBarStyle">@style/ActionBarStyle.Pink</item>
+    </style>
+    <style name="ActionBarStyle.Blue" parent="android:Widget.Holo.Light.ActionBar" >
+        <item name="android:background">#0383e9</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
+    </style>
+    <style name="ActionBarStyle.Yellow" parent="android:Widget.Holo.Light.ActionBar" >
+        <item name="android:background">#FDD835</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
+    </style>
+    <style name="ActionBarStyle.Orange" parent="android:Widget.Holo.Light.ActionBar" >
+        <item name="android:background">#FF9900</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
+    </style>
+    <style name="ActionBarStyle.Green" parent="android:Widget.Holo.Light.ActionBar" >
+        <item name="android:background">#00EE00</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
+    </style>
+    <style name="ActionBarStyle.Pink" parent="android:Widget.Holo.Light.ActionBar" >
+        <item name="android:background">#FF3366</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
+    </style>
+    <style name="ActionBarTitleStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
 </resources>

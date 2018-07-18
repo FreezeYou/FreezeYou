@@ -10,4 +10,5 @@ public class MainApplication extends Application {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init();
     }
+
 }
