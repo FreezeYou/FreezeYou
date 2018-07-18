@@ -889,6 +889,4 @@ public class Main extends Activity {
             showToast(this,"请访问 https://app.playhi.cf/freezeyou/checkupdate.php?v=" + getVersionCode(this));
         }
     }
-    //TODO:运行中亮绿灯（列表、与白点、蓝点并列，覆盖是否已冻结状态）//高考(好像并没有多大必要)
-    //TODO:Main.java查看列表icon等代码整理&复用//高考（已完成）
 }
