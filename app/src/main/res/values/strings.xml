@@ -99,6 +99,7 @@
     <string name="activated">已激活</string>
     <string name="disableConfirmation">确定取消？</string>
     <string name="disabled">已停用</string>
+    <string name="notUpdatedForALongTimeMessage">已经很久没有更新过了，是否立即检查更新？</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>

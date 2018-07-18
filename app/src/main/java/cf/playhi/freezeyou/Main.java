@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,6 +41,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -243,13 +245,7 @@ public class Main extends Activity {
                 }).start();
                 return true;
             case R.id.menu_update:
-                Uri webPage = Uri.parse("https://freezeyou.playhi.cf/checkupdate.php?v=" + getVersionCode(this));
-                Intent about = new Intent(Intent.ACTION_VIEW, webPage);
-                if (about.resolveActivity(getPackageManager()) != null) {
-                    startActivity(about);
-                } else {
-                    showToast(this,"请访问 https://app.playhi.cf/freezeyou/checkupdate.php?v=" + getVersionCode(this));
-                }
+                checkUpdate();
                 return true;
             case R.id.menu_exit:
                 finish();
@@ -703,6 +699,47 @@ public class Main extends Activity {
             }
         });
         initThread.start();
+        new Thread(new Runnable() {
+            @SuppressLint("ApplySharedPref")
+            @Override
+            public void run() {
+                try {
+                    SharedPreferences sharedPreferences = getSharedPreferences("Ver",MODE_PRIVATE);
+                    if (sharedPreferences.getInt("Ver",0) < getVersionCode(getApplicationContext())){
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("Ver", getVersionCode(getApplicationContext()));
+                        editor.putLong("Time",new Date().getTime());
+                        editor.commit();
+                    }
+                    if ((new Date().getTime() - sharedPreferences.getLong("Time",0))>1296000000){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                buildAlertDialog(
+                                        Main.this,
+                                        R.mipmap.ic_launcher_new_round,
+                                        R.string.notUpdatedForALongTimeMessage,
+                                        R.string.notice)
+                                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                checkUpdate();
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        }).create().show();
+                            }
+                        });
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
         if (!sharedPref.getBoolean("noCaution",false)){
             buildAlertDialog(Main.this,R.mipmap.ic_launcher_new_round,R.string.cautionContent,R.string.caution)
@@ -813,6 +850,16 @@ public class Main extends Activity {
             oneKeyActionMRoot(Main.this,Main.this,freeze,pkgNameList);
         } else {
             oneKeyActionRoot(Main.this,Main.this,freeze,pkgNameList,false);
+        }
+    }
+
+    private void checkUpdate(){
+        Uri webPage = Uri.parse("https://freezeyou.playhi.cf/checkupdate.php?v=" + getVersionCode(this));
+        Intent about = new Intent(Intent.ACTION_VIEW, webPage);
+        if (about.resolveActivity(getPackageManager()) != null) {
+            startActivity(about);
+        } else {
+            showToast(this,"请访问 https://app.playhi.cf/freezeyou/checkupdate.php?v=" + getVersionCode(this));
         }
     }
     //TODO:运行中亮绿灯（列表、与白点、蓝点并列，覆盖是否已冻结状态）//高考
