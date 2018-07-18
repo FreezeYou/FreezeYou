@@ -294,16 +294,16 @@ public class Main extends Activity {
                     customThemeDisabledDot = R.drawable.shapedotblue;
                     break;
                 case "orange":
-                    customThemeDisabledDot = R.drawable.shapedotblue;
+                    customThemeDisabledDot = R.drawable.shapedotorange;
                     break;
                 case "green":
-                    customThemeDisabledDot = R.drawable.shapedotblue;
+                    customThemeDisabledDot = R.drawable.shapedotgreen;
                     break;
                 case "pink":
-                    customThemeDisabledDot = R.drawable.shapedotblue;
+                    customThemeDisabledDot = R.drawable.shapedotpink;
                     break;
                 case "yellow":
-                    customThemeDisabledDot = R.drawable.shapedotblue;
+                    customThemeDisabledDot = R.drawable.shapedotyellow;
                     break;
                 default:
                     customThemeDisabledDot = R.drawable.shapedotblue;
