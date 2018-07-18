@@ -66,7 +66,7 @@ public class Main extends Activity {
     private final static int APPListViewOnClickMode_freezeImmediately = 2;
     private final static int APPListViewOnClickMode_UFImmediately = 3;
 
-    private ArrayList<String> selectedPackages = new ArrayList<>();
+    private final ArrayList<String> selectedPackages = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
 
     @Override

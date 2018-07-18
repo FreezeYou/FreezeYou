@@ -2,14 +2,12 @@ package cf.playhi.freezeyou;
 
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
-import static cf.playhi.freezeyou.Support.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.openDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.showToast;

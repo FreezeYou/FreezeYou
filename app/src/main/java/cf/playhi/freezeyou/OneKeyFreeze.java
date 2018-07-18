@@ -5,7 +5,6 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -34,10 +33,10 @@ public class OneKeyFreeze extends Activity {
         }
     }
 
-    private void checkAndLockScreen(final Context context, final boolean finish){
+    private void checkAndLockScreen(final Context context){
         switch (PreferenceManager.getDefaultSharedPreferences(context).getString("shortCutOneKeyFreezeAdditionalOptions","nothing")){
             case "nothing":
-                doFinish(finish);
+                doFinish();
                 break;
             case "askLockScreen":
                 buildAlertDialog(context,R.mipmap.ic_launcher_new_round,R.string.askIfLockScreen,R.string.notice)
@@ -45,36 +44,35 @@ public class OneKeyFreeze extends Activity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 doLockScreen(context);
-                                doFinish(finish);
+                                doFinish();
                             }
                         })
                         .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                doFinish(finish);
+                                doFinish();
                             }
                         })
                         .setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialogInterface) {
-                                doFinish(finish);
+                                doFinish();
                             }
                         })
                         .create().show();
                 break;
             case "lockScreenImmediately":
                 doLockScreen(context);
-                doFinish(finish);
+                doFinish();
                 break;
             default:
-                doFinish(finish);
+                doFinish();
                 break;
         }
     }
 
-    private void doFinish(boolean finish){
-        if (finish)
-            finish();
+    private void doFinish(){
+        finish();
     }
 
     private void doLockScreen(Context context){
@@ -93,9 +91,9 @@ public class OneKeyFreeze extends Activity {
 
     private void checkAuto(boolean auto,Context context){
         if (auto){
-            checkAndLockScreen(context,true);
+            checkAndLockScreen(context);
         } else {
-            doFinish(true);
+            doFinish();
         }
     }
 }
