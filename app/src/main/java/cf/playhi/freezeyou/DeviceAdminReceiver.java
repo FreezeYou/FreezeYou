@@ -10,17 +10,17 @@ public class DeviceAdminReceiver extends android.app.admin.DeviceAdminReceiver {
 
     @Override
     public void onEnabled(Context context, Intent intent) {
-        showToast(context, "Enabled");
+        showToast(context, R.string.activated);
     }
 
     @Override
     public CharSequence onDisableRequested(Context context, Intent intent) {
-        return "Why?";
+        return context.getString(R.string.disableConfirmation);
     }
 
     @Override
     public void onDisabled(Context context, Intent intent) {
-        showToast(context, "Disabled");
+        showToast(context, R.string.disabled);
     }
 
     public static ComponentName getComponentName(Context context) {

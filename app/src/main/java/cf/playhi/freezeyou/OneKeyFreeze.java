@@ -5,6 +5,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -25,13 +26,10 @@ public class OneKeyFreeze extends Activity {
                 "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
         if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
             oneKeyActionMRoot(activity,activity,true,pkgNameList);
-            if (auto){
-                checkAndLockScreen(activity,true);
-            }
+            checkAuto(auto,activity);
         } else {
-            oneKeyActionRoot(activity,activity,true,pkgNameList,true);
-            if (auto)
-                checkAndLockScreen(activity,false);
+            oneKeyActionRoot(activity,activity,true,pkgNameList,false);
+            checkAuto(auto,activity);
         }
     }
 
@@ -86,9 +84,20 @@ public class OneKeyFreeze extends Activity {
                 devicePolicyManager.lockNow();
             } else {
                 showToast(context,R.string.devicePolicyManagerNotActivated);
+                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
+                startActivity(intent);
             }
         } else {
             showToast(context,R.string.devicePolicyManagerNotFound);
+        }
+    }
+
+    private void checkAuto(boolean auto,Context context){
+        if (auto){
+            checkAndLockScreen(context,true);
+        } else {
+            doFinish(true);
         }
     }
 }

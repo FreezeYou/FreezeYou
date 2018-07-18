@@ -96,6 +96,9 @@
     <string name="askIfLockScreen">是否立即锁屏？</string>
     <string name="devicePolicyManagerNotFound">未找到可用的设备管理器</string>
     <string name="devicePolicyManagerNotActivated">相关权限尚未被激活</string>
+    <string name="activated">已激活</string>
+    <string name="disableConfirmation">确定取消？</string>
+    <string name="disabled">已停用</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
