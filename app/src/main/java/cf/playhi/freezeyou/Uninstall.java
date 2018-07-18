@@ -21,12 +21,12 @@ public class Uninstall extends Activity{
                             try {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     Support.getDevicePolicyManager(getApplicationContext()).clearDeviceOwnerApp("cf.playhi.freezeyou");
-                                    showToast(getApplicationContext(),"Success");
+                                    showToast(getApplicationContext(),R.string.success);
                                 } else {
                                     showToast(getApplicationContext(),"现在还没有成功启用免ROOT呢！");
                                 }
                             } catch (Exception e){
-                                showToast(getApplicationContext(),"Failed");
+                                showToast(getApplicationContext(),R.string.failed);
                             }
                         } else {
                             showToast(getApplicationContext(),"现在还没有成功启用免ROOT呢！");

@@ -20,29 +20,31 @@
     <style name="AppTheme.Default.Pink" parent="android:Theme.DeviceDefault.Light">
         <item name="android:actionBarStyle">@style/ActionBarStyle.Pink</item>
     </style>
-    <style name="ActionBarStyle.Blue" parent="android:Widget.Holo.Light.ActionBar" >
+    <style name="ActionBarStyle.Light.NoLogo" parent="android:Widget.Holo.Light.ActionBar">
+        <item name="android:displayOptions">showTitle</item>
+    </style>
+    <style name="ActionBarStyle.Blue" parent="ActionBarStyle.Light.NoLogo" >
         <item name="android:background">#0383e9</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
     </style>
-    <style name="ActionBarStyle.Yellow" parent="android:Widget.Holo.Light.ActionBar" >
+    <style name="ActionBarStyle.Yellow" parent="ActionBarStyle.Light.NoLogo" >
         <item name="android:background">#FDD835</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
     </style>
-    <style name="ActionBarStyle.Orange" parent="android:Widget.Holo.Light.ActionBar" >
-        <item name="android:background">#FF9900</item>
+    <style name="ActionBarStyle.Orange" parent="ActionBarStyle.Light.NoLogo" >
+        <item name="android:background">#ff6f00</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
     </style>
-    <style name="ActionBarStyle.Green" parent="android:Widget.Holo.Light.ActionBar" >
-        <item name="android:background">#00EE00</item>
+    <style name="ActionBarStyle.Green" parent="ActionBarStyle.Light.NoLogo" >
+        <item name="android:background">#00c853</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
     </style>
-    <style name="ActionBarStyle.Pink" parent="android:Widget.Holo.Light.ActionBar" >
-        <item name="android:background">#FF3366</item>
+    <style name="ActionBarStyle.Pink" parent="ActionBarStyle.Light.NoLogo" >
+        <item name="android:background">#f50057</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
     </style>
     <style name="ActionBarTitleStyle">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
-
 </resources>
