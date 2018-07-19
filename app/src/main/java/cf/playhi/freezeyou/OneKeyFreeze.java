@@ -14,11 +14,15 @@ import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
 import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
 import static cf.playhi.freezeyou.Support.openDevicePolicyManager;
+import static cf.playhi.freezeyou.Support.processAddTranslucent;
+import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class OneKeyFreeze extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        processSetTheme(this);
+        processAddTranslucent(this);
         super.onCreate(savedInstanceState);
         boolean auto = getIntent().getBooleanExtra("autoCheckAndLockScreen",true);
         Activity activity = this;

@@ -8,10 +8,14 @@ import android.os.Bundle;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
 import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
+import static cf.playhi.freezeyou.Support.processAddTranslucent;
+import static cf.playhi.freezeyou.Support.processSetTheme;
 
 public class OneKeyUF extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        processSetTheme(this);
+        processAddTranslucent(this);
         super.onCreate(savedInstanceState);
         Activity activity = this;
         String[] pkgNameList = getApplicationContext().getSharedPreferences(

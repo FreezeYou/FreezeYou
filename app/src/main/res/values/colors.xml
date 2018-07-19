@@ -2,4 +2,5 @@
 <resources>
     <color name="translucentBackground">#80000000</color>
     <color name="translucentGreyBackground">#80696969</color>
+    <color name="realTranslucent">#00000000</color>
 </resources>

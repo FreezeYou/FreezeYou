@@ -8,12 +8,16 @@ import android.os.Bundle;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
+import static cf.playhi.freezeyou.Support.processAddTranslucent;
+import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.shortcutMakeDialog;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class Freeze extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        processSetTheme(this);
+        processAddTranslucent(this);
         super.onCreate(savedInstanceState);
         this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
         setContentView(R.layout.shortcut);

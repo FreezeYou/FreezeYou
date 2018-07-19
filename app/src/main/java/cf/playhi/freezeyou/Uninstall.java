@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 
+import static cf.playhi.freezeyou.Support.processAddTranslucent;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.showToast;
 
@@ -12,6 +13,7 @@ public class Uninstall extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);
+        processAddTranslucent(this);
         super.onCreate(savedInstanceState);
         Support.buildAlertDialog(this,getResources().getDrawable(R.mipmap.ic_launcher_round),"真的要解除免ROOT吗？\n!为避免造成不必要的麻烦，解除前请先解冻所有已冻结的程序！","请确认")
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {

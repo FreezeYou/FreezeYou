@@ -29,6 +29,8 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.io.DataOutputStream;
@@ -741,12 +743,31 @@ class Support {
                 case "yellow":
                     context.setTheme(R.style.AppTheme_Default_Yellow);
                     break;
-                default:
+                case "black":
                     context.setTheme(R.style.AppTheme_Default);
+                    break;
+                default:
+                    if (Build.VERSION.SDK_INT>=21){
+                        context.setTheme(R.style.AppTheme_Default_Blue);
+                    } else {
+                        context.setTheme(R.style.AppTheme_Default);
+                    }
                     break;
             }
         } catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+    static void processAddTranslucent(Activity activity){
+        Window window = activity.getWindow();
+        if (window!=null){
+            window.requestFeature(Window.FEATURE_NO_TITLE);
+            window.setBackgroundDrawableResource(R.color.realTranslucent);
+            if (Build.VERSION.SDK_INT>=19){
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            }
         }
     }
 }
