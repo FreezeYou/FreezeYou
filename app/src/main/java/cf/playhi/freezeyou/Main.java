@@ -738,47 +738,7 @@ public class Main extends Activity {
             }
         });
         initThread.start();
-        new Thread(new Runnable() {
-            @SuppressLint("ApplySharedPref")
-            @Override
-            public void run() {
-                try {
-                    SharedPreferences sharedPreferences = getSharedPreferences("Ver",MODE_PRIVATE);
-                    if (sharedPreferences.getInt("Ver",0) < getVersionCode(getApplicationContext())){
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt("Ver", getVersionCode(getApplicationContext()));
-                        editor.putLong("Time",new Date().getTime());
-                        editor.commit();
-                    }
-                    if ((new Date().getTime() - sharedPreferences.getLong("Time",0))>1296000000){
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                buildAlertDialog(
-                                        Main.this,
-                                        R.mipmap.ic_launcher_new_round,
-                                        R.string.notUpdatedForALongTimeMessage,
-                                        R.string.notice)
-                                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                checkUpdate();
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                                            }
-                                        }).create().show();
-                            }
-                        });
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        checkLongTimeNotUpdated();
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
         if (!sharedPref.getBoolean("noCaution",false)){
             buildAlertDialog(Main.this,R.mipmap.ic_launcher_new_round,R.string.cautionContent,R.string.caution)
@@ -906,7 +866,7 @@ public class Main extends Activity {
         if (about.resolveActivity(getPackageManager()) != null) {
             startActivity(about);
         } else {
-            showToast(this,"请访问 https://app.playhi.cf/freezeyou/checkupdate.php?v=" + getVersionCode(this));
+            showToast(this,"请访问 https://freezeyou.playhi.cf/checkupdate.php?v=" + getVersionCode(this));
         }
     }
 
@@ -920,5 +880,49 @@ public class Main extends Activity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void checkLongTimeNotUpdated(){
+        new Thread(new Runnable() {
+            @SuppressLint("ApplySharedPref")
+            @Override
+            public void run() {
+                try {
+                    SharedPreferences sharedPreferences = getSharedPreferences("Ver",MODE_PRIVATE);
+                    if (sharedPreferences.getInt("Ver",0) < getVersionCode(getApplicationContext())){
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("Ver", getVersionCode(getApplicationContext()));
+                        editor.putLong("Time",new Date().getTime());
+                        editor.commit();
+                    }
+                    if ((new Date().getTime() - sharedPreferences.getLong("Time",0))>1296000000){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                buildAlertDialog(
+                                        Main.this,
+                                        R.mipmap.ic_launcher_new_round,
+                                        R.string.notUpdatedForALongTimeMessage,
+                                        R.string.notice)
+                                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                checkUpdate();
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        }).create().show();
+                            }
+                        });
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

@@ -75,6 +75,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 break;
             case "uiStyleSelection":
                 showToast(getActivity(),R.string.willTakeEffectsNextLaunch);
+                break;
             default:
                 break;
         }
