@@ -3,15 +3,15 @@
     android:id="@+id/so_body"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:gravity="bottom"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/so_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#a0000000"
+        android:background="#90000000"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="5dp"
@@ -21,7 +21,7 @@
         android:id="@+id/so_pkgName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#a0000000"
+        android:background="#90000000"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
@@ -35,7 +35,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#a0000000"
+        android:background="#90000000"
         android:orientation="horizontal">
 
         <ListView

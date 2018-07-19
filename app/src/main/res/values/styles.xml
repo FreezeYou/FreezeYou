@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppTheme.Translucent.NoTitleBar" parent="android:Theme.DeviceDefault.NoActionBar">
-        <item name="android:windowBackground">@color/translucentBackground</item>
+        <item name="android:windowBackground">@color/realTranslucent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
     <style name="AppTheme.Default" parent="android:Theme.DeviceDefault"/>

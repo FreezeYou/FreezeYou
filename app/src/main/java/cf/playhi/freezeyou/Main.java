@@ -72,6 +72,8 @@ public class Main extends Activity {
     private final ArrayList<String> selectedPackages = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
     private int customThemeDisabledDot = R.drawable.shapedotblue;
+    private View itemView;
+    private String filterNowStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +94,12 @@ public class Main extends Activity {
         super.onNewIntent(intent);
         setIntent(intent);
         go();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateFrozenStatus();
     }
 
     @Override
@@ -274,6 +282,7 @@ public class Main extends Activity {
     }
 
     private void generateList(String filter){
+        filterNowStatus = filter;
         final ListView app_listView = findViewById(R.id.app_list);
         final ProgressBar progressBar = findViewById(R.id.progressBar);
         final TextView textView = findViewById(R.id.textView);
@@ -556,14 +565,14 @@ public class Main extends Activity {
                 HashMap<String,Object> map=(HashMap<String,Object>)app_listView.getItemAtPosition(i);
                 final String name=(String)map.get("Name");
                 final String pkgName=(String)map.get("PackageName");
+                itemView = view;
                 if (!getString(R.string.notAvailable).equals(name)) {
                     switch (appListViewOnClickMode){
                         case APPListViewOnClickMode_chooseAction:
                             startActivityForResult(
                                     new Intent(Main.this, SelectOperation.class).
                                             putExtra("Name",name).
-                                            putExtra("pkgName",pkgName).
-                                            putExtra("index",i),
+                                            putExtra("pkgName",pkgName),
                                     1092
                             );
                             overridePendingTransition(R.anim.pullup,R.anim.pulldown);
@@ -574,12 +583,15 @@ public class Main extends Activity {
                             } else {
                                 processUnfreezeAction(Main.this,Main.this,pkgName,null,false,false);
                             }
+                            updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_freezeImmediately:
                             processFreezeAction(Main.this,Main.this,pkgName,null,false,false);
+                            updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_UFImmediately:
                             processUnfreezeAction(Main.this,Main.this,pkgName,null,false,false);
+                            updateFrozenStatus();
                             break;
                         default:
                             break;
@@ -797,10 +809,17 @@ public class Main extends Activity {
         }
     }
 
+    /**
+     * @param packageName 应用包名
+     * @return 资源 Id
+     */
+    private int getFrozenStatus(String packageName) {
+        return (checkRootFrozen(Main.this, packageName) || checkMRootFrozen(Main.this, packageName))
+                        ? customThemeDisabledDot : R.drawable.shapedotwhite;
+    }
+
     private void processFrozenStatus(Map<String, Object> keyValuePair,String packageName) {
-        keyValuePair.put("isFrozen",
-                (checkRootFrozen(Main.this, packageName) || checkMRootFrozen(Main.this, packageName))
-                        ? customThemeDisabledDot : R.drawable.shapedotwhite);
+        keyValuePair.put("isFrozen",getFrozenStatus(packageName));
     }
 
     private Map<String, Object> processAppStatus(String name,String packageName,ApplicationInfo applicationInfo){
@@ -878,6 +897,7 @@ public class Main extends Activity {
         } else {
             oneKeyActionRoot(Main.this,Main.this,freeze,pkgNameList,false);
         }
+        generateList(filterNowStatus);
     }
 
     private void checkUpdate(){
@@ -887,6 +907,18 @@ public class Main extends Activity {
             startActivity(about);
         } else {
             showToast(this,"请访问 https://app.playhi.cf/freezeyou/checkupdate.php?v=" + getVersionCode(this));
+        }
+    }
+
+    private void updateFrozenStatus(){
+        if (itemView!=null){
+            try {
+                ImageView imageView = itemView.findViewById(R.id.isFrozen);
+                TextView textView = itemView.findViewById(R.id.pkgName);
+                imageView.setImageResource(getFrozenStatus(textView.getText().toString()));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 }

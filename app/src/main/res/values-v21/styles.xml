@@ -10,14 +10,14 @@
     <style name="AppTheme.Default.Blue" parent="android:Theme.DeviceDefault.Light.DarkActionBar">
         <item name="android:colorPrimary">#0383E9</item>
         <item name="android:colorPrimaryDark">#026FDE</item>
-        <item name="android:colorAccent">#0800EF</item>
+        <item name="android:colorAccent">#0300EF</item>
         <item name="android:navigationBarColor">#026FDE</item>
     </style>
     <style name="AppTheme.Default.Pink" parent="android:Theme.DeviceDefault.Light.DarkActionBar">
-        <item name="android:colorPrimary">#f50057</item>
-        <item name="android:colorPrimaryDark">#f00037</item>
-        <item name="android:colorAccent">#f50057</item>
-        <item name="android:navigationBarColor">#f00037</item>
+        <item name="android:colorPrimary">#FF4081</item>
+        <item name="android:colorPrimaryDark">#ec407a</item>
+        <item name="android:colorAccent">#FF4081</item>
+        <item name="android:navigationBarColor">#FF1744</item>
     </style>
     <style name="AppTheme.Default.Green" parent="android:Theme.DeviceDefault.Light.DarkActionBar">
         <item name="android:colorPrimary">#00c853</item>
@@ -26,9 +26,9 @@
         <item name="android:navigationBarColor">#009624</item>
     </style>
     <style name="AppTheme.Default.Yellow" parent="android:Theme.DeviceDefault.Light.DarkActionBar">
-        <item name="android:colorPrimary">#ffd600</item>
+        <item name="android:colorPrimary">#ffbf00</item>
         <item name="android:colorPrimaryDark">#f7a500</item>
-        <item name="android:colorAccent">#ffd600</item>
+        <item name="android:colorAccent">#ffbf00</item>
         <item name="android:navigationBarColor">#f7a500</item>
     </style>
     <style name="AppTheme.Default.Orange" parent="android:Theme.DeviceDefault.Light.DarkActionBar">
