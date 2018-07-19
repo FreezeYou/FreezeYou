@@ -543,7 +543,9 @@ class Support {
             if (hidden){
                 showToast(context,R.string.freezeCompleted);
                 deleteNotification(context,pkgName);
-                activity.finish();
+                if (finish){
+                    activity.finish();
+                }
             } else {
                 showToast(context,R.string.UFCompleted);
                 createNotification(activity, pkgName, R.drawable.ic_notification);
