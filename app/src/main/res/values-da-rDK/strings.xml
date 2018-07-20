@@ -127,13 +127,4 @@
     <item>黄色</item>
     <item>橙色</item>
   </string-array>
-  <string-array name="uiStyleSelectionValues">
-    <item>default</item>
-    <item>black</item>
-    <item>blue</item>
-    <item>pink</item>
-    <item>green</item>
-    <item>yellow</item>
-    <item>orange</item>
-  </string-array>
 </resources>
