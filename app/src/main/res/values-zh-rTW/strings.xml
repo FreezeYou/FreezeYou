@@ -60,7 +60,7 @@
   <string name="common">常規</string>
   <string name="openImmediately">立即打開</string>
   <string name="openImmediatelyEx">解凍後直接打開應用程序，不再詢問</string>
-  <string name="hToUse">如何使用</string>
+  <string name="hToUse">新手教學</string>
   <string name="openAndUFImmediately">快捷方式立即解凍並啟動</string>
   <string name="openAndUFImmediatelyEx">損失快捷方式凍結的便利（可利用 一鍵凍結）</string>
   <string name="quickView">快捷查看</string>
@@ -89,21 +89,21 @@
   <string name="UFImmediately">立即解凍</string>
   <string name="plsRemoveUninstalledApplications">[提示]可以將已卸載的應用程序移出一鍵凍結/解凍列表</string>
   <string name="notificationBarFreezeImmediately">點擊通知欄快捷操作立即凍結</string>
-  <string name="onClickFunction">单击功能</string>
-  <string name="chooseAction">选择操作</string>
-  <string name="autoUFOrFreeze">自动冻解</string>
-  <string name="freezeCompleted">已冻结</string>
-  <string name="UFCompleted">已解冻</string>
-  <string name="shortCutOneKeyFreezeAdditionalOptions">快捷方式一键冻结后追加</string>
-  <string name="askIfLockScreen">是否立即锁屏？</string>
-  <string name="devicePolicyManagerNotFound">未找到可用的设备管理器</string>
-  <string name="devicePolicyManagerNotActivated">相关权限尚未被激活</string>
+  <string name="onClickFunction">單擊功能</string>
+  <string name="chooseAction">選擇動作</string>
+  <string name="autoUFOrFreeze">自動凍解</string>
+  <string name="freezeCompleted">已凍結</string>
+  <string name="UFCompleted">已解凍</string>
+  <string name="shortCutOneKeyFreezeAdditionalOptions">快捷方式一鍵凍結後追加</string>
+  <string name="askIfLockScreen">是否立即鎖屏？</string>
+  <string name="devicePolicyManagerNotFound">未找到可用的裝置管理員</string>
+  <string name="devicePolicyManagerNotActivated">相關許可權尚未被啟動</string>
   <string name="activated">已激活</string>
-  <string name="disableConfirmation">确定取消？</string>
+  <string name="disableConfirmation">確定取消？</string>
   <string name="disabled">已停用</string>
-  <string name="notUpdatedForALongTimeMessage">已经很久没有更新过了，是否立即检查更新？</string>
-  <string name="uiStyle">界面风格</string>
-  <string name="willTakeEffectsNextLaunch">将会在下次启动应用时生效</string>
+  <string name="notUpdatedForALongTimeMessage">已經很久沒有更新過了，是否立即檢查更新？</string>
+  <string name="uiStyle">介面風格</string>
+  <string name="willTakeEffectsNextLaunch">將會在下次啟動應用時生效</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
@@ -114,17 +114,17 @@
     <item>一鍵解凍</item>
   </string-array>
   <string-array name="shortCutOneKeyFreezeAdditionalOptionsSelection">
-    <item>无</item>
-    <item>询问锁屏</item>
-    <item>立即锁屏</item>
+    <item>無</item>
+    <item>詢問鎖屏</item>
+    <item>立即鎖屏</item>
   </string-array>
   <string-array name="uiStyleSelection">
-    <item>默认</item>
+    <item>預設</item>
     <item>暗色</item>
-    <item>蓝色</item>
-    <item>粉红</item>
-    <item>绿色</item>
-    <item>黄色</item>
+    <item>藍色</item>
+    <item>粉紅</item>
+    <item>綠色</item>
+    <item>黃色</item>
     <item>橙色</item>
   </string-array>
 </resources>
