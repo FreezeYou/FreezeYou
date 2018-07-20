@@ -1,0 +1,5 @@
+files:
+  - source: /**/values/strings.xml
+    translation: /**/%android_code%/strings.xml
+    translate_attributes: '0'
+    content_segmentation: '0'
