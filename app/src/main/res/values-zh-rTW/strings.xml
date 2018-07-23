@@ -106,6 +106,8 @@
   <string name="willTakeEffectsNextLaunch">將會在下次啟動應用時生效</string>
   <string name="freezeAUF">冻结与解冻</string>
   <string name="notificationBar">通知栏</string>
+  <string name="disableSlideOut">禁止滑动移除</string>
+  <string name="effectNextCreate">下次创建时生效</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
