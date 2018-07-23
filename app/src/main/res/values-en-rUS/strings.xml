@@ -18,7 +18,7 @@
   <string name="removeFailed">移除失败</string>
   <string name="addToOneKeyList">加入一键冻结列表</string>
   <string name="addToOneKeyUFList">加入一键解冻列表</string>
-  <string name="addFailed">添加失败</string>
+  <string name="addFailed">Add failed</string>
   <string name="caution">CAUTION</string>
   <string name="cautionContent">不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n\n长按可以多选\n右侧点为是否已冻结\n主题以及桌面三个图标等可以在“更多设置”中自行选择</string>
   <string name="yes">Yes</string>
@@ -81,7 +81,7 @@
   <string name="iconAEntry">Icons and Entrances</string>
   <string name="dialEntry">拨号盘进入</string>
   <string name="dialEntry_Ex">*#* #373393968 #*#* (*#* #FreezeYou #*#*) (Most Android devices support)</string>
-  <string name="ciFinishedToast">已提交，请等待桌面刷新或重启桌面。</string>
+  <string name="ciFinishedToast">Submitted, please wait for the launcher to refresh or restart the launcher.</string>
   <string name="ifUploadCrashLog">检测到存在发生过但并未提交的异常日志，是否上传日志？</string>
   <string name="search">Search</string>
   <string name="launchMode">Startup Mode</string>
@@ -110,26 +110,26 @@
   <string name="disableClickDisappear">禁止点击消失</string>
   <string name="effectNextCreate">下次创建时生效</string>
   <string-array name="launchModeSelection">
-    <item>显示全部</item>
+    <item>Show All</item>
     <item>仅已冻结</item>
     <item>仅未冻结</item>
-    <item>系统预装</item>
-    <item>用户应用</item>
+    <item>System pre-installed</item>
+    <item>User Application</item>
     <item>一键冻结</item>
     <item>一键解冻</item>
   </string-array>
   <string-array name="shortCutOneKeyFreezeAdditionalOptionsSelection">
-    <item>无</item>
-    <item>询问锁屏</item>
-    <item>立即锁屏</item>
+    <item>None</item>
+    <item>Ask if Lock Screen</item>
+    <item>Lock Screen Immediately</item>
   </string-array>
   <string-array name="uiStyleSelection">
-    <item>默认</item>
-    <item>暗色</item>
-    <item>蓝色</item>
-    <item>粉红</item>
-    <item>绿色</item>
-    <item>黄色</item>
-    <item>橙色</item>
+    <item>Default</item>
+    <item>Dark</item>
+    <item>Blue</item>
+    <item>Pink</item>
+    <item>Green</item>
+    <item>Yellow</item>
+    <item>Orange</item>
   </string-array>
 </resources>
