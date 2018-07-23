@@ -54,6 +54,11 @@
             android:summary="@string/effectNextCreate"
             android:key="notificationBarDisableSlideOut"
             android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:title="@string/disableClickDisappear"
+            android:summary="@string/effectNextCreate"
+            android:key="notificationBarDisableClickDisappear"
+            android:defaultValue="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory

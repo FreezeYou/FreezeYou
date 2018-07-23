@@ -404,8 +404,8 @@ class Support {
     private static void createNotification(Context context,String pkgName,int iconResId){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             String description;
-            boolean notificationBarFreezeImmediately = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notificationBarFreezeImmediately", true);
-            boolean notificationBarDisableSlideOut = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notificationBarDisableSlideOut", false);
+            SharedPreferences preferenceManager = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean notificationBarFreezeImmediately = preferenceManager.getBoolean("notificationBarFreezeImmediately", true);
             description = notificationBarFreezeImmediately ? context.getString(R.string.freezeImmediately) : context.getString(R.string.disableAEnable);
             Notification.Builder mBuilder = new Notification.Builder(context);
             int mId = pkgName.hashCode();
@@ -417,7 +417,8 @@ class Support {
                 mBuilder.setContentTitle(context.getString(R.string.notice));
             }
             mBuilder.setContentText(description);
-            mBuilder.setAutoCancel(!notificationBarDisableSlideOut);
+            mBuilder.setAutoCancel(!preferenceManager.getBoolean("notificationBarDisableClickDisappear", false));
+            mBuilder.setOngoing(preferenceManager.getBoolean("notificationBarDisableSlideOut", false));
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
