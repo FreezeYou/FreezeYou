@@ -402,25 +402,22 @@ class Support {
     }
 
     private static void createNotification(Context context,String pkgName,int iconResId){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             String description;
-            boolean notificationBarFreezeImmediately = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notificationBarFreezeImmediately",true);
-            if (notificationBarFreezeImmediately){
-                description = context.getString(R.string.freezeImmediately);
-            } else {
-                description = context.getString(R.string.disableAEnable);
-            }
+            boolean notificationBarFreezeImmediately = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notificationBarFreezeImmediately", true);
+            boolean notificationBarDisableSlideOut = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notificationBarDisableSlideOut", false);
+            description = notificationBarFreezeImmediately ? context.getString(R.string.freezeImmediately) : context.getString(R.string.disableAEnable);
             Notification.Builder mBuilder = new Notification.Builder(context);
             int mId = pkgName.hashCode();
             mBuilder.setSmallIcon(iconResId);
-            mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_notification));
+            mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_notification));
             try {
-                mBuilder.setContentTitle(context.getPackageManager().getApplicationLabel(context.getPackageManager().getApplicationInfo(pkgName,GET_UNINSTALLED_PACKAGES)).toString());
-            } catch (Exception e){
+                mBuilder.setContentTitle(context.getPackageManager().getApplicationLabel(context.getPackageManager().getApplicationInfo(pkgName, GET_UNINSTALLED_PACKAGES)).toString());
+            } catch (Exception e) {
                 mBuilder.setContentTitle(context.getString(R.string.notice));
             }
             mBuilder.setContentText(description);
-            mBuilder.setAutoCancel(true);
+            mBuilder.setAutoCancel(!notificationBarDisableSlideOut);
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -433,16 +430,16 @@ class Support {
                 // Register the channel with the system; you can't change the importance
                 // or other notification behaviors after this
                 NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-                if (notificationManager!=null)
+                if (notificationManager != null)
                     notificationManager.createNotificationChannel(channel);
                 mBuilder.setChannelId(CHANNEL_ID);
             }
             // Create an Intent for the activity you want to start
             Intent resultIntent;
-            if (notificationBarFreezeImmediately){
-                resultIntent = new Intent(context, Freeze.class).putExtra("pkgName",pkgName).putExtra("auto",false).putExtra("ot",3);
+            if (notificationBarFreezeImmediately) {
+                resultIntent = new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false).putExtra("ot", 3);
             } else {
-                resultIntent = new Intent(context, Freeze.class).putExtra("pkgName",pkgName).putExtra("auto",false);
+                resultIntent = new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false);
             }
             // Create the TaskStackBuilder and add the intent, which inflates the back stack
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
@@ -456,7 +453,7 @@ class Support {
             SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
                     "notificationId", Context.MODE_PRIVATE);
             sharedPreferences.edit().putInt(pkgName, mId).apply();
-            if (mNotificationManager!=null){
+            if (mNotificationManager != null) {
                 // mId allows you to update the notification later on.
                 mNotificationManager.notify(mId, mBuilder.build());
             }

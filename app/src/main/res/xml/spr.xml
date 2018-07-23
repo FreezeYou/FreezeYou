@@ -49,6 +49,11 @@
             android:summary="@string/notificationBarFreezeImmediately"
             android:key="notificationBarFreezeImmediately"
             android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:title="@string/disableSlideOut"
+            android:summary="@string/disableSlideOut"
+            android:key="notificationBarDisableSlideOut"
+            android:defaultValue="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory
