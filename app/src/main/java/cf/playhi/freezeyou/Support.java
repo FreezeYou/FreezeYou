@@ -1,6 +1,7 @@
 package cf.playhi.freezeyou;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -151,28 +152,13 @@ class Support {
         return builder;
     }
 
-    /****************
-     *
-     * @return 返回true表示呼起手Q成功，返回false表示呼起失败
-     ******************/
-    static boolean joinQQGroup(Context context) {
+    static void joinQQGroup(Context context) {
         Intent intent = new Intent();
         intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D92NGzlhmCK_UFrL_oEAV7Fe6QrvFR5y_"));
-        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         try {
             context.startActivity(intent);
-            return true;
         } catch (Exception e) {
-            Uri webPage = Uri.parse("https://shang.qq.com/wpa/qunwpa?idkey=cbc8ae71402e8a1bc9bb4c39384bcfe5b9f7d18ff1548ea9bdd842f036832f3d");
-            Intent intent1 = new Intent(Intent.ACTION_VIEW, webPage);
-            if (intent1.resolveActivity(context.getPackageManager()) != null) {
-                context.startActivity(intent1);
-                return true;
-            } else {
-                return false;
-            }
-//            // 未安装手Q或安装的版本不支持
-//            return false;
+            requestOpenWebSite(context,"https://shang.qq.com/wpa/qunwpa?idkey=cbc8ae71402e8a1bc9bb4c39384bcfe5b9f7d18ff1548ea9bdd842f036832f3d");
         }
     }
 
@@ -470,23 +456,23 @@ class Support {
             mNotificationManager.cancel(sharedPreferences.getInt(pkgName,0));
         }
     }
-//
-//    static String getVersionName(Context context) {
-//        PackageManager packageManager = context.getPackageManager();
-//        String packageName = context.getPackageName();
-//        int flags = 0;
-//        PackageInfo packageInfo = null;
-//        try {
-//            packageInfo = packageManager.getPackageInfo(packageName, flags);
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (packageInfo != null) {
-//            return packageInfo.versionName;
-//        }
-//        return "";
-//    }
+
+    static String getVersionName(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        String packageName = context.getPackageName();
+        int flags = 0;
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = packageManager.getPackageInfo(packageName, flags);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (packageInfo != null) {
+            return packageInfo.versionName;
+        }
+        return "";
+    }
 
     static void processRootAction(final String pkgName, final Context context, final Activity activity, final boolean enable, final boolean SelfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final boolean askRun){
         new Thread(new Runnable() {
@@ -768,6 +754,28 @@ class Support {
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             }
+        }
+    }
+
+    static void processActionBar(ActionBar actionBar){
+        if (actionBar!= null){
+            actionBar.setDisplayShowHomeEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    static void checkUpdate(Context context) {
+        requestOpenWebSite(context, "https://freezeyou.playhi.cf/checkupdate.php?v=" + getVersionCode(context));
+    }
+
+    static void requestOpenWebSite(Context context,String url) {
+        Uri webPage = Uri.parse(url);
+        Intent about = new Intent(Intent.ACTION_VIEW, webPage);
+        if (about.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(about);
+        } else {
+            showToast(context, context.getString(R.string.plsVisit) + " " + url);
         }
     }
 }

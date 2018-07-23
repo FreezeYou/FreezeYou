@@ -60,7 +60,9 @@ import static cf.playhi.freezeyou.Support.processFreezeAction;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.processUnfreezeAction;
 import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
+import static cf.playhi.freezeyou.Support.requestOpenWebSite;
 import static cf.playhi.freezeyou.Support.showToast;
+import static cf.playhi.freezeyou.Support.checkUpdate;
 
 public class Main extends Activity {
 
@@ -167,31 +169,32 @@ public class Main extends Activity {
                 );
                 return true;
             case R.id.menu_about:
-                buildAlertDialog(this,R.mipmap.ic_launcher_round,R.string.about_message,R.string.about)
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setNeutralButton(R.string.visitWebsite, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Uri webPage = Uri.parse("https://freezeyou.playhi.cf/");
-                                Intent about = new Intent(Intent.ACTION_VIEW, webPage);
-                                if (about.resolveActivity(getPackageManager()) != null) {
-                                    startActivity(about);
-                                } else {
-                                    showToast(getApplicationContext(),R.string.plsVisitPXXXX);
-                                }
-                            }
-                        })
-                        .setPositiveButton(R.string.addQQGroup, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Support.joinQQGroup(Main.this);
-                            }
-                        }).create().show();
+//                buildAlertDialog(this,R.mipmap.ic_launcher_round,R.string.about_message,R.string.about)
+//                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        })
+//                        .setNeutralButton(R.string.visitWebsite, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Uri webPage = Uri.parse("https://freezeyou.playhi.cf/");
+//                                Intent about = new Intent(Intent.ACTION_VIEW, webPage);
+//                                if (about.resolveActivity(getPackageManager()) != null) {
+//                                    startActivity(about);
+//                                } else {
+//                                    showToast(getApplicationContext(),R.string.plsVisitPXXXX);
+//                                }
+//                            }
+//                        })
+//                        .setPositiveButton(R.string.addQQGroup, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Support.joinQQGroup(Main.this);
+//                            }
+//                        }).create().show();
+                startActivity(new Intent(this,AboutActivity.class));
                 return true;
             case R.id.menu_oneKeyFreezeImmediately:
                 startActivity(new Intent(this,OneKeyFreeze.class).putExtra("autoCheckAndLockScreen",false));
@@ -256,7 +259,7 @@ public class Main extends Activity {
                 }).start();
                 return true;
             case R.id.menu_update:
-                checkUpdate();
+                checkUpdate(Main.this);
                 return true;
             case R.id.menu_exit:
                 finish();
@@ -723,13 +726,14 @@ public class Main extends Activity {
                     .setNeutralButton(R.string.hToUse, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Uri webPage = Uri.parse("https://freezeyou.playhi.cf/");
-                            Intent about = new Intent(Intent.ACTION_VIEW, webPage);
-                            if (about.resolveActivity(getPackageManager()) != null) {
-                                startActivity(about);
-                            } else {
-                                showToast(getApplicationContext(),R.string.plsVisitPXXXX);
-                            }
+//                            Uri webPage = Uri.parse("https://freezeyou.playhi.cf/");
+//                            Intent about = new Intent(Intent.ACTION_VIEW, webPage);
+//                            if (about.resolveActivity(getPackageManager()) != null) {
+//                                startActivity(about);
+//                            } else {
+//                                showToast(getApplicationContext(),R.string.plsVisitPXXXX);
+//                            }
+                            requestOpenWebSite(Main.this,"https://freezeyou.playhi.cf/");
                         }
                     })
                     .setNegativeButton(R.string.nCaution, new DialogInterface.OnClickListener() {
@@ -838,16 +842,6 @@ public class Main extends Activity {
         generateList(filterNowStatus);
     }
 
-    private void checkUpdate(){
-        Uri webPage = Uri.parse("https://freezeyou.playhi.cf/checkupdate.php?v=" + getVersionCode(this));
-        Intent about = new Intent(Intent.ACTION_VIEW, webPage);
-        if (about.resolveActivity(getPackageManager()) != null) {
-            startActivity(about);
-        } else {
-            showToast(this,"请访问 https://freezeyou.playhi.cf/checkupdate.php?v=" + getVersionCode(this));
-        }
-    }
-
     private void updateFrozenStatus(){
         if (itemView!=null){
             try {
@@ -885,7 +879,7 @@ public class Main extends Activity {
                                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                checkUpdate();
+                                                checkUpdate(Main.this);
                                             }
                                         })
                                         .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

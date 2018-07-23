@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import static cf.playhi.freezeyou.Support.processActionBar;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 
 public class SettingsActivity extends Activity{
@@ -17,12 +18,7 @@ public class SettingsActivity extends Activity{
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
-        ActionBar actionBar = getActionBar();
-        if (actionBar!= null){
-            actionBar.setDisplayShowHomeEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        processActionBar(getActionBar());
     }
 
     @Override
