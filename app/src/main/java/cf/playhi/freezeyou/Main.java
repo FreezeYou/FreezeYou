@@ -546,19 +546,6 @@ public class Main extends Activity {
             }
         });
 
-//        app_listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                HashMap<String, String> map = (HashMap<String, String>) app_listView.getItemAtPosition(i);
-//                final String name = map.get("Name");
-//                final String pkgName = map.get("PackageName");
-//                if (!(getString(R.string.notAvailable).equals(name))) {
-//                    startActivity(new Intent(Main.this, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false));
-//                }
-//                return true;
-//            }
-//        });
-
         app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -578,10 +565,10 @@ public class Main extends Activity {
                             overridePendingTransition(R.anim.pullup,R.anim.pulldown);
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
-                            if (R.drawable.shapedotwhite==(int)map.get("isFrozen")){
-                                processFreezeAction(Main.this,Main.this,pkgName,null,false,false);
-                            } else {
+                            if (realGetFrozenStatus(pkgName)){
                                 processUnfreezeAction(Main.this,Main.this,pkgName,null,false,false);
+                            } else {
+                                processFreezeAction(Main.this,Main.this,pkgName,null,false,false);
                             }
                             updateFrozenStatus();
                             break;
@@ -608,18 +595,6 @@ public class Main extends Activity {
         keyValuePair.put("PackageName", context.getString(R.string.notAvailable));
         AppList.add(keyValuePair);
     }
-
-//    private static boolean ifOnekeyFreezeList(String pkgName){
-//        for(String s: autoFreezePkgNameList){
-//            if(s.replaceAll("\\|","").equals(pkgName))
-//                return true;
-//        }
-//        return false;
-//    }
-
-//    private static String addIfOnekeyFreezeList(Context context,String name,String pkgName){
-//        return ifOnekeyFreezeList(pkgName) ? name + "(" + context.getResources().getString(R.string.oneKeyFreeze) + ")" : name;
-//    }
 
     private void manageCrashLog() throws Exception{
         File crashCheck = new File(Environment.getDataDirectory().getPath()
@@ -702,8 +677,6 @@ public class Main extends Activity {
     }
 
     private void go(){
-//        autoFreezePkgNameList = getApplicationContext().getSharedPreferences(
-//                "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
         Thread initThread;
         initThread = new Thread(new Runnable() {
             @Override
@@ -774,8 +747,15 @@ public class Main extends Activity {
      * @return 资源 Id
      */
     private int getFrozenStatus(String packageName) {
-        return (checkRootFrozen(Main.this, packageName) || checkMRootFrozen(Main.this, packageName))
-                        ? customThemeDisabledDot : R.drawable.shapedotwhite;
+        return realGetFrozenStatus(packageName) ? customThemeDisabledDot : R.drawable.shapedotwhite;
+    }
+
+    /**
+     * @param packageName 应用包名
+     * @return true 则已冻结
+     */
+    private boolean realGetFrozenStatus(String packageName) {
+        return (checkRootFrozen(Main.this, packageName) || checkMRootFrozen(Main.this, packageName));
     }
 
     private void processFrozenStatus(Map<String, Object> keyValuePair,String packageName) {
@@ -788,7 +768,6 @@ public class Main extends Activity {
             keyValuePair.put("Img", getApplicationIcon(Main.this, packageName, applicationInfo, true));
             keyValuePair.put("Name", name);
             processFrozenStatus(keyValuePair, packageName);
-//            keyValuePair.put("isAutoList", ifOnekeyFreezeList(packageName) ? R.drawable.bluedot : R.drawable.whitedot);
             keyValuePair.put("PackageName", packageName);
             return keyValuePair;
         }
@@ -815,7 +794,6 @@ public class Main extends Activity {
                 keyValuePair.put("Img", icon);
                 keyValuePair.put("Name", name);
                 processFrozenStatus(keyValuePair, aPkgNameList);
-//                keyValuePair.put("isAutoList", ifOnekeyFreezeList(aPkgNameList) ? R.drawable.bluedot : R.drawable.whitedot);
                 keyValuePair.put("PackageName", aPkgNameList);
                 AppList.add(keyValuePair);
             }

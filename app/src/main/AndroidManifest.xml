@@ -96,7 +96,8 @@
             android:name=".OneKeyFreeze"
             android:label="@string/oneKeyFreeze"
             android:launchMode="standard"
-            android:documentLaunchMode="intoExisting"
+            android:documentLaunchMode="always"
+            android:maxRecents="1"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
@@ -108,7 +109,8 @@
             android:name=".OneKeyUF"
             android:label="@string/oneKeyUF"
             android:launchMode="standard"
-            android:documentLaunchMode="intoExisting"
+            android:documentLaunchMode="always"
+            android:maxRecents="1"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
