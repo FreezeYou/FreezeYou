@@ -104,6 +104,8 @@
   <string name="notUpdatedForALongTimeMessage">已經很久沒有更新過了，是否立即檢查更新？</string>
   <string name="uiStyle">介面風格</string>
   <string name="willTakeEffectsNextLaunch">將會在下次啟動應用時生效</string>
+  <string name="freezeAUF">冻结与解冻</string>
+  <string name="notificationBar">通知栏</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
