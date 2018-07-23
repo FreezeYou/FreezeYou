@@ -46,12 +46,12 @@
         android:title="@string/notificationBar">
         <CheckBoxPreference
             android:title="@string/notificationBarFreezeImmediately"
-            android:summary="@string/notificationBarFreezeImmediately"
+            android:summary="@string/effectNextCreate"
             android:key="notificationBarFreezeImmediately"
             android:defaultValue="true"/>
         <CheckBoxPreference
             android:title="@string/disableSlideOut"
-            android:summary="@string/disableSlideOut"
+            android:summary="@string/effectNextCreate"
             android:key="notificationBarDisableSlideOut"
             android:defaultValue="false"/>
     </PreferenceCategory>
