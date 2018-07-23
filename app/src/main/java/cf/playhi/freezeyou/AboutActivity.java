@@ -75,7 +75,7 @@ public class AboutActivity extends Activity {
             }
         });
 
-        aboutSlogan.setText(String.format("V %s", getVersionName(activity)));
+        aboutSlogan.setText(String.format("V %s", getVersionCode(activity)));
     }
 
     @Override
