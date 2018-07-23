@@ -14,4 +14,4 @@
 ## 其它 Others
 * 欢迎转载，也感谢各位的转载，但转载时如非必要，请您不要修改应用程序或重打包（修改以及重打包都很可能会导致用户后续更新出现麻烦），请直接使用 [Release](https://github.com/Playhi/FreezeYou/releases) 中包含的 安装包(APK)文件 即可。
 ## 翻译 Translation
-* 直接访问 [Crowdin(https://crowdin.com/project/freezeyou)](https://crowdin.com/project/freezeyou) 参与翻译即可，感谢您的贡献！👍
+* 直接访问 [Crowdin(https://crwd.in/freezeyou)](https://crwd.in/freezeyou) 参与翻译即可，感谢您的贡献！👍
