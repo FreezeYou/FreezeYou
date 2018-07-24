@@ -38,7 +38,7 @@
   <string name="OneKeyFreezeImmediately">一鍵凍結</string>
   <string name="about">關於軟體</string>
   <string name="plsVisitPXXXX">請訪問 https://freezeyou.playhi.cf/</string>
-  <string name="plsVisit">请访问</string>
+  <string name="plsVisit">請訪問</string>
   <string name="viewMode">查看模式</string>
   <string name="onlyFrozen">僅已凍結</string>
   <string name="onlyUF">僅未凍結</string>
@@ -105,13 +105,13 @@
   <string name="notUpdatedForALongTimeMessage">已經很久沒有更新過了，是否立即檢查更新？</string>
   <string name="uiStyle">介面風格</string>
   <string name="willTakeEffectsNextLaunch">將會在下次啟動應用時生效</string>
-  <string name="freezeAUF">冻结与解冻</string>
-  <string name="notificationBar">通知栏</string>
-  <string name="disableSlideOut">禁止滑动移除</string>
-  <string name="disableClickDisappear">禁止点击消失</string>
-  <string name="effectNextCreate">下次创建时生效</string>
-  <string name="helpTranslate">协助翻译</string>
-  <string name="thanksList">感谢名单</string>
+  <string name="freezeAUF">凍結與解凍</string>
+  <string name="notificationBar">通知欄</string>
+  <string name="disableSlideOut">禁止滑動移除</string>
+  <string name="disableClickDisappear">禁止點擊消失</string>
+  <string name="effectNextCreate">下次創建時生效</string>
+  <string name="helpTranslate">協助翻譯</string>
+  <string name="thanksList">感謝名單</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
