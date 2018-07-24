@@ -37,7 +37,7 @@
   <string name="frozen">已凍結</string>
   <string name="OneKeyFreezeImmediately">一鍵凍結</string>
   <string name="about">關於軟體</string>
-  <string name="plsVisitPXXXX">請訪問 https://freezeyou.playhi.cf/</string>
+  <!--<string name="plsVisitPXXXX">请访问 https://freezeyou.playhi.cf/</string>-->
   <string name="plsVisit">請訪問</string>
   <string name="viewMode">查看模式</string>
   <string name="onlyFrozen">僅已凍結</string>
@@ -51,7 +51,7 @@
   <string name="onlyUA">用戶應用</string>
   <string name="exit">退出軟體</string>
   <string name="moreSettings">更多設置</string>
-  <string name="about_message">FreezeYou!\n凍住！不許動！\n先感謝一下提供過很大幫助的用戶：wcedla 。\n這是一款輕量級的應用程序，它可以協助您的設備更流暢、更持久、更高效的運行。它免費並且沒有任何廣告，也不會在任何時候向您索要任何當時不必要的權限。\n使用方法：長按或單擊應用程序列表即可。\n免ROOT：請點擊下方 訪問官網 查看\n官方QQ群：704086494\n官網：https://freezeyou.playhi.cf/</string>
+  <!--<string name="about_message">FreezeYou!\n冻住！不许动！\n先感谢一下提供过很大帮助的用户：wcedla 。\n这是一款轻量级的应用程序，它可以协助您的设备更流畅、更持久、更高效的运行。它免费并且没有任何广告，也不会在任何时候向您索要任何当时不必要的权限。\n使用方法：长按或单击应用程序列表即可。\n免ROOT：请点击下方 访问官网 查看\n官方QQ群：704086494\n官网：https://freezeyou.playhi.cf/</string>-->
   <string name="visitWebsite">訪問官網</string>
   <string name="addQQGroup">加入QQ群</string>
   <string name="dangerZone">危險區</string>
