@@ -6,7 +6,9 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -64,6 +66,10 @@ public class SelectOperation extends Activity {
 
         final ListAdapter adapt = new ArrayAdapter<>(SelectOperation.this, R.layout.so_item, operationData);
         listView.setAdapter(adapt);
+
+        if (Build.VERSION.SDK_INT<21){
+            so_body.setBackgroundColor(Color.parseColor("#90000000"));
+        }
 
         so_body.setOnClickListener(new View.OnClickListener() {
             @Override

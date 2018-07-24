@@ -294,9 +294,9 @@ class Support {
         process = Runtime.getRuntime().exec("su");
         outputStream = new DataOutputStream(process.getOutputStream());
         if (enable){
-            outputStream.writeBytes("pm enable " + pkgName + "\n");
+            outputStream.writeBytes("pm unhide " + pkgName + "\n");
         } else {
-            outputStream.writeBytes("pm disable " + pkgName + "\n");
+            outputStream.writeBytes("pm hide " + pkgName + "\n");
         }
         outputStream.writeBytes("exit\n");
         outputStream.flush();
@@ -594,7 +594,7 @@ class Support {
                         int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
                         if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
                             outputStream.writeBytes(
-                                    "pm disable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                                    "pm hide " + aPkgNameList.replaceAll("\\|", "") + "\n");
                         }
                     } catch (Exception e){
                         e.printStackTrace();
@@ -607,7 +607,7 @@ class Support {
                         int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
                         if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
                             outputStream.writeBytes(
-                                    "pm enable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                                    "pm unhide " + aPkgNameList.replaceAll("\\|", "") + "\n");
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -501,8 +501,10 @@ public class Main extends Activity {
                 final String pkgName = ((HashMap<String, String>) app_listView.getItemAtPosition(i)).get("PackageName");
                 if (b){
                     selectedPackages.add(pkgName);
+                    actionMode.setTitle(Integer.toString(selectedPackages.size()));
                 } else {
                     selectedPackages.remove(pkgName);
+                    actionMode.setTitle(Integer.toString(selectedPackages.size()));
                 }
             }
 
@@ -534,9 +536,11 @@ public class Main extends Activity {
                         return true;
                     case R.id.list_menu_freezeImmediately:
                         processDisableAndEnableImmediately(true);
+                        actionMode.finish();
                         return true;
                     case R.id.list_menu_UFImmediately:
                         processDisableAndEnableImmediately(false);
+                        actionMode.finish();
                         return true;
                     default:
                         return false;
