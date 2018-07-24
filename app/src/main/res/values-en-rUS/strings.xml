@@ -36,7 +36,7 @@
   <string name="unrootedOrCannotFindTheLaunchIntent">解冻成功但未找到程序入口，或权限不足导致解冻失败</string>
   <string name="frozen">已冻结</string>
   <string name="OneKeyFreezeImmediately">一键冻结</string>
-  <string name="about">关于软件</string>
+  <string name="about">About</string>
   <string name="plsVisit">请访问</string>
   <string name="viewMode">View Mode</string>
   <string name="onlyFrozen">仅已冻结</string>
@@ -50,14 +50,14 @@
   <string name="onlyUA">User Application</string>
   <string name="exit">Exit</string>
   <string name="moreSettings">Settings</string>
-  <string name="visitWebsite">访问官网</string>
+  <string name="visitWebsite">Visit Website</string>
   <string name="addQQGroup">Join QQ Group</string>
   <string name="dangerZone">Danger Zone</string>
   <string name="disableMRootMode">解除免ROOT</string>
   <string name="disableMRootModeEx">如果启用免ROOT模式成功，需要解除后才能正常卸载本应用程序。</string>
   <string name="update">Update</string>
   <string name="common">General</string>
-  <string name="openImmediately">立即打开</string>
+  <string name="openImmediately">Open Immediately</string>
   <string name="openImmediatelyEx">解冻后直接打开应用程序，不再询问</string>
   <string name="hToUse">How to use</string>
   <string name="openAndUFImmediately">快捷方式立即解冻并启动</string>
@@ -108,7 +108,7 @@
   <string name="disableSlideOut">禁止滑动移除</string>
   <string name="disableClickDisappear">禁止点击消失</string>
   <string name="effectNextCreate">下次创建时生效</string>
-  <string name="helpTranslate">协助翻译</string>
+  <string name="helpTranslate">Help Translate</string>
   <string name="thanksList">感谢名单</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
