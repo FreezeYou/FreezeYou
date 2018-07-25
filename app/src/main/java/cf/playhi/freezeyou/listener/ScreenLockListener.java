@@ -23,7 +23,10 @@ public class ScreenLockListener {
         public void onReceive(Context context, Intent intent) {
             if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
                 if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("onekeyFreezeWhenLockScreen", false)) {
-                    context.startActivity(new Intent(context, OneKeyFreeze.class).putExtra("autoCheckAndLockScreen",false));
+                    context.startActivity(
+                            new Intent(context, OneKeyFreeze.class)
+                                    .putExtra("autoCheckAndLockScreen",false)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             }
         }
