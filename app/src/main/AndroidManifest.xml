@@ -170,6 +170,9 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+        <service
+            android:process=":service.ScreenLockOneKeyFreezeService"
+            android:name=".service.ScreenLockOneKeyFreezeService" />
     </application>
 
 </manifest>

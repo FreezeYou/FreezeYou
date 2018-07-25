@@ -2,11 +2,15 @@ package cf.playhi.freezeyou;
 
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+
+import cf.playhi.freezeyou.listener.ScreenLockListener;
+import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
 
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.openDevicePolicyManager;
@@ -75,6 +79,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 break;
             case "uiStyleSelection":
                 showToast(getActivity(),R.string.willTakeEffectsNextLaunch);
+                break;
+            case "onekeyFreezeWhenLockScreen":
+                if (sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen",false)){
+                    getActivity().startService(new Intent(getActivity().getApplicationContext(), ScreenLockOneKeyFreezeService.class));
+                } else {
+                    getActivity().stopService(new Intent(getActivity().getApplicationContext(),ScreenLockOneKeyFreezeService.class));
+                }
                 break;
             default:
                 break;

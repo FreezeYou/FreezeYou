@@ -62,6 +62,15 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/automation">
+        <CheckBoxPreference
+            android:key="onekeyFreezeWhenLockScreen"
+            android:summary="@string/freezeAfterScreenLock"
+            android:title="@string/freezeAfterScreenLock"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/iconAEntry">
         <CheckBoxPreference
             android:icon="@mipmap/ic_launcher"
