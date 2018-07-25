@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
-import cf.playhi.freezeyou.listener.ScreenLockListener;
 import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
 
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
