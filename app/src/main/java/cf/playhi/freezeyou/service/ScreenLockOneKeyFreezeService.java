@@ -19,8 +19,7 @@ public class ScreenLockOneKeyFreezeService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("useForegroundService",false)||(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     Notification.Builder mBuilder = new Notification.Builder(this);
                     mBuilder.setSmallIcon(R.drawable.ic_notification);
                     mBuilder.setContentText(getString(R.string.backgroundService));
@@ -30,9 +29,8 @@ public class ScreenLockOneKeyFreezeService extends Service {
                         notificationManager.createNotificationChannel(channel);
                     mBuilder.setChannelId("BackgroundService");
                     startForeground(1,mBuilder.build());
-                } else {
-                    startForeground(1,new Notification());
-                }
+            } else {
+                startForeground(1, new Notification());
             }
         }
         if (screenLockListener==null) {
