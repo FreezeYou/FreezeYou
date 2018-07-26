@@ -109,10 +109,10 @@
   <string name="disableClickDisappear">禁止点击消失</string>
   <string name="effectNextCreate">下次创建时生效</string>
   <string name="helpTranslate">Help Translate</string>
-  <string name="thanksList">感谢名单</string>
-  <string name="automation">自动化</string>
+  <string name="thanksList">Thanks List</string>
+  <string name="automation">Automation</string>
   <string name="freezeAfterScreenLock">锁屏后一键冻结</string>
-  <string name="backgroundService">后台服务</string>
+  <string name="backgroundService">Background Services</string>
   <string name="useForegroundService">使用前台服务(安卓8.0及以上强制开启)</string>
   <string name="serviceLongerEx">减小后台功能失效的概率</string>
   <string-array name="launchModeSelection">
