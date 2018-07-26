@@ -1,9 +1,15 @@
 package cf.playhi.freezeyou.service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 
+import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.listener.ScreenLockListener;
 
 public class ScreenLockOneKeyFreezeService extends Service {
@@ -12,6 +18,23 @@ public class ScreenLockOneKeyFreezeService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("useForegroundService",false)||(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Notification.Builder mBuilder = new Notification.Builder(this);
+                    mBuilder.setSmallIcon(R.drawable.ic_notification);
+                    mBuilder.setContentText(getString(R.string.backgroundService));
+                    NotificationChannel channel = new NotificationChannel("BackgroundService", getString(R.string.backgroundService), NotificationManager.IMPORTANCE_NONE);
+                    NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                    if (notificationManager != null)
+                        notificationManager.createNotificationChannel(channel);
+                    mBuilder.setChannelId("BackgroundService");
+                    startForeground(1,mBuilder.build());
+                } else {
+                    startForeground(1,new Notification());
+                }
+            }
+        }
         if (screenLockListener==null) {
             screenLockListener = new ScreenLockListener(getApplicationContext());
             screenLockListener.registerListener();
@@ -30,6 +53,7 @@ public class ScreenLockOneKeyFreezeService extends Service {
             screenLockListener.unregisterListener();
             screenLockListener = null;
         }
+        stopForeground(true);
         super.onDestroy();
     }
 

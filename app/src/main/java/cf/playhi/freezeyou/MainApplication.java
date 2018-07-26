@@ -2,6 +2,7 @@ package cf.playhi.freezeyou;
 
 import android.app.Application;
 import android.content.Intent;
+import android.os.Build;
 import android.preference.PreferenceManager;
 
 import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
@@ -14,7 +15,11 @@ public class MainApplication extends Application {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init();
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("onekeyFreezeWhenLockScreen",false)){
-            startService(new Intent(this, ScreenLockOneKeyFreezeService.class));
+            if (Build.VERSION.SDK_INT>=26){
+                startForegroundService(new Intent(this, ScreenLockOneKeyFreezeService.class));
+            } else {
+                startService(new Intent(this, ScreenLockOneKeyFreezeService.class));
+            }
         }
     }
 

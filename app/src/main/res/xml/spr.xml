@@ -71,6 +71,15 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/backgroundService">
+        <CheckBoxPreference
+            android:key="useForegroundService"
+            android:summary="@string/serviceLongerEx"
+            android:title="@string/useForegroundService"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/iconAEntry">
         <CheckBoxPreference
             android:icon="@mipmap/ic_launcher"

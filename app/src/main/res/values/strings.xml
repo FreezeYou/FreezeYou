@@ -110,6 +110,9 @@
     <string name="thanksList">感谢名单</string>
     <string name="automation">自动化</string>
     <string name="freezeAfterScreenLock">锁屏后一键冻结</string>
+    <string name="backgroundService">后台服务</string>
+    <string name="useForegroundService">使用前台服务(安卓8.0及以上强制开启)</string>
+    <string name="serviceLongerEx">减小后台功能失效的概率</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
