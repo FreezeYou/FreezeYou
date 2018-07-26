@@ -110,8 +110,8 @@
   <string name="effectNextCreate">下次創建時生效</string>
   <string name="helpTranslate">協助翻譯</string>
   <string name="thanksList">感謝名單</string>
-  <string name="automation">自动化</string>
-  <string name="freezeAfterScreenLock">锁屏后一键冻结</string>
+  <string name="automation">自動化</string>
+  <string name="freezeAfterScreenLock">鎖屏後一鍵凍結</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
