@@ -4,7 +4,7 @@
   <string name="app_name">FreezeYou!</string>
   <string name="oneKeyFreeze">一鍵凍結</string>
   <string name="oneKeyUF">一鍵解凍</string>
-  <string name="alertT1">注意！\n不知道的不要亂凍結，可能會使系統崩潰！\n請謹慎操作！\n請謹慎操作！</string>
+  <string name="alertT1">注意！ \n不知道的不要亂凍結，可能會使系統崩潰！ \n請謹慎操作！ \n請謹慎操作！</string>
   <string name="cancel">取消</string>
   <string name="chooseDetailAction">請選擇具體操作</string>
   <string name="added">已添加</string>
@@ -112,9 +112,9 @@
   <string name="thanksList">感謝名單</string>
   <string name="automation">自動化</string>
   <string name="freezeAfterScreenLock">鎖屏後一鍵凍結</string>
-  <string name="backgroundService">后台服务</string>
-  <string name="useForegroundService">使用前台服务(安卓8.0及以上强制开启)</string>
-  <string name="serviceLongerEx">减小后台功能失效的概率</string>
+  <string name="backgroundService">背景常駐服務</string>
+  <string name="useForegroundService">使用前臺服務(安卓8.0及以上強制開啟)</string>
+  <string name="serviceLongerEx">減小後臺功能失效的概率</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
