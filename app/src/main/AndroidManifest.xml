@@ -8,6 +8,25 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
+    <permission
+        android:name="cf.playhi.freezeyou.permission.GET_DISABLED_APPLICATIONS"
+        android:description="@string/getDisabledApplications"
+        android:icon="@mipmap/ic_launcher_new_round"
+        android:label="@string/getDisabledApplications"
+        android:protectionLevel="normal"/>
+    <permission
+        android:name="cf.playhi.freezeyou.permission.ENABLE_APPLICATIONS"
+        android:description="@string/enableApplications"
+        android:icon="@mipmap/ic_launcher_new_round"
+        android:label="@string/enableApplications"
+        android:protectionLevel="dangerous"/>
+    <permission
+        android:name="cf.playhi.freezeyou.permission.DISABLE_APPLICATIONS"
+        android:description="@string/disableApplications"
+        android:icon="@mipmap/ic_launcher_new_round"
+        android:label="@string/disableApplications"
+        android:protectionLevel="dangerous"/>
+
     <application
         android:allowBackup="true"
         android:name=".MainApplication"
@@ -143,6 +162,22 @@
             android:label="@string/about"
             android:theme="@style/AppTheme.Default"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"/>
+        <activity
+            android:name=".GetDisabledApplications"
+            android:exported="true"
+            android:permission="cf.playhi.freezeyou.permission.GET_DISABLED_APPLICATIONS"
+            android:theme="@style/AppTheme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".DisableApplications"
+            android:exported="true"
+            android:permission="cf.playhi.freezeyou.permission.DISABLE_APPLICATIONS"
+            android:theme="@style/AppTheme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".EnableApplications"
+            android:exported="true"
+            android:permission="cf.playhi.freezeyou.permission.ENABLE_APPLICATIONS"
+            android:theme="@style/AppTheme.Translucent.NoTitleBar" />
+
         <receiver
             android:name=".DeviceAdminReceiver"
             android:label="@string/app_name"
@@ -178,6 +213,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter >
+                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
+                <data android:scheme="package"/>
             </intent-filter>
         </receiver>
         <service
