@@ -115,6 +115,9 @@
   <string name="backgroundService">Background Services</string>
   <string name="useForegroundService">使用前台服务(安卓8.0及以上强制开启)</string>
   <string name="serviceLongerEx">减小后台功能失效的概率</string>
+  <string name="getDisabledApplications">获得已冻结的应用程序列表</string>
+  <string name="enableApplications">解冻应用</string>
+  <string name="disableApplications">冻结应用</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>仅已冻结</item>
