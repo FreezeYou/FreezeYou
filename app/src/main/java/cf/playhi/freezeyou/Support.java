@@ -38,7 +38,6 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.nio.file.Files;
 
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 

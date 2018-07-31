@@ -52,6 +52,7 @@ import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
+import static cf.playhi.freezeyou.Support.getApplicationLabel;
 import static cf.playhi.freezeyou.Support.getVersionCode;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
@@ -325,7 +326,8 @@ public class Main extends Activity {
             e.printStackTrace();
         }
         ApplicationInfo applicationInfo1;
-        PackageManager packageManager = getApplicationContext().getPackageManager();
+        Context applicationContext = getApplicationContext();
+        PackageManager packageManager = applicationContext.getPackageManager();
         List<ApplicationInfo> applicationInfo = packageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
         int size = applicationInfo.size();
         switch (filter) {
@@ -333,7 +335,7 @@ public class Main extends Activity {
                 for (int i = 0; i < size; i++) {
                     applicationInfo1 = applicationInfo.get(i);
                     Map<String, Object> keyValuePair = processAppStatus(
-                            applicationInfo1.loadLabel(packageManager).toString(),
+                            getApplicationLabel(applicationContext,packageManager,applicationInfo1,applicationInfo1.packageName),
                             applicationInfo1.packageName,
                             applicationInfo1
                     );
@@ -347,7 +349,7 @@ public class Main extends Activity {
                 for (int i = 0; i < size; i++) {
                     applicationInfo1 = applicationInfo.get(i);
                     Map<String, Object> keyValuePair = processAppStatus(
-                            applicationInfo1.loadLabel(packageManager).toString(),
+                            getApplicationLabel(applicationContext,packageManager,applicationInfo1,applicationInfo1.packageName),
                             applicationInfo1.packageName,
                             applicationInfo1
                     );
@@ -361,7 +363,7 @@ public class Main extends Activity {
                 for (int i = 0; i < size; i++) {
                     applicationInfo1 = applicationInfo.get(i);
                     Map<String, Object> keyValuePair = processAppStatus(
-                            applicationInfo1.loadLabel(packageManager).toString(),
+                            getApplicationLabel(applicationContext,packageManager,applicationInfo1,applicationInfo1.packageName),
                             applicationInfo1.packageName,
                             applicationInfo1
                     );
@@ -388,7 +390,7 @@ public class Main extends Activity {
                     applicationInfo1 = applicationInfo.get(i);
                     if ((applicationInfo1.flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM) {
                         Map<String, Object> keyValuePair = processAppStatus(
-                                applicationInfo1.loadLabel(packageManager).toString(),
+                                getApplicationLabel(applicationContext,packageManager,applicationInfo1,applicationInfo1.packageName),
                                 applicationInfo1.packageName,
                                 applicationInfo1
                         );
@@ -404,7 +406,7 @@ public class Main extends Activity {
                     applicationInfo1 = applicationInfo.get(i);
                     if ((applicationInfo1.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
                         Map<String, Object> keyValuePair = processAppStatus(
-                                applicationInfo1.loadLabel(packageManager).toString(),
+                                getApplicationLabel(applicationContext,packageManager,applicationInfo1,applicationInfo1.packageName),
                                 applicationInfo1.packageName,
                                 applicationInfo1
                         );
@@ -491,7 +493,6 @@ public class Main extends Activity {
                 app_listView.setAdapter(adapter);
                 app_listView.setTextFilterEnabled(true);
                 app_listView.setVisibility(View.VISIBLE);
-                Support.drawable = null;
             }
         });
 
@@ -788,7 +789,7 @@ public class Main extends Activity {
         for (String aPkgNameList : source) {
             aPkgNameList = aPkgNameList.replaceAll("\\|","");
             try{
-                name = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(aPkgNameList,PackageManager.GET_UNINSTALLED_PACKAGES)).toString();
+                name = getApplicationLabel(getApplicationContext(),null,null,aPkgNameList);
             } catch (Exception e){
                 name = getResources().getString(R.string.uninstalled);
             }
