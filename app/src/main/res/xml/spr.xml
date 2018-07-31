@@ -111,6 +111,14 @@
                 android:targetClass="cf.playhi.freezeyou.ManualMode"
                 android:data="ManualMode" />
         </Preference>
+        <Preference
+            android:title="@string/clearIconCache"
+            android:summary="@string/refreshCache"
+            android:key="clearIconCache"/>
+        <Preference
+            android:title="@string/clearNameCache"
+            android:summary="@string/refreshCache"
+            android:key="clearNameCache"/>
     </PreferenceCategory>
 
     <PreferenceCategory

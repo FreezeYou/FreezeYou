@@ -2,13 +2,18 @@ package cf.playhi.freezeyou;
 
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
+
+import java.io.File;
 
 import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
 
@@ -94,6 +99,37 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        switch (preference.getKey()){
+            case "clearNameCache":
+                getActivity().getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE).edit().clear().apply();
+                break;
+            case "clearIconCache":
+                try {
+                    File file = new File(getActivity().getFilesDir()+"/icon");
+                    if(file.exists()&&file.isDirectory()){
+                        File[] childFile = file.listFiles();
+                        if(childFile == null || childFile.length == 0){
+                            file.delete();
+                        } else {
+                            for(File f : childFile){
+                                if(f.isFile()){
+                                    f.delete();
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                break;
+        }
+        return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
     @Override

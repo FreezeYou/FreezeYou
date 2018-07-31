@@ -116,6 +116,9 @@
     <string name="getDisabledApplications">获得已冻结的应用程序列表</string>
     <string name="enableApplications">解冻应用</string>
     <string name="disableApplications">冻结应用</string>
+    <string name="clearIconCache">清除图标缓存</string>
+    <string name="clearNameCache">清除应用程序名称缓存</string>
+    <string name="refreshCache">刷新缓存</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>

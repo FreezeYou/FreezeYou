@@ -34,14 +34,19 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
 
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
 class Support {
     private static Process process = null;
     private static DataOutputStream outputStream = null;
-    static Drawable drawable;
+    private static Drawable drawable;
+    private static Bitmap bitmap;
     private static void makeDialog(final String title,final String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final String pkgName,final boolean enabled) {
         AlertDialog.Builder builder =
                 buildAlertDialog(activity, getApplicationIcon(activity, pkgName, applicationInfo, true), message, title)
@@ -265,11 +270,18 @@ class Support {
     }
 
     static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo,boolean resize){
-        if (applicationInfo!=null){
-            drawable = context.getPackageManager().getApplicationIcon(applicationInfo);
+        String path = context.getFilesDir()+"/icon/"+pkgName+".png";
+        if (new File(path).exists()){
+            drawable = BitmapDrawable.createFromPath(path);
+        } else if (applicationInfo!=null){
+            drawable = applicationInfo.loadIcon(context.getPackageManager());
+            folderCheck(context.getFilesDir()+"/icon");
+            writeBitmapToFile(path,getBitmapFromDrawable(drawable));
         } else if (!"".equals(pkgName)){
             try {
                 drawable = context.getPackageManager().getApplicationIcon(pkgName);
+                folderCheck(context.getFilesDir()+"/icon");
+                writeBitmapToFile(path,getBitmapFromDrawable(drawable));
             } catch (Exception e){
                 drawable = context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
             }
@@ -278,15 +290,67 @@ class Support {
             drawable = context.getResources().getDrawable(R.mipmap.ic_launcher_round);
         }
         if (resize){
-            int width = drawable.getIntrinsicWidth();
-            int height= drawable.getIntrinsicHeight();
+            bitmap = getBitmapFromDrawable(drawable);
+            int width = bitmap.getWidth();
+            int height= bitmap.getHeight();
             Matrix matrix = new Matrix();
-            float scaleWidth = ((float)72 / width);
-            float scaleHeight = ((float)72 / height);
+            float scaleWidth = ((float)72)/ width;
+            float scaleHeight = ((float)72)/ height;
             matrix.postScale(scaleWidth, scaleHeight);
-            return new BitmapDrawable(Bitmap.createBitmap(getBitmapFromDrawable(drawable), 0, 0, width, height, matrix, true));
+            return new BitmapDrawable(Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true));
         } else {
-            return new BitmapDrawable(Bitmap.createBitmap(getBitmapFromDrawable(drawable)));
+            return drawable;
+        }
+    }
+
+    private static void writeBitmapToFile(String filePath, Bitmap b) {
+        try {
+            File file = new File(filePath);
+            FileOutputStream fos = new FileOutputStream(file);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            b.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            bos.flush();
+            bos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void folderCheck(String path) {
+        File file = new File(path);
+        if (!file.isDirectory()) {
+            file.delete();
+        }
+        if (!file.exists()) {
+            if (!file.mkdirs()) {
+                throw new IllegalStateException("Unable to create directory: " +
+                        file.getAbsolutePath());
+            }
+        }
+    }
+
+    static String getApplicationLabel(Context context,PackageManager packageManager,ApplicationInfo applicationInfo,String pkgName){
+        if (packageManager==null){
+            packageManager = context.getPackageManager();
+        }
+        SharedPreferences sharedPreferences = context.getSharedPreferences("NameOfPackages",Context.MODE_PRIVATE);
+        String name = sharedPreferences.getString(pkgName,"");
+        if (!name.equals("")){
+            return name;
+        }
+        if (applicationInfo!=null){
+            name = applicationInfo.loadLabel(packageManager).toString();
+            sharedPreferences.edit().putString(pkgName,name).apply();
+            return name;
+        } else {
+            try {
+                name = packageManager.getApplicationInfo(pkgName,GET_UNINSTALLED_PACKAGES).loadLabel(packageManager).toString();
+                sharedPreferences.edit().putString(pkgName,name).apply();
+                return name;
+            } catch (Exception e){
+                e.printStackTrace();
+                return pkgName;
+            }
         }
     }
 

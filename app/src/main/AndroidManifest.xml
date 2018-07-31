@@ -225,6 +225,7 @@
         </receiver>
         <service
             android:process=":screenLockOneKeyFreezeService"
+            android:exported="false"
             android:name=".service.ScreenLockOneKeyFreezeService" />
     </application>
 
