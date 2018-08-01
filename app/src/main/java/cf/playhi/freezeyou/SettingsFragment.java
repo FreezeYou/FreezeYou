@@ -20,6 +20,7 @@ import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
 import static cf.playhi.freezeyou.Support.checkUpdate;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.openDevicePolicyManager;
+import static cf.playhi.freezeyou.Support.requestOpenWebSite;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -131,6 +132,12 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     break;
                 case "checkUpdate":
                     checkUpdate(getActivity());
+                    break;
+                case "helpTranslate":
+                    requestOpenWebSite(getActivity(),"https://crwd.in/freezeyou");
+                    break;
+                case "thanksList":
+                    requestOpenWebSite(getActivity(),"https://freezeyou.playhi.cf/thanks.html");
                     break;
                 default:
                     break;

@@ -20,6 +20,11 @@
             android:summary="@string/nSCaution"
             android:key="noCaution"
             android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:title="@string/saveOnClickFunctionStatus"
+            android:summary="@string/saveOnClickFunctionStatus"
+            android:key="saveOnClickFunctionStatus"
+            android:defaultValue="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -105,14 +110,20 @@
     <PreferenceCategory
         android:title="@string/more">
         <Preference
+            android:title="@string/update"
+            android:key="checkUpdate"/>
+        <Preference
+            android:title="@string/helpTranslate"
+            android:key="helpTranslate"/>
+        <Preference
+            android:title="@string/thanksList"
+            android:key="thanksList"/>
+        <Preference
             android:title="@string/about">
             <intent
                 android:targetPackage="cf.playhi.freezeyou"
                 android:targetClass="cf.playhi.freezeyou.AboutActivity" />
         </Preference>
-        <Preference
-            android:title="@string/update"
-            android:key="checkUpdate"/>
     </PreferenceCategory>
 
     <PreferenceCategory
