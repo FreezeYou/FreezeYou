@@ -10,8 +10,8 @@ import cf.playhi.freezeyou.OneKeyFreeze;
 
 public class ScreenLockListener {
 
-    private Context mContext;
-    private ScreenLockBroadcastReceiver mScreenLockReceiver;
+    private final Context mContext;
+    private final ScreenLockBroadcastReceiver mScreenLockReceiver;
 
     public ScreenLockListener(Context context){
         mContext = context;

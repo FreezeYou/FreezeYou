@@ -48,8 +48,7 @@
   <string name="uninstalled">Uninstalled</string>
   <string name="onlySA">System pre-installed</string>
   <string name="onlyUA">User Application</string>
-  <string name="exit">Exit</string>
-  <string name="moreSettings">Settings</string>
+    <string name="moreSettings">Settings</string>
   <string name="visitWebsite">Visit Website</string>
   <string name="addQQGroup">Join QQ Group</string>
   <string name="dangerZone">Danger Zone</string>

@@ -48,8 +48,7 @@
   <string name="uninstalled">已卸载</string>
   <string name="onlySA">系统预装</string>
   <string name="onlyUA">用户应用</string>
-  <string name="exit">退出软件</string>
-  <string name="moreSettings">更多设置</string>
+    <string name="moreSettings">更多设置</string>
   <string name="visitWebsite">访问官网</string>
   <string name="addQQGroup">加入QQ群</string>
   <string name="dangerZone">危险区</string>
