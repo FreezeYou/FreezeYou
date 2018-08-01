@@ -103,6 +103,19 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/more">
+        <Preference
+            android:title="@string/about">
+            <intent
+                android:targetPackage="cf.playhi.freezeyou"
+                android:targetClass="cf.playhi.freezeyou.AboutActivity" />
+        </Preference>
+        <Preference
+            android:title="@string/update"
+            android:key="checkUpdate"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/advance">
         <Preference
             android:title="@string/manualMode">

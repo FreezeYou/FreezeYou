@@ -17,6 +17,7 @@ import java.io.File;
 
 import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
 
+import static cf.playhi.freezeyou.Support.checkUpdate;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.openDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.showToast;
@@ -103,31 +104,37 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        switch (preference.getKey()){
-            case "clearNameCache":
-                getActivity().getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE).edit().clear().apply();
-                break;
-            case "clearIconCache":
-                try {
-                    File file = new File(getActivity().getFilesDir()+"/icon");
-                    if(file.exists()&&file.isDirectory()){
-                        File[] childFile = file.listFiles();
-                        if(childFile == null || childFile.length == 0){
-                            file.delete();
-                        } else {
-                            for(File f : childFile){
-                                if(f.isFile()){
-                                    f.delete();
+        String key = preference.getKey();
+        if (key!=null){
+            switch (key){
+                case "clearNameCache":
+                    getActivity().getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE).edit().clear().apply();
+                    break;
+                case "clearIconCache":
+                    try {
+                        File file = new File(getActivity().getFilesDir()+"/icon");
+                        if(file.exists()&&file.isDirectory()){
+                            File[] childFile = file.listFiles();
+                            if(childFile == null || childFile.length == 0){
+                                file.delete();
+                            } else {
+                                for(File f : childFile){
+                                    if(f.isFile()){
+                                        f.delete();
+                                    }
                                 }
                             }
                         }
+                    } catch (Exception e){
+                        e.printStackTrace();
                     }
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-                break;
-            default:
-                break;
+                    break;
+                case "checkUpdate":
+                    checkUpdate(getActivity());
+                    break;
+                default:
+                    break;
+            }
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
