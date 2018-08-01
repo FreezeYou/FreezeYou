@@ -89,7 +89,7 @@ public class Main extends Activity {
             e.printStackTrace();
             go();
         }
-        //throw new RuntimeException("自定义异常：仅于异常上报测试中使用");//发版前务必注释
+//        throw new RuntimeException("自定义异常：仅于异常上报测试中使用");//发版前务必注释
     }
 
     @Override
@@ -170,31 +170,6 @@ public class Main extends Activity {
                 );
                 return true;
             case R.id.menu_about:
-//                buildAlertDialog(this,R.mipmap.ic_launcher_round,R.string.about_message,R.string.about)
-//                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                            }
-//                        })
-//                        .setNeutralButton(R.string.visitWebsite, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                Uri webPage = Uri.parse("https://freezeyou.playhi.cf/");
-//                                Intent about = new Intent(Intent.ACTION_VIEW, webPage);
-//                                if (about.resolveActivity(getPackageManager()) != null) {
-//                                    startActivity(about);
-//                                } else {
-//                                    showToast(getApplicationContext(),R.string.plsVisitPXXXX);
-//                                }
-//                            }
-//                        })
-//                        .setPositiveButton(R.string.addQQGroup, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                Support.joinQQGroup(Main.this);
-//                            }
-//                        }).create().show();
                 startActivity(new Intent(this,AboutActivity.class));
                 return true;
             case R.id.menu_oneKeyFreezeImmediately:
@@ -262,23 +237,24 @@ public class Main extends Activity {
             case R.id.menu_update:
                 checkUpdate(Main.this);
                 return true;
-            case R.id.menu_exit:
-                finish();
-                return true;
             case R.id.menu_moreSettings:
                 startActivity(new Intent(this,SettingsActivity.class));
                 return true;
             case R.id.menu_onClickFunc_autoUFOrFreeze:
                 appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreeze;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
                 return true;
             case R.id.menu_onClickFunc_freezeImmediately:
                 appListViewOnClickMode = APPListViewOnClickMode_freezeImmediately;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
                 return true;
             case R.id.menu_onClickFunc_UFImmediately:
                 appListViewOnClickMode = APPListViewOnClickMode_UFImmediately;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
                 return true;
             case R.id.menu_onClickFunc_chooseAction:
                 appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -728,6 +704,9 @@ public class Main extends Activity {
         initThread.start();
         checkLongTimeNotUpdated();
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
+        if (sharedPref.getBoolean("saveOnClickFunctionStatus",false)){
+            appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus",0);
+        }
         if (!sharedPref.getBoolean("noCaution",false)){
             buildAlertDialog(Main.this,R.mipmap.ic_launcher_new_round,R.string.cautionContent,R.string.caution)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -738,13 +717,6 @@ public class Main extends Activity {
                     .setNeutralButton(R.string.hToUse, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-//                            Uri webPage = Uri.parse("https://freezeyou.playhi.cf/");
-//                            Intent about = new Intent(Intent.ACTION_VIEW, webPage);
-//                            if (about.resolveActivity(getPackageManager()) != null) {
-//                                startActivity(about);
-//                            } else {
-//                                showToast(getApplicationContext(),R.string.plsVisitPXXXX);
-//                            }
                             requestOpenWebSite(Main.this,"https://freezeyou.playhi.cf/");
                         }
                     })
@@ -863,6 +835,13 @@ public class Main extends Activity {
             } catch (Exception e){
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void saveOnClickFunctionStatus(int status){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (sharedPreferences.getBoolean("saveOnClickFunctionStatus",false)){
+            sharedPreferences.edit().putInt("onClickFunctionStatus",status).apply();
         }
     }
 
