@@ -121,6 +121,7 @@
   <string name="clearIconCache">清除图标缓存</string>
   <string name="clearNameCache">清除应用程序名称缓存</string>
   <string name="refreshCache">刷新缓存</string>
+  <string name="saveOnClickFunctionStatus">保存单击功能状态</string>
   <string-array name="launchModeSelection">
     <item>显示全部</item>
     <item>仅已冻结</item>
