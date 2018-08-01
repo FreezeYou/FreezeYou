@@ -638,6 +638,13 @@ public class Main extends Activity {
                             go();
                         }
                     })
+                    .setNeutralButton(R.string.update, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            checkUpdate(Main.this);
+                            go();
+                        }
+                    })
                     .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
