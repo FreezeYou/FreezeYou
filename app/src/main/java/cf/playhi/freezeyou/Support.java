@@ -316,15 +316,16 @@ class Support {
     }
 
     private static void folderCheck(String path) {
-        File file = new File(path);
-        if (!file.isDirectory()) {
-            file.delete();
-        }
-        if (!file.exists()) {
-            if (!file.mkdirs()) {
-                throw new IllegalStateException("Unable to create directory: " +
-                        file.getAbsolutePath());
+        try {
+            File file = new File(path);
+            if (!file.isDirectory()) {
+                file.delete();
             }
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 
