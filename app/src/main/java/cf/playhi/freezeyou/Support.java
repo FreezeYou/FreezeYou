@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -40,7 +39,6 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.List;
 
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
@@ -521,8 +519,6 @@ class Support {
 
     @SuppressLint("ApplySharedPref")
     private static void deleteNotification(Context context, String pkgName){
-        SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-                "notificationId", Context.MODE_PRIVATE);
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (mNotificationManager!=null){
@@ -862,9 +858,4 @@ class Support {
             showToast(context, context.getString(R.string.plsVisit) + " " + url);
         }
     }
-//
-//    static String getCurrentActivityPackageName(Context context) {
-//        ActivityManager am = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
-//        return am != null ? am.getRunningTasks(1).get(0).topActivity.getPackageName() : "";
-//    }
 }
