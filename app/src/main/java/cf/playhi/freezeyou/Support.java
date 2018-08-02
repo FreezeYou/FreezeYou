@@ -503,9 +503,9 @@ class Support {
             mBuilder.setContentIntent(resultPendingIntent);
             NotificationManager mNotificationManager =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-                    "notificationId", Context.MODE_PRIVATE);
-            sharedPreferences.edit().putInt(pkgName, mId).apply();
+//            SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
+//                    "notificationId", Context.MODE_PRIVATE);
+//            sharedPreferences.edit().putInt(pkgName, mId).apply();
             if (mNotificationManager != null) {
                 // mId allows you to update the notification later on.
                 mNotificationManager.notify(mId, mBuilder.build());
@@ -524,7 +524,7 @@ class Support {
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (mNotificationManager!=null){
-            mNotificationManager.cancel(sharedPreferences.getInt(pkgName,0));
+            mNotificationManager.cancel(pkgName.hashCode());
             SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String notifying = defaultSharedPreferences.getString("notifying","");
             if (notifying.contains(pkgName+"!")){

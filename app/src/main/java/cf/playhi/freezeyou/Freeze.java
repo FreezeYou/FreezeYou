@@ -1,13 +1,16 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.os.Build;
 import android.os.Bundle;
 
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
+import static cf.playhi.freezeyou.Support.getApplicationLabel;
 import static cf.playhi.freezeyou.Support.processAddTranslucent;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.shortcutMakeDialog;
@@ -40,7 +43,11 @@ public class Freeze extends Activity{
         } else if ("".equals(pkgName)){
             showToast(getApplicationContext(),"参数错误");
             Freeze.this.finish();
-        } else if (3 == getIntent().getIntExtra("ot",0)) {
+        }
+        if (Build.VERSION.SDK_INT>=21){
+            setTaskDescription(new ActivityManager.TaskDescription(getApplicationLabel(this,null,null,pkgName)));
+        }
+        if (3 == getIntent().getIntExtra("ot",0)) {
             processDialog(pkgName,auto,3);
         } else if ((!checkRootFrozen(Freeze.this,pkgName))&&(!checkMRootFrozen(Freeze.this,pkgName))){
             processDialog(pkgName,auto,2);
