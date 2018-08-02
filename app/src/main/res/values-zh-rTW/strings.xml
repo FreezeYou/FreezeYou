@@ -120,7 +120,7 @@
   <string name="clearIconCache">清除圖示快取</string>
   <string name="clearNameCache">清除應用程式名稱快取</string>
   <string name="refreshCache">刷新快取</string>
-  <string name="saveOnClickFunctionStatus">保存单击功能状态</string>
+  <string name="saveOnClickFunctionStatus">保存單擊功能狀態</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
