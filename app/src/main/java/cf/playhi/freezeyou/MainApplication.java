@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
 
@@ -27,9 +28,11 @@ public class MainApplication extends Application {
 
     static void setCurrentPackage(String pkgName){
         mCurrentPackage = pkgName;
+        Log.e("!",mCurrentPackage);
     }
 
     static String getCurrentPackage(){
+        Log.e("!!",mCurrentPackage);
         return mCurrentPackage;
     }
 }

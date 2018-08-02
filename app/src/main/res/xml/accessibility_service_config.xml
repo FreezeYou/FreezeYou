@@ -2,10 +2,10 @@
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/accessibility_service_description"
     android:packageNames="@null"
-    android:accessibilityEventTypes="typeWindowsChanged"
+    android:accessibilityEventTypes="typeWindowStateChanged"
     android:accessibilityFlags="flagRetrieveInteractiveWindows"
     android:accessibilityFeedbackType="feedbackAllMask"
-    android:notificationTimeout="10"
+    android:notificationTimeout="100"
     android:canRetrieveWindowContent="true"
     android:settingsActivity="cf.playhi.SettingsActivity"
     />
