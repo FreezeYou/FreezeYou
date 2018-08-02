@@ -121,6 +121,7 @@
   <string name="clearNameCache">清除應用程式名稱快取</string>
   <string name="refreshCache">刷新快取</string>
   <string name="saveOnClickFunctionStatus">保存單擊功能狀態</string>
+  <string name="accessibility_service_description">侦听前台应用切换变化。\n用于避免自动冻结时前台应用被冻结以及应用不在前台时自动冻结等功能。</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
