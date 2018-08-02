@@ -3,10 +3,12 @@ package cf.playhi.freezeyou;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
 import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
+import static cf.playhi.freezeyou.Support.createNotification;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
     @Override
@@ -15,9 +17,11 @@ public class BootCompletedReceiver extends BroadcastReceiver {
             switch (intent.getAction()){
                 case Intent.ACTION_BOOT_COMPLETED:
                     runBackgroundService(context);
+                    checkAndReNotifyNotifications(context);
                     break;
                 case Intent.ACTION_PACKAGE_REPLACED:
                     runBackgroundService(context);
+                    checkAndReNotifyNotifications(context);
                     break;
                 default:
                     break;
@@ -31,6 +35,17 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                 context.startForegroundService(new Intent(context, ScreenLockOneKeyFreezeService.class));
             } else {
                 context.startService(new Intent(context, ScreenLockOneKeyFreezeService.class));
+            }
+        }
+    }
+
+    private void checkAndReNotifyNotifications(Context context){
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String string = defaultSharedPreferences.getString("notifying","");
+        if (!"".equals(string)){
+            String[] strings = string.split("!");
+            for (String aPkgName : strings){
+                createNotification(context,aPkgName,R.drawable.ic_notification);
             }
         }
     }

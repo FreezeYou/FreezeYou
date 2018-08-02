@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -451,7 +452,8 @@ class Support {
         }
     }
 
-    private static void createNotification(Context context,String pkgName,int iconResId){
+    @SuppressLint("ApplySharedPref")
+    static void createNotification(Context context, String pkgName, int iconResId){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             String description;
             SharedPreferences preferenceManager = PreferenceManager.getDefaultSharedPreferences(context);
@@ -507,17 +509,27 @@ class Support {
             if (mNotificationManager != null) {
                 // mId allows you to update the notification later on.
                 mNotificationManager.notify(mId, mBuilder.build());
+                String notifying = preferenceManager.getString("notifying","");
+                if (!notifying.contains(pkgName+"!")){
+                    preferenceManager.edit().putString("notifying",notifying+pkgName+"!").commit();//一键解冻会多次调用，如果apply可能会遗失数据。
+                }
             }
         }
     }
 
-    private static void deleteNotification(Context context,String pkgName){
+    @SuppressLint("ApplySharedPref")
+    private static void deleteNotification(Context context, String pkgName){
         SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
                 "notificationId", Context.MODE_PRIVATE);
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (mNotificationManager!=null){
             mNotificationManager.cancel(sharedPreferences.getInt(pkgName,0));
+            SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            String notifying = defaultSharedPreferences.getString("notifying","");
+            if (notifying.contains(pkgName+"!")){
+                defaultSharedPreferences.edit().putString("notifying",notifying.replace(pkgName+"!","")).commit();
+            }
         }
     }
 
