@@ -9,6 +9,8 @@ import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
 
 public class MainApplication extends Application {
 
+    private static String mCurrentPackage = "";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -23,4 +25,11 @@ public class MainApplication extends Application {
         }
     }
 
+    static void setCurrentPackage(String pkgName){
+        mCurrentPackage = pkgName;
+    }
+
+    static String getCurrentPackage(){
+        return mCurrentPackage;
+    }
 }

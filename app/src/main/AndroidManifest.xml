@@ -227,6 +227,18 @@
             android:process=":screenLockOneKeyFreezeService"
             android:exported="false"
             android:name=".service.ScreenLockOneKeyFreezeService" />
+        <service
+            android:process=":accessibilityService"
+            android:name=".AccessibilityService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
     </application>
 
 </manifest>

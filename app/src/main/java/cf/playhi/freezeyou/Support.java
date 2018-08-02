@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -39,6 +40,7 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
@@ -661,27 +663,30 @@ class Support {
     }
 
     static void oneKeyActionRoot(Context context,Activity activity,boolean freeze,String[] pkgNameList,boolean finish){
+        String currentPackage = MainApplication.getCurrentPackage();
         try {
             process = Runtime.getRuntime().exec("su");
             outputStream = new DataOutputStream(process.getOutputStream());
             if (freeze){
                 for (String aPkgNameList : pkgNameList) {
-                    try{
-                        int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
-                        if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
-                            outputStream.writeBytes(
-                                    "pm disable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                    if (!currentPackage.equals(aPkgNameList)) {
+                        try {
+                            int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
+                            if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+                                outputStream.writeBytes(
+                                        "pm disable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            showToast(context, R.string.plsRemoveUninstalledApplications);
                         }
-                    } catch (Exception e){
-                        e.printStackTrace();
-                        showToast(context,R.string.plsRemoveUninstalledApplications);
                     }
                 }
             } else {
                 for (String aPkgNameList : pkgNameList) {
                     try {
                         int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
-                        if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED){
+                        if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
                             outputStream.writeBytes(
                                     "pm enable " + aPkgNameList.replaceAll("\\|", "") + "\n");
                         }
@@ -721,32 +726,35 @@ class Support {
 
     @TargetApi(21)
     static void oneKeyActionMRoot(Context context,Activity activity,boolean freeze,String[] pkgNameList){
+        String currentPackage = MainApplication.getCurrentPackage();
         for (String aPkgNameList : pkgNameList) {
             String tmp = aPkgNameList.replaceAll("\\|", "");
-            try {
-                if (freeze){
-                    if (!checkMRootFrozen(activity, tmp)) {
-                        if (!getDevicePolicyManager(activity).setApplicationHidden(
-                                DeviceAdminReceiver.getComponentName(activity), tmp, true)) {
-                            showToast(activity, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
-                        } else {
-                            deleteNotification(activity,tmp);
+                try {
+                    if (freeze){
+                        if (!currentPackage.equals(aPkgNameList)) {
+                            if (!checkMRootFrozen(activity, tmp)) {
+                                if (!getDevicePolicyManager(activity).setApplicationHidden(
+                                        DeviceAdminReceiver.getComponentName(activity), tmp, true)) {
+                                    showToast(activity, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                                } else {
+                                    deleteNotification(activity, tmp);
+                                }
+                            }
+                        }
+                    } else {
+                        if (checkMRootFrozen(activity, tmp)) {
+                            if (!getDevicePolicyManager(activity).setApplicationHidden(
+                                    DeviceAdminReceiver.getComponentName(activity), tmp, false)) {
+                                showToast(activity, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                            } else {
+                                createNotification(activity,tmp,R.drawable.ic_notification);
+                            }
                         }
                     }
-                } else {
-                    if (checkMRootFrozen(activity, tmp)) {
-                        if (!getDevicePolicyManager(activity).setApplicationHidden(
-                                DeviceAdminReceiver.getComponentName(activity), tmp, false)) {
-                            showToast(activity, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
-                        } else {
-                            createNotification(activity,tmp,R.drawable.ic_notification);
-                        }
-                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showToast(activity, "发生了点异常，操作仍将继续:" + e.getLocalizedMessage());
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                showToast(activity, "发生了点异常，操作仍将继续:" + e.getLocalizedMessage());
-            }
         }
         showToast(activity,R.string.executed);
     }
@@ -854,4 +862,9 @@ class Support {
             showToast(context, context.getString(R.string.plsVisit) + " " + url);
         }
     }
+//
+//    static String getCurrentActivityPackageName(Context context) {
+//        ActivityManager am = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
+//        return am != null ? am.getRunningTasks(1).get(0).topActivity.getPackageName() : "";
+//    }
 }
