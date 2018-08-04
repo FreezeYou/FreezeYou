@@ -124,11 +124,11 @@ class Support {
             if (process1 != null){
                 process1.destroy();
             }
-            if (finish){
+            if (finish && activity != null) {
                 activity.finish();
             }
         } catch (Exception e) {
-            if (finish){
+            if (finish && activity != null) {
                 activity.finish();
             }
         }
@@ -511,8 +511,8 @@ class Support {
                 // mId allows you to update the notification later on.
                 mNotificationManager.notify(mId, mBuilder.build());
                 String notifying = preferenceManager.getString("notifying","");
-                if (!notifying.contains(pkgName+"!")){
-                    preferenceManager.edit().putString("notifying",notifying+pkgName+"!").commit();//一键解冻会多次调用，如果apply可能会遗失数据。
+                if (!notifying.contains(pkgName+",")){
+                    preferenceManager.edit().putString("notifying",notifying+pkgName+",").commit();//一键解冻会多次调用，如果apply可能会遗失数据。
                 }
             }
         }
@@ -526,8 +526,8 @@ class Support {
             mNotificationManager.cancel(pkgName.hashCode());
             SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String notifying = defaultSharedPreferences.getString("notifying","");
-            if (notifying.contains(pkgName+"!")){
-                defaultSharedPreferences.edit().putString("notifying",notifying.replace(pkgName+"!","")).commit();
+            if (notifying.contains(pkgName+",")){
+                defaultSharedPreferences.edit().putString("notifying",notifying.replace(pkgName+",","")).commit();
             }
         }
     }
@@ -699,7 +699,7 @@ class Support {
             if (exitValue == 0) {
                 if (freeze){
                     for (String aPkgNameList : pkgNameList) {
-                        deleteNotification(activity,aPkgNameList.replaceAll("\\|", ""));
+                        deleteNotification(context,aPkgNameList.replaceAll("\\|", ""));
                     }
                 } else {
                     for (String aPkgNameList : pkgNameList) {
@@ -713,9 +713,9 @@ class Support {
             destroyProcess(finish,outputStream,process,activity);
         } catch (Exception e){
             e.printStackTrace();
-            showToast(activity,context.getString(R.string.exception) + e.getMessage());
+            showToast(context,context.getString(R.string.exception) + e.getMessage());
             if (e.getMessage().toLowerCase().contains("permission denied")||e.getMessage().toLowerCase().contains("not found")){
-                showToast(activity,R.string.mayUnrooted);
+                showToast(context,R.string.mayUnrooted);
             }
             destroyProcess(finish,outputStream,process,activity);
         }
@@ -729,31 +729,31 @@ class Support {
                 try {
                     if (freeze){
                         if (!currentPackage.equals(aPkgNameList)) {
-                            if (!checkMRootFrozen(activity, tmp)) {
-                                if (!getDevicePolicyManager(activity).setApplicationHidden(
-                                        DeviceAdminReceiver.getComponentName(activity), tmp, true)) {
-                                    showToast(activity, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                            if (!checkMRootFrozen(context, tmp)) {
+                                if (!getDevicePolicyManager(context).setApplicationHidden(
+                                        DeviceAdminReceiver.getComponentName(context), tmp, true)) {
+                                    showToast(context, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
                                 } else {
-                                    deleteNotification(activity, tmp);
+                                    deleteNotification(context, tmp);
                                 }
                             }
                         }
                     } else {
-                        if (checkMRootFrozen(activity, tmp)) {
-                            if (!getDevicePolicyManager(activity).setApplicationHidden(
-                                    DeviceAdminReceiver.getComponentName(activity), tmp, false)) {
-                                showToast(activity, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                        if (checkMRootFrozen(context, tmp)) {
+                            if (!getDevicePolicyManager(context).setApplicationHidden(
+                                    DeviceAdminReceiver.getComponentName(context), tmp, false)) {
+                                showToast(context, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
                             } else {
-                                createNotification(activity,tmp,R.drawable.ic_notification);
+                                createNotification(context,tmp,R.drawable.ic_notification);
                             }
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    showToast(activity, "发生了点异常，操作仍将继续:" + e.getLocalizedMessage());
+                    showToast(context, "发生了点异常，操作仍将继续:" + e.getLocalizedMessage());
                 }
         }
-        showToast(activity,R.string.executed);
+        showToast(context,R.string.executed);
     }
 
     static boolean addToOneKeyList(Context context,String freezeOrUF,String pkgName){
@@ -857,6 +857,20 @@ class Support {
             context.startActivity(about);
         } else {
             showToast(context, context.getString(R.string.plsVisit) + " " + url);
+        }
+    }
+
+    static void doLockScreen(Context context){
+        DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
+        if (devicePolicyManager!=null){
+            if (devicePolicyManager.isAdminActive(componentName)){
+                devicePolicyManager.lockNow();
+            } else {
+                openDevicePolicyManager(context);
+            }
+        } else {
+            showToast(context,R.string.devicePolicyManagerNotFound);
         }
     }
 }

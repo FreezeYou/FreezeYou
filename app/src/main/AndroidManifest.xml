@@ -164,6 +164,12 @@
             android:theme="@style/AppTheme.Default"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"/>
         <activity
+            android:name=".AskLockScreenActivity"
+            android:label="@string/askIfLockScreen"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.Translucent.NoTitleBar"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"/>
+        <activity
             android:name=".GetDisabledApplications"
             android:exported="true"
             android:excludeFromRecents="true"
@@ -226,9 +232,9 @@
         <service
             android:process=":screenLockOneKeyFreezeService"
             android:exported="false"
-            android:name=".service.ScreenLockOneKeyFreezeService" />
+            android:name=".ScreenLockOneKeyFreezeService" />
         <service
-            android:process=":accessibilityService"
+            android:process="backgroundService"
             android:name=".AccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:label="@string/app_name">
@@ -239,6 +245,16 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
         </service>
+        <service
+            android:process="backgroundService"
+            android:label="@string/oneKeyFreeze"
+            android:exported="false"
+            android:name=".OneKeyFreezeService" />
+        <service
+            android:process="backgroundService"
+            android:label="@string/oneKeyUF"
+            android:exported="false"
+            android:name=".OneKeyUFService" />
     </application>
 
 </manifest>

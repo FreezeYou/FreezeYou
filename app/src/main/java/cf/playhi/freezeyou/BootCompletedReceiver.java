@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
-import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
 import static cf.playhi.freezeyou.Support.createNotification;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
@@ -43,7 +42,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String string = defaultSharedPreferences.getString("notifying","");
         if (!"".equals(string)){
-            String[] strings = string.split("!");
+            String[] strings = string.split(",");
             for (String aPkgName : strings){
                 createNotification(context,aPkgName,R.drawable.ic_notification);
             }

@@ -1,30 +1,21 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-
-import static cf.playhi.freezeyou.Support.isDeviceOwner;
-import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
-import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
-import static cf.playhi.freezeyou.Support.processAddTranslucent;
-import static cf.playhi.freezeyou.Support.processSetTheme;
 
 public class OneKeyUF extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        processSetTheme(this);
-        processAddTranslucent(this);
         super.onCreate(savedInstanceState);
-        Activity activity = this;
-        String[] pkgNameList = getApplicationContext().getSharedPreferences(
-                "OneKeyUFApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
-        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(activity)){
-            oneKeyActionMRoot(activity,activity,false,pkgNameList);
-            finish();
+        if (Build.VERSION.SDK_INT>=26){
+            this.startForegroundService(
+                    new Intent(getApplicationContext(), OneKeyUFService.class));
         } else {
-            oneKeyActionRoot(activity,activity,false,pkgNameList,true);
+            this.startService(
+                    new Intent(getApplicationContext(), OneKeyUFService.class));
         }
+        finish();
     }
 }

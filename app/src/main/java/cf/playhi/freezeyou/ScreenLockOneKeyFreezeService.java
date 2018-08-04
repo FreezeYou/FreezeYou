@@ -1,4 +1,4 @@
-package cf.playhi.freezeyou.service;
+package cf.playhi.freezeyou;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -8,9 +8,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-
-import cf.playhi.freezeyou.R;
-import cf.playhi.freezeyou.listener.ScreenLockListener;
 
 public class ScreenLockOneKeyFreezeService extends Service {
 

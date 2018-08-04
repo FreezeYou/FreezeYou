@@ -15,7 +15,6 @@ import android.preference.PreferenceScreen;
 
 import java.io.File;
 
-import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
 
 import static cf.playhi.freezeyou.Support.checkUpdate;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
