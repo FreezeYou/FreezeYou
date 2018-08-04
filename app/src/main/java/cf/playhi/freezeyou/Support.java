@@ -337,7 +337,7 @@ class Support {
         }
         SharedPreferences sharedPreferences = context.getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE);
         String name = sharedPreferences.getString(pkgName, "");
-        if (!name.equals("")) {
+        if (!"".equals(name)) {
             return name;
         }
         if (applicationInfo != null) {
