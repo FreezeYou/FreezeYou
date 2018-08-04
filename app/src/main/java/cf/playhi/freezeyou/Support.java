@@ -31,7 +31,6 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -331,25 +330,26 @@ class Support {
         }
     }
 
-    static String getApplicationLabel(Context context,PackageManager packageManager,ApplicationInfo applicationInfo,String pkgName){
-        if (packageManager==null){
-            packageManager = context.getPackageManager();
+    static String getApplicationLabel(Context context,PackageManager packageManager,ApplicationInfo applicationInfo,String pkgName) {
+        PackageManager pm = packageManager;
+        if (pm == null) {
+            pm = context.getPackageManager();
         }
-        SharedPreferences sharedPreferences = context.getSharedPreferences("NameOfPackages",Context.MODE_PRIVATE);
-        String name = sharedPreferences.getString(pkgName,"");
-        if (!name.equals("")){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE);
+        String name = sharedPreferences.getString(pkgName, "");
+        if (!name.equals("")) {
             return name;
         }
-        if (applicationInfo!=null){
-            name = applicationInfo.loadLabel(packageManager).toString();
-            sharedPreferences.edit().putString(pkgName,name).apply();
+        if (applicationInfo != null) {
+            name = applicationInfo.loadLabel(pm).toString();
+            sharedPreferences.edit().putString(pkgName, name).apply();
             return name;
         } else {
             try {
-                name = packageManager.getApplicationInfo(pkgName,GET_UNINSTALLED_PACKAGES).loadLabel(packageManager).toString();
-                sharedPreferences.edit().putString(pkgName,name).apply();
+                name = pm.getApplicationInfo(pkgName, GET_UNINSTALLED_PACKAGES).loadLabel(pm).toString();
+                sharedPreferences.edit().putString(pkgName, name).apply();
                 return name;
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 return pkgName;
             }
@@ -728,14 +728,12 @@ class Support {
             String tmp = aPkgNameList.replaceAll("\\|", "");
                 try {
                     if (freeze){
-                        if (!currentPackage.equals(aPkgNameList)) {
-                            if (!checkMRootFrozen(context, tmp)) {
-                                if (!getDevicePolicyManager(context).setApplicationHidden(
-                                        DeviceAdminReceiver.getComponentName(context), tmp, true)) {
-                                    showToast(context, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
-                                } else {
-                                    deleteNotification(context, tmp);
-                                }
+                        if (!currentPackage.equals(aPkgNameList) && !checkMRootFrozen(context, tmp)) {
+                            if (!getDevicePolicyManager(context).setApplicationHidden(
+                                    DeviceAdminReceiver.getComponentName(context), tmp, true)) {
+                                showToast(context, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                            } else {
+                                deleteNotification(context, tmp);
                             }
                         }
                     } else {
