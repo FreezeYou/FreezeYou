@@ -71,8 +71,8 @@ public class SelectOperation extends Activity {
         final SharedPreferences FreezeOnceQuitSharedPreferences = getApplicationContext().getSharedPreferences(
                 "FreezeOnceQuit", Context.MODE_PRIVATE);
         final String FreezeOnceQuitPkgNameList = FreezeOnceQuitSharedPreferences.getString("pkgName", "");
-        if (UFPkgNameList.contains("|" + pkgName + "|")) {
-            operationData[4] = getResources().getString(R.string.removeFromFreezeOnceQuit);
+        if (FreezeOnceQuitPkgNameList.contains("|" + pkgName + "|")) {
+            operationData[5] = getResources().getString(R.string.removeFromFreezeOnceQuit);
         }
 
         final ListAdapter adapt = new ArrayAdapter<>(SelectOperation.this, R.layout.so_item, operationData);
