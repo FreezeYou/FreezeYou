@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +24,8 @@ import static cf.playhi.freezeyou.Support.addToOneKeyList;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getApplicationInfoFromPkgName;
+import static cf.playhi.freezeyou.Support.isAccessibilitySettingsOn;
+import static cf.playhi.freezeyou.Support.openAccessibilitySettings;
 import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
 import static cf.playhi.freezeyou.Support.showToast;
 
@@ -47,6 +50,7 @@ public class SelectOperation extends Activity {
                 getResources().getString(R.string.copyPkgName),
                 getResources().getString(R.string.addToOneKeyList),
                 getResources().getString(R.string.addToOneKeyUFList),
+                getResources().getString(R.string.addToFreezeOnceQuit),
                 getResources().getString(R.string.appDetail)
         };
 
@@ -62,6 +66,13 @@ public class SelectOperation extends Activity {
         final String UFPkgNameList = UFSharedPreferences.getString("pkgName", "");
         if (UFPkgNameList.contains("|" + pkgName + "|")) {
             operationData[4] = getResources().getString(R.string.removeFromOneKeyUFList);
+        }
+
+        final SharedPreferences FreezeOnceQuitSharedPreferences = getApplicationContext().getSharedPreferences(
+                "FreezeOnceQuit", Context.MODE_PRIVATE);
+        final String FreezeOnceQuitPkgNameList = FreezeOnceQuitSharedPreferences.getString("pkgName", "");
+        if (UFPkgNameList.contains("|" + pkgName + "|")) {
+            operationData[4] = getResources().getString(R.string.removeFromFreezeOnceQuit);
         }
 
         final ListAdapter adapt = new ArrayAdapter<>(SelectOperation.this, R.layout.so_item, operationData);
@@ -159,6 +170,28 @@ public class SelectOperation extends Activity {
                         finish();
                         break;
                     case 5:
+                        if (FreezeOnceQuitPkgNameList.contains("|" + pkgName + "|")) {
+                            showToast(getApplicationContext(),
+                                    removeFromOneKeyList(getApplicationContext(),
+                                            "FreezeOnceQuit",
+                                            pkgName) ? R.string.removed : R.string.removeFailed);
+                        } else {
+                            showToast(getApplicationContext(),
+                                    addToOneKeyList(getApplicationContext(),
+                                            "FreezeOnceQuit",
+                                            pkgName) ? R.string.added : R.string.addFailed);
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            if(!preferences.getBoolean("freezeOnceQuit",false)){
+                                preferences.edit().putBoolean("freezeOnceQuit",true).apply();
+                                if (!isAccessibilitySettingsOn(getApplicationContext())){
+                                    showToast(SelectOperation.this,R.string.needActiveAccessibilityService);
+                                    openAccessibilitySettings(getApplicationContext());
+                                }
+                            }
+                        }
+                        finish();
+                        break;
+                    case 6:
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", pkgName, null);
                         intent.setData(uri);

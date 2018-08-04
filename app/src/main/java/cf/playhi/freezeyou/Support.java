@@ -31,6 +31,8 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -642,7 +644,7 @@ class Support {
     }
 
     static void processFreezeAction(Context context,Activity activity,String pkgName,ApplicationInfo applicationInfo,boolean finish,boolean askRun) {
-        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(activity)) {
+        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
             processMRootAction(context, activity, pkgName, true, applicationInfo, finish, askRun);
         } else {
             processRootAction(pkgName, context, activity, false, finish, applicationInfo, askRun);
@@ -870,5 +872,49 @@ class Support {
         } else {
             showToast(context,R.string.devicePolicyManagerNotFound);
         }
+    }
+
+
+    static void openAccessibilitySettings(Context context){
+        try {
+            Intent accessibilityIntent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            context.startActivity(accessibilityIntent);
+        } catch (Exception e){
+            e.printStackTrace();
+            showToast(context,R.string.failed);
+        }
+    }
+
+    //https://stackoverflow.com/questions/18094982/detect-if-my-accessibility-service-is-enabled
+    static boolean isAccessibilitySettingsOn(Context mContext) {
+        int accessibilityEnabled = 0;
+        final String service = mContext.getPackageName() + "/" + AccessibilityService.class.getCanonicalName();
+        try {
+            accessibilityEnabled = Settings.Secure.getInt(
+                    mContext.getApplicationContext().getContentResolver(),
+                    android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
+
+        if (accessibilityEnabled == 1) {
+            String settingValue = Settings.Secure.getString(
+                    mContext.getApplicationContext().getContentResolver(),
+                    Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+            if (settingValue != null) {
+                mStringColonSplitter.setString(settingValue);
+                while (mStringColonSplitter.hasNext()) {
+                    String accessibilityService = mStringColonSplitter.next();
+                    if (accessibilityService.equalsIgnoreCase(service)) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            return false;
+        }
+        return false;
     }
 }

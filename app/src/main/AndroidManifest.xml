@@ -234,7 +234,7 @@
             android:exported="false"
             android:name=".ScreenLockOneKeyFreezeService" />
         <service
-            android:process="backgroundService"
+            android:process=":backgroundService"
             android:name=".AccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:label="@string/app_name">
@@ -246,12 +246,12 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
         <service
-            android:process="backgroundService"
+            android:process=":backgroundService"
             android:label="@string/oneKeyFreeze"
             android:exported="false"
             android:name=".OneKeyFreezeService" />
         <service
-            android:process="backgroundService"
+            android:process=":backgroundService"
             android:label="@string/oneKeyUF"
             android:exported="false"
             android:name=".OneKeyUFService" />

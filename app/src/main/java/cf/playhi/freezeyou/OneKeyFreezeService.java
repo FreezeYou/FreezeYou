@@ -28,9 +28,9 @@ public class OneKeyFreezeService extends Service {
             if (notificationManager != null)
                 notificationManager.createNotificationChannel(channel);
             mBuilder.setChannelId("OneKeyFreeze");
-            startForeground(1,mBuilder.build());
+            startForeground(2,mBuilder.build());
         } else {
-            startForeground(1, new Notification());
+            startForeground(2, new Notification());
         }
         boolean auto = intent.getBooleanExtra("autoCheckAndLockScreen",true);
         String[] pkgNameList = getApplicationContext().getSharedPreferences(
@@ -70,6 +70,10 @@ public class OneKeyFreezeService extends Service {
     }
 
     private void doFinish(){
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (mNotificationManager!=null){
+            mNotificationManager.cancel(2);
+        }
         stopSelf();
     }
 

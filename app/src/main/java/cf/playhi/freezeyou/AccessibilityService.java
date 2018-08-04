@@ -1,6 +1,8 @@
 package cf.playhi.freezeyou;
 
+import android.content.Context;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.view.accessibility.AccessibilityEvent;
 
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
@@ -16,8 +18,16 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     if (pm!=null){
                         isScreenOn = pm.isScreenOn();
                     }
-                    if (isScreenOn){// && !"android".equals(pkgName) && !"com.android.systemui".equals(pkgName)
-                        MainApplication.setCurrentPackage(pkgName.toString());
+                    String pkgNameString = pkgName.toString();
+                    if (isScreenOn && !"com.android.systemui".equals(pkgNameString)) {// && !"android".equals(pkgName)
+                        String previousPkg = MainApplication.getCurrentPackage();
+                        MainApplication.setCurrentPackage(pkgNameString);
+                        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("freezeOnceQuit", false)) {
+                            if (getApplicationContext().getSharedPreferences("FreezeOnceQuit", Context.MODE_PRIVATE)
+                                    .getString("pkgName", "").contains("|" + previousPkg + "|")&&!pkgNameString.equals(previousPkg)) {
+                                Support.processFreezeAction(getApplicationContext(), null, previousPkg, null, false, false);
+                            }
+                        }
                     }
                 }
                 break;

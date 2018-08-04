@@ -73,6 +73,15 @@
             android:summary="@string/freezeAfterScreenLock"
             android:title="@string/freezeAfterScreenLock"
             android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:key="freezeOnceQuit"
+            android:summary="@string/needActiveAccessibilityService"
+            android:title="@string/freezeOnceQuit"
+            android:defaultValue="false"/>
+        <Preference
+            android:title="@string/configureAccessibilityService"
+            android:summary="@string/accessibility_service_description"
+            android:key="configureAccessibilityService"/>
     </PreferenceCategory>
 
     <PreferenceCategory

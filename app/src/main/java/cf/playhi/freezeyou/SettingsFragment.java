@@ -18,6 +18,8 @@ import java.io.File;
 
 import static cf.playhi.freezeyou.Support.checkUpdate;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
+import static cf.playhi.freezeyou.Support.isAccessibilitySettingsOn;
+import static cf.playhi.freezeyou.Support.openAccessibilitySettings;
 import static cf.playhi.freezeyou.Support.openDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.requestOpenWebSite;
 import static cf.playhi.freezeyou.Support.showToast;
@@ -97,6 +99,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     getActivity().stopService(new Intent(getActivity().getApplicationContext(),ScreenLockOneKeyFreezeService.class));
                 }
                 break;
+            case "freezeOnceQuit":
+                if (sharedPreferences.getBoolean("freezeOnceQuit", false) && !isAccessibilitySettingsOn(getActivity()))
+                    openAccessibilitySettings(getActivity());
+                break;
             default:
                 break;
         }
@@ -137,6 +143,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     break;
                 case "thanksList":
                     requestOpenWebSite(getActivity(),"https://freezeyou.playhi.cf/thanks.html");
+                    break;
+                case "configureAccessibilityService":
+                    openAccessibilitySettings(getActivity());
                     break;
                 default:
                     break;
