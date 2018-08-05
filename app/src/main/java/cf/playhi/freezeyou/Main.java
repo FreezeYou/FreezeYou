@@ -171,7 +171,7 @@ public class Main extends Activity {
                 return true;
             case R.id.menu_createFreezeOnceQuitShortCut:
                 createShortCut(
-                        getString(R.string.oneKeyUF),
+                        getString(R.string.freezeOnceQuit),
                         "FOQ",
                         getResources().getDrawable(R.mipmap.ic_launcher_round),Main.class,
                         "FOQ",
