@@ -14,10 +14,12 @@
   <string name="appDetail">應用詳情</string>
   <string name="removeFromOneKeyList">移出一鍵凍結列表</string>
   <string name="removeFromOneKeyUFList">移出一鍵解凍列表</string>
+  <string name="removeFromFreezeOnceQuit">移出离开冻结列表</string>
   <string name="removed">已移出</string>
   <string name="removeFailed">移除失敗</string>
   <string name="addToOneKeyList">加入一鍵凍結列表</string>
   <string name="addToOneKeyUFList">加入一鍵解凍列表</string>
+  <string name="addToFreezeOnceQuit">加入离开冻结列表</string>
   <string name="addFailed">添加失敗</string>
   <string name="caution">警告</string>
   <string name="cautionContent">不知道的不要亂凍結，可能會使系統崩潰！\n請謹慎操作！\n\n長按可以多選\n\n請謹慎操作！</string>
@@ -122,6 +124,9 @@
   <string name="refreshCache">刷新快取</string>
   <string name="saveOnClickFunctionStatus">保存單擊功能狀態</string>
   <string name="accessibility_service_description">侦听前台应用切换变化。\n用于避免自动冻结时前台应用被冻结以及应用不在前台时自动冻结等功能。</string>
+  <string name="configureAccessibilityService">设置无障碍服务</string>
+  <string name="freezeOnceQuit">离开即冻结</string>
+  <string name="needActiveAccessibilityService">需要启用无障碍模式</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
@@ -130,6 +135,7 @@
     <item>用戶應用</item>
     <item>一鍵凍結</item>
     <item>一鍵解凍</item>
+    <item>离开冻结</item>
   </string-array>
   <string-array name="shortCutOneKeyFreezeAdditionalOptionsSelection">
     <item>無</item>
