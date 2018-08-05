@@ -169,6 +169,15 @@ public class Main extends Activity {
                         this
                 );
                 return true;
+            case R.id.menu_createFreezeOnceQuitShortCut:
+                createShortCut(
+                        getString(R.string.oneKeyUF),
+                        "FOQ",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),Main.class,
+                        "FOQ",
+                        this
+                );
+                return true;
             case R.id.menu_about:
                 startActivity(new Intent(this,AboutActivity.class));
                 return true;
@@ -231,6 +240,14 @@ public class Main extends Activity {
                     @Override
                     public void run() {
                         generateList("OU");
+                    }
+                }).start();
+                return true;
+            case R.id.menu_vM_freezeOnceQuit:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList("FOQ");
                     }
                 }).start();
                 return true;
@@ -359,6 +376,12 @@ public class Main extends Activity {
                 String[] autoUFPkgNameList = getApplicationContext().getSharedPreferences(
                         "OneKeyUFApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
                 oneKeyListGenerate(autoUFPkgNameList,AppList);
+                checkAndAddNotAvailablePair(AppList);
+                break;
+            case "FOQ":
+                String[] freezeOnceQuit = getApplicationContext().getSharedPreferences(
+                        "FreezeOnceQuit", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
+                oneKeyListGenerate(freezeOnceQuit,AppList);
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "OS":
@@ -694,6 +717,9 @@ public class Main extends Activity {
                         break;
                     case "OU":
                         generateList("OU");
+                        break;
+                    case "FOQ":
+                        generateList("FOQ");
                         break;
                     default:
                         generateList("all");
