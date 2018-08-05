@@ -100,8 +100,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 }
                 break;
             case "freezeOnceQuit":
-                if (sharedPreferences.getBoolean("freezeOnceQuit", false) && !isAccessibilitySettingsOn(getActivity()))
+                if (sharedPreferences.getBoolean("freezeOnceQuit", false) && !isAccessibilitySettingsOn(getActivity())){
+                    showToast(getActivity(),R.string.needActiveAccessibilityService);
                     openAccessibilitySettings(getActivity());
+                }
                 break;
             default:
                 break;

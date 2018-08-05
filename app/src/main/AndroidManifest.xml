@@ -246,6 +246,24 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
         <service
+            android:name=".OneKeyFreezeQSTileService"
+            android:label="@string/oneKeyFreeze"
+            android:icon="@drawable/ic_notification"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".OneKeyUFQSTileService"
+            android:label="@string/oneKeyUF"
+            android:icon="@drawable/ic_notification"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+            </intent-filter>
+        </service>
+        <service
             android:process=":backgroundService"
             android:label="@string/oneKeyFreeze"
             android:exported="false"

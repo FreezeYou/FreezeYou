@@ -22,6 +22,9 @@
                 android:id="@+id/menu_vM_onlyOnekeyUF"
                 android:title="@string/oneKeyUF" />
             <item
+                android:id="@+id/menu_vM_freezeOnceQuit"
+                android:title="@string/freezeOnceQuit" />
+            <item
                 android:id="@+id/menu_vM_all"
                 android:title="@string/displayAll" />
         </menu>
@@ -49,6 +52,9 @@
                     <item
                         android:id="@+id/menu_createOnlyOnekeyUFShortCut"
                         android:title="@string/oneKeyUF" />
+                    <item
+                        android:id="@+id/menu_createFreezeOnceQuitShortCut"
+                        android:title="@string/freezeOnceQuit" />
                 </menu>
             </item>
         </menu>
