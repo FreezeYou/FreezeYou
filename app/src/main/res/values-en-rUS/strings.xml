@@ -135,6 +135,7 @@
     <item>User Application</item>
     <item>一键冻结</item>
     <item>一键解冻</item>
+    <item>离开冻结</item>
   </string-array>
   <string-array name="shortCutOneKeyFreezeAdditionalOptionsSelection">
     <item>None</item>
