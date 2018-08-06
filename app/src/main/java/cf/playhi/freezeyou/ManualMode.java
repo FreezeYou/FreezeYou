@@ -24,7 +24,7 @@ public class ManualMode extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manualmode);
         ActionBar actionBar = getActionBar();
-        if (actionBar!= null){
+        if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -38,13 +38,13 @@ public class ManualMode extends Activity {
         disable_MRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                processMRootOperation(packageNameEditText.getText().toString(),context,true);
+                processMRootOperation(packageNameEditText.getText().toString(), context, true);
             }
         });
         enable_MRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                processMRootOperation(packageNameEditText.getText().toString(),context,false);
+                processMRootOperation(packageNameEditText.getText().toString(), context, false);
             }
         });
         disable_Root.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +56,7 @@ public class ManualMode extends Activity {
                         ManualMode.this,
                         false,
                         false,
-                        getApplicationInfoFromPkgName(packageNameEditText.getText().toString(),context),
+                        getApplicationInfoFromPkgName(packageNameEditText.getText().toString(), context),
                         false);
             }
         });
@@ -69,7 +69,7 @@ public class ManualMode extends Activity {
                         ManualMode.this,
                         true,
                         false,
-                        getApplicationInfoFromPkgName(packageNameEditText.getText().toString(),context),
+                        getApplicationInfoFromPkgName(packageNameEditText.getText().toString(), context),
                         false);
             }
         });
@@ -86,16 +86,16 @@ public class ManualMode extends Activity {
         }
     }
 
-    private void processMRootOperation(String pkgName,Context context,boolean hidden){
-        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(context)) {
+    private void processMRootOperation(String pkgName, Context context, boolean hidden) {
+        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
             if (getDevicePolicyManager(context).setApplicationHidden(
-                    DeviceAdminReceiver.getComponentName(context), pkgName, hidden)){
-                showToast(context,R.string.success);
+                    DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
+                showToast(context, R.string.success);
             } else {
-                showToast(context,R.string.failed);
+                showToast(context, R.string.failed);
             }
         } else {
-            showToast(context,R.string.failed);
+            showToast(context, R.string.failed);
         }
     }
 }

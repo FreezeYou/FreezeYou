@@ -12,10 +12,10 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         switch (type) {
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
                 CharSequence pkgName = accessibilityEvent.getPackageName();
-                if (pkgName != null){
+                if (pkgName != null) {
                     boolean isScreenOn = true;
                     PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
-                    if (pm!=null){
+                    if (pm != null) {
                         isScreenOn = pm.isScreenOn();
                     }
                     String pkgNameString = pkgName.toString();
@@ -24,7 +24,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         MainApplication.setCurrentPackage(pkgNameString);
                         if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("freezeOnceQuit", false)) {
                             if (getApplicationContext().getSharedPreferences("FreezeOnceQuit", Context.MODE_PRIVATE)
-                                    .getString("pkgName", "").contains("|" + previousPkg + "|")&&!pkgNameString.equals(previousPkg)) {
+                                    .getString("pkgName", "").contains("|" + previousPkg + "|") && !pkgNameString.equals(previousPkg)) {
                                 Support.processFreezeAction(getApplicationContext(), null, previousPkg, null, false, false);
                             }
                         }

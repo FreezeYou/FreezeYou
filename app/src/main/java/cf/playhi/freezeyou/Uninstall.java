@@ -9,29 +9,29 @@ import static cf.playhi.freezeyou.Support.processAddTranslucent;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.showToast;
 
-public class Uninstall extends Activity{
+public class Uninstall extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);
         processAddTranslucent(this);
         super.onCreate(savedInstanceState);
-        Support.buildAlertDialog(this,getResources().getDrawable(R.mipmap.ic_launcher_round),"真的要解除免ROOT吗？\n!为避免造成不必要的麻烦，解除前请先解冻所有已冻结的程序！","请确认")
+        Support.buildAlertDialog(this, R.mipmap.ic_launcher_round, R.string.removeNoRootCaution, R.string.plsConfirm)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (Support.isDeviceOwner(getApplicationContext())){
+                        if (Support.isDeviceOwner(getApplicationContext())) {
                             try {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     Support.getDevicePolicyManager(getApplicationContext()).clearDeviceOwnerApp("cf.playhi.freezeyou");
-                                    showToast(getApplicationContext(),R.string.success);
+                                    showToast(getApplicationContext(), R.string.success);
                                 } else {
-                                    showToast(getApplicationContext(),"现在还没有成功启用免ROOT呢！");
+                                    showToast(getApplicationContext(), R.string.noRootNotActivated);
                                 }
-                            } catch (Exception e){
-                                showToast(getApplicationContext(),R.string.failed);
+                            } catch (Exception e) {
+                                showToast(getApplicationContext(), R.string.failed);
                             }
                         } else {
-                            showToast(getApplicationContext(),"现在还没有成功启用免ROOT呢！");
+                            showToast(getApplicationContext(), R.string.noRootNotActivated);
                         }
                         finish();
                     }

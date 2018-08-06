@@ -39,7 +39,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                     + "FreezeYou"
                     + File.separator
                     + "Log";
-            saveLog(throwable,logPath);
+            saveLog(throwable, logPath);
         }
 
         logPath2 =
@@ -47,16 +47,16 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                         + File.separator
                         + "data"
                         + File.separator
-                        +"cf.playhi.freezeyou"
+                        + "cf.playhi.freezeyou"
                         + File.separator
                         + "log";
-        saveLog(throwable,logPath2);
+        saveLog(throwable, logPath2);
 
         saveLocationAndMore(Environment.getDataDirectory().getPath()
                 + File.separator
                 + "data"
                 + File.separator
-                +"cf.playhi.freezeyou"
+                + "cf.playhi.freezeyou"
                 + File.separator
                 + "log");
 
@@ -64,10 +64,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
-    private void saveLog(Throwable throwable,String logPath){
+    private void saveLog(Throwable throwable, String logPath) {
         File file = new File(logPath);
         if (!file.exists()) {
-            if (!file.mkdirs()){
+            if (!file.mkdirs()) {
                 Log.e("crash handler", "mkdirs failed");
             }
         }
@@ -93,12 +93,12 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
     }
 
-    private void saveLocationAndMore(String filePath){
+    private void saveLocationAndMore(String filePath) {
         //保存需要提交文件位置
         File file =
                 new File(filePath);
         if (!file.exists()) {
-            if (!file.mkdirs()){
+            if (!file.mkdirs()) {
                 Log.e("crash handler", "mkdirs failed");
             }
         }

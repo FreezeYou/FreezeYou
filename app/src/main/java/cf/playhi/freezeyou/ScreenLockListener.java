@@ -12,7 +12,7 @@ public class ScreenLockListener {
     private final Context mContext;
     private final ScreenLockBroadcastReceiver mScreenLockReceiver;
 
-    ScreenLockListener(Context context){
+    ScreenLockListener(Context context) {
         mContext = context;
         mScreenLockReceiver = new ScreenLockBroadcastReceiver();
     }
@@ -21,11 +21,11 @@ public class ScreenLockListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action!=null){
-                switch (action){
+            if (action != null) {
+                switch (action) {
                     case Intent.ACTION_SCREEN_OFF:
                         if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("onekeyFreezeWhenLockScreen", false)) {
-                            if (Build.VERSION.SDK_INT>=26){
+                            if (Build.VERSION.SDK_INT >= 26) {
                                 context.startForegroundService(
                                         new Intent(context, OneKeyFreezeService.class)
                                                 .putExtra("autoCheckAndLockScreen", false));
@@ -43,13 +43,13 @@ public class ScreenLockListener {
         }
     }
 
-    public void registerListener(){
+    public void registerListener() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         mContext.registerReceiver(mScreenLockReceiver, filter);
     }
 
-    public void unregisterListener(){
+    public void unregisterListener() {
         mContext.unregisterReceiver(mScreenLockReceiver);
     }
 }

@@ -28,19 +28,19 @@ public class OneKeyFreezeService extends Service {
             if (notificationManager != null)
                 notificationManager.createNotificationChannel(channel);
             mBuilder.setChannelId("OneKeyFreeze");
-            startForeground(2,mBuilder.build());
+            startForeground(2, mBuilder.build());
         } else {
             startForeground(2, new Notification());
         }
-        boolean auto = intent.getBooleanExtra("autoCheckAndLockScreen",true);
+        boolean auto = intent.getBooleanExtra("autoCheckAndLockScreen", true);
         String[] pkgNameList = getApplicationContext().getSharedPreferences(
-                "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
-        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(getApplicationContext())){
-            oneKeyActionMRoot(this,null,true,pkgNameList);
-            checkAuto(auto,this);
+                "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName", "").split("\\|\\|");
+        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(getApplicationContext())) {
+            oneKeyActionMRoot(this, null, true, pkgNameList);
+            checkAuto(auto, this);
         } else {
-            oneKeyActionRoot(this,null,true,pkgNameList,false);
-            checkAuto(auto,this);
+            oneKeyActionRoot(this, null, true, pkgNameList, false);
+            checkAuto(auto, this);
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -50,13 +50,13 @@ public class OneKeyFreezeService extends Service {
         super.onCreate();
     }
 
-    private void checkAndLockScreen(Context context){
-        switch (PreferenceManager.getDefaultSharedPreferences(context).getString("shortCutOneKeyFreezeAdditionalOptions","nothing")){
+    private void checkAndLockScreen(Context context) {
+        switch (PreferenceManager.getDefaultSharedPreferences(context).getString("shortCutOneKeyFreezeAdditionalOptions", "nothing")) {
             case "nothing":
                 doFinish();
                 break;
             case "askLockScreen":
-                startActivity(new Intent(getApplicationContext(),AskLockScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                startActivity(new Intent(getApplicationContext(), AskLockScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 doFinish();
                 break;
             case "lockScreenImmediately":
@@ -69,16 +69,16 @@ public class OneKeyFreezeService extends Service {
         }
     }
 
-    private void doFinish(){
+    private void doFinish() {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (mNotificationManager!=null){
+        if (mNotificationManager != null) {
             mNotificationManager.cancel(2);
         }
         stopSelf();
     }
 
-    private void checkAuto(boolean auto,Context context){
-        if (auto){
+    private void checkAuto(boolean auto, Context context) {
+        if (auto) {
             checkAndLockScreen(context);
         } else {
             doFinish();

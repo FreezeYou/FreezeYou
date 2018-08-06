@@ -15,7 +15,7 @@ public class AskLockScreenActivity extends Activity {
         processSetTheme(this);
         processAddTranslucent(this);
         super.onCreate(savedInstanceState);
-        buildAlertDialog(this,R.mipmap.ic_launcher_new_round,R.string.askIfLockScreen,R.string.notice)
+        buildAlertDialog(this, R.mipmap.ic_launcher_new_round, R.string.askIfLockScreen, R.string.notice)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

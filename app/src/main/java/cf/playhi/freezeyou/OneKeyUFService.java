@@ -25,17 +25,17 @@ public class OneKeyUFService extends Service {
             if (notificationManager != null)
                 notificationManager.createNotificationChannel(channel);
             mBuilder.setChannelId("OneKeyUF");
-            startForeground(3,mBuilder.build());
+            startForeground(3, mBuilder.build());
         } else {
             startForeground(3, new Notification());
         }
         String[] pkgNameList = getApplicationContext().getSharedPreferences(
-                "OneKeyUFApplicationList", Context.MODE_PRIVATE).getString("pkgName","").split("\\|\\|");
-        if (Build.VERSION.SDK_INT>=21 && isDeviceOwner(this)){
-            oneKeyActionMRoot(this,null,false,pkgNameList);
+                "OneKeyUFApplicationList", Context.MODE_PRIVATE).getString("pkgName", "").split("\\|\\|");
+        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(this)) {
+            oneKeyActionMRoot(this, null, false, pkgNameList);
             doFinish();
         } else {
-            oneKeyActionRoot(this,null,false,pkgNameList,false);
+            oneKeyActionRoot(this, null, false, pkgNameList, false);
             doFinish();
         }
         return super.onStartCommand(intent, flags, startId);
@@ -46,9 +46,9 @@ public class OneKeyUFService extends Service {
         return null;
     }
 
-    private void doFinish(){
+    private void doFinish() {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (mNotificationManager!=null){
+        if (mNotificationManager != null) {
             mNotificationManager.cancel(3);
         }
         stopSelf();

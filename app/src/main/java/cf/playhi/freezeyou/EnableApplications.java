@@ -13,7 +13,7 @@ public class EnableApplications extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String[] packages = getIntent().getStringArrayExtra("packages");
-        if (packages!=null) {
+        if (packages != null) {
             setResult(Activity.RESULT_OK);
             if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(EnableApplications.this)) {
                 oneKeyActionMRoot(EnableApplications.this, EnableApplications.this, false, packages);

@@ -755,7 +755,7 @@ class Support {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    showToast(context, "发生了点异常，操作仍将继续:" + e.getLocalizedMessage());
+                    showToast(context, context.getString(R.string.exceptionHC) + e.getLocalizedMessage());
                 }
         }
         sendStatusChangedBroadcast(context);

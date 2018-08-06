@@ -10,7 +10,7 @@ public class OneKeyUFQSTileService extends TileService {
     @Override
     public void onClick() {
         super.onClick();
-        if (Build.VERSION.SDK_INT>=26){
+        if (Build.VERSION.SDK_INT >= 26) {
             this.startForegroundService(
                     new Intent(getApplicationContext(), OneKeyUFService.class));
         } else {

@@ -14,8 +14,8 @@ public class MainApplication extends Application {
         super.onCreate();
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init();
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("onekeyFreezeWhenLockScreen",false)){
-            if (Build.VERSION.SDK_INT>=26){
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("onekeyFreezeWhenLockScreen", false)) {
+            if (Build.VERSION.SDK_INT >= 26) {
                 startForegroundService(new Intent(this, ScreenLockOneKeyFreezeService.class));
             } else {
                 startService(new Intent(this, ScreenLockOneKeyFreezeService.class));
@@ -23,11 +23,11 @@ public class MainApplication extends Application {
         }
     }
 
-    static void setCurrentPackage(String pkgName){
+    static void setCurrentPackage(String pkgName) {
         mCurrentPackage = pkgName;
     }
 
-    static String getCurrentPackage(){
+    static String getCurrentPackage() {
         return mCurrentPackage;
     }
 }

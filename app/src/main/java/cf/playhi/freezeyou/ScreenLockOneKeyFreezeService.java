@@ -15,22 +15,22 @@ public class ScreenLockOneKeyFreezeService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("useForegroundService",false)||(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)){
+        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("useForegroundService", false) || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    Notification.Builder mBuilder = new Notification.Builder(this);
-                    mBuilder.setSmallIcon(R.drawable.ic_notification);
-                    mBuilder.setContentText(getString(R.string.backgroundService));
-                    NotificationChannel channel = new NotificationChannel("BackgroundService", getString(R.string.backgroundService), NotificationManager.IMPORTANCE_NONE);
-                    NotificationManager notificationManager = getSystemService(NotificationManager.class);
-                    if (notificationManager != null)
-                        notificationManager.createNotificationChannel(channel);
-                    mBuilder.setChannelId("BackgroundService");
-                    startForeground(1,mBuilder.build());
+                Notification.Builder mBuilder = new Notification.Builder(this);
+                mBuilder.setSmallIcon(R.drawable.ic_notification);
+                mBuilder.setContentText(getString(R.string.backgroundService));
+                NotificationChannel channel = new NotificationChannel("BackgroundService", getString(R.string.backgroundService), NotificationManager.IMPORTANCE_NONE);
+                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                if (notificationManager != null)
+                    notificationManager.createNotificationChannel(channel);
+                mBuilder.setChannelId("BackgroundService");
+                startForeground(1, mBuilder.build());
             } else {
                 startForeground(1, new Notification());
             }
         }
-        if (screenLockListener==null) {
+        if (screenLockListener == null) {
             screenLockListener = new ScreenLockListener(getApplicationContext());
             screenLockListener.registerListener();
         }
@@ -44,7 +44,7 @@ public class ScreenLockOneKeyFreezeService extends Service {
 
     @Override
     public void onDestroy() {
-        if (screenLockListener!=null) {
+        if (screenLockListener != null) {
             screenLockListener.unregisterListener();
             screenLockListener = null;
         }

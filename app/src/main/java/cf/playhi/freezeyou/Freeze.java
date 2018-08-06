@@ -38,10 +38,10 @@ public class Freeze extends Activity {
         String pkgName = getIntent().getStringExtra("pkgName");
         boolean auto = getIntent().getBooleanExtra("auto", true);
         if (pkgName == null) {
-            showToast(getApplicationContext(), "参数错误");
+            showToast(getApplicationContext(), R.string.invalidArguments);
             Freeze.this.finish();
         } else if ("".equals(pkgName)) {
-            showToast(getApplicationContext(), "参数错误");
+            showToast(getApplicationContext(), R.string.invalidArguments);
             Freeze.this.finish();
         }
         if (Build.VERSION.SDK_INT >= 21) {

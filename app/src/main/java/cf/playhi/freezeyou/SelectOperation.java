@@ -44,7 +44,7 @@ public class SelectOperation extends Activity {
         so_name.setText(name);
         so_pkgName.setText(pkgName);
 
-        String[] operationData = new String[] {
+        String[] operationData = new String[]{
                 getResources().getString(R.string.createDisEnableShortCut),
                 getResources().getString(R.string.disableAEnable),
                 getResources().getString(R.string.copyPkgName),
@@ -78,7 +78,7 @@ public class SelectOperation extends Activity {
         final ListAdapter adapt = new ArrayAdapter<>(SelectOperation.this, R.layout.so_item, operationData);
         listView.setAdapter(adapt);
 
-        if (Build.VERSION.SDK_INT<21){
+        if (Build.VERSION.SDK_INT < 21) {
             so_body.setBackgroundColor(Color.parseColor("#90000000"));
         }
 
@@ -95,29 +95,29 @@ public class SelectOperation extends Activity {
                 switch (i) {
                     case 0:
                         createShortCut(
-                                name.replace("(" + getString(R.string.frozen) + ")", "").replace("(" + getString(R.string.oneKeyFreeze) + ")",""),
+                                name.replace("(" + getString(R.string.frozen) + ")", "").replace("(" + getString(R.string.oneKeyFreeze) + ")", ""),
                                 pkgName,
-                                getApplicationIcon(SelectOperation.this,pkgName,getApplicationInfoFromPkgName(pkgName,getApplicationContext()),false),
+                                getApplicationIcon(SelectOperation.this, pkgName, getApplicationInfoFromPkgName(pkgName, getApplicationContext()), false),
                                 Freeze.class,
-                                "FreezeYou! "+pkgName,
+                                "FreezeYou! " + pkgName,
                                 SelectOperation.this
                         );
                         finish();
                         break;
                     case 1:
-                        if (!(getString(R.string.notAvailable).equals(name))){
-                            startActivity(new Intent(SelectOperation.this,Freeze.class).putExtra("pkgName",pkgName).putExtra("auto",false));
+                        if (!(getString(R.string.notAvailable).equals(name))) {
+                            startActivity(new Intent(SelectOperation.this, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false));
                         }
                         finish();
                         break;
                     case 2:
                         ClipboardManager copy = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText(pkgName, pkgName);
-                        if (copy != null){
+                        if (copy != null) {
                             copy.setPrimaryClip(clip);
-                            showToast(SelectOperation.this,R.string.success);
+                            showToast(SelectOperation.this, R.string.success);
                         } else {
-                            showToast(SelectOperation.this,R.string.failed);
+                            showToast(SelectOperation.this, R.string.failed);
                         }
                         finish();
                         break;
@@ -126,7 +126,7 @@ public class SelectOperation extends Activity {
                             showToast(getApplicationContext(),
                                     removeFromOneKeyList(getApplicationContext(),
                                             "AutoFreezeApplicationList",
-                                            pkgName)? R.string.removed : R.string.removeFailed);
+                                            pkgName) ? R.string.removed : R.string.removeFailed);
 //                            sharedPreferences.edit()
 //                                    .putString(
 //                                            "pkgName",
@@ -136,7 +136,7 @@ public class SelectOperation extends Activity {
                             showToast(getApplicationContext(),
                                     addToOneKeyList(getApplicationContext(),
                                             "AutoFreezeApplicationList",
-                                            pkgName)? R.string.added : R.string.addFailed);
+                                            pkgName) ? R.string.added : R.string.addFailed);
 //                            showToast(getApplicationContext(), sharedPreferences.edit()
 //                                    .putString(
 //                                            "pkgName",
@@ -181,10 +181,10 @@ public class SelectOperation extends Activity {
                                             "FreezeOnceQuit",
                                             pkgName) ? R.string.added : R.string.addFailed);
                             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            if(!preferences.getBoolean("freezeOnceQuit",false)){
-                                preferences.edit().putBoolean("freezeOnceQuit",true).apply();
-                                if (!isAccessibilitySettingsOn(getApplicationContext())){
-                                    showToast(SelectOperation.this,R.string.needActiveAccessibilityService);
+                            if (!preferences.getBoolean("freezeOnceQuit", false)) {
+                                preferences.edit().putBoolean("freezeOnceQuit", true).apply();
+                                if (!isAccessibilitySettingsOn(getApplicationContext())) {
+                                    showToast(SelectOperation.this, R.string.needActiveAccessibilityService);
                                     openAccessibilitySettings(getApplicationContext());
                                 }
                             }
@@ -214,6 +214,6 @@ public class SelectOperation extends Activity {
     @Override
     public void finish() {
         super.finish();
-        this.overridePendingTransition(R.anim.pullup,R.anim.pulldown);
+        this.overridePendingTransition(R.anim.pullup, R.anim.pulldown);
     }
 }

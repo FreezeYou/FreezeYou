@@ -30,14 +30,14 @@ public class AboutActivity extends Activity {
 
         TextView aboutSlogan = findViewById(R.id.about_slogan);
 
-        final String[] aboutData = new String[] {
+        final String[] aboutData = new String[]{
                 getResources().getString(R.string.hToUse),
                 getResources().getString(R.string.helpTranslate),
                 getResources().getString(R.string.thanksList),
                 getResources().getString(R.string.visitWebsite),
                 getResources().getString(R.string.addQQGroup),
                 getResources().getString(R.string.update),
-                "V" + getVersionName(getApplicationContext()) +"(" + getVersionCode(getApplicationContext()) + ")"
+                "V" + getVersionName(getApplicationContext()) + "(" + getVersionCode(getApplicationContext()) + ")"
         };
 
         ListView aboutListView = findViewById(R.id.about_listView);
@@ -49,16 +49,16 @@ public class AboutActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        requestOpenWebSite(activity,"https://freezeyou.playhi.cf/");
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf/");
                         break;
                     case 1:
-                        requestOpenWebSite(activity,"https://crwd.in/freezeyou");
+                        requestOpenWebSite(activity, "https://crwd.in/freezeyou");
                         break;
                     case 2:
-                        requestOpenWebSite(activity,"https://freezeyou.playhi.cf/thanks.html");
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf/thanks.html");
                         break;
                     case 3:
-                        requestOpenWebSite(activity,"https://freezeyou.playhi.cf");
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf");
                         break;
                     case 4:
                         joinQQGroup(activity);
@@ -67,7 +67,7 @@ public class AboutActivity extends Activity {
                         checkUpdate(activity);
                         break;
                     case 6:
-                        showToast(activity,"V" + getVersionName(activity) +"(" + getVersionCode(activity) + ")");
+                        showToast(activity, "V" + getVersionName(activity) + "(" + getVersionCode(activity) + ")");
                         break;
                     default:
                         break;
