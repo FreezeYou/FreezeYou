@@ -49,13 +49,14 @@ class Support {
     private static DataOutputStream outputStream = null;
     private static Drawable drawable;
     private static Bitmap bitmap;
-    private static void makeDialog(final String title,final String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final String pkgName,final boolean enabled) {
+
+    private static void makeDialog(final String title, final String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled) {
         AlertDialog.Builder builder =
                 buildAlertDialog(activity, getApplicationIcon(activity, pkgName, applicationInfo, true), message, title)
                         .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                processFreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess,true);
+                                processFreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess, true);
                             }
                         })
                         .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -81,7 +82,7 @@ class Support {
             builder.setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    processUnfreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess,true);
+                    processUnfreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess, true);
                 }
             });
         }
@@ -117,12 +118,12 @@ class Support {
 //                .create().show();
 //    }
 
-    private static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity){
+    private static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity) {
         try {
             if (dataOutputStream != null) {
                 dataOutputStream.close();
             }
-            if (process1 != null){
+            if (process1 != null) {
                 process1.destroy();
             }
             if (finish && activity != null) {
@@ -135,15 +136,15 @@ class Support {
         }
     }
 
-    static void showToast(Context context,int id){
-        Toast.makeText(context,id,Toast.LENGTH_LONG).show();
+    static void showToast(Context context, int id) {
+        Toast.makeText(context, id, Toast.LENGTH_LONG).show();
     }
 
-    static void showToast(Context context,String string){
-        Toast.makeText(context,string,Toast.LENGTH_LONG).show();
+    static void showToast(Context context, String string) {
+        Toast.makeText(context, string, Toast.LENGTH_LONG).show();
     }
 
-    static AlertDialog.Builder buildAlertDialog(Context context,int icon,int message,int title){
+    static AlertDialog.Builder buildAlertDialog(Context context, int icon, int message, int title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setIcon(icon);
         builder.setTitle(title);
@@ -151,7 +152,7 @@ class Support {
         return builder;
     }
 
-    static AlertDialog.Builder buildAlertDialog(Context context, Drawable icon, CharSequence message,CharSequence title){
+    static AlertDialog.Builder buildAlertDialog(Context context, Drawable icon, CharSequence message, CharSequence title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setIcon(icon);
         builder.setTitle(title);
@@ -165,7 +166,7 @@ class Support {
         try {
             context.startActivity(intent);
         } catch (Exception e) {
-            requestOpenWebSite(context,"https://shang.qq.com/wpa/qunwpa?idkey=cbc8ae71402e8a1bc9bb4c39384bcfe5b9f7d18ff1548ea9bdd842f036832f3d");
+            requestOpenWebSite(context, "https://shang.qq.com/wpa/qunwpa?idkey=cbc8ae71402e8a1bc9bb4c39384bcfe5b9f7d18ff1548ea9bdd842f036832f3d");
         }
     }
 
@@ -173,30 +174,30 @@ class Support {
         return Build.VERSION.SDK_INT >= 18 && getDevicePolicyManager(context).isDeviceOwnerApp(context.getPackageName());
     }
 
-    static DevicePolicyManager getDevicePolicyManager(Context context){
+    static DevicePolicyManager getDevicePolicyManager(Context context) {
         return (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
     }
 
-    static boolean checkMRootFrozen(Context context,String pkgName) {
+    static boolean checkMRootFrozen(Context context, String pkgName) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(context) && getDevicePolicyManager(context).isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
     }
 
-    static boolean checkRootFrozen(Context context,String pkgName) {
+    static boolean checkRootFrozen(Context context, String pkgName) {
         int tmp;
         try {
             tmp = context.getPackageManager().getApplicationEnabledSetting(pkgName);
-        } catch (Exception e){
+        } catch (Exception e) {
             tmp = -1;
         }
-        return ((tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER )|| (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED));
+        return ((tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) || (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED));
     }
 
-    private static void askRun(final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String pkgName,final ApplicationInfo applicationInfo){
+    private static void askRun(final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String pkgName, final ApplicationInfo applicationInfo) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
-        if ((sharedPref.getBoolean("openImmediately",false))||(sharedPref.getBoolean("openAndUFImmediately",false))){
-            checkAndStartApp(activity,activity,pkgName,SelfCloseWhenDestroyProcess);
+        if ((sharedPref.getBoolean("openImmediately", false)) || (sharedPref.getBoolean("openAndUFImmediately", false))) {
+            checkAndStartApp(activity, activity, pkgName, SelfCloseWhenDestroyProcess);
         } else {
-            buildAlertDialog(activity,getApplicationIcon(activity,pkgName,applicationInfo,true),activity.getResources().getString(R.string.unfreezedAndAskLaunch),activity.getResources().getString(R.string.notice))
+            buildAlertDialog(activity, getApplicationIcon(activity, pkgName, applicationInfo, true), activity.getResources().getString(R.string.unfreezedAndAskLaunch), activity.getResources().getString(R.string.notice))
                     .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -206,7 +207,7 @@ class Support {
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int ii) {
-                            checkAndStartApp(activity,activity,pkgName,SelfCloseWhenDestroyProcess);
+                            checkAndStartApp(activity, activity, pkgName, SelfCloseWhenDestroyProcess);
                         }
                     })
                     .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -220,22 +221,23 @@ class Support {
     }
 
     @TargetApi(21)
-    static void shortcutMakeDialog(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final String pkgName, int ot, boolean auto){
+    static void shortcutMakeDialog(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final String pkgName, int ot, boolean auto) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
-        if (sharedPref.getBoolean("openAndUFImmediately",false) && auto){
-            if (ot==2){
-                checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
+        if (sharedPref.getBoolean("openAndUFImmediately", false) && auto) {
+            if (ot == 2) {
+                checkAndStartApp(activity, activity, pkgName, selfCloseWhenDestroyProcess);
             } else {
-                processUnfreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess,true);//ot==1
+                processUnfreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess, true);//ot==1
             }
-        } else if (ot==3){
-            processFreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess,true);
+        } else if (ot == 3) {
+            processFreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess, true);
         } else {
             makeDialog(title, message, activity, selfCloseWhenDestroyProcess, applicationInfo, pkgName, ot == 2);
         }
     }
 
     //最初参考 http://www.cnblogs.com/zhou2016/p/6281678.html
+
     /**
      * Drawable转Bitmap
      *
@@ -244,8 +246,8 @@ class Support {
      */
     private static Bitmap getBitmapFromDrawable(Drawable drawable) {
         try {
-            return ((BitmapDrawable)drawable).getBitmap();
-        }catch (Exception e) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        } catch (Exception e) {
             Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
@@ -271,33 +273,33 @@ class Support {
         return 0;
     }
 
-    static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo,boolean resize){
-        String path = context.getFilesDir()+"/icon/"+pkgName+".png";
-        if (new File(path).exists()){
+    static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo, boolean resize) {
+        String path = context.getFilesDir() + "/icon/" + pkgName + ".png";
+        if (new File(path).exists()) {
             drawable = BitmapDrawable.createFromPath(path);
-        } else if (applicationInfo!=null){
+        } else if (applicationInfo != null) {
             drawable = applicationInfo.loadIcon(context.getPackageManager());
-            folderCheck(context.getFilesDir()+"/icon");
-            writeBitmapToFile(path,getBitmapFromDrawable(drawable));
-        } else if (!"".equals(pkgName)){
+            folderCheck(context.getFilesDir() + "/icon");
+            writeBitmapToFile(path, getBitmapFromDrawable(drawable));
+        } else if (!"".equals(pkgName)) {
             try {
                 drawable = context.getPackageManager().getApplicationIcon(pkgName);
-                folderCheck(context.getFilesDir()+"/icon");
-                writeBitmapToFile(path,getBitmapFromDrawable(drawable));
-            } catch (Exception e){
+                folderCheck(context.getFilesDir() + "/icon");
+                writeBitmapToFile(path, getBitmapFromDrawable(drawable));
+            } catch (Exception e) {
                 drawable = context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
             }
         }
-        if ((drawable == null)||(drawable.getIntrinsicWidth()<=0)||(drawable.getIntrinsicHeight()<=0)){
+        if ((drawable == null) || (drawable.getIntrinsicWidth() <= 0) || (drawable.getIntrinsicHeight() <= 0)) {
             drawable = context.getResources().getDrawable(R.mipmap.ic_launcher_round);
         }
-        if (resize){
+        if (resize) {
             bitmap = getBitmapFromDrawable(drawable);
             int width = bitmap.getWidth();
-            int height= bitmap.getHeight();
+            int height = bitmap.getHeight();
             Matrix matrix = new Matrix();
-            float scaleWidth = ((float)72)/ width;
-            float scaleHeight = ((float)72)/ height;
+            float scaleWidth = ((float) 72) / width;
+            float scaleHeight = ((float) 72) / height;
             matrix.postScale(scaleWidth, scaleHeight);
             return new BitmapDrawable(Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true));
         } else {
@@ -327,20 +329,20 @@ class Support {
             if (!file.exists()) {
                 file.mkdirs();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    static String getApplicationLabel(Context context,PackageManager packageManager,ApplicationInfo applicationInfo,String pkgName) {
-        PackageManager pm = packageManager;
-        if (pm == null) {
-            pm = context.getPackageManager();
-        }
+    static String getApplicationLabel(Context context, PackageManager packageManager, ApplicationInfo applicationInfo, String pkgName) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE);
         String name = sharedPreferences.getString(pkgName, "");
         if (!"".equals(name)) {
             return name;
+        }
+        PackageManager pm = packageManager;
+        if (pm == null) {
+            pm = context.getPackageManager();
         }
         if (applicationInfo != null) {
             name = applicationInfo.loadLabel(pm).toString();
@@ -358,10 +360,10 @@ class Support {
         }
     }
 
-    private static int fAURoot(String pkgName, Boolean enable) throws Exception{
+    private static int fAURoot(String pkgName, Boolean enable) throws Exception {
         process = Runtime.getRuntime().exec("su");
         outputStream = new DataOutputStream(process.getOutputStream());
-        if (enable){
+        if (enable) {
             outputStream.writeBytes("pm enable " + pkgName + "\n");
         } else {
             outputStream.writeBytes("pm disable " + pkgName + "\n");
@@ -371,13 +373,13 @@ class Support {
         return process.waitFor();
     }
 
-    static void createShortCut(String title, String pkgName, Drawable icon,Class<?> cls,String id,Context context){
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
-            createShortCutOldApi(title,pkgName,icon,cls,context);
+    static void createShortCut(String title, String pkgName, Drawable icon, Class<?> cls, String id, Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            createShortCutOldApi(title, pkgName, icon, cls, context);
         } else {
             ShortcutManager mShortcutManager =
                     context.getSystemService(ShortcutManager.class);
-            if (mShortcutManager!=null){
+            if (mShortcutManager != null) {
                 if (mShortcutManager.isRequestPinShortcutSupported()) {
                     ShortcutInfo.Builder shortcutInfoBuilder =
                             new ShortcutInfo.Builder(context, id);
@@ -385,7 +387,7 @@ class Support {
                     shortcutInfoBuilder.setIntent(
                             new Intent(context, cls)
                                     .setAction(Intent.ACTION_MAIN)
-                                    .putExtra("pkgName",pkgName)
+                                    .putExtra("pkgName", pkgName)
                     );
                     shortcutInfoBuilder.setShortLabel(title);
                     shortcutInfoBuilder.setLongLabel(title);
@@ -409,15 +411,15 @@ class Support {
                             successCallback.getIntentSender());
                     showToast(context, R.string.requested);
                 } else {
-                    createShortCutOldApi(title,pkgName,icon,cls,context);
+                    createShortCutOldApi(title, pkgName, icon, cls, context);
                 }
             } else {
-                createShortCutOldApi(title,pkgName,icon,cls,context);
+                createShortCutOldApi(title, pkgName, icon, cls, context);
             }
         }
     }
 
-    private static void createShortCutOldApi(String title, String pkgName, Drawable icon,Class<?> cls,Context context){
+    private static void createShortCutOldApi(String title, String pkgName, Drawable icon, Class<?> cls, Context context) {
         Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
         Intent intent = new Intent(context, cls);
         intent.putExtra("pkgName", pkgName);
@@ -428,7 +430,7 @@ class Support {
             addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
             context.sendBroadcast(addShortCut);
             showToast(context, R.string.requested);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             try {
                 Matrix matrix = new Matrix();
@@ -438,7 +440,7 @@ class Support {
                         Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true));
                 context.sendBroadcast(addShortCut);
                 showToast(context, R.string.requested);
-            }catch (Exception ee){
+            } catch (Exception ee) {
                 ee.printStackTrace();
                 try {
                     Matrix matrix = new Matrix();
@@ -448,15 +450,15 @@ class Support {
                             Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true));
                     context.sendBroadcast(addShortCut);
                     showToast(context, R.string.requested);
-                } catch (Exception eee){
-                    showToast(context,context.getString(R.string.requestFailed)+eee.getMessage());
+                } catch (Exception eee) {
+                    showToast(context, context.getString(R.string.requestFailed) + eee.getMessage());
                 }
             }
         }
     }
 
     @SuppressLint("ApplySharedPref")
-    static void createNotification(Context context, String pkgName, int iconResId){
+    static void createNotification(Context context, String pkgName, int iconResId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             String description;
             SharedPreferences preferenceManager = PreferenceManager.getDefaultSharedPreferences(context);
@@ -466,11 +468,7 @@ class Support {
             int mId = pkgName.hashCode();
             mBuilder.setSmallIcon(iconResId);
             mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_notification));
-            try {
-                mBuilder.setContentTitle(context.getPackageManager().getApplicationLabel(context.getPackageManager().getApplicationInfo(pkgName, GET_UNINSTALLED_PACKAGES)).toString());
-            } catch (Exception e) {
-                mBuilder.setContentTitle(context.getString(R.string.notice));
-            }
+            mBuilder.setContentTitle(getApplicationLabel(context, null, null, pkgName));
             mBuilder.setContentText(description);
             mBuilder.setAutoCancel(!preferenceManager.getBoolean("notificationBarDisableClickDisappear", false));
             mBuilder.setOngoing(preferenceManager.getBoolean("notificationBarDisableSlideOut", false));
@@ -512,24 +510,24 @@ class Support {
             if (mNotificationManager != null) {
                 // mId allows you to update the notification later on.
                 mNotificationManager.notify(mId, mBuilder.build());
-                String notifying = preferenceManager.getString("notifying","");
-                if (!notifying.contains(pkgName+",")){
-                    preferenceManager.edit().putString("notifying",notifying+pkgName+",").commit();//一键解冻会多次调用，如果apply可能会遗失数据。
+                String notifying = preferenceManager.getString("notifying", "");
+                if (!notifying.contains(pkgName + ",")) {
+                    preferenceManager.edit().putString("notifying", notifying + pkgName + ",").commit();//一键解冻会多次调用，如果apply可能会遗失数据。
                 }
             }
         }
     }
 
     @SuppressLint("ApplySharedPref")
-    private static void deleteNotification(Context context, String pkgName){
+    private static void deleteNotification(Context context, String pkgName) {
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (mNotificationManager!=null){
+        if (mNotificationManager != null) {
             mNotificationManager.cancel(pkgName.hashCode());
             SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            String notifying = defaultSharedPreferences.getString("notifying","");
-            if (notifying.contains(pkgName+",")){
-                defaultSharedPreferences.edit().putString("notifying",notifying.replace(pkgName+",","")).commit();
+            String notifying = defaultSharedPreferences.getString("notifying", "");
+            if (notifying.contains(pkgName + ",")) {
+                defaultSharedPreferences.edit().putString("notifying", notifying.replace(pkgName + ",", "")).commit();
             }
         }
     }
@@ -551,30 +549,30 @@ class Support {
         return "";
     }
 
-    static void processRootAction(final String pkgName, final Context context, final Activity activity, final boolean enable, final boolean SelfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final boolean askRun){
+    static void processRootAction(final String pkgName, final Context context, final Activity activity, final boolean enable, final boolean SelfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final boolean askRun) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    final int exitValue = fAURoot(pkgName,enable);
+                    final int exitValue = fAURoot(pkgName, enable);
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             if (exitValue == 0) {
-                                if (enable){
+                                if (enable) {
                                     showToast(context, R.string.executed);
                                     createNotification(context, pkgName, R.drawable.ic_notification);
-                                    if (askRun){
-                                        askRun(activity, SelfCloseWhenDestroyProcess, pkgName,applicationInfo);
+                                    if (askRun) {
+                                        askRun(activity, SelfCloseWhenDestroyProcess, pkgName, applicationInfo);
                                     }
                                 } else {
                                     showToast(context, R.string.executed);
-                                    deleteNotification(context,pkgName);
-                                    destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
+                                    deleteNotification(context, pkgName);
+                                    destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
                                 }
                             } else {
                                 showToast(context, R.string.mayUnrootedOrOtherEx);
-                                destroyProcess(SelfCloseWhenDestroyProcess,outputStream,process,activity);
+                                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
                             }
 
                         }
@@ -585,7 +583,7 @@ class Support {
                         public void run() {
                             e.printStackTrace();
                             showToast(context, context.getString(R.string.exception) + e.getMessage());
-                            if (e.getMessage().toLowerCase().contains("permission denied")||e.getMessage().toLowerCase().contains("not found")) {
+                            if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
                                 showToast(context, R.string.mayUnrooted);
                             }
                             destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
@@ -599,34 +597,34 @@ class Support {
     }
 
     @TargetApi(21)
-    private static void processMRootAction(Context context,Activity activity,String pkgName,boolean hidden,ApplicationInfo applicationInfo,boolean finish,boolean askRun){
+    private static void processMRootAction(Context context, Activity activity, String pkgName, boolean hidden, ApplicationInfo applicationInfo, boolean finish, boolean askRun) {
         if (getDevicePolicyManager(context).setApplicationHidden(
                 DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
-            if (hidden){
+            if (hidden) {
                 sendStatusChangedBroadcast(context);
-                showToast(context,R.string.freezeCompleted);
-                deleteNotification(context,pkgName);
-                if (finish){
+                showToast(context, R.string.freezeCompleted);
+                deleteNotification(context, pkgName);
+                if (finish) {
                     activity.finish();
                 }
             } else {
                 sendStatusChangedBroadcast(context);
-                showToast(context,R.string.UFCompleted);
+                showToast(context, R.string.UFCompleted);
                 createNotification(activity, pkgName, R.drawable.ic_notification);
-                if(askRun){
+                if (askRun) {
                     askRun(activity, finish, pkgName, applicationInfo);
                 }
             }
         } else {
             sendStatusChangedBroadcast(context);
             showToast(context, R.string.failed);
-            if (finish){
+            if (finish) {
                 activity.finish();
             }
         }
     }
 
-    private static void checkAndStartApp(Context context,Activity activity,String pkgName,boolean finish){
+    private static void checkAndStartApp(Context context, Activity activity, String pkgName, boolean finish) {
         if (context.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
             Intent intent = new Intent(
                     context.getPackageManager().getLaunchIntentForPackage(pkgName));
@@ -639,7 +637,7 @@ class Support {
         }
     }
 
-    static void processUnfreezeAction(Context context,Activity activity,String pkgName,ApplicationInfo applicationInfo,boolean finish,boolean askRun) {
+    static void processUnfreezeAction(Context context, Activity activity, String pkgName, ApplicationInfo applicationInfo, boolean finish, boolean askRun) {
         if (checkMRootFrozen(context, pkgName)) {
             processMRootAction(context, activity, pkgName, false, applicationInfo, finish, askRun);
         } else {
@@ -647,7 +645,7 @@ class Support {
         }
     }
 
-    static void processFreezeAction(Context context,Activity activity,String pkgName,ApplicationInfo applicationInfo,boolean finish,boolean askRun) {
+    static void processFreezeAction(Context context, Activity activity, String pkgName, ApplicationInfo applicationInfo, boolean finish, boolean askRun) {
         if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
             processMRootAction(context, activity, pkgName, true, applicationInfo, finish, askRun);
         } else {
@@ -655,22 +653,22 @@ class Support {
         }
     }
 
-    static ApplicationInfo getApplicationInfoFromPkgName(String pkgName,Context context){
+    static ApplicationInfo getApplicationInfoFromPkgName(String pkgName, Context context) {
         ApplicationInfo applicationInfo = null;
-        try{
-            applicationInfo = context.getPackageManager().getApplicationInfo(pkgName,GET_UNINSTALLED_PACKAGES);
-        }catch (Exception e){
+        try {
+            applicationInfo = context.getPackageManager().getApplicationInfo(pkgName, GET_UNINSTALLED_PACKAGES);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return applicationInfo;
     }
 
-    static void oneKeyActionRoot(Context context,Activity activity,boolean freeze,String[] pkgNameList,boolean finish){
+    static void oneKeyActionRoot(Context context, Activity activity, boolean freeze, String[] pkgNameList, boolean finish) {
         String currentPackage = MainApplication.getCurrentPackage();
         try {
             process = Runtime.getRuntime().exec("su");
             outputStream = new DataOutputStream(process.getOutputStream());
-            if (freeze){
+            if (freeze) {
                 for (String aPkgNameList : pkgNameList) {
                     if (!currentPackage.equals(aPkgNameList)) {
                         try {
@@ -703,72 +701,73 @@ class Support {
             outputStream.flush();
             int exitValue = process.waitFor();
             if (exitValue == 0) {
-                if (freeze){
+                if (freeze) {
                     for (String aPkgNameList : pkgNameList) {
-                        deleteNotification(context,aPkgNameList.replaceAll("\\|", ""));
+                        deleteNotification(context, aPkgNameList.replaceAll("\\|", ""));
                     }
                 } else {
                     for (String aPkgNameList : pkgNameList) {
-                        createNotification(context,aPkgNameList.replaceAll("\\|", ""),R.drawable.ic_notification);
+                        createNotification(context, aPkgNameList.replaceAll("\\|", ""), R.drawable.ic_notification);
                     }
                 }
-                showToast(context,R.string.executed);
+                showToast(context, R.string.executed);
             } else {
-                showToast(context,R.string.mayUnrootedOrOtherEx);
+                showToast(context, R.string.mayUnrootedOrOtherEx);
             }
-            destroyProcess(finish,outputStream,process,activity);
-        } catch (Exception e){
+            destroyProcess(finish, outputStream, process, activity);
+        } catch (Exception e) {
             e.printStackTrace();
-            showToast(context,context.getString(R.string.exception) + e.getMessage());
-            if (e.getMessage().toLowerCase().contains("permission denied")||e.getMessage().toLowerCase().contains("not found")){
-                showToast(context,R.string.mayUnrooted);
+            showToast(context, context.getString(R.string.exception) + e.getMessage());
+            if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
+                showToast(context, R.string.mayUnrooted);
             }
-            destroyProcess(finish,outputStream,process,activity);
+            destroyProcess(finish, outputStream, process, activity);
         }
         sendStatusChangedBroadcast(context);
     }
 
     @TargetApi(21)
-    static void oneKeyActionMRoot(Context context,Activity activity,boolean freeze,String[] pkgNameList){
+    static void oneKeyActionMRoot(Context context, Activity activity, boolean freeze, String[] pkgNameList) {
         String currentPackage = MainApplication.getCurrentPackage();
         for (String aPkgNameList : pkgNameList) {
             String tmp = aPkgNameList.replaceAll("\\|", "");
-                try {
-                    if (freeze){
-                        if (!currentPackage.equals(aPkgNameList) && !checkMRootFrozen(context, tmp)) {
-                            if (!getDevicePolicyManager(context).setApplicationHidden(
-                                    DeviceAdminReceiver.getComponentName(context), tmp, true)) {
-                                showToast(context, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
-                            } else {
-                                deleteNotification(context, tmp);
-                            }
-                        }
-                    } else {
-                        if (checkMRootFrozen(context, tmp)) {
-                            if (!getDevicePolicyManager(context).setApplicationHidden(
-                                    DeviceAdminReceiver.getComponentName(context), tmp, false)) {
-                                showToast(context, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
-                            } else {
-                                createNotification(context,tmp,R.drawable.ic_notification);
-                            }
+            try {
+                if (freeze) {
+                    if (!currentPackage.equals(aPkgNameList) && !checkMRootFrozen(context, tmp)) {
+                        if (!getDevicePolicyManager(context).setApplicationHidden(
+                                DeviceAdminReceiver.getComponentName(context), tmp, true)) {
+                            showToast(context, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                        } else {
+                            deleteNotification(context, tmp);
                         }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showToast(context, context.getString(R.string.exceptionHC) + e.getLocalizedMessage());
+                } else {
+                    if (checkMRootFrozen(context, tmp)) {
+                        if (!getDevicePolicyManager(context).setApplicationHidden(
+                                DeviceAdminReceiver.getComponentName(context), tmp, false)) {
+                            showToast(context, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                        } else {
+                            createNotification(context, tmp, R.drawable.ic_notification);
+                        }
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showToast(context, context.getString(R.string.exceptionHC) + e.getLocalizedMessage());
+            }
         }
         sendStatusChangedBroadcast(context);
-        showToast(context,R.string.executed);
+        showToast(context, R.string.executed);
     }
 
-    private static void sendStatusChangedBroadcast(Context context){
+    private static void sendStatusChangedBroadcast(Context context) {
         Intent intent = new Intent();
         intent.setAction("cf.playhi.freezeyou.action.packageStatusChanged");
+        intent.setPackage("cf.playhi.freezeyou");
         context.sendBroadcast(intent);
     }
 
-    static boolean addToOneKeyList(Context context,String freezeOrUF,String pkgName){
+    static boolean addToOneKeyList(Context context, String freezeOrUF, String pkgName) {
         final SharedPreferences sharedPreferences = context.getSharedPreferences(
                 freezeOrUF, Context.MODE_PRIVATE);
         final String pkgNameList = sharedPreferences.getString("pkgName", "");
@@ -782,11 +781,11 @@ class Support {
         return true;
     }
 
-    static boolean removeFromOneKeyList(Context context,String freezeOrUF,String pkgName){
+    static boolean removeFromOneKeyList(Context context, String freezeOrUF, String pkgName) {
         final SharedPreferences sharedPreferences = context.getSharedPreferences(
                 freezeOrUF, Context.MODE_PRIVATE);
         final String pkgNameList = sharedPreferences.getString("pkgName", "");
-        if (pkgNameList.contains("|" + pkgName + "|")){
+        if (pkgNameList.contains("|" + pkgName + "|")) {
             return sharedPreferences.edit()
                     .putString(
                             "pkgName",
@@ -796,17 +795,17 @@ class Support {
         return true;
     }
 
-    static void openDevicePolicyManager(Context context){
-        showToast(context,R.string.devicePolicyManagerNotActivated);
+    static void openDevicePolicyManager(Context context) {
+        showToast(context, R.string.devicePolicyManagerNotActivated);
         ComponentName componentName = new ComponentName(context.getApplicationContext(), DeviceAdminReceiver.class);
         Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
         intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
         context.startActivity(intent);
     }
 
-    static void processSetTheme(Context context){
-        try{
-            switch (PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection","default")){
+    static void processSetTheme(Context context) {
+        try {
+            switch (PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default")) {
                 case "blue":
                     context.setTheme(R.style.AppTheme_Default_Blue);
                     break;
@@ -826,32 +825,32 @@ class Support {
                     context.setTheme(R.style.AppTheme_Default);
                     break;
                 default:
-                    if (Build.VERSION.SDK_INT>=21){
+                    if (Build.VERSION.SDK_INT >= 21) {
                         context.setTheme(R.style.AppTheme_Default_Blue);
                     } else {
                         context.setTheme(R.style.AppTheme_Default);
                     }
                     break;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    static void processAddTranslucent(Activity activity){
+    static void processAddTranslucent(Activity activity) {
         Window window = activity.getWindow();
-        if (window!=null){
+        if (window != null) {
             window.requestFeature(Window.FEATURE_NO_TITLE);
             window.setBackgroundDrawableResource(R.color.realTranslucent);
-            if (Build.VERSION.SDK_INT>=19){
+            if (Build.VERSION.SDK_INT >= 19) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             }
         }
     }
 
-    static void processActionBar(ActionBar actionBar){
-        if (actionBar!= null){
+    static void processActionBar(ActionBar actionBar) {
+        if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -862,7 +861,7 @@ class Support {
         requestOpenWebSite(context, "https://freezeyou.playhi.cf/checkupdate.php?v=" + getVersionCode(context));
     }
 
-    static void requestOpenWebSite(Context context,String url) {
+    static void requestOpenWebSite(Context context, String url) {
         Uri webPage = Uri.parse(url);
         Intent about = new Intent(Intent.ACTION_VIEW, webPage);
         if (about.resolveActivity(context.getPackageManager()) != null) {
@@ -872,28 +871,28 @@ class Support {
         }
     }
 
-    static void doLockScreen(Context context){
+    static void doLockScreen(Context context) {
         DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
         ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
-        if (devicePolicyManager!=null){
-            if (devicePolicyManager.isAdminActive(componentName)){
+        if (devicePolicyManager != null) {
+            if (devicePolicyManager.isAdminActive(componentName)) {
                 devicePolicyManager.lockNow();
             } else {
                 openDevicePolicyManager(context);
             }
         } else {
-            showToast(context,R.string.devicePolicyManagerNotFound);
+            showToast(context, R.string.devicePolicyManagerNotFound);
         }
     }
 
 
-    static void openAccessibilitySettings(Context context){
+    static void openAccessibilitySettings(Context context) {
         try {
             Intent accessibilityIntent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             context.startActivity(accessibilityIntent);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            showToast(context,R.string.failed);
+            showToast(context, R.string.failed);
         }
     }
 
