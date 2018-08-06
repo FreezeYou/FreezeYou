@@ -878,7 +878,7 @@ public class Main extends Activity {
             pkgNameList[i] = "|" + selectedPackages.get(i) + "|";
         }
         if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(Main.this)) {
-            oneKeyActionMRoot(Main.this, Main.this, freeze, pkgNameList);
+            oneKeyActionMRoot(Main.this, freeze, pkgNameList);
         } else {
             oneKeyActionRoot(Main.this, Main.this, freeze, pkgNameList, false);
         }

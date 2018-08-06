@@ -698,7 +698,7 @@ class Support {
     }
 
     @TargetApi(21)
-    static void oneKeyActionMRoot(Context context, Activity activity, boolean freeze, String[] pkgNameList) {
+    static void oneKeyActionMRoot(Context context, boolean freeze, String[] pkgNameList) {
         String currentPackage = MainApplication.getCurrentPackage();
         for (String aPkgNameList : pkgNameList) {
             String tmp = aPkgNameList.replaceAll("\\|", "");

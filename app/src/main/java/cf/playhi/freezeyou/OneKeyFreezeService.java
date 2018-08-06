@@ -36,7 +36,7 @@ public class OneKeyFreezeService extends Service {
         String[] pkgNameList = getApplicationContext().getSharedPreferences(
                 "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName", "").split("\\|\\|");
         if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(getApplicationContext())) {
-            oneKeyActionMRoot(this, null, true, pkgNameList);
+            oneKeyActionMRoot(this, true, pkgNameList);
             checkAuto(auto, this);
         } else {
             oneKeyActionRoot(this, null, true, pkgNameList, false);

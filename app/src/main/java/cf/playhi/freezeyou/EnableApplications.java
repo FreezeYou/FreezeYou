@@ -16,7 +16,7 @@ public class EnableApplications extends Activity {
         if (packages != null) {
             setResult(Activity.RESULT_OK);
             if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(EnableApplications.this)) {
-                oneKeyActionMRoot(EnableApplications.this, EnableApplications.this, false, packages);
+                oneKeyActionMRoot(EnableApplications.this, false, packages);
                 finish();
             } else {
                 oneKeyActionRoot(EnableApplications.this, EnableApplications.this, false, packages, true);

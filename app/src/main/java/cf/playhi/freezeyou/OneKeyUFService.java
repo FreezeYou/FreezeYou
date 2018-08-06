@@ -32,7 +32,7 @@ public class OneKeyUFService extends Service {
         String[] pkgNameList = getApplicationContext().getSharedPreferences(
                 "OneKeyUFApplicationList", Context.MODE_PRIVATE).getString("pkgName", "").split("\\|\\|");
         if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(this)) {
-            oneKeyActionMRoot(this, null, false, pkgNameList);
+            oneKeyActionMRoot(this, false, pkgNameList);
             doFinish();
         } else {
             oneKeyActionRoot(this, null, false, pkgNameList, false);

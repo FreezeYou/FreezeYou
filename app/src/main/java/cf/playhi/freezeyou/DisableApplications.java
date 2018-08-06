@@ -16,7 +16,7 @@ public class DisableApplications extends Activity {
         if (packages != null) {
             setResult(Activity.RESULT_OK);
             if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(DisableApplications.this)) {
-                oneKeyActionMRoot(DisableApplications.this, DisableApplications.this, true, packages);
+                oneKeyActionMRoot(DisableApplications.this, true, packages);
                 finish();
             } else {
                 oneKeyActionRoot(DisableApplications.this, DisableApplications.this, true, packages, true);
