@@ -593,6 +593,7 @@ class Support {
                         }
                     });
                 }
+                sendStatusChangedBroadcast(context);
             }
         }).start();
     }
@@ -602,12 +603,14 @@ class Support {
         if (getDevicePolicyManager(context).setApplicationHidden(
                 DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
             if (hidden){
+                sendStatusChangedBroadcast(context);
                 showToast(context,R.string.freezeCompleted);
                 deleteNotification(context,pkgName);
                 if (finish){
                     activity.finish();
                 }
             } else {
+                sendStatusChangedBroadcast(context);
                 showToast(context,R.string.UFCompleted);
                 createNotification(activity, pkgName, R.drawable.ic_notification);
                 if(askRun){
@@ -615,6 +618,7 @@ class Support {
                 }
             }
         } else {
+            sendStatusChangedBroadcast(context);
             showToast(context, R.string.failed);
             if (finish){
                 activity.finish();
@@ -721,6 +725,7 @@ class Support {
             }
             destroyProcess(finish,outputStream,process,activity);
         }
+        sendStatusChangedBroadcast(context);
     }
 
     @TargetApi(21)
@@ -753,7 +758,14 @@ class Support {
                     showToast(context, "发生了点异常，操作仍将继续:" + e.getLocalizedMessage());
                 }
         }
+        sendStatusChangedBroadcast(context);
         showToast(context,R.string.executed);
+    }
+
+    private static void sendStatusChangedBroadcast(Context context){
+        Intent intent = new Intent();
+        intent.setAction("cf.playhi.freezeyou.action.packageStatusChanged");
+        context.sendBroadcast(intent);
     }
 
     static boolean addToOneKeyList(Context context,String freezeOrUF,String pkgName){

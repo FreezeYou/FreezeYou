@@ -54,7 +54,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.FirstIcon"),
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 }
-                showToast(getActivity(),R.string.ciFinishedToast);
+                showToast(getActivity(), R.string.ciFinishedToast);
                 break;
             case "secondIconEnabled":
                 if (sharedPreferences.getBoolean(s, true)) {
@@ -64,7 +64,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.SecondIcon"),
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 }
-                showToast(getActivity(),R.string.ciFinishedToast);
+                showToast(getActivity(), R.string.ciFinishedToast);
                 break;
             case "thirdIconEnabled":
                 if (sharedPreferences.getBoolean(s, true)) {
@@ -74,7 +74,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.ThirdIcon"),
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 }
-                showToast(getActivity(),R.string.ciFinishedToast);
+                showToast(getActivity(), R.string.ciFinishedToast);
                 break;
             case "shortCutOneKeyFreezeAdditionalOptions":
                 if (!"nothing".equals(sharedPreferences.getString(s, "nothing"))) {
@@ -86,22 +86,22 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 }
                 break;
             case "uiStyleSelection":
-                showToast(getActivity(),R.string.willTakeEffectsNextLaunch);
+                showToast(getActivity(), R.string.willTakeEffectsNextLaunch);
                 break;
             case "onekeyFreezeWhenLockScreen":
-                if (sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen",false)){
-                    if (Build.VERSION.SDK_INT>=26){
+                if (sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen", false)) {
+                    if (Build.VERSION.SDK_INT >= 26) {
                         getActivity().startForegroundService(new Intent(getActivity().getApplicationContext(), ScreenLockOneKeyFreezeService.class));
                     } else {
                         getActivity().startService(new Intent(getActivity().getApplicationContext(), ScreenLockOneKeyFreezeService.class));
                     }
                 } else {
-                    getActivity().stopService(new Intent(getActivity().getApplicationContext(),ScreenLockOneKeyFreezeService.class));
+                    getActivity().stopService(new Intent(getActivity().getApplicationContext(), ScreenLockOneKeyFreezeService.class));
                 }
                 break;
             case "freezeOnceQuit":
-                if (sharedPreferences.getBoolean("freezeOnceQuit", false) && !isAccessibilitySettingsOn(getActivity())){
-                    showToast(getActivity(),R.string.needActiveAccessibilityService);
+                if (sharedPreferences.getBoolean("freezeOnceQuit", false) && !isAccessibilitySettingsOn(getActivity())) {
+                    showToast(getActivity(), R.string.needActiveAccessibilityService);
                     openAccessibilitySettings(getActivity());
                 }
                 break;
@@ -113,27 +113,27 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         String key = preference.getKey();
-        if (key!=null){
-            switch (key){
+        if (key != null) {
+            switch (key) {
                 case "clearNameCache":
                     getActivity().getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE).edit().clear().apply();
                     break;
                 case "clearIconCache":
                     try {
-                        File file = new File(getActivity().getFilesDir()+"/icon");
-                        if(file.exists()&&file.isDirectory()){
+                        File file = new File(getActivity().getFilesDir() + "/icon");
+                        if (file.exists() && file.isDirectory()) {
                             File[] childFile = file.listFiles();
-                            if(childFile == null || childFile.length == 0){
+                            if (childFile == null || childFile.length == 0) {
                                 file.delete();
                             } else {
-                                for(File f : childFile){
-                                    if(f.isFile()){
+                                for (File f : childFile) {
+                                    if (f.isFile()) {
                                         f.delete();
                                     }
                                 }
                             }
                         }
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     break;
@@ -141,10 +141,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     checkUpdate(getActivity());
                     break;
                 case "helpTranslate":
-                    requestOpenWebSite(getActivity(),"https://crwd.in/freezeyou");
+                    requestOpenWebSite(getActivity(), "https://crwd.in/freezeyou");
                     break;
                 case "thanksList":
-                    requestOpenWebSite(getActivity(),"https://freezeyou.playhi.cf/thanks.html");
+                    requestOpenWebSite(getActivity(), "https://freezeyou.playhi.cf/thanks.html");
                     break;
                 case "configureAccessibilityService":
                     openAccessibilitySettings(getActivity());
