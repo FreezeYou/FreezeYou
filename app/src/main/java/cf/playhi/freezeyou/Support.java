@@ -156,11 +156,7 @@ class Support {
     static boolean checkRootFrozen(Context context, String pkgName, PackageManager packageManager) {
         int tmp;
         try {
-            if (packageManager == null) {
-                tmp = context.getPackageManager().getApplicationEnabledSetting(pkgName);
-            } else {
-                tmp = packageManager.getApplicationEnabledSetting(pkgName);
-            }
+            tmp = packageManager == null ? context.getPackageManager().getApplicationEnabledSetting(pkgName) : packageManager.getApplicationEnabledSetting(pkgName);
         } catch (Exception e) {
             tmp = -1;
         }
