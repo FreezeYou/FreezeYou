@@ -22,7 +22,7 @@ public class GetDisabledApplications extends Activity {
         ArrayList<String> appList = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             packageName = applicationInfo.get(i).packageName;
-            if (checkRootFrozen(GetDisabledApplications.this, packageName) || checkMRootFrozen(GetDisabledApplications.this, packageName)) {
+            if (checkRootFrozen(GetDisabledApplications.this, packageName, null) || checkMRootFrozen(GetDisabledApplications.this, packageName)) {
                 appList.add(packageName);
             }
         }

@@ -89,35 +89,6 @@ class Support {
         builder.create().show();
     }
 
-//    private static void makeDialog2(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess,final ApplicationInfo applicationInfo,final String pkgName){
-//        buildAlertDialog(activity,getApplicationIcon(activity,pkgName,applicationInfo,true),message,title)
-//                .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        processFreezeAction(activity,activity,pkgName,applicationInfo,selfCloseWhenDestroyProcess);
-//                    }
-//                })
-//                .setPositiveButton(R.string.launch, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        checkAndStartApp(activity,activity,pkgName,selfCloseWhenDestroyProcess);
-//                    }
-//                })
-//                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
-//                    }
-//                })
-//                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-//                    @Override
-//                    public void onCancel(DialogInterface dialogInterface) {
-//                        destroyProcess(selfCloseWhenDestroyProcess,outputStream,process,activity);
-//                    }
-//                })
-//                .create().show();
-//    }
-
     private static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity) {
         try {
             if (dataOutputStream != null) {
@@ -182,10 +153,14 @@ class Support {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(context) && getDevicePolicyManager(context).isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
     }
 
-    static boolean checkRootFrozen(Context context, String pkgName) {
+    static boolean checkRootFrozen(Context context, String pkgName, PackageManager packageManager) {
         int tmp;
         try {
-            tmp = context.getPackageManager().getApplicationEnabledSetting(pkgName);
+            if (packageManager == null) {
+                tmp = context.getPackageManager().getApplicationEnabledSetting(pkgName);
+            } else {
+                tmp = packageManager.getApplicationEnabledSetting(pkgName);
+            }
         } catch (Exception e) {
             tmp = -1;
         }

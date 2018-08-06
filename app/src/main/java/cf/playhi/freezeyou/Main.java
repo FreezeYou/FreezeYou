@@ -339,7 +339,8 @@ public class Main extends Activity {
                     Map<String, Object> keyValuePair = processAppStatus(
                             getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
                             applicationInfo1.packageName,
-                            applicationInfo1
+                            applicationInfo1,
+                            packageManager
                     );
                     if (keyValuePair != null) {
                         AppList.add(keyValuePair);
@@ -353,7 +354,8 @@ public class Main extends Activity {
                     Map<String, Object> keyValuePair = processAppStatus(
                             getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
                             applicationInfo1.packageName,
-                            applicationInfo1
+                            applicationInfo1,
+                            packageManager
                     );
                     if ((keyValuePair != null) && (R.drawable.shapedotwhite != (int) keyValuePair.get("isFrozen"))) {
                         AppList.add(keyValuePair);
@@ -367,7 +369,8 @@ public class Main extends Activity {
                     Map<String, Object> keyValuePair = processAppStatus(
                             getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
                             applicationInfo1.packageName,
-                            applicationInfo1
+                            applicationInfo1,
+                            packageManager
                     );
                     if (keyValuePair != null && R.drawable.shapedotwhite == (int) keyValuePair.get("isFrozen")) {
                         AppList.add(keyValuePair);
@@ -400,7 +403,8 @@ public class Main extends Activity {
                         Map<String, Object> keyValuePair = processAppStatus(
                                 getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
                                 applicationInfo1.packageName,
-                                applicationInfo1
+                                applicationInfo1,
+                                packageManager
                         );
                         if (keyValuePair != null) {
                             AppList.add(keyValuePair);
@@ -416,7 +420,8 @@ public class Main extends Activity {
                         Map<String, Object> keyValuePair = processAppStatus(
                                 getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
                                 applicationInfo1.packageName,
-                                applicationInfo1
+                                applicationInfo1,
+                                packageManager
                         );
                         if (keyValuePair != null) {
                             AppList.add(keyValuePair);
@@ -581,7 +586,7 @@ public class Main extends Activity {
                             overridePendingTransition(R.anim.pullup, R.anim.pulldown);
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
-                            if (realGetFrozenStatus(pkgName)) {
+                            if (realGetFrozenStatus(pkgName, null)) {
                                 processUnfreezeAction(Main.this, Main.this, pkgName, null, false, false);
                             } else {
                                 processFreezeAction(Main.this, Main.this, pkgName, null, false, false);
@@ -589,7 +594,7 @@ public class Main extends Activity {
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_freezeImmediately:
-                            if (!realGetFrozenStatus(pkgName)) {
+                            if (!realGetFrozenStatus(pkgName, null)) {
                                 processFreezeAction(Main.this, Main.this, pkgName, null, false, false);
                             } else {
                                 showToast(Main.this, R.string.freezeCompleted);
@@ -597,7 +602,7 @@ public class Main extends Activity {
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_UFImmediately:
-                            if (realGetFrozenStatus(pkgName)) {
+                            if (realGetFrozenStatus(pkgName, null)) {
                                 processUnfreezeAction(Main.this, Main.this, pkgName, null, false, false);
                             } else {
                                 showToast(Main.this, R.string.UFCompleted);
@@ -788,28 +793,28 @@ public class Main extends Activity {
      * @param packageName 应用包名
      * @return 资源 Id
      */
-    private int getFrozenStatus(String packageName) {
-        return realGetFrozenStatus(packageName) ? customThemeDisabledDot : R.drawable.shapedotwhite;
+    private int getFrozenStatus(String packageName, PackageManager packageManager) {
+        return realGetFrozenStatus(packageName, packageManager) ? customThemeDisabledDot : R.drawable.shapedotwhite;
     }
 
     /**
      * @param packageName 应用包名
      * @return true 则已冻结
      */
-    private boolean realGetFrozenStatus(String packageName) {
-        return (checkRootFrozen(Main.this, packageName) || checkMRootFrozen(Main.this, packageName));
+    private boolean realGetFrozenStatus(String packageName, PackageManager pm) {
+        return (checkRootFrozen(Main.this, packageName, pm) || checkMRootFrozen(Main.this, packageName));
     }
 
-    private void processFrozenStatus(Map<String, Object> keyValuePair, String packageName) {
-        keyValuePair.put("isFrozen", getFrozenStatus(packageName));
+    private void processFrozenStatus(Map<String, Object> keyValuePair, String packageName, PackageManager packageManager) {
+        keyValuePair.put("isFrozen", getFrozenStatus(packageName, packageManager));
     }
 
-    private Map<String, Object> processAppStatus(String name, String packageName, ApplicationInfo applicationInfo) {
+    private Map<String, Object> processAppStatus(String name, String packageName, ApplicationInfo applicationInfo, PackageManager packageManager) {
         if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
             Map<String, Object> keyValuePair = new HashMap<>();
             keyValuePair.put("Img", getApplicationIcon(Main.this, packageName, applicationInfo, true));
             keyValuePair.put("Name", name);
-            processFrozenStatus(keyValuePair, packageName);
+            processFrozenStatus(keyValuePair, packageName, packageManager);
             keyValuePair.put("PackageName", packageName);
             return keyValuePair;
         }
@@ -829,13 +834,13 @@ public class Main extends Activity {
             if (!("android".equals(aPkgNameList) || "cf.playhi.freezeyou".equals(aPkgNameList) || "".equals(aPkgNameList))) {
                 Map<String, Object> keyValuePair = new HashMap<>();
                 try {
-                    icon = getApplicationIcon(Main.this, aPkgNameList, getPackageManager().getApplicationInfo(aPkgNameList, PackageManager.GET_UNINSTALLED_PACKAGES), true);
+                    icon = getApplicationIcon(Main.this, aPkgNameList, null, true);
                 } catch (Exception e) {
                     icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
                 }
                 keyValuePair.put("Img", icon);
                 keyValuePair.put("Name", name);
-                processFrozenStatus(keyValuePair, aPkgNameList);
+                processFrozenStatus(keyValuePair, aPkgNameList, null);
                 keyValuePair.put("PackageName", aPkgNameList);
                 AppList.add(keyValuePair);
             }
@@ -885,7 +890,7 @@ public class Main extends Activity {
             try {
                 ImageView imageView = itemView.findViewById(R.id.isFrozen);
                 TextView textView = itemView.findViewById(R.id.pkgName);
-                imageView.setImageResource(getFrozenStatus(textView.getText().toString()));
+                imageView.setImageResource(getFrozenStatus(textView.getText().toString(), null));
             } catch (Exception e) {
                 e.printStackTrace();
             }

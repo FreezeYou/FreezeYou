@@ -49,7 +49,7 @@ public class Freeze extends Activity {
         }
         if (3 == getIntent().getIntExtra("ot", 0)) {
             processDialog(pkgName, auto, 3);
-        } else if ((!checkRootFrozen(Freeze.this, pkgName)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
+        } else if ((!checkRootFrozen(Freeze.this, pkgName, null)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
             processDialog(pkgName, auto, 2);
         } else {
             processDialog(pkgName, auto, 1);
@@ -63,13 +63,6 @@ public class Freeze extends Activity {
     }
 
     private void processDialog(String pkgName, boolean auto, int ot) {
-        ApplicationInfo applicationInfo = null;
-        try {
-            applicationInfo = getPackageManager().getApplicationInfo(pkgName, GET_UNINSTALLED_PACKAGES);
-            shortcutMakeDialog(getPackageManager().getApplicationLabel(applicationInfo).toString(), getString(R.string.chooseDetailAction), Freeze.this, true, applicationInfo, pkgName, ot, auto);
-        } catch (Exception e) {
-            e.printStackTrace();
-            shortcutMakeDialog(getString(R.string.notice), getString(R.string.chooseDetailAction), Freeze.this, true, applicationInfo, pkgName, 2, auto);
-        }
+        shortcutMakeDialog(getApplicationLabel(Freeze.this, null, null, pkgName), getString(R.string.chooseDetailAction), Freeze.this, true, null, pkgName, ot, auto);
     }
 }
