@@ -127,6 +127,11 @@
   <string name="configureAccessibilityService">设置无障碍服务</string>
   <string name="freezeOnceQuit">离开冻结</string>
   <string name="needActiveAccessibilityService">需要启用无障碍模式</string>
+  <string name="invalidArguments">参数错误</string>
+  <string name="exceptionHC">发生了点异常，操作仍将继续:</string>
+  <string name="plsConfirm">请确认</string>
+  <string name="removeNoRootCaution">真的要解除免ROOT吗？\n!为避免造成不必要的麻烦，解除前请先解冻所有已冻结的程序！</string>
+  <string name="noRootNotActivated">现在还没有成功启用免ROOT呢！</string>
   <string-array name="launchModeSelection">
     <item>显示全部</item>
     <item>仅已冻结</item>

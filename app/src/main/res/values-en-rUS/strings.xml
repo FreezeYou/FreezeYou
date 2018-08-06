@@ -45,7 +45,7 @@
   <string name="onlyUF">仅未冻结</string>
   <string name="shortCut">Shortcuts</string>
   <string name="notAvailable">N/A</string>
-  <string name="displayAll">显示全部</string>
+  <string name="displayAll">Show All</string>
   <string name="onlyOnekey">一键冻结</string>
   <string name="uninstalled">Uninstalled</string>
   <string name="onlySA">System pre-installed</string>
@@ -124,9 +124,14 @@
   <string name="refreshCache">Refresh Cache</string>
   <string name="saveOnClickFunctionStatus">保存单击功能状态</string>
   <string name="accessibility_service_description">侦听前台应用切换变化。\n用于避免自动冻结时前台应用被冻结以及应用不在前台时自动冻结等功能。</string>
-  <string name="configureAccessibilityService">设置无障碍服务</string>
+  <string name="configureAccessibilityService">Configure Accessibility Service</string>
   <string name="freezeOnceQuit">离开冻结</string>
-  <string name="needActiveAccessibilityService">需要启用无障碍模式</string>
+  <string name="needActiveAccessibilityService">Need to enable Accessibility Service</string>
+  <string name="invalidArguments">Invalid parameters</string>
+  <string name="exceptionHC">An exception has occurred but the operation will continue:</string>
+  <string name="plsConfirm">Please Confirm</string>
+  <string name="removeNoRootCaution">真的要解除免ROOT吗？\n!为避免造成不必要的麻烦，解除前请先解冻所有已冻结的程序！</string>
+  <string name="noRootNotActivated">现在还没有成功启用免ROOT呢！</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>仅已冻结</item>
