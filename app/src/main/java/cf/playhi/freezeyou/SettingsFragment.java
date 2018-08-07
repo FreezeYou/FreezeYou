@@ -149,6 +149,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 case "configureAccessibilityService":
                     openAccessibilitySettings(getActivity());
                     break;
+                case "faq":
+                    requestOpenWebSite(getActivity(), "https://freezeyou.playhi.cf/faq.html");
+                    break;
                 default:
                     break;
             }

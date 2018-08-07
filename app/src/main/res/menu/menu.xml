@@ -80,15 +80,24 @@
     <item
         android:id="@+id/menu_moreSettings"
         android:title="@string/moreSettings"/>
-    <item
-        android:id="@+id/menu_oneKeyFreezeImmediately"
-        android:title="@string/OneKeyFreezeImmediately" />
-    <item
-        android:id="@+id/menu_oneKeyUFImmediately"
-        android:title="@string/oneKeyUF" />
+
+    <item android:title="@string/executeImmediately">
+        <menu>
+            <item
+                android:id="@+id/menu_oneKeyFreezeImmediately"
+                android:title="@string/OneKeyFreezeImmediately" />
+            <item
+                android:id="@+id/menu_oneKeyUFImmediately"
+                android:title="@string/oneKeyUF" />
+        </menu>
+    </item>
+
     <item
         android:id="@+id/menu_update"
         android:title="@string/update" />
+    <item
+        android:id="@+id/menu_faq"
+        android:title="@string/faq" />
     <item
         android:id="@+id/menu_about"
         android:title="@string/about" />

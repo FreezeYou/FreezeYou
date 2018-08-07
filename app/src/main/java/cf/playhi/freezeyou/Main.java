@@ -266,6 +266,9 @@ public class Main extends Activity {
             case R.id.menu_moreSettings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
+            case R.id.menu_faq:
+                requestOpenWebSite(this, "https://freezeyou.playhi.cf/faq.html");
+                return true;
             case R.id.menu_onClickFunc_autoUFOrFreeze:
                 appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreeze;
                 saveOnClickFunctionStatus(appListViewOnClickMode);

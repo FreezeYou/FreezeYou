@@ -32,6 +32,7 @@ public class AboutActivity extends Activity {
 
         final String[] aboutData = new String[]{
                 getResources().getString(R.string.hToUse),
+                getResources().getString(R.string.faq),
                 getResources().getString(R.string.helpTranslate),
                 getResources().getString(R.string.thanksList),
                 getResources().getString(R.string.visitWebsite),
@@ -52,21 +53,24 @@ public class AboutActivity extends Activity {
                         requestOpenWebSite(activity, "https://freezeyou.playhi.cf/");
                         break;
                     case 1:
-                        requestOpenWebSite(activity, "https://crwd.in/freezeyou");
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf/faq.html");
                         break;
                     case 2:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf/thanks.html");
+                        requestOpenWebSite(activity, "https://crwd.in/freezeyou");
                         break;
                     case 3:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf");
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf/thanks.html");
                         break;
                     case 4:
-                        joinQQGroup(activity);
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf");
                         break;
                     case 5:
-                        checkUpdate(activity);
+                        joinQQGroup(activity);
                         break;
                     case 6:
+                        checkUpdate(activity);
+                        break;
+                    case 7:
                         showToast(activity, "V" + getVersionName(activity) + "(" + getVersionCode(activity) + ")");
                         break;
                     default:

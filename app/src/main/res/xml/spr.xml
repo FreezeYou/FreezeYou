@@ -122,6 +122,9 @@
             android:title="@string/update"
             android:key="checkUpdate"/>
         <Preference
+            android:title="@string/faq"
+            android:key="faq"/>
+        <Preference
             android:title="@string/helpTranslate"
             android:key="helpTranslate"/>
         <Preference
