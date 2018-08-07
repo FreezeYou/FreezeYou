@@ -22,11 +22,11 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     if (isScreenOn && !"com.android.systemui".equals(pkgNameString)) {// && !"android".equals(pkgName)
                         String previousPkg = MainApplication.getCurrentPackage();
                         MainApplication.setCurrentPackage(pkgNameString);
-                        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("freezeOnceQuit", false)) {
-                            if (getApplicationContext().getSharedPreferences("FreezeOnceQuit", Context.MODE_PRIVATE)
-                                    .getString("pkgName", "").contains("|" + previousPkg + "|") && !pkgNameString.equals(previousPkg)) {
-                                Support.processFreezeAction(getApplicationContext(), null, previousPkg, null, false, false);
-                            }
+                        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("freezeOnceQuit", false)
+                                && getApplicationContext().getSharedPreferences("FreezeOnceQuit", Context.MODE_PRIVATE)
+                                .getString("pkgName", "").contains("|" + previousPkg + "|")
+                                && !pkgNameString.equals(previousPkg)) {
+                            Support.processFreezeAction(getApplicationContext(), null, previousPkg, null, false, false);
                         }
                     }
                 }

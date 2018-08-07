@@ -3,11 +3,9 @@ package cf.playhi.freezeyou;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
 
-import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.getApplicationLabel;
