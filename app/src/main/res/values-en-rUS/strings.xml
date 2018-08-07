@@ -124,8 +124,8 @@ Do not freeze the application which is very important to the system, that may ca
   <string name="clearIconCache">Clear Icon Cache</string>
   <string name="clearNameCache">Clear Name Cache of Applications</string>
   <string name="refreshCache">Refresh Cache</string>
-  <string name="saveOnClickFunctionStatus">保存单击功能状态</string>
-  <string name="accessibility_service_description">侦听前台应用切换变化。\n用于避免自动冻结时前台应用被冻结以及应用不在前台时自动冻结等功能。</string>
+  <string name="saveOnClickFunctionStatus">Save Click Function Status</string>
+  <string name="accessibility_service_description">Listen to the foreground application changes. \nUsed to active the functions to avoid freezing foreground applications when automatic freezing, automatically freeze applications when they are not the foreground applications, etc.</string>
   <string name="configureAccessibilityService">Configure Accessibility Service</string>
   <string name="freezeOnceQuit">Leave Freeze</string>
   <string name="needActiveAccessibilityService">Need to enable Accessibility Service</string>
