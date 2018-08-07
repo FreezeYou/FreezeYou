@@ -74,6 +74,24 @@
             <item
                 android:id="@+id/menu_onClickFunc_autoUFOrFreeze"
                 android:title="@string/autoUFOrFreeze" />
+            <item
+                android:id="@+id/menu_onClickFunc_addToOFList"
+                android:title="@string/addToOneKeyList" />
+            <item
+                android:id="@+id/menu_onClickFunc_removeFromOFList"
+                android:title="@string/removeFromOneKeyList" />
+            <item
+                android:id="@+id/menu_onClickFunc_addToOUFList"
+                android:title="@string/addToOneKeyUFList" />
+            <item
+                android:id="@+id/menu_onClickFunc_removeFromOUFList"
+                android:title="@string/removeFromOneKeyUFList" />
+            <item
+                android:id="@+id/menu_onClickFunc_addToFOQList"
+                android:title="@string/addToFreezeOnceQuit" />
+            <item
+                android:id="@+id/menu_onClickFunc_removeFromFOQList"
+                android:title="@string/removeFromFreezeOnceQuit" />
         </menu>
     </item>
 

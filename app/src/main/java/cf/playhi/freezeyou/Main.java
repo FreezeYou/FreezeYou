@@ -73,6 +73,12 @@ public class Main extends Activity {
     private final static int APPListViewOnClickMode_autoUFOrFreeze = 1;
     private final static int APPListViewOnClickMode_freezeImmediately = 2;
     private final static int APPListViewOnClickMode_UFImmediately = 3;
+    private final static int APPListViewOnClickMode_addToOFList = 4;
+    private final static int APPListViewOnClickMode_removeFromOFList = 5;
+    private final static int APPListViewOnClickMode_addToOUFList = 6;
+    private final static int APPListViewOnClickMode_removeFromOUFList = 7;
+    private final static int APPListViewOnClickMode_addToFOQList = 8;
+    private final static int APPListViewOnClickMode_removeFromFOQList = 9;
 
     private final ArrayList<String> selectedPackages = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
@@ -283,6 +289,30 @@ public class Main extends Activity {
                 return true;
             case R.id.menu_onClickFunc_chooseAction:
                 appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
+                return true;
+            case R.id.menu_onClickFunc_addToFOQList:
+                appListViewOnClickMode = APPListViewOnClickMode_addToFOQList;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
+                return true;
+            case R.id.menu_onClickFunc_addToOFList:
+                appListViewOnClickMode = APPListViewOnClickMode_addToOFList;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
+                return true;
+            case R.id.menu_onClickFunc_addToOUFList:
+                appListViewOnClickMode = APPListViewOnClickMode_addToOUFList;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
+                return true;
+            case R.id.menu_onClickFunc_removeFromFOQList:
+                appListViewOnClickMode = APPListViewOnClickMode_removeFromFOQList;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
+                return true;
+            case R.id.menu_onClickFunc_removeFromOFList:
+                appListViewOnClickMode = APPListViewOnClickMode_removeFromOFList;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
+                return true;
+            case R.id.menu_onClickFunc_removeFromOUFList:
+                appListViewOnClickMode = APPListViewOnClickMode_removeFromOUFList;
                 saveOnClickFunctionStatus(appListViewOnClickMode);
                 return true;
             default:
@@ -611,6 +641,24 @@ public class Main extends Activity {
                                 showToast(Main.this, R.string.UFCompleted);
                             }
                             updateFrozenStatus();
+                            break;
+                        case APPListViewOnClickMode_addToOFList:
+                            showToast(Main.this, addToOneKeyList(Main.this, "AutoFreezeApplicationList", pkgName) ? R.string.added : R.string.failed);
+                            break;
+                        case APPListViewOnClickMode_removeFromOFList:
+                            showToast(Main.this, removeFromOneKeyList(Main.this, "AutoFreezeApplicationList", pkgName) ? R.string.removed : R.string.failed);
+                            break;
+                        case APPListViewOnClickMode_addToOUFList:
+                            showToast(Main.this, addToOneKeyList(Main.this, "OneKeyUFApplicationList", pkgName) ? R.string.added : R.string.failed);
+                            break;
+                        case APPListViewOnClickMode_removeFromOUFList:
+                            showToast(Main.this, removeFromOneKeyList(Main.this, "OneKeyUFApplicationList", pkgName) ? R.string.removed : R.string.failed);
+                            break;
+                        case APPListViewOnClickMode_addToFOQList:
+                            showToast(Main.this, addToOneKeyList(Main.this, "FreezeOnceQuit", pkgName) ? R.string.added : R.string.failed);
+                            break;
+                        case APPListViewOnClickMode_removeFromFOQList:
+                            showToast(Main.this, removeFromOneKeyList(Main.this, "FreezeOnceQuit", pkgName) ? R.string.removed : R.string.failed);
                             break;
                         default:
                             break;

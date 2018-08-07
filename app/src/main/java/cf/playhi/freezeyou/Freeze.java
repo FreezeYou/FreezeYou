@@ -8,7 +8,9 @@ import android.os.Bundle;
 
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
+import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getApplicationLabel;
+import static cf.playhi.freezeyou.Support.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.Support.processAddTranslucent;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.shortcutMakeDialog;
@@ -42,15 +44,15 @@ public class Freeze extends Activity {
             showToast(getApplicationContext(), R.string.invalidArguments);
             Freeze.this.finish();
         }
-        if (Build.VERSION.SDK_INT >= 21) {
-            setTaskDescription(new ActivityManager.TaskDescription(getApplicationLabel(this, null, null, pkgName)));
-        }
         if (3 == getIntent().getIntExtra("ot", 0)) {
             processDialog(pkgName, auto, 3);
         } else if ((!checkRootFrozen(Freeze.this, pkgName, null)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
             processDialog(pkgName, auto, 2);
         } else {
             processDialog(pkgName, auto, 1);
+        }
+        if (Build.VERSION.SDK_INT >= 21) {
+            setTaskDescription(new ActivityManager.TaskDescription(getApplicationLabel(this, null, null, pkgName),getBitmapFromDrawable(getApplicationIcon(this,pkgName,null,false))));
         }
     }
 

@@ -215,7 +215,7 @@ class Support {
      * @param drawable drawable
      * @return Bitmap
      */
-    private static Bitmap getBitmapFromDrawable(Drawable drawable) {
+    static Bitmap getBitmapFromDrawable(Drawable drawable) {
         try {
             return ((BitmapDrawable) drawable).getBitmap();
         } catch (Exception e) {
@@ -742,28 +742,14 @@ class Support {
         final SharedPreferences sharedPreferences = context.getSharedPreferences(
                 freezeOrUF, Context.MODE_PRIVATE);
         final String pkgNameList = sharedPreferences.getString("pkgName", "");
-        if (!pkgNameList.contains("|" + pkgName + "|")) {
-            return sharedPreferences.edit()
-                    .putString(
-                            "pkgName",
-                            pkgNameList + "|" + pkgName + "|")
-                    .commit();
-        }
-        return true;
+        return pkgNameList.contains("|" + pkgName + "|") || sharedPreferences.edit().putString("pkgName", pkgNameList + "|" + pkgName + "|").commit();
     }
 
     static boolean removeFromOneKeyList(Context context, String freezeOrUF, String pkgName) {
         final SharedPreferences sharedPreferences = context.getSharedPreferences(
                 freezeOrUF, Context.MODE_PRIVATE);
         final String pkgNameList = sharedPreferences.getString("pkgName", "");
-        if (pkgNameList.contains("|" + pkgName + "|")) {
-            return sharedPreferences.edit()
-                    .putString(
-                            "pkgName",
-                            pkgNameList.replace("|" + pkgName + "|", ""))
-                    .commit();
-        }
-        return true;
+        return !pkgNameList.contains("|" + pkgName + "|") || sharedPreferences.edit().putString("pkgName", pkgNameList.replace("|" + pkgName + "|", "")).commit();
     }
 
     static void openDevicePolicyManager(Context context) {
