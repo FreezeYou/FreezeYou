@@ -326,6 +326,9 @@ class Support {
                 name = pm.getApplicationInfo(pkgName, GET_UNINSTALLED_PACKAGES).loadLabel(pm).toString();
                 sharedPreferences.edit().putString(pkgName, name).apply();
                 return name;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+                return context.getString(R.string.uninstalled);
             } catch (Exception e) {
                 e.printStackTrace();
                 return pkgName;
@@ -441,51 +444,48 @@ class Support {
             int mId = pkgName.hashCode();
             mBuilder.setSmallIcon(iconResId);
             mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_notification));
-            mBuilder.setContentTitle(getApplicationLabel(context, null, null, pkgName));
-            mBuilder.setContentText(description);
-            mBuilder.setAutoCancel(!preferenceManager.getBoolean("notificationBarDisableClickDisappear", false));
-            mBuilder.setOngoing(preferenceManager.getBoolean("notificationBarDisableSlideOut", false));
-            // Create the NotificationChannel, but only on API 26+ because
-            // the NotificationChannel class is new and not in the support library
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                String CHANNEL_ID = "FAUf";
-//                CharSequence name = context.getString(R.string.disableAEnable);
-//                String description = context.getString(R.string.disableAEnable);
-                int importance = NotificationManager.IMPORTANCE_LOW;
-                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, description, importance);
-                channel.setDescription(description);
-                // Register the channel with the system; you can't change the importance
-                // or other notification behaviors after this
-                NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-                if (notificationManager != null)
-                    notificationManager.createNotificationChannel(channel);
-                mBuilder.setChannelId(CHANNEL_ID);
-            }
-            // Create an Intent for the activity you want to start
-            Intent resultIntent;
-            if (notificationBarFreezeImmediately) {
-                resultIntent = new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false).putExtra("ot", 3);
-            } else {
-                resultIntent = new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false);
-            }
-            // Create the TaskStackBuilder and add the intent, which inflates the back stack
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-            stackBuilder.addNextIntent(resultIntent);
-            // Get the PendingIntent containing the entire back stack
-            PendingIntent resultPendingIntent =
-                    stackBuilder.getPendingIntent(mId, PendingIntent.FLAG_UPDATE_CURRENT);
-            mBuilder.setContentIntent(resultPendingIntent);
-            NotificationManager mNotificationManager =
-                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//            SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(
-//                    "notificationId", Context.MODE_PRIVATE);
-//            sharedPreferences.edit().putInt(pkgName, mId).apply();
-            if (mNotificationManager != null) {
-                // mId allows you to update the notification later on.
-                mNotificationManager.notify(mId, mBuilder.build());
-                String notifying = preferenceManager.getString("notifying", "");
-                if (!notifying.contains(pkgName + ",")) {
-                    preferenceManager.edit().putString("notifying", notifying + pkgName + ",").commit();//一键解冻会多次调用，如果apply可能会遗失数据。
+            String name = getApplicationLabel(context, null, null, pkgName);
+            if (!context.getString(R.string.uninstalled).equals(name)){
+                mBuilder.setContentTitle(name);
+                mBuilder.setContentText(description);
+                mBuilder.setAutoCancel(!preferenceManager.getBoolean("notificationBarDisableClickDisappear", false));
+                mBuilder.setOngoing(preferenceManager.getBoolean("notificationBarDisableSlideOut", false));
+                // Create the NotificationChannel, but only on API 26+ because
+                // the NotificationChannel class is new and not in the support library
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    String CHANNEL_ID = "FAUf";
+                    int importance = NotificationManager.IMPORTANCE_LOW;
+                    NotificationChannel channel = new NotificationChannel(CHANNEL_ID, description, importance);
+                    channel.setDescription(description);
+                    // Register the channel with the system; you can't change the importance
+                    // or other notification behaviors after this
+                    NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+                    if (notificationManager != null)
+                        notificationManager.createNotificationChannel(channel);
+                    mBuilder.setChannelId(CHANNEL_ID);
+                }
+                // Create an Intent for the activity you want to start
+                Intent resultIntent;
+                if (notificationBarFreezeImmediately) {
+                    resultIntent = new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false).putExtra("ot", 3);
+                } else {
+                    resultIntent = new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false);
+                }
+                // Create the TaskStackBuilder and add the intent, which inflates the back stack
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                stackBuilder.addNextIntent(resultIntent);
+                // Get the PendingIntent containing the entire back stack
+                PendingIntent resultPendingIntent =
+                        stackBuilder.getPendingIntent(mId, PendingIntent.FLAG_UPDATE_CURRENT);
+                mBuilder.setContentIntent(resultPendingIntent);
+                NotificationManager mNotificationManager =
+                        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                if (mNotificationManager != null) {
+                    mNotificationManager.notify(mId, mBuilder.build());
+                    String notifying = preferenceManager.getString("notifying", "");
+                    if (!notifying.contains(pkgName + ",")) {
+                        preferenceManager.edit().putString("notifying", notifying + pkgName + ",").commit();//一键解冻会多次调用，如果apply可能会遗失数据。
+                    }
                 }
             }
         }
@@ -497,12 +497,14 @@ class Support {
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (mNotificationManager != null) {
             mNotificationManager.cancel(pkgName.hashCode());
-            SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            String notifying = defaultSharedPreferences.getString("notifying", "");
-            if (notifying.contains(pkgName + ",")) {
-                defaultSharedPreferences.edit().putString("notifying", notifying.replace(pkgName + ",", "")).commit();
-            }
+            deleteNotifying(context,pkgName);
         }
+    }
+
+    static boolean deleteNotifying(Context context,String pkgName) {
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String notifying = defaultSharedPreferences.getString("notifying", "");
+        return !notifying.contains(pkgName + ",") || defaultSharedPreferences.edit().putString("notifying", notifying.replace(pkgName + ",", "")).commit();
     }
 
     static String getVersionName(Context context) {
