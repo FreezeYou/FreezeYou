@@ -89,14 +89,14 @@ Do not freeze the application which is very important to the system, that may ca
   <string name="launchMode">Startup Mode</string>
   <string name="freezeImmediately">Freeze Immediately</string>
   <string name="UFImmediately">Unfreeze Immediately</string>
-  <string name="plsRemoveUninstalledApplications">[提示]可以将已卸载的应用程序移出一键冻结/解冻列表</string>
+  <string name="plsRemoveUninstalledApplications">[Hint] You can remove uninstalled applications from the Onekey Freeze/Unfreeze list</string>
   <string name="notificationBarFreezeImmediately">点击通知栏快捷操作立即冻结</string>
-  <string name="onClickFunction">单击功能</string>
+  <string name="onClickFunction">Click Function</string>
   <string name="chooseAction">Choose Action</string>
-  <string name="autoUFOrFreeze">自动冻解</string>
-  <string name="freezeCompleted">已冻结</string>
-  <string name="UFCompleted">已解冻</string>
-  <string name="shortCutOneKeyFreezeAdditionalOptions">快捷方式一键冻结后追加</string>
+  <string name="autoUFOrFreeze">Automatic Freeze and Unfreeze</string>
+  <string name="freezeCompleted">Frozen</string>
+  <string name="UFCompleted">Unfrozen</string>
+  <string name="shortCutOneKeyFreezeAdditionalOptions">Shortcut OneKey Freeze Additional Options</string>
   <string name="askIfLockScreen">Do you want to lock the screen now?</string>
   <string name="devicePolicyManagerNotFound">No available Device Manager found</string>
   <string name="devicePolicyManagerNotActivated">Related permissions have not been activated</string>
@@ -106,28 +106,28 @@ Do not freeze the application which is very important to the system, that may ca
   <string name="notUpdatedForALongTimeMessage">Has not been updated for a long time, do you want to check for update now?</string>
   <string name="uiStyle">Interface Style</string>
   <string name="willTakeEffectsNextLaunch">Will take effect the next time the application is launched</string>
-  <string name="freezeAUF">冻结与解冻</string>
+  <string name="freezeAUF">Freeze and Unfreeze</string>
   <string name="notificationBar">Notification</string>
-  <string name="disableSlideOut">禁止滑动移除</string>
-  <string name="disableClickDisappear">禁止点击消失</string>
-  <string name="effectNextCreate">下次创建时生效</string>
+  <string name="disableSlideOut">Do not disappear when slide out</string>
+  <string name="disableClickDisappear">Do not disappear after clicked</string>
+  <string name="effectNextCreate">Take effects the next time created</string>
   <string name="helpTranslate">Help Translate</string>
   <string name="thanksList">Thanks List</string>
   <string name="automation">Automation</string>
-  <string name="freezeAfterScreenLock">锁屏后一键冻结</string>
+  <string name="freezeAfterScreenLock">Onekey freeze after screen locked</string>
   <string name="backgroundService">Background Services</string>
-  <string name="useForegroundService">使用前台服务(安卓8.0及以上强制开启)</string>
-  <string name="serviceLongerEx">减小后台功能失效的概率</string>
-  <string name="getDisabledApplications">获得已冻结的应用程序列表</string>
-  <string name="enableApplications">解冻应用</string>
-  <string name="disableApplications">冻结应用</string>
+  <string name="useForegroundService">Use the foreground service</string>
+  <string name="serviceLongerEx">Reduce the probability of failure of the background function</string>
+  <string name="getDisabledApplications">Get a list of frozen applications</string>
+  <string name="enableApplications">Unfreeze Packages</string>
+  <string name="disableApplications">Freeze Packages</string>
   <string name="clearIconCache">Clear Icon Cache</string>
   <string name="clearNameCache">Clear Name Cache of Applications</string>
   <string name="refreshCache">Refresh Cache</string>
   <string name="saveOnClickFunctionStatus">保存单击功能状态</string>
   <string name="accessibility_service_description">侦听前台应用切换变化。\n用于避免自动冻结时前台应用被冻结以及应用不在前台时自动冻结等功能。</string>
   <string name="configureAccessibilityService">Configure Accessibility Service</string>
-  <string name="freezeOnceQuit">离开冻结</string>
+  <string name="freezeOnceQuit">Leave Freeze</string>
   <string name="needActiveAccessibilityService">Need to enable Accessibility Service</string>
   <string name="invalidArguments">Invalid parameters</string>
   <string name="exceptionHC">An exception has occurred but the operation will continue:</string>
@@ -138,13 +138,13 @@ Do not freeze the application which is very important to the system, that may ca
   <string name="executeImmediately">Execute</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
-    <item>仅已冻结</item>
-    <item>仅未冻结</item>
+    <item>Frozen only</item>
+    <item>Unfrozen only</item>
     <item>System pre-installed</item>
     <item>User Application</item>
-    <item>一键冻结</item>
-    <item>一键解冻</item>
-    <item>离开冻结</item>
+    <item>Onekey Freeze</item>
+    <item>Onekey Unfreeze</item>
+    <item>Leave Freeze</item>
   </string-array>
   <string-array name="shortCutOneKeyFreezeAdditionalOptionsSelection">
     <item>None</item>
