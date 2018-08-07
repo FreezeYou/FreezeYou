@@ -132,8 +132,8 @@
   <string name="plsConfirm">Please Confirm</string>
   <string name="removeNoRootCaution">真的要解除免ROOT吗？\n!为避免造成不必要的麻烦，解除前请先解冻所有已冻结的程序！</string>
   <string name="noRootNotActivated">现在还没有成功启用免ROOT呢！</string>
-  <string name="faq">疑难解答</string>
-  <string name="executeImmediately">立即执行</string>
+  <string name="faq">FAQ</string>
+  <string name="executeImmediately">Execute</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>仅已冻结</item>
