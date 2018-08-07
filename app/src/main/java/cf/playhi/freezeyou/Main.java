@@ -877,18 +877,10 @@ public class Main extends Activity {
         Drawable icon;
         for (String aPkgNameList : source) {
             aPkgNameList = aPkgNameList.replaceAll("\\|", "");
-            try {
-                name = getApplicationLabel(getApplicationContext(), null, null, aPkgNameList);
-            } catch (Exception e) {
-                name = getResources().getString(R.string.uninstalled);
-            }
+            name = getApplicationLabel(getApplicationContext(), null, null, aPkgNameList);
             if (!("android".equals(aPkgNameList) || "cf.playhi.freezeyou".equals(aPkgNameList) || "".equals(aPkgNameList))) {
                 Map<String, Object> keyValuePair = new HashMap<>();
-                try {
-                    icon = getApplicationIcon(Main.this, aPkgNameList, null, true);
-                } catch (Exception e) {
-                    icon = getResources().getDrawable(android.R.drawable.ic_menu_delete);//ic_delete
-                }
+                icon = getApplicationIcon(Main.this, aPkgNameList, null, true);
                 keyValuePair.put("Img", icon);
                 keyValuePair.put("Name", name);
                 processFrozenStatus(keyValuePair, aPkgNameList, null);

@@ -257,6 +257,8 @@ class Support {
                 drawable = context.getPackageManager().getApplicationIcon(pkgName);
                 folderCheck(context.getFilesDir() + "/icon");
                 writeBitmapToFile(path, getBitmapFromDrawable(drawable));
+            } catch (PackageManager.NameNotFoundException e) {
+                drawable = context.getResources().getDrawable(android.R.drawable.ic_menu_delete);
             } catch (Exception e) {
                 drawable = context.getResources().getDrawable(android.R.drawable.sym_def_app_icon);
             }
