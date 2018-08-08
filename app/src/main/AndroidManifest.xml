@@ -2,198 +2,207 @@
 
     package="cf.playhi.freezeyou">
 
-    <uses-permission android:name="android.permission.INSTALL_SHORTCUT"/>
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <permission
         android:name="cf.playhi.freezeyou.permission.GET_DISABLED_APPLICATIONS"
         android:description="@string/getDisabledApplications"
         android:icon="@mipmap/ic_launcher_new_round"
         android:label="@string/getDisabledApplications"
-        android:protectionLevel="normal"/>
+        android:protectionLevel="normal" />
     <permission
         android:name="cf.playhi.freezeyou.permission.ENABLE_APPLICATIONS"
         android:description="@string/enableApplications"
         android:icon="@mipmap/ic_launcher_new_round"
         android:label="@string/enableApplications"
-        android:protectionLevel="dangerous"/>
+        android:protectionLevel="dangerous" />
     <permission
         android:name="cf.playhi.freezeyou.permission.DISABLE_APPLICATIONS"
         android:description="@string/disableApplications"
         android:icon="@mipmap/ic_launcher_new_round"
         android:label="@string/disableApplications"
-        android:protectionLevel="dangerous"/>
+        android:protectionLevel="dangerous" />
 
     <application
-        android:allowBackup="true"
         android:name=".MainApplication"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher_new_round"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:fullBackupContent="@xml/backup_descriptor"
-        android:manageSpaceActivity=".SettingsActivity">
+        android:manageSpaceActivity=".SettingsActivity"
+        android:supportsRtl="true">
         <activity
             android:name=".Main"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:launchMode="singleTask"
             android:icon="@mipmap/ic_launcher_new_round"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/AppTheme.Default" >
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Default"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity-alias
-            android:enabled="true"
-            android:label="@string/app_name"
             android:name=".ThirdIcon"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:enabled="true"
             android:icon="@mipmap/ic_launcher_new_round"
-            android:targetActivity=".Main"
-            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Default" >
+            android:targetActivity=".Main"
+            android:theme="@style/AppTheme.Default">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts"
+            <meta-data
+                android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity-alias>
         <activity-alias
-            android:enabled="true"
-            android:label="@string/app_name"
             android:name=".FirstIcon"
-            android:icon="@mipmap/ic_launcher"
-            android:targetActivity=".Main"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:enabled="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Default" >
+            android:targetActivity=".Main"
+            android:theme="@style/AppTheme.Default">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts"
+            <meta-data
+                android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity-alias>
         <activity-alias
-            android:enabled="true"
-            android:label="@string/app_name"
             android:name=".SecondIcon"
-            android:icon="@mipmap/ic_launcher_round"
-            android:targetActivity=".Main"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:enabled="true"
+            android:icon="@mipmap/ic_launcher_round"
+            android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Default" >
+            android:targetActivity=".Main"
+            android:theme="@style/AppTheme.Default">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts"
+            <meta-data
+                android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity-alias>
+
         <activity
             android:name=".Freeze"
-            android:label="@string/disableAEnable"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:launchMode="standard"
             android:documentLaunchMode="always"
+            android:label="@string/disableAEnable"
+            android:launchMode="standard"
             android:maxRecents="3"
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".OneKeyFreeze"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:documentLaunchMode="always"
             android:label="@string/oneKeyFreeze"
             android:launchMode="standard"
-            android:documentLaunchMode="always"
             android:maxRecents="1"
-            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".OneKeyUF"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:documentLaunchMode="always"
             android:label="@string/oneKeyUF"
             android:launchMode="standard"
-            android:documentLaunchMode="always"
             android:maxRecents="1"
-            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ManualMode"
-            android:label="@string/manualMode"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:theme="@style/AppTheme.Default"/>
+            android:label="@string/manualMode"
+            android:theme="@style/AppTheme.Default" />
         <activity
             android:name=".SelectOperation"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar"/>
+            android:theme="@style/AppTheme.Translucent.NoTitleBar" />
         <activity
             android:name=".SettingsActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/moreSettings"
-            android:theme="@style/AppTheme.Default"
-            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"/>
+            android:theme="@style/AppTheme.Default" />
         <activity
             android:name=".Uninstall"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar"/>
+            android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar" />
         <activity
             android:name=".AboutActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/about"
-            android:theme="@style/AppTheme.Default"
-            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"/>
+            android:theme="@style/AppTheme.Default" />
         <activity
             android:name=".AskLockScreenActivity"
-            android:label="@string/askIfLockScreen"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar"
-            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"/>
+            android:label="@string/askIfLockScreen"
+            android:theme="@style/AppTheme.Translucent.NoTitleBar" />
         <activity
             android:name=".GetDisabledApplications"
-            android:exported="true"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:permission="cf.playhi.freezeyou.permission.GET_DISABLED_APPLICATIONS"
             android:theme="@style/AppTheme.Translucent.NoTitleBar" />
         <activity
             android:name=".DisableApplications"
-            android:exported="true"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:permission="cf.playhi.freezeyou.permission.DISABLE_APPLICATIONS"
             android:theme="@style/AppTheme.Translucent.NoTitleBar" />
         <activity
             android:name=".EnableApplications"
-            android:exported="true"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:permission="cf.playhi.freezeyou.permission.ENABLE_APPLICATIONS"
             android:theme="@style/AppTheme.Translucent.NoTitleBar" />
 
         <receiver
             android:name=".DeviceAdminReceiver"
-            android:label="@string/app_name"
             android:description="@string/app_name"
+            android:label="@string/app_name"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <meta-data android:name="android.app.device_admin"
+            <meta-data
+                android:name="android.app.device_admin"
                 android:resource="@xml/device_admin" />
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
@@ -204,8 +213,10 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.provider.Telephony.SECRET_CODE"/>
-                <data android:scheme="android_secret_code" android:host="373393968"/>
+                <action android:name="android.provider.Telephony.SECRET_CODE" />
+                <data
+                    android:host="373393968"
+                    android:scheme="android_secret_code" />
             </intent-filter>
         </receiver>
         <receiver
@@ -224,18 +235,21 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-            <intent-filter >
-                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
-                <data android:scheme="package"/>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
+
         <service
+            android:name=".ScreenLockOneKeyFreezeService"
             android:exported="false"
-            android:name=".ScreenLockOneKeyFreezeService" />
+            android:process=":screenLockOneKeyFreezeService" />
         <service
             android:name=".AccessibilityService"
+            android:label="@string/app_name"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
-            android:label="@string/app_name">
+            android:process=":backgroundService">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
@@ -245,30 +259,37 @@
         </service>
         <service
             android:name=".OneKeyFreezeQSTileService"
-            android:label="@string/oneKeyFreeze"
             android:icon="@drawable/ic_notification"
+            android:label="@string/oneKeyFreeze"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
         <service
             android:name=".OneKeyUFQSTileService"
-            android:label="@string/oneKeyUF"
             android:icon="@drawable/ic_notification"
+            android:label="@string/oneKeyUF"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
         <service
+            android:name=".OneKeyFreezeService"
+            android:exported="false"
             android:label="@string/oneKeyFreeze"
-            android:exported="false"
-            android:name=".OneKeyFreezeService" />
+            android:process=":backgroundService" />
         <service
-            android:label="@string/oneKeyUF"
+            android:name=".OneKeyUFService"
             android:exported="false"
-            android:name=".OneKeyUFService" />
+            android:label="@string/oneKeyUF"
+            android:process=":backgroundService" />
+
+        <provider
+            android:name="cf.playhi.freezeyou.provider.DataProvider"
+            android:authorities="cf.playhi.freezeyou.provider"
+            android:exported="false" />
     </application>
 
 </manifest>
