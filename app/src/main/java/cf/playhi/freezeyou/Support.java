@@ -749,13 +749,13 @@ class Support {
     }
 
     static boolean addToOneKeyList(Context context, String freezeOrUF, String pkgName) {
-        final AppPreferences sharedPreferences =  new AppPreferences(context);
+        final AppPreferences sharedPreferences = new AppPreferences(context);
         final String pkgNames = sharedPreferences.getString(freezeOrUF, "");
         return existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(freezeOrUF, pkgNames + pkgName + ",");
     }
 
     static boolean removeFromOneKeyList(Context context, String freezeOrUF, String pkgName) {
-        final AppPreferences sharedPreferences =  new AppPreferences(context);
+        final AppPreferences sharedPreferences = new AppPreferences(context);
         final String pkgNames = sharedPreferences.getString(freezeOrUF, "");
         return !existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(freezeOrUF, pkgNames.replace(pkgName + ",", ""));
     }
@@ -854,13 +854,13 @@ class Support {
             outputStream.writeBytes("exit\n");
             outputStream.flush();
             process.waitFor();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         PowerManager pm = (PowerManager) context.getSystemService(POWER_SERVICE);
-        if (pm!=null){
-            if (pm.isScreenOn()){
+        if (pm != null) {
+            if (pm.isScreenOn()) {
                 DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
                 ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
                 if (devicePolicyManager != null) {
