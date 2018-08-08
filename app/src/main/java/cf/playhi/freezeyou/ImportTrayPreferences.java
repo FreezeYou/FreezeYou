@@ -5,6 +5,8 @@ import android.content.Context;
 import net.grandcentrix.tray.TrayPreferences;
 import net.grandcentrix.tray.core.SharedPreferencesImport;
 
+import java.io.File;
+
 public class ImportTrayPreferences extends TrayPreferences {
 
     ImportTrayPreferences(final Context context) {
@@ -31,5 +33,11 @@ public class ImportTrayPreferences extends TrayPreferences {
         final SharedPreferencesImport New_OneKeyUFApplicationList = new SharedPreferencesImport(getContext(),
                 "New_OneKeyUFApplicationList", "pkgName", getContext().getString(R.string.sOneKeyUFApplicationList));
         migrate(New_OneKeyUFApplicationList);
+
+        try {
+            new File(getContext().getFilesDir().getAbsolutePath() + File.separator + "p2d.lock").createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

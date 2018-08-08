@@ -66,7 +66,9 @@ public class MainApplication extends Application {
                 }
                 checkFile.createNewFile();
             }
-            new ImportTrayPreferences(this);
+            if (!new File(getFilesDir().getAbsolutePath() + File.separator + "p2d.lock").exists()) {
+                new ImportTrayPreferences(this);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

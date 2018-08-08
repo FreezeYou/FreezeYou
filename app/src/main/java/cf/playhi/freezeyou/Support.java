@@ -30,6 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -47,6 +48,7 @@ import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.content.Context.POWER_SERVICE;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
 class Support {
@@ -763,9 +765,8 @@ class Support {
     }
 
     static boolean existsInOneKeyList(Context context, String onekeyName, String pkgName) {
-        return Arrays.asList(
-                context.getSharedPreferences(onekeyName, Context.MODE_PRIVATE).getString("pkgName", "").split(","))
-                .contains(pkgName);
+        final String pkgNames = new AppPreferences(context).getString(onekeyName, "");
+        return pkgNames != null && Arrays.asList(pkgNames.split(",")).contains(pkgName);
     }
 
     static void openDevicePolicyManager(Context context) {
@@ -845,16 +846,33 @@ class Support {
     }
 
     static void doLockScreen(Context context) {
-        DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
-        if (devicePolicyManager != null) {
-            if (devicePolicyManager.isAdminActive(componentName)) {
-                devicePolicyManager.lockNow();
-            } else {
-                openDevicePolicyManager(context);
+        //先走ROOT，有权限的话就可以不影响SmartLock之类的了
+        try {
+            process = Runtime.getRuntime().exec("su");
+            outputStream = new DataOutputStream(process.getOutputStream());
+            outputStream.writeBytes("input keyevent KEYCODE_POWER" + "\n");
+            outputStream.writeBytes("exit\n");
+            outputStream.flush();
+            process.waitFor();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        PowerManager pm = (PowerManager) context.getSystemService(POWER_SERVICE);
+        if (pm!=null){
+            if (pm.isScreenOn()){
+                DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+                ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
+                if (devicePolicyManager != null) {
+                    if (devicePolicyManager.isAdminActive(componentName)) {
+                        devicePolicyManager.lockNow();
+                    } else {
+                        openDevicePolicyManager(context);
+                    }
+                } else {
+                    showToast(context, R.string.devicePolicyManagerNotFound);
+                }
             }
-        } else {
-            showToast(context, R.string.devicePolicyManagerNotFound);
         }
     }
 
