@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "cf.playhi.freezeyou"
         minSdkVersion 14
-        targetSdkVersion 28
-        versionCode 76
-        versionName '5.0.20180805'
+        targetSdkVersion 27
+        versionCode 77
+        versionName '5.1.20180808'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
