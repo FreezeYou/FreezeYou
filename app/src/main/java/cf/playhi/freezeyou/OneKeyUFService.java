@@ -29,13 +29,13 @@ public class OneKeyUFService extends Service {
         } else {
             startForeground(3, new Notification());
         }
-        String[] pkgNameList = getApplicationContext().getSharedPreferences(
-                "OneKeyUFApplicationList", Context.MODE_PRIVATE).getString("pkgName", "").split("\\|\\|");
+        String[] pkgNames = getApplicationContext().getSharedPreferences(
+                getString(R.string.sOneKeyUFApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
         if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(this)) {
-            oneKeyActionMRoot(this, false, pkgNameList);
+            oneKeyActionMRoot(this, false, pkgNames);
             doFinish();
         } else {
-            oneKeyActionRoot(this, null, false, pkgNameList, false);
+            oneKeyActionRoot(this, null, false, pkgNames, false);
             doFinish();
         }
         return super.onStartCommand(intent, flags, startId);

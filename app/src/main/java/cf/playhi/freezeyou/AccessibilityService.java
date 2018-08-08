@@ -1,9 +1,10 @@
 package cf.playhi.freezeyou;
 
-import android.content.Context;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.view.accessibility.AccessibilityEvent;
+
+import static cf.playhi.freezeyou.Support.existsInOneKeyList;
 
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
     @Override
@@ -19,13 +20,12 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         isScreenOn = pm.isScreenOn();
                     }
                     String pkgNameString = pkgName.toString();
-                    if (isScreenOn && !"com.android.systemui".equals(pkgNameString)) {// && !"android".equals(pkgName)
+                    if (isScreenOn && !"com.android.systemui".equals(pkgNameString) && !"android".equals(pkgNameString)) {
                         String previousPkg = MainApplication.getCurrentPackage();
                         MainApplication.setCurrentPackage(pkgNameString);
-                        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("freezeOnceQuit", false)
-                                && getApplicationContext().getSharedPreferences("FreezeOnceQuit", Context.MODE_PRIVATE)
-                                .getString("pkgName", "").contains("|" + previousPkg + "|")
-                                && !pkgNameString.equals(previousPkg)) {
+                        if (!pkgNameString.equals(previousPkg)
+                                && PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("freezeOnceQuit", false)
+                                && existsInOneKeyList(getApplicationContext(), getString(R.string.sFreezeOnceQuit), previousPkg)) {
                             Support.processFreezeAction(getApplicationContext(), null, previousPkg, null, false, false);
                         }
                     }

@@ -33,13 +33,13 @@ public class OneKeyFreezeService extends Service {
             startForeground(2, new Notification());
         }
         boolean auto = intent.getBooleanExtra("autoCheckAndLockScreen", true);
-        String[] pkgNameList = getApplicationContext().getSharedPreferences(
-                "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName", "").split("\\|\\|");
+        String[] pkgNames = getApplicationContext().getSharedPreferences(
+                getString(R.string.sAutoFreezeApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
         if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(getApplicationContext())) {
-            oneKeyActionMRoot(this, true, pkgNameList);
+            oneKeyActionMRoot(this, true, pkgNames);
             checkAuto(auto, this);
         } else {
-            oneKeyActionRoot(this, null, true, pkgNameList, false);
+            oneKeyActionRoot(this, null, true, pkgNames, false);
             checkAuto(auto, this);
         }
         return super.onStartCommand(intent, flags, startId);

@@ -41,6 +41,7 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Arrays;
 
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
@@ -445,7 +446,7 @@ class Support {
             mBuilder.setSmallIcon(iconResId);
             mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_notification));
             String name = getApplicationLabel(context, null, null, pkgName);
-            if (!context.getString(R.string.uninstalled).equals(name)){
+            if (!context.getString(R.string.uninstalled).equals(name)) {
                 mBuilder.setContentTitle(name);
                 mBuilder.setContentText(description);
                 mBuilder.setAutoCancel(!preferenceManager.getBoolean("notificationBarDisableClickDisappear", false));
@@ -497,11 +498,11 @@ class Support {
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (mNotificationManager != null) {
             mNotificationManager.cancel(pkgName.hashCode());
-            deleteNotifying(context,pkgName);
+            deleteNotifying(context, pkgName);
         }
     }
 
-    static boolean deleteNotifying(Context context,String pkgName) {
+    static boolean deleteNotifying(Context context, String pkgName) {
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String notifying = defaultSharedPreferences.getString("notifying", "");
         return !notifying.contains(pkgName + ",") || defaultSharedPreferences.edit().putString("notifying", notifying.replace(pkgName + ",", "")).commit();
@@ -647,10 +648,10 @@ class Support {
                 for (String aPkgNameList : pkgNameList) {
                     if (!currentPackage.equals(aPkgNameList)) {
                         try {
-                            int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
+                            int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList);
                             if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
                                 outputStream.writeBytes(
-                                        "pm disable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                                        "pm disable " + aPkgNameList + "\n");
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -661,10 +662,10 @@ class Support {
             } else {
                 for (String aPkgNameList : pkgNameList) {
                     try {
-                        int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList.replaceAll("\\|", ""));
+                        int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList);
                         if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
                             outputStream.writeBytes(
-                                    "pm enable " + aPkgNameList.replaceAll("\\|", "") + "\n");
+                                    "pm enable " + aPkgNameList + "\n");
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -678,11 +679,11 @@ class Support {
             if (exitValue == 0) {
                 if (freeze) {
                     for (String aPkgNameList : pkgNameList) {
-                        deleteNotification(context, aPkgNameList.replaceAll("\\|", ""));
+                        deleteNotification(context, aPkgNameList);
                     }
                 } else {
                     for (String aPkgNameList : pkgNameList) {
-                        createNotification(context, aPkgNameList.replaceAll("\\|", ""), R.drawable.ic_notification);
+                        createNotification(context, aPkgNameList, R.drawable.ic_notification);
                     }
                 }
                 showToast(context, R.string.executed);
@@ -705,24 +706,23 @@ class Support {
     static void oneKeyActionMRoot(Context context, boolean freeze, String[] pkgNameList) {
         String currentPackage = MainApplication.getCurrentPackage();
         for (String aPkgNameList : pkgNameList) {
-            String tmp = aPkgNameList.replaceAll("\\|", "");
             try {
                 if (freeze) {
-                    if (!currentPackage.equals(aPkgNameList) && !checkMRootFrozen(context, tmp)) {
+                    if (!currentPackage.equals(aPkgNameList) && !checkMRootFrozen(context, aPkgNameList)) {
                         if (!getDevicePolicyManager(context).setApplicationHidden(
-                                DeviceAdminReceiver.getComponentName(context), tmp, true)) {
-                            showToast(context, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                                DeviceAdminReceiver.getComponentName(context), aPkgNameList, true)) {
+                            showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
                         } else {
-                            deleteNotification(context, tmp);
+                            deleteNotification(context, aPkgNameList);
                         }
                     }
                 } else {
-                    if (checkMRootFrozen(context, tmp)) {
+                    if (checkMRootFrozen(context, aPkgNameList)) {
                         if (!getDevicePolicyManager(context).setApplicationHidden(
-                                DeviceAdminReceiver.getComponentName(context), tmp, false)) {
-                            showToast(context, tmp + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                                DeviceAdminReceiver.getComponentName(context), aPkgNameList, false)) {
+                            showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
                         } else {
-                            createNotification(context, tmp, R.drawable.ic_notification);
+                            createNotification(context, aPkgNameList, R.drawable.ic_notification);
                         }
                     }
                 }
@@ -745,15 +745,25 @@ class Support {
     static boolean addToOneKeyList(Context context, String freezeOrUF, String pkgName) {
         final SharedPreferences sharedPreferences = context.getSharedPreferences(
                 freezeOrUF, Context.MODE_PRIVATE);
-        final String pkgNameList = sharedPreferences.getString("pkgName", "");
-        return pkgNameList.contains("|" + pkgName + "|") || sharedPreferences.edit().putString("pkgName", pkgNameList + "|" + pkgName + "|").commit();
+        final String pkgNames = sharedPreferences.getString("pkgName", "");
+        return existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.edit().putString("pkgName", pkgNames + pkgName + ",").commit();
     }
 
     static boolean removeFromOneKeyList(Context context, String freezeOrUF, String pkgName) {
         final SharedPreferences sharedPreferences = context.getSharedPreferences(
                 freezeOrUF, Context.MODE_PRIVATE);
-        final String pkgNameList = sharedPreferences.getString("pkgName", "");
-        return !pkgNameList.contains("|" + pkgName + "|") || sharedPreferences.edit().putString("pkgName", pkgNameList.replace("|" + pkgName + "|", "")).commit();
+        final String pkgNames = sharedPreferences.getString("pkgName", "");
+        return !existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.edit().putString("pkgName", pkgNames.replace(pkgName + ",", "")).commit();
+    }
+
+    static boolean existsInOneKeyList(String pkgNames, String pkgName) {
+        return Arrays.asList(pkgNames.split(",")).contains(pkgName);
+    }
+
+    static boolean existsInOneKeyList(Context context, String onekeyName, String pkgName) {
+        return Arrays.asList(
+                context.getSharedPreferences(onekeyName, Context.MODE_PRIVATE).getString("pkgName", "").split(","))
+                .contains(pkgName);
     }
 
     static void openDevicePolicyManager(Context context) {

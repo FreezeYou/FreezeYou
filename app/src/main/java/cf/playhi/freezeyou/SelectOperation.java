@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import static cf.playhi.freezeyou.Support.addToOneKeyList;
 import static cf.playhi.freezeyou.Support.createShortCut;
+import static cf.playhi.freezeyou.Support.existsInOneKeyList;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getApplicationInfoFromPkgName;
 import static cf.playhi.freezeyou.Support.isAccessibilitySettingsOn;
@@ -55,23 +56,23 @@ public class SelectOperation extends Activity {
         };
 
         final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
-                "AutoFreezeApplicationList", Context.MODE_PRIVATE);
-        final String pkgNameList = sharedPreferences.getString("pkgName", "");
-        if (pkgNameList.contains("|" + pkgName + "|")) {
+                getString(R.string.sAutoFreezeApplicationList), Context.MODE_PRIVATE);
+        final String pkgNames = sharedPreferences.getString("pkgName", "");
+        if (existsInOneKeyList(pkgNames, pkgName)) {
             operationData[3] = getResources().getString(R.string.removeFromOneKeyList);
         }
 
         final SharedPreferences UFSharedPreferences = getApplicationContext().getSharedPreferences(
-                "OneKeyUFApplicationList", Context.MODE_PRIVATE);
-        final String UFPkgNameList = UFSharedPreferences.getString("pkgName", "");
-        if (UFPkgNameList.contains("|" + pkgName + "|")) {
+                getString(R.string.sOneKeyUFApplicationList), Context.MODE_PRIVATE);
+        final String UFPkgNames = UFSharedPreferences.getString("pkgName", "");
+        if (existsInOneKeyList(UFPkgNames, pkgName)) {
             operationData[4] = getResources().getString(R.string.removeFromOneKeyUFList);
         }
 
         final SharedPreferences FreezeOnceQuitSharedPreferences = getApplicationContext().getSharedPreferences(
-                "FreezeOnceQuit", Context.MODE_PRIVATE);
-        final String FreezeOnceQuitPkgNameList = FreezeOnceQuitSharedPreferences.getString("pkgName", "");
-        if (FreezeOnceQuitPkgNameList.contains("|" + pkgName + "|")) {
+                getString(R.string.sFreezeOnceQuit), Context.MODE_PRIVATE);
+        final String FreezeOnceQuitPkgNames = FreezeOnceQuitSharedPreferences.getString("pkgName", "");
+        if (existsInOneKeyList(FreezeOnceQuitPkgNames, pkgName)) {
             operationData[5] = getResources().getString(R.string.removeFromFreezeOnceQuit);
         }
 
@@ -122,63 +123,43 @@ public class SelectOperation extends Activity {
                         finish();
                         break;
                     case 3:
-                        if (pkgNameList.contains("|" + pkgName + "|")) {
+                        if (existsInOneKeyList(pkgNames, pkgName)) {
                             showToast(getApplicationContext(),
                                     removeFromOneKeyList(getApplicationContext(),
-                                            "AutoFreezeApplicationList",
+                                            getString(R.string.sAutoFreezeApplicationList),
                                             pkgName) ? R.string.removed : R.string.removeFailed);
-//                            sharedPreferences.edit()
-//                                    .putString(
-//                                            "pkgName",
-//                                            pkgNameList.replace("|" + pkgName + "|", ""))
-//                                    .commit()
                         } else {
                             showToast(getApplicationContext(),
                                     addToOneKeyList(getApplicationContext(),
-                                            "AutoFreezeApplicationList",
+                                            getString(R.string.sAutoFreezeApplicationList),
                                             pkgName) ? R.string.added : R.string.addFailed);
-//                            showToast(getApplicationContext(), sharedPreferences.edit()
-//                                    .putString(
-//                                            "pkgName",
-//                                            pkgNameList + "|" + pkgName + "|")
-//                                    .commit() ? R.string.added : R.string.addFailed);
                         }
                         finish();
                         break;
                     case 4:
-                        if (UFPkgNameList.contains("|" + pkgName + "|")) {
+                        if (existsInOneKeyList(UFPkgNames, pkgName)) {
                             showToast(getApplicationContext(),
                                     removeFromOneKeyList(getApplicationContext(),
-                                            "OneKeyUFApplicationList",
+                                            getString(R.string.sOneKeyUFApplicationList),
                                             pkgName) ? R.string.removed : R.string.removeFailed);
-//                            UFSharedPreferences.edit()
-//                                    .putString(
-//                                            "pkgName",
-//                                            UFPkgNameList.replace("|" + pkgName + "|", ""))
-//                                    .commit()
                         } else {
                             showToast(getApplicationContext(),
                                     addToOneKeyList(getApplicationContext(),
-                                            "OneKeyUFApplicationList",
+                                            getString(R.string.sOneKeyUFApplicationList),
                                             pkgName) ? R.string.added : R.string.addFailed);
-//                            UFSharedPreferences.edit()
-//                                    .putString(
-//                                            "pkgName",
-//                                            UFPkgNameList + "|" + pkgName + "|")
-//                                    .commit()
                         }
                         finish();
                         break;
                     case 5:
-                        if (FreezeOnceQuitPkgNameList.contains("|" + pkgName + "|")) {
+                        if (existsInOneKeyList(FreezeOnceQuitPkgNames, pkgName)) {
                             showToast(getApplicationContext(),
                                     removeFromOneKeyList(getApplicationContext(),
-                                            "FreezeOnceQuit",
+                                            getString(R.string.sFreezeOnceQuit),
                                             pkgName) ? R.string.removed : R.string.removeFailed);
                         } else {
                             showToast(getApplicationContext(),
                                     addToOneKeyList(getApplicationContext(),
-                                            "FreezeOnceQuit",
+                                            getString(R.string.sFreezeOnceQuit),
                                             pkgName) ? R.string.added : R.string.addFailed);
                             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                             if (!preferences.getBoolean("freezeOnceQuit", false)) {

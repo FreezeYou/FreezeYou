@@ -413,19 +413,19 @@ public class Main extends Activity {
                 break;
             case "OO":
                 String[] autoFreezePkgNameList = getApplicationContext().getSharedPreferences(
-                        "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName", "").split("\\|\\|");
+                        getString(R.string.sAutoFreezeApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
                 oneKeyListGenerate(autoFreezePkgNameList, AppList);
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "OOU":
                 String[] autoUFPkgNameList = getApplicationContext().getSharedPreferences(
-                        "OneKeyUFApplicationList", Context.MODE_PRIVATE).getString("pkgName", "").split("\\|\\|");
+                        getString(R.string.sOneKeyUFApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
                 oneKeyListGenerate(autoUFPkgNameList, AppList);
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "FOQ":
                 String[] freezeOnceQuit = getApplicationContext().getSharedPreferences(
-                        "FreezeOnceQuit", Context.MODE_PRIVATE).getString("pkgName", "").split("\\|\\|");
+                        getString(R.string.sFreezeOnceQuit), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
                 oneKeyListGenerate(freezeOnceQuit, AppList);
                 checkAndAddNotAvailablePair(AppList);
                 break;
@@ -643,22 +643,22 @@ public class Main extends Activity {
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_addToOFList:
-                            showToast(Main.this, addToOneKeyList(Main.this, "AutoFreezeApplicationList", pkgName) ? R.string.added : R.string.failed);
+                            showToast(Main.this, addToOneKeyList(Main.this, getString(R.string.sAutoFreezeApplicationList), pkgName) ? R.string.added : R.string.failed);
                             break;
                         case APPListViewOnClickMode_removeFromOFList:
-                            showToast(Main.this, removeFromOneKeyList(Main.this, "AutoFreezeApplicationList", pkgName) ? R.string.removed : R.string.failed);
+                            showToast(Main.this, removeFromOneKeyList(Main.this, getString(R.string.sAutoFreezeApplicationList), pkgName) ? R.string.removed : R.string.failed);
                             break;
                         case APPListViewOnClickMode_addToOUFList:
-                            showToast(Main.this, addToOneKeyList(Main.this, "OneKeyUFApplicationList", pkgName) ? R.string.added : R.string.failed);
+                            showToast(Main.this, addToOneKeyList(Main.this, getString(R.string.sOneKeyUFApplicationList), pkgName) ? R.string.added : R.string.failed);
                             break;
                         case APPListViewOnClickMode_removeFromOUFList:
-                            showToast(Main.this, removeFromOneKeyList(Main.this, "OneKeyUFApplicationList", pkgName) ? R.string.removed : R.string.failed);
+                            showToast(Main.this, removeFromOneKeyList(Main.this, getString(R.string.sOneKeyUFApplicationList), pkgName) ? R.string.removed : R.string.failed);
                             break;
                         case APPListViewOnClickMode_addToFOQList:
-                            showToast(Main.this, addToOneKeyList(Main.this, "FreezeOnceQuit", pkgName) ? R.string.added : R.string.failed);
+                            showToast(Main.this, addToOneKeyList(Main.this, getString(R.string.sFreezeOnceQuit), pkgName) ? R.string.added : R.string.failed);
                             break;
                         case APPListViewOnClickMode_removeFromFOQList:
-                            showToast(Main.this, removeFromOneKeyList(Main.this, "FreezeOnceQuit", pkgName) ? R.string.removed : R.string.failed);
+                            showToast(Main.this, removeFromOneKeyList(Main.this, getString(R.string.sFreezeOnceQuit), pkgName) ? R.string.removed : R.string.failed);
                             break;
                         default:
                             break;
@@ -876,7 +876,6 @@ public class Main extends Activity {
         String name;
         Drawable icon;
         for (String aPkgNameList : source) {
-            aPkgNameList = aPkgNameList.replaceAll("\\|", "");
             name = getApplicationLabel(getApplicationContext(), null, null, aPkgNameList);
             if (!("android".equals(aPkgNameList) || "cf.playhi.freezeyou".equals(aPkgNameList) || "".equals(aPkgNameList))) {
                 Map<String, Object> keyValuePair = new HashMap<>();
@@ -899,7 +898,7 @@ public class Main extends Activity {
     private void processAddToOneKeyList(boolean freeze) {
         int size = selectedPackages.size();
         for (int i = 0; i < size; i++) {
-            if (!addToOneKeyList(getApplicationContext(), freeze ? "AutoFreezeApplicationList" : "OneKeyUFApplicationList", selectedPackages.get(i))) {
+            if (!addToOneKeyList(getApplicationContext(), freeze ? getString(R.string.sAutoFreezeApplicationList) : getString(R.string.sOneKeyUFApplicationList), selectedPackages.get(i))) {
                 showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
             }
         }
@@ -908,7 +907,7 @@ public class Main extends Activity {
     private void processRemoveFromOneKeyList(boolean freeze) {
         int size = selectedPackages.size();
         for (int i = 0; i < size; i++) {
-            if (!removeFromOneKeyList(getApplicationContext(), freeze ? "AutoFreezeApplicationList" : "OneKeyUFApplicationList", selectedPackages.get(i))) {
+            if (!removeFromOneKeyList(getApplicationContext(), freeze ? getString(R.string.sAutoFreezeApplicationList) : getString(R.string.sOneKeyUFApplicationList), selectedPackages.get(i))) {
                 showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
             }
         }
@@ -918,7 +917,7 @@ public class Main extends Activity {
         int size = selectedPackages.size();
         String[] pkgNameList = new String[size];
         for (int i = 0; i < size; i++) {
-            pkgNameList[i] = "|" + selectedPackages.get(i) + "|";
+            pkgNameList[i] = selectedPackages.get(i) + ",";
         }
         if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(Main.this)) {
             oneKeyActionMRoot(Main.this, freeze, pkgNameList);
