@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
+import net.grandcentrix.tray.AppPreferences;
+
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
 import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
@@ -29,14 +31,17 @@ public class OneKeyUFService extends Service {
         } else {
             startForeground(3, new Notification());
         }
-        String[] pkgNames = getApplicationContext().getSharedPreferences(
-                getString(R.string.sOneKeyUFApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
-        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(this)) {
-            oneKeyActionMRoot(this, false, pkgNames);
-            doFinish();
-        } else {
-            oneKeyActionRoot(this, null, false, pkgNames, false);
-            doFinish();
+//        String[] pkgNames = getApplicationContext().getSharedPreferences(
+//                getString(R.string.sOneKeyUFApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
+        String pkgNames = new AppPreferences(getApplicationContext()).getString(getString(R.string.sOneKeyUFApplicationList),"");
+        if (pkgNames!=null) {
+            if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(this)) {
+                oneKeyActionMRoot(this, false, pkgNames.split(","));
+                doFinish();
+            } else {
+                oneKeyActionRoot(this, null, false, pkgNames.split(","), false);
+                doFinish();
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }

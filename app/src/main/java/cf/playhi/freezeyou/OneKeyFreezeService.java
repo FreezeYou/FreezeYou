@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 
+import net.grandcentrix.tray.AppPreferences;
+
 import static cf.playhi.freezeyou.Support.doLockScreen;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
@@ -33,14 +35,17 @@ public class OneKeyFreezeService extends Service {
             startForeground(2, new Notification());
         }
         boolean auto = intent.getBooleanExtra("autoCheckAndLockScreen", true);
-        String[] pkgNames = getApplicationContext().getSharedPreferences(
-                getString(R.string.sAutoFreezeApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
-        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(getApplicationContext())) {
-            oneKeyActionMRoot(this, true, pkgNames);
-            checkAuto(auto, this);
-        } else {
-            oneKeyActionRoot(this, null, true, pkgNames, false);
-            checkAuto(auto, this);
+//        String[] pkgNames = getApplicationContext().getSharedPreferences(
+//                getString(R.string.sAutoFreezeApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
+        String pkgNames = new AppPreferences(getApplicationContext()).getString(getString(R.string.sAutoFreezeApplicationList),"");
+        if (pkgNames!=null){
+            if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(getApplicationContext())) {
+                oneKeyActionMRoot(this, true, pkgNames.split(","));
+                checkAuto(auto, this);
+            } else {
+                oneKeyActionRoot(this, null, true, pkgNames.split(","), false);
+                checkAuto(auto, this);
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }

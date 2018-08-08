@@ -66,6 +66,7 @@ public class MainApplication extends Application {
                 }
                 checkFile.createNewFile();
             }
+            new ImportTrayPreferences(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

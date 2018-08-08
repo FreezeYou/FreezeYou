@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "cf.playhi.freezeyou"
         minSdkVersion 14
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 77
         versionName '5.1.20180808'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -28,5 +28,6 @@ android {
 }
 
 dependencies {
+    implementation 'net.grandcentrix.tray:tray:0.12.0'
     testImplementation 'junit:junit:4.12'
 }

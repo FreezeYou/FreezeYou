@@ -20,6 +20,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +35,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import net.grandcentrix.tray.AppPreferences;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -412,21 +415,25 @@ public class Main extends Activity {
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "OO":
-                String[] autoFreezePkgNameList = getApplicationContext().getSharedPreferences(
-                        getString(R.string.sAutoFreezeApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
-                oneKeyListGenerate(autoFreezePkgNameList, AppList);
+                String autoFreezePkgNameList = new AppPreferences(applicationContext).getString(getString(R.string.sAutoFreezeApplicationList),"");
+                Log.e("!!!",autoFreezePkgNameList);
+                if (autoFreezePkgNameList!=null){
+                    oneKeyListGenerate(autoFreezePkgNameList.split(","), AppList);
+                }
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "OOU":
-                String[] autoUFPkgNameList = getApplicationContext().getSharedPreferences(
-                        getString(R.string.sOneKeyUFApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
-                oneKeyListGenerate(autoUFPkgNameList, AppList);
+                String autoUFPkgNameList = new AppPreferences(applicationContext).getString(getString(R.string.sOneKeyUFApplicationList),"");
+                if (autoUFPkgNameList!=null) {
+                    oneKeyListGenerate(autoUFPkgNameList.split(","), AppList);
+                }
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "FOQ":
-                String[] freezeOnceQuit = getApplicationContext().getSharedPreferences(
-                        getString(R.string.sFreezeOnceQuit), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
-                oneKeyListGenerate(freezeOnceQuit, AppList);
+                String freezeOnceQuit = new AppPreferences(applicationContext).getString(getString(R.string.sFreezeOnceQuit),"");
+                if (freezeOnceQuit!=null) {
+                    oneKeyListGenerate(freezeOnceQuit.split(","), AppList);
+                }
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "OS":

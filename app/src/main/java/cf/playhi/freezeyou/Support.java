@@ -32,16 +32,20 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import net.grandcentrix.tray.AppPreferences;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Arrays;
+import java.util.List;
 
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
@@ -743,21 +747,19 @@ class Support {
     }
 
     static boolean addToOneKeyList(Context context, String freezeOrUF, String pkgName) {
-        final SharedPreferences sharedPreferences = context.getSharedPreferences(
-                freezeOrUF, Context.MODE_PRIVATE);
-        final String pkgNames = sharedPreferences.getString("pkgName", "");
-        return existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.edit().putString("pkgName", pkgNames + pkgName + ",").commit();
+        final AppPreferences sharedPreferences =  new AppPreferences(context);
+        final String pkgNames = sharedPreferences.getString(freezeOrUF, "");
+        return existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(freezeOrUF, pkgNames + pkgName + ",");
     }
 
     static boolean removeFromOneKeyList(Context context, String freezeOrUF, String pkgName) {
-        final SharedPreferences sharedPreferences = context.getSharedPreferences(
-                freezeOrUF, Context.MODE_PRIVATE);
-        final String pkgNames = sharedPreferences.getString("pkgName", "");
-        return !existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.edit().putString("pkgName", pkgNames.replace(pkgName + ",", "")).commit();
+        final AppPreferences sharedPreferences =  new AppPreferences(context);
+        final String pkgNames = sharedPreferences.getString(freezeOrUF, "");
+        return !existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(freezeOrUF, pkgNames.replace(pkgName + ",", ""));
     }
 
-    static boolean existsInOneKeyList(String pkgNames, String pkgName) {
-        return Arrays.asList(pkgNames.split(",")).contains(pkgName);
+    static boolean existsInOneKeyList(@Nullable String pkgNames, String pkgName) {
+        return pkgNames != null && Arrays.asList(pkgNames.split(",")).contains(pkgName);
     }
 
     static boolean existsInOneKeyList(Context context, String onekeyName, String pkgName) {

@@ -20,6 +20,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import net.grandcentrix.tray.AppPreferences;
+
 import static cf.playhi.freezeyou.Support.addToOneKeyList;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.existsInOneKeyList;
@@ -55,23 +57,19 @@ public class SelectOperation extends Activity {
                 getResources().getString(R.string.appDetail)
         };
 
-        final SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
-                getString(R.string.sAutoFreezeApplicationList), Context.MODE_PRIVATE);
-        final String pkgNames = sharedPreferences.getString("pkgName", "");
+        final AppPreferences sharedPreferences =  new AppPreferences(getApplicationContext());
+
+        final String pkgNames = sharedPreferences.getString(getString(R.string.sAutoFreezeApplicationList), "");
         if (existsInOneKeyList(pkgNames, pkgName)) {
             operationData[3] = getResources().getString(R.string.removeFromOneKeyList);
         }
 
-        final SharedPreferences UFSharedPreferences = getApplicationContext().getSharedPreferences(
-                getString(R.string.sOneKeyUFApplicationList), Context.MODE_PRIVATE);
-        final String UFPkgNames = UFSharedPreferences.getString("pkgName", "");
+        final String UFPkgNames = sharedPreferences.getString(getString(R.string.sOneKeyUFApplicationList), "");
         if (existsInOneKeyList(UFPkgNames, pkgName)) {
             operationData[4] = getResources().getString(R.string.removeFromOneKeyUFList);
         }
 
-        final SharedPreferences FreezeOnceQuitSharedPreferences = getApplicationContext().getSharedPreferences(
-                getString(R.string.sFreezeOnceQuit), Context.MODE_PRIVATE);
-        final String FreezeOnceQuitPkgNames = FreezeOnceQuitSharedPreferences.getString("pkgName", "");
+        final String FreezeOnceQuitPkgNames = sharedPreferences.getString(getString(R.string.sFreezeOnceQuit), "");
         if (existsInOneKeyList(FreezeOnceQuitPkgNames, pkgName)) {
             operationData[5] = getResources().getString(R.string.removeFromFreezeOnceQuit);
         }
