@@ -4,7 +4,8 @@
   <string name="app_name">FreezeYou!</string>
   <string name="oneKeyFreeze">Onekey Freeze</string>
   <string name="oneKeyUF">Onekey Unfreeze</string>
-  <string name="alertT1">Attention!\nDo not freeze the application which is very important to the system, that may cause the system to crash!</string>
+  <string name="alertT1">Attention! 
+Do not freeze the application which is very important to the system, that may cause the system to crash!</string>
   <string name="cancel">Cancel</string>
   <string name="chooseDetailAction">Please choose an action</string>
   <string name="added">Added</string>
@@ -22,7 +23,8 @@
   <string name="addToFreezeOnceQuit">Add to the Freeze Once Quit list</string>
   <string name="addFailed">Add failed</string>
   <string name="caution">CAUTION</string>
-  <string name="cautionContent">Attention!\nDo not freeze the application which is very important to the system, that may cause the system to crash!</string>
+  <string name="cautionContent">Attention! 
+Do not freeze the application which is very important to the system, that may cause the system to crash!</string>
   <string name="yes">Yes</string>
   <string name="no">No</string>
   <string name="requested">Requested</string>
