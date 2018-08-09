@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="cyanogenmod.permission.PUBLISH_CUSTOM_TILE" />
+    <uses-permission android:name="lineageos.permission.PUBLISH_CUSTOM_TILE" />
 
     <permission
         android:name="cf.playhi.freezeyou.permission.GET_DISABLED_APPLICATIONS"
@@ -241,6 +243,22 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
                 <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:enabled="true"
+            android:exported="true"
+            android:name=".OneKeyFreezeQSTileReceiver" >
+            <intent-filter>
+                <action android:name="cf.playhi.freezeyou.customtiles.okf.ACTION_TOGGLE_STATE"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:enabled="true"
+            android:exported="true"
+            android:name=".OneKeyUFQSTileReceiver" >
+            <intent-filter>
+                <action android:name="cf.playhi.freezeyou.customtiles.okuf.ACTION_TOGGLE_STATE"/>
             </intent-filter>
         </receiver>
 
