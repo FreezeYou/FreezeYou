@@ -4,9 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
+import static cf.playhi.freezeyou.Support.checkMRootFrozen;
+import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.createNotification;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
@@ -44,8 +47,14 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         if (!"".equals(string)) {
             String[] strings = string.split(",");
             for (String aPkgName : strings) {
-                createNotification(context, aPkgName, R.drawable.ic_notification);
+                if (!checkFrozenStatus(context,aPkgName,null)){
+                    createNotification(context, aPkgName, R.drawable.ic_notification);
+                }
             }
         }
+    }
+
+    private boolean checkFrozenStatus(Context context,String packageName, PackageManager pm) {
+        return (checkRootFrozen(context, packageName, pm) || checkMRootFrozen(context, packageName));
     }
 }

@@ -52,7 +52,7 @@ public class Freeze extends Activity {
             processDialog(pkgName, auto, 1);
         }
         if (Build.VERSION.SDK_INT >= 21) {
-            setTaskDescription(new ActivityManager.TaskDescription(getApplicationLabel(this, null, null, pkgName),getBitmapFromDrawable(getApplicationIcon(this,pkgName,null,false))));
+            setTaskDescription(new ActivityManager.TaskDescription(getApplicationLabel(this, null, null, pkgName) + " - " + getString(R.string.app_name), getBitmapFromDrawable(getApplicationIcon(this, pkgName, null, false))));
         }
     }
 
