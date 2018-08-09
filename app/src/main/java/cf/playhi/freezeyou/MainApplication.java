@@ -22,13 +22,6 @@ public class MainApplication extends Application {
         super.onCreate();
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init();
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("onekeyFreezeWhenLockScreen", false)) {
-            if (Build.VERSION.SDK_INT >= 26) {
-                startForegroundService(new Intent(this, ScreenLockOneKeyFreezeService.class));
-            } else {
-                startService(new Intent(this, ScreenLockOneKeyFreezeService.class));
-            }
-        }
         try {
             File checkFile = new File(getFilesDir().getAbsolutePath() + File.separator + "20180808");
             if (!checkFile.exists()) {
@@ -48,6 +41,13 @@ public class MainApplication extends Application {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if (new AppPreferences(this).getBoolean("onekeyFreezeWhenLockScreen", false)) {
+            if (Build.VERSION.SDK_INT >= 26) {
+                startForegroundService(new Intent(this, ScreenLockOneKeyFreezeService.class));
+            } else {
+                startService(new Intent(this, ScreenLockOneKeyFreezeService.class));
+            }
         }
     }
 
