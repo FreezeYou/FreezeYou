@@ -858,7 +858,7 @@ class Support {
         }
 
         PowerManager pm = (PowerManager) context.getSystemService(POWER_SERVICE);
-        if (pm != null && pm.isScreenOn()) {
+        if (pm == null || pm.isScreenOn()) {
             DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
             ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
             if (devicePolicyManager != null) {
