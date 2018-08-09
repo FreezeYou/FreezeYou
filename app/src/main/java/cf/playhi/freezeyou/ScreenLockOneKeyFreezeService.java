@@ -9,13 +9,15 @@ import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 
+import net.grandcentrix.tray.AppPreferences;
+
 public class ScreenLockOneKeyFreezeService extends Service {
 
     private ScreenLockListener screenLockListener;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("useForegroundService", false) || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
+        if (new AppPreferences(getApplicationContext()).getBoolean("useForegroundService", false) || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Notification.Builder mBuilder = new Notification.Builder(this);
                 mBuilder.setSmallIcon(R.drawable.ic_notification);

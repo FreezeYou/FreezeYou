@@ -4,6 +4,8 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.view.accessibility.AccessibilityEvent;
 
+import net.grandcentrix.tray.AppPreferences;
+
 import static cf.playhi.freezeyou.Support.existsInOneKeyList;
 
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
@@ -24,7 +26,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         String previousPkg = MainApplication.getCurrentPackage();
                         MainApplication.setCurrentPackage(pkgNameString);
                         if (!pkgNameString.equals(previousPkg)
-                                && PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("freezeOnceQuit", false)
+                                && new AppPreferences(getApplicationContext()).getBoolean("freezeOnceQuit", false)
                                 && existsInOneKeyList(getApplicationContext(), getString(R.string.sFreezeOnceQuit), previousPkg)) {
                             Support.processFreezeAction(getApplicationContext(), null, previousPkg, null, false, false);
                         }

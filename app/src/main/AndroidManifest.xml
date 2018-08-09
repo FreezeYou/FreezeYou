@@ -121,7 +121,8 @@
             android:label="@string/disableAEnable"
             android:launchMode="standard"
             android:maxRecents="3"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar">
+            android:theme="@style/AppTheme.Translucent.NoTitleBar"
+            tools:ignore="UnusedAttribute">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -134,7 +135,8 @@
             android:label="@string/oneKeyFreeze"
             android:launchMode="standard"
             android:maxRecents="1"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar">
+            android:theme="@style/AppTheme.Translucent.NoTitleBar"
+            tools:ignore="UnusedAttribute">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -147,7 +149,8 @@
             android:label="@string/oneKeyUF"
             android:launchMode="standard"
             android:maxRecents="1"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar">
+            android:theme="@style/AppTheme.Translucent.NoTitleBar"
+            tools:ignore="UnusedAttribute">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -274,6 +277,15 @@
             android:name=".OneKeyUFQSTileService"
             android:icon="@drawable/ic_notification"
             android:label="@string/oneKeyUF"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".OneKeyScreenLockQSTileService"
+            android:icon="@drawable/ic_notification"
+            android:label="@string/oneKeyLockScreen"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />

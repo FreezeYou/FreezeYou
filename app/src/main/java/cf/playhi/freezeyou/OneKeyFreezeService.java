@@ -35,10 +35,8 @@ public class OneKeyFreezeService extends Service {
             startForeground(2, new Notification());
         }
         boolean auto = intent.getBooleanExtra("autoCheckAndLockScreen", true);
-//        String[] pkgNames = getApplicationContext().getSharedPreferences(
-//                getString(R.string.sAutoFreezeApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
-        String pkgNames = new AppPreferences(getApplicationContext()).getString(getString(R.string.sAutoFreezeApplicationList),"");
-        if (pkgNames!=null){
+        String pkgNames = new AppPreferences(getApplicationContext()).getString(getString(R.string.sAutoFreezeApplicationList), "");
+        if (pkgNames != null) {
             if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(getApplicationContext())) {
                 oneKeyActionMRoot(this, true, pkgNames.split(","));
                 checkAuto(auto, this);
@@ -56,7 +54,10 @@ public class OneKeyFreezeService extends Service {
     }
 
     private void checkAndLockScreen(Context context) {
-        switch (PreferenceManager.getDefaultSharedPreferences(context).getString("shortCutOneKeyFreezeAdditionalOptions", "nothing")) {
+        String options = new AppPreferences(getApplicationContext()).getString("shortCutOneKeyFreezeAdditionalOptions", "nothing");
+        if (options == null)
+            options = "";
+        switch (options) {
             case "nothing":
                 doFinish();
                 break;

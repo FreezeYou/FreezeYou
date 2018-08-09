@@ -7,6 +7,8 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
+import net.grandcentrix.tray.AppPreferences;
+
 public class ScreenLockListener {
 
     private final Context mContext;
@@ -24,7 +26,7 @@ public class ScreenLockListener {
             if (action != null) {
                 switch (action) {
                     case Intent.ACTION_SCREEN_OFF:
-                        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("onekeyFreezeWhenLockScreen", false)) {
+                        if (new AppPreferences(context).getBoolean("onekeyFreezeWhenLockScreen", false)) {
                             if (Build.VERSION.SDK_INT >= 26) {
                                 context.startForegroundService(
                                         new Intent(context, OneKeyFreezeService.class)

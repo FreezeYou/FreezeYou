@@ -13,6 +13,8 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
+import net.grandcentrix.tray.AppPreferences;
+
 import java.io.File;
 
 
@@ -45,6 +47,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        final AppPreferences appPreferences = new AppPreferences(getActivity());
         switch (s) {
             case "firstIconEnabled":
                 if (sharedPreferences.getBoolean(s, true)) {
@@ -78,6 +81,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 break;
             case "shortCutOneKeyFreezeAdditionalOptions":
                 if (!"nothing".equals(sharedPreferences.getString(s, "nothing"))) {
+                    appPreferences.put("shortCutOneKeyFreezeAdditionalOptions",sharedPreferences.getString(s,"nothing"));
                     DevicePolicyManager devicePolicyManager = getDevicePolicyManager(getActivity());
                     if (devicePolicyManager != null && !devicePolicyManager.isAdminActive(
                             new ComponentName(getActivity(), DeviceAdminReceiver.class))) {
@@ -89,6 +93,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 showToast(getActivity(), R.string.willTakeEffectsNextLaunch);
                 break;
             case "onekeyFreezeWhenLockScreen":
+                appPreferences.put("onekeyFreezeWhenLockScreen",sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen", false));
                 if (sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen", false)) {
                     if (Build.VERSION.SDK_INT >= 26) {
                         getActivity().startForegroundService(new Intent(getActivity().getApplicationContext(), ScreenLockOneKeyFreezeService.class));
@@ -100,10 +105,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 }
                 break;
             case "freezeOnceQuit":
+                appPreferences.put("freezeOnceQuit",sharedPreferences.getBoolean("freezeOnceQuit", false));
                 if (sharedPreferences.getBoolean("freezeOnceQuit", false) && !isAccessibilitySettingsOn(getActivity())) {
                     showToast(getActivity(), R.string.needActiveAccessibilityService);
                     openAccessibilitySettings(getActivity());
                 }
+                break;
+            case "useForegroundService":
+                appPreferences.put("useForegroundService",sharedPreferences.getBoolean("useForegroundService", false));
                 break;
             default:
                 break;
