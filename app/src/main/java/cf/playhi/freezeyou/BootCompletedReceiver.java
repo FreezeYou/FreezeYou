@@ -46,8 +46,9 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         String string = defaultSharedPreferences.getString("notifying", "");
         if (!"".equals(string)) {
             String[] strings = string.split(",");
+            PackageManager pm = context.getPackageManager();
             for (String aPkgName : strings) {
-                if (!checkFrozenStatus(context,aPkgName,null)){
+                if (!checkFrozenStatus(context,aPkgName,pm)){
                     createNotification(context, aPkgName, R.drawable.ic_notification);
                 }
             }
