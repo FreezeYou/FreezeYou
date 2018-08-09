@@ -134,6 +134,7 @@
   <string name="noRootNotActivated">现在还没有成功启用免ROOT呢！</string>
   <string name="faq">疑难解答</string>
   <string name="executeImmediately">立即执行</string>
+  <string name="oneKeyLockScreen">一键锁屏</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
