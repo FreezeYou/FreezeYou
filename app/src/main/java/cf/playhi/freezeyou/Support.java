@@ -858,19 +858,17 @@ class Support {
         }
 
         PowerManager pm = (PowerManager) context.getSystemService(POWER_SERVICE);
-        if (pm != null) {
-            if (pm.isScreenOn()) {
-                DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-                ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
-                if (devicePolicyManager != null) {
-                    if (devicePolicyManager.isAdminActive(componentName)) {
-                        devicePolicyManager.lockNow();
-                    } else {
-                        openDevicePolicyManager(context);
-                    }
+        if (pm != null && pm.isScreenOn()) {
+            DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+            ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
+            if (devicePolicyManager != null) {
+                if (devicePolicyManager.isAdminActive(componentName)) {
+                    devicePolicyManager.lockNow();
                 } else {
-                    showToast(context, R.string.devicePolicyManagerNotFound);
+                    openDevicePolicyManager(context);
                 }
+            } else {
+                showToast(context, R.string.devicePolicyManagerNotFound);
             }
         }
     }
