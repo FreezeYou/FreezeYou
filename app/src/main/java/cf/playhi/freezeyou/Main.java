@@ -20,7 +20,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -416,7 +415,6 @@ public class Main extends Activity {
                 break;
             case "OO":
                 String autoFreezePkgNameList = new AppPreferences(applicationContext).getString(getString(R.string.sAutoFreezeApplicationList),"");
-                Log.e("!!!",autoFreezePkgNameList);
                 if (autoFreezePkgNameList!=null){
                     oneKeyListGenerate(autoFreezePkgNameList.split(","), AppList);
                 }
