@@ -18,10 +18,18 @@
         android:title="@string/addToOneKeyUFList"/>
     <item
         android:showAsAction="never"
+        android:id="@+id/list_menu_addToFreezeOnceQuit"
+        android:title="@string/addToFreezeOnceQuit"/>
+    <item
+        android:showAsAction="never"
         android:id="@+id/list_menu_removeFromOneKeyFreezeList"
         android:title="@string/removeFromOneKeyList"/>
     <item
         android:showAsAction="never"
         android:id="@+id/list_menu_removeFromOneKeyUFList"
         android:title="@string/removeFromOneKeyUFList"/>
+    <item
+        android:showAsAction="never"
+        android:id="@+id/list_menu_removeFromFreezeOnceQuit"
+        android:title="@string/removeFromFreezeOnceQuit"/>
 </menu>

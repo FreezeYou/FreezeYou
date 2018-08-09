@@ -414,22 +414,22 @@ public class Main extends Activity {
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "OO":
-                String autoFreezePkgNameList = new AppPreferences(applicationContext).getString(getString(R.string.sAutoFreezeApplicationList),"");
-                if (autoFreezePkgNameList!=null){
+                String autoFreezePkgNameList = new AppPreferences(applicationContext).getString(getString(R.string.sAutoFreezeApplicationList), "");
+                if (autoFreezePkgNameList != null) {
                     oneKeyListGenerate(autoFreezePkgNameList.split(","), AppList);
                 }
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "OOU":
-                String autoUFPkgNameList = new AppPreferences(applicationContext).getString(getString(R.string.sOneKeyUFApplicationList),"");
-                if (autoUFPkgNameList!=null) {
+                String autoUFPkgNameList = new AppPreferences(applicationContext).getString(getString(R.string.sOneKeyUFApplicationList), "");
+                if (autoUFPkgNameList != null) {
                     oneKeyListGenerate(autoUFPkgNameList.split(","), AppList);
                 }
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "FOQ":
-                String freezeOnceQuit = new AppPreferences(applicationContext).getString(getString(R.string.sFreezeOnceQuit),"");
-                if (freezeOnceQuit!=null) {
+                String freezeOnceQuit = new AppPreferences(applicationContext).getString(getString(R.string.sFreezeOnceQuit), "");
+                if (freezeOnceQuit != null) {
                     oneKeyListGenerate(freezeOnceQuit.split(","), AppList);
                 }
                 checkAndAddNotAvailablePair(AppList);
@@ -575,16 +575,22 @@ public class Main extends Activity {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.list_menu_addToOneKeyFreezeList:
-                        processAddToOneKeyList(true);
+                        processAddToOneKeyList(getString(R.string.sAutoFreezeApplicationList));
                         return true;
                     case R.id.list_menu_addToOneKeyUFList:
-                        processAddToOneKeyList(false);
+                        processAddToOneKeyList(getString(R.string.sOneKeyUFApplicationList));
+                        return true;
+                    case R.id.list_menu_addToFreezeOnceQuit:
+                        processAddToOneKeyList(getString(R.string.sFreezeOnceQuit));
                         return true;
                     case R.id.list_menu_removeFromOneKeyFreezeList:
-                        processRemoveFromOneKeyList(true);
+                        processRemoveFromOneKeyList(getString(R.string.sAutoFreezeApplicationList));
                         return true;
                     case R.id.list_menu_removeFromOneKeyUFList:
-                        processRemoveFromOneKeyList(false);
+                        processRemoveFromOneKeyList(getString(R.string.sOneKeyUFApplicationList));
+                        return true;
+                    case R.id.list_menu_removeFromFreezeOnceQuit:
+                        processRemoveFromOneKeyList(getString(R.string.sFreezeOnceQuit));
                         return true;
                     case R.id.list_menu_freezeImmediately:
                         processDisableAndEnableImmediately(true);
@@ -900,19 +906,19 @@ public class Main extends Activity {
         }
     }
 
-    private void processAddToOneKeyList(boolean freeze) {
+    private void processAddToOneKeyList(String string) {
         int size = selectedPackages.size();
         for (int i = 0; i < size; i++) {
-            if (!addToOneKeyList(getApplicationContext(), freeze ? getString(R.string.sAutoFreezeApplicationList) : getString(R.string.sOneKeyUFApplicationList), selectedPackages.get(i))) {
+            if (!addToOneKeyList(getApplicationContext(), string, selectedPackages.get(i))) {
                 showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
             }
         }
     }
 
-    private void processRemoveFromOneKeyList(boolean freeze) {
+    private void processRemoveFromOneKeyList(String s) {
         int size = selectedPackages.size();
         for (int i = 0; i < size; i++) {
-            if (!removeFromOneKeyList(getApplicationContext(), freeze ? getString(R.string.sAutoFreezeApplicationList) : getString(R.string.sOneKeyUFApplicationList), selectedPackages.get(i))) {
+            if (!removeFromOneKeyList(getApplicationContext(), s, selectedPackages.get(i))) {
                 showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
             }
         }

@@ -747,16 +747,16 @@ class Support {
         context.sendBroadcast(intent);
     }
 
-    static boolean addToOneKeyList(Context context, String freezeOrUF, String pkgName) {
+    static boolean addToOneKeyList(Context context, String key, String pkgName) {
         final AppPreferences sharedPreferences = new AppPreferences(context);
-        final String pkgNames = sharedPreferences.getString(freezeOrUF, "");
-        return existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(freezeOrUF, pkgNames + pkgName + ",");
+        final String pkgNames = sharedPreferences.getString(key, "");
+        return existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(key, pkgNames + pkgName + ",");
     }
 
-    static boolean removeFromOneKeyList(Context context, String freezeOrUF, String pkgName) {
+    static boolean removeFromOneKeyList(Context context, String key, String pkgName) {
         final AppPreferences sharedPreferences = new AppPreferences(context);
-        final String pkgNames = sharedPreferences.getString(freezeOrUF, "");
-        return !existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(freezeOrUF, pkgNames.replace(pkgName + ",", ""));
+        final String pkgNames = sharedPreferences.getString(key, "");
+        return !existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(key, pkgNames.replace(pkgName + ",", ""));
     }
 
     static boolean existsInOneKeyList(@Nullable String pkgNames, String pkgName) {
