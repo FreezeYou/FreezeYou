@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -46,11 +45,6 @@ public class OneKeyFreezeService extends Service {
             }
         }
         return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
     }
 
     private void checkAndLockScreen(Context context) {

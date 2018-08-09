@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.preference.PreferenceManager;
 
 import net.grandcentrix.tray.AppPreferences;
 

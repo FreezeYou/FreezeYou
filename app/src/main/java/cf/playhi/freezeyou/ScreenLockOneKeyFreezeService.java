@@ -7,7 +7,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -37,11 +36,6 @@ public class ScreenLockOneKeyFreezeService extends Service {
             screenLockListener.registerListener();
         }
         return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
     }
 
     @Override

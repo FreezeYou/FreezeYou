@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou;
 
 import android.os.PowerManager;
-import android.preference.PreferenceManager;
 import android.view.accessibility.AccessibilityEvent;
 
 import net.grandcentrix.tray.AppPreferences;
