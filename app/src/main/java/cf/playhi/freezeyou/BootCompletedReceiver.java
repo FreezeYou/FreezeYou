@@ -18,7 +18,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                     runBackgroundService(context);
                     checkAndReNotifyNotifications(context);
                     break;
-                case Intent.ACTION_PACKAGE_REPLACED:
+                case Intent.ACTION_MY_PACKAGE_REPLACED:
                     runBackgroundService(context);
                     checkAndReNotifyNotifications(context);
                     break;

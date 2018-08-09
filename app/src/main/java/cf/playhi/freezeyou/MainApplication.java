@@ -1,16 +1,12 @@
 package cf.playhi.freezeyou;
 
 import android.app.Application;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
 import java.io.File;
-
-import cyanogenmod.app.CMStatusBarManager;
-import cyanogenmod.app.CustomTile;
 
 import static cf.playhi.freezeyou.Support.addToOneKeyList;
 
@@ -73,8 +69,6 @@ public class MainApplication extends Application {
             File importTrayLock = new File(getFilesDir().getAbsolutePath() + File.separator + "p2d.lock");
             if (!importTrayLock.exists()) {
                 new ImportTrayPreferences(this);
-                createCMTiles("cf.playhi.freezeyou.customtiles.okf.ACTION_TOGGLE_STATE", 1, R.string.oneKeyFreeze);
-                createCMTiles("cf.playhi.freezeyou.customtiles.okuf.ACTION_TOGGLE_STATE", 2, R.string.oneKeyUF);
                 importTrayLock.createNewFile();
             }
 
@@ -89,23 +83,5 @@ public class MainApplication extends Application {
 
     static String getCurrentPackage() {
         return mCurrentPackage;
-    }
-
-    private void createCMTiles(String action, int id, int labelRes) {
-        Intent intent = new Intent();
-        intent.setAction(action);
-        intent.putExtra("state", 1);
-        PendingIntent pendingIntent =
-                PendingIntent.getBroadcast(this, id,
-                        intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        CustomTile mCustomTile = new CustomTile.Builder(this)
-                .setOnClickIntent(pendingIntent)
-                .setContentDescription(labelRes)
-                .setLabel(labelRes)
-                .shouldCollapsePanel(false)
-                .setIcon(R.drawable.ic_notification)
-                .build();
-        CMStatusBarManager.getInstance(this)
-                .publishTile(id, mCustomTile);
     }
 }
