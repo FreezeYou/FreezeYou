@@ -19,6 +19,7 @@ public class ImportTrayPreferences extends TrayPreferences {
     }
 
     private void importSharedPreferences() {
+
         // migrate sharedPreferences in here.
         final SharedPreferencesImport New_FreezeOnceQuit = new SharedPreferencesImport(getContext(),
                 "New_FreezeOnceQuit", "pkgName", getContext().getString(R.string.sFreezeOnceQuit));
@@ -31,5 +32,6 @@ public class ImportTrayPreferences extends TrayPreferences {
         final SharedPreferencesImport New_OneKeyUFApplicationList = new SharedPreferencesImport(getContext(),
                 "New_OneKeyUFApplicationList", "pkgName", getContext().getString(R.string.sOneKeyUFApplicationList));
         migrate(New_OneKeyUFApplicationList);
+
     }
 }

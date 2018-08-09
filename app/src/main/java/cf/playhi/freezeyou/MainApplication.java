@@ -3,8 +3,11 @@ package cf.playhi.freezeyou;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
+
+import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
 
@@ -35,9 +38,14 @@ public class MainApplication extends Application {
             File importTrayLock = new File(getFilesDir().getAbsolutePath() + File.separator + "p2d.lock");
             if (!importTrayLock.exists()) {
                 new ImportTrayPreferences(this);
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                AppPreferences appPreferences = new AppPreferences(this);
+                appPreferences.put("freezeOnceQuit", sharedPreferences.getBoolean("freezeOnceQuit", false));
+                appPreferences.put("shortCutOneKeyFreezeAdditionalOptions", sharedPreferences.getString("shortCutOneKeyFreezeAdditionalOptions", "nothing"));
+                appPreferences.put("useForegroundService", sharedPreferences.getBoolean("useForegroundService", false));
+                appPreferences.put("onekeyFreezeWhenLockScreen", sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen", false));
                 importTrayLock.createNewFile();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
