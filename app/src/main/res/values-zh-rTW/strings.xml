@@ -127,14 +127,14 @@
   <string name="configureAccessibilityService">設置無障礙服務</string>
   <string name="freezeOnceQuit">離開凍結</string>
   <string name="needActiveAccessibilityService">需要啟用無障礙模式</string>
-  <string name="invalidArguments">参数错误</string>
-  <string name="exceptionHC">发生了点异常，操作仍将继续:</string>
-  <string name="plsConfirm">请确认</string>
-  <string name="removeNoRootCaution">真的要解除免ROOT吗？\n!为避免造成不必要的麻烦，解除前请先解冻所有已冻结的程序！</string>
-  <string name="noRootNotActivated">现在还没有成功启用免ROOT呢！</string>
-  <string name="faq">疑难解答</string>
-  <string name="executeImmediately">立即执行</string>
-  <string name="oneKeyLockScreen">一键锁屏</string>
+  <string name="invalidArguments">參數錯誤</string>
+  <string name="exceptionHC">發生了點異常，操作仍將繼續:</string>
+  <string name="plsConfirm">請確認</string>
+  <string name="removeNoRootCaution">真的要解除免ROOT嗎？ \n!為避免造成不必要的麻煩，解除前請先解凍所有已凍結的程式！</string>
+  <string name="noRootNotActivated">現在還沒有成功啟用免ROOT呢！</string>
+  <string name="faq">疑難排解</string>
+  <string name="executeImmediately">立即執行</string>
+  <string name="oneKeyLockScreen">一鍵鎖屏</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
