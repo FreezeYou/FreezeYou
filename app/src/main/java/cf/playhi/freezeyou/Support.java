@@ -765,7 +765,7 @@ class Support {
     }
 
     static void openDevicePolicyManager(Context context) {
-        showToast(context, R.string.devicePolicyManagerNotActivated);
+        showToast(context, R.string.needActiveAccessibilityService);
         ComponentName componentName = new ComponentName(context.getApplicationContext(), DeviceAdminReceiver.class);
         Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
         intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
