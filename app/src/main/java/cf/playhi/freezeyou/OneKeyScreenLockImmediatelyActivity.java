@@ -1,15 +1,14 @@
 package cf.playhi.freezeyou;
 
-import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
-import android.service.quicksettings.TileService;
+import android.os.Bundle;
 
-@TargetApi(Build.VERSION_CODES.N)
-public class OneKeyScreenLockQSTileService extends TileService {
+public class OneKeyScreenLockImmediatelyActivity extends Activity {
     @Override
-    public void onClick() {
-        super.onClick();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= 26) {
             this.startForegroundService(
                     new Intent(getApplicationContext(), OneKeyScreenLockImmediatelyService.class));
@@ -17,5 +16,6 @@ public class OneKeyScreenLockQSTileService extends TileService {
             this.startService(
                     new Intent(getApplicationContext(), OneKeyScreenLockImmediatelyService.class));
         }
+        finish();
     }
 }

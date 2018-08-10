@@ -201,6 +201,20 @@
             android:exported="true"
             android:permission="cf.playhi.freezeyou.permission.ENABLE_APPLICATIONS"
             android:theme="@style/AppTheme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".OneKeyScreenLockImmediatelyActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:documentLaunchMode="always"
+            android:label="@string/oneKeyLockScreen"
+            android:launchMode="standard"
+            android:maxRecents="1"
+            android:theme="@style/AppTheme.Translucent.NoTitleBar"
+            tools:ignore="UnusedAttribute">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".DeviceAdminReceiver"

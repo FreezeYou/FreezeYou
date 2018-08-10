@@ -136,7 +136,8 @@ public class Main extends Activity {
                 createShortCut(
                         getString(R.string.oneKeyFreeze),
                         "",
-                        getResources().getDrawable(R.mipmap.ic_launcher_round), OneKeyFreeze.class,
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),
+                        OneKeyFreeze.class,
                         "OneKeyFreeze",
                         this
                 );
@@ -145,8 +146,19 @@ public class Main extends Activity {
                 createShortCut(
                         getString(R.string.oneKeyUF),
                         "",
-                        getResources().getDrawable(R.mipmap.ic_launcher_round), OneKeyUF.class,
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),
+                        OneKeyUF.class,
                         "OneKeyUF",
+                        this
+                );
+                return true;
+            case R.id.menu_createOneKeyLockScreenShortCut:
+                createShortCut(
+                        getString(R.string.oneKeyLockScreen),
+                        "",
+                        getResources().getDrawable(R.drawable.screenlock),
+                        OneKeyScreenLockImmediatelyActivity.class,
+                        "OneKeyLockScreen",
                         this
                 );
                 return true;

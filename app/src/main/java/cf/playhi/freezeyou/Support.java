@@ -452,6 +452,7 @@ class Support {
                 mBuilder.setContentText(description);
                 mBuilder.setAutoCancel(!preferenceManager.getBoolean("notificationBarDisableClickDisappear", false));
                 mBuilder.setOngoing(preferenceManager.getBoolean("notificationBarDisableSlideOut", false));
+//                mBuilder.setDeleteIntent();
                 // Create the NotificationChannel, but only on API 26+ because
                 // the NotificationChannel class is new and not in the support library
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -766,7 +767,7 @@ class Support {
 
     static void openDevicePolicyManager(Context context) {
         showToast(context, R.string.needActiveAccessibilityService);
-        ComponentName componentName = new ComponentName(context.getApplicationContext(), DeviceAdminReceiver.class);
+        ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
         Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
         intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
         context.startActivity(intent);

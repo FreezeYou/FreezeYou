@@ -38,6 +38,9 @@
             <item
                 android:id="@+id/menu_createOneKeyUFShortCut"
                 android:title="@string/oneKeyUF" />
+            <item
+                android:id="@+id/menu_createOneKeyLockScreenShortCut"
+                android:title="@string/oneKeyLockScreen" />
             <item android:title="@string/quickView">
                 <menu>
                     <item
