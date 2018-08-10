@@ -11,6 +11,8 @@ import android.preference.PreferenceManager;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.createNotification;
+import static cf.playhi.freezeyou.Support.getApplicationIcon;
+import static cf.playhi.freezeyou.Support.getBitmapFromDrawable;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
     @Override
@@ -48,14 +50,14 @@ public class BootCompletedReceiver extends BroadcastReceiver {
             String[] strings = string.split(",");
             PackageManager pm = context.getPackageManager();
             for (String aPkgName : strings) {
-                if (!checkFrozenStatus(context,aPkgName,pm)){
-                    createNotification(context, aPkgName, R.drawable.ic_notification);
+                if (!checkFrozenStatus(context, aPkgName, pm)) {
+                    createNotification(context, aPkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgName, null, false)));
                 }
             }
         }
     }
 
-    private boolean checkFrozenStatus(Context context,String packageName, PackageManager pm) {
+    private boolean checkFrozenStatus(Context context, String packageName, PackageManager pm) {
         return (checkRootFrozen(context, packageName, pm) || checkMRootFrozen(context, packageName));
     }
 }

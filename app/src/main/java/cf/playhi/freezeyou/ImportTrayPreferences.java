@@ -5,7 +5,7 @@ import android.content.Context;
 import net.grandcentrix.tray.TrayPreferences;
 import net.grandcentrix.tray.core.SharedPreferencesImport;
 
-public class ImportTrayPreferences extends TrayPreferences {
+class ImportTrayPreferences extends TrayPreferences {
 
     ImportTrayPreferences(final Context context) {
         super(context, context.getPackageName(), 1);

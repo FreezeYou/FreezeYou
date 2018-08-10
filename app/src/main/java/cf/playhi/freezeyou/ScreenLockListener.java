@@ -8,7 +8,7 @@ import android.os.Build;
 
 import net.grandcentrix.tray.AppPreferences;
 
-public class ScreenLockListener {
+class ScreenLockListener {
 
     private final Context mContext;
     private final ScreenLockBroadcastReceiver mScreenLockReceiver;

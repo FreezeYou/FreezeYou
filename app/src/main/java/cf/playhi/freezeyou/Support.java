@@ -22,7 +22,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
@@ -250,7 +249,7 @@ class Support {
         return 0;
     }
 
-    static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo, boolean resize) {
+    static Drawable getApplicationIcon(Context context, String pkgName, @Nullable ApplicationInfo applicationInfo, boolean resize) {
         String path = context.getFilesDir() + "/icon/" + pkgName + ".png";
         if (new File(path).exists()) {
             drawable = BitmapDrawable.createFromPath(path);
@@ -313,16 +312,13 @@ class Support {
         }
     }
 
-    static String getApplicationLabel(Context context, PackageManager packageManager, ApplicationInfo applicationInfo, String pkgName) {
+    static String getApplicationLabel(Context context, @Nullable PackageManager packageManager, @Nullable ApplicationInfo applicationInfo, String pkgName) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE);
         String name = sharedPreferences.getString(pkgName, "");
         if (!"".equals(name)) {
             return name;
         }
-        PackageManager pm = packageManager;
-        if (pm == null) {
-            pm = context.getPackageManager();
-        }
+        PackageManager pm = packageManager == null ? context.getPackageManager() : packageManager;
         if (applicationInfo != null) {
             name = applicationInfo.loadLabel(pm).toString();
             sharedPreferences.edit().putString(pkgName, name).apply();
@@ -440,7 +436,7 @@ class Support {
     }
 
     @SuppressLint("ApplySharedPref")
-    static void createNotification(Context context, String pkgName, int iconResId) {
+    static void createNotification(Context context, String pkgName, int iconResId, @Nullable Bitmap bitmap) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             String description;
             SharedPreferences preferenceManager = PreferenceManager.getDefaultSharedPreferences(context);
@@ -448,10 +444,10 @@ class Support {
             description = notificationBarFreezeImmediately ? context.getString(R.string.freezeImmediately) : context.getString(R.string.disableAEnable);
             Notification.Builder mBuilder = new Notification.Builder(context);
             int mId = pkgName.hashCode();
-            mBuilder.setSmallIcon(iconResId);
-            mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_notification));
             String name = getApplicationLabel(context, null, null, pkgName);
             if (!context.getString(R.string.uninstalled).equals(name)) {
+                mBuilder.setSmallIcon(iconResId);
+                mBuilder.setLargeIcon(bitmap);
                 mBuilder.setContentTitle(name);
                 mBuilder.setContentText(description);
                 mBuilder.setAutoCancel(!preferenceManager.getBoolean("notificationBarDisableClickDisappear", false));
@@ -542,7 +538,7 @@ class Support {
                             if (exitValue == 0) {
                                 if (enable) {
                                     showToast(context, R.string.executed);
-                                    createNotification(context, pkgName, R.drawable.ic_notification);
+                                    createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, applicationInfo, false)));
                                     if (askRun) {
                                         askRun(activity, SelfCloseWhenDestroyProcess, pkgName, applicationInfo);
                                     }
@@ -591,7 +587,7 @@ class Support {
             } else {
                 sendStatusChangedBroadcast(context);
                 showToast(context, R.string.UFCompleted);
-                createNotification(activity, pkgName, R.drawable.ic_notification);
+                createNotification(activity, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, applicationInfo, false)));
                 if (askRun) {
                     askRun(activity, finish, pkgName, applicationInfo);
                 }
@@ -688,7 +684,7 @@ class Support {
                     }
                 } else {
                     for (String aPkgNameList : pkgNameList) {
-                        createNotification(context, aPkgNameList, R.drawable.ic_notification);
+                        createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
                     }
                 }
                 showToast(context, R.string.executed);
@@ -727,7 +723,7 @@ class Support {
                                 DeviceAdminReceiver.getComponentName(context), aPkgNameList, false)) {
                             showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
                         } else {
-                            createNotification(context, aPkgNameList, R.drawable.ic_notification);
+                            createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
                         }
                     }
                 }
