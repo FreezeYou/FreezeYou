@@ -3,7 +3,7 @@
 
     package="cf.playhi.freezeyou">
 
-    <uses-sdk tools:overrideLibrary="net.grandcentrix.tray"/>
+    <uses-sdk tools:overrideLibrary="net.grandcentrix.tray" />
 
     <uses-permission android:name="android.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
@@ -245,6 +245,36 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".widget.OneKeyFreezeWidget"
+            android:label="@string/oneKeyFreeze">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_onekeyfreeze" />
+        </receiver>
+        <receiver
+            android:name=".widget.OneKeyUFWidget"
+            android:label="@string/oneKeyUF">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_onekeyuf" />
+        </receiver>
+        <receiver
+            android:name=".widget.OneKeyLockScreen"
+            android:label="@string/oneKeyLockScreen">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_onekeylockscreen" />
+        </receiver>
 
         <service
             android:name=".ScreenLockOneKeyFreezeService"
@@ -298,6 +328,11 @@
             android:name=".OneKeyUFService"
             android:exported="false"
             android:label="@string/oneKeyUF"
+            android:process=":backgroundService" />
+        <service
+            android:name=".OneKeyScreenLockImmediatelyService"
+            android:exported="false"
+            android:label="@string/oneKeyLockScreen"
             android:process=":backgroundService" />
     </application>
 
