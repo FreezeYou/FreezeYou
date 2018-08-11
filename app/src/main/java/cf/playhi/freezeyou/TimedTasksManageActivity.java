@@ -1,11 +1,13 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 
 import static cf.playhi.freezeyou.Support.processActionBar;
@@ -31,6 +33,17 @@ public class TimedTasksManageActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 1:
+                break;
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void init() {
@@ -66,5 +79,11 @@ public class TimedTasksManageActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(TimedTasksManageActivity.this, TimedTasksAddActivity.class), 1);
+            }
+        });
     }
 }

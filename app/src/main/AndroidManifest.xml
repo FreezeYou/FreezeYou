@@ -165,6 +165,10 @@
             android:label="@string/timedTasks"
             android:theme="@style/AppTheme.Default" />
         <activity
+            android:name=".TimedTasksAddActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:theme="@style/AppTheme.Default" />
+        <activity
             android:name=".SelectOperation"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:theme="@style/AppTheme.Translucent.NoTitleBar" />
