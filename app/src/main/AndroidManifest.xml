@@ -289,6 +289,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_onekeylockscreen" />
         </receiver>
+        <receiver
+            android:name=".receiver.NotificationDeletedReceiver"
+            android:exported="false"/>
 
         <service
             android:name=".ScreenLockOneKeyFreezeService"

@@ -46,6 +46,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 
+import cf.playhi.freezeyou.receiver.NotificationDeletedReceiver;
+
 import static android.content.Context.POWER_SERVICE;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
@@ -438,10 +440,9 @@ class Support {
     @SuppressLint("ApplySharedPref")
     static void createNotification(Context context, String pkgName, int iconResId, @Nullable Bitmap bitmap) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            String description;
             SharedPreferences preferenceManager = PreferenceManager.getDefaultSharedPreferences(context);
             boolean notificationBarFreezeImmediately = preferenceManager.getBoolean("notificationBarFreezeImmediately", true);
-            description = notificationBarFreezeImmediately ? context.getString(R.string.freezeImmediately) : context.getString(R.string.disableAEnable);
+            String description = notificationBarFreezeImmediately ? context.getString(R.string.freezeImmediately) : context.getString(R.string.disableAEnable);
             Notification.Builder mBuilder = new Notification.Builder(context);
             int mId = pkgName.hashCode();
             String name = getApplicationLabel(context, null, null, pkgName);
@@ -452,9 +453,11 @@ class Support {
                 mBuilder.setContentText(description);
                 mBuilder.setAutoCancel(!preferenceManager.getBoolean("notificationBarDisableClickDisappear", false));
                 mBuilder.setOngoing(preferenceManager.getBoolean("notificationBarDisableSlideOut", false));
-//                mBuilder.setDeleteIntent();
-                // Create the NotificationChannel, but only on API 26+ because
-                // the NotificationChannel class is new and not in the support library
+
+                Intent intent = new Intent(context, NotificationDeletedReceiver.class).putExtra("pkgName", pkgName);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, mId, intent, 0);
+                mBuilder.setDeleteIntent(pendingIntent);
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     String CHANNEL_ID = "FAUf";
                     int importance = NotificationManager.IMPORTANCE_LOW;
@@ -485,9 +488,10 @@ class Support {
                         (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 if (mNotificationManager != null) {
                     mNotificationManager.notify(mId, mBuilder.build());
-                    String notifying = preferenceManager.getString("notifying", "");
-                    if (!notifying.contains(pkgName + ",")) {
-                        preferenceManager.edit().putString("notifying", notifying + pkgName + ",").commit();//一键解冻会多次调用，如果apply可能会遗失数据。
+                    AppPreferences appPreferences = new AppPreferences(context);
+                    String notifying = appPreferences.getString("notifying", "");
+                    if (notifying != null && !notifying.contains(pkgName + ",")) {
+                        appPreferences.put("notifying", notifying + pkgName + ",");
                     }
                 }
             }
@@ -505,9 +509,9 @@ class Support {
     }
 
     static boolean deleteNotifying(Context context, String pkgName) {
-        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        AppPreferences defaultSharedPreferences = new AppPreferences(context);
         String notifying = defaultSharedPreferences.getString("notifying", "");
-        return !notifying.contains(pkgName + ",") || defaultSharedPreferences.edit().putString("notifying", notifying.replace(pkgName + ",", "")).commit();
+        return notifying == null || !notifying.contains(pkgName + ",") || defaultSharedPreferences.put("notifying", notifying.replace(pkgName + ",", ""));
     }
 
     static String getVersionName(Context context) {

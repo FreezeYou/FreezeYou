@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
+import net.grandcentrix.tray.AppPreferences;
+
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.createNotification;
@@ -44,9 +46,9 @@ public class BootCompletedReceiver extends BroadcastReceiver {
     }
 
     private void checkAndReNotifyNotifications(Context context) {
-        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        AppPreferences defaultSharedPreferences = new AppPreferences(context);
         String string = defaultSharedPreferences.getString("notifying", "");
-        if (!"".equals(string)) {
+        if (string != null && !"".equals(string)) {
             String[] strings = string.split(",");
             PackageManager pm = context.getPackageManager();
             for (String aPkgName : strings) {
@@ -54,6 +56,18 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                     createNotification(context, aPkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgName, null, false)));
                 }
             }
+        }
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String oldNotifying = sharedPreferences.getString("notifying","");
+        if (!"".equals(oldNotifying)){
+            String[] oldNotifyings = oldNotifying.split(",");
+            PackageManager pm = context.getPackageManager();
+            for (String aPkgName : oldNotifyings) {
+                if (!checkFrozenStatus(context, aPkgName, pm)) {
+                    createNotification(context, aPkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgName, null, false)));
+                }
+            }
+            sharedPreferences.edit().putString("notifying","").apply();
         }
     }
 
