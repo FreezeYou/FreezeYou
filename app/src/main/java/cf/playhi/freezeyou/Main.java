@@ -938,10 +938,7 @@ public class Main extends Activity {
 
     private void processDisableAndEnableImmediately(boolean freeze) {
         int size = selectedPackages.size();
-        String[] pkgNameList = new String[size];
-        for (int i = 0; i < size; i++) {
-            pkgNameList[i] = selectedPackages.get(i) + ",";
-        }
+        String[] pkgNameList = selectedPackages.toArray(new String[size]);
         if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(Main.this)) {
             oneKeyActionMRoot(Main.this, freeze, pkgNameList);
         } else {

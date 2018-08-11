@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
-import cf.playhi.freezeyou.OneKeyScreenLockImmediatelyService;
+import cf.playhi.freezeyou.OneKeyScreenLockImmediatelyActivity;
 import cf.playhi.freezeyou.R;
 
 public class OneKeyLockScreen extends AppWidgetProvider {
@@ -17,8 +17,8 @@ public class OneKeyLockScreen extends AppWidgetProvider {
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (int appWidgetId : appWidgetIds) {
             // Create an Intent to launch ExampleActivity
-            Intent intent = new Intent(context, OneKeyScreenLockImmediatelyService.class);
-            PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+            Intent intent = new Intent(context, OneKeyScreenLockImmediatelyActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             // Get the layout for the App Widget and attach an on-click listener
             // to the button
