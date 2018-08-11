@@ -207,6 +207,9 @@ public class Main extends Activity {
                         this
                 );
                 return true;
+            case R.id.menu_timedTasks:
+                startActivity(new Intent(this, TimedTasksManageActivity.class));
+                return true;
             case R.id.menu_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;

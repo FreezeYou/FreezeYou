@@ -160,6 +160,11 @@
             android:label="@string/manualMode"
             android:theme="@style/AppTheme.Default" />
         <activity
+            android:name=".TimedTasksManageActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:label="@string/timedTasks"
+            android:theme="@style/AppTheme.Default" />
+        <activity
             android:name=".SelectOperation"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:theme="@style/AppTheme.Translucent.NoTitleBar" />

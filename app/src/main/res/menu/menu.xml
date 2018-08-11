@@ -125,4 +125,9 @@
     <!--<item-->
         <!--android:id="@+id/menu_exit"-->
         <!--android:title="@string/exit" />对于该“退出”概念定义可能有出入，服务都能从设置中调整开关，并没有单列退出功能的需要-->
+    <item
+        android:id="@+id/menu_timedTasks"
+        android:icon="@drawable/ic_action_add"
+        android:title="@string/timedTasks"
+        android:showAsAction="always"/>
 </menu>
