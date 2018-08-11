@@ -126,7 +126,7 @@
   <string name="accessibility_service_description">Listen to the foreground application changes. \nUsed to active the functions to avoid freezing foreground applications when automatic freezing, automatically freeze applications when they are not the foreground applications, etc.</string>
   <string name="configureAccessibilityService">Configure Accessibility Service</string>
   <string name="freezeOnceQuit">Leave Freeze</string>
-  <string name="needActiveAccessibilityService">需要启用无障碍服务</string>
+  <string name="needActiveAccessibilityService">Need to enable Accessibility Service</string>
   <string name="invalidArguments">Invalid parameters</string>
   <string name="exceptionHC">An exception has occurred but the operation will continue:</string>
   <string name="plsConfirm">Please Confirm</string>
