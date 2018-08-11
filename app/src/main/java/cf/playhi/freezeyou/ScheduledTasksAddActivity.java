@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import static cf.playhi.freezeyou.Support.processActionBar;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 
-public class TimedTasksAddActivity extends Activity {
+public class ScheduledTasksAddActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

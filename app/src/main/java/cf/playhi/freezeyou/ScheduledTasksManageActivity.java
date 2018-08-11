@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import static cf.playhi.freezeyou.Support.processActionBar;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 
-public class TimedTasksManageActivity extends Activity {
+public class ScheduledTasksManageActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class TimedTasksManageActivity extends Activity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(TimedTasksManageActivity.this, TimedTasksAddActivity.class), 1);
+                startActivityForResult(new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class), 1);
             }
         });
     }

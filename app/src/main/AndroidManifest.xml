@@ -160,12 +160,12 @@
             android:label="@string/manualMode"
             android:theme="@style/AppTheme.Default" />
         <activity
-            android:name=".TimedTasksManageActivity"
+            android:name=".ScheduledTasksManageActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:label="@string/timedTasks"
+            android:label="@string/scheduledTasks"
             android:theme="@style/AppTheme.Default" />
         <activity
-            android:name=".TimedTasksAddActivity"
+            android:name=".ScheduledTasksAddActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:theme="@style/AppTheme.Default" />
         <activity
