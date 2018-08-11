@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,8 +15,11 @@ public class ScheduledTasksAddActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ttma_main);
-        processActionBar(getActionBar());
+        setContentView(R.layout.ttma_add);
+        ActionBar actionBar = getActionBar();
+        processActionBar(actionBar);
+        if (actionBar != null)
+            actionBar.setDisplayShowTitleEnabled(false);
         init();
     }
 

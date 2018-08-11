@@ -16,7 +16,8 @@
         android:layout_margin="25dp"
         android:background="@drawable/shapedotblack"
         android:contentDescription="@string/add"
+        android:elevation="6dp"
         android:src="@drawable/ic_action_add"
-        android:elevation="6dp"/>
+        android:stateListAnimator="@animator/fab_animator" />
 
 </FrameLayout>

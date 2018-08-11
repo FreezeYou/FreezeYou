@@ -48,36 +48,33 @@ public class ScheduledTasksManageActivity extends Activity {
 
     private void init() {
         ImageButton addButton = findViewById(R.id.ttma_addButton);
-        try {
-            switch (PreferenceManager.getDefaultSharedPreferences(this).getString("uiStyleSelection", "default")) {
-                case "blue":
-                    addButton.setBackgroundResource(R.drawable.shapedotblue);
-                    break;
-                case "orange":
-                    addButton.setBackgroundResource(R.drawable.shapedotorange);
-                    break;
-                case "black":
-                    addButton.setBackgroundResource(R.drawable.shapedotblack);
-                    break;
-                case "green":
-                    addButton.setBackgroundResource(R.drawable.shapedotgreen);
-                    break;
-                case "pink":
-                    addButton.setBackgroundResource(R.drawable.shapedotpink);
-                    break;
-                case "yellow":
-                    addButton.setBackgroundResource(R.drawable.shapedotyellow);
-                    break;
-                default:
-                    if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            addButton.setBackgroundResource(R.drawable.oval_ripple);
+        } else {
+            try {
+                switch (PreferenceManager.getDefaultSharedPreferences(this).getString("uiStyleSelection", "default")) {
+                    case "blue":
                         addButton.setBackgroundResource(R.drawable.shapedotblue);
-                    } else {
+                        break;
+                    case "orange":
+                        addButton.setBackgroundResource(R.drawable.shapedotorange);
+                        break;
+                    case "green":
+                        addButton.setBackgroundResource(R.drawable.shapedotgreen);
+                        break;
+                    case "pink":
+                        addButton.setBackgroundResource(R.drawable.shapedotpink);
+                        break;
+                    case "yellow":
+                        addButton.setBackgroundResource(R.drawable.shapedotyellow);
+                        break;
+                    default:
                         addButton.setBackgroundResource(R.drawable.shapedotblack);
-                    }
-                    break;
+                        break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
