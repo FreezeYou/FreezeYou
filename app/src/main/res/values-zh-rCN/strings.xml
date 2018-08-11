@@ -135,6 +135,8 @@
   <string name="faq">疑难解答</string>
   <string name="executeImmediately">立即执行</string>
   <string name="oneKeyLockScreen">一键锁屏</string>
+  <string name="timedTasks">定时任务</string>
+  <string name="add">添加</string>
   <string-array name="launchModeSelection">
     <item>显示全部</item>
     <item>仅已冻结</item>
