@@ -135,7 +135,7 @@
   <string name="faq">疑難排解</string>
   <string name="executeImmediately">立即執行</string>
   <string name="oneKeyLockScreen">一鍵鎖屏</string>
-  <string name="timedTasks">定时任务</string>
+  <string name="scheduledTasks">计划任务</string>
   <string name="add">添加</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
