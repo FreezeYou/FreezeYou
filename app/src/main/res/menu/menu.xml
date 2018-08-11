@@ -128,6 +128,6 @@
     <item
         android:id="@+id/menu_timedTasks"
         android:icon="@drawable/ic_action_add"
-        android:title="@string/timedTasks"
+        android:title="@string/scheduledTasks"
         android:showAsAction="always"/>
 </menu>
