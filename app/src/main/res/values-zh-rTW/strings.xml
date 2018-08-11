@@ -126,7 +126,7 @@
   <string name="accessibility_service_description">偵聽前臺應用切換變化。 \n用於避免自動凍結時前臺應用被凍結以及應用不在前臺時自動凍結等功能。</string>
   <string name="configureAccessibilityService">設置無障礙服務</string>
   <string name="freezeOnceQuit">離開凍結</string>
-  <string name="needActiveAccessibilityService">需要啟用無障礙模式</string>
+  <string name="needActiveAccessibilityService">需要啟用無障礙服務</string>
   <string name="invalidArguments">參數錯誤</string>
   <string name="exceptionHC">發生了點異常，操作仍將繼續:</string>
   <string name="plsConfirm">請確認</string>
