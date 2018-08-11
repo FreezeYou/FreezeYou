@@ -925,6 +925,7 @@ public class Main extends Activity {
                 showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
             }
         }
+        showToast(Main.this,R.string.success);
     }
 
     private void processRemoveFromOneKeyList(String s) {
@@ -934,6 +935,7 @@ public class Main extends Activity {
                 showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
             }
         }
+        showToast(Main.this,R.string.success);
     }
 
     private void processDisableAndEnableImmediately(boolean freeze) {
