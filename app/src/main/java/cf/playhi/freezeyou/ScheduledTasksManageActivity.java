@@ -87,7 +87,7 @@ public class ScheduledTasksManageActivity extends Activity {
                 keyValuePair.put("time", time);
                 keyValuePair.put("enabled", enabled == 1 ? themeDotResId : R.drawable.shapedotwhite);
                 tasksData.add(keyValuePair);
-                integerArrayList.add(cursor.getInt(cursor.getColumnIndex("hour")));
+                integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
                 cursor.moveToNext();
             }
             ListAdapter adapter =

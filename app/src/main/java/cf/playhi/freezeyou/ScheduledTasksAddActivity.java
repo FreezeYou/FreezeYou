@@ -9,12 +9,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.ArraySet;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
 import net.grandcentrix.tray.provider.SqliteHelper;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static cf.playhi.freezeyou.Support.getThemeDot;
@@ -56,8 +58,19 @@ public class ScheduledTasksAddActivity extends Activity {
             );
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ScheduledTasksAddActivity.this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            Cursor cursor = db.query("tasks",new String[]{"_id"},"_id=?",new String[]{Integer.toString(id)},null,null,null);
-//            editor.putString("stma_add_time",);
+            Cursor cursor = db.query("tasks",null,"_id=?",new String[]{Integer.toString(id)},null,null,null);
+            if (cursor.moveToFirst()) {
+                editor.putString("stma_add_time", Integer.toString(cursor.getInt(cursor.getColumnIndex("hour"))) + ":" + Integer.toString(cursor.getInt(cursor.getColumnIndex("minutes"))));
+                editor.putBoolean("stma_add_enable", cursor.getInt(cursor.getColumnIndex("enabled")) == 1);
+                editor.putString("stma_add_label", cursor.getString(cursor.getColumnIndex("label")));
+                editor.putString("stma_add_task", cursor.getString(cursor.getColumnIndex("task")));
+                HashSet<String> hashSet = new HashSet<>();
+                String repeat = cursor.getString(cursor.getColumnIndex("repeat"));
+                for (int i = 0; i < repeat.length(); i++) {
+                    hashSet.add(repeat.substring(i,i+1));
+                }
+                editor.putStringSet("stma_add_repeat",hashSet);
+            }
             cursor.close();
             db.close();
             editor.commit();
