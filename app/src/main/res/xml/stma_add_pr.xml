@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:key="stma_add_label"
+        android:title="@string/label"
+        android:defaultValue="@string/label"/>
+
+    <SwitchPreference
+        android:title="@string/enable"
+        android:key="stma_add_enable"
+        android:defaultValue="true"/>
+
+    <EditTextPreference
+        android:defaultValue="09:09"
+        android:inputType="time"
+        android:key="stma_add_time"
+        android:title="@string/time" />
+
+    <MultiSelectListPreference
+        android:entries="@array/sevenDays"
+        android:entryValues="@array/sevenDaysValues"
+        android:title="@string/repeat"
+        android:key="stma_add_repeat"/>
+
+    <EditTextPreference
+        android:key="stma_add_task"
+        android:title="@string/task"
+        android:defaultValue="okuf"/>
+
+    <Preference
+        android:title="@string/help"
+        android:key="stma_add_help"/>
+
+</PreferenceScreen>

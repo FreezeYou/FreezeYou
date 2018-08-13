@@ -3,21 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/ttma_tasksListview"
+    <FrameLayout
+        android:id="@+id/staa_sp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
     <ImageButton
-        android:id="@+id/ttma_addButton"
+        android:id="@+id/staa_saveButton"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="25dp"
         android:background="@drawable/shapedotblack"
-        android:contentDescription="@string/add"
+        android:contentDescription="@string/save"
         android:elevation="6dp"
-        android:src="@drawable/ic_action_add"
+        android:src="@drawable/ic_save"
         android:stateListAnimator="@animator/fab_animator" />
-
 </FrameLayout>
