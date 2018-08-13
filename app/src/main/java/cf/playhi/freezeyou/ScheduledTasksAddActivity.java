@@ -9,12 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.util.ArraySet;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-
-import net.grandcentrix.tray.provider.SqliteHelper;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -73,7 +70,7 @@ public class ScheduledTasksAddActivity extends Activity {
             }
             cursor.close();
             db.close();
-            editor.commit();
+            editor.apply();
         }
 
         getFragmentManager()
