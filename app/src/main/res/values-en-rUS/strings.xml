@@ -137,6 +137,15 @@
   <string name="oneKeyLockScreen">LockScreen</string>
   <string name="scheduledTasks">计划任务</string>
   <string name="add">添加</string>
+  <string name="save">保存</string>
+  <string name="hour">小时</string>
+  <string name="minute">分钟</string>
+  <string name="time">时间</string>
+  <string name="enable">启用</string>
+  <string name="repeat">重复</string>
+  <string name="task">任务</string>
+  <string name="help">帮助</string>
+  <string name="label">标签</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>Frozen only</item>
@@ -160,5 +169,14 @@
     <item>Green</item>
     <item>Yellow</item>
     <item>Orange</item>
+  </string-array>
+  <string-array name="sevenDays">
+    <item>周一</item>
+    <item>周二</item>
+    <item>周三</item>
+    <item>周四</item>
+    <item>周五</item>
+    <item>周六</item>
+    <item>周日</item>
   </string-array>
 </resources>
