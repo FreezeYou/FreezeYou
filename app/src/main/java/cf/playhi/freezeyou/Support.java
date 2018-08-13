@@ -917,4 +917,29 @@ class Support {
         }
         return false;
     }
+
+    static int getThemeDot(Context context){
+        int resId;
+        switch (PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default")) {
+            case "blue":
+                resId = R.drawable.shapedotblue;
+                break;
+            case "orange":
+                resId = R.drawable.shapedotorange;
+                break;
+            case "green":
+                resId = R.drawable.shapedotgreen;
+                break;
+            case "pink":
+                resId = R.drawable.shapedotpink;
+                break;
+            case "yellow":
+                resId = R.drawable.shapedotyellow;
+                break;
+            default:
+                resId = R.drawable.shapedotblue;
+                break;
+        }
+        return resId;
+    }
 }

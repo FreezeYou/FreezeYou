@@ -57,6 +57,7 @@ import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getApplicationLabel;
+import static cf.playhi.freezeyou.Support.getThemeDot;
 import static cf.playhi.freezeyou.Support.getVersionCode;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
@@ -354,26 +355,7 @@ public class Main extends Activity {
             }
         });
         try {
-            switch (PreferenceManager.getDefaultSharedPreferences(Main.this).getString("uiStyleSelection", "default")) {
-                case "blue":
-                    customThemeDisabledDot = R.drawable.shapedotblue;
-                    break;
-                case "orange":
-                    customThemeDisabledDot = R.drawable.shapedotorange;
-                    break;
-                case "green":
-                    customThemeDisabledDot = R.drawable.shapedotgreen;
-                    break;
-                case "pink":
-                    customThemeDisabledDot = R.drawable.shapedotpink;
-                    break;
-                case "yellow":
-                    customThemeDisabledDot = R.drawable.shapedotyellow;
-                    break;
-                default:
-                    customThemeDisabledDot = R.drawable.shapedotblue;
-                    break;
-            }
+            customThemeDisabledDot = getThemeDot(Main.this);
         } catch (Exception e) {
             e.printStackTrace();
         }

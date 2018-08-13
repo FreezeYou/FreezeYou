@@ -26,10 +26,12 @@
             android:textSize="18sp" />
     </LinearLayout>
 
-    <Switch
-        android:id="@+id/stma_switchButton"
+    <ImageView
+        android:id="@+id/stma_status"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="0"
-        android:padding="10dp" />
+        android:src="@drawable/shapedotwhite"
+        android:contentDescription="@string/enable"
+        android:padding="10dp"/>
 </LinearLayout>

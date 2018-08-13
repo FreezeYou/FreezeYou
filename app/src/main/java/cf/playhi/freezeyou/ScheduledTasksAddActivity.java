@@ -3,6 +3,7 @@ package cf.playhi.freezeyou;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import net.grandcentrix.tray.provider.SqliteHelper;
 
 import java.util.Set;
 
+import static cf.playhi.freezeyou.Support.getThemeDot;
 import static cf.playhi.freezeyou.Support.processActionBar;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 
@@ -26,14 +28,10 @@ public class ScheduledTasksAddActivity extends Activity {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stma_add);
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.staa_sp, new STAAFragment())
-                .commit();
         ActionBar actionBar = getActionBar();
         processActionBar(actionBar);
         if (actionBar != null) {
-            actionBar.setTitle(getIntent().getStringExtra("label"));
+                actionBar.setTitle(getIntent().getStringExtra("label"));
         }
         init();
     }
@@ -50,36 +48,28 @@ public class ScheduledTasksAddActivity extends Activity {
     }
 
     private void init() {
-        ImageButton saveButton = findViewById(R.id.staa_saveButton);
-        if (Build.VERSION.SDK_INT < 21) {
-            try {
-                switch (PreferenceManager.getDefaultSharedPreferences(this).getString("uiStyleSelection", "default")) {
-                    case "orange":
-                        saveButton.setBackgroundResource(R.drawable.shapedotorange);
-                        break;
-                    case "blue":
-                        saveButton.setBackgroundResource(R.drawable.shapedotblue);
-                        break;
-                    case "green":
-                        saveButton.setBackgroundResource(R.drawable.shapedotgreen);
-                        break;
-                    case "yellow":
-                        saveButton.setBackgroundResource(R.drawable.shapedotyellow);
-                        break;
-                    case "pink":
-                        saveButton.setBackgroundResource(R.drawable.shapedotpink);
-                        break;
-                    default:
-                        saveButton.setBackgroundResource(R.drawable.shapedotblack);
-                        break;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            saveButton.setBackgroundResource(R.drawable.oval_ripple);
+        int id = getIntent().getIntExtra("id",-5);
+        if (id!=-5) {
+            final SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
+            db.execSQL(
+                    "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+            );
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ScheduledTasksAddActivity.this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            Cursor cursor = db.query("tasks",new String[]{"_id"},"_id=?",new String[]{Integer.toString(id)},null,null,null);
+//            editor.putString("stma_add_time",);
+            cursor.close();
+            db.close();
+            editor.commit();
         }
 
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.staa_sp, new STAAFragment())
+                .commit();
+
+        ImageButton saveButton = findViewById(R.id.staa_saveButton);
+        saveButton.setBackgroundResource(Build.VERSION.SDK_INT < 21 ? getThemeDot(ScheduledTasksAddActivity.this) : R.drawable.oval_ripple);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,6 +126,8 @@ public class ScheduledTasksAddActivity extends Activity {
                                 + "'" + task + "'" + ",'','')"
                 );
                 db.close();
+                setResult(RESULT_OK);
+                finish();
             }
         });
     }
