@@ -87,7 +87,7 @@
   <string name="launchMode">Startup Mode</string>
   <string name="freezeImmediately">Freeze Immediately</string>
   <string name="UFImmediately">Unfreeze Immediately</string>
-  <string name="plsRemoveUninstalledApplications">[Hint] You can remove uninstalled applications from the Onekey Freeze/Unfreeze list</string>
+  <string name="plsRemoveUninstalledApplications">[提示]可以将已卸载的应用程序移出列表</string>
   <string name="notificationBarFreezeImmediately">点击通知栏快捷操作立即冻结</string>
   <string name="onClickFunction">Click Function</string>
   <string name="chooseAction">Choose Action</string>
