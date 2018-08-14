@@ -30,7 +30,7 @@ public class ScheduledTasksAddActivity extends Activity {
         ActionBar actionBar = getActionBar();
         processActionBar(actionBar);
         if (actionBar != null) {
-                actionBar.setTitle(getIntent().getStringExtra("label"));
+            actionBar.setTitle(getIntent().getStringExtra("label"));
         }
         init();
     }
@@ -47,15 +47,27 @@ public class ScheduledTasksAddActivity extends Activity {
     }
 
     private void init() {
-        int id = getIntent().getIntExtra("id",-5);
-        if (id!=-5) {
+        final int id = getIntent().getIntExtra("id", -5);
+
+        prepareData(id);
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.staa_sp, new STAAFragment())
+                .commit();
+
+        prepareSaveButton(id);
+    }
+
+    private void prepareData(int id){
+        if (id != -5) {
             final SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
             db.execSQL(
                     "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
             );
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ScheduledTasksAddActivity.this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            Cursor cursor = db.query("tasks",null,"_id=?",new String[]{Integer.toString(id)},null,null,null);
+            Cursor cursor = db.query("tasks", null, "_id=?", new String[]{Integer.toString(id)}, null, null, null);
             if (cursor.moveToFirst()) {
                 editor.putString("stma_add_time", Integer.toString(cursor.getInt(cursor.getColumnIndex("hour"))) + ":" + Integer.toString(cursor.getInt(cursor.getColumnIndex("minutes"))));
                 editor.putBoolean("stma_add_enable", cursor.getInt(cursor.getColumnIndex("enabled")) == 1);
@@ -64,20 +76,17 @@ public class ScheduledTasksAddActivity extends Activity {
                 HashSet<String> hashSet = new HashSet<>();
                 String repeat = cursor.getString(cursor.getColumnIndex("repeat"));
                 for (int i = 0; i < repeat.length(); i++) {
-                    hashSet.add(repeat.substring(i,i+1));
+                    hashSet.add(repeat.substring(i, i + 1));
                 }
-                editor.putStringSet("stma_add_repeat",hashSet);
+                editor.putStringSet("stma_add_repeat", hashSet);
             }
             cursor.close();
             db.close();
             editor.apply();
         }
+    }
 
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.staa_sp, new STAAFragment())
-                .commit();
-
+    private void prepareSaveButton(final int id){
         ImageButton saveButton = findViewById(R.id.staa_saveButton);
         saveButton.setBackgroundResource(Build.VERSION.SDK_INT < 21 ? getThemeDot(ScheduledTasksAddActivity.this) : R.drawable.oval_ripple);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -126,15 +135,25 @@ public class ScheduledTasksAddActivity extends Activity {
                 db.execSQL(
                         "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
                 );//column1\2 留作备用
-                db.execSQL(
-                        "insert into tasks(_id,hour,minutes,repeat,enabled,label,task,column1,column2) values(null,"
-                                + hour + ","
-                                + minutes + ","
-                                + repeat + ","
-                                + enabled + ","
-                                + "'" + label + "'" + ","
-                                + "'" + task + "'" + ",'','')"
-                );
+                if (id == -5) {
+                    db.execSQL(
+                            "insert into tasks(_id,hour,minutes,repeat,enabled,label,task,column1,column2) values(null,"
+                                    + hour + ","
+                                    + minutes + ","
+                                    + repeat + ","
+                                    + enabled + ","
+                                    + "'" + label + "'" + ","
+                                    + "'" + task + "'" + ",'','')"
+                    );
+                } else {
+                    db.execSQL("UPDATE tasks SET hour = "
+                            + hour + ", minutes = "
+                            + minutes + ", repeat = "
+                            + repeat + ", enabled = "
+                            + enabled + ", label = '"
+                            + label + "', task = '"
+                            + task + "' WHERE _id = " + Integer.toString(id) + ";");
+                }
                 db.close();
                 setResult(RESULT_OK);
                 finish();
