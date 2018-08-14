@@ -87,7 +87,7 @@
   <string name="launchMode">啟動模式</string>
   <string name="freezeImmediately">立即凍結</string>
   <string name="UFImmediately">立即解凍</string>
-  <string name="plsRemoveUninstalledApplications">[提示]可以將已卸載的應用程序移出一鍵凍結/解凍列表</string>
+  <string name="plsRemoveUninstalledApplications">[提示]可以将已卸载的应用程序移出列表</string>
   <string name="notificationBarFreezeImmediately">點擊通知欄快捷操作立即凍結</string>
   <string name="onClickFunction">單擊功能</string>
   <string name="chooseAction">選擇動作</string>
