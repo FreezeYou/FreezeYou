@@ -13,9 +13,15 @@ import net.grandcentrix.tray.AppPreferences;
 public class ScreenLockOneKeyFreezeService extends Service {
 
     private ScreenLockListener screenLockListener;
+//
+//    @Override
+//    public int onStartCommand(Intent intent, int flags, int startId) {
+//        return super.onStartCommand(intent, flags, startId);
+//    }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public void onCreate() {
+        super.onCreate();
         if (new AppPreferences(getApplicationContext()).getBoolean("useForegroundService", false) || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Notification.Builder mBuilder = new Notification.Builder(this);
@@ -35,7 +41,6 @@ public class ScreenLockOneKeyFreezeService extends Service {
             screenLockListener = new ScreenLockListener(getApplicationContext());
             screenLockListener.registerListener();
         }
-        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override

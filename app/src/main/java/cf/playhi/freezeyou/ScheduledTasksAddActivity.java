@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -54,17 +55,18 @@ public class ScheduledTasksAddActivity extends Activity {
     private void init() {
         final int id = getIntent().getIntExtra("id", -5);
 
-        prepareData(id);
+        String task = prepareData(id);
 
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.staa_sp, new STAAFragment())
                 .commit();
 
-        prepareSaveButton(id);
+        prepareSaveButton(id, task);
     }
 
-    private void prepareData(int id) {
+    private String prepareData(int id) {
+        String task = "";
         if (id != -5) {
             final SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
             db.execSQL(
@@ -77,7 +79,8 @@ public class ScheduledTasksAddActivity extends Activity {
                 editor.putString("stma_add_time", Integer.toString(cursor.getInt(cursor.getColumnIndex("hour"))) + ":" + Integer.toString(cursor.getInt(cursor.getColumnIndex("minutes"))));
                 editor.putBoolean("stma_add_enable", cursor.getInt(cursor.getColumnIndex("enabled")) == 1);
                 editor.putString("stma_add_label", cursor.getString(cursor.getColumnIndex("label")));
-                editor.putString("stma_add_task", cursor.getString(cursor.getColumnIndex("task")));
+                task = cursor.getString(cursor.getColumnIndex("task"));
+                editor.putString("stma_add_task", task);
                 HashSet<String> hashSet = new HashSet<>();
                 String repeat = cursor.getString(cursor.getColumnIndex("repeat"));
                 for (int i = 0; i < repeat.length(); i++) {
@@ -89,9 +92,10 @@ public class ScheduledTasksAddActivity extends Activity {
             db.close();
             editor.apply();
         }
+        return task;
     }
 
-    private void prepareSaveButton(final int id) {
+    private void prepareSaveButton(final int id, final String existedTask) {
         ImageButton saveButton = findViewById(R.id.staa_saveButton);
         saveButton.setBackgroundResource(Build.VERSION.SDK_INT < 21 ? getThemeDot(ScheduledTasksAddActivity.this) : R.drawable.oval_ripple);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -160,62 +164,87 @@ public class ScheduledTasksAddActivity extends Activity {
                             + task + "' WHERE _id = " + Integer.toString(id) + ";");
                 }
                 db.close();
+                cancelTheTask(id, existedTask);
+                if (enabled == 1) {
+                    publishTheTask(id, hour, minutes, repeat, task);
+                }
                 setResult(RESULT_OK);
                 finish();
             }
         });
     }
 
-    private void publishTheTask(int id, int hour, int minute, String repeat) {
+    private void publishTheTask(int id, int hour, int minute, String repeat, String task) {
+        showToast(this, task);
         AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(this, TasksNeedExecuteReceiver.class).putExtra("id", id);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, id, intent, 0);
+        Intent intent = new Intent(this, TasksNeedExecuteReceiver.class)
+                .putExtra("id", id)
+                .putExtra("task", task)
+                .putExtra("repeat", repeat);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
+        long systemTime = System.currentTimeMillis();
+        calendar.setTimeInMillis(systemTime);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
 
         if (alarmMgr != null) {
-            if ("0".equals(repeat)) {
-                if (Build.VERSION.SDK_INT >= 19) {
-                    alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-                } else {
-                    alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-                }
-            } else {
-                for (int i = 0; i < repeat.length(); i++) {
-                    switch (repeat.substring(i, i + 1)) {
-                        case "1":
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                            break;
-                        case "2":
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-                            break;
-                        case "3":
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-                            break;
-                        case "4":
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-                            break;
-                        case "5":
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-                            break;
-                        case "6":
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-                            break;
-                        case "7":
-                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                            break;
-                        default:
-                            break;
-                    }
-                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                            1000 * 60 * 60 * 24 * 7, alarmIntent);
-                }
+            if (systemTime >= calendar.getTimeInMillis()) {
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
             }
+            if (Build.VERSION.SDK_INT >= 19) {
+                alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+            } else {
+                alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+            }
+//                for (int i = 0; i < repeat.length(); i++) {
+//                    switch (repeat.substring(i, i + 1)) {
+//                        case "1":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+//                            break;
+//                        case "2":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+//                            break;
+//                        case "3":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+//                            break;
+//                        case "4":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+//                            break;
+//                        case "5":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+//                            break;
+//                        case "6":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+//                            break;
+//                        case "7":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+//                            break;
+//                        default:
+//                            break;
+//                    }
+//                    if (systemTime >= calendar.getTimeInMillis()) {
+//                        calendar.add(Calendar.DAY_OF_MONTH, 7);
+//                    }
+//                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+//                            1000 * 60 * 60 * 24 * 7, alarmIntent);
+//                }
+//            }
         } else {
             showToast(this, R.string.requestFailedPlsRetry);
+        }
+    }
+
+    private void cancelTheTask(int id, String task) {
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, TasksNeedExecuteReceiver.class)
+                .putExtra("id", id)
+                .putExtra("task", task);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        if (alarmMgr != null) {
+            alarmMgr.cancel(alarmIntent);
         }
     }
 }

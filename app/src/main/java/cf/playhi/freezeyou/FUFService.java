@@ -16,6 +16,21 @@ import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
 public class FUFService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        boolean freeze = intent.getBooleanExtra("freeze",false);
+        String[] packages = intent.getStringArrayExtra("packages");
+        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(FUFService.this)) {
+            oneKeyActionMRoot(FUFService.this, freeze, packages);
+            stopSelf();
+        } else {
+            oneKeyActionRoot(FUFService.this, null, freeze, packages, false);
+            stopSelf();
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
         if (Build.VERSION.SDK_INT >= 26) {
             Notification.Builder mBuilder = new Notification.Builder(this);
             mBuilder.setSmallIcon(R.drawable.ic_notification);
@@ -29,16 +44,6 @@ public class FUFService extends Service {
         } else {
             startForeground(4, new Notification());
         }
-        boolean freeze = intent.getBooleanExtra("freeze",false);
-        String[] packages = intent.getStringArrayExtra("packages");
-        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(FUFService.this)) {
-            oneKeyActionMRoot(FUFService.this, freeze, packages);
-            stopSelf();
-        } else {
-            oneKeyActionRoot(FUFService.this, null, freeze, packages, false);
-            stopSelf();
-        }
-        return super.onStartCommand(intent, flags, startId);
     }
 
     @Nullable
