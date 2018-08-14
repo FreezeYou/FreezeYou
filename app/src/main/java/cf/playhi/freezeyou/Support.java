@@ -532,50 +532,33 @@ class Support {
     }
 
     static void processRootAction(final String pkgName, final Context context, final Activity activity, final boolean enable, final boolean SelfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final boolean askRun) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final int exitValue = fAURoot(pkgName, enable);
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (exitValue == 0) {
-                                if (enable) {
-                                    showToast(context, R.string.executed);
-                                    createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, applicationInfo, false)));
-                                    if (askRun) {
-                                        askRun(activity, SelfCloseWhenDestroyProcess, pkgName, applicationInfo);
-                                    }
-                                } else {
-                                    showToast(context, R.string.executed);
-                                    deleteNotification(context, pkgName);
-                                    destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                                }
-                            } else {
-                                showToast(context, R.string.mayUnrootedOrOtherEx);
-                                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                            }
-
-                        }
-                    });
-                } catch (final Exception e) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            e.printStackTrace();
-                            showToast(context, context.getString(R.string.exception) + e.getMessage());
-                            if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
-                                showToast(context, R.string.mayUnrooted);
-                            }
-                            destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-
-                        }
-                    });
+        try {
+            final int exitValue = fAURoot(pkgName, enable);
+            if (exitValue == 0) {
+                if (enable) {
+                    showToast(context, R.string.executed);
+                    createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, applicationInfo, false)));
+                    if (askRun) {
+                        askRun(activity, SelfCloseWhenDestroyProcess, pkgName, applicationInfo);
+                    }
+                } else {
+                    showToast(context, R.string.executed);
+                    deleteNotification(context, pkgName);
+                    destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
                 }
-                sendStatusChangedBroadcast(context);
+            } else {
+                showToast(context, R.string.mayUnrootedOrOtherEx);
+                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
             }
-        }).start();
+        } catch (final Exception e) {
+            e.printStackTrace();
+            showToast(context, context.getString(R.string.exception) + e.getMessage());
+            if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
+                showToast(context, R.string.mayUnrooted);
+            }
+            destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
+        }
+        sendStatusChangedBroadcast(context);
     }
 
     @TargetApi(21)
@@ -646,18 +629,33 @@ class Support {
     }
 
     static void oneKeyActionRoot(Context context, Activity activity, boolean freeze, String[] pkgNameList, boolean finish) {
-        String currentPackage = MainApplication.getCurrentPackage();
-        try {
-            process = Runtime.getRuntime().exec("su");
-            outputStream = new DataOutputStream(process.getOutputStream());
-            if (freeze) {
-                for (String aPkgNameList : pkgNameList) {
-                    if (!currentPackage.equals(aPkgNameList)) {
+        if (pkgNameList!=null){
+            String currentPackage = MainApplication.getCurrentPackage();
+            try {
+                process = Runtime.getRuntime().exec("su");
+                outputStream = new DataOutputStream(process.getOutputStream());
+                if (freeze) {
+                    for (String aPkgNameList : pkgNameList) {
+                        if (!currentPackage.equals(aPkgNameList)) {
+                            try {
+                                int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList);
+                                if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+                                    outputStream.writeBytes(
+                                            "pm disable " + aPkgNameList + "\n");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                showToast(context, R.string.plsRemoveUninstalledApplications);
+                            }
+                        }
+                    }
+                } else {
+                    for (String aPkgNameList : pkgNameList) {
                         try {
                             int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList);
-                            if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+                            if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
                                 outputStream.writeBytes(
-                                        "pm disable " + aPkgNameList + "\n");
+                                        "pm enable " + aPkgNameList + "\n");
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -665,80 +663,69 @@ class Support {
                         }
                     }
                 }
-            } else {
-                for (String aPkgNameList : pkgNameList) {
-                    try {
-                        int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList);
-                        if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                            outputStream.writeBytes(
-                                    "pm enable " + aPkgNameList + "\n");
+                outputStream.writeBytes("exit\n");
+                outputStream.flush();
+                int exitValue = process.waitFor();
+                if (exitValue == 0) {
+                    if (freeze) {
+                        for (String aPkgNameList : pkgNameList) {
+                            deleteNotification(context, aPkgNameList);
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        showToast(context, R.string.plsRemoveUninstalledApplications);
+                    } else {
+                        for (String aPkgNameList : pkgNameList) {
+                            createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
+                        }
                     }
-                }
-            }
-            outputStream.writeBytes("exit\n");
-            outputStream.flush();
-            int exitValue = process.waitFor();
-            if (exitValue == 0) {
-                if (freeze) {
-                    for (String aPkgNameList : pkgNameList) {
-                        deleteNotification(context, aPkgNameList);
-                    }
+                    showToast(context, R.string.executed);
                 } else {
-                    for (String aPkgNameList : pkgNameList) {
-                        createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
-                    }
+                    showToast(context, R.string.mayUnrootedOrOtherEx);
                 }
-                showToast(context, R.string.executed);
-            } else {
-                showToast(context, R.string.mayUnrootedOrOtherEx);
+                destroyProcess(finish, outputStream, process, activity);
+            } catch (Exception e) {
+                e.printStackTrace();
+                showToast(context, context.getString(R.string.exception) + e.getMessage());
+                if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
+                    showToast(context, R.string.mayUnrooted);
+                }
+                destroyProcess(finish, outputStream, process, activity);
             }
-            destroyProcess(finish, outputStream, process, activity);
-        } catch (Exception e) {
-            e.printStackTrace();
-            showToast(context, context.getString(R.string.exception) + e.getMessage());
-            if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
-                showToast(context, R.string.mayUnrooted);
-            }
-            destroyProcess(finish, outputStream, process, activity);
+            sendStatusChangedBroadcast(context);
         }
-        sendStatusChangedBroadcast(context);
     }
 
     @TargetApi(21)
     static void oneKeyActionMRoot(Context context, boolean freeze, String[] pkgNameList) {
-        String currentPackage = MainApplication.getCurrentPackage();
-        for (String aPkgNameList : pkgNameList) {
-            try {
-                if (freeze) {
-                    if (!currentPackage.equals(aPkgNameList) && !checkMRootFrozen(context, aPkgNameList)) {
-                        if (!getDevicePolicyManager(context).setApplicationHidden(
-                                DeviceAdminReceiver.getComponentName(context), aPkgNameList, true)) {
-                            showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
-                        } else {
-                            deleteNotification(context, aPkgNameList);
+        if (pkgNameList!=null){
+            String currentPackage = MainApplication.getCurrentPackage();
+            for (String aPkgNameList : pkgNameList) {
+                try {
+                    if (freeze) {
+                        if (!currentPackage.equals(aPkgNameList) && !checkMRootFrozen(context, aPkgNameList)) {
+                            if (!getDevicePolicyManager(context).setApplicationHidden(
+                                    DeviceAdminReceiver.getComponentName(context), aPkgNameList, true)) {
+                                showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                            } else {
+                                deleteNotification(context, aPkgNameList);
+                            }
+                        }
+                    } else {
+                        if (checkMRootFrozen(context, aPkgNameList)) {
+                            if (!getDevicePolicyManager(context).setApplicationHidden(
+                                    DeviceAdminReceiver.getComponentName(context), aPkgNameList, false)) {
+                                showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                            } else {
+                                createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
+                            }
                         }
                     }
-                } else {
-                    if (checkMRootFrozen(context, aPkgNameList)) {
-                        if (!getDevicePolicyManager(context).setApplicationHidden(
-                                DeviceAdminReceiver.getComponentName(context), aPkgNameList, false)) {
-                            showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
-                        } else {
-                            createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
-                        }
-                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showToast(context, context.getString(R.string.exceptionHC) + e.getLocalizedMessage());
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                showToast(context, context.getString(R.string.exceptionHC) + e.getLocalizedMessage());
             }
+            sendStatusChangedBroadcast(context);
+            showToast(context, R.string.executed);
         }
-        sendStatusChangedBroadcast(context);
-        showToast(context, R.string.executed);
     }
 
     private static void sendStatusChangedBroadcast(Context context) {

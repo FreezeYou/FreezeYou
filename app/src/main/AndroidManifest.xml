@@ -300,7 +300,10 @@
         </receiver>
         <receiver
             android:name=".receiver.NotificationDeletedReceiver"
-            android:exported="false"/>
+            android:exported="false" />
+        <receiver
+            android:name=".TasksNeedExecuteReceiver"
+            android:exported="false" />
 
         <service
             android:name=".ScreenLockOneKeyFreezeService"
@@ -359,6 +362,11 @@
             android:name=".OneKeyScreenLockImmediatelyService"
             android:exported="false"
             android:label="@string/oneKeyLockScreen"
+            android:process=":backgroundService" />
+        <service
+            android:name=".FUFService"
+            android:exported="false"
+            android:label="@string/freezeAUF"
             android:process=":backgroundService" />
     </application>
 
