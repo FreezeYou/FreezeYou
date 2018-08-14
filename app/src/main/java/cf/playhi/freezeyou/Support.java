@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -45,9 +46,12 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 import cf.playhi.freezeyou.receiver.NotificationDeletedReceiver;
 
+import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.POWER_SERVICE;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
@@ -629,7 +633,7 @@ class Support {
     }
 
     static void oneKeyActionRoot(Context context, Activity activity, boolean freeze, String[] pkgNameList, boolean finish) {
-        if (pkgNameList!=null){
+        if (pkgNameList != null) {
             String currentPackage = MainApplication.getCurrentPackage();
             try {
                 process = Runtime.getRuntime().exec("su");
@@ -695,7 +699,7 @@ class Support {
 
     @TargetApi(21)
     static void oneKeyActionMRoot(Context context, boolean freeze, String[] pkgNameList) {
-        if (pkgNameList!=null){
+        if (pkgNameList != null) {
             String currentPackage = MainApplication.getCurrentPackage();
             for (String aPkgNameList : pkgNameList) {
                 try {
@@ -905,7 +909,7 @@ class Support {
         return false;
     }
 
-    static int getThemeDot(Context context){
+    static int getThemeDot(Context context) {
         int resId;
         switch (PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default")) {
             case "blue":
@@ -928,5 +932,77 @@ class Support {
                 break;
         }
         return resId;
+    }
+
+
+    static void publishTask(Context context, int id, int hour, int minute, String repeat, String task) {
+        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(context, TasksNeedExecuteReceiver.class)
+                .putExtra("id", id)
+                .putExtra("task", task)
+                .putExtra("repeat", repeat)
+                .putExtra("hour", hour)
+                .putExtra("minute", minute);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar calendar = Calendar.getInstance();
+        long systemTime = System.currentTimeMillis();
+        calendar.setTimeInMillis(systemTime);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (alarmMgr != null) {
+            if ("0".equals(repeat)) {
+                if (systemTime >= calendar.getTimeInMillis()) {
+                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+                }
+                if (Build.VERSION.SDK_INT >= 23) {
+                    alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+                } else if (Build.VERSION.SDK_INT >= 19) {
+                    alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+                } else {
+                    alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+                }
+            } else {
+//
+//                for (int i = 0; i < repeat.length(); i++) {
+//                    switch (repeat.substring(i, i + 1)) {
+//                        case "1":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+//                            break;
+//                        case "2":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+//                            break;
+//                        case "3":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+//                            break;
+//                        case "4":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+//                            break;
+//                        case "5":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+//                            break;
+//                        case "6":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+//                            break;
+//                        case "7":
+//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+//                            break;
+//                        default:
+//                            break;
+//                    }
+//                    if (systemTime >= calendar.getTimeInMillis()) {
+//                        calendar.add(Calendar.DAY_OF_MONTH, 7);
+//                    }
+//                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+//                            1000 * 60 * 60 * 24 * 7, alarmIntent);
+//                }
+            }
+
+
+        } else {
+            showToast(context, R.string.requestFailedPlsRetry);
+        }
     }
 }

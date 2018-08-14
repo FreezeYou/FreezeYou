@@ -24,6 +24,7 @@ import java.util.Set;
 import static cf.playhi.freezeyou.Support.getThemeDot;
 import static cf.playhi.freezeyou.Support.processActionBar;
 import static cf.playhi.freezeyou.Support.processSetTheme;
+import static cf.playhi.freezeyou.Support.publishTask;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class ScheduledTasksAddActivity extends Activity {
@@ -62,7 +63,7 @@ public class ScheduledTasksAddActivity extends Activity {
                 .replace(R.id.staa_sp, new STAAFragment())
                 .commit();
 
-        prepareSaveButton(id, task);
+        prepareSaveButton(id);
     }
 
     private String prepareData(int id) {
@@ -95,7 +96,7 @@ public class ScheduledTasksAddActivity extends Activity {
         return task;
     }
 
-    private void prepareSaveButton(final int id, final String existedTask) {
+    private void prepareSaveButton(final int id) {
         ImageButton saveButton = findViewById(R.id.staa_saveButton);
         saveButton.setBackgroundResource(Build.VERSION.SDK_INT < 21 ? getThemeDot(ScheduledTasksAddActivity.this) : R.drawable.oval_ripple);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -164,9 +165,9 @@ public class ScheduledTasksAddActivity extends Activity {
                             + task + "' WHERE _id = " + Integer.toString(id) + ";");
                 }
                 db.close();
-                cancelTheTask(id, existedTask);
+                cancelTheTask(id);
                 if (enabled == 1) {
-                    publishTheTask(id, hour, minutes, repeat, task);
+                    publishTask(ScheduledTasksAddActivity.this, id, hour, minutes, repeat, task);
                 }
                 setResult(RESULT_OK);
                 finish();
@@ -174,74 +175,10 @@ public class ScheduledTasksAddActivity extends Activity {
         });
     }
 
-    private void publishTheTask(int id, int hour, int minute, String repeat, String task) {
-        showToast(this, task);
+    private void cancelTheTask(int id) {
         AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this, TasksNeedExecuteReceiver.class)
-                .putExtra("id", id)
-                .putExtra("task", task)
-                .putExtra("repeat", repeat);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Calendar calendar = Calendar.getInstance();
-        long systemTime = System.currentTimeMillis();
-        calendar.setTimeInMillis(systemTime);
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.SECOND, 0);
-
-        if (alarmMgr != null) {
-            if (systemTime >= calendar.getTimeInMillis()) {
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-            }
-            if (Build.VERSION.SDK_INT >= 19) {
-                alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-            } else {
-                alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-            }
-//                for (int i = 0; i < repeat.length(); i++) {
-//                    switch (repeat.substring(i, i + 1)) {
-//                        case "1":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-//                            break;
-//                        case "2":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-//                            break;
-//                        case "3":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-//                            break;
-//                        case "4":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-//                            break;
-//                        case "5":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-//                            break;
-//                        case "6":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-//                            break;
-//                        case "7":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-//                            break;
-//                        default:
-//                            break;
-//                    }
-//                    if (systemTime >= calendar.getTimeInMillis()) {
-//                        calendar.add(Calendar.DAY_OF_MONTH, 7);
-//                    }
-//                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                            1000 * 60 * 60 * 24 * 7, alarmIntent);
-//                }
-//            }
-        } else {
-            showToast(this, R.string.requestFailedPlsRetry);
-        }
-    }
-
-    private void cancelTheTask(int id, String task) {
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(this, TasksNeedExecuteReceiver.class)
-                .putExtra("id", id)
-                .putExtra("task", task);
+                .putExtra("id", id);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         if (alarmMgr != null) {
             alarmMgr.cancel(alarmIntent);
