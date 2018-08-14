@@ -2,6 +2,9 @@ package cf.playhi.freezeyou;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,12 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
 import static cf.playhi.freezeyou.Support.getThemeDot;
 import static cf.playhi.freezeyou.Support.processActionBar;
 import static cf.playhi.freezeyou.Support.processSetTheme;
+import static cf.playhi.freezeyou.Support.showToast;
 
 public class ScheduledTasksAddActivity extends Activity {
 
@@ -59,7 +64,7 @@ public class ScheduledTasksAddActivity extends Activity {
         prepareSaveButton(id);
     }
 
-    private void prepareData(int id){
+    private void prepareData(int id) {
         if (id != -5) {
             final SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
             db.execSQL(
@@ -86,7 +91,7 @@ public class ScheduledTasksAddActivity extends Activity {
         }
     }
 
-    private void prepareSaveButton(final int id){
+    private void prepareSaveButton(final int id) {
         ImageButton saveButton = findViewById(R.id.staa_saveButton);
         saveButton.setBackgroundResource(Build.VERSION.SDK_INT < 21 ? getThemeDot(ScheduledTasksAddActivity.this) : R.drawable.oval_ripple);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -159,5 +164,58 @@ public class ScheduledTasksAddActivity extends Activity {
                 finish();
             }
         });
+    }
+
+    private void publishTheTask(int id, int hour, int minute, String repeat) {
+        AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, TasksNeedExecuteReceiver.class).putExtra("id", id);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, id, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+
+        if (alarmMgr != null) {
+            if ("0".equals(repeat)) {
+                if (Build.VERSION.SDK_INT >= 19) {
+                    alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+                } else {
+                    alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+                }
+            } else {
+                for (int i = 0; i < repeat.length(); i++) {
+                    switch (repeat.substring(i, i + 1)) {
+                        case "1":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                            break;
+                        case "2":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+                            break;
+                        case "3":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+                            break;
+                        case "4":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+                            break;
+                        case "5":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+                            break;
+                        case "6":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+                            break;
+                        case "7":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                            break;
+                        default:
+                            break;
+                    }
+                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                            1000 * 60 * 60 * 24 * 7, alarmIntent);
+                }
+            }
+        } else {
+            showToast(this, R.string.requestFailedPlsRetry);
+        }
     }
 }

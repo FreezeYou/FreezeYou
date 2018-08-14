@@ -10,7 +10,7 @@ import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
-import net.grandcentrix.tray.AppPreferences;
+import static cf.playhi.freezeyou.Support.showToast;
 
 public class STAAFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -31,8 +31,21 @@ public class STAAFragment extends PreferenceFragment implements SharedPreference
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         updatePrefSummary(findPreference(s));
-        final AppPreferences appPreferences = new AppPreferences(getActivity());
-
+        switch (s) {
+            case "stma_add_time":
+                String time = sharedPreferences.getString("stma_add_time", "09:09");
+                int hour = Integer.valueOf(time.substring(0, time.indexOf(":")));
+                int minutes = Integer.valueOf(time.substring(time.indexOf(":") + 1));
+                if (hour < 0 || hour >= 24) {
+                    showToast(getActivity(),R.string.hourShouldBetween);
+                }
+                if (minutes < 0 || minutes > 59) {
+                    showToast(getActivity(),R.string.minutesShouldBetween);
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
