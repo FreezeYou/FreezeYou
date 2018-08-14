@@ -146,6 +146,9 @@
   <string name="task">任务</string>
   <string name="help">帮助</string>
   <string name="label">标签</string>
+  <string name="hourShouldBetween">小时需要在0至23之间</string>
+  <string name="minutesShouldBetween">分钟需要在0至59之间</string>
+  <string name="requestFailedPlsRetry">请求失败，请重试</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>Frozen only</item>
