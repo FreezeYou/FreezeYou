@@ -135,20 +135,20 @@
   <string name="faq">FAQ</string>
   <string name="executeImmediately">Execute</string>
   <string name="oneKeyLockScreen">LockScreen</string>
-  <string name="scheduledTasks">计划任务</string>
-  <string name="add">添加</string>
-  <string name="save">保存</string>
-  <string name="hour">小时</string>
-  <string name="minute">分钟</string>
-  <string name="time">时间</string>
-  <string name="enable">启用</string>
-  <string name="repeat">重复</string>
-  <string name="task">任务</string>
-  <string name="help">帮助</string>
-  <string name="label">标签</string>
-  <string name="hourShouldBetween">小时需要在0至23之间</string>
-  <string name="minutesShouldBetween">分钟需要在0至59之间</string>
-  <string name="requestFailedPlsRetry">请求失败，请重试</string>
+  <string name="scheduledTasks">Scheduled tasks</string>
+  <string name="add">Add</string>
+  <string name="save">Save</string>
+  <string name="hour">Hour</string>
+  <string name="minute">Minute</string>
+  <string name="time">Time</string>
+  <string name="enable">Enable</string>
+  <string name="repeat">Repeat</string>
+  <string name="task">Task</string>
+  <string name="help">Help</string>
+  <string name="label">Label</string>
+  <string name="hourShouldBetween">The hour needs to be between 0 and 23</string>
+  <string name="minutesShouldBetween">Minutes need to be between 0 and 59</string>
+  <string name="requestFailedPlsRetry">Request failed, please try again</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>Frozen only</item>
@@ -174,12 +174,12 @@
     <item>Orange</item>
   </string-array>
   <string-array name="sevenDays">
-    <item>周一</item>
-    <item>周二</item>
-    <item>周三</item>
-    <item>周四</item>
-    <item>周五</item>
-    <item>周六</item>
-    <item>周日</item>
+    <item>Monday</item>
+    <item>Tuesday</item>
+    <item>Wednesday</item>
+    <item>Thursday</item>
+    <item>Friday</item>
+    <item>Saturday</item>
+    <item>Sunday</item>
   </string-array>
 </resources>
