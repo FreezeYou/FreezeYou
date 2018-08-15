@@ -135,6 +135,7 @@
   <string name="faq">疑難排解</string>
   <string name="executeImmediately">立即執行</string>
   <string name="oneKeyLockScreen">一鍵鎖屏</string>
+  <string name="mustContainColon">必须包含 : 以区分小时与时间</string>
   <string name="scheduledTasks">计划任务</string>
   <string name="add">添加</string>
   <string name="save">保存</string>
