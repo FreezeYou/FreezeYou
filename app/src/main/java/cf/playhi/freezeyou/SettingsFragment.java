@@ -81,7 +81,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 break;
             case "shortCutOneKeyFreezeAdditionalOptions":
                 if (!"nothing".equals(sharedPreferences.getString(s, "nothing"))) {
-                    appPreferences.put("shortCutOneKeyFreezeAdditionalOptions",sharedPreferences.getString(s,"nothing"));
+                    appPreferences.put("shortCutOneKeyFreezeAdditionalOptions", sharedPreferences.getString(s, "nothing"));
                     DevicePolicyManager devicePolicyManager = getDevicePolicyManager(getActivity());
                     if (devicePolicyManager != null && !devicePolicyManager.isAdminActive(
                             new ComponentName(getActivity(), DeviceAdminReceiver.class))) {
@@ -93,7 +93,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 showToast(getActivity(), R.string.willTakeEffectsNextLaunch);
                 break;
             case "onekeyFreezeWhenLockScreen":
-                appPreferences.put("onekeyFreezeWhenLockScreen",sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen", false));
+                appPreferences.put("onekeyFreezeWhenLockScreen", sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen", false));
                 if (sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen", false)) {
                     if (Build.VERSION.SDK_INT >= 26) {
                         getActivity().startForegroundService(new Intent(getActivity().getApplicationContext(), ScreenLockOneKeyFreezeService.class));
@@ -105,14 +105,20 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 }
                 break;
             case "freezeOnceQuit":
-                appPreferences.put("freezeOnceQuit",sharedPreferences.getBoolean("freezeOnceQuit", false));
+                appPreferences.put("freezeOnceQuit", sharedPreferences.getBoolean("freezeOnceQuit", false));
                 if (sharedPreferences.getBoolean("freezeOnceQuit", false) && !isAccessibilitySettingsOn(getActivity())) {
                     showToast(getActivity(), R.string.needActiveAccessibilityService);
                     openAccessibilitySettings(getActivity());
                 }
                 break;
             case "useForegroundService":
-                appPreferences.put("useForegroundService",sharedPreferences.getBoolean("useForegroundService", false));
+                appPreferences.put("useForegroundService", sharedPreferences.getBoolean("useForegroundService", false));
+                break;
+            case "openImmediately":
+                appPreferences.put("openImmediately", sharedPreferences.getBoolean("openImmediately", false));
+                break;
+            case "openAndUFImmediately":
+                appPreferences.put("openAndUFImmediately", sharedPreferences.getBoolean("openAndUFImmediately", false));
                 break;
             default:
                 break;

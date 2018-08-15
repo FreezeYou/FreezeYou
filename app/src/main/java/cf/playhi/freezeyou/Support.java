@@ -168,7 +168,7 @@ class Support {
     }
 
     private static void askRun(final Context context, final String pkgName, @Nullable Activity activity, boolean finish) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        AppPreferences sharedPref = new AppPreferences(context);
         if ((sharedPref.getBoolean("openImmediately", false)) || (sharedPref.getBoolean("openAndUFImmediately", false))) {
             checkAndStartApp(context, pkgName, activity, finish);
         } else {
@@ -180,8 +180,7 @@ class Support {
 
     @TargetApi(21)
     static void shortcutMakeDialog(Context context, String title, String message, final Activity activity, @Nullable final ApplicationInfo applicationInfo, final String pkgName, int ot, boolean auto, boolean finish) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        if (sharedPref.getBoolean("openAndUFImmediately", false) && auto) {
+        if (new AppPreferences(context).getBoolean("openAndUFImmediately", false) && auto) {
             if (ot == 2) {
                 checkAndStartApp(context, pkgName, activity, finish);
             } else {
@@ -460,17 +459,23 @@ class Support {
                 }
                 // Create an Intent for the activity you want to start
                 Intent resultIntent;
+                PendingIntent resultPendingIntent;
                 if (notificationBarFreezeImmediately) {
-                    resultIntent = new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false).putExtra("ot", 3);
+                    resultIntent = new Intent(context, FUFService.class)
+                            .putExtra("pkgName", pkgName)
+                            .putExtra("single", true)
+                            .putExtra("freeze", true);
+                    resultPendingIntent = PendingIntent.getService(context, mId, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 } else {
                     resultIntent = new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false);
+                    resultPendingIntent = PendingIntent.getActivity(context, mId, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 }
-                // Create the TaskStackBuilder and add the intent, which inflates the back stack
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                stackBuilder.addNextIntent(resultIntent);
-                // Get the PendingIntent containing the entire back stack
-                PendingIntent resultPendingIntent =
-                        stackBuilder.getPendingIntent(mId, PendingIntent.FLAG_UPDATE_CURRENT);
+//                // Create the TaskStackBuilder and add the intent, which inflates the back stack
+//                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+//                stackBuilder.addNextIntent(resultIntent);
+//                // Get the PendingIntent containing the entire back stack
+//                PendingIntent resultPendingIntent =
+//                        stackBuilder.getPendingIntent(mId, PendingIntent.FLAG_UPDATE_CURRENT);
                 mBuilder.setContentIntent(resultPendingIntent);
                 NotificationManager mNotificationManager =
                         (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

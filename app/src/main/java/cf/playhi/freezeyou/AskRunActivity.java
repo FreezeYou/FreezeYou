@@ -8,10 +8,14 @@ import android.support.annotation.Nullable;
 import static cf.playhi.freezeyou.Support.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkAndStartApp;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
+import static cf.playhi.freezeyou.Support.processAddTranslucent;
+import static cf.playhi.freezeyou.Support.processSetTheme;
 
 public class AskRunActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        processSetTheme(this);
+        processAddTranslucent(this);
         super.onCreate(savedInstanceState);
         final String pkgName = getIntent().getStringExtra("pkgName");
         buildAlertDialog(
@@ -36,7 +40,19 @@ public class AskRunActivity extends Activity {
                         finish();
                     }
                 })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        finish();
+                    }
+                })
                 .create()
                 .show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 }
