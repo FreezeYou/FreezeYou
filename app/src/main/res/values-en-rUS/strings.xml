@@ -87,7 +87,7 @@
   <string name="launchMode">Startup Mode</string>
   <string name="freezeImmediately">Freeze Immediately</string>
   <string name="UFImmediately">Unfreeze Immediately</string>
-  <string name="plsRemoveUninstalledApplications">[Hint] You can remove uninstalled applications from the Onekey Freeze/Unfreeze list</string>
+  <string name="plsRemoveUninstalledApplications">[Hint] You can remove the uninstalled application(s) out of the list</string>
   <string name="notificationBarFreezeImmediately">点击通知栏快捷操作立即冻结</string>
   <string name="onClickFunction">Click Function</string>
   <string name="chooseAction">Choose Action</string>
@@ -135,6 +135,21 @@
   <string name="faq">FAQ</string>
   <string name="executeImmediately">Execute</string>
   <string name="oneKeyLockScreen">LockScreen</string>
+  <string name="mustContainColon">必须包含 : 以区分小时与时间</string>
+  <string name="scheduledTasks">Scheduled tasks</string>
+  <string name="add">Add</string>
+  <string name="save">Save</string>
+  <string name="hour">Hour</string>
+  <string name="minute">Minute</string>
+  <string name="time">Time</string>
+  <string name="enable">Enable</string>
+  <string name="repeat">Repeat</string>
+  <string name="task">Task</string>
+  <string name="help">Help</string>
+  <string name="label">Label</string>
+  <string name="hourShouldBetween">The hour needs to be between 0 and 23</string>
+  <string name="minutesShouldBetween">Minutes need to be between 0 and 59</string>
+  <string name="requestFailedPlsRetry">Request failed, please try again</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>Frozen only</item>
@@ -158,5 +173,14 @@
     <item>Green</item>
     <item>Yellow</item>
     <item>Orange</item>
+  </string-array>
+  <string-array name="sevenDays">
+    <item>Monday</item>
+    <item>Tuesday</item>
+    <item>Wednesday</item>
+    <item>Thursday</item>
+    <item>Friday</item>
+    <item>Saturday</item>
+    <item>Sunday</item>
   </string-array>
 </resources>
