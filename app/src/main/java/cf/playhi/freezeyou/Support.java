@@ -59,7 +59,7 @@ class Support {
     private static Drawable drawable;
     private static Bitmap bitmap;
 
-    private static void makeDialog(final String title, final String message, final Context context, @Nullable final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled, @Nullable final Activity activity, @Nullable final boolean finish) {
+    private static void makeDialog(final String title, final String message, final Context context, @Nullable final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled, @Nullable final Activity activity, final boolean finish) {
         AlertDialog.Builder builder =
                 buildAlertDialog(context, getApplicationIcon(context, pkgName, applicationInfo, true), message, title)
                         .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {

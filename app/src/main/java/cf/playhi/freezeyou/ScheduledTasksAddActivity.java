@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -56,7 +55,7 @@ public class ScheduledTasksAddActivity extends Activity {
     private void init() {
         final int id = getIntent().getIntExtra("id", -5);
 
-        String task = prepareData(id);
+        prepareData(id);
 
         getFragmentManager()
                 .beginTransaction()
@@ -66,8 +65,7 @@ public class ScheduledTasksAddActivity extends Activity {
         prepareSaveButton(id);
     }
 
-    private String prepareData(int id) {
-        String task = "";
+    private void prepareData(int id) {
         if (id != -5) {
             final SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
             db.execSQL(
@@ -80,8 +78,7 @@ public class ScheduledTasksAddActivity extends Activity {
                 editor.putString("stma_add_time", Integer.toString(cursor.getInt(cursor.getColumnIndex("hour"))) + ":" + Integer.toString(cursor.getInt(cursor.getColumnIndex("minutes"))));
                 editor.putBoolean("stma_add_enable", cursor.getInt(cursor.getColumnIndex("enabled")) == 1);
                 editor.putString("stma_add_label", cursor.getString(cursor.getColumnIndex("label")));
-                task = cursor.getString(cursor.getColumnIndex("task"));
-                editor.putString("stma_add_task", task);
+                editor.putString("stma_add_task",  cursor.getString(cursor.getColumnIndex("task")));
                 HashSet<String> hashSet = new HashSet<>();
                 String repeat = cursor.getString(cursor.getColumnIndex("repeat"));
                 for (int i = 0; i < repeat.length(); i++) {
@@ -93,7 +90,6 @@ public class ScheduledTasksAddActivity extends Activity {
             db.close();
             editor.apply();
         }
-        return task;
     }
 
     private void prepareSaveButton(final int id) {

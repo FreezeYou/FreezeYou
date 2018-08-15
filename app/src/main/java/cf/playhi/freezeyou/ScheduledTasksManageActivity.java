@@ -25,7 +25,7 @@ import static cf.playhi.freezeyou.Support.processActionBar;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 
 public class ScheduledTasksManageActivity extends Activity {
-    int themeDotResId;
+    private int themeDotResId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
