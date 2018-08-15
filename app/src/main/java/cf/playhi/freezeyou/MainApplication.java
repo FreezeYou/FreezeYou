@@ -15,7 +15,7 @@ import static cf.playhi.freezeyou.Support.addToOneKeyList;
 
 public class MainApplication extends Application {
 
-    private static String mCurrentPackage = "";
+    private static String mCurrentPackage = " ";
 
     @Override
     public void onCreate() {

@@ -33,13 +33,13 @@ public class OneKeyUFService extends Service {
         }
 //        String[] pkgNames = getApplicationContext().getSharedPreferences(
 //                getString(R.string.sOneKeyUFApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
-        String pkgNames = new AppPreferences(getApplicationContext()).getString(getString(R.string.sOneKeyUFApplicationList),"");
-        if (pkgNames!=null) {
+        String pkgNames = new AppPreferences(getApplicationContext()).getString(getString(R.string.sOneKeyUFApplicationList), "");
+        if (pkgNames != null) {
             if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(this)) {
                 oneKeyActionMRoot(this, false, pkgNames.split(","));
                 doFinish();
             } else {
-                oneKeyActionRoot(this, null, false, pkgNames.split(","), false);
+                oneKeyActionRoot(this, false, pkgNames.split(","));
                 doFinish();
             }
         }

@@ -53,10 +53,9 @@ public class ManualMode extends Activity {
                 processRootAction(
                         packageNameEditText.getText().toString(),
                         context,
-                        ManualMode.this,
                         false,
                         false,
-                        getApplicationInfoFromPkgName(packageNameEditText.getText().toString(), context),
+                        null,
                         false);
             }
         });
@@ -66,10 +65,9 @@ public class ManualMode extends Activity {
                 processRootAction(
                         packageNameEditText.getText().toString(),
                         context,
-                        ManualMode.this,
                         true,
                         false,
-                        getApplicationInfoFromPkgName(packageNameEditText.getText().toString(), context),
+                        null,
                         false);
             }
         });

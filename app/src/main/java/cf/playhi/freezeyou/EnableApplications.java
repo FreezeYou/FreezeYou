@@ -19,7 +19,8 @@ public class EnableApplications extends Activity {
                 oneKeyActionMRoot(EnableApplications.this, false, packages);
                 finish();
             } else {
-                oneKeyActionRoot(EnableApplications.this, EnableApplications.this, false, packages, true);
+                oneKeyActionRoot(EnableApplications.this, false, packages);
+                finish();
             }
         }
     }

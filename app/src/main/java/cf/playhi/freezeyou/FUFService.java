@@ -4,26 +4,50 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
 import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
+import static cf.playhi.freezeyou.Support.processMRootAction;
+import static cf.playhi.freezeyou.Support.processRootAction;
 
 public class FUFService extends Service {
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        boolean freeze = intent.getBooleanExtra("freeze",false);
-        String[] packages = intent.getStringArrayExtra("packages");
-        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(FUFService.this)) {
-            oneKeyActionMRoot(FUFService.this, freeze, packages);
-            stopSelf();
+        boolean freeze = intent.getBooleanExtra("freeze", false);
+        Context context = getApplicationContext();
+        if (intent.getBooleanExtra("single", false)) {
+            String pkgName = intent.getStringExtra("pkgName");
+            boolean askRun = intent.getBooleanExtra("askRun",false);
+            if (freeze){
+                if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
+                    processMRootAction(context, pkgName, true, askRun,null,false);
+                } else {
+                    processRootAction(pkgName, context, false, askRun,null,false);
+                }
+            } else {
+                if (checkMRootFrozen(context, pkgName)) {
+                    processMRootAction(context, pkgName, false, askRun,null,false);
+                } else {
+                    processRootAction(pkgName, context, true, askRun,null,false);
+                }
+            }
         } else {
-            oneKeyActionRoot(FUFService.this, null, freeze, packages, false);
-            stopSelf();
+            String[] packages = intent.getStringArrayExtra("packages");
+            if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
+                oneKeyActionMRoot(context, freeze, packages);
+                stopSelf();
+            } else {
+                oneKeyActionRoot(context, freeze, packages);
+                stopSelf();
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }

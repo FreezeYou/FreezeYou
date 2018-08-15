@@ -22,8 +22,6 @@ public class Freeze extends Activity {
         processSetTheme(this);
         processAddTranslucent(this);
         super.onCreate(savedInstanceState);
-        this.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        setContentView(R.layout.shortcut);
         init();
     }
 
@@ -56,13 +54,7 @@ public class Freeze extends Activity {
         }
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-        this.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-    }
-
     private void processDialog(String pkgName, boolean auto, int ot) {
-        shortcutMakeDialog(getApplicationLabel(Freeze.this, null, null, pkgName), getString(R.string.chooseDetailAction), Freeze.this, true, null, pkgName, ot, auto);
+        shortcutMakeDialog(Freeze.this,getApplicationLabel(Freeze.this, null, null, pkgName), getString(R.string.chooseDetailAction), Freeze.this, null, pkgName, ot, auto,true);
     }
 }

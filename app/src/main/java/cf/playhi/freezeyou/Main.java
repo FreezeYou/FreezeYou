@@ -628,15 +628,15 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
                             if (realGetFrozenStatus(pkgName, null)) {
-                                processUnfreezeAction(Main.this, Main.this, pkgName, null, false, false);
+                                processUnfreezeAction(Main.this, pkgName, false, null, false);
                             } else {
-                                processFreezeAction(Main.this, Main.this, pkgName, null, false, false);
+                                processFreezeAction(Main.this, pkgName, false, null, false);
                             }
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_freezeImmediately:
                             if (!realGetFrozenStatus(pkgName, null)) {
-                                processFreezeAction(Main.this, Main.this, pkgName, null, false, false);
+                                processFreezeAction(Main.this, pkgName, false, null, false);
                             } else {
                                 showToast(Main.this, R.string.freezeCompleted);
                             }
@@ -644,7 +644,7 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_UFImmediately:
                             if (realGetFrozenStatus(pkgName, null)) {
-                                processUnfreezeAction(Main.this, Main.this, pkgName, null, false, false);
+                                processUnfreezeAction(Main.this, pkgName, false, null, false);
                             } else {
                                 showToast(Main.this, R.string.UFCompleted);
                             }
@@ -910,7 +910,7 @@ public class Main extends Activity {
                 showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
             }
         }
-        showToast(Main.this,R.string.success);
+        showToast(Main.this, R.string.success);
     }
 
     private void processRemoveFromOneKeyList(String s) {
@@ -920,7 +920,7 @@ public class Main extends Activity {
                 showToast(Main.this, selectedPackages.get(i) + getString(R.string.failed));
             }
         }
-        showToast(Main.this,R.string.success);
+        showToast(Main.this, R.string.success);
     }
 
     private void processDisableAndEnableImmediately(boolean freeze) {
@@ -929,7 +929,7 @@ public class Main extends Activity {
         if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(Main.this)) {
             oneKeyActionMRoot(Main.this, freeze, pkgNameList);
         } else {
-            oneKeyActionRoot(Main.this, Main.this, freeze, pkgNameList, false);
+            oneKeyActionRoot(Main.this, freeze, pkgNameList);
         }
         generateList(filterNowStatus);
     }

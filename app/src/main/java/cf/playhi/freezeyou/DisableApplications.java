@@ -19,7 +19,8 @@ public class DisableApplications extends Activity {
                 oneKeyActionMRoot(DisableApplications.this, true, packages);
                 finish();
             } else {
-                oneKeyActionRoot(DisableApplications.this, DisableApplications.this, true, packages, true);
+                oneKeyActionRoot(DisableApplications.this, true, packages);
+                finish();
             }
         }
     }

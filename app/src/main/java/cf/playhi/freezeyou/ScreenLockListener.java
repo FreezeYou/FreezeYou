@@ -44,13 +44,13 @@ class ScreenLockListener {
         }
     }
 
-    public void registerListener() {
+    void registerListener() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         mContext.registerReceiver(mScreenLockReceiver, filter);
     }
 
-    public void unregisterListener() {
+    void unregisterListener() {
         mContext.unregisterReceiver(mScreenLockReceiver);
     }
 }

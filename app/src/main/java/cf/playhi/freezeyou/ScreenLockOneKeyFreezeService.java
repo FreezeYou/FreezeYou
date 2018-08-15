@@ -7,17 +7,13 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import net.grandcentrix.tray.AppPreferences;
 
 public class ScreenLockOneKeyFreezeService extends Service {
 
     private ScreenLockListener screenLockListener;
-//
-//    @Override
-//    public int onStartCommand(Intent intent, int flags, int startId) {
-//        return super.onStartCommand(intent, flags, startId);
-//    }
 
     @Override
     public void onCreate() {

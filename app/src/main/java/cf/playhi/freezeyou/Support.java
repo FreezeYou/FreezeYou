@@ -48,7 +48,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 
 import cf.playhi.freezeyou.receiver.NotificationDeletedReceiver;
 
@@ -57,51 +56,49 @@ import static android.content.Context.POWER_SERVICE;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
 class Support {
-    private static Process process = null;
-    private static DataOutputStream outputStream = null;
     private static Drawable drawable;
     private static Bitmap bitmap;
 
-    private static void makeDialog(final String title, final String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled) {
+    private static void makeDialog(final String title, final String message, final Context context, @Nullable final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled, @Nullable final Activity activity, @Nullable final boolean finish) {
         AlertDialog.Builder builder =
-                buildAlertDialog(activity, getApplicationIcon(activity, pkgName, applicationInfo, true), message, title)
+                buildAlertDialog(context, getApplicationIcon(context, pkgName, applicationInfo, true), message, title)
                         .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                processFreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess, true);
+                                processFreezeAction(context, pkgName, true, activity, finish);
                             }
                         })
                         .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
+                                checkAndDoActivityFinish(activity, finish);
                             }
                         })
                         .setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialogInterface) {
-                                destroyProcess(selfCloseWhenDestroyProcess, outputStream, process, activity);
+                                checkAndDoActivityFinish(activity, finish);
                             }
                         });
         if (enabled) {
             builder.setPositiveButton(R.string.launch, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    checkAndStartApp(activity, activity, pkgName, selfCloseWhenDestroyProcess);
+                    checkAndStartApp(context, pkgName, activity, finish);
                 }
             });
         } else {
             builder.setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    processUnfreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess, true);
+                    processUnfreezeAction(context, pkgName, true, activity, finish);
                 }
             });
         }
         builder.create().show();
     }
 
-    private static void destroyProcess(Boolean finish, DataOutputStream dataOutputStream, Process process1, Activity activity) {
+    private static void destroyProcess(@Nullable DataOutputStream dataOutputStream, @Nullable Process process1) {
         try {
             if (dataOutputStream != null) {
                 dataOutputStream.close();
@@ -109,13 +106,8 @@ class Support {
             if (process1 != null) {
                 process1.destroy();
             }
-            if (finish && activity != null) {
-                activity.finish();
-            }
         } catch (Exception e) {
-            if (finish && activity != null) {
-                activity.finish();
-            }
+            e.printStackTrace();
         }
     }
 
@@ -175,47 +167,36 @@ class Support {
         return ((tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) || (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED));
     }
 
-    private static void askRun(final Activity activity, final Boolean SelfCloseWhenDestroyProcess, final String pkgName, final ApplicationInfo applicationInfo) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+    private static void askRun(final Context context, final String pkgName, @Nullable Activity activity, boolean finish) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         if ((sharedPref.getBoolean("openImmediately", false)) || (sharedPref.getBoolean("openAndUFImmediately", false))) {
-            checkAndStartApp(activity, activity, pkgName, SelfCloseWhenDestroyProcess);
+            checkAndStartApp(context, pkgName, activity, finish);
         } else {
-            buildAlertDialog(activity, getApplicationIcon(activity, pkgName, applicationInfo, true), activity.getResources().getString(R.string.unfreezedAndAskLaunch), activity.getResources().getString(R.string.notice))
-                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                        }
-                    })
-                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int ii) {
-                            checkAndStartApp(activity, activity, pkgName, SelfCloseWhenDestroyProcess);
-                        }
-                    })
-                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialogInterface) {
-                            destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
-                        }
-                    })
-                    .create().show();
+            context.startActivity(new Intent(context, AskRunActivity.class)
+                    .putExtra("pkgName", pkgName)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     }
 
     @TargetApi(21)
-    static void shortcutMakeDialog(String title, String message, final Activity activity, final Boolean selfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final String pkgName, int ot, boolean auto) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+    static void shortcutMakeDialog(Context context, String title, String message, final Activity activity, @Nullable final ApplicationInfo applicationInfo, final String pkgName, int ot, boolean auto, boolean finish) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPref.getBoolean("openAndUFImmediately", false) && auto) {
             if (ot == 2) {
-                checkAndStartApp(activity, activity, pkgName, selfCloseWhenDestroyProcess);
+                checkAndStartApp(context, pkgName, activity, finish);
             } else {
-                processUnfreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess, true);//ot==1
+                processUnfreezeAction(context, pkgName, true, activity, finish);//ot==1
             }
         } else if (ot == 3) {
-            processFreezeAction(activity, activity, pkgName, applicationInfo, selfCloseWhenDestroyProcess, true);
+            processFreezeAction(context, pkgName, true, activity, finish);//通知栏立即冻结
         } else {
-            makeDialog(title, message, activity, selfCloseWhenDestroyProcess, applicationInfo, pkgName, ot == 2);
+            makeDialog(title, message, context, applicationInfo, pkgName, ot == 2, activity, finish);
+        }
+    }
+
+    private static void checkAndDoActivityFinish(Activity activity, boolean finish) {
+        if (activity != null && finish) {
+            activity.finish();
         }
     }
 
@@ -346,8 +327,8 @@ class Support {
     }
 
     private static int fAURoot(String pkgName, Boolean enable) throws Exception {
-        process = Runtime.getRuntime().exec("su");
-        outputStream = new DataOutputStream(process.getOutputStream());
+        Process process = Runtime.getRuntime().exec("su");
+        DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
         if (enable) {
             outputStream.writeBytes("pm enable " + pkgName + "\n");
         } else {
@@ -355,7 +336,9 @@ class Support {
         }
         outputStream.writeBytes("exit\n");
         outputStream.flush();
-        return process.waitFor();
+        int i = process.waitFor();
+        destroyProcess(outputStream, process);
+        return i;
     }
 
     static void createShortCut(String title, String pkgName, Drawable icon, Class<?> cls, String id, Context context) {
@@ -536,24 +519,22 @@ class Support {
         return "";
     }
 
-    static void processRootAction(final String pkgName, final Context context, final Activity activity, final boolean enable, final boolean SelfCloseWhenDestroyProcess, final ApplicationInfo applicationInfo, final boolean askRun) {
+    static void processRootAction(final String pkgName, final Context context, final boolean enable, final boolean askRun, @Nullable Activity activity, boolean finish) {
         try {
             final int exitValue = fAURoot(pkgName, enable);
             if (exitValue == 0) {
                 if (enable) {
                     showToast(context, R.string.executed);
-                    createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, applicationInfo, false)));
+                    createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
                     if (askRun) {
-                        askRun(activity, SelfCloseWhenDestroyProcess, pkgName, applicationInfo);
+                        askRun(context, pkgName, activity, finish);
                     }
                 } else {
                     showToast(context, R.string.executed);
                     deleteNotification(context, pkgName);
-                    destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
                 }
             } else {
                 showToast(context, R.string.mayUnrootedOrOtherEx);
-                destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
             }
         } catch (final Exception e) {
             e.printStackTrace();
@@ -561,66 +542,70 @@ class Support {
             if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
                 showToast(context, R.string.mayUnrooted);
             }
-            destroyProcess(SelfCloseWhenDestroyProcess, outputStream, process, activity);
         }
         sendStatusChangedBroadcast(context);
     }
 
     @TargetApi(21)
-    private static void processMRootAction(Context context, Activity activity, String pkgName, boolean hidden, ApplicationInfo applicationInfo, boolean finish, boolean askRun) {
+    static void processMRootAction(Context context, String pkgName, boolean hidden, boolean askRun, @Nullable Activity activity, boolean finish) {
         if (getDevicePolicyManager(context).setApplicationHidden(
                 DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
             if (hidden) {
                 sendStatusChangedBroadcast(context);
                 showToast(context, R.string.freezeCompleted);
                 deleteNotification(context, pkgName);
-                if (finish) {
-                    activity.finish();
-                }
             } else {
                 sendStatusChangedBroadcast(context);
                 showToast(context, R.string.UFCompleted);
-                createNotification(activity, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, applicationInfo, false)));
+                createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
                 if (askRun) {
-                    askRun(activity, finish, pkgName, applicationInfo);
+                    askRun(context, pkgName, activity, finish);
                 }
             }
         } else {
             sendStatusChangedBroadcast(context);
             showToast(context, R.string.failed);
-            if (finish) {
-                activity.finish();
-            }
         }
     }
 
-    private static void checkAndStartApp(Context context, Activity activity, String pkgName, boolean finish) {
+    static void checkAndStartApp(Context context, String pkgName, @Nullable Activity activity, boolean finish) {
         if (context.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
             Intent intent = new Intent(
                     context.getPackageManager().getLaunchIntentForPackage(pkgName));
-            activity.startActivity(intent);
-            destroyProcess(finish, outputStream, process, activity);
+            context.startActivity(intent);
         } else {
             showToast(context,
                     R.string.unrootedOrCannotFindTheLaunchIntent);
-            destroyProcess(finish, outputStream, process, activity);
         }
+        checkAndDoActivityFinish(activity, finish);
     }
 
-    static void processUnfreezeAction(Context context, Activity activity, String pkgName, ApplicationInfo applicationInfo, boolean finish, boolean askRun) {
-        if (checkMRootFrozen(context, pkgName)) {
-            processMRootAction(context, activity, pkgName, false, applicationInfo, finish, askRun);
-        } else {
-            processRootAction(pkgName, context, activity, true, finish, applicationInfo, askRun);
-        }
+    static void processUnfreezeAction(Context context, String pkgName, boolean askRun, @Nullable Activity activity, boolean finish) {
+        startService(context, new Intent(context, FUFService.class)
+                .putExtra("askRun", askRun)
+                .putExtra("pkgName", pkgName)
+                .putExtra("freeze", false)
+                .putExtra("single", true));
+        checkAndDoActivityFinish(activity, finish);
+//        if (checkMRootFrozen(context, pkgName)) {
+//            processMRootAction(context, pkgName, false, askRun);
+//        } else {
+//            processRootAction(pkgName, context, true, askRun);
+//        }
     }
 
-    static void processFreezeAction(Context context, Activity activity, String pkgName, ApplicationInfo applicationInfo, boolean finish, boolean askRun) {
-        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
-            processMRootAction(context, activity, pkgName, true, applicationInfo, finish, askRun);
-        } else {
-            processRootAction(pkgName, context, activity, false, finish, applicationInfo, askRun);
-        }
+    static void processFreezeAction(Context context, String pkgName, boolean askRun, @Nullable Activity activity, boolean finish) {
+        startService(context, new Intent(context, FUFService.class)
+                .putExtra("askRun", askRun)
+                .putExtra("pkgName", pkgName)
+                .putExtra("freeze", true)
+                .putExtra("single", true));
+        checkAndDoActivityFinish(activity, finish);
+//        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
+//            processMRootAction(context, pkgName, true, askRun);
+//        } else {
+//            processRootAction(pkgName, context, false, askRun);
+//        }
     }
 
     static ApplicationInfo getApplicationInfoFromPkgName(String pkgName, Context context) {
@@ -633,9 +618,11 @@ class Support {
         return applicationInfo;
     }
 
-    static void oneKeyActionRoot(Context context, Activity activity, boolean freeze, String[] pkgNameList, boolean finish) {
+    static void oneKeyActionRoot(Context context, boolean freeze, String[] pkgNameList) {
         if (pkgNameList != null) {
             String currentPackage = MainApplication.getCurrentPackage();
+            Process process = null;
+            DataOutputStream outputStream = null;
             try {
                 process = Runtime.getRuntime().exec("su");
                 outputStream = new DataOutputStream(process.getOutputStream());
@@ -685,14 +672,14 @@ class Support {
                 } else {
                     showToast(context, R.string.mayUnrootedOrOtherEx);
                 }
-                destroyProcess(finish, outputStream, process, activity);
+                destroyProcess(outputStream, process);
             } catch (Exception e) {
                 e.printStackTrace();
                 showToast(context, context.getString(R.string.exception) + e.getMessage());
                 if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
                     showToast(context, R.string.mayUnrooted);
                 }
-                destroyProcess(finish, outputStream, process, activity);
+                destroyProcess(outputStream, process);
             }
             sendStatusChangedBroadcast(context);
         }
@@ -840,12 +827,13 @@ class Support {
     static void doLockScreen(Context context) {
         //先走ROOT，有权限的话就可以不影响SmartLock之类的了
         try {
-            process = Runtime.getRuntime().exec("su");
-            outputStream = new DataOutputStream(process.getOutputStream());
+            Process process = Runtime.getRuntime().exec("su");
+            DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
             outputStream.writeBytes("input keyevent KEYCODE_POWER" + "\n");
             outputStream.writeBytes("exit\n");
             outputStream.flush();
             process.waitFor();
+            destroyProcess(outputStream, process);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1007,7 +995,7 @@ class Support {
         }
     }
 
-    private static void setTask(@NonNull AlarmManager alarmManager,long triggerAtMillis,PendingIntent operation){
+    private static void setTask(@NonNull AlarmManager alarmManager, long triggerAtMillis, PendingIntent operation) {
         if (Build.VERSION.SDK_INT >= 23) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, operation);
         } else if (Build.VERSION.SDK_INT >= 19) {
@@ -1024,6 +1012,14 @@ class Support {
     private static void checkWeekTime(Long nowTime, Calendar calendar) {
         if (nowTime >= calendar.getTimeInMillis()) {
             calendar.add(Calendar.DAY_OF_MONTH, 7);
+        }
+    }
+
+    private static void startService(Context context, Intent intent) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
         }
     }
 }

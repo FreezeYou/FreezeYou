@@ -40,7 +40,7 @@ public class OneKeyFreezeService extends Service {
                 oneKeyActionMRoot(this, true, pkgNames.split(","));
                 checkAuto(auto, this);
             } else {
-                oneKeyActionRoot(this, null, true, pkgNames.split(","), false);
+                oneKeyActionRoot(this, true, pkgNames.split(","));
                 checkAuto(auto, this);
             }
         }
