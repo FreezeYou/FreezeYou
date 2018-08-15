@@ -39,6 +39,7 @@ public class FUFService extends Service {
                     processRootAction(pkgName, context, true, askRun,null,false);
                 }
             }
+            stopSelf();
         } else {
             String[] packages = intent.getStringArrayExtra("packages");
             if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
