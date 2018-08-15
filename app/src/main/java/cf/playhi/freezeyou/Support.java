@@ -33,6 +33,7 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Window;
@@ -957,52 +958,72 @@ class Support {
                 if (systemTime >= calendar.getTimeInMillis()) {
                     calendar.add(Calendar.DAY_OF_MONTH, 1);
                 }
-                if (Build.VERSION.SDK_INT >= 23) {
-                    alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-                } else if (Build.VERSION.SDK_INT >= 19) {
-                    alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-                } else {
-                    alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-                }
+                setTask(alarmMgr, calendar.getTimeInMillis(), alarmIntent);
             } else {
-//
-//                for (int i = 0; i < repeat.length(); i++) {
-//                    switch (repeat.substring(i, i + 1)) {
-//                        case "1":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-//                            break;
-//                        case "2":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-//                            break;
-//                        case "3":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-//                            break;
-//                        case "4":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-//                            break;
-//                        case "5":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-//                            break;
-//                        case "6":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-//                            break;
-//                        case "7":
-//                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-//                            break;
-//                        default:
-//                            break;
-//                    }
-//                    if (systemTime >= calendar.getTimeInMillis()) {
-//                        calendar.add(Calendar.DAY_OF_MONTH, 7);
-//                    }
-//                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                            1000 * 60 * 60 * 24 * 7, alarmIntent);
-//                }
+                long timeInterval = Long.MAX_VALUE;
+                long timeTmp;
+                for (int i = 0; i < repeat.length(); i++) {
+                    switch (repeat.substring(i, i + 1)) {
+                        case "1":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                            checkWeekTime(systemTime, calendar);
+                            break;
+                        case "2":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                            checkWeekTime(systemTime, calendar);
+                            break;
+                        case "3":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+                            checkWeekTime(systemTime, calendar);
+                            break;
+                        case "4":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+                            checkWeekTime(systemTime, calendar);
+                            break;
+                        case "5":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+                            checkWeekTime(systemTime, calendar);
+                            break;
+                        case "6":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+                            checkWeekTime(systemTime, calendar);
+                            break;
+                        case "7":
+                            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+                            checkWeekTime(systemTime, calendar);
+                            break;
+                        default:
+                            break;
+                    }
+                    timeTmp = calculateTimeInterval(systemTime, calendar.getTimeInMillis());
+                    if (timeTmp > 0 && timeTmp < timeInterval) {
+                        timeInterval = timeTmp;
+                    }
+                }
+                setTask(alarmMgr, systemTime + timeInterval, alarmIntent);
             }
-
-
         } else {
             showToast(context, R.string.requestFailedPlsRetry);
+        }
+    }
+
+    private static void setTask(@NonNull AlarmManager alarmManager,long triggerAtMillis,PendingIntent operation){
+        if (Build.VERSION.SDK_INT >= 23) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, operation);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, operation);
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, operation);
+        }
+    }
+
+    private static long calculateTimeInterval(long first, long last) {
+        return last - first;
+    }
+
+    private static void checkWeekTime(Long nowTime, Calendar calendar) {
+        if (nowTime >= calendar.getTimeInMillis()) {
+            calendar.add(Calendar.DAY_OF_MONTH, 7);
         }
     }
 }
