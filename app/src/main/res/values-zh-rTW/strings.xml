@@ -97,7 +97,6 @@
   <string name="shortCutOneKeyFreezeAdditionalOptions">快捷方式一鍵凍結後追加</string>
   <string name="askIfLockScreen">是否立即鎖屏？</string>
   <string name="devicePolicyManagerNotFound">未找到可用的裝置管理員</string>
-  <string name="devicePolicyManagerNotActivated">相關許可權尚未被啟動</string>
   <string name="activated">已激活</string>
   <string name="disableConfirmation">確定取消？</string>
   <string name="disabled">已停用</string>
@@ -139,8 +138,6 @@
   <string name="scheduledTasks">排程任務</string>
   <string name="add">新增</string>
   <string name="save">儲存</string>
-  <string name="hour">小時</string>
-  <string name="minute">分鐘</string>
   <string name="time">時間</string>
   <string name="enable">啟用</string>
   <string name="repeat">重複</string>
