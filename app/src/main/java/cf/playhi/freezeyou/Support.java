@@ -427,7 +427,7 @@ class Support {
     @SuppressLint("ApplySharedPref")
     static void createNotification(Context context, String pkgName, int iconResId, @Nullable Bitmap bitmap) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            SharedPreferences preferenceManager = PreferenceManager.getDefaultSharedPreferences(context);
+            AppPreferences preferenceManager = new AppPreferences(context);
             boolean notificationBarFreezeImmediately = preferenceManager.getBoolean("notificationBarFreezeImmediately", true);
             String description = notificationBarFreezeImmediately ? context.getString(R.string.freezeImmediately) : context.getString(R.string.disableAEnable);
             Notification.Builder mBuilder = new Notification.Builder(context);

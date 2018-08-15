@@ -120,6 +120,15 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             case "openAndUFImmediately":
                 appPreferences.put("openAndUFImmediately", sharedPreferences.getBoolean("openAndUFImmediately", false));
                 break;
+            case "notificationBarFreezeImmediately":
+                appPreferences.put("notificationBarFreezeImmediately", sharedPreferences.getBoolean("notificationBarFreezeImmediately", true));
+                break;
+            case "notificationBarDisableSlideOut":
+                appPreferences.put("notificationBarDisableSlideOut", sharedPreferences.getBoolean("notificationBarDisableSlideOut", false));
+                break;
+            case "notificationBarDisableClickDisappear":
+                appPreferences.put("notificationBarDisableClickDisappear", sharedPreferences.getBoolean("notificationBarDisableClickDisappear", false));
+                break;
             default:
                 break;
         }
