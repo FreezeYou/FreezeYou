@@ -34,13 +34,17 @@ public class STAAFragment extends PreferenceFragment implements SharedPreference
         switch (s) {
             case "stma_add_time":
                 String time = sharedPreferences.getString("stma_add_time", "09:09");
-                int hour = Integer.valueOf(time.substring(0, time.indexOf(":")));
-                int minutes = Integer.valueOf(time.substring(time.indexOf(":") + 1));
-                if (hour < 0 || hour >= 24) {
-                    showToast(getActivity(),R.string.hourShouldBetween);
-                }
-                if (minutes < 0 || minutes > 59) {
-                    showToast(getActivity(),R.string.minutesShouldBetween);
+                if (time.contains(":")){
+                    int hour = Integer.valueOf(time.substring(0, time.indexOf(":")));
+                    int minutes = Integer.valueOf(time.substring(time.indexOf(":") + 1));
+                    if (hour < 0 || hour >= 24) {
+                        showToast(getActivity(),R.string.hourShouldBetween);
+                    }
+                    if (minutes < 0 || minutes > 59) {
+                        showToast(getActivity(),R.string.minutesShouldBetween);
+                    }
+                } else {
+                    showToast(getActivity(),R.string.mustContainColon);
                 }
                 break;
             default:
