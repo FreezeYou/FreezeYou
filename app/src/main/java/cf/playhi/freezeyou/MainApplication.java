@@ -39,6 +39,17 @@ public class MainApplication extends Application {
                 appPreferences.put("onekeyFreezeWhenLockScreen", sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen", false));
                 importTrayLock.createNewFile();
             }
+            File dataTransfer20180816Lock = new File(getFilesDir().getAbsolutePath() + File.separator + "20180816.lock");
+            if (!dataTransfer20180816Lock.exists()) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                AppPreferences appPreferences = new AppPreferences(this);
+                appPreferences.put("notificationBarFreezeImmediately", sharedPreferences.getBoolean("notificationBarFreezeImmediately", true));
+                appPreferences.put("openImmediately", sharedPreferences.getBoolean("openImmediately", false));
+                appPreferences.put("openAndUFImmediately", sharedPreferences.getBoolean("openAndUFImmediately", false));
+                appPreferences.put("notificationBarDisableSlideOut", sharedPreferences.getBoolean("notificationBarDisableSlideOut", false));
+                appPreferences.put("notificationBarDisableClickDisappear", sharedPreferences.getBoolean("notificationBarDisableClickDisappear", false));
+                dataTransfer20180816Lock.createNewFile();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

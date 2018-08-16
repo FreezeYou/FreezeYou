@@ -10,7 +10,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -945,6 +944,7 @@ class Support {
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
 
         if (alarmMgr != null) {
             if ("0".equals(repeat)) {
@@ -959,36 +959,32 @@ class Support {
                     switch (repeat.substring(i, i + 1)) {
                         case "1":
                             calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-                            checkWeekTime(systemTime, calendar);
                             break;
                         case "2":
                             calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                            checkWeekTime(systemTime, calendar);
                             break;
                         case "3":
                             calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-                            checkWeekTime(systemTime, calendar);
                             break;
                         case "4":
                             calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-                            checkWeekTime(systemTime, calendar);
                             break;
                         case "5":
                             calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-                            checkWeekTime(systemTime, calendar);
                             break;
                         case "6":
                             calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-                            checkWeekTime(systemTime, calendar);
                             break;
                         case "7":
                             calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-                            checkWeekTime(systemTime, calendar);
                             break;
                         default:
                             break;
                     }
                     timeTmp = calculateTimeInterval(systemTime, calendar.getTimeInMillis());
+                    if (timeTmp <= 0) {
+                        timeTmp = timeTmp + 604800000;
+                    }
                     if (timeTmp > 0 && timeTmp < timeInterval) {
                         timeInterval = timeTmp;
                     }
@@ -1012,12 +1008,6 @@ class Support {
 
     private static long calculateTimeInterval(long first, long last) {
         return last - first;
-    }
-
-    private static void checkWeekTime(Long nowTime, Calendar calendar) {
-        if (nowTime >= calendar.getTimeInMillis()) {
-            calendar.add(Calendar.DAY_OF_MONTH, 7);
-        }
     }
 
     private static void startService(Context context, Intent intent) {
