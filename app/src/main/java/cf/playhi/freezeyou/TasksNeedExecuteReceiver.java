@@ -4,25 +4,29 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
+
+import java.lang.reflect.Method;
 
 public class TasksNeedExecuteReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int id = intent.getIntExtra("id", -5);
-        int hour = intent.getIntExtra("hour",-1);
-        int minute = intent.getIntExtra("minute",-1);
+        int hour = intent.getIntExtra("hour", -1);
+        int minute = intent.getIntExtra("minute", -1);
         String task = intent.getStringExtra("task");
         String repeat = intent.getStringExtra("repeat");
         SQLiteDatabase db = context.openOrCreateDatabase("scheduledTasks", Context.MODE_PRIVATE, null);
         if ("0".equals(repeat) && id != -5) {
             db.execSQL("UPDATE tasks SET enabled = 0 WHERE _id = " + Integer.toString(id) + ";");
         } else {
-            Support.publishTask(context,id,hour,minute,repeat,task);
+            Support.publishTask(context, id, hour, minute, repeat, task);
         }
         if (task != null && !"".equals(task)) {
-            runTask(task.toLowerCase(), context);
+            runTask(task.toLowerCase(), context);//全部转小写
         }
     }
 
@@ -33,21 +37,66 @@ public class TasksNeedExecuteReceiver extends BroadcastReceiver {
             startService(context, new Intent(context, OneKeyUFService.class));
         } else if (task.length() >= 4) {
             String string = task.substring(0, 2);
-            if (string.equals("ff")) {
-                startService(
-                        context,
-                        new Intent(context, FUFService.class)
-                                .putExtra("packages", task.substring(3).replaceAll(" ", "").split(","))
-                                .putExtra("freeze", true)
-                );
-            } else if (string.equals("uf")) {
-                startService(
-                        context,
-                        new Intent(context, FUFService.class)
-                                .putExtra("packages", task.substring(3).replaceAll(" ", "").split(","))
-                                .putExtra("freeze", false)
-                );
+            String[] tasks = task.substring(3).replaceAll(" ", "").split(",");
+            switch (string) {
+                case "ff":
+                    startService(
+                            context,
+                            new Intent(context, FUFService.class)
+                                    .putExtra("packages", tasks)
+                                    .putExtra("freeze", true)
+                    );
+                    break;
+                case "uf":
+                    startService(
+                            context,
+                            new Intent(context, FUFService.class)
+                                    .putExtra("packages", tasks)
+                                    .putExtra("freeze", false)
+                    );
+                    break;
+                case "es": //enableSettings
+                    enableAndDisableSysSettings(tasks, context, true);
+                    break;
+                case "ds": //disableSettings
+                    enableAndDisableSysSettings(tasks, context, false);
+                    break;
+                default:
+                    break;
             }
+        }
+    }
+
+    private void enableAndDisableSysSettings(String[] tasks, Context context, boolean enable) {
+        for (String aTask : tasks) {
+            switch (aTask) {
+                case "wifi"://WiFi
+                    WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                    if (wifiManager != null)
+                        wifiManager.setWifiEnabled(enable);
+                    break;
+                case "cellulardata"://蜂窝移动数据
+                    setMobileData(context, enable);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    //https://blog.csdn.net/fangzhibin4712/article/details/26563285
+    private void setMobileData(Context pContext, boolean enable) {
+        try {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) pContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (mConnectivityManager != null) {
+                Class ownerClass = mConnectivityManager.getClass();
+                Class[] argsClass = new Class[1];
+                argsClass[0] = boolean.class;
+                Method method = ownerClass.getMethod("setMobileDataEnabled", argsClass);
+                method.invoke(mConnectivityManager, enable);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

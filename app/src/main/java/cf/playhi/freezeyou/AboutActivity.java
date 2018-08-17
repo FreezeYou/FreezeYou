@@ -38,6 +38,7 @@ public class AboutActivity extends Activity {
                 getResources().getString(R.string.visitWebsite),
                 getResources().getString(R.string.addQQGroup),
                 getResources().getString(R.string.update),
+                getResources().getString(R.string.donate),
                 "V" + getVersionName(getApplicationContext()) + "(" + getVersionCode(getApplicationContext()) + ")"
         };
 
@@ -71,6 +72,9 @@ public class AboutActivity extends Activity {
                         checkUpdate(activity);
                         break;
                     case 7:
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf/sponsorship.html");
+                        break;
+                    case 8:
                         showToast(activity, "V" + getVersionName(activity) + "(" + getVersionCode(activity) + ")");
                         break;
                     default:
