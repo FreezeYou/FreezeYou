@@ -147,7 +147,7 @@
   <string name="hourShouldBetween">小時需要在0至23之間</string>
   <string name="minutesShouldBetween">分鐘需要在0至59之間</string>
   <string name="requestFailedPlsRetry">請求失敗，請重試</string>
-  <string name="donate">赞助支持</string>
+  <string name="donate">贊助支援</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
