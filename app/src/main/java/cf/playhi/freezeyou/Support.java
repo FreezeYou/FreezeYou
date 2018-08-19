@@ -21,6 +21,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -35,6 +37,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -551,6 +554,9 @@ class Support {
 
     @TargetApi(21)
     static void processMRootAction(Context context, String pkgName, boolean hidden, boolean askRun, @Nullable Activity activity, boolean finish) {
+        if (hidden && Build.VERSION.SDK_INT >= 23 && new AppPreferences(context).getBoolean("savePermissionsStats", false)) {
+            savePermissionsStats(context, pkgName);
+        }
         if (getDevicePolicyManager(context).setApplicationHidden(
                 DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
             if (hidden) {
@@ -558,6 +564,9 @@ class Support {
                 showToast(context, R.string.freezeCompleted);
                 deleteNotification(context, pkgName);
             } else {
+                if (Build.VERSION.SDK_INT >= 23 && new AppPreferences(context).getBoolean("savePermissionsStats", false)) {
+                    setPermissionsStats(context,pkgName);
+                }
                 sendStatusChangedBroadcast(context);
                 showToast(context, R.string.UFCompleted);
                 createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
@@ -568,6 +577,56 @@ class Support {
         } else {
             sendStatusChangedBroadcast(context);
             showToast(context, R.string.failed);
+        }
+    }
+
+    @TargetApi(23)
+    private static void savePermissionsStats(Context context,String packageName) {
+        try {
+            String processedPkgName = packageName.replaceAll("\\.", "_");
+            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
+            SQLiteDatabase db = context.openOrCreateDatabase("PermissionsOfPackages", MODE_PRIVATE, null);
+            db.execSQL(
+                    "create table if not exists " + processedPkgName + "(_id integer primary key autoincrement,permission varchar,stats integer)"
+            );
+            for (String aPermission : packageInfo.requestedPermissions) {
+                db.execSQL(
+                        "REPLACE INTO " + processedPkgName + " (_id, permission, stats) VALUES (null, '"
+                                + aPermission + "', "
+                                + Integer.toString(getDevicePolicyManager(context).getPermissionGrantState(DeviceAdminReceiver.getComponentName(context), packageName, aPermission)) + ");"
+                );
+            }
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @TargetApi(23)
+    private static void setPermissionsStats(Context context,String packageName) {
+        try {
+            String processedPkgName = packageName.replaceAll("\\.", "_");
+            SQLiteDatabase db = context.openOrCreateDatabase("PermissionsOfPackages", MODE_PRIVATE, null);
+            db.execSQL(
+                    "create table if not exists " + processedPkgName + "(_id integer primary key autoincrement,permission varchar,stats integer)"
+            );
+            final Cursor cursor = db.query(processedPkgName, null, null, null, null, null, null);
+            if (cursor.moveToFirst()) {
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    String permission = cursor.getString(cursor.getColumnIndex("permission"));
+                    getDevicePolicyManager(context)
+                            .setPermissionGrantState(
+                                    DeviceAdminReceiver.getComponentName(context),
+                                    packageName,
+                                    permission,
+                                    cursor.getInt(cursor.getColumnIndex("stats")));
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -590,11 +649,6 @@ class Support {
                 .putExtra("freeze", false)
                 .putExtra("single", true));
         checkAndDoActivityFinish(activity, finish);
-//        if (checkMRootFrozen(context, pkgName)) {
-//            processMRootAction(context, pkgName, false, askRun);
-//        } else {
-//            processRootAction(pkgName, context, true, askRun);
-//        }
     }
 
     static void processFreezeAction(Context context, String pkgName, boolean askRun, @Nullable Activity activity, boolean finish) {
@@ -604,11 +658,6 @@ class Support {
                 .putExtra("freeze", true)
                 .putExtra("single", true));
         checkAndDoActivityFinish(activity, finish);
-//        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
-//            processMRootAction(context, pkgName, true, askRun);
-//        } else {
-//            processRootAction(pkgName, context, false, askRun);
-//        }
     }
 
     static ApplicationInfo getApplicationInfoFromPkgName(String pkgName, Context context) {
@@ -692,24 +741,31 @@ class Support {
     static void oneKeyActionMRoot(Context context, boolean freeze, String[] pkgNameList) {
         if (pkgNameList != null) {
             String currentPackage = MainApplication.getCurrentPackage();
+            boolean processPermissionsStats = Build.VERSION.SDK_INT >= 23 && new AppPreferences(context).getBoolean("savePermissionsStats", false);
             for (String aPkgNameList : pkgNameList) {
                 try {
                     if (freeze) {
                         if (!currentPackage.equals(aPkgNameList) && !checkMRootFrozen(context, aPkgNameList)) {
-                            if (!getDevicePolicyManager(context).setApplicationHidden(
+                            if (processPermissionsStats) {
+                                savePermissionsStats(context, aPkgNameList);
+                            }
+                            if (getDevicePolicyManager(context).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(context), aPkgNameList, true)) {
-                                showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
-                            } else {
                                 deleteNotification(context, aPkgNameList);
+                            } else {
+                                showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
                             }
                         }
                     } else {
                         if (checkMRootFrozen(context, aPkgNameList)) {
-                            if (!getDevicePolicyManager(context).setApplicationHidden(
+                            if (getDevicePolicyManager(context).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(context), aPkgNameList, false)) {
-                                showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
-                            } else {
+                                if (processPermissionsStats) {
+                                    setPermissionsStats(context, aPkgNameList);
+                                }
                                 createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
+                            } else {
+                                showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
                             }
                         }
                     }
