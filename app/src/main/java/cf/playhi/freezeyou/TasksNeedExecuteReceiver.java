@@ -4,12 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
-
-import java.lang.reflect.Method;
 
 public class TasksNeedExecuteReceiver extends BroadcastReceiver {
     @Override
@@ -75,28 +72,9 @@ public class TasksNeedExecuteReceiver extends BroadcastReceiver {
                     if (wifiManager != null)
                         wifiManager.setWifiEnabled(enable);
                     break;
-                case "cellulardata"://蜂窝移动数据
-                    setMobileData(context, enable);
-                    break;
                 default:
                     break;
             }
-        }
-    }
-
-    //https://blog.csdn.net/fangzhibin4712/article/details/26563285
-    private void setMobileData(Context pContext, boolean enable) {
-        try {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) pContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (mConnectivityManager != null) {
-                Class ownerClass = mConnectivityManager.getClass();
-                Class[] argsClass = new Class[1];
-                argsClass[0] = boolean.class;
-                Method method = ownerClass.getMethod("setMobileDataEnabled", argsClass);
-                method.invoke(mConnectivityManager, enable);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

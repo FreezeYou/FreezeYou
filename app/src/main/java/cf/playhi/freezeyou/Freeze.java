@@ -2,7 +2,6 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -26,10 +25,9 @@ public class Freeze extends Activity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        init();
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 
     private void init() {
@@ -42,9 +40,7 @@ public class Freeze extends Activity {
             showToast(getApplicationContext(), R.string.invalidArguments);
             Freeze.this.finish();
         }
-        if (3 == getIntent().getIntExtra("ot", 0)) {
-            processDialog(pkgName, auto, 3);
-        } else if ((!checkRootFrozen(Freeze.this, pkgName, null)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
+        if ((!checkRootFrozen(Freeze.this, pkgName, null)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
             processDialog(pkgName, auto, 2);
         } else {
             processDialog(pkgName, auto, 1);
@@ -55,6 +51,6 @@ public class Freeze extends Activity {
     }
 
     private void processDialog(String pkgName, boolean auto, int ot) {
-        shortcutMakeDialog(Freeze.this,getApplicationLabel(Freeze.this, null, null, pkgName), getString(R.string.chooseDetailAction), Freeze.this, null, pkgName, ot, auto,true);
+        shortcutMakeDialog(Freeze.this, getApplicationLabel(Freeze.this, null, null, pkgName), getString(R.string.chooseDetailAction), Freeze.this, null, pkgName, ot, auto, true);
     }
 }

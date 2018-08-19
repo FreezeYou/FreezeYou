@@ -61,12 +61,6 @@ class Support {
     private static void makeDialog(final String title, final String message, final Context context, @Nullable final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled, @Nullable final Activity activity, final boolean finish) {
         AlertDialog.Builder builder =
                 buildAlertDialog(context, getApplicationIcon(context, pkgName, applicationInfo, true), message, title)
-                        .setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                processFreezeAction(context, pkgName, true, activity, finish);
-                            }
-                        })
                         .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -84,6 +78,12 @@ class Support {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     checkAndStartApp(context, pkgName, activity, finish);
+                }
+            });
+            builder.setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    processFreezeAction(context, pkgName, true, activity, finish);
                 }
             });
         } else {
@@ -185,8 +185,6 @@ class Support {
             } else {
                 processUnfreezeAction(context, pkgName, true, activity, finish);//ot==1
             }
-        } else if (ot == 3) {
-            processFreezeAction(context, pkgName, true, activity, finish);//通知栏立即冻结
         } else {
             makeDialog(title, message, context, applicationInfo, pkgName, ot == 2, activity, finish);
         }
