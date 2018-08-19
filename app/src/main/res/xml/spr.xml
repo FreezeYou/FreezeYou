@@ -43,11 +43,6 @@
             android:entryValues="@array/shortCutOneKeyFreezeAdditionalOptionsSelectionValues"
             android:key="shortCutOneKeyFreezeAdditionalOptions"
             android:title="@string/shortCutOneKeyFreezeAdditionalOptions" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="savePermissionsStats"
-            android:summary="@string/savePermissionsStatsEx"
-            android:title="@string/savePermissionsStats" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/notificationBar">

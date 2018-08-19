@@ -129,9 +129,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             case "notificationBarDisableClickDisappear":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));
                 break;
-            case "savePermissionsStats":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                break;
             default:
                 break;
         }

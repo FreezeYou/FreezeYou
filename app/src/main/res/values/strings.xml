@@ -146,8 +146,6 @@
     <string name="minutesShouldBetween">分钟需要在0至59之间</string>
     <string name="requestFailedPlsRetry">请求失败，请重试</string>
     <string name="donate">赞助支持</string>
-    <string name="savePermissionsStats">额外处理应用权限状态</string>
-    <string name="savePermissionsStatsEx">冻结后再解冻应用时应用权限需重新配置的设备可尝试启用</string>
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>

@@ -554,9 +554,6 @@ class Support {
 
     @TargetApi(21)
     static void processMRootAction(Context context, String pkgName, boolean hidden, boolean askRun, @Nullable Activity activity, boolean finish) {
-        if (hidden && Build.VERSION.SDK_INT >= 23 && new AppPreferences(context).getBoolean("savePermissionsStats", false)) {
-            savePermissionsStats(context, pkgName);
-        }
         if (getDevicePolicyManager(context).setApplicationHidden(
                 DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
             if (hidden) {
@@ -564,9 +561,6 @@ class Support {
                 showToast(context, R.string.freezeCompleted);
                 deleteNotification(context, pkgName);
             } else {
-                if (Build.VERSION.SDK_INT >= 23 && new AppPreferences(context).getBoolean("savePermissionsStats", false)) {
-                    setPermissionsStats(context,pkgName);
-                }
                 sendStatusChangedBroadcast(context);
                 showToast(context, R.string.UFCompleted);
                 createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
@@ -577,56 +571,6 @@ class Support {
         } else {
             sendStatusChangedBroadcast(context);
             showToast(context, R.string.failed);
-        }
-    }
-
-    @TargetApi(23)
-    private static void savePermissionsStats(Context context,String packageName) {
-        try {
-            String processedPkgName = packageName.replaceAll("\\.", "_");
-            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
-            SQLiteDatabase db = context.openOrCreateDatabase("PermissionsOfPackages", MODE_PRIVATE, null);
-            db.execSQL(
-                    "create table if not exists " + processedPkgName + "(_id integer primary key autoincrement,permission varchar,stats integer)"
-            );
-            for (String aPermission : packageInfo.requestedPermissions) {
-                db.execSQL(
-                        "REPLACE INTO " + processedPkgName + " (_id, permission, stats) VALUES (null, '"
-                                + aPermission + "', "
-                                + Integer.toString(getDevicePolicyManager(context).getPermissionGrantState(DeviceAdminReceiver.getComponentName(context), packageName, aPermission)) + ");"
-                );
-            }
-            db.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @TargetApi(23)
-    private static void setPermissionsStats(Context context,String packageName) {
-        try {
-            String processedPkgName = packageName.replaceAll("\\.", "_");
-            SQLiteDatabase db = context.openOrCreateDatabase("PermissionsOfPackages", MODE_PRIVATE, null);
-            db.execSQL(
-                    "create table if not exists " + processedPkgName + "(_id integer primary key autoincrement,permission varchar,stats integer)"
-            );
-            final Cursor cursor = db.query(processedPkgName, null, null, null, null, null, null);
-            if (cursor.moveToFirst()) {
-                for (int i = 0; i < cursor.getCount(); i++) {
-                    String permission = cursor.getString(cursor.getColumnIndex("permission"));
-                    getDevicePolicyManager(context)
-                            .setPermissionGrantState(
-                                    DeviceAdminReceiver.getComponentName(context),
-                                    packageName,
-                                    permission,
-                                    cursor.getInt(cursor.getColumnIndex("stats")));
-                    cursor.moveToNext();
-                }
-            }
-            cursor.close();
-            db.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -741,14 +685,10 @@ class Support {
     static void oneKeyActionMRoot(Context context, boolean freeze, String[] pkgNameList) {
         if (pkgNameList != null) {
             String currentPackage = MainApplication.getCurrentPackage();
-            boolean processPermissionsStats = Build.VERSION.SDK_INT >= 23 && new AppPreferences(context).getBoolean("savePermissionsStats", false);
             for (String aPkgNameList : pkgNameList) {
                 try {
                     if (freeze) {
                         if (!currentPackage.equals(aPkgNameList) && !checkMRootFrozen(context, aPkgNameList)) {
-                            if (processPermissionsStats) {
-                                savePermissionsStats(context, aPkgNameList);
-                            }
                             if (getDevicePolicyManager(context).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(context), aPkgNameList, true)) {
                                 deleteNotification(context, aPkgNameList);
@@ -760,9 +700,6 @@ class Support {
                         if (checkMRootFrozen(context, aPkgNameList)) {
                             if (getDevicePolicyManager(context).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(context), aPkgNameList, false)) {
-                                if (processPermissionsStats) {
-                                    setPermissionsStats(context, aPkgNameList);
-                                }
                                 createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
                             } else {
                                 showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
