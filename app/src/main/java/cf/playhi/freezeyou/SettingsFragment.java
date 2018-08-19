@@ -167,6 +167,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 case "helpTranslate":
                     requestOpenWebSite(getActivity(), "https://crwd.in/freezeyou");
                     break;
+                case "donate":
+                    requestOpenWebSite(getActivity(), "https://freezeyou.playhi.cf/sponsorship.html");
+                    break;
                 case "thanksList":
                     requestOpenWebSite(getActivity(), "https://freezeyou.playhi.cf/thanks.html");
                     break;

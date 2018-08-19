@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:title="@string/common">
+    <PreferenceCategory android:title="@string/common">
         <ListPreference
             android:defaultValue="default"
             android:entries="@array/uiStyleSelection"
@@ -16,156 +15,149 @@
             android:key="launchMode"
             android:title="@string/launchMode" />
         <CheckBoxPreference
-            android:title="@string/nSCaution"
-            android:summary="@string/nSCaution"
+            android:defaultValue="false"
             android:key="noCaution"
-            android:defaultValue="false"/>
+            android:summary="@string/nSCaution"
+            android:title="@string/nSCaution" />
         <CheckBoxPreference
-            android:title="@string/saveOnClickFunctionStatus"
-            android:summary="@string/saveOnClickFunctionStatus"
+            android:defaultValue="false"
             android:key="saveOnClickFunctionStatus"
-            android:defaultValue="false"/>
+            android:summary="@string/saveOnClickFunctionStatus"
+            android:title="@string/saveOnClickFunctionStatus" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/freezeAUF">
+    <PreferenceCategory android:title="@string/freezeAUF">
         <CheckBoxPreference
-            android:title="@string/openImmediately"
-            android:summary="@string/openImmediatelyEx"
+            android:defaultValue="false"
             android:key="openImmediately"
-            android:defaultValue="false"/>
+            android:summary="@string/openImmediatelyEx"
+            android:title="@string/openImmediately" />
         <CheckBoxPreference
-            android:title="@string/openAndUFImmediately"
-            android:summary="@string/openAndUFImmediatelyEx"
+            android:defaultValue="false"
             android:key="openAndUFImmediately"
-            android:defaultValue="false"/>
+            android:summary="@string/openAndUFImmediatelyEx"
+            android:title="@string/openAndUFImmediately" />
         <ListPreference
             android:defaultValue="nothing"
-            android:title="@string/shortCutOneKeyFreezeAdditionalOptions"
-            android:key="shortCutOneKeyFreezeAdditionalOptions"
             android:entries="@array/shortCutOneKeyFreezeAdditionalOptionsSelection"
-            android:entryValues="@array/shortCutOneKeyFreezeAdditionalOptionsSelectionValues"/>
+            android:entryValues="@array/shortCutOneKeyFreezeAdditionalOptionsSelectionValues"
+            android:key="shortCutOneKeyFreezeAdditionalOptions"
+            android:title="@string/shortCutOneKeyFreezeAdditionalOptions" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/notificationBar">
+    <PreferenceCategory android:title="@string/notificationBar">
         <CheckBoxPreference
-            android:title="@string/notificationBarFreezeImmediately"
-            android:summary="@string/effectNextCreate"
+            android:defaultValue="true"
             android:key="notificationBarFreezeImmediately"
-            android:defaultValue="true"/>
-        <CheckBoxPreference
-            android:title="@string/disableSlideOut"
             android:summary="@string/effectNextCreate"
+            android:title="@string/notificationBarFreezeImmediately" />
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="notificationBarDisableSlideOut"
-            android:defaultValue="false"/>
-        <CheckBoxPreference
-            android:title="@string/disableClickDisappear"
             android:summary="@string/effectNextCreate"
+            android:title="@string/disableSlideOut" />
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="notificationBarDisableClickDisappear"
-            android:defaultValue="false"/>
+            android:summary="@string/effectNextCreate"
+            android:title="@string/disableClickDisappear" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/automation">
+    <PreferenceCategory android:title="@string/automation">
         <CheckBoxPreference
+            android:defaultValue="false"
             android:key="onekeyFreezeWhenLockScreen"
             android:summary="@string/freezeAfterScreenLock"
-            android:title="@string/freezeAfterScreenLock"
-            android:defaultValue="false"/>
+            android:title="@string/freezeAfterScreenLock" />
         <CheckBoxPreference
+            android:defaultValue="false"
             android:key="freezeOnceQuit"
             android:summary="@string/needActiveAccessibilityService"
-            android:title="@string/freezeOnceQuit"
-            android:defaultValue="false"/>
+            android:title="@string/freezeOnceQuit" />
         <Preference
-            android:title="@string/configureAccessibilityService"
+            android:key="configureAccessibilityService"
             android:summary="@string/accessibility_service_description"
-            android:key="configureAccessibilityService"/>
+            android:title="@string/configureAccessibilityService" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/backgroundService">
+    <PreferenceCategory android:title="@string/backgroundService">
         <CheckBoxPreference
+            android:defaultValue="false"
             android:key="useForegroundService"
             android:summary="@string/serviceLongerEx"
-            android:title="@string/useForegroundService"
-            android:defaultValue="false"/>
+            android:title="@string/useForegroundService" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/iconAEntry">
+    <PreferenceCategory android:title="@string/iconAEntry">
         <CheckBoxPreference
+            android:defaultValue="true"
             android:icon="@mipmap/ic_launcher"
-            android:key="firstIconEnabled"
-            android:defaultValue="true"/>
+            android:key="firstIconEnabled" />
         <CheckBoxPreference
+            android:defaultValue="true"
             android:icon="@mipmap/ic_launcher_round"
-            android:key="secondIconEnabled"
-            android:defaultValue="true"/>
+            android:key="secondIconEnabled" />
         <CheckBoxPreference
+            android:defaultValue="true"
             android:icon="@mipmap/ic_launcher_new_round"
-            android:key="thirdIconEnabled"
-            android:defaultValue="true"/>
+            android:key="thirdIconEnabled" />
         <Preference
-            android:title="@string/dialEntry"
-            android:summary="@string/dialEntry_Ex">
+            android:summary="@string/dialEntry_Ex"
+            android:title="@string/dialEntry">
             <intent
                 android:action="android.intent.action.DIAL"
                 android:data="tel:*#*#373393968#*#*" />
         </Preference>
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/more">
+    <PreferenceCategory android:title="@string/more">
         <Preference
-            android:title="@string/update"
-            android:key="checkUpdate"/>
+            android:key="checkUpdate"
+            android:title="@string/update" />
         <Preference
-            android:title="@string/faq"
-            android:key="faq"/>
+            android:key="faq"
+            android:title="@string/faq" />
         <Preference
-            android:title="@string/helpTranslate"
-            android:key="helpTranslate"/>
+            android:key="donate"
+            android:title="@string/donate" />
         <Preference
-            android:title="@string/thanksList"
-            android:key="thanksList"/>
+            android:key="helpTranslate"
+            android:title="@string/helpTranslate" />
         <Preference
-            android:title="@string/about">
+            android:key="thanksList"
+            android:title="@string/thanksList" />
+        <Preference android:title="@string/about">
             <intent
-                android:targetPackage="cf.playhi.freezeyou"
-                android:targetClass="cf.playhi.freezeyou.AboutActivity" />
+                android:targetClass="cf.playhi.freezeyou.AboutActivity"
+                android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/advance">
-        <Preference
-            android:title="@string/manualMode">
+    <PreferenceCategory android:title="@string/advance">
+        <Preference android:title="@string/manualMode">
             <intent
-                android:targetPackage="cf.playhi.freezeyou"
+                android:data="ManualMode"
                 android:targetClass="cf.playhi.freezeyou.ManualMode"
-                android:data="ManualMode" />
+                android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
-            android:title="@string/clearIconCache"
+            android:key="clearIconCache"
             android:summary="@string/refreshCache"
-            android:key="clearIconCache"/>
+            android:title="@string/clearIconCache" />
         <Preference
-            android:title="@string/clearNameCache"
+            android:key="clearNameCache"
             android:summary="@string/refreshCache"
-            android:key="clearNameCache"/>
+            android:title="@string/clearNameCache" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/dangerZone">
+    <PreferenceCategory android:title="@string/dangerZone">
         <Preference
-            android:title="@string/disableMRootMode"
-            android:summary="@string/disableMRootModeEx">
+            android:summary="@string/disableMRootModeEx"
+            android:title="@string/disableMRootMode">
             <intent
-                android:targetPackage="cf.playhi.freezeyou"
+                android:data="Uninstall"
                 android:targetClass="cf.playhi.freezeyou.Uninstall"
-                android:data="Uninstall" />
+                android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
     </PreferenceCategory>
 
