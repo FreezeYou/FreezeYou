@@ -51,6 +51,7 @@ import java.util.Calendar;
 import cf.playhi.freezeyou.receiver.NotificationDeletedReceiver;
 
 import static android.content.Context.ALARM_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.POWER_SERVICE;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
@@ -297,7 +298,7 @@ class Support {
     }
 
     static String getApplicationLabel(Context context, @Nullable PackageManager packageManager, @Nullable ApplicationInfo applicationInfo, String pkgName) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("NameOfPackages", MODE_PRIVATE);
         String name = sharedPreferences.getString(pkgName, "");
         if (!"".equals(name)) {
             return name;
@@ -924,7 +925,6 @@ class Support {
         }
         return resId;
     }
-
 
     static void publishTask(Context context, int id, int hour, int minute, String repeat, String task) {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(ALARM_SERVICE);

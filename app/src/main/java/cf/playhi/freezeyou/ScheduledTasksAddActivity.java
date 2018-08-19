@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +23,6 @@ import static cf.playhi.freezeyou.Support.getThemeDot;
 import static cf.playhi.freezeyou.Support.processActionBar;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.publishTask;
-import static cf.playhi.freezeyou.Support.showToast;
 
 public class ScheduledTasksAddActivity extends Activity {
 
@@ -78,7 +76,7 @@ public class ScheduledTasksAddActivity extends Activity {
                 editor.putString("stma_add_time", Integer.toString(cursor.getInt(cursor.getColumnIndex("hour"))) + ":" + Integer.toString(cursor.getInt(cursor.getColumnIndex("minutes"))));
                 editor.putBoolean("stma_add_enable", cursor.getInt(cursor.getColumnIndex("enabled")) == 1);
                 editor.putString("stma_add_label", cursor.getString(cursor.getColumnIndex("label")));
-                editor.putString("stma_add_task",  cursor.getString(cursor.getColumnIndex("task")));
+                editor.putString("stma_add_task", cursor.getString(cursor.getColumnIndex("task")));
                 HashSet<String> hashSet = new HashSet<>();
                 String repeat = cursor.getString(cursor.getColumnIndex("repeat"));
                 for (int i = 0; i < repeat.length(); i++) {
