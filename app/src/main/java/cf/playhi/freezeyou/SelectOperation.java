@@ -56,7 +56,7 @@ public class SelectOperation extends Activity {
                 getResources().getString(R.string.appDetail)
         };
 
-        final AppPreferences sharedPreferences =  new AppPreferences(getApplicationContext());
+        final AppPreferences sharedPreferences = new AppPreferences(getApplicationContext());
 
         final String pkgNames = sharedPreferences.getString(getString(R.string.sAutoFreezeApplicationList), "");
         if (existsInOneKeyList(pkgNames, pkgName)) {
@@ -120,53 +120,15 @@ public class SelectOperation extends Activity {
                         finish();
                         break;
                     case 3:
-                        if (existsInOneKeyList(pkgNames, pkgName)) {
-                            showToast(getApplicationContext(),
-                                    removeFromOneKeyList(getApplicationContext(),
-                                            getString(R.string.sAutoFreezeApplicationList),
-                                            pkgName) ? R.string.removed : R.string.removeFailed);
-                        } else {
-                            showToast(getApplicationContext(),
-                                    addToOneKeyList(getApplicationContext(),
-                                            getString(R.string.sAutoFreezeApplicationList),
-                                            pkgName) ? R.string.added : R.string.addFailed);
-                        }
+                        checkAddOrRemove(pkgNames, pkgName, getString(R.string.sAutoFreezeApplicationList));
                         finish();
                         break;
                     case 4:
-                        if (existsInOneKeyList(UFPkgNames, pkgName)) {
-                            showToast(getApplicationContext(),
-                                    removeFromOneKeyList(getApplicationContext(),
-                                            getString(R.string.sOneKeyUFApplicationList),
-                                            pkgName) ? R.string.removed : R.string.removeFailed);
-                        } else {
-                            showToast(getApplicationContext(),
-                                    addToOneKeyList(getApplicationContext(),
-                                            getString(R.string.sOneKeyUFApplicationList),
-                                            pkgName) ? R.string.added : R.string.addFailed);
-                        }
+                        checkAddOrRemove(UFPkgNames, pkgName, getString(R.string.sOneKeyUFApplicationList));
                         finish();
                         break;
                     case 5:
-                        if (existsInOneKeyList(FreezeOnceQuitPkgNames, pkgName)) {
-                            showToast(getApplicationContext(),
-                                    removeFromOneKeyList(getApplicationContext(),
-                                            getString(R.string.sFreezeOnceQuit),
-                                            pkgName) ? R.string.removed : R.string.removeFailed);
-                        } else {
-                            showToast(getApplicationContext(),
-                                    addToOneKeyList(getApplicationContext(),
-                                            getString(R.string.sFreezeOnceQuit),
-                                            pkgName) ? R.string.added : R.string.addFailed);
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            if (!preferences.getBoolean("freezeOnceQuit", false)) {
-                                preferences.edit().putBoolean("freezeOnceQuit", true).apply();
-                                if (!isAccessibilitySettingsOn(getApplicationContext())) {
-                                    showToast(SelectOperation.this, R.string.needActiveAccessibilityService);
-                                    openAccessibilitySettings(getApplicationContext());
-                                }
-                            }
-                        }
+                        checkAddOrRemove(FreezeOnceQuitPkgNames, pkgName, getString(R.string.sFreezeOnceQuit));
                         finish();
                         break;
                     case 6:
@@ -193,5 +155,30 @@ public class SelectOperation extends Activity {
     public void finish() {
         super.finish();
         this.overridePendingTransition(R.anim.pullup, R.anim.pulldown);
+    }
+
+    private void checkAddOrRemove(String pkgNames, String pkgName, String oneKeyName) {
+        if (existsInOneKeyList(pkgNames, pkgName)) {
+            showToast(getApplicationContext(),
+                    removeFromOneKeyList(getApplicationContext(),
+                            oneKeyName,
+                            pkgName) ? R.string.removed : R.string.removeFailed);
+        } else {
+            showToast(getApplicationContext(),
+                    addToOneKeyList(getApplicationContext(),
+                            oneKeyName,
+                            pkgName) ? R.string.added : R.string.addFailed);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            if (getString(R.string.sFreezeOnceQuit).equals(oneKeyName)) {
+                if (!preferences.getBoolean("freezeOnceQuit", false)) {
+                    preferences.edit().putBoolean("freezeOnceQuit", true).apply();
+                    new AppPreferences(getApplicationContext()).put("freezeOnceQuit", true);
+                }
+                if (!isAccessibilitySettingsOn(getApplicationContext())) {
+                    showToast(SelectOperation.this, R.string.needActiveAccessibilityService);
+                    openAccessibilitySettings(getApplicationContext());
+                }
+            }
+        }
     }
 }

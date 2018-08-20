@@ -16,6 +16,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -411,24 +413,21 @@ public class Main extends Activity {
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "OO":
-                String autoFreezePkgNameList = new AppPreferences(applicationContext).getString(getString(R.string.sAutoFreezeApplicationList), "");
-                if (autoFreezePkgNameList != null) {
-                    oneKeyListGenerate(autoFreezePkgNameList.split(","), AppList);
-                }
+                oneKeyListCheckAndGenerate(
+                        new AppPreferences(applicationContext).getString(getString(R.string.sAutoFreezeApplicationList), ""),
+                        AppList);
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "OOU":
-                String autoUFPkgNameList = new AppPreferences(applicationContext).getString(getString(R.string.sOneKeyUFApplicationList), "");
-                if (autoUFPkgNameList != null) {
-                    oneKeyListGenerate(autoUFPkgNameList.split(","), AppList);
-                }
+                oneKeyListCheckAndGenerate(
+                        new AppPreferences(applicationContext).getString(getString(R.string.sOneKeyUFApplicationList), ""),
+                        AppList);
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "FOQ":
-                String freezeOnceQuit = new AppPreferences(applicationContext).getString(getString(R.string.sFreezeOnceQuit), "");
-                if (freezeOnceQuit != null) {
-                    oneKeyListGenerate(freezeOnceQuit.split(","), AppList);
-                }
+                oneKeyListCheckAndGenerate(
+                        new AppPreferences(applicationContext).getString(getString(R.string.sFreezeOnceQuit), ""),
+                        AppList);
                 checkAndAddNotAvailablePair(AppList);
                 break;
             case "OS":
@@ -880,7 +879,7 @@ public class Main extends Activity {
         return null;
     }
 
-    private void oneKeyListGenerate(String[] source, List<Map<String, Object>> AppList) {
+    private void oneKeyListGenerate(String[] source, @NonNull List<Map<String, Object>> AppList) {
         String name;
         Drawable icon;
         for (String aPkgNameList : source) {
@@ -894,6 +893,12 @@ public class Main extends Activity {
                 keyValuePair.put("PackageName", aPkgNameList);
                 AppList.add(keyValuePair);
             }
+        }
+    }
+
+    private void oneKeyListCheckAndGenerate(@Nullable String pkgNames, @NonNull List<Map<String, Object>> AppList) {
+        if (pkgNames != null) {
+            oneKeyListGenerate(pkgNames.split(","), AppList);
         }
     }
 
