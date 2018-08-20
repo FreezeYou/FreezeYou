@@ -176,7 +176,7 @@ public class SelectOperation extends Activity {
                 }
                 if (!isAccessibilitySettingsOn(getApplicationContext())) {
                     showToast(SelectOperation.this, R.string.needActiveAccessibilityService);
-                    openAccessibilitySettings(getApplicationContext());
+                    openAccessibilitySettings(SelectOperation.this);
                 }
             }
         }
