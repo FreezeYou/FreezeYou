@@ -3,6 +3,7 @@ package cf.playhi.freezeyou;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
@@ -27,6 +28,9 @@ public class ScreenLockOneKeyFreezeService extends Service {
                 if (notificationManager != null)
                     notificationManager.createNotificationChannel(channel);
                 mBuilder.setChannelId("BackgroundService");
+                Intent resultIntent = new Intent(getApplicationContext(), Main.class);
+                PendingIntent resultPendingIntent = PendingIntent.getActivity(getApplicationContext(), 1, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                mBuilder.setContentIntent(resultPendingIntent);
                 startForeground(1, mBuilder.build());
             } else {
                 startForeground(1, new Notification());
