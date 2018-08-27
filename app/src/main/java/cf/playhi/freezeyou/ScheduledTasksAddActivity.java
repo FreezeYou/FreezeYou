@@ -98,6 +98,9 @@ public class ScheduledTasksAddActivity extends Activity {
             public void onClick(View view) {
                 SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String time = defaultSharedPreferences.getString("stma_add_time", "09:09");
+                if (time == null) {
+                    time = "09:09";
+                }
                 int hour = Integer.valueOf(time.substring(0, time.indexOf(":")));
                 int minutes = Integer.valueOf(time.substring(time.indexOf(":") + 1));
                 int enabled = defaultSharedPreferences.getBoolean("stma_add_enable", true) ? 1 : 0;

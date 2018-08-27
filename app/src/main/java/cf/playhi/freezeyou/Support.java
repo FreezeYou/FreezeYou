@@ -458,12 +458,6 @@ class Support {
                     resultIntent = new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false);
                     resultPendingIntent = PendingIntent.getActivity(context, mId, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 }
-//                // Create the TaskStackBuilder and add the intent, which inflates the back stack
-//                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-//                stackBuilder.addNextIntent(resultIntent);
-//                // Get the PendingIntent containing the entire back stack
-//                PendingIntent resultPendingIntent =
-//                        stackBuilder.getPendingIntent(mId, PendingIntent.FLAG_UPDATE_CURRENT);
                 mBuilder.setContentIntent(resultPendingIntent);
                 NotificationManager mNotificationManager =
                         (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -741,32 +735,35 @@ class Support {
 
     static void processSetTheme(Context context) {
         try {
-            switch (PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default")) {
-                case "blue":
-                    context.setTheme(R.style.AppTheme_Default_Blue);
-                    break;
-                case "orange":
-                    context.setTheme(R.style.AppTheme_Default_Orange);
-                    break;
-                case "green":
-                    context.setTheme(R.style.AppTheme_Default_Green);
-                    break;
-                case "pink":
-                    context.setTheme(R.style.AppTheme_Default_Pink);
-                    break;
-                case "yellow":
-                    context.setTheme(R.style.AppTheme_Default_Yellow);
-                    break;
-                case "black":
-                    context.setTheme(R.style.AppTheme_Default);
-                    break;
-                default:
-                    if (Build.VERSION.SDK_INT >= 21) {
+            String string = PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default");
+            if (string != null) {
+                switch (string) {
+                    case "blue":
                         context.setTheme(R.style.AppTheme_Default_Blue);
-                    } else {
+                        break;
+                    case "orange":
+                        context.setTheme(R.style.AppTheme_Default_Orange);
+                        break;
+                    case "green":
+                        context.setTheme(R.style.AppTheme_Default_Green);
+                        break;
+                    case "pink":
+                        context.setTheme(R.style.AppTheme_Default_Pink);
+                        break;
+                    case "yellow":
+                        context.setTheme(R.style.AppTheme_Default_Yellow);
+                        break;
+                    case "black":
                         context.setTheme(R.style.AppTheme_Default);
-                    }
-                    break;
+                        break;
+                    default:
+                        if (Build.VERSION.SDK_INT >= 21) {
+                            context.setTheme(R.style.AppTheme_Default_Blue);
+                        } else {
+                            context.setTheme(R.style.AppTheme_Default);
+                        }
+                        break;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -883,25 +880,30 @@ class Support {
 
     static int getThemeDot(Context context) {
         int resId;
-        switch (PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default")) {
-            case "blue":
-                resId = R.drawable.shapedotblue;
-                break;
-            case "orange":
-                resId = R.drawable.shapedotorange;
-                break;
-            case "green":
-                resId = R.drawable.shapedotgreen;
-                break;
-            case "pink":
-                resId = R.drawable.shapedotpink;
-                break;
-            case "yellow":
-                resId = R.drawable.shapedotyellow;
-                break;
-            default:
-                resId = R.drawable.shapedotblue;
-                break;
+        String string = PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default");
+        if (string != null) {
+            switch (string) {
+                case "blue":
+                    resId = R.drawable.shapedotblue;
+                    break;
+                case "orange":
+                    resId = R.drawable.shapedotorange;
+                    break;
+                case "green":
+                    resId = R.drawable.shapedotgreen;
+                    break;
+                case "pink":
+                    resId = R.drawable.shapedotpink;
+                    break;
+                case "yellow":
+                    resId = R.drawable.shapedotyellow;
+                    break;
+                default:
+                    resId = R.drawable.shapedotblue;
+                    break;
+            }
+        } else {
+            resId = R.drawable.shapedotblue;
         }
         return resId;
     }

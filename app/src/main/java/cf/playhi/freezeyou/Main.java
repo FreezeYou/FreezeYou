@@ -757,7 +757,8 @@ public class Main extends Activity {
             for (int i = 0; i < count; i++) {
                 try {
                     Map<String, Object> h = unfilteredValues.get(i);
-                    if (((String) h.get("Name")).toLowerCase().contains(prefixString)) {
+                    String name = ((String) h.get("Name"));
+                    if (name != null && name.toLowerCase().contains(prefixString)) {
                         newValues.add(h);
                     }
                 } catch (Exception e) {
@@ -789,6 +790,9 @@ public class Main extends Activity {
                 String mode = getIntent().getStringExtra("pkgName");//快捷方式提供
                 if (mode == null) {
                     mode = PreferenceManager.getDefaultSharedPreferences(Main.this).getString("launchMode", "all");
+                }
+                if (mode == null) {
+                    mode = "";
                 }
                 switch (mode) {
                     case "OF":

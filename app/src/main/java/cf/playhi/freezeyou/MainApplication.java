@@ -73,38 +73,33 @@ public class MainApplication extends Application {
     private void updateConfig() {
         String absoluteFilesPath = getFilesDir().getAbsolutePath();
         String shared_prefsPath = absoluteFilesPath.substring(0, absoluteFilesPath.length() - 5) + "shared_prefs" + File.separator;
-        File autoFreezeApplicationList = new File(shared_prefsPath + "AutoFreezeApplicationList.xml");
-        if (autoFreezeApplicationList.exists() && autoFreezeApplicationList.isFile()) {
-            String[] autoFreezeApplicationPkgNames = this.getSharedPreferences(
-                    "AutoFreezeApplicationList", Context.MODE_PRIVATE).getString("pkgName", "").split("\\|\\|");
-            for (String aPkgNameList : autoFreezeApplicationPkgNames) {
-                String tmp = aPkgNameList.replaceAll("\\|", "");
-                if (!"".equals(tmp))
-                    addToOneKeyList(this, getString(R.string.sAutoFreezeApplicationList), tmp);
+        updateOneKeyData(
+                new File(shared_prefsPath + "AutoFreezeApplicationList.xml"),
+                "AutoFreezeApplicationList",
+                getString(R.string.sAutoFreezeApplicationList));
+        updateOneKeyData(
+                new File(shared_prefsPath + "OneKeyUFApplicationList.xml"),
+                "OneKeyUFApplicationList",
+                getString(R.string.sOneKeyUFApplicationList));
+        updateOneKeyData(
+                new File(shared_prefsPath + "FreezeOnceQuit.xml"),
+                "FreezeOnceQuit",
+                getString(R.string.sFreezeOnceQuit));
+    }
+
+    private void updateOneKeyData(File oldFile, String old_shared_prefs_name, String new_key_name) {
+        if (oldFile.exists() && oldFile.isFile()) {
+            String pkgNameS = getApplicationContext().getSharedPreferences(
+                    old_shared_prefs_name, Context.MODE_PRIVATE).getString("pkgName", "");
+            if (pkgNameS != null) {
+                String[] pkgNames = pkgNameS.split("\\|\\|");
+                for (String aPkgNameList : pkgNames) {
+                    String tmp = aPkgNameList.replaceAll("\\|", "");
+                    if (!"".equals(tmp))
+                        addToOneKeyList(this, new_key_name, tmp);
+                }
+                oldFile.delete();
             }
-            autoFreezeApplicationList.delete();
-        }
-        File oneKeyUFApplicationList = new File(shared_prefsPath + "OneKeyUFApplicationList.xml");
-        if (oneKeyUFApplicationList.exists() && oneKeyUFApplicationList.isFile()) {
-            String[] autoUFApplicationPkgNames = getApplicationContext().getSharedPreferences(
-                    "OneKeyUFApplicationList", Context.MODE_PRIVATE).getString("pkgName", "").split("\\|\\|");
-            for (String aPkgNameList : autoUFApplicationPkgNames) {
-                String tmp = aPkgNameList.replaceAll("\\|", "");
-                if (!"".equals(tmp))
-                    addToOneKeyList(this, getString(R.string.sOneKeyUFApplicationList), tmp);
-            }
-            oneKeyUFApplicationList.delete();
-        }
-        File freezeOnceQuit = new File(shared_prefsPath + "FreezeOnceQuit.xml");
-        if (freezeOnceQuit.exists() && freezeOnceQuit.isFile()) {
-            String[] freezeOnceQuitPkgNames = this.getSharedPreferences(
-                    "FreezeOnceQuit", Context.MODE_PRIVATE).getString("pkgName", "").split("\\|\\|");
-            for (String aPkgNameList : freezeOnceQuitPkgNames) {
-                String tmp = aPkgNameList.replaceAll("\\|", "");
-                if (!"".equals(tmp))
-                    addToOneKeyList(this, getString(R.string.sFreezeOnceQuit), tmp);
-            }
-            freezeOnceQuit.delete();
         }
     }
 }

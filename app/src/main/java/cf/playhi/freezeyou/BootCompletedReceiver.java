@@ -65,7 +65,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         }
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String oldNotifying = sharedPreferences.getString("notifying", "");
-        if (!"".equals(oldNotifying)) {
+        if (oldNotifying != null && !"".equals(oldNotifying)) {
             String[] oldNotifyings = oldNotifying.split(",");
             PackageManager pm = context.getPackageManager();
             for (String aPkgName : oldNotifyings) {
