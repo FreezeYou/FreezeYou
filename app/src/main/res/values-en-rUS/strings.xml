@@ -59,7 +59,7 @@
   <string name="update">Update</string>
   <string name="common">General</string>
   <string name="openImmediately">Open Immediately</string>
-  <string name="openImmediatelyEx">解冻后直接打开应用程序，不再询问</string>
+  <string name="openImmediatelyEx">Open the application immediately after being unfrozen</string>
   <string name="hToUse">How to use</string>
   <string name="openAndUFImmediately">快捷方式立即解冻并启动</string>
   <string name="openAndUFImmediatelyEx">损失快捷方式冻结的便利（可利用 一键冻结）</string>
