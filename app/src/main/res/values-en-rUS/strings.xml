@@ -148,6 +148,7 @@
   <string name="minutesShouldBetween">Minutes need to be between 0 and 59</string>
   <string name="requestFailedPlsRetry">Request failed, please try again</string>
   <string name="donate">赞助支持</string>
+  <string name="uninstall">卸载</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>Frozen only</item>
