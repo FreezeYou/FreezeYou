@@ -134,7 +134,7 @@
   <string name="faq">FAQ</string>
   <string name="executeImmediately">Execute</string>
   <string name="oneKeyLockScreen">LockScreen</string>
-  <string name="mustContainColon">必须包含 : 以区分小时与时间</string>
+  <string name="mustContainColon">Must include : to distinguish hours and minutes</string>
   <string name="scheduledTasks">Scheduled tasks</string>
   <string name="add">Add</string>
   <string name="save">Save</string>
@@ -148,7 +148,7 @@
   <string name="minutesShouldBetween">Minutes need to be between 0 and 59</string>
   <string name="requestFailedPlsRetry">Request failed, please try again</string>
   <string name="donate">赞助支持</string>
-  <string name="uninstall">卸载</string>
+  <string name="uninstall">Uninstall</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>Frozen only</item>
