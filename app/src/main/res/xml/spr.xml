@@ -159,6 +159,9 @@
                 android:targetClass="cf.playhi.freezeyou.Uninstall"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
+        <Preference
+            android:key="uninstall"
+            android:title="@string/uninstall" />
     </PreferenceCategory>
 
 </PreferenceScreen>

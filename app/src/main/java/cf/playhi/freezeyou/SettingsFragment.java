@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -178,6 +179,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     break;
                 case "faq":
                     requestOpenWebSite(getActivity(), "https://freezeyou.playhi.cf/faq.html");
+                    break;
+                case "uninstall":
+                    Intent uninstall =
+                            new Intent(
+                                    Intent.ACTION_DELETE,
+                                    Uri.parse("package:cf.playhi.freezeyou")
+                            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getActivity().startActivity(uninstall);
                     break;
                 default:
                     break;

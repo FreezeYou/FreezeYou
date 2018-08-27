@@ -146,6 +146,7 @@
     <string name="minutesShouldBetween">分钟需要在0至59之间</string>
     <string name="requestFailedPlsRetry">请求失败，请重试</string>
     <string name="donate">赞助支持</string>
+    <string name="uninstall">卸载</string>
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>

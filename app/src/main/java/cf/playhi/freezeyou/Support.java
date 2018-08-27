@@ -391,34 +391,25 @@ class Support {
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
         try {
-            BitmapDrawable bd = (BitmapDrawable) icon;
-            addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
-            context.sendBroadcast(addShortCut);
-            showToast(context, R.string.requested);
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
+            Bitmap bitmap = getBitmapFromDrawable(icon);
+            float size = context.getResources().getDimension(android.R.dimen.app_icon_size);
+            if (bitmap.getHeight() > size) {
                 Matrix matrix = new Matrix();
-                matrix.setScale(0.5f, 0.5f);
-                Bitmap bitmap = getBitmapFromDrawable(icon);
+                float scaleWidth = (size) / bitmap.getWidth();
+                float scaleHeight = (size) / bitmap.getHeight();
+                matrix.postScale(scaleWidth, scaleHeight);
                 addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON,
                         Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true));
                 context.sendBroadcast(addShortCut);
-                showToast(context, R.string.requested);
-            } catch (Exception ee) {
-                ee.printStackTrace();
-                try {
-                    Matrix matrix = new Matrix();
-                    matrix.setScale(0.2f, 0.2f);
-                    Bitmap bitmap = getBitmapFromDrawable(icon);
-                    addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON,
-                            Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true));
-                    context.sendBroadcast(addShortCut);
-                    showToast(context, R.string.requested);
-                } catch (Exception eee) {
-                    showToast(context, context.getString(R.string.requestFailed) + eee.getMessage());
-                }
+            } else {
+                BitmapDrawable bd = (BitmapDrawable) icon;
+                addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
+                context.sendBroadcast(addShortCut);
             }
+            showToast(context, R.string.requested);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showToast(context, context.getString(R.string.requestFailed) + e.getMessage());
         }
     }
 
