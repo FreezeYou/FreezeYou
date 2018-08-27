@@ -93,7 +93,7 @@ public class SelectOperation extends Activity {
                 switch (i) {
                     case 0:
                         createShortCut(
-                                name.replace("(" + getString(R.string.frozen) + ")", "").replace("(" + getString(R.string.oneKeyFreeze) + ")", ""),
+                                name,
                                 pkgName,
                                 getApplicationIcon(SelectOperation.this, pkgName, getApplicationInfoFromPkgName(pkgName, getApplicationContext()), false),
                                 Freeze.class,

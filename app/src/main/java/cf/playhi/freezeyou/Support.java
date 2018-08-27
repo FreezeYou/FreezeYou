@@ -402,8 +402,7 @@ class Support {
                         Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true));
                 context.sendBroadcast(addShortCut);
             } else {
-                BitmapDrawable bd = (BitmapDrawable) icon;
-                addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bd.getBitmap());
+                addShortCut.putExtra(Intent.EXTRA_SHORTCUT_ICON, bitmap);
                 context.sendBroadcast(addShortCut);
             }
             showToast(context, R.string.requested);
