@@ -59,7 +59,7 @@
   <string name="update">Update</string>
   <string name="common">General</string>
   <string name="openImmediately">Open Immediately</string>
-  <string name="openImmediatelyEx">解冻后直接打开应用程序，不再询问</string>
+  <string name="openImmediatelyEx">Open the application immediately after being unfrozen</string>
   <string name="hToUse">How to use</string>
   <string name="openAndUFImmediately">快捷方式立即解冻并启动</string>
   <string name="openAndUFImmediatelyEx">损失快捷方式冻结的便利（可利用 一键冻结）</string>
@@ -134,7 +134,7 @@
   <string name="faq">FAQ</string>
   <string name="executeImmediately">Execute</string>
   <string name="oneKeyLockScreen">LockScreen</string>
-  <string name="mustContainColon">必须包含 : 以区分小时与时间</string>
+  <string name="mustContainColon">Must include : to distinguish hours and minutes</string>
   <string name="scheduledTasks">Scheduled tasks</string>
   <string name="add">Add</string>
   <string name="save">Save</string>
@@ -148,6 +148,7 @@
   <string name="minutesShouldBetween">Minutes need to be between 0 and 59</string>
   <string name="requestFailedPlsRetry">Request failed, please try again</string>
   <string name="donate">赞助支持</string>
+  <string name="uninstall">Uninstall</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>Frozen only</item>
