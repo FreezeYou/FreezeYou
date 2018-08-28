@@ -735,7 +735,7 @@ class Support {
 
     static void processSetTheme(Context context) {
         try {
-            String string = PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default");
+            String string = getUiTheme(context);
             if (string != null) {
                 switch (string) {
                     case "blue":
@@ -880,7 +880,7 @@ class Support {
 
     static int getThemeDot(Context context) {
         int resId;
-        String string = PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default");
+        String string = getUiTheme(context);
         if (string != null) {
             switch (string) {
                 case "blue":
@@ -906,6 +906,10 @@ class Support {
             resId = R.drawable.shapedotblue;
         }
         return resId;
+    }
+
+    private static String getUiTheme(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default");
     }
 
     static void publishTask(Context context, int id, int hour, int minute, String repeat, String task) {
