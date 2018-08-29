@@ -8,16 +8,51 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageButton
-        android:id="@+id/stma_addButton"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="25dp"
-        android:background="@drawable/shapedotblack"
-        android:contentDescription="@string/add"
-        android:elevation="6dp"
-        android:src="@drawable/ic_action_add"
-        android:stateListAnimator="@animator/fab_animator" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|end">
+
+        <ImageButton
+            android:id="@+id/stma_addTimeButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_above="@+id/stma_addTriggerButton"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:background="@drawable/shapedot_almost_white"
+            android:contentDescription="@string/time"
+            android:elevation="3dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_add_alarm"
+            android:stateListAnimator="@animator/fab_animator" />
+
+        <ImageButton
+            android:id="@+id/stma_addTriggerButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_above="@+id/stma_addButton"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="35dp"
+            android:background="@drawable/shapedot_almost_white"
+            android:contentDescription="@string/add"
+            android:elevation="3dp"
+            android:src="@drawable/ic_explore"
+            android:visibility="gone"
+            android:stateListAnimator="@animator/fab_animator" />
+
+        <ImageButton
+            android:id="@+id/stma_addButton"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="25dp"
+            android:background="@drawable/shapedotblack"
+            android:contentDescription="@string/add"
+            android:elevation="6dp"
+            android:src="@drawable/ic_action_add"
+            android:stateListAnimator="@animator/fab_animator" />
+    </RelativeLayout>
 
 </FrameLayout>

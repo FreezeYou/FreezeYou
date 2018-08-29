@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
@@ -112,16 +116,80 @@ public class ScheduledTasksManageActivity extends Activity {
     }
 
     private void processAddButton() {
-        ImageButton addButton = findViewById(R.id.stma_addButton);
-        addButton.setBackgroundResource(Build.VERSION.SDK_INT >= 21 ? R.drawable.oval_ripple : themeDotResId);
+        final ImageButton addButton = findViewById(R.id.stma_addButton);
+        final ImageButton addTimeButton = findViewById(R.id.stma_addTimeButton);
+        final ImageButton addTriggerButton = findViewById(R.id.stma_addTriggerButton);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            addButton.setBackgroundResource(R.drawable.oval_ripple);
+            addTriggerButton.setBackgroundResource(R.drawable.oval_ripple_almost_white);
+            addTimeButton.setBackgroundResource(R.drawable.oval_ripple_almost_white);
+        } else {
+            addButton.setBackgroundResource(themeDotResId);
+        }
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                changeFloatButtonsStatus(!(addTimeButton.getVisibility() == View.VISIBLE));
+            }
+        });
+
+        addTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeFloatButtonsStatus(false);
                 startActivityForResult(
                         new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
-                                .putExtra("label", getString(R.string.add)),
+                                .putExtra("label", getString(R.string.add))
+                                .putExtra("time", true),
                         1);
             }
         });
+
+        addTriggerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeFloatButtonsStatus(false);
+                startActivityForResult(
+                        new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
+                                .putExtra("label", getString(R.string.add))
+                                .putExtra("time", false),
+                        2);
+            }
+        });
+    }
+
+    private void changeFloatButtonsStatus(boolean showSmallButton) {
+        final ImageButton addButton = findViewById(R.id.stma_addButton);
+        final ImageButton addTimeButton = findViewById(R.id.stma_addTimeButton);
+        final ImageButton addTriggerButton = findViewById(R.id.stma_addTriggerButton);
+        if (showSmallButton) {
+            RotateAnimation animation =
+                    new RotateAnimation(0, 45, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            animation.setDuration(300);
+            animation.setRepeatMode(RotateAnimation.REVERSE);
+            animation.setFillAfter(true);
+            addButton.startAnimation(animation);
+            AlphaAnimation alphaAnimation = new AlphaAnimation(0.2f, 1.0f);
+            alphaAnimation.setDuration(100);
+            addTimeButton.startAnimation(alphaAnimation);
+            addTriggerButton.startAnimation(alphaAnimation);
+            addTimeButton.setVisibility(View.VISIBLE);
+            addTriggerButton.setVisibility(View.VISIBLE);
+        } else {
+            RotateAnimation animation =
+                    new RotateAnimation(45, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            animation.setDuration(300);
+            animation.setRepeatMode(RotateAnimation.REVERSE);
+            animation.setFillAfter(true);
+            addButton.startAnimation(animation);
+            AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.2f);
+            alphaAnimation.setDuration(100);
+            addTimeButton.startAnimation(alphaAnimation);
+            addTriggerButton.startAnimation(alphaAnimation);
+            addTimeButton.setVisibility(View.GONE);
+            addTriggerButton.setVisibility(View.GONE);
+        }
     }
 }

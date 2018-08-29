@@ -147,6 +147,7 @@
     <string name="requestFailedPlsRetry">请求失败，请重试</string>
     <string name="donate">赞助支持</string>
     <string name="uninstall">卸载</string>
+    <string name="triggers">触发器</string>
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>
@@ -215,5 +216,13 @@
         <item>6</item>
         <item>7</item>
         <item>1</item>
+    </string-array>
+    <string-array name="triggers">
+        <item>打开屏幕时</item>
+        <item>关闭屏幕时</item>
+    </string-array>
+    <string-array name="triggersValues" translatable="false">
+        <item>onScreenOn</item>
+        <item>onScreenOff</item>
     </string-array>
 </resources>

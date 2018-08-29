@@ -11,17 +11,11 @@
         android:key="stma_add_enable"
         android:defaultValue="true"/>
 
-    <EditTextPreference
-        android:defaultValue="09:09"
-        android:inputType="time"
-        android:key="stma_add_time"
-        android:title="@string/time" />
-
     <MultiSelectListPreference
-        android:entries="@array/sevenDays"
-        android:entryValues="@array/sevenDaysValues"
-        android:title="@string/repeat"
-        android:key="stma_add_repeat"/>
+        android:entries="@array/triggers"
+        android:entryValues="@array/triggersValues"
+        android:title="@string/triggers"
+        android:key="stma_add_trigger"/>
 
     <EditTextPreference
         android:key="stma_add_task"
