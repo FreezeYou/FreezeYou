@@ -149,6 +149,7 @@
   <string name="requestFailedPlsRetry">Request failed, please try again</string>
   <string name="donate">赞助支持</string>
   <string name="uninstall">Uninstall</string>
+  <string name="triggers">触发器</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>Frozen only</item>
@@ -181,5 +182,9 @@
     <item>Friday</item>
     <item>Saturday</item>
     <item>Sunday</item>
+  </string-array>
+  <string-array name="triggers">
+    <item>打开屏幕时</item>
+    <item>关闭屏幕时</item>
   </string-array>
 </resources>
