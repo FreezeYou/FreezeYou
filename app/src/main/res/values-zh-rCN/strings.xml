@@ -150,6 +150,7 @@
   <string name="donate">赞助支持</string>
   <string name="uninstall">卸载</string>
   <string name="triggers">觸發器</string>
+  <string name="triggers_extra_parameters">触发器附加参数</string>
   <string-array name="launchModeSelection">
     <item>显示全部</item>
     <item>仅已冻结</item>
