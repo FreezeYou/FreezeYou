@@ -11,11 +11,15 @@
         android:key="stma_add_enable"
         android:defaultValue="true"/>
 
-    <MultiSelectListPreference
+    <ListPreference
         android:entries="@array/triggers"
         android:entryValues="@array/triggersValues"
         android:title="@string/triggers"
         android:key="stma_add_trigger"/>
+
+    <EditTextPreference
+        android:key="stma_add_trigger_extra_parameters"
+        android:title="@string/triggers_extra_parameters"/>
 
     <EditTextPreference
         android:key="stma_add_task"

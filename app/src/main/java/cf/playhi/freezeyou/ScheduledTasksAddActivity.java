@@ -68,13 +68,13 @@ public class ScheduledTasksAddActivity extends Activity {
 
     private void prepareData(int id) {
         if (id != -5) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ScheduledTasksAddActivity.this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
             if (isTimeTask) {
                 final SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
                 db.execSQL(
                         "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
                 );
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ScheduledTasksAddActivity.this);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
                 Cursor cursor = db.query("tasks", null, "_id=?", new String[]{Integer.toString(id)}, null, null, null);
                 if (cursor.moveToFirst()) {
                     editor.putString("stma_add_time", Integer.toString(cursor.getInt(cursor.getColumnIndex("hour"))) + ":" + Integer.toString(cursor.getInt(cursor.getColumnIndex("minutes"))));
@@ -90,10 +90,23 @@ public class ScheduledTasksAddActivity extends Activity {
                 }
                 cursor.close();
                 db.close();
-                editor.apply();
             } else {
-
+                final SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+                db.execSQL(
+                        "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+                );
+                Cursor cursor = db.query("tasks", null, "_id=?", new String[]{Integer.toString(id)}, null, null, null);
+                if (cursor.moveToFirst()) {
+                    editor.putString("stma_add_trigger_extra_parameters", cursor.getString(cursor.getColumnIndex("tgextra")));
+                    editor.putBoolean("stma_add_enable", cursor.getInt(cursor.getColumnIndex("enabled")) == 1);
+                    editor.putString("stma_add_label", cursor.getString(cursor.getColumnIndex("label")));
+                    editor.putString("stma_add_task", cursor.getString(cursor.getColumnIndex("task")));
+                    editor.putString("stma_add_trigger", cursor.getString(cursor.getColumnIndex("tg")));
+                }
+                cursor.close();
+                db.close();
             }
+            editor.apply();
         }
     }
 
@@ -107,6 +120,7 @@ public class ScheduledTasksAddActivity extends Activity {
                 if (isTimeTask) {
                     saveTimeTaskData(defaultSharedPreferences, id);
                 } else {
+                    saveTriggerTaskData(defaultSharedPreferences,id);
                 }
                 finish();
             }
@@ -193,6 +207,23 @@ public class ScheduledTasksAddActivity extends Activity {
         if (enabled == 1) {
             publishTask(ScheduledTasksAddActivity.this, id, hour, minutes, repeat, task);
         }
+        setResult(RESULT_OK);
+    }
+
+    private void saveTriggerTaskData(SharedPreferences defaultSharedPreferences, int id) {
+        String triggerExtraParameters = defaultSharedPreferences.getString("stma_add_trigger_extra_parameters", "");
+        int enabled = defaultSharedPreferences.getBoolean("stma_add_enable", true) ? 1 : 0;
+        String label = defaultSharedPreferences.getString("stma_add_label", getString(R.string.label));
+        String task = defaultSharedPreferences.getString("stma_add_task", "okuf");
+        String trigger = defaultSharedPreferences.getString("stma_add_trigger", "");
+        SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+        db.execSQL("replace into tasks(_id,tg,tgextra,enabled,label,task,column1,column2) VALUES ( "
+                + ((id == -5) ? null : id) + ",'"
+                + trigger + "','" + triggerExtraParameters + "'," + enabled + ",'" + label + "','" + task + "','','')");
+        db.close();
         setResult(RESULT_OK);
     }
 }

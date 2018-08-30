@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,10 @@ public class ScheduledTasksManageActivity extends Activity {
                 if (resultCode == RESULT_OK)
                     generateTasksList();
                 break;
+            case 2:
+                if (resultCode == RESULT_OK)
+                    generateTasksList();
+                break;
             default:
                 break;
         }
@@ -73,46 +78,28 @@ public class ScheduledTasksManageActivity extends Activity {
         final ArrayList<Integer> integerArrayList = new ArrayList<>();
         themeDotResId = getThemeDot(ScheduledTasksManageActivity.this);
         final ListView tasksListView = findViewById(R.id.stma_tasksListview);
-        final SQLiteDatabase db = ScheduledTasksManageActivity.this.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
-        db.execSQL(
-                "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
-        );
-        final Cursor cursor = db.query("tasks", null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            final List<Map<String, Object>> tasksData = new ArrayList<>();
-            for (int i = 0; i < cursor.getCount(); i++) {
-                String label = cursor.getString(cursor.getColumnIndex("label"));
-                String hour = Integer.toString(cursor.getInt(cursor.getColumnIndex("hour")));
-                String minutes = Integer.toString(cursor.getInt(cursor.getColumnIndex("minutes")));
-                String time = (hour.length() == 1 ? "0" + hour : hour) + ":" + (minutes.length() == 1 ? "0" + minutes : minutes);
-                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                Map<String, Object> keyValuePair = new HashMap<>();
-                keyValuePair.put("label", label);
-                keyValuePair.put("time", time);
-                keyValuePair.put("enabled", enabled == 1 ? themeDotResId : R.drawable.shapedotwhite);
-                tasksData.add(keyValuePair);
-                integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
-                cursor.moveToNext();
+        final List<Map<String, Object>> tasksData = new ArrayList<>();
+
+        generateTimeTaskList(integerArrayList, tasksData);
+        generateTriggerTaskList(integerArrayList, tasksData);
+
+        ListAdapter adapter =
+                new SimpleAdapter(this, tasksData, R.layout.stma_item, new String[]{"label",
+                        "time", "enabled"}, new int[]{R.id.stma_label, R.id.stma_time, R.id.stma_status});
+        tasksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                HashMap<String, Object> map = (HashMap<String, Object>) tasksListView.getItemAtPosition(i);
+                final String label = (String) map.get("label");
+                startActivityForResult(
+                        new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
+                                .putExtra("label", label)
+                                .putExtra("time", true)
+                                .putExtra("id", integerArrayList.get(i)),
+                        1);
             }
-            ListAdapter adapter =
-                    new SimpleAdapter(this, tasksData, R.layout.stma_item, new String[]{"label",
-                            "time", "enabled"}, new int[]{R.id.stma_label, R.id.stma_time, R.id.stma_status});
-            tasksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    HashMap<String, Object> map = (HashMap<String, Object>) tasksListView.getItemAtPosition(i);
-                    final String label = (String) map.get("label");
-                    startActivityForResult(
-                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
-                                    .putExtra("label", label)
-                                    .putExtra("id", integerArrayList.get(i)),
-                            1);
-                }
-            });
-            tasksListView.setAdapter(adapter);
-        }
-        cursor.close();
-        db.close();
+        });
+        tasksListView.setAdapter(adapter);
     }
 
     private void processAddButton() {
@@ -191,5 +178,59 @@ public class ScheduledTasksManageActivity extends Activity {
             addTimeButton.setVisibility(View.GONE);
             addTriggerButton.setVisibility(View.GONE);
         }
+    }
+
+    private void generateTimeTaskList(ArrayList<Integer> integerArrayList, List<Map<String, Object>> tasksData) {
+        //时间触发
+        final SQLiteDatabase db = ScheduledTasksManageActivity.this.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+        final Cursor cursor = db.query("tasks", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                String label = cursor.getString(cursor.getColumnIndex("label"));
+                String hour = Integer.toString(cursor.getInt(cursor.getColumnIndex("hour")));
+                String minutes = Integer.toString(cursor.getInt(cursor.getColumnIndex("minutes")));
+                String time = (hour.length() == 1 ? "0" + hour : hour) + ":" + (minutes.length() == 1 ? "0" + minutes : minutes);
+                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                Map<String, Object> keyValuePair = new HashMap<>();
+                keyValuePair.put("label", label);
+                keyValuePair.put("time", time);
+                keyValuePair.put("enabled", enabled == 1 ? themeDotResId : R.drawable.shapedotwhite);
+                tasksData.add(keyValuePair);
+                integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+    }
+
+    private void generateTriggerTaskList(ArrayList<Integer> integerArrayList, List<Map<String, Object>> tasksData) {
+        //事件触发器触发
+        final SQLiteDatabase db = ScheduledTasksManageActivity.this.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+        final Cursor cursor = db.query("tasks", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                String label = cursor.getString(cursor.getColumnIndex("label"));
+                String tg = cursor.getString(cursor.getColumnIndex("tg"));
+                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                Map<String, Object> keyValuePair = new HashMap<>();
+                keyValuePair.put("label", label);
+                keyValuePair.put("time",
+                        Arrays.asList(getResources().getStringArray(R.array.triggers))
+                                .get(Arrays.asList(getResources().getStringArray(R.array.triggersValues)).indexOf(tg)));
+                keyValuePair.put("enabled", enabled == 1 ? themeDotResId : R.drawable.shapedotwhite);
+                tasksData.add(keyValuePair);
+                integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
     }
 }
