@@ -91,14 +91,14 @@ public class ScheduledTasksManageActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 HashMap<String, Object> map = (HashMap<String, Object>) tasksListView.getItemAtPosition(i);
                 final String label = (String) map.get("label");
-                String s = ((String) map.get("time"));
-                boolean isTimeTask = ((s != null) && s.contains(":"));
+                final String s = ((String) map.get("time"));
+                final boolean isTimeTask = ((s != null) && s.contains(":"));
                 startActivityForResult(
                         new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
                                 .putExtra("label", label)
                                 .putExtra("time", isTimeTask)
                                 .putExtra("id", integerArrayList.get(i)),
-                        1);
+                        isTimeTask ? 1 : 2);
             }
         });
         tasksListView.setAdapter(adapter);
