@@ -172,7 +172,7 @@ public class ScheduledTasksManageActivity extends Activity {
             animation.setFillAfter(true);
             addButton.startAnimation(animation);
             AlphaAnimation alphaAnimation = new AlphaAnimation(0.2f, 1.0f);
-            alphaAnimation.setDuration(100);
+            alphaAnimation.setDuration(150);
             addTimeButton.startAnimation(alphaAnimation);
             addTriggerButton.startAnimation(alphaAnimation);
             addTimeButton.setVisibility(View.VISIBLE);
@@ -185,7 +185,7 @@ public class ScheduledTasksManageActivity extends Activity {
             animation.setFillAfter(true);
             addButton.startAnimation(animation);
             AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.2f);
-            alphaAnimation.setDuration(100);
+            alphaAnimation.setDuration(150);
             addTimeButton.startAnimation(alphaAnimation);
             addTriggerButton.startAnimation(alphaAnimation);
             addTimeButton.setVisibility(View.GONE);

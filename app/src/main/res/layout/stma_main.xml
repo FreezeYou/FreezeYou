@@ -9,9 +9,9 @@
         android:layout_height="match_parent" />
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom|end">
+        android:gravity="end">
 
         <ImageButton
             android:id="@+id/stma_addTimeButton"
@@ -23,9 +23,9 @@
             android:background="@drawable/shapedot_almost_white"
             android:contentDescription="@string/time"
             android:elevation="3dp"
-            android:visibility="gone"
             android:src="@drawable/ic_add_alarm"
-            android:stateListAnimator="@animator/fab_animator" />
+            android:stateListAnimator="@animator/fab_animator"
+            android:visibility="gone" />
 
         <ImageButton
             android:id="@+id/stma_addTriggerButton"
@@ -39,8 +39,8 @@
             android:contentDescription="@string/add"
             android:elevation="3dp"
             android:src="@drawable/ic_explore"
-            android:visibility="gone"
-            android:stateListAnimator="@animator/fab_animator" />
+            android:stateListAnimator="@animator/fab_animator"
+            android:visibility="gone" />
 
         <ImageButton
             android:id="@+id/stma_addButton"
