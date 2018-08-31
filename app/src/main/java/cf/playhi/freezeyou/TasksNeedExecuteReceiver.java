@@ -4,9 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.wifi.WifiManager;
-import android.os.Build;
-import android.support.annotation.NonNull;
 
 public class TasksNeedExecuteReceiver extends BroadcastReceiver {
     @Override
