@@ -26,15 +26,10 @@ class ScreenLockListener {
                 switch (action) {
                     case Intent.ACTION_SCREEN_OFF:
                         if (new AppPreferences(context).getBoolean("onekeyFreezeWhenLockScreen", false)) {
-                            if (Build.VERSION.SDK_INT >= 26) {
-                                context.startForegroundService(
-                                        new Intent(context, OneKeyFreezeService.class)
-                                                .putExtra("autoCheckAndLockScreen", false));
-                            } else {
-                                context.startService(
-                                        new Intent(context, OneKeyFreezeService.class)
-                                                .putExtra("autoCheckAndLockScreen", false));
-                            }
+                            Support.startService(context,
+                                    new Intent(context, OneKeyFreezeService.class)
+                                            .putExtra("autoCheckAndLockScreen", false)
+                            );
                         }
                         break;
                     default:

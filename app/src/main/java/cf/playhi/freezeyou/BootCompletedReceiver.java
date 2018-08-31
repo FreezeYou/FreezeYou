@@ -82,6 +82,11 @@ public class BootCompletedReceiver extends BroadcastReceiver {
     }
 
     private void checkTasks(Context context) {
+        checkTimeTasks(context);
+        checkTriggerTasks(context);
+    }
+
+    private void checkTimeTasks(Context context) {
         SQLiteDatabase db = context.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
@@ -98,6 +103,44 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                 String task = cursor.getString(cursor.getColumnIndex("task"));
                 if (enabled == 1) {
                     publishTask(context, id, hour, minutes, repeat, task);
+                }
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+    }
+
+    private void checkTriggerTasks(Context context) {
+        //事件触发器
+        final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+
+        final Cursor cursor = db.query("tasks", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                String tg = cursor.getString(cursor.getColumnIndex("tg"));
+                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                if (enabled == 1) {
+                    if (tg == null) {
+                        tg = "";
+                    }
+                    switch (tg) {
+                        case "onScreenOn":
+                            Support.startService(context,
+                                    new Intent(context, TriggerTasksService.class)
+                                    .putExtra("OnScreenOn", true));
+                            break;
+                        case "onScreenOff":
+                            Support.startService(context,
+                                    new Intent(context, TriggerTasksService.class)
+                                            .putExtra("OnScreenOff", true));
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 cursor.moveToNext();
             }
