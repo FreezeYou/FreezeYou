@@ -28,6 +28,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
@@ -999,6 +1000,57 @@ class Support {
             context.startForegroundService(intent);
         } else {
             context.startService(intent);
+        }
+    }
+
+    static void runTask(@NonNull String task, Context context) {
+        if ("okff".equals(task)) {
+            startService(context, new Intent(context, OneKeyFreezeService.class).putExtra("autoCheckAndLockScreen", false));
+        } else if ("okuf".equals(task)) {
+            startService(context, new Intent(context, OneKeyUFService.class));
+        } else if (task.length() >= 4) {
+            String string = task.substring(0, 2);
+            String[] tasks = task.substring(3).replaceAll(" ", "").split(",");
+            switch (string) {
+                case "ff":
+                    startService(
+                            context,
+                            new Intent(context, FUFService.class)
+                                    .putExtra("packages", tasks)
+                                    .putExtra("freeze", true)
+                    );
+                    break;
+                case "uf":
+                    startService(
+                            context,
+                            new Intent(context, FUFService.class)
+                                    .putExtra("packages", tasks)
+                                    .putExtra("freeze", false)
+                    );
+                    break;
+                case "es": //enableSettings
+                    enableAndDisableSysSettings(tasks, context, true);
+                    break;
+                case "ds": //disableSettings
+                    enableAndDisableSysSettings(tasks, context, false);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private static void enableAndDisableSysSettings(String[] tasks, Context context, boolean enable) {
+        for (String aTask : tasks) {
+            switch (aTask) {
+                case "wifi"://WiFi
+                    WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                    if (wifiManager != null)
+                        wifiManager.setWifiEnabled(enable);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

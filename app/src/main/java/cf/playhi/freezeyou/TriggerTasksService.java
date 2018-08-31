@@ -100,7 +100,10 @@ class TriggerScreenLockListener {
                             String tg = cursor.getString(cursor.getColumnIndex("tg"));
                             int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
                             if (enabled == 1 && "onScreenOn".equals(tg)) {
-
+                                String task = cursor.getString(cursor.getColumnIndex("task"));
+                                if (task != null && !"".equals(task)) {
+                                    Support.runTask(task.toLowerCase(), context);
+                                }
                             }
                             cursor.moveToNext();
                         }
@@ -110,7 +113,10 @@ class TriggerScreenLockListener {
                             String tg = cursor.getString(cursor.getColumnIndex("tg"));
                             int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
                             if (enabled == 1 && "onScreenOff".equals(tg)) {
-
+                                String task = cursor.getString(cursor.getColumnIndex("task"));
+                                if (task != null && !"".equals(task)) {
+                                    Support.runTask(task.toLowerCase(), context);
+                                }
                             }
                             cursor.moveToNext();
                         }
@@ -133,7 +139,7 @@ class TriggerScreenLockListener {
         mContext.unregisterReceiver(mScreenLockReceiver);
     }
 
-    private Cursor getCursor(Context context){
+    private Cursor getCursor(Context context) {
         final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
