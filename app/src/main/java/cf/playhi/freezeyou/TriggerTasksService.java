@@ -99,7 +99,7 @@ class TriggerScreenLockListener {
                         for (int i = 0; i < cursor.getCount(); i++) {
                             String tg = cursor.getString(cursor.getColumnIndex("tg"));
                             int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                            if (enabled == 1) {
+                            if (enabled == 1 && "onScreenOn".equals(tg)) {
 
                             }
                             cursor.moveToNext();
@@ -109,7 +109,7 @@ class TriggerScreenLockListener {
                         for (int i = 0; i < cursor.getCount(); i++) {
                             String tg = cursor.getString(cursor.getColumnIndex("tg"));
                             int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                            if (enabled == 1) {
+                            if (enabled == 1 && "onScreenOff".equals(tg)) {
 
                             }
                             cursor.moveToNext();
