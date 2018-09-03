@@ -148,9 +148,9 @@
   <string name="minutesShouldBetween">分鐘需要在0至59之間</string>
   <string name="requestFailedPlsRetry">請求失敗，請重試</string>
   <string name="donate">贊助支援</string>
-  <string name="uninstall">卸载</string>
-  <string name="triggers">触发器</string>
-  <string name="triggers_extra_parameters">触发器附加参数</string>
+  <string name="uninstall">移除</string>
+  <string name="triggers">觸發器</string>
+  <string name="triggers_extra_parameters">觸發器附加參數</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
@@ -185,7 +185,7 @@
     <item>星期天</item>
   </string-array>
   <string-array name="triggers">
-    <item>打开屏幕时</item>
-    <item>关闭屏幕时</item>
+    <item>打開螢幕時</item>
+    <item>關閉螢幕時</item>
   </string-array>
 </resources>
