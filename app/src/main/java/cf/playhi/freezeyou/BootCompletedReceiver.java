@@ -131,7 +131,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                         case "onScreenOn":
                             Support.startService(context,
                                     new Intent(context, TriggerTasksService.class)
-                                    .putExtra("OnScreenOn", true));
+                                            .putExtra("OnScreenOn", true));
                             break;
                         case "onScreenOff":
                             Support.startService(context,

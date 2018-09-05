@@ -120,7 +120,7 @@ public class ScheduledTasksAddActivity extends Activity {
                 if (isTimeTask) {
                     saveTimeTaskData(defaultSharedPreferences, id);
                 } else {
-                    saveTriggerTaskData(defaultSharedPreferences,id);
+                    saveTriggerTaskData(defaultSharedPreferences, id);
                 }
                 finish();
             }
@@ -224,6 +224,10 @@ public class ScheduledTasksAddActivity extends Activity {
                 + ((id == -5) ? null : id) + ",'"
                 + trigger + "','" + triggerExtraParameters + "'," + enabled + ",'" + label + "','" + task + "','','')");
         db.close();
+        Support.startService(this,
+                new Intent(this, TriggerTasksService.class)
+                        .putExtra("OnScreenOff", true)
+                        .putExtra("OnScreenOn", true));
         setResult(RESULT_OK);
     }
 }
