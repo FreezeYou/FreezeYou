@@ -186,6 +186,6 @@
   </string-array>
   <string-array name="triggers">
     <item>打开屏幕时</item>
-    <item>关闭屏幕时</item>
+    <item>On Screen Off</item>
   </string-array>
 </resources>
