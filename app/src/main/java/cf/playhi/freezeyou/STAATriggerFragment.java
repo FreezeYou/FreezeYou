@@ -32,7 +32,7 @@ public class STAATriggerFragment extends PreferenceFragment implements SharedPre
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         updatePrefSummary(findPreference(s));
         switch (s) {
-            case "stma_add_time":
+            case "stma_add_trigger":
                 String stma_add_trigger = sharedPreferences.getString("stma_add_trigger", "");
                 if ("onApplicationsForeground".equals(stma_add_trigger)){
                     if (!Support.isAccessibilitySettingsOn(getActivity())){
