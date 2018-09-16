@@ -125,6 +125,7 @@ class TriggerScreenLockListener {
                         break;
                 }
             }
+            cursor.close();
         }
     }
 

@@ -45,23 +45,25 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                         if (!pkgNameString.equals(previousPkg)){
                             Cursor cursor = getCursor(this);
-                            for (int i = 0; i < cursor.getCount(); i++) {
-                                String tgExtra = cursor.getString(cursor.getColumnIndex("tgextra"));
-                                if (tgExtra == null) {
-                                    tgExtra = "";
-                                }
-                                String tg = cursor.getString(cursor.getColumnIndex("tg"));
-                                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                                if (enabled == 1 && Arrays.asList(tgExtra.split(",")).contains(pkgNameString) && "onApplicationsForeground".equals(tg)) {
-                                    String task = cursor.getString(cursor.getColumnIndex("task"));
-                                    if (task != null && !"".equals(task)) {
-                                        Support.runTask(task.toLowerCase(), this);
+                            if (cursor.moveToFirst()){
+                                for (int i = 0; i < cursor.getCount(); i++) {
+                                    String tgExtra = cursor.getString(cursor.getColumnIndex("tgextra"));
+                                    if (tgExtra == null) {
+                                        tgExtra = "";
                                     }
+                                    String tg = cursor.getString(cursor.getColumnIndex("tg"));
+                                    int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                                    if (enabled == 1 && Arrays.asList(tgExtra.split(",")).contains(pkgNameString) && "onApplicationsForeground".equals(tg)) {
+                                        String task = cursor.getString(cursor.getColumnIndex("task"));
+                                        if (task != null && !"".equals(task)) {
+                                            Support.runTask(task.toLowerCase(), this);
+                                        }
+                                    }
+                                    cursor.moveToNext();
                                 }
-                                cursor.moveToNext();
                             }
+                            cursor.close();
                         }
-
                     }
                 }
                 break;
