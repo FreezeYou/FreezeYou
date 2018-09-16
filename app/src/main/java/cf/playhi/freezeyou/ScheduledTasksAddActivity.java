@@ -23,6 +23,7 @@ import static cf.playhi.freezeyou.Support.getThemeDot;
 import static cf.playhi.freezeyou.Support.processActionBar;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.publishTask;
+import static cf.playhi.freezeyou.Support.showToast;
 
 public class ScheduledTasksAddActivity extends Activity {
 
@@ -224,11 +225,27 @@ public class ScheduledTasksAddActivity extends Activity {
                 + ((id == -5) ? null : id) + ",'"
                 + trigger + "','" + triggerExtraParameters + "'," + enabled + ",'" + label + "','" + task + "','','')");
         db.close();
-        if (enabled == 1) {
-            Support.startService(this,
-                    new Intent(this, TriggerTasksService.class)
-                            .putExtra("OnScreenOff", true)
-                            .putExtra("OnScreenOn", true));
+        if (enabled == 1 && trigger != null) {
+            switch (trigger) {
+                case "onScreenOn":
+                    Support.startService(this,
+                            new Intent(this, TriggerTasksService.class)
+                                    .putExtra("OnScreenOn", true));
+                    break;
+                case "onScreenOff":
+                    Support.startService(this,
+                            new Intent(this, TriggerTasksService.class)
+                                    .putExtra("OnScreenOff", true));
+                    break;
+                case "onApplicationsForeground":
+                    if (!Support.isAccessibilitySettingsOn(this)) {
+                        showToast(this, R.string.needActiveAccessibilityService);
+                        Support.openAccessibilitySettings(this);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
         setResult(RESULT_OK);
     }

@@ -10,6 +10,8 @@ import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
+import static cf.playhi.freezeyou.Support.showToast;
+
 public class STAATriggerFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
@@ -29,6 +31,19 @@ public class STAATriggerFragment extends PreferenceFragment implements SharedPre
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         updatePrefSummary(findPreference(s));
+        switch (s) {
+            case "stma_add_time":
+                String stma_add_trigger = sharedPreferences.getString("stma_add_trigger", "");
+                if ("onApplicationsForeground".equals(stma_add_trigger)){
+                    if (!Support.isAccessibilitySettingsOn(getActivity())){
+                        showToast(getActivity(), R.string.needActiveAccessibilityService);
+                        Support.openAccessibilitySettings(getActivity());
+                    }
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
