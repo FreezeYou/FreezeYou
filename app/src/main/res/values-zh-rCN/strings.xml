@@ -187,5 +187,6 @@
   <string-array name="triggers">
     <item>打开屏幕时</item>
     <item>关闭屏幕时</item>
+    <item>打开应用时</item>
   </string-array>
 </resources>
