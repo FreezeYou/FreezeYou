@@ -77,7 +77,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     }
 
-
     private Cursor getCursor(Context context) {
         final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
         db.execSQL(
