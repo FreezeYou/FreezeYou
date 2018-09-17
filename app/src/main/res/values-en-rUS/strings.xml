@@ -151,6 +151,7 @@
   <string name="uninstall">Uninstall</string>
   <string name="triggers">Triggers</string>
   <string name="triggers_extra_parameters">Additional parameters</string>
+  <string name="delete">删除</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>Frozen only</item>
