@@ -32,4 +32,8 @@
         android:showAsAction="never"
         android:id="@+id/list_menu_removeFromFreezeOnceQuit"
         android:title="@string/removeFromFreezeOnceQuit"/>
+    <item
+        android:showAsAction="never"
+        android:id="@+id/list_menu_copyAfterBeingFormatted"
+        android:title="@string/copyAfterBeingFormatted"/>
 </menu>
