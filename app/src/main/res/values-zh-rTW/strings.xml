@@ -151,6 +151,7 @@
   <string name="uninstall">移除</string>
   <string name="triggers">觸發器</string>
   <string name="triggers_extra_parameters">觸發器附加參數</string>
+  <string name="delete">删除</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
