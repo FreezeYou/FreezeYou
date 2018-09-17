@@ -12,6 +12,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -28,12 +30,15 @@ import static cf.playhi.freezeyou.Support.showToast;
 public class ScheduledTasksAddActivity extends Activity {
 
     private boolean isTimeTask;
+    private int id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stma_add);
+        id = getIntent().getIntExtra("id", -5);
+        isTimeTask = getIntent().getBooleanExtra("time", true);
         ActionBar actionBar = getActionBar();
         processActionBar(actionBar);
         if (actionBar != null) {
@@ -43,10 +48,28 @@ public class ScheduledTasksAddActivity extends Activity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.staa_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.menu_staa_delete:
+                setResult(RESULT_OK);
+                if (id != -5) {
+                    SQLiteDatabase db = openOrCreateDatabase(isTimeTask ? "scheduledTasks" : "scheduledTriggerTasks", MODE_PRIVATE, null);
+                    db.execSQL("DELETE FROM tasks WHERE _id = " + id);
+                    db.close();
+                    finish();
+                } else {
+                    finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -54,8 +77,6 @@ public class ScheduledTasksAddActivity extends Activity {
     }
 
     private void init() {
-        final int id = getIntent().getIntExtra("id", -5);
-        isTimeTask = getIntent().getBooleanExtra("time", true);
 
         prepareData(id);
 
