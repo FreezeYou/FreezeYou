@@ -11,6 +11,8 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -52,6 +54,7 @@ import java.util.Calendar;
 import cf.playhi.freezeyou.receiver.NotificationDeletedReceiver;
 
 import static android.content.Context.ALARM_SERVICE;
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.POWER_SERVICE;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
@@ -909,7 +912,7 @@ class Support {
         return resId;
     }
 
-    private static String getUiTheme(Context context){
+    private static String getUiTheme(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default");
     }
 
@@ -1051,6 +1054,17 @@ class Support {
                 default:
                     break;
             }
+        }
+    }
+
+    static void copyToClipboard(Context context, String data) {
+        ClipboardManager copy = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(data, data);
+        if (copy != null) {
+            copy.setPrimaryClip(clip);
+            showToast(context, R.string.success);
+        } else {
+            showToast(context, R.string.failed);
         }
     }
 }

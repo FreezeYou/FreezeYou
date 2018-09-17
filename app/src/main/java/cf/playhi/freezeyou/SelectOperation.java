@@ -22,6 +22,7 @@ import android.widget.TextView;
 import net.grandcentrix.tray.AppPreferences;
 
 import static cf.playhi.freezeyou.Support.addToOneKeyList;
+import static cf.playhi.freezeyou.Support.copyToClipboard;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.existsInOneKeyList;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
@@ -109,14 +110,7 @@ public class SelectOperation extends Activity {
                         finish();
                         break;
                     case 2:
-                        ClipboardManager copy = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText(pkgName, pkgName);
-                        if (copy != null) {
-                            copy.setPrimaryClip(clip);
-                            showToast(SelectOperation.this, R.string.success);
-                        } else {
-                            showToast(SelectOperation.this, R.string.failed);
-                        }
+                        copyToClipboard(SelectOperation.this, pkgName);
                         finish();
                         break;
                     case 3:

@@ -56,6 +56,7 @@ import static cf.playhi.freezeyou.Support.addToOneKeyList;
 import static cf.playhi.freezeyou.Support.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
+import static cf.playhi.freezeyou.Support.copyToClipboard;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getApplicationLabel;
@@ -595,6 +596,14 @@ public class Main extends Activity {
                     case R.id.list_menu_UFImmediately:
                         processDisableAndEnableImmediately(false);
                         actionMode.finish();
+                        return true;
+                    case R.id.list_menu_copyAfterBeingFormatted:
+                        StringBuilder formattedPackages = new StringBuilder();
+                        int size = selectedPackages.size();
+                        for (int i = 0; i < size; i++) {
+                            formattedPackages.append(selectedPackages.get(i)).append(",");
+                        }
+                        copyToClipboard(Main.this, formattedPackages.toString());
                         return true;
                     default:
                         return false;
