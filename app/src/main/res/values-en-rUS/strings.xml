@@ -152,6 +152,7 @@
   <string name="triggers">Triggers</string>
   <string name="triggers_extra_parameters">Additional parameters</string>
   <string name="delete">Delete</string>
+  <string name="copyAfterBeingFormatted">格式化后复制</string>
   <string-array name="launchModeSelection">
     <item>Show All</item>
     <item>Frozen only</item>
