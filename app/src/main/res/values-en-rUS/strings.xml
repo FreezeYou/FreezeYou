@@ -35,7 +35,7 @@
   <string name="mayUnrootedOrOtherEx">Permissions may not be granted, targets have been uninstalled, or other exceptions have occurred</string>
   <string name="unfreeze">Unfreeze</string>
   <string name="unfreezedAndAskLaunch">Requested unfreeze, try running now?</string>
-  <string name="unrootedOrCannotFindTheLaunchIntent">解冻成功但未找到程序入口，或权限不足导致解冻失败</string>
+  <string name="unrootedOrCannotFindTheLaunchIntent">Unfreeze succeeded but unable to find the entrance of this application, or unfreeze failed due to the insufficient permission.</string>
   <string name="frozen">Frozen</string>
   <string name="OneKeyFreezeImmediately">Onekey Freeze</string>
   <string name="about">About</string>
@@ -54,7 +54,7 @@
   <string name="visitWebsite">Visit Website</string>
   <string name="addQQGroup">Join QQ Group</string>
   <string name="dangerZone">Danger Zone</string>
-  <string name="disableMRootMode">解除免ROOT</string>
+  <string name="disableMRootMode">Release no-root mode permission</string>
   <string name="disableMRootModeEx">如果启用免ROOT模式成功，需要解除后才能正常卸载本应用程序。</string>
   <string name="update">Update</string>
   <string name="common">General</string>
