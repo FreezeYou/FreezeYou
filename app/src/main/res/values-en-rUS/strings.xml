@@ -55,13 +55,13 @@
   <string name="addQQGroup">Join QQ Group</string>
   <string name="dangerZone">Danger Zone</string>
   <string name="disableMRootMode">Release no-root mode permission</string>
-  <string name="disableMRootModeEx">如果启用免ROOT模式成功，需要解除后才能正常卸载本应用程序。</string>
+  <string name="disableMRootModeEx">If you enable the no-root mode success, you need to release it before uninstalling the application.</string>
   <string name="update">Update</string>
   <string name="common">General</string>
   <string name="openImmediately">Open Immediately</string>
   <string name="openImmediatelyEx">Open the application immediately after being unfrozen</string>
   <string name="hToUse">How to use</string>
-  <string name="openAndUFImmediately">快捷方式立即解冻并启动</string>
+  <string name="openAndUFImmediately">Unfreeze immediately then run when clicking the shortcut</string>
   <string name="openAndUFImmediatelyEx">损失快捷方式冻结的便利（可利用 一键冻结）</string>
   <string name="quickView">Quick View</string>
   <string name="nCaution">Don\'t remind</string>
