@@ -31,7 +31,7 @@
   <string name="executed">Executed</string>
   <string name="exception">Exception:</string>
   <string name="launch">Run</string>
-  <string name="mayUnrooted">可能尚未ROOT或免ROOT模式未启用成功</string>
+  <string name="mayUnrooted">No root permission or no-root mode has not been enabled</string>
   <string name="mayUnrootedOrOtherEx">Permissions may not be granted, targets have been uninstalled, or other exceptions have occurred</string>
   <string name="unfreeze">Unfreeze</string>
   <string name="unfreezedAndAskLaunch">Requested unfreeze, try running now?</string>
