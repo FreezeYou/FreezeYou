@@ -64,6 +64,9 @@ public class ScheduledTasksAddActivity extends Activity {
                 setResult(RESULT_OK);
                 if (id != -5) {
                     SQLiteDatabase db = openOrCreateDatabase(isTimeTask ? "scheduledTasks" : "scheduledTriggerTasks", MODE_PRIVATE, null);
+                    if (isTimeTask) {
+                        cancelTheTask(id);
+                    }
                     db.execSQL("DELETE FROM tasks WHERE _id = " + id);
                     db.close();
                     finish();

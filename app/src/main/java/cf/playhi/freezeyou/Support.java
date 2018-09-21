@@ -1007,40 +1007,44 @@ class Support {
     }
 
     static void runTask(@NonNull String task, Context context) {
-        if ("okff".equals(task)) {
-            startService(context, new Intent(context, OneKeyFreezeService.class).putExtra("autoCheckAndLockScreen", false));
-        } else if ("okuf".equals(task)) {
-            startService(context, new Intent(context, OneKeyUFService.class));
-        } else if (task.length() >= 4) {
-            String string = task.substring(0, 2);
-            String[] tasks = task.substring(3).replaceAll(" ", "").split(",");
-            switch (string) {
-                case "ff":
-                    startService(
-                            context,
-                            new Intent(context, FUFService.class)
-                                    .putExtra("packages", tasks)
-                                    .putExtra("freeze", true)
-                    );
-                    break;
-                case "uf":
-                    startService(
-                            context,
-                            new Intent(context, FUFService.class)
-                                    .putExtra("packages", tasks)
-                                    .putExtra("freeze", false)
-                    );
-                    break;
-                case "es": //enableSettings
-                    enableAndDisableSysSettings(tasks, context, true);
-                    break;
-                case "ds": //disableSettings
-                    enableAndDisableSysSettings(tasks, context, false);
-                    break;
-                default:
-                    break;
+        String[] sTasks = task.split(";");
+        for (String asTasks : sTasks) {
+            if ("okff".equals(asTasks)) {
+                startService(context, new Intent(context, OneKeyFreezeService.class).putExtra("autoCheckAndLockScreen", false));
+            } else if ("okuf".equals(asTasks)) {
+                startService(context, new Intent(context, OneKeyUFService.class));
+            } else if (asTasks.length() >= 4) {
+                String string = asTasks.substring(0, 2);
+                String[] tasks = asTasks.substring(3).replaceAll(" ", "").split(",");
+                switch (string) {
+                    case "ff":
+                        startService(
+                                context,
+                                new Intent(context, FUFService.class)
+                                        .putExtra("packages", tasks)
+                                        .putExtra("freeze", true)
+                        );
+                        break;
+                    case "uf":
+                        startService(
+                                context,
+                                new Intent(context, FUFService.class)
+                                        .putExtra("packages", tasks)
+                                        .putExtra("freeze", false)
+                        );
+                        break;
+                    case "es": //enableSettings
+                        enableAndDisableSysSettings(tasks, context, true);
+                        break;
+                    case "ds": //disableSettings
+                        enableAndDisableSysSettings(tasks, context, false);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
+
     }
 
     private static void enableAndDisableSysSettings(String[] tasks, Context context, boolean enable) {
