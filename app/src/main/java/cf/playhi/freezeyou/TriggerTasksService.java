@@ -99,7 +99,7 @@ class TriggerScreenLockListener {
                         for (int i = 0; i < cursor.getCount(); i++) {
                             String tg = cursor.getString(cursor.getColumnIndex("tg"));
                             int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                            if (enabled == 1 && "onScreenOn".equals(tg)) {
+                            if (enabled == 1 && "onScreenOff".equals(tg)) {
                                 String task = cursor.getString(cursor.getColumnIndex("task"));
                                 if (task != null && !"".equals(task)) {
                                     Support.runTask(task.toLowerCase(), context);
@@ -112,7 +112,7 @@ class TriggerScreenLockListener {
                         for (int i = 0; i < cursor.getCount(); i++) {
                             String tg = cursor.getString(cursor.getColumnIndex("tg"));
                             int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                            if (enabled == 1 && "onScreenOff".equals(tg)) {
+                            if (enabled == 1 && "onScreenOn".equals(tg)) {
                                 String task = cursor.getString(cursor.getColumnIndex("task"));
                                 if (task != null && !"".equals(task)) {
                                     Support.runTask(task.toLowerCase(), context);
