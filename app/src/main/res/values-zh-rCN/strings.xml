@@ -153,6 +153,7 @@
   <string name="triggers_extra_parameters">触发器附加参数</string>
   <string name="delete">删除</string>
   <string name="copyAfterBeingFormatted">格式化后复制</string>
+  <string name="displayLanguage">显示语言</string>
   <string-array name="launchModeSelection">
     <item>显示全部</item>
     <item>仅已冻结</item>
