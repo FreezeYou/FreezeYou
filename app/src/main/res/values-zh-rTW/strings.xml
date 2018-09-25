@@ -151,8 +151,8 @@
   <string name="uninstall">移除</string>
   <string name="triggers">觸發器</string>
   <string name="triggers_extra_parameters">觸發器附加參數</string>
-  <string name="delete">删除</string>
-  <string name="copyAfterBeingFormatted">格式化后复制</string>
+  <string name="delete">刪除</string>
+  <string name="copyAfterBeingFormatted">格式化後複製</string>
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
     <item>僅已凍結</item>
@@ -189,6 +189,6 @@
   <string-array name="triggers">
     <item>打開螢幕時</item>
     <item>關閉螢幕時</item>
-    <item>打开应用时</item>
+    <item>打開應用時</item>
   </string-array>
 </resources>
