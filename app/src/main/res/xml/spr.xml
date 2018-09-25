@@ -114,6 +114,12 @@
         <Preference
             android:key="checkUpdate"
             android:title="@string/update" />
+        <!--<ListPreference-->
+            <!--android:defaultValue="default"-->
+            <!--android:entries="@array/displayLanguageOptionsSelection"-->
+            <!--android:entryValues="@array/displayLanguageOptionsSelectionValues"-->
+            <!--android:key="languagePref"-->
+            <!--android:title="@string/displayLanguage" />-->
         <Preference
             android:key="faq"
             android:title="@string/faq" />

@@ -1073,4 +1073,32 @@ class Support {
             showToast(context, R.string.failed);
         }
     }
+
+//    static void checkLanguage(Context context) {
+//        Resources resources = context.getResources();
+//        DisplayMetrics dm = resources.getDisplayMetrics();
+//        Configuration config = resources.getConfiguration();
+//        String s = PreferenceManager.getDefaultSharedPreferences(context).getString("languagePref", "Default");
+//        if (s == null) {
+//            s = "Default";
+//        }
+//        switch (s) {
+//            case "Default":
+//                config.locale = Locale.getDefault();
+//                break;
+//            case "tc":
+//                config.locale = Locale.TRADITIONAL_CHINESE;
+//                break;
+//            case "sc":
+//                config.locale = Locale.SIMPLIFIED_CHINESE;
+//                break;
+//            case "en":
+//                config.locale = Locale.ENGLISH;
+//                break;
+//            default:
+//                config.locale = Locale.getDefault();
+//                break;
+//        }
+//        resources.updateConfiguration(config, dm);
+//    }
 }

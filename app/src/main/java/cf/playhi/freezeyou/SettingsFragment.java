@@ -18,7 +18,6 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
 
-
 import static cf.playhi.freezeyou.Support.checkUpdate;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.isAccessibilitySettingsOn;
@@ -130,6 +129,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             case "notificationBarDisableClickDisappear":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));
                 break;
+//            case "languagePref":
+//                checkLanguage(getActivity().getApplicationContext());
+//                showToast(getActivity(),R.string.willTakeEffectsNextLaunch);
+//                break;
             default:
                 break;
         }

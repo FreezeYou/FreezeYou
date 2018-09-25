@@ -22,6 +22,7 @@ public class MainApplication extends Application {
         super.onCreate();
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init();
+//        checkLanguage(getApplicationContext());
         try {
             File checkFile = new File(getFilesDir().getAbsolutePath() + File.separator + "20180808");
             if (!checkFile.exists()) {
