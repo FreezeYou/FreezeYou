@@ -90,11 +90,11 @@
 
     <PreferenceCategory android:title="@string/iconAEntry">
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:icon="@mipmap/ic_launcher"
             android:key="firstIconEnabled" />
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:icon="@mipmap/ic_launcher_round"
             android:key="secondIconEnabled" />
         <CheckBoxPreference
