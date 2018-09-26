@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -93,6 +94,9 @@ public class Main extends Activity {
     private String filterNowStatus;
     private BroadcastReceiver updateFrozenStatusBroadcastReceiver;
 
+    private boolean shortcutsCompleted = true;
+    private int shortcutsCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);
@@ -117,6 +121,20 @@ public class Main extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (!shortcutsCompleted) {
+            String pkgName;
+            shortcutsCount = shortcutsCount - 1;
+            pkgName = selectedPackages.get(shortcutsCount);
+            createShortCut(
+                    getApplicationLabel(Main.this, null, null, pkgName),
+                    pkgName,
+                    getApplicationIcon(Main.this, pkgName, null, false),
+                    Freeze.class,
+                    "FreezeYou! " + pkgName,
+                    Main.this
+            );
+            shortcutsCompleted = (shortcutsCount <= 0);
+        }
         updateFrozenStatus();
     }
 
@@ -597,6 +615,30 @@ public class Main extends Activity {
                         processDisableAndEnableImmediately(false);
                         actionMode.finish();
                         return true;
+                    case R.id.list_menu_createDisEnableShortCut:
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            ShortcutManager mShortcutManager =
+                                    Main.this.getSystemService(ShortcutManager.class);
+                            if (mShortcutManager != null && mShortcutManager.isRequestPinShortcutSupported()) {
+                                String pkgName;
+                                shortcutsCount = selectedPackages.size() - 1;
+                                pkgName = selectedPackages.get(shortcutsCount);
+                                createShortCut(
+                                        getApplicationLabel(Main.this, null, null, pkgName),
+                                        pkgName,
+                                        getApplicationIcon(Main.this, pkgName, null, false),
+                                        Freeze.class,
+                                        "FreezeYou! " + pkgName,
+                                        Main.this
+                                );
+                                shortcutsCompleted = (shortcutsCount <= 0);
+                            } else {
+                                createFUFShortcuts_Batch();
+                            }
+                        } else {
+                            createFUFShortcuts_Batch();
+                        }
+                        return true;
                     case R.id.list_menu_copyAfterBeingFormatted:
                         StringBuilder formattedPackages = new StringBuilder();
                         int size = selectedPackages.size();
@@ -1013,5 +1055,21 @@ public class Main extends Activity {
                 }
             }
         }).start();
+    }
+
+    private void createFUFShortcuts_Batch() {
+        int sps = selectedPackages.size();
+        String pkgName;
+        for (int i = 0; i < sps; i++) {
+            pkgName = selectedPackages.get(i);
+            createShortCut(
+                    getApplicationLabel(Main.this, null, null, pkgName),
+                    pkgName,
+                    getApplicationIcon(Main.this, pkgName, null, false),
+                    Freeze.class,
+                    "FreezeYou! " + pkgName,
+                    Main.this
+            );
+        }
     }
 }

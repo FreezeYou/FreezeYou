@@ -34,6 +34,10 @@
         android:title="@string/removeFromFreezeOnceQuit"/>
     <item
         android:showAsAction="never"
+        android:id="@+id/list_menu_createDisEnableShortCut"
+        android:title="@string/createDisEnableShortCut"/>
+    <item
+        android:showAsAction="never"
         android:id="@+id/list_menu_copyAfterBeingFormatted"
         android:title="@string/copyAfterBeingFormatted"/>
 </menu>

@@ -373,7 +373,7 @@ class Support {
 
                     // Configure the intent so that your app's broadcast receiver gets
                     // the callback successfully.
-                    PendingIntent successCallback = PendingIntent.getBroadcast(context, 0,
+                    PendingIntent successCallback = PendingIntent.getBroadcast(context, id.hashCode(),
                             pinnedShortcutCallbackIntent, 0);
 
                     mShortcutManager.requestPinShortcut(pinShortcutInfo,
