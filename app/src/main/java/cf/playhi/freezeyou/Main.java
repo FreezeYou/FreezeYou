@@ -111,12 +111,12 @@ public class Main extends Activity {
 //        throw new RuntimeException("自定义异常：仅于异常上报测试中使用");//发版前务必注释
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        go();
-    }
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//        super.onNewIntent(intent);
+//        setIntent(intent);
+//        go();
+//    }
 
     @Override
     protected void onResume() {
@@ -1057,7 +1057,7 @@ public class Main extends Activity {
         }).start();
     }
 
-    private void createFUFShortcuts_Batch() {
+    private void createFUFShortcuts_Batch() { //小于 Android 8.0 适用
         int sps = selectedPackages.size();
         String pkgName;
         for (int i = 0; i < sps; i++) {

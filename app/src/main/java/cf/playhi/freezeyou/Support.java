@@ -63,7 +63,7 @@ class Support {
     private static Drawable drawable;
     private static Bitmap bitmap;
 
-    private static void makeDialog(final String title, final String message, final Context context, @Nullable final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled, @Nullable final Activity activity, final boolean finish) {
+    static void makeDialog(final String title, final String message, final Context context, @Nullable final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled, @Nullable final Activity activity, final boolean finish) {
         AlertDialog.Builder builder =
                 buildAlertDialog(context, getApplicationIcon(context, pkgName, applicationInfo, true), message, title)
                         .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -182,7 +182,6 @@ class Support {
         }
     }
 
-    @TargetApi(21)
     static void shortcutMakeDialog(Context context, String title, String message, final Activity activity, @Nullable final ApplicationInfo applicationInfo, final String pkgName, int ot, boolean auto, boolean finish) {
         if (new AppPreferences(context).getBoolean("openAndUFImmediately", false) && auto) {
             if (ot == 2) {
@@ -191,7 +190,17 @@ class Support {
                 processUnfreezeAction(context, pkgName, true, activity, finish);//ot==1
             }
         } else {
-            makeDialog(title, message, context, applicationInfo, pkgName, ot == 2, activity, finish);
+            if (new AppPreferences(context).getBoolean("showInRecents", true)) {
+                context.startActivity(
+                        new Intent(context, FreezeShowInRecentsActivity.class)
+                                .putExtra("title", title)
+                                .putExtra("message", message)
+                                .putExtra("pkgName", pkgName)
+                                .putExtra("ot", ot == 2));
+                checkAndDoActivityFinish(activity, finish);
+            } else {
+                makeDialog(title, message, context, applicationInfo, pkgName, ot == 2, activity, finish);
+            }
         }
     }
 

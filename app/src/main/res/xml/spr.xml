@@ -24,6 +24,11 @@
             android:key="saveOnClickFunctionStatus"
             android:summary="@string/saveOnClickFunctionStatus"
             android:title="@string/saveOnClickFunctionStatus" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="showInRecents"
+            android:summary="@string/mayHaveNoEffectsL"
+            android:title="@string/showInRecents" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/freezeAUF">

@@ -129,6 +129,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             case "notificationBarDisableClickDisappear":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));
                 break;
+            case "showInRecents":
+                appPreferences.put(s, sharedPreferences.getBoolean(s, true));
+                break;
 //            case "languagePref":
 //                checkLanguage(getActivity().getApplicationContext());
 //                showToast(getActivity(),R.string.willTakeEffectsNextLaunch);
