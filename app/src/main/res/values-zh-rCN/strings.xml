@@ -154,7 +154,7 @@
   <string name="delete">删除</string>
   <string name="copyAfterBeingFormatted">格式化后复制</string>
   <string name="showInRecents">显示在最近任务列表</string>
-  <string name="mayHaveNoEffectsL">在 Android 4.4 及以下系统可能无效</string>
+  <string name="mayHaveNoEffectsL">在 Android 4.4 及以下系统无效</string>
   <!--<string name="displayLanguage">显示语言</string>-->
   <string-array name="launchModeSelection">
     <item>显示全部</item>
