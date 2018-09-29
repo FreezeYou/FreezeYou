@@ -132,6 +132,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             case "showInRecents":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, true));
                 break;
+            case "lesserToast":
+                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
+                break;
 //            case "languagePref":
 //                checkLanguage(getActivity().getApplicationContext());
 //                showToast(getActivity(),R.string.willTakeEffectsNextLaunch);

@@ -153,6 +153,7 @@
     <string name="copyAfterBeingFormatted">格式化后复制</string>
     <string name="showInRecents">显示在最近任务列表</string>
     <string name="mayHaveNoEffectsL">在 Android 4.4 及以下系统无效</string>
+    <string name="lesserToast">更少的 Toast 提示</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>

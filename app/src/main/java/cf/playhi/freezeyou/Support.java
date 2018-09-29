@@ -514,13 +514,17 @@ class Support {
             final int exitValue = fAURoot(pkgName, enable);
             if (exitValue == 0) {
                 if (enable) {
-                    showToast(context, R.string.executed);
+                    if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                        showToast(context, R.string.executed);
+                    }
                     createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
                     if (askRun) {
                         askRun(context, pkgName, activity, finish);
                     }
                 } else {
-                    showToast(context, R.string.executed);
+                    if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                        showToast(context, R.string.executed);
+                    }
                     deleteNotification(context, pkgName);
                 }
             } else {
@@ -542,11 +546,15 @@ class Support {
                 DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
             if (hidden) {
                 sendStatusChangedBroadcast(context);
-                showToast(context, R.string.freezeCompleted);
+                if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                    showToast(context, R.string.freezeCompleted);
+                }
                 deleteNotification(context, pkgName);
             } else {
                 sendStatusChangedBroadcast(context);
-                showToast(context, R.string.UFCompleted);
+                if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                    showToast(context, R.string.UFCompleted);
+                }
                 createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
                 if (askRun) {
                     askRun(context, pkgName, activity, finish);
@@ -648,7 +656,9 @@ class Support {
                             createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
                         }
                     }
-                    showToast(context, R.string.executed);
+                    if (!(new AppPreferences(context).getBoolean("lesserToast", false))){
+                        showToast(context, R.string.executed);
+                    }
                 } else {
                     showToast(context, R.string.mayUnrootedOrOtherEx);
                 }
@@ -696,7 +706,9 @@ class Support {
                 }
             }
             sendStatusChangedBroadcast(context);
-            showToast(context, R.string.executed);
+            if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                showToast(context, R.string.executed);
+            }
         }
     }
 

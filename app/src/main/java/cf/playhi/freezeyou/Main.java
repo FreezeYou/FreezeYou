@@ -688,7 +688,9 @@ public class Main extends Activity {
                             if (!realGetFrozenStatus(pkgName, null)) {
                                 processFreezeAction(Main.this, pkgName, false, null, false);
                             } else {
-                                showToast(Main.this, R.string.freezeCompleted);
+                                if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
+                                    showToast(Main.this, R.string.freezeCompleted);
+                                }
                             }
                             updateFrozenStatus();
                             break;
@@ -696,7 +698,9 @@ public class Main extends Activity {
                             if (realGetFrozenStatus(pkgName, null)) {
                                 processUnfreezeAction(Main.this, pkgName, false, null, false);
                             } else {
-                                showToast(Main.this, R.string.UFCompleted);
+                                if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
+                                    showToast(Main.this, R.string.UFCompleted);
+                                }
                             }
                             updateFrozenStatus();
                             break;

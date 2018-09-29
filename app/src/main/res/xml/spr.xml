@@ -29,6 +29,11 @@
             android:key="showInRecents"
             android:summary="@string/mayHaveNoEffectsL"
             android:title="@string/showInRecents" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="lesserToast"
+            android:summary="@string/lesserToast"
+            android:title="@string/lesserToast" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/freezeAUF">
