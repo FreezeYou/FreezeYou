@@ -155,6 +155,7 @@
   <string name="copyAfterBeingFormatted">格式化後複製</string>
   <string name="showInRecents">显示在最近任务列表</string>
   <string name="mayHaveNoEffectsL">在 Android 4.4 及以下系统无效</string>
+  <string name="lesserToast">更少的 Toast 提示</string>
   <!--<string name="displayLanguage">显示语言</string>-->
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
