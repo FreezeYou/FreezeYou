@@ -43,9 +43,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             }
                         }
 
-                        if (!pkgNameString.equals(previousPkg)){
+                        if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
                             Cursor cursor = getCursor(this);
-                            if (cursor.moveToFirst()){
+                            if (cursor.moveToFirst()) {
                                 for (int i = 0; i < cursor.getCount(); i++) {
                                     String tgExtra = cursor.getString(cursor.getColumnIndex("tgextra"));
                                     if (tgExtra == null) {

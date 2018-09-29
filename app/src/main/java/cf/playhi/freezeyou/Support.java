@@ -63,7 +63,7 @@ class Support {
     private static Drawable drawable;
     private static Bitmap bitmap;
 
-    static void makeDialog(final String title, final String message, final Context context, @Nullable final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled, @Nullable final Activity activity, final boolean finish) {
+    private static void makeDialog(final String title, final String message, final Context context, @Nullable final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled, @Nullable final Activity activity, final boolean finish) {
         AlertDialog.Builder builder =
                 buildAlertDialog(context, getApplicationIcon(context, pkgName, applicationInfo, true), message, title)
                         .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -190,17 +190,7 @@ class Support {
                 processUnfreezeAction(context, pkgName, true, activity, finish);//ot==1
             }
         } else {
-            if (new AppPreferences(context).getBoolean("showInRecents", true)) {
-                context.startActivity(
-                        new Intent(context, FreezeShowInRecentsActivity.class)
-                                .putExtra("title", title)
-                                .putExtra("message", message)
-                                .putExtra("pkgName", pkgName)
-                                .putExtra("ot", ot == 2));
-                checkAndDoActivityFinish(activity, finish);
-            } else {
-                makeDialog(title, message, context, applicationInfo, pkgName, ot == 2, activity, finish);
-            }
+            makeDialog(title, message, context, applicationInfo, pkgName, ot == 2, activity, finish);
         }
     }
 

@@ -1072,4 +1072,12 @@ public class Main extends Activity {
             );
         }
     }
+
+    @Override
+    public void finish() {
+        if (Build.VERSION.SDK_INT >= 21 && !(new AppPreferences(this).getBoolean("showInRecents", true))) {
+            finishAndRemoveTask();
+        }
+        super.finish();
+    }
 }

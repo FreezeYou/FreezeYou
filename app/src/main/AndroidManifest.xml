@@ -40,12 +40,12 @@
         android:manageSpaceActivity=".SettingsActivity"
         android:supportsRtl="true">
         <activity
-            android:name=".Start"
+            android:name=".Main"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:excludeFromRecents="true"
             android:icon="@mipmap/ic_launcher_new_round"
-            android:launchMode="standard"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Default"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -58,7 +58,9 @@
             android:enabled="true"
             android:icon="@mipmap/ic_launcher_new_round"
             android:label="@string/app_name"
-            android:targetActivity=".Start">
+            android:launchMode="singleTask"
+            android:targetActivity=".Main"
+            android:theme="@style/AppTheme.Default">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -76,7 +78,9 @@
             android:enabled="false"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:targetActivity=".Start">
+            android:launchMode="singleTask"
+            android:targetActivity=".Main"
+            android:theme="@style/AppTheme.Default">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -94,7 +98,9 @@
             android:enabled="false"
             android:icon="@mipmap/ic_launcher_round"
             android:label="@string/app_name"
-            android:targetActivity=".Start">
+            android:launchMode="singleTask"
+            android:targetActivity=".Main"
+            android:theme="@style/AppTheme.Default">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -110,7 +116,7 @@
         <activity
             android:name=".Freeze"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:excludeFromRecents="true"
+            android:documentLaunchMode="always"
             android:label="@string/disableAEnable"
             android:launchMode="standard"
             android:theme="@style/AppTheme.Translucent.NoTitleBar"
@@ -120,13 +126,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".FreezeShowInRecentsActivity"
-            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:documentLaunchMode="always"
-            android:label="@string/disableAEnable"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar"
-            tools:ignore="UnusedAttribute" />
         <activity
             android:name=".OneKeyFreeze"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
@@ -169,13 +168,6 @@
             android:name=".ScheduledTasksAddActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:theme="@style/AppTheme.Default" />
-        <activity
-            android:name=".Main"
-            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:label="@string/app_name"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Default"
-            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".SelectOperation"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
