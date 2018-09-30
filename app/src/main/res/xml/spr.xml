@@ -39,6 +39,11 @@
     <PreferenceCategory android:title="@string/freezeAUF">
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="avoidFreezeForegroundApplications"
+            android:summary="@string/needActiveAccessibilityService"
+            android:title="@string/avoidFreezeForegroundApplications" />
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="openImmediately"
             android:summary="@string/openImmediatelyEx"
             android:title="@string/openImmediately" />
@@ -77,17 +82,13 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="onekeyFreezeWhenLockScreen"
-            android:summary="@string/freezeAfterScreenLock"
+            android:summary="@string/suggestUseTasksInstead"
             android:title="@string/freezeAfterScreenLock" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="freezeOnceQuit"
-            android:summary="@string/needActiveAccessibilityService"
+            android:summary="@string/suggestUseTasksInstead"
             android:title="@string/freezeOnceQuit" />
-        <Preference
-            android:key="configureAccessibilityService"
-            android:summary="@string/accessibility_service_description"
-            android:title="@string/configureAccessibilityService" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/backgroundService">
@@ -124,12 +125,17 @@
         <Preference
             android:key="checkUpdate"
             android:title="@string/update" />
+        <Preference android:title="@string/scheduledTasks">
+            <intent
+                android:targetClass="cf.playhi.freezeyou.ScheduledTasksManageActivity"
+                android:targetPackage="cf.playhi.freezeyou" />
+        </Preference>
         <!--<ListPreference-->
-            <!--android:defaultValue="default"-->
-            <!--android:entries="@array/displayLanguageOptionsSelection"-->
-            <!--android:entryValues="@array/displayLanguageOptionsSelectionValues"-->
-            <!--android:key="languagePref"-->
-            <!--android:title="@string/displayLanguage" />-->
+        <!--android:defaultValue="default"-->
+        <!--android:entries="@array/displayLanguageOptionsSelection"-->
+        <!--android:entryValues="@array/displayLanguageOptionsSelectionValues"-->
+        <!--android:key="languagePref"-->
+        <!--android:title="@string/displayLanguage" />-->
         <Preference
             android:key="faq"
             android:title="@string/faq" />
@@ -150,6 +156,10 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/advance">
+        <Preference
+            android:key="configureAccessibilityService"
+            android:summary="@string/accessibility_service_description"
+            android:title="@string/configureAccessibilityService" />
         <Preference android:title="@string/manualMode">
             <intent
                 android:data="ManualMode"

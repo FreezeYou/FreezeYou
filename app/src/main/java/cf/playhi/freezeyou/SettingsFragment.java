@@ -135,6 +135,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             case "lesserToast":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));
                 break;
+            case "avoidFreezeForegroundApplications":
+                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
+                if ((sharedPreferences.getBoolean(s, false)) && !isAccessibilitySettingsOn(getActivity())) {
+                    showToast(getActivity(), R.string.needActiveAccessibilityService);
+                    openAccessibilitySettings(getActivity());
+                }
+                break;
 //            case "languagePref":
 //                checkLanguage(getActivity().getApplicationContext());
 //                showToast(getActivity(),R.string.willTakeEffectsNextLaunch);

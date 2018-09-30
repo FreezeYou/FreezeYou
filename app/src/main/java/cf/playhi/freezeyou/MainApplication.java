@@ -64,7 +64,8 @@ public class MainApplication extends Application {
     }
 
     static void setCurrentPackage(String pkgName) {
-        mCurrentPackage = pkgName;
+        if (pkgName != null)
+            mCurrentPackage = pkgName;
     }
 
     static String getCurrentPackage() {

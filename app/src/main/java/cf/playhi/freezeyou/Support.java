@@ -510,59 +510,71 @@ class Support {
     }
 
     static void processRootAction(final String pkgName, final Context context, final boolean enable, final boolean askRun, @Nullable Activity activity, boolean finish) {
-        try {
-            final int exitValue = fAURoot(pkgName, enable);
-            if (exitValue == 0) {
-                if (enable) {
+        String currentPackage = " ";
+        if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)){
+            currentPackage = MainApplication.getCurrentPackage();
+        }
+        if (!pkgName.equals(currentPackage)) {
+            try {
+                final int exitValue = fAURoot(pkgName, enable);
+                if (exitValue == 0) {
+                    if (enable) {
+                        if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                            showToast(context, R.string.executed);
+                        }
+                        createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
+                        if (askRun) {
+                            askRun(context, pkgName, activity, finish);
+                        }
+                    } else {
+                        if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                            showToast(context, R.string.executed);
+                        }
+                        deleteNotification(context, pkgName);
+                    }
+                } else {
+                    showToast(context, R.string.mayUnrootedOrOtherEx);
+                }
+            } catch (final Exception e) {
+                e.printStackTrace();
+                showToast(context, context.getString(R.string.exception) + e.getMessage());
+                if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
+                    showToast(context, R.string.mayUnrooted);
+                }
+            }
+            sendStatusChangedBroadcast(context);
+        }
+    }
+
+    @TargetApi(21)
+    static void processMRootAction(Context context, String pkgName, boolean hidden, boolean askRun, @Nullable Activity activity, boolean finish) {
+        String currentPackage = " ";
+        if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)){
+            currentPackage = MainApplication.getCurrentPackage();
+        }
+        if (!pkgName.equals(currentPackage)){
+            if (getDevicePolicyManager(context).setApplicationHidden(
+                    DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
+                if (hidden) {
+                    sendStatusChangedBroadcast(context);
                     if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
-                        showToast(context, R.string.executed);
+                        showToast(context, R.string.freezeCompleted);
+                    }
+                    deleteNotification(context, pkgName);
+                } else {
+                    sendStatusChangedBroadcast(context);
+                    if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                        showToast(context, R.string.UFCompleted);
                     }
                     createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
                     if (askRun) {
                         askRun(context, pkgName, activity, finish);
                     }
-                } else {
-                    if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
-                        showToast(context, R.string.executed);
-                    }
-                    deleteNotification(context, pkgName);
                 }
             } else {
-                showToast(context, R.string.mayUnrootedOrOtherEx);
-            }
-        } catch (final Exception e) {
-            e.printStackTrace();
-            showToast(context, context.getString(R.string.exception) + e.getMessage());
-            if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
-                showToast(context, R.string.mayUnrooted);
-            }
-        }
-        sendStatusChangedBroadcast(context);
-    }
-
-    @TargetApi(21)
-    static void processMRootAction(Context context, String pkgName, boolean hidden, boolean askRun, @Nullable Activity activity, boolean finish) {
-        if (getDevicePolicyManager(context).setApplicationHidden(
-                DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
-            if (hidden) {
                 sendStatusChangedBroadcast(context);
-                if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
-                    showToast(context, R.string.freezeCompleted);
-                }
-                deleteNotification(context, pkgName);
-            } else {
-                sendStatusChangedBroadcast(context);
-                if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
-                    showToast(context, R.string.UFCompleted);
-                }
-                createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
-                if (askRun) {
-                    askRun(context, pkgName, activity, finish);
-                }
+                showToast(context, R.string.failed);
             }
-        } else {
-            sendStatusChangedBroadcast(context);
-            showToast(context, R.string.failed);
         }
     }
 
@@ -608,7 +620,10 @@ class Support {
 
     static void oneKeyActionRoot(Context context, boolean freeze, String[] pkgNameList) {
         if (pkgNameList != null) {
-            String currentPackage = MainApplication.getCurrentPackage();
+            String currentPackage = " ";
+            if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)){
+                currentPackage = MainApplication.getCurrentPackage();
+            }
             Process process = null;
             DataOutputStream outputStream = null;
             try {
@@ -678,7 +693,10 @@ class Support {
     @TargetApi(21)
     static void oneKeyActionMRoot(Context context, boolean freeze, String[] pkgNameList) {
         if (pkgNameList != null) {
-            String currentPackage = MainApplication.getCurrentPackage();
+            String currentPackage = " ";
+            if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)){
+                currentPackage = MainApplication.getCurrentPackage();
+            }
             for (String aPkgNameList : pkgNameList) {
                 try {
                     if (freeze) {
