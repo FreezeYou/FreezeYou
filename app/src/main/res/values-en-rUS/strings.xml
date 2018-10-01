@@ -153,7 +153,7 @@
   <string name="triggers_extra_parameters">Additional parameters</string>
   <string name="delete">Delete</string>
   <string name="copyAfterBeingFormatted">Copy After Being Formatted</string>
-  <string name="showInRecents">显示在最近任务列表</string>
+  <string name="showInRecents">Show in recents</string>
   <string name="mayHaveNoEffectsL">May have no effects on Android 4.4 and below</string>
   <string name="lesserToast">Fewer Toast Tips</string>
   <string name="avoidFreezeForegroundApplications">Avoid Freezing Foreground Applications</string>
