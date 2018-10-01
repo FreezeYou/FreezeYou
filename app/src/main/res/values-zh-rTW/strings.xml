@@ -153,6 +153,11 @@
   <string name="triggers_extra_parameters">觸發器附加參數</string>
   <string name="delete">刪除</string>
   <string name="copyAfterBeingFormatted">格式化後複製</string>
+  <string name="showInRecents">顯示在最近工作清單</string>
+  <string name="mayHaveNoEffectsL">在 Android 4.4 及以下系統無效</string>
+  <string name="lesserToast">更少的 Toast 提示</string>
+  <string name="avoidFreezeForegroundApplications">避免冻结前台应用程序</string>
+  <string name="suggestUseTasksInstead">建议使用 计划任务 替代</string>
   <!--<string name="displayLanguage">显示语言</string>-->
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
