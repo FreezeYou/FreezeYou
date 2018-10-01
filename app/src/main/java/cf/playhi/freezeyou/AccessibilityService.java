@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.PowerManager;
+import android.support.annotation.NonNull;
 import android.view.accessibility.AccessibilityEvent;
 
 import net.grandcentrix.tray.AppPreferences;
@@ -41,29 +42,12 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                                     && existsInOneKeyList(getApplicationContext(), getString(R.string.sFreezeOnceQuit), previousPkg)) {
                                 Support.processFreezeAction(getApplicationContext(), previousPkg, false, null, false);
                             }
+
+                            onLeaveApplications(previousPkg,pkgNameString);//检测+执行
                         }
 
-                        if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
-                            Cursor cursor = getCursor(this);
-                            if (cursor.moveToFirst()) {
-                                for (int i = 0; i < cursor.getCount(); i++) {
-                                    String tgExtra = cursor.getString(cursor.getColumnIndex("tgextra"));
-                                    if (tgExtra == null) {
-                                        tgExtra = "";
-                                    }
-                                    String tg = cursor.getString(cursor.getColumnIndex("tg"));
-                                    int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                                    if (enabled == 1 && Arrays.asList(tgExtra.split(",")).contains(pkgNameString) && "onApplicationsForeground".equals(tg)) {
-                                        String task = cursor.getString(cursor.getColumnIndex("task"));
-                                        if (task != null && !"".equals(task)) {
-                                            Support.runTask(task.toLowerCase(), this);
-                                        }
-                                    }
-                                    cursor.moveToNext();
-                                }
-                            }
-                            cursor.close();
-                        }
+                        onApplicationsForeground(previousPkg,pkgNameString);//检测+执行
+
                     }
                 }
                 break;
@@ -84,5 +68,55 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         );
 
         return db.query("tasks", null, null, null, null, null, null);
+    }
+
+    private void onApplicationsForeground(String previousPkg,@NonNull String pkgNameString){
+
+        if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
+            Cursor cursor = getCursor(this);
+            if (cursor.moveToFirst()) {
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    String tgExtra = cursor.getString(cursor.getColumnIndex("tgextra"));
+                    if (tgExtra == null) {
+                        tgExtra = "";
+                    }
+                    String tg = cursor.getString(cursor.getColumnIndex("tg"));
+                    int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                    if (enabled == 1 && "onApplicationsForeground".equals(tg) && Arrays.asList(tgExtra.split(",")).contains(pkgNameString)) {
+                        String task = cursor.getString(cursor.getColumnIndex("task"));
+                        if (task != null && !"".equals(task)) {
+                            Support.runTask(task.toLowerCase(), this);
+                        }
+                    }
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+        }
+    }
+
+    private void onLeaveApplications(String previousPkg,@NonNull String pkgNameString){
+
+        if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
+            Cursor cursor = getCursor(this);
+            if (cursor.moveToFirst()) {
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    String tg = cursor.getString(cursor.getColumnIndex("tg"));
+                    int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                    String tgExtra = cursor.getString(cursor.getColumnIndex("tgextra"));
+                    if (tgExtra == null) {
+                        tgExtra = "";
+                    }
+                    if (enabled == 1 && "onLeaveApplications".equals(tg) && (tgExtra.equals("") || Arrays.asList(tgExtra.split(",")).contains(previousPkg))) {
+                        String task = cursor.getString(cursor.getColumnIndex("task"));
+                        if (task != null && !"".equals(task)) {
+                            Support.runTask(task.toLowerCase(), this);
+                        }
+                    }
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+        }
     }
 }

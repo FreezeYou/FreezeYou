@@ -429,7 +429,7 @@ class Support {
                 mBuilder.setLargeIcon(bitmap);
                 mBuilder.setContentTitle(name);
                 mBuilder.setContentText(description);
-                mBuilder.setAutoCancel(!preferenceManager.getBoolean("notificationBarDisableClickDisappear", false));
+                mBuilder.setAutoCancel(!preferenceManager.getBoolean("notificationBarDisableClickDisappear", true));
                 mBuilder.setOngoing(preferenceManager.getBoolean("notificationBarDisableSlideOut", false));
 
                 Intent intent = new Intent(context, NotificationDeletedReceiver.class).putExtra("pkgName", pkgName);
