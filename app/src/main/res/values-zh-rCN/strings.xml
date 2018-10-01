@@ -196,6 +196,7 @@
     <item>打开屏幕时</item>
     <item>关闭屏幕时</item>
     <item>打开应用时</item>
+    <item>离开应用时</item>
   </string-array>
   <!--<string-array name="displayLanguageOptionsSelection" translatable="false">-->
   <!--<item>Default</item>-->
