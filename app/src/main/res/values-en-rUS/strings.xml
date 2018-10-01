@@ -154,9 +154,9 @@
   <string name="delete">Delete</string>
   <string name="copyAfterBeingFormatted">Copy After Being Formatted</string>
   <string name="showInRecents">显示在最近任务列表</string>
-  <string name="mayHaveNoEffectsL">在 Android 4.4 及以下系统无效</string>
+  <string name="mayHaveNoEffectsL">May have no effects on Android 4.4 and below</string>
   <string name="lesserToast">Fewer Toast Tips</string>
-  <string name="avoidFreezeForegroundApplications">避免冻结前台应用程序</string>
+  <string name="avoidFreezeForegroundApplications">Avoid Freezing Foreground Applications</string>
   <string name="suggestUseTasksInstead">Recommend to use scheduled tasks instead</string>
   <!--<string name="displayLanguage">显示语言</string>-->
   <string-array name="launchModeSelection">
@@ -196,7 +196,7 @@
     <item>On Screen On</item>
     <item>On Screen Off</item>
     <item>When Applications Open</item>
-    <item>离开应用时</item>
+    <item>When Leave Applications</item>
   </string-array>
   <!--<string-array name="displayLanguageOptionsSelection" translatable="false">-->
   <!--<item>Default</item>-->
