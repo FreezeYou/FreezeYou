@@ -7,6 +7,9 @@
     <style name="AppTheme.Default" parent="android:Theme.DeviceDefault">
         <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
     </style>
+    <style name="AppTheme.Default.Light" parent="android:Theme.DeviceDefault.Light">
+        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
+    </style>
     <style name="AppTheme.Default.Blue" parent="AppTheme.Default">
         <item name="android:actionBarStyle">@style/ActionBarStyle.Blue</item>
     </style>
@@ -22,7 +25,7 @@
     <style name="AppTheme.Default.Pink" parent="AppTheme.Default">
         <item name="android:actionBarStyle">@style/ActionBarStyle.Pink</item>
     </style>
-    <style name="AppTheme.Default.White" parent="AppTheme.Default">
+    <style name="AppTheme.Default.White" parent="AppTheme.Default.Light">
         <item name="android:actionBarStyle">@style/ActionBarStyle.White</item>
     </style>
     <style name="ActionBarStyle.Light.NoLogo" parent="android:Widget.Holo.Light.ActionBar">
@@ -50,7 +53,7 @@
     </style>
     <style name="ActionBarStyle.White" parent="ActionBarStyle.Light.NoLogo" >
         <item name="android:background">#fafafa</item>
-        <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleStyle.LightBackground</item>
     </style>
     <style name="ActionBarTitleStyle">
         <item name="android:textSize">18sp</item>

@@ -789,6 +789,9 @@ class Support {
                     case "black":
                         context.setTheme(R.style.AppTheme_Default);
                         break;
+                    case "white":
+                        context.setTheme(R.style.AppTheme_Default_White);
+                        break;
                     default:
                         if (Build.VERSION.SDK_INT >= 21) {
                             context.setTheme(R.style.AppTheme_Default_Blue);

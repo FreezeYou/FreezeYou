@@ -10,6 +10,9 @@
     <style name="AppTheme.Default.Light" parent="android:Theme.DeviceDefault.Light.DarkActionBar">
         <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
     </style>
+    <style name="AppTheme.Default.Light.LightActionBar" parent="android:Theme.DeviceDefault.Light">
+        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
+    </style>
     <style name="AppTheme.Default.Blue" parent="AppTheme.Default.Light">
         <item name="android:colorPrimary">#0383E9</item>
         <item name="android:colorPrimaryDark">#026FDE</item>
@@ -39,6 +42,12 @@
         <item name="android:colorPrimaryDark">#c43e00</item>
         <item name="android:colorAccent">#ff5500</item>
         <item name="android:navigationBarColor">#c43e00</item>
+    </style>
+    <style name="AppTheme.Default.White" parent="AppTheme.Default.Light.LightActionBar">
+        <item name="android:colorPrimary">#fafafa</item>
+        <item name="android:colorPrimaryDark">#eeeeee</item>
+        <item name="android:colorAccent">#424242</item>
+        <item name="android:navigationBarColor">#eeeeee</item>
     </style>
     <style name="OverflowStyle" parent="android:Widget.Material.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_action_more</item>

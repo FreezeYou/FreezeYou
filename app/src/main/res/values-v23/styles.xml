@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.Default.White" parent="AppTheme.Default.Light.LightActionBar">
+        <item name="android:colorPrimary">#fafafa</item>
+        <item name="android:colorPrimaryDark">#eeeeee</item>
+        <item name="android:colorAccent">#424242</item>
+        <item name="android:navigationBarColor">#eeeeee</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>
