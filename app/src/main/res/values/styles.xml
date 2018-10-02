@@ -22,6 +22,9 @@
     <style name="AppTheme.Default.Pink" parent="AppTheme.Default">
         <item name="android:actionBarStyle">@style/ActionBarStyle.Pink</item>
     </style>
+    <style name="AppTheme.Default.White" parent="AppTheme.Default">
+        <item name="android:actionBarStyle">@style/ActionBarStyle.White</item>
+    </style>
     <style name="ActionBarStyle.Light.NoLogo" parent="android:Widget.Holo.Light.ActionBar">
         <item name="android:displayOptions">showTitle</item>
     </style>
@@ -45,9 +48,17 @@
         <item name="android:background">#f50057</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
     </style>
+    <style name="ActionBarStyle.White" parent="ActionBarStyle.Light.NoLogo" >
+        <item name="android:background">#fafafa</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>
+    </style>
     <style name="ActionBarTitleStyle">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">#fafafa</item>
+    </style>
+    <style name="ActionBarTitleStyle.LightBackground">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#212121</item>
     </style>
     <style name="OverflowStyle" parent="android:Widget.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_action_more</item>
