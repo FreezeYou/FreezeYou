@@ -937,6 +937,9 @@ class Support {
                 case "yellow":
                     resId = R.drawable.shapedotyellow;
                     break;
+                case "white":
+                    resId = R.drawable.shapedotblack;
+                    break;
                 default:
                     resId = R.drawable.shapedotblue;
                     break;
