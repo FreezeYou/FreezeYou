@@ -182,6 +182,7 @@
     <item>綠色</item>
     <item>黃色</item>
     <item>橙色</item>
+    <item>白色</item>
   </string-array>
   <string-array name="sevenDays">
     <item>星期一</item>
