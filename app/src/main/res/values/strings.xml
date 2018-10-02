@@ -198,6 +198,7 @@
         <item>绿色</item>
         <item>黄色</item>
         <item>橙色</item>
+        <item>白色</item>
     </string-array>
     <string-array name="uiStyleSelectionValues" translatable="false">
         <item>default</item>
@@ -207,6 +208,7 @@
         <item>green</item>
         <item>yellow</item>
         <item>orange</item>
+        <item>white</item>
     </string-array>
     <string-array name="sevenDays">
         <item>周一</item>
