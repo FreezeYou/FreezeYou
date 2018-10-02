@@ -182,6 +182,7 @@
     <item>Green</item>
     <item>Yellow</item>
     <item>Orange</item>
+    <item>白色</item>
   </string-array>
   <string-array name="sevenDays">
     <item>Monday</item>
