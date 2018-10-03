@@ -107,7 +107,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     if (tgExtra == null) {
                         tgExtra = "";
                     }
-                    if (enabled == 1 && "onLeaveApplications".equals(tg) && (tgExtra.equals("") || Arrays.asList(tgExtra.split(",")).contains(previousPkg))) {
+                    if (enabled == 1 && "onLeaveApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(previousPkg))) {
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
                             Support.runTask(task.toLowerCase(), this);

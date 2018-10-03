@@ -119,7 +119,7 @@ public class ScheduledTasksManageActivity extends Activity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeFloatButtonsStatus(!(addTimeButton.getVisibility() == View.VISIBLE));
+                changeFloatButtonsStatus(addTimeButton.getVisibility() != View.VISIBLE);
             }
         });
 

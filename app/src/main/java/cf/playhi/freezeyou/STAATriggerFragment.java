@@ -34,11 +34,9 @@ public class STAATriggerFragment extends PreferenceFragment implements SharedPre
         switch (s) {
             case "stma_add_trigger":
                 String stma_add_trigger = sharedPreferences.getString("stma_add_trigger", "");
-                if ("onApplicationsForeground".equals(stma_add_trigger)){
-                    if (!Support.isAccessibilitySettingsOn(getActivity())){
-                        showToast(getActivity(), R.string.needActiveAccessibilityService);
-                        Support.openAccessibilitySettings(getActivity());
-                    }
+                if ("onApplicationsForeground".equals(stma_add_trigger) && !Support.isAccessibilitySettingsOn(getActivity())) {
+                    showToast(getActivity(), R.string.needActiveAccessibilityService);
+                    Support.openAccessibilitySettings(getActivity());
                 }
                 break;
             default:

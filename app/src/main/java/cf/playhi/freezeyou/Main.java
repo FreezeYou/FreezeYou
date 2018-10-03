@@ -635,10 +635,10 @@ public class Main extends Activity {
                                 );
                                 shortcutsCompleted = (shortcutsCount <= 0);
                             } else {
-                                createFUFShortcuts_Batch();
+                                createFUFShortcutsBatch();
                             }
                         } else {
-                            createFUFShortcuts_Batch();
+                            createFUFShortcutsBatch();
                         }
                         return true;
                     case R.id.list_menu_copyAfterBeingFormatted:
@@ -1063,7 +1063,7 @@ public class Main extends Activity {
         }).start();
     }
 
-    private void createFUFShortcuts_Batch() { //小于 Android 8.0 适用
+    private void createFUFShortcutsBatch() { //小于 Android 8.0 适用
         int sps = selectedPackages.size();
         String pkgName;
         for (int i = 0; i < sps; i++) {
