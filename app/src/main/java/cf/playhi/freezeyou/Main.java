@@ -148,6 +148,8 @@ public class Main extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        if (customThemeDisabledDot == R.drawable.shapedotblack)
+            menu.findItem(R.id.menu_timedTasks).setIcon(R.drawable.ic_action_add_light);
         return true;
     }
 
