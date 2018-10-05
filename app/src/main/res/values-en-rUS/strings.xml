@@ -92,6 +92,8 @@
   <string name="onClickFunction">Click Function</string>
   <string name="chooseAction">Choose Action</string>
   <string name="autoUFOrFreeze">Automatic Freeze and Unfreeze</string>
+  <string name="UFAndRun">解冻启动</string>
+  <string name="autoUFOrFreezeAndRun">冻解启动</string>
   <string name="freezeCompleted">Frozen</string>
   <string name="UFCompleted">Unfrozen</string>
   <string name="shortCutOneKeyFreezeAdditionalOptions">Shortcut OneKey Freeze Additional Options</string>
