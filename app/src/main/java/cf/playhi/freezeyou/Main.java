@@ -54,6 +54,7 @@ import java.util.List;
 import java.util.Map;
 
 import static cf.playhi.freezeyou.Support.addToOneKeyList;
+import static cf.playhi.freezeyou.Support.askRun;
 import static cf.playhi.freezeyou.Support.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
@@ -86,6 +87,8 @@ public class Main extends Activity {
     private final static int APPListViewOnClickMode_removeFromOUFList = 7;
     private final static int APPListViewOnClickMode_addToFOQList = 8;
     private final static int APPListViewOnClickMode_removeFromFOQList = 9;
+    private final static int APPListViewOnClickMode_UFAndRun = 10;
+    private final static int APPListViewOnClickMode_autoUFOrFreezeAndRun = 11;
 
     private final ArrayList<String> selectedPackages = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
@@ -354,6 +357,14 @@ public class Main extends Activity {
                 return true;
             case R.id.menu_onClickFunc_removeFromOUFList:
                 appListViewOnClickMode = APPListViewOnClickMode_removeFromOUFList;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
+                return true;
+            case R.id.menu_onClickFunc_UFAndRun:
+                appListViewOnClickMode = APPListViewOnClickMode_UFAndRun;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
+                return true;
+            case R.id.menu_onClickFunc_autoUFOrFreezeAndRun:
+                appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreezeAndRun;
                 saveOnClickFunctionStatus(appListViewOnClickMode);
                 return true;
             default:
@@ -703,6 +714,25 @@ public class Main extends Activity {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
                                     showToast(Main.this, R.string.UFCompleted);
                                 }
+                            }
+                            updateFrozenStatus();
+                            break;
+                        case APPListViewOnClickMode_UFAndRun:
+                            if (realGetFrozenStatus(pkgName, null)) {
+                                processUnfreezeAction(Main.this, pkgName, true, null, false);
+                            } else {
+                                if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
+                                    showToast(Main.this, R.string.UFCompleted);
+                                }
+                                askRun(Main.this, pkgName, null, false);
+                            }
+                            updateFrozenStatus();
+                            break;
+                        case APPListViewOnClickMode_autoUFOrFreezeAndRun:
+                            if (realGetFrozenStatus(pkgName, null)) {
+                                processUnfreezeAction(Main.this, pkgName, true, null, false);
+                            } else {
+                                processFreezeAction(Main.this, pkgName, false, null, false);
                             }
                             updateFrozenStatus();
                             break;

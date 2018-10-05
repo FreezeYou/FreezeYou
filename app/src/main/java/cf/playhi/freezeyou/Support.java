@@ -171,7 +171,7 @@ class Support {
         return ((tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) || (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED));
     }
 
-    private static void askRun(final Context context, final String pkgName, @Nullable Activity activity, boolean finish) {
+    static void askRun(final Context context, final String pkgName, @Nullable Activity activity, boolean finish) {
         AppPreferences sharedPref = new AppPreferences(context);
         if ((sharedPref.getBoolean("openImmediately", false)) || (sharedPref.getBoolean("openAndUFImmediately", false))) {
             checkAndStartApp(context, pkgName, activity, finish);
@@ -359,8 +359,7 @@ class Support {
                     );
                     shortcutInfoBuilder.setShortLabel(title);
                     shortcutInfoBuilder.setLongLabel(title);
-                    // Assumes there's already a shortcut with the ID "my-shortcut".
-                    // The shortcut must be enabled.
+
                     ShortcutInfo pinShortcutInfo = shortcutInfoBuilder.build();
                     // Create the PendingIntent object only if your app needs to be notified
                     // that the user allowed the shortcut to be pinned. Note that, if the
@@ -396,6 +395,9 @@ class Support {
         try {
             Bitmap bitmap = getBitmapFromDrawable(icon);
             float size = context.getResources().getDimension(android.R.dimen.app_icon_size);
+            if (size < 1) {
+                size = 72;
+            }
             if (bitmap.getHeight() > size) {
                 Matrix matrix = new Matrix();
                 float scaleWidth = (size) / bitmap.getWidth();

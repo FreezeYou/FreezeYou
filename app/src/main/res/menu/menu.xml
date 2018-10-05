@@ -75,8 +75,14 @@
                 android:id="@+id/menu_onClickFunc_UFImmediately"
                 android:title="@string/UFImmediately" />
             <item
+                android:id="@+id/menu_onClickFunc_UFAndRun"
+                android:title="@string/UFAndRun" />
+            <item
                 android:id="@+id/menu_onClickFunc_autoUFOrFreeze"
                 android:title="@string/autoUFOrFreeze" />
+            <item
+                android:id="@+id/menu_onClickFunc_autoUFOrFreezeAndRun"
+                android:title="@string/autoUFOrFreezeAndRun" />
             <item
                 android:id="@+id/menu_onClickFunc_addToOFList"
                 android:title="@string/addToOneKeyList" />
