@@ -54,6 +54,7 @@ public class ManualMode extends Activity {
                         context,
                         false,
                         false,
+                        false,
                         null,
                         false);
             }
@@ -65,6 +66,7 @@ public class ManualMode extends Activity {
                         packageNameEditText.getText().toString(),
                         context,
                         true,
+                        false,
                         false,
                         null,
                         false);

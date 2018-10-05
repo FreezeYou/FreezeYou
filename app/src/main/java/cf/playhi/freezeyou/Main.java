@@ -691,7 +691,7 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
                             if (realGetFrozenStatus(pkgName, null)) {
-                                processUnfreezeAction(Main.this, pkgName, false, null, false);
+                                processUnfreezeAction(Main.this, pkgName, false, false, null, false);
                             } else {
                                 processFreezeAction(Main.this, pkgName, false, null, false);
                             }
@@ -709,7 +709,7 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_UFImmediately:
                             if (realGetFrozenStatus(pkgName, null)) {
-                                processUnfreezeAction(Main.this, pkgName, false, null, false);
+                                processUnfreezeAction(Main.this, pkgName, false, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
                                     showToast(Main.this, R.string.UFCompleted);
@@ -719,18 +719,18 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_UFAndRun:
                             if (realGetFrozenStatus(pkgName, null)) {
-                                processUnfreezeAction(Main.this, pkgName, true, null, false);
+                                processUnfreezeAction(Main.this, pkgName, true, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
                                     showToast(Main.this, R.string.UFCompleted);
                                 }
-                                askRun(Main.this, pkgName, null, false);
+                                askRun(Main.this, pkgName, false, null, false);
                             }
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_autoUFOrFreezeAndRun:
                             if (realGetFrozenStatus(pkgName, null)) {
-                                processUnfreezeAction(Main.this, pkgName, true, null, false);
+                                processUnfreezeAction(Main.this, pkgName, true, false, null, false);
                             } else {
                                 processFreezeAction(Main.this, pkgName, false, null, false);
                             }

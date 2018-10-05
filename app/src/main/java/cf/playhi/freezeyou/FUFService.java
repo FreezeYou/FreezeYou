@@ -25,18 +25,19 @@ public class FUFService extends Service {
         Context context = getApplicationContext();
         if (intent.getBooleanExtra("single", false)) {
             String pkgName = intent.getStringExtra("pkgName");
-            boolean askRun = intent.getBooleanExtra("askRun",false);
-            if (freeze){
+            boolean askRun = intent.getBooleanExtra("askRun", false);
+            boolean runImmediately = intent.getBooleanExtra("runImmediately", false);
+            if (freeze) {
                 if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
-                    processMRootAction(context, pkgName, true, askRun,null,false);
+                    processMRootAction(context, pkgName, true, askRun, false, null, false);
                 } else {
-                    processRootAction(pkgName, context, false, askRun,null,false);
+                    processRootAction(pkgName, context, false, askRun, false, null, false);
                 }
             } else {
                 if (checkMRootFrozen(context, pkgName)) {
-                    processMRootAction(context, pkgName, false, askRun,null,false);
+                    processMRootAction(context, pkgName, false, askRun, runImmediately, null, false);
                 } else {
-                    processRootAction(pkgName, context, true, askRun,null,false);
+                    processRootAction(pkgName, context, true, askRun, runImmediately, null, false);
                 }
             }
             stopSelf();
