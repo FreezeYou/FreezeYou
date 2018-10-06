@@ -92,6 +92,8 @@
   <string name="onClickFunction">单击功能</string>
   <string name="chooseAction">选择操作</string>
   <string name="autoUFOrFreeze">自动冻解</string>
+  <string name="UFAndRun">解冻启动</string>
+  <string name="autoUFOrFreezeAndRun">冻解启动</string>
   <string name="freezeCompleted">已冻结</string>
   <string name="UFCompleted">已解冻</string>
   <string name="shortCutOneKeyFreezeAdditionalOptions">快捷方式一键冻结后追加</string>
