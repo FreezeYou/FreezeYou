@@ -2,14 +2,13 @@ package cf.playhi.freezeyou;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
+import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
+import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
 import static cf.playhi.freezeyou.Support.showToast;
 
 public class STAATriggerFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -63,29 +62,5 @@ public class STAATriggerFragment extends PreferenceFragment implements SharedPre
     public void onPause() {
         super.onPause();
         PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    //https://stackoverflow.com/questions/531427/how-do-i-display-the-current-value-of-an-android-preference-in-the-preference-su
-    private void initSummary(Preference p) {
-        if (p instanceof PreferenceGroup) {
-            PreferenceGroup pGrp = (PreferenceGroup) p;
-            for (int i = 0; i < pGrp.getPreferenceCount(); i++) {
-                initSummary(pGrp.getPreference(i));
-            }
-        } else {
-            updatePrefSummary(p);
-        }
-    }
-
-    //https://stackoverflow.com/questions/531427/how-do-i-display-the-current-value-of-an-android-preference-in-the-preference-su
-    private void updatePrefSummary(Preference p) {
-        if (p instanceof ListPreference) {
-            ListPreference listPref = (ListPreference) p;
-            p.setSummary(listPref.getEntry());
-        }
-        if (p instanceof EditTextPreference) {
-            EditTextPreference editTextPref = (EditTextPreference) p;
-            p.setSummary(editTextPref.getText());
-        }
     }
 }

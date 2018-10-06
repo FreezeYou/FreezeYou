@@ -18,6 +18,8 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
 
+import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
+import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
 import static cf.playhi.freezeyou.Support.checkUpdate;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.isAccessibilitySettingsOn;
@@ -37,6 +39,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.spr);//preferences
         pm = getActivity().getPackageManager();
+        initSummary(getPreferenceScreen());
     }
 
     @Override
@@ -149,6 +152,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             default:
                 break;
         }
+        updatePrefSummary(findPreference(s));
     }
 
     @Override
