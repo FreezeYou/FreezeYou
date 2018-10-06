@@ -515,7 +515,7 @@ class Support {
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
         }
-        if (!pkgName.equals(currentPackage)) {
+        if ((!"cf.playhi.freezeyou".equals(pkgName)) && (!pkgName.equals(currentPackage))) {
             try {
                 final int exitValue = fAURoot(pkgName, enable);
                 if (exitValue == 0) {
@@ -553,7 +553,7 @@ class Support {
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
         }
-        if (!pkgName.equals(currentPackage)) {
+        if ((!"cf.playhi.freezeyou".equals(pkgName)) && (!pkgName.equals(currentPackage))) {
             if (getDevicePolicyManager(context).setApplicationHidden(
                     DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
                 if (hidden) {
@@ -633,7 +633,7 @@ class Support {
                 outputStream = new DataOutputStream(process.getOutputStream());
                 if (freeze) {
                     for (String aPkgNameList : pkgNameList) {
-                        if (!currentPackage.equals(aPkgNameList)) {
+                        if ((!"cf.playhi.freezeyou".equals(aPkgNameList)) && (!currentPackage.equals(aPkgNameList))) {
                             try {
                                 int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList);
                                 if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
@@ -702,7 +702,7 @@ class Support {
             for (String aPkgNameList : pkgNameList) {
                 try {
                     if (freeze) {
-                        if (!currentPackage.equals(aPkgNameList) && !checkMRootFrozen(context, aPkgNameList)) {
+                        if ((!"cf.playhi.freezeyou".equals(aPkgNameList)) && (!currentPackage.equals(aPkgNameList)) && (!checkMRootFrozen(context, aPkgNameList))) {
                             if (getDevicePolicyManager(context).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(context), aPkgNameList, true)) {
                                 deleteNotification(context, aPkgNameList);

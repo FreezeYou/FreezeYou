@@ -43,10 +43,10 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                                 Support.processFreezeAction(getApplicationContext(), previousPkg, false, null, false);
                             }
 
-                            onLeaveApplications(previousPkg,pkgNameString);//检测+执行
+                            onLeaveApplications(previousPkg, pkgNameString);//检测+执行
                         }
 
-                        onApplicationsForeground(previousPkg,pkgNameString);//检测+执行
+                        onApplicationsForeground(previousPkg, pkgNameString);//检测+执行
 
                     }
                 }
@@ -70,7 +70,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         return db.query("tasks", null, null, null, null, null, null);
     }
 
-    private void onApplicationsForeground(String previousPkg,@NonNull String pkgNameString){
+    private void onApplicationsForeground(String previousPkg, @NonNull String pkgNameString) {
 
         if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
             Cursor cursor = getCursor(this);
@@ -82,7 +82,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     }
                     String tg = cursor.getString(cursor.getColumnIndex("tg"));
                     int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                    if (enabled == 1 && "onApplicationsForeground".equals(tg) && Arrays.asList(tgExtra.split(",")).contains(pkgNameString)) {
+                    if (enabled == 1 && "onApplicationsForeground".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
                             Support.runTask(task.toLowerCase(), this);
@@ -95,7 +95,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         }
     }
 
-    private void onLeaveApplications(String previousPkg,@NonNull String pkgNameString){
+    private void onLeaveApplications(String previousPkg, @NonNull String pkgNameString) {
 
         if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
             Cursor cursor = getCursor(this);
