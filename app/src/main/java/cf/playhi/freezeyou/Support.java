@@ -33,6 +33,7 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -1024,13 +1025,23 @@ class Support {
         }
     }
 
-    private static void setTask(@NonNull AlarmManager alarmManager, long triggerAtMillis, PendingIntent operation) {
+    private static void setTask(@NonNull AlarmManager alarmManager, long triggerAtMillis, PendingIntent operation) {//RTC
         if (Build.VERSION.SDK_INT >= 23) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, operation);
         } else if (Build.VERSION.SDK_INT >= 19) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, operation);
         } else {
             alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, operation);
+        }
+    }
+
+    private static void setRealTimeTask(@NonNull AlarmManager alarmManager, long triggerAtMillis, PendingIntent operation) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, operation);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, operation);
+        } else {
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, operation);
         }
     }
 
@@ -1110,6 +1121,12 @@ class Support {
         } else {
             showToast(context, R.string.failed);
         }
+    }
+
+    private static void createDelayTasks(AlarmManager alarmManager, long delayAtSeconds, PendingIntent pendingIntent) {
+
+        setRealTimeTask(alarmManager, SystemClock.elapsedRealtime() + delayAtSeconds * 1000, pendingIntent);
+
     }
 
 //    static void checkLanguage(Context context) {
