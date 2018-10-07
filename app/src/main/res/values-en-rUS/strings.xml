@@ -200,6 +200,7 @@
     <item>On Screen Off</item>
     <item>When Applications Open</item>
     <item>When Leave Applications</item>
+    <item>解冻应用时</item>
   </string-array>
   <!--<string-array name="displayLanguageOptionsSelection" translatable="false">-->
   <!--<item>Default</item>-->
