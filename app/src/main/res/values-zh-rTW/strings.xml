@@ -92,8 +92,8 @@
   <string name="onClickFunction">單擊功能</string>
   <string name="chooseAction">選擇動作</string>
   <string name="autoUFOrFreeze">自動凍解</string>
-  <string name="UFAndRun">解冻启动</string>
-  <string name="autoUFOrFreezeAndRun">冻解启动</string>
+  <string name="UFAndRun">解凍啟動</string>
+  <string name="autoUFOrFreezeAndRun">凍解啟動</string>
   <string name="freezeCompleted">已凍結</string>
   <string name="UFCompleted">已解凍</string>
   <string name="shortCutOneKeyFreezeAdditionalOptions">快捷方式一鍵凍結後追加</string>
@@ -158,8 +158,8 @@
   <string name="showInRecents">顯示在最近工作清單</string>
   <string name="mayHaveNoEffectsL">在 Android 4.4 及以下系統無效</string>
   <string name="lesserToast">更少的 Toast 提示</string>
-  <string name="avoidFreezeForegroundApplications">避免冻结前台应用程序</string>
-  <string name="suggestUseTasksInstead">建议使用 计划任务 替代</string>
+  <string name="avoidFreezeForegroundApplications">避免凍結前臺應用程式</string>
+  <string name="suggestUseTasksInstead">建議使用 計畫任務 替代</string>
   <!--<string name="displayLanguage">显示语言</string>-->
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
@@ -199,8 +199,8 @@
     <item>打開螢幕時</item>
     <item>關閉螢幕時</item>
     <item>打開應用時</item>
-    <item>离开应用时</item>
-    <item>解冻应用时</item>
+    <item>離開應用時</item>
+    <item>解凍應用時</item>
   </string-array>
   <!--<string-array name="displayLanguageOptionsSelection" translatable="false">-->
   <!--<item>Default</item>-->
