@@ -23,6 +23,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -521,6 +523,7 @@ class Support {
                 final int exitValue = fAURoot(pkgName, enable);
                 if (exitValue == 0) {
                     if (enable) {
+                        onUFApplications(context, pkgName);
                         if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
                             showToast(context, R.string.executed);
                         }
@@ -564,6 +567,7 @@ class Support {
                     }
                     deleteNotification(context, pkgName);
                 } else {
+                    onUFApplications(context, pkgName);
                     sendStatusChangedBroadcast(context);
                     if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
                         showToast(context, R.string.UFCompleted);
@@ -671,6 +675,7 @@ class Support {
                         }
                     } else {
                         for (String aPkgNameList : pkgNameList) {
+                            onUFApplications(context, aPkgNameList);
                             createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
                         }
                     }
@@ -715,6 +720,7 @@ class Support {
                         if (checkMRootFrozen(context, aPkgNameList)) {
                             if (getDevicePolicyManager(context).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(context), aPkgNameList, false)) {
+                                onUFApplications(context, aPkgNameList);
                                 createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
                             } else {
                                 showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
@@ -1066,7 +1072,7 @@ class Support {
                 startService(context, new Intent(context, OneKeyUFService.class));
             } else if (asTasks.length() >= 4) {
                 String string = asTasks.substring(0, 2);
-                String[] tasks = asTasks.substring(3).replaceAll(" ", "").split(",");
+                String[] tasks = asTasks.substring(3).split(",");
                 switch (string) {
                     case "ff":
                         startService(
@@ -1090,12 +1096,14 @@ class Support {
                     case "ds": //disableSettings
                         enableAndDisableSysSettings(tasks, context, false);
                         break;
+                    case "st"://showToast
+                        showToast(context, asTasks.substring(3));
+                        break;
                     default:
                         break;
                 }
             }
         }
-
     }
 
     private static void enableAndDisableSysSettings(String[] tasks, Context context, boolean enable) {
@@ -1127,6 +1135,33 @@ class Support {
 
         setRealTimeTask(alarmManager, SystemClock.elapsedRealtime() + delayAtSeconds * 1000, pendingIntent);
 
+    }
+
+    private static void onUFApplications(Context context, @NonNull String pkgNameString) {
+        final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+        Cursor cursor = db.query("tasks", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                String tgExtra = cursor.getString(cursor.getColumnIndex("tgextra"));
+                if (tgExtra == null) {
+                    tgExtra = "";
+                }
+                String tg = cursor.getString(cursor.getColumnIndex("tg"));
+                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                if (enabled == 1 && "onUFApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
+                    String task = cursor.getString(cursor.getColumnIndex("task"));
+                    if (task != null && !"".equals(task)) {
+                        Support.runTask(task.toLowerCase(), context);
+                    }
+                }
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
     }
 
 //    static void checkLanguage(Context context) {

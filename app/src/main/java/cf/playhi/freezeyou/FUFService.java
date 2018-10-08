@@ -40,17 +40,15 @@ public class FUFService extends Service {
                     processRootAction(pkgName, context, true, askRun, runImmediately, null, false);
                 }
             }
-            stopSelf();
         } else {
             String[] packages = intent.getStringArrayExtra("packages");
             if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
                 oneKeyActionMRoot(context, freeze, packages);
-                stopSelf();
             } else {
                 oneKeyActionRoot(context, freeze, packages);
-                stopSelf();
             }
         }
+        stopSelf();
         return super.onStartCommand(intent, flags, startId);
     }
 
