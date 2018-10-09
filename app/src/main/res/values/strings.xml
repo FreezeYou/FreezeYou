@@ -158,6 +158,7 @@
     <string name="lesserToast">更少的 Toast 提示</string>
     <string name="avoidFreezeForegroundApplications">避免冻结前台应用程序</string>
     <string name="suggestUseTasksInstead">建议使用 计划任务 替代</string>
+    <string name="thirdPartyOpenSourceLicenses">第三方开放源代码许可</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>

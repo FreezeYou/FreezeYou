@@ -39,6 +39,7 @@ public class AboutActivity extends Activity {
                 getResources().getString(R.string.addQQGroup),
                 getResources().getString(R.string.update),
                 getResources().getString(R.string.donate),
+                getResources().getString(R.string.thirdPartyOpenSourceLicenses),
                 "V" + getVersionName(getApplicationContext()) + "(" + getVersionCode(getApplicationContext()) + ")"
         };
 
@@ -51,19 +52,19 @@ public class AboutActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf/");
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/");
                         break;
                     case 1:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf/faq.html");
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/faq.html");
                         break;
                     case 2:
                         requestOpenWebSite(activity, "https://crwd.in/freezeyou");
                         break;
                     case 3:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf/thanks.html");
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/thanks.html");
                         break;
                     case 4:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf");
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.net");
                         break;
                     case 5:
                         joinQQGroup(activity);
@@ -72,9 +73,12 @@ public class AboutActivity extends Activity {
                         checkUpdate(activity);
                         break;
                     case 7:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.cf/sponsorship.html");
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/sponsorship.html");
                         break;
                     case 8:
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/ThirdPartyOpenSourceLicenses.html");
+                        break;
+                    case 9:
                         showToast(activity, "V" + getVersionName(activity) + "(" + getVersionCode(activity) + ")");
                         break;
                     default:
