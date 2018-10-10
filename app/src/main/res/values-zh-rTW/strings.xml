@@ -160,7 +160,7 @@
   <string name="lesserToast">更少的 Toast 提示</string>
   <string name="avoidFreezeForegroundApplications">避免凍結前臺應用程式</string>
   <string name="suggestUseTasksInstead">建議使用 計畫任務 替代</string>
-  <string name="thirdPartyOpenSourceLicenses">第三方开放源代码许可</string>
+  <string name="thirdPartyOpenSourceLicenses">協力廠商開放原始碼許可</string>
   <!--<string name="displayLanguage">显示语言</string>-->
   <string-array name="launchModeSelection">
     <item>顯示全部</item>
