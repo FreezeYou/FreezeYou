@@ -160,7 +160,7 @@
   <string name="lesserToast">Fewer Toast Tips</string>
   <string name="avoidFreezeForegroundApplications">Avoid Freezing Foreground Applications</string>
   <string name="suggestUseTasksInstead">Recommend to use scheduled tasks instead</string>
-  <string name="thirdPartyOpenSourceLicenses">第三方开放源代码许可</string>
+  <string name="thirdPartyOpenSourceLicenses">Third-party Open Source Licenses</string>
   <!--<string name="displayLanguage">显示语言</string>-->
   <string-array name="launchModeSelection">
     <item>Show All</item>
@@ -201,7 +201,7 @@
     <item>On Screen Off</item>
     <item>When Applications Open</item>
     <item>When Leave Applications</item>
-    <item>解冻应用时</item>
+    <item>When Unfreeze Applications</item>
   </string-array>
   <!--<string-array name="displayLanguageOptionsSelection" translatable="false">-->
   <!--<item>Default</item>-->
