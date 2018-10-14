@@ -1,9 +1,11 @@
 package cf.playhi.freezeyou;
 
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
@@ -24,11 +26,13 @@ public class MainApplication extends Application {
         crashHandler.init();
 //        checkLanguage(getApplicationContext());
         try {
+
             File checkFile = new File(getFilesDir().getAbsolutePath() + File.separator + "20180808");
             if (!checkFile.exists()) {
                 updateConfig();
                 checkFile.createNewFile();
             }
+
             File importTrayLock = new File(getFilesDir().getAbsolutePath() + File.separator + "p2d.lock");
             if (!importTrayLock.exists()) {
                 new ImportTrayPreferences(this);
@@ -40,6 +44,7 @@ public class MainApplication extends Application {
                 appPreferences.put("onekeyFreezeWhenLockScreen", sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen", false));
                 importTrayLock.createNewFile();
             }
+
             File dataTransfer20180816Lock = new File(getFilesDir().getAbsolutePath() + File.separator + "20180816.lock");
             if (!dataTransfer20180816Lock.exists()) {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -51,6 +56,24 @@ public class MainApplication extends Application {
                 appPreferences.put("notificationBarDisableClickDisappear", sharedPreferences.getBoolean("notificationBarDisableClickDisappear", false));
                 dataTransfer20180816Lock.createNewFile();
             }
+
+            File appIconDataTransfer20181014 = new File(getFilesDir().getAbsolutePath() + File.separator + "appIconDataTransfer20181014.lock");
+            if (!appIconDataTransfer20181014.exists()) {
+                PackageManager pm = getPackageManager();
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                String[] theCls = new String[]{"cf.playhi.freezeyou.FirstIcon", "cf.playhi.freezeyou.SecondIcon", "cf.playhi.freezeyou.ThirdIcon"};
+                String[] theAppIconPrefs = new String[]{"firstIconEnabled", "secondIconEnabled", "thirdIconEnabled"};
+                for (int i = 0; i < theCls.length; i++) {
+                    if (sharedPreferences.getBoolean(theAppIconPrefs[i], "thirdIconEnabled".equals(theAppIconPrefs[i]))) {
+                        pm.setComponentEnabledSetting(new ComponentName(this, theCls[i]),
+                                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+                    } else {
+                        pm.setComponentEnabledSetting(new ComponentName(this, theCls[i]),
+                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                    }
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
