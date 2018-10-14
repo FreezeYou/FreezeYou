@@ -3,6 +3,7 @@ package cf.playhi.freezeyou;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,6 +21,7 @@ import java.io.File;
 
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
+import static cf.playhi.freezeyou.Support.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkUpdate;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.isAccessibilitySettingsOn;
@@ -207,6 +209,27 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                                     Uri.parse("package:cf.playhi.freezeyou")
                             ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getActivity().startActivity(uninstall);
+                    break;
+                case "deleteAllScheduledTasks":
+                    buildAlertDialog(getActivity(),android.R.drawable.ic_dialog_alert,R.string.askIfDel,R.string.caution)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    File file;
+                                    for (String name:new String[]{"scheduledTasks","scheduledTriggerTasks"}){
+                                        file = getActivity().getApplicationContext().getDatabasePath(name);
+                                        if (file.exists())
+                                            file.delete();
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                            .create().show();
                     break;
                 default:
                     break;
