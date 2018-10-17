@@ -161,6 +161,8 @@
   <string name="avoidFreezeForegroundApplications">避免冻结前台应用程序</string>
   <string name="suggestUseTasksInstead">建议使用 计划任务 替代</string>
   <string name="thirdPartyOpenSourceLicenses">第三方开放源代码许可</string>
+  <string name="delAllScheduledTasks">删除全部计划任务</string>
+  <string name="askIfDel">确认删除？</string>
   <!--<string name="displayLanguage">显示语言</string>-->
   <string-array name="launchModeSelection">
     <item>显示全部</item>

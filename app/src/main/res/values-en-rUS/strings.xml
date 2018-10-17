@@ -161,6 +161,8 @@
   <string name="avoidFreezeForegroundApplications">Avoid Freezing Foreground Applications</string>
   <string name="suggestUseTasksInstead">Recommend to use scheduled tasks instead</string>
   <string name="thirdPartyOpenSourceLicenses">Third-party Open Source Licenses</string>
+  <string name="delAllScheduledTasks">Delete All Scheduled Tasks</string>
+  <string name="askIfDel">Are you sure to delete?</string>
   <!--<string name="displayLanguage">显示语言</string>-->
   <string-array name="launchModeSelection">
     <item>Show All</item>
