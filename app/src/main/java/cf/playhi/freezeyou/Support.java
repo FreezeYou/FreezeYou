@@ -31,6 +31,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -40,6 +41,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.Window;
 import android.view.WindowManager;
@@ -51,6 +53,7 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -1114,6 +1117,9 @@ class Support {
                     if (wifiManager != null)
                         wifiManager.setWifiEnabled(enable);
                     break;
+                case "cd"://CellularData
+                    setMobileDataEnabled(context, enable);
+                    break;
                 default:
                     break;
             }
@@ -1162,6 +1168,39 @@ class Support {
         }
         cursor.close();
         db.close();
+    }
+
+    private static void setMobileDataEnabled(Context context, boolean enable) {
+        //https://stackoverflow.com/questions/21511216/toggle-mobile-data-programmatically-on-android-4-4-2
+        try {//4.4及以下
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            Class aClass = mConnectivityManager.getClass();
+            Class[] argsClass = new Class[1];
+            argsClass[0] = boolean.class;
+            Method method = aClass.getMethod("setMobileDataEnabled", argsClass);
+            method.invoke(mConnectivityManager, enable);
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {//pri-app方法
+                TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                Method methodSet = Class.forName(tm.getClass().getName()).getDeclaredMethod("setDataEnabled", Boolean.TYPE);
+                methodSet.invoke(tm, true);
+            } catch (Exception ee) {
+                ee.printStackTrace();
+                try {//Root方法
+                    Process process = Runtime.getRuntime().exec("su");
+                    DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
+                    outputStream.writeBytes("svc data " + (enable ? "enable" : "disable") + "\n");
+                    outputStream.writeBytes("exit\n");
+                    outputStream.flush();
+                    process.waitFor();
+                    destroyProcess(outputStream, process);
+                } catch (Exception eee) {//暂时无计可施……
+                    eee.printStackTrace();
+                    showToast(context, R.string.failed);
+                }
+            }
+        }
     }
 
 //    static void checkLanguage(Context context) {
