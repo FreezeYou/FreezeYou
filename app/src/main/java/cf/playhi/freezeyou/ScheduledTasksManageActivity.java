@@ -27,6 +27,7 @@ import java.util.Map;
 import static cf.playhi.freezeyou.Support.getThemeDot;
 import static cf.playhi.freezeyou.Support.processActionBar;
 import static cf.playhi.freezeyou.Support.processSetTheme;
+import static cf.playhi.freezeyou.Support.showToast;
 
 public class ScheduledTasksManageActivity extends Activity {
     private int themeDotResId;
@@ -190,18 +191,23 @@ public class ScheduledTasksManageActivity extends Activity {
         final Cursor cursor = db.query("tasks", null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
-                String label = cursor.getString(cursor.getColumnIndex("label"));
-                String hour = Integer.toString(cursor.getInt(cursor.getColumnIndex("hour")));
-                String minutes = Integer.toString(cursor.getInt(cursor.getColumnIndex("minutes")));
-                String time = (hour.length() == 1 ? "0" + hour : hour) + ":" + (minutes.length() == 1 ? "0" + minutes : minutes);
-                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                Map<String, Object> keyValuePair = new HashMap<>();
-                keyValuePair.put("label", label);
-                keyValuePair.put("time", time);
-                keyValuePair.put("enabled", enabled == 1 ? themeDotResId : R.drawable.shapedotwhite);
-                tasksData.add(keyValuePair);
-                integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
-                cursor.moveToNext();
+                try {
+                    String label = cursor.getString(cursor.getColumnIndex("label"));
+                    String hour = Integer.toString(cursor.getInt(cursor.getColumnIndex("hour")));
+                    String minutes = Integer.toString(cursor.getInt(cursor.getColumnIndex("minutes")));
+                    String time = (hour.length() == 1 ? "0" + hour : hour) + ":" + (minutes.length() == 1 ? "0" + minutes : minutes);
+                    int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                    Map<String, Object> keyValuePair = new HashMap<>();
+                    keyValuePair.put("label", label);
+                    keyValuePair.put("time", time);
+                    keyValuePair.put("enabled", enabled == 1 ? themeDotResId : R.drawable.shapedotwhite);
+                    tasksData.add(keyValuePair);
+                    integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
+                    cursor.moveToNext();
+                } catch (Exception e) {
+                    //找不到报错原因，先catch了，等相关信息多了想办法定位
+                    showToast(this, e.getLocalizedMessage());
+                }
             }
         }
         cursor.close();
@@ -217,18 +223,23 @@ public class ScheduledTasksManageActivity extends Activity {
         final Cursor cursor = db.query("tasks", null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
-                String label = cursor.getString(cursor.getColumnIndex("label"));
-                String tg = cursor.getString(cursor.getColumnIndex("tg"));
-                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                Map<String, Object> keyValuePair = new HashMap<>();
-                keyValuePair.put("label", label);
-                keyValuePair.put("time",
-                        Arrays.asList(getResources().getStringArray(R.array.triggers))
-                                .get(Arrays.asList(getResources().getStringArray(R.array.triggersValues)).indexOf(tg)));
-                keyValuePair.put("enabled", enabled == 1 ? themeDotResId : R.drawable.shapedotwhite);
-                tasksData.add(keyValuePair);
-                integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
-                cursor.moveToNext();
+                try {
+                    String label = cursor.getString(cursor.getColumnIndex("label"));
+                    String tg = cursor.getString(cursor.getColumnIndex("tg"));
+                    int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                    Map<String, Object> keyValuePair = new HashMap<>();
+                    keyValuePair.put("label", label);
+                    keyValuePair.put("time",
+                            Arrays.asList(getResources().getStringArray(R.array.triggers))
+                                    .get(Arrays.asList(getResources().getStringArray(R.array.triggersValues)).indexOf(tg)));
+                    keyValuePair.put("enabled", enabled == 1 ? themeDotResId : R.drawable.shapedotwhite);
+                    tasksData.add(keyValuePair);
+                    integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
+                    cursor.moveToNext();
+                } catch (Exception e) {
+                    //找不到报错原因，先catch了，等相关信息多了想办法定位
+                    showToast(this, e.getLocalizedMessage());
+                }
             }
         }
         cursor.close();
