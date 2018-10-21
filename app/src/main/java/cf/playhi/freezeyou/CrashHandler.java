@@ -1,5 +1,7 @@
 package cf.playhi.freezeyou;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.os.Environment;
 import android.util.Log;
 
@@ -13,16 +15,18 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private final Date date = new Date();
     private String logPath2;
     private static CrashHandler instance;
+    private Context mContext;
 
-    public static CrashHandler getInstance() {
+    static CrashHandler getInstance() {
         if (instance == null) {
             instance = new CrashHandler();
         }
         return instance;
     }
 
-    public void init() {
+    void init(Context context) {
         Thread.setDefaultUncaughtExceptionHandler(this);
+        mContext = context;
     }
 
     @Override
@@ -79,7 +83,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                     + android.os.Build.VERSION.SDK + ","
                     + android.os.Build.VERSION.RELEASE + "\n");
             StackTraceElement[] stackTrace = throwable.getStackTrace();
-            fw.write(throwable.getMessage() + "\n");
+            PackageInfo packageInfo = mContext.getPackageManager().getPackageInfo("cf.playhi.freezeyou", 0);
+            fw.write("VN:" + packageInfo.versionName + "\n");
+            fw.write("VC:" + packageInfo.versionCode + "\n");
+            fw.write("LM:" + throwable.getLocalizedMessage() + "\n");
+            fw.write("RM:" + throwable.getMessage() + "\n");
             for (StackTraceElement aStackTrace : stackTrace) {
                 fw.write("File:" + aStackTrace.getFileName() + " Class:"
                         + aStackTrace.getClassName() + " Method:"

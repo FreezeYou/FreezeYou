@@ -23,7 +23,7 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init();
+        crashHandler.init(this);
 //        checkLanguage(getApplicationContext());
         try {
 
