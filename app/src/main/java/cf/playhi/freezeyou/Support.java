@@ -856,6 +856,7 @@ class Support {
             context.startActivity(about);
         } else {
             showToast(context, context.getString(R.string.plsVisit) + " " + url);
+            copyToClipboard(context, url);
         }
     }
 
