@@ -846,7 +846,7 @@ class Support {
         //"https://play.google.com/store/apps/details?id=cf.playhi.freezeyou"
         //"https://freezeyou.playhi.cf/checkupdate.php?v=" + getVersionCode(context)
         String s = getVersionName(context);
-        requestOpenWebSite(context, s != null && s.contains("g") ? "https://play.google.com/store/apps/details?id=cf.playhi.freezeyou" : "https://freezeyou.playhi.cf/checkupdate.php?v=" + getVersionCode(context));
+        requestOpenWebSite(context, s != null && s.contains("g") ? "https://play.google.com/store/apps/details?id=cf.playhi.freezeyou" : "https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(context));
     }
 
     static void requestOpenWebSite(Context context, String url) {

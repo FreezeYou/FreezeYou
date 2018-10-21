@@ -191,16 +191,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     requestOpenWebSite(getActivity(), "https://crwd.in/freezeyou");
                     break;
                 case "donate":
-                    requestOpenWebSite(getActivity(), "https://freezeyou.playhi.cf/sponsorship.html");
+                    requestOpenWebSite(getActivity(), "https://freezeyou.playhi.net/sponsorship.html");
                     break;
                 case "thanksList":
-                    requestOpenWebSite(getActivity(), "https://freezeyou.playhi.cf/thanks.html");
+                    requestOpenWebSite(getActivity(), "https://freezeyou.playhi.net/thanks.html");
                     break;
                 case "configureAccessibilityService":
                     openAccessibilitySettings(getActivity());
                     break;
                 case "faq":
-                    requestOpenWebSite(getActivity(), "https://freezeyou.playhi.cf/faq.html");
+                    requestOpenWebSite(getActivity(), "https://freezeyou.playhi.net/faq.html");
                     break;
                 case "uninstall":
                     Intent uninstall =

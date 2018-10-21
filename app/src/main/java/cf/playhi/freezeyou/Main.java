@@ -317,7 +317,7 @@ public class Main extends Activity {
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.menu_faq:
-                requestOpenWebSite(this, "https://freezeyou.playhi.cf/faq.html");
+                requestOpenWebSite(this, "https://freezeyou.playhi.net/faq.html");
                 return true;
             case R.id.menu_onClickFunc_autoUFOrFreeze:
                 appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreeze;
@@ -794,7 +794,7 @@ public class Main extends Activity {
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Uri webPage = Uri.parse("https://app.playhi.cf/freezeyou/crashReport.php?data=" + Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT));
+                            Uri webPage = Uri.parse("https://freezeyou.playhi.net/crashReport.php?data=" + Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT));
                             Intent report = new Intent(Intent.ACTION_VIEW, webPage);
                             if (report.resolveActivity(getPackageManager()) != null) {
                                 startActivity(report);
@@ -925,7 +925,7 @@ public class Main extends Activity {
                     .setNeutralButton(R.string.hToUse, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            requestOpenWebSite(Main.this, "https://freezeyou.playhi.cf/");
+                            requestOpenWebSite(Main.this, "https://freezeyou.playhi.net/");
                         }
                     })
                     .setNegativeButton(R.string.nCaution, new DialogInterface.OnClickListener() {

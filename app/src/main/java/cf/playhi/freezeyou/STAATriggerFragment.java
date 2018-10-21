@@ -49,7 +49,7 @@ public class STAATriggerFragment extends PreferenceFragment implements SharedPre
         if (key != null) {
             switch (key) {
                 case "stma_add_help":
-                    Support.requestOpenWebSite(getActivity(), "https://wiki.playhi.cf/index.php?title=%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1_-_FreezeYou");
+                    Support.requestOpenWebSite(getActivity(), "https://wiki.playhi.net/index.php?title=%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1_-_FreezeYou");
                     break;
                 default:
                     break;
