@@ -164,7 +164,11 @@ class Support {
     }
 
     static boolean checkMRootFrozen(Context context, String pkgName) {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(context) && getDevicePolicyManager(context).isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
+        try {
+            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(context) && getDevicePolicyManager(context).isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     static boolean checkRootFrozen(Context context, String pkgName, PackageManager packageManager) {
