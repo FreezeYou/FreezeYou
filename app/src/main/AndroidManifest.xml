@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"/><!-- 开关移动数据，需 pri app -->
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" /><!-- 开关移动数据，需 pri app -->
 
     <permission
         android:name="cf.playhi.freezeyou.permission.GET_DISABLED_APPLICATIONS"
