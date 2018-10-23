@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:updatePeriodMillis="0"
-    android:previewImage="@mipmap/ic_launcher_new_round"
-    android:initialLayout="@layout/appwidget_onekeyfreeze"
-    android:resizeMode="horizontal|vertical"
-    android:widgetCategory="home_screen|keyguard|searchbox">
-</appwidget-provider>

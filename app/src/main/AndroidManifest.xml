@@ -127,32 +127,44 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="fuf"
+                    android:scheme="freezeyou" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".OneKeyFreeze"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
             android:label="@string/oneKeyFreeze"
-            android:launchMode="standard"
-            android:maxRecents="1"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar"
-            tools:ignore="UnusedAttribute">
+            android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".OneKeyUF"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
             android:label="@string/oneKeyUF"
-            android:launchMode="standard"
-            android:maxRecents="1"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar"
-            tools:ignore="UnusedAttribute">
+            android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -220,17 +232,21 @@
         <activity
             android:name=".OneKeyScreenLockImmediatelyActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:documentLaunchMode="always"
+            android:excludeFromRecents="true"
+            android:icon="@drawable/screenlock"
             android:label="@string/oneKeyLockScreen"
-            android:launchMode="standard"
-            android:maxRecents="1"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar"
-            tools:ignore="UnusedAttribute">
+            android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
+
 
         <receiver
             android:name=".DeviceAdminReceiver"
@@ -274,36 +290,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".widget.OneKeyFreezeWidget"
-            android:label="@string/oneKeyFreeze">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_onekeyfreeze" />
-        </receiver>
-        <receiver
-            android:name=".widget.OneKeyUFWidget"
-            android:label="@string/oneKeyUF">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_onekeyuf" />
-        </receiver>
-        <receiver
-            android:name=".widget.OneKeyLockScreen"
-            android:label="@string/oneKeyLockScreen">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_onekeylockscreen" />
         </receiver>
         <receiver
             android:name=".receiver.NotificationDeletedReceiver"

@@ -2,6 +2,8 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -33,8 +35,17 @@ public class Freeze extends Activity {
     }
 
     private void init() {
-        String pkgName = getIntent().getStringExtra("pkgName");
-        boolean auto = getIntent().getBooleanExtra("auto", true);
+        Intent intent = getIntent();
+        String pkgName;
+        boolean auto;
+        if ("freezeyou".equals(intent.getScheme())) {
+            Uri dataUri = intent.getData();
+            pkgName = (dataUri == null) ? null : dataUri.getQueryParameter("pkgName");
+            auto = false;
+        } else {
+            pkgName = intent.getStringExtra("pkgName");
+            auto = intent.getBooleanExtra("auto", true);
+        }
         if (pkgName == null) {
             showToast(getApplicationContext(), R.string.invalidArguments);
             Freeze.this.finish();
