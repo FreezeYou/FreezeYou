@@ -70,8 +70,17 @@ public class ScheduledTasksManageActivity extends Activity {
     }
 
     private void init() {
-        generateTasksList();
-        processAddButton();
+        if (Intent.ACTION_CREATE_SHORTCUT.equals(getIntent().getAction())) {
+            Intent intent = new Intent();
+            intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(this, ScheduledTasksManageActivity.class));
+            intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.scheduledTasks));
+            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(this, R.mipmap.ic_launcher_new_round));
+            setResult(RESULT_OK, intent);
+            finish();
+        } else {
+            generateTasksList();
+            processAddButton();
+        }
     }
 
     private void generateTasksList() {
