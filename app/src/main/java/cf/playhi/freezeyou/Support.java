@@ -43,6 +43,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -56,6 +57,7 @@ import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 import cf.playhi.freezeyou.receiver.NotificationDeletedReceiver;
 
@@ -1075,37 +1077,44 @@ class Support {
         String[] sTasks = task.split(";");
         for (String asTasks : sTasks) {
             if ("okff".equals(asTasks)) {
-                startService(context, new Intent(context, OneKeyFreezeService.class).putExtra("autoCheckAndLockScreen", false));
+                if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                    startService(context, new Intent(context, OneKeyFreezeService.class).putExtra("autoCheckAndLockScreen", false));
             } else if ("okuf".equals(asTasks)) {
-                startService(context, new Intent(context, OneKeyUFService.class));
+                if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                    startService(context, new Intent(context, OneKeyUFService.class));
             } else if (asTasks.length() >= 4) {
                 String string = asTasks.substring(0, 2);
                 String[] tasks = asTasks.substring(3).split(",");
                 switch (string) {
                     case "ff":
-                        startService(
-                                context,
-                                new Intent(context, FUFService.class)
-                                        .putExtra("packages", tasks)
-                                        .putExtra("freeze", true)
-                        );
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                            startService(
+                                    context,
+                                    new Intent(context, FUFService.class)
+                                            .putExtra("packages", tasks)
+                                            .putExtra("freeze", true)
+                            );
                         break;
                     case "uf":
-                        startService(
-                                context,
-                                new Intent(context, FUFService.class)
-                                        .putExtra("packages", tasks)
-                                        .putExtra("freeze", false)
-                        );
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                            startService(
+                                    context,
+                                    new Intent(context, FUFService.class)
+                                            .putExtra("packages", tasks)
+                                            .putExtra("freeze", false)
+                            );
                         break;
                     case "es": //enableSettings
-                        enableAndDisableSysSettings(tasks, context, true);
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                            enableAndDisableSysSettings(tasks, context, true);
                         break;
                     case "ds": //disableSettings
-                        enableAndDisableSysSettings(tasks, context, false);
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                            enableAndDisableSysSettings(tasks, context, false);
                         break;
                     case "st"://showToast
-                        showToast(context, asTasks.substring(3));
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                            showToast(context, asTasks.substring(3));
                         break;
                     default:
                         break;
@@ -1140,6 +1149,39 @@ class Support {
         } else {
             showToast(context, R.string.failed);
         }
+    }
+
+    private static boolean parseTaskAndReturnIfNeedExecuteImmediately(Context context,String task) {
+        String[] splitTask = task.split(" ");
+        int splitTaskLength = splitTask.length;
+        for (int i = 0; i < splitTaskLength; i++) {
+            Log.e("11",splitTask.toString());
+            switch (splitTask[i]) {
+                case "-d":
+                    if (i + 1 < splitTaskLength) {
+                        long delayAtSeconds = Long.valueOf(splitTask[i + 1]);
+                        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+                        Intent intent = new Intent(context, TasksNeedExecuteReceiver.class)
+                                .putExtra("id", -6)
+                                .putExtra("task", task.replace(" -d "+ splitTask[i + 1],""))
+                                .putExtra("repeat", "-1")
+                                .putExtra("hour", -1)
+                                .putExtra("minute", -1);
+                        PendingIntent pendingIntent =
+                                PendingIntent.getBroadcast(
+                                        context,
+                                        (task + new Date().toString()).hashCode(),
+                                        intent,
+                                        PendingIntent.FLAG_UPDATE_CURRENT);
+                        createDelayTasks(alarmMgr,delayAtSeconds,pendingIntent);
+                        return false;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return true;
     }
 
     private static void createDelayTasks(AlarmManager alarmManager, long delayAtSeconds, PendingIntent pendingIntent) {

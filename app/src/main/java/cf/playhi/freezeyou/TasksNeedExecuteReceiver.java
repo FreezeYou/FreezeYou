@@ -14,10 +14,12 @@ public class TasksNeedExecuteReceiver extends BroadcastReceiver {
         String task = intent.getStringExtra("task");
         String repeat = intent.getStringExtra("repeat");
         SQLiteDatabase db = context.openOrCreateDatabase("scheduledTasks", Context.MODE_PRIVATE, null);
-        if ("0".equals(repeat) && id != -5) {
-            db.execSQL("UPDATE tasks SET enabled = 0 WHERE _id = " + Integer.toString(id) + ";");
-        } else {
-            Support.publishTask(context, id, hour, minute, repeat, task);
+        if (id != -6) {//-6为延时任务
+            if ("0".equals(repeat) && id != -5) {
+                db.execSQL("UPDATE tasks SET enabled = 0 WHERE _id = " + Integer.toString(id) + ";");
+            } else {
+                Support.publishTask(context, id, hour, minute, repeat, task);
+            }
         }
         if (task != null && !"".equals(task)) {
             Support.runTask(task.toLowerCase(), context);//全部转小写
