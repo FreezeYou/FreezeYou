@@ -1076,10 +1076,10 @@ class Support {
     static void runTask(@NonNull String task, Context context) {
         String[] sTasks = task.split(";");
         for (String asTasks : sTasks) {
-            if ("okff".equals(asTasks)) {
+            if (asTasks.startsWith("okff")) {
                 if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
                     startService(context, new Intent(context, OneKeyFreezeService.class).putExtra("autoCheckAndLockScreen", false));
-            } else if ("okuf".equals(asTasks)) {
+            } else if (asTasks.startsWith("okuf")) {
                 if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
                     startService(context, new Intent(context, OneKeyUFService.class));
             } else if (asTasks.length() >= 4) {
@@ -1151,13 +1151,13 @@ class Support {
         }
     }
 
-    private static boolean parseTaskAndReturnIfNeedExecuteImmediately(Context context,String task) {
+    private static boolean parseTaskAndReturnIfNeedExecuteImmediately(Context context, String task) {
         String[] splitTask = task.split(" ");
         int splitTaskLength = splitTask.length;
         for (int i = 0; i < splitTaskLength; i++) {
             switch (splitTask[i]) {
                 case "-d":
-                    if (i < splitTaskLength) {
+                    if (splitTaskLength >= i + 1) {
                         long delayAtSeconds = Long.valueOf(splitTask[i + 1]);
                         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(ALARM_SERVICE);
                         Intent intent = new Intent(context, TasksNeedExecuteReceiver.class)
