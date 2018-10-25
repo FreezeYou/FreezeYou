@@ -1155,15 +1155,14 @@ class Support {
         String[] splitTask = task.split(" ");
         int splitTaskLength = splitTask.length;
         for (int i = 0; i < splitTaskLength; i++) {
-            Log.e("11",splitTask.toString());
             switch (splitTask[i]) {
                 case "-d":
-                    if (i + 1 < splitTaskLength) {
+                    if (i < splitTaskLength) {
                         long delayAtSeconds = Long.valueOf(splitTask[i + 1]);
                         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(ALARM_SERVICE);
                         Intent intent = new Intent(context, TasksNeedExecuteReceiver.class)
                                 .putExtra("id", -6)
-                                .putExtra("task", task.replace(" -d "+ splitTask[i + 1],""))
+                                .putExtra("task", task.replace(" -d " + splitTask[i + 1], ""))
                                 .putExtra("repeat", "-1")
                                 .putExtra("hour", -1)
                                 .putExtra("minute", -1);
@@ -1173,7 +1172,7 @@ class Support {
                                         (task + new Date().toString()).hashCode(),
                                         intent,
                                         PendingIntent.FLAG_UPDATE_CURRENT);
-                        createDelayTasks(alarmMgr,delayAtSeconds,pendingIntent);
+                        createDelayTasks(alarmMgr, delayAtSeconds, pendingIntent);
                         return false;
                     }
                     break;
