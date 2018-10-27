@@ -22,7 +22,7 @@ public class TasksNeedExecuteReceiver extends BroadcastReceiver {
             }
         }
         if (task != null && !"".equals(task)) {
-            Support.runTask(task.toLowerCase(), context);//全部转小写
+            Support.runTask(task.toLowerCase(), context, null);//全部转小写
         }
     }
 }

@@ -1073,21 +1073,21 @@ class Support {
         }
     }
 
-    static void runTask(@NonNull String task, Context context) {
+    static void runTask(@NonNull String task, Context context, @Nullable String taskTrigger) {
         String[] sTasks = task.split(";");
         for (String asTasks : sTasks) {
             if (asTasks.startsWith("okff")) {
-                if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                     startService(context, new Intent(context, OneKeyFreezeService.class).putExtra("autoCheckAndLockScreen", false));
             } else if (asTasks.startsWith("okuf")) {
-                if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                     startService(context, new Intent(context, OneKeyUFService.class));
             } else if (asTasks.length() >= 4) {
                 String string = asTasks.substring(0, 2);
                 String[] tasks = asTasks.substring(3).split(",");
                 switch (string) {
                     case "ff":
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             startService(
                                     context,
                                     new Intent(context, FUFService.class)
@@ -1096,7 +1096,7 @@ class Support {
                             );
                         break;
                     case "uf":
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             startService(
                                     context,
                                     new Intent(context, FUFService.class)
@@ -1105,16 +1105,20 @@ class Support {
                             );
                         break;
                     case "es": //enableSettings
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             enableAndDisableSysSettings(tasks, context, true);
                         break;
                     case "ds": //disableSettings
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             enableAndDisableSysSettings(tasks, context, false);
                         break;
                     case "st"://showToast
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks))
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             showToast(context, asTasks.substring(3));
+                        break;
+                    case "lg"://LOG.E
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                            Log.e("TasksLogE", asTasks.substring(3));
                         break;
                     default:
                         break;
@@ -1151,7 +1155,7 @@ class Support {
         }
     }
 
-    private static boolean parseTaskAndReturnIfNeedExecuteImmediately(Context context, String task) {
+    private static boolean parseTaskAndReturnIfNeedExecuteImmediately(Context context, String task, @Nullable String taskTrigger) {
         String[] splitTask = task.split(" ");
         int splitTaskLength = splitTask.length;
         for (int i = 0; i < splitTaskLength; i++) {
@@ -1166,13 +1170,18 @@ class Support {
                                 .putExtra("repeat", "-1")
                                 .putExtra("hour", -1)
                                 .putExtra("minute", -1);
+                        int requestCode = (task + new Date().toString()).hashCode();
                         PendingIntent pendingIntent =
                                 PendingIntent.getBroadcast(
                                         context,
-                                        (task + new Date().toString()).hashCode(),
+                                        requestCode,
                                         intent,
                                         PendingIntent.FLAG_UPDATE_CURRENT);
                         createDelayTasks(alarmMgr, delayAtSeconds, pendingIntent);
+                        if (taskTrigger != null) {//定时或无撤回判断能力或目前不计划实现撤销的任务直接null
+                            AppPreferences appPreferences = new AppPreferences(context);
+                            appPreferences.put(taskTrigger, appPreferences.getString(taskTrigger, "") + Integer.toString(requestCode) + ",");
+                        }
                         return false;
                     }
                     break;
@@ -1206,7 +1215,7 @@ class Support {
                 if (enabled == 1 && "onUFApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
                     String task = cursor.getString(cursor.getColumnIndex("task"));
                     if (task != null && !"".equals(task)) {
-                        Support.runTask(task.toLowerCase(), context);
+                        Support.runTask(task.toLowerCase(), context, null);
                     }
                 }
                 cursor.moveToNext();

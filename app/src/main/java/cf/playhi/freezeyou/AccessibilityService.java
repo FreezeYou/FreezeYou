@@ -61,19 +61,14 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     }
 
-    private Cursor getCursor(Context context) {
-        final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
-        db.execSQL(
-                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
-        );
-
-        return db.query("tasks", null, null, null, null, null, null);
-    }
-
     private void onApplicationsForeground(String previousPkg, @NonNull String pkgNameString) {
 
         if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
-            Cursor cursor = getCursor(this);
+            final SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+            db.execSQL(
+                    "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+            );
+            Cursor cursor = db.query("tasks", null, null, null, null, null, null);
             if (cursor.moveToFirst()) {
                 for (int i = 0; i < cursor.getCount(); i++) {
                     String tgExtra = cursor.getString(cursor.getColumnIndex("tgextra"));
@@ -85,20 +80,25 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     if (enabled == 1 && "onApplicationsForeground".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
-                            Support.runTask(task.toLowerCase(), this);
+                            Support.runTask(task.toLowerCase(), this, null);
                         }
                     }
                     cursor.moveToNext();
                 }
             }
             cursor.close();
+            db.close();
         }
     }
 
     private void onLeaveApplications(String previousPkg, @NonNull String pkgNameString) {
 
         if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
-            Cursor cursor = getCursor(this);
+            final SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+            db.execSQL(
+                    "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+            );
+            Cursor cursor = db.query("tasks", null, null, null, null, null, null);
             if (cursor.moveToFirst()) {
                 for (int i = 0; i < cursor.getCount(); i++) {
                     String tg = cursor.getString(cursor.getColumnIndex("tg"));
@@ -110,13 +110,14 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     if (enabled == 1 && "onLeaveApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(previousPkg))) {
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
-                            Support.runTask(task.toLowerCase(), this);
+                            Support.runTask(task.toLowerCase(), this, null);
                         }
                     }
                     cursor.moveToNext();
                 }
             }
             cursor.close();
+            db.close();
         }
     }
 }
