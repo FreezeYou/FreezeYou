@@ -242,7 +242,6 @@ public class FUFLauncherShortcutCreator extends Activity {
         return null;
     }
 
-
     /**
      * @param packageName 应用包名
      * @return true 则已冻结
@@ -254,8 +253,6 @@ public class FUFLauncherShortcutCreator extends Activity {
     private void processFrozenStatus(Map<String, Object> keyValuePair, String packageName, PackageManager packageManager) {
         keyValuePair.put("isFrozen", getFrozenStatus(packageName, packageManager));
     }
-
-
 
     /**
      * @param packageName 应用包名
