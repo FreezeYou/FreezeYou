@@ -58,10 +58,12 @@ import static cf.playhi.freezeyou.Support.askRun;
 import static cf.playhi.freezeyou.Support.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
+import static cf.playhi.freezeyou.Support.checkUpdate;
 import static cf.playhi.freezeyou.Support.copyToClipboard;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getApplicationLabel;
+import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.getThemeDot;
 import static cf.playhi.freezeyou.Support.getVersionCode;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
@@ -73,7 +75,6 @@ import static cf.playhi.freezeyou.Support.processUnfreezeAction;
 import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
 import static cf.playhi.freezeyou.Support.requestOpenWebSite;
 import static cf.playhi.freezeyou.Support.showToast;
-import static cf.playhi.freezeyou.Support.checkUpdate;
 
 public class Main extends Activity {
 
@@ -1061,6 +1062,8 @@ public class Main extends Activity {
                         editor.putInt("Ver", getVersionCode(getApplicationContext()));
                         editor.putLong("Time", new Date().getTime());
                         editor.commit();
+                        if (Build.VERSION.SDK_INT >= 24)
+                            getDevicePolicyManager(Main.this).setOrganizationName(DeviceAdminReceiver.getComponentName(Main.this), "FreezeYou");
                     }
                     if ((new Date().getTime() - sharedPreferences.getLong("Time", 0)) > 1296000000) {
                         runOnUiThread(new Runnable() {
