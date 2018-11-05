@@ -23,7 +23,7 @@ public class Uninstall extends Activity {
                         if (Support.isDeviceOwner(getApplicationContext())) {
                             try {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    Support.getDevicePolicyManager(getApplicationContext()).clearDeviceOwnerApp("cf.playhi.freezeyou");
+                                    DevicePolicyManagerUtils.getDevicePolicyManager(getApplicationContext()).clearDeviceOwnerApp("cf.playhi.freezeyou");
                                     showToast(getApplicationContext(), R.string.success);
                                 } else {
                                     showToast(getApplicationContext(), R.string.noRootNotActivated);
