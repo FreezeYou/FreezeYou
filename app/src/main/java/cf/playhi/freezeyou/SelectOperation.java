@@ -20,7 +20,7 @@ import android.widget.TextView;
 import net.grandcentrix.tray.AppPreferences;
 
 import static cf.playhi.freezeyou.Support.addToOneKeyList;
-import static cf.playhi.freezeyou.Support.copyToClipboard;
+import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.existsInOneKeyList;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;

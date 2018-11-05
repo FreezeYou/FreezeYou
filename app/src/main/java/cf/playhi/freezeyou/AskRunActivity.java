@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import static cf.playhi.freezeyou.Support.buildAlertDialog;
+import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkAndStartApp;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.processAddTranslucent;

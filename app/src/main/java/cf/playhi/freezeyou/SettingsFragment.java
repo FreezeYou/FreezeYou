@@ -21,13 +21,13 @@ import java.io.File;
 
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
-import static cf.playhi.freezeyou.Support.buildAlertDialog;
-import static cf.playhi.freezeyou.Support.checkUpdate;
+import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
+import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.Support.openAccessibilitySettings;
 import static cf.playhi.freezeyou.Support.openDevicePolicyManager;
-import static cf.playhi.freezeyou.Support.requestOpenWebSite;
+import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {

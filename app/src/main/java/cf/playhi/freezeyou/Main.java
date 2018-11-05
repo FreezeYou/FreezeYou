@@ -55,17 +55,17 @@ import java.util.Map;
 
 import static cf.playhi.freezeyou.Support.addToOneKeyList;
 import static cf.playhi.freezeyou.Support.askRun;
-import static cf.playhi.freezeyou.Support.buildAlertDialog;
+import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
-import static cf.playhi.freezeyou.Support.checkUpdate;
-import static cf.playhi.freezeyou.Support.copyToClipboard;
+import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.Support.createShortCut;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getApplicationLabel;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.getThemeDot;
-import static cf.playhi.freezeyou.Support.getVersionCode;
+import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
 import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
@@ -73,7 +73,7 @@ import static cf.playhi.freezeyou.Support.processFreezeAction;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.processUnfreezeAction;
 import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
-import static cf.playhi.freezeyou.Support.requestOpenWebSite;
+import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class Main extends Activity {

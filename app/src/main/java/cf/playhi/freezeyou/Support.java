@@ -11,15 +11,12 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
@@ -60,13 +57,13 @@ import java.util.Date;
 
 import cf.playhi.freezeyou.receiver.NotificationDeletedReceiver;
 
-import static cf.playhi.freezeyou.ToastUtils.showToast;
-
 import static android.content.Context.ALARM_SERVICE;
-import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.POWER_SERVICE;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
+import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
+import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
+import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 class Support {
     private static Drawable drawable;
@@ -122,22 +119,6 @@ class Support {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    static AlertDialog.Builder buildAlertDialog(Context context, int icon, int message, int title) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(icon);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        return builder;
-    }
-
-    static AlertDialog.Builder buildAlertDialog(Context context, Drawable icon, CharSequence message, CharSequence title) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(icon);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        return builder;
     }
 
     static void joinQQGroup(Context context) {
@@ -222,23 +203,6 @@ class Support {
             drawable.draw(canvas);
             return bitmap;
         }
-    }
-
-    static int getVersionCode(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        String packageName = context.getPackageName();
-        int flags = 0;
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = packageManager.getPackageInfo(packageName, flags);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        if (packageInfo != null) {
-            return packageInfo.versionCode;
-        }
-        return 0;
     }
 
     static Drawable getApplicationIcon(Context context, String pkgName, @Nullable ApplicationInfo applicationInfo, boolean resize) {
@@ -496,23 +460,6 @@ class Support {
         AppPreferences defaultSharedPreferences = new AppPreferences(context);
         String notifying = defaultSharedPreferences.getString("notifying", "");
         return notifying == null || !notifying.contains(pkgName + ",") || defaultSharedPreferences.put("notifying", notifying.replace(pkgName + ",", ""));
-    }
-
-    static String getVersionName(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        String packageName = context.getPackageName();
-        int flags = 0;
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = packageManager.getPackageInfo(packageName, flags);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        if (packageInfo != null) {
-            return packageInfo.versionName;
-        }
-        return "";
     }
 
     static void processRootAction(final String pkgName, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, @Nullable Activity activity, boolean finish) {
@@ -837,24 +784,6 @@ class Support {
         }
     }
 
-    static void checkUpdate(Context context) {
-        //"https://play.google.com/store/apps/details?id=cf.playhi.freezeyou"
-        //"https://freezeyou.playhi.cf/checkupdate.php?v=" + getVersionCode(context)
-        String s = getVersionName(context);
-        requestOpenWebSite(context, s != null && s.contains("g") ? "https://play.google.com/store/apps/details?id=cf.playhi.freezeyou" : "https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(context));
-    }
-
-    static void requestOpenWebSite(Context context, String url) {
-        Uri webPage = Uri.parse(url);
-        Intent about = new Intent(Intent.ACTION_VIEW, webPage);
-        if (about.resolveActivity(context.getPackageManager()) != null) {
-            context.startActivity(about);
-        } else {
-            showToast(context, context.getString(R.string.plsVisit) + " " + url);
-            copyToClipboard(context, url);
-        }
-    }
-
     static void doLockScreen(Context context) {
         //先走ROOT，有权限的话就可以不影响SmartLock之类的了
         try {
@@ -1134,17 +1063,6 @@ class Support {
                 default:
                     break;
             }
-        }
-    }
-
-    static void copyToClipboard(Context context, String data) {
-        ClipboardManager copy = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText(data, data);
-        if (copy != null) {
-            copy.setPrimaryClip(clip);
-            showToast(context, R.string.success);
-        } else {
-            showToast(context, R.string.failed);
         }
     }
 

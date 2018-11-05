@@ -9,13 +9,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import static cf.playhi.freezeyou.Support.checkUpdate;
-import static cf.playhi.freezeyou.Support.getVersionCode;
-import static cf.playhi.freezeyou.Support.getVersionName;
+import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
+import static cf.playhi.freezeyou.VersionUtils.getVersionName;
 import static cf.playhi.freezeyou.Support.joinQQGroup;
 import static cf.playhi.freezeyou.Support.processActionBar;
 import static cf.playhi.freezeyou.Support.processSetTheme;
-import static cf.playhi.freezeyou.Support.requestOpenWebSite;
+import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class AboutActivity extends Activity {

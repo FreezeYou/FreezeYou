@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import static cf.playhi.freezeyou.Support.buildAlertDialog;
+import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.doLockScreen;
 import static cf.playhi.freezeyou.Support.processAddTranslucent;
 import static cf.playhi.freezeyou.Support.processSetTheme;

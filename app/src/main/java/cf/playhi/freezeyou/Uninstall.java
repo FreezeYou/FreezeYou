@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 
-import static cf.playhi.freezeyou.Support.checkUpdate;
+import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.Support.processAddTranslucent;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
@@ -16,7 +16,7 @@ public class Uninstall extends Activity {
         processSetTheme(this);
         processAddTranslucent(this);
         super.onCreate(savedInstanceState);
-        Support.buildAlertDialog(this, R.mipmap.ic_launcher_round, R.string.removeNoRootCaution, R.string.plsConfirm)
+        AlertDialogUtils.buildAlertDialog(this, R.mipmap.ic_launcher_round, R.string.removeNoRootCaution, R.string.plsConfirm)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
