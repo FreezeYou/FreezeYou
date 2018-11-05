@@ -15,7 +15,7 @@ public class OneKeyScreenLockImmediatelyActivity extends Activity {
             intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(this, R.drawable.screenlock));
             setResult(RESULT_OK, intent);
         } else {
-            Support.doLockScreen(this);
+            DevicePolicyManagerUtils.doLockScreen(this);
         }
         finish();
     }

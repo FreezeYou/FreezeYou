@@ -11,7 +11,7 @@ import android.os.IBinder;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static cf.playhi.freezeyou.Support.doLockScreen;
+import static cf.playhi.freezeyou.DevicePolicyManagerUtils.doLockScreen;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
 import static cf.playhi.freezeyou.Support.oneKeyActionRoot;

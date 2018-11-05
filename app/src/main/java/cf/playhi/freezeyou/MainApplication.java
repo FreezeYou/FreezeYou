@@ -13,8 +13,6 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
 
-import static cf.playhi.freezeyou.Support.addToOneKeyList;
-
 public class MainApplication extends Application {
 
     private static String mCurrentPackage = " ";
@@ -121,7 +119,7 @@ public class MainApplication extends Application {
                 for (String aPkgNameList : pkgNames) {
                     String tmp = aPkgNameList.replaceAll("\\|", "");
                     if (!"".equals(tmp))
-                        addToOneKeyList(this, new_key_name, tmp);
+                        OneKeyListUtils.addToOneKeyList(this, new_key_name, tmp);
                 }
                 oldFile.delete();
             }

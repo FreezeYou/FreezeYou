@@ -53,28 +53,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static cf.playhi.freezeyou.Support.addToOneKeyList;
-import static cf.playhi.freezeyou.Support.askRun;
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
-import static cf.playhi.freezeyou.Support.checkMRootFrozen;
-import static cf.playhi.freezeyou.Support.checkRootFrozen;
-import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
-import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
-import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
-import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
-import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
-import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
-import static cf.playhi.freezeyou.Support.isDeviceOwner;
-import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
-import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
-import static cf.playhi.freezeyou.Support.processFreezeAction;
-import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.Support.processUnfreezeAction;
-import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
+import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
+import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
+import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
+import static cf.playhi.freezeyou.OneKeyListUtils.addToOneKeyList;
+import static cf.playhi.freezeyou.OneKeyListUtils.removeFromOneKeyList;
+import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
+import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
 
 public class Main extends Activity {
 
@@ -692,15 +684,15 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
                             if (realGetFrozenStatus(pkgName, null)) {
-                                processUnfreezeAction(Main.this, pkgName, false, false, null, false);
+                                Support.processUnfreezeAction(Main.this, pkgName, false, false, null, false);
                             } else {
-                                processFreezeAction(Main.this, pkgName, false, null, false);
+                                Support.processFreezeAction(Main.this, pkgName, false, null, false);
                             }
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_freezeImmediately:
                             if (!realGetFrozenStatus(pkgName, null)) {
-                                processFreezeAction(Main.this, pkgName, false, null, false);
+                                Support.processFreezeAction(Main.this, pkgName, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
                                     showToast(Main.this, R.string.freezeCompleted);
@@ -710,7 +702,7 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_UFImmediately:
                             if (realGetFrozenStatus(pkgName, null)) {
-                                processUnfreezeAction(Main.this, pkgName, false, false, null, false);
+                                Support.processUnfreezeAction(Main.this, pkgName, false, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
                                     showToast(Main.this, R.string.UFCompleted);
@@ -720,20 +712,20 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_UFAndRun:
                             if (realGetFrozenStatus(pkgName, null)) {
-                                processUnfreezeAction(Main.this, pkgName, true, false, null, false);
+                                Support.processUnfreezeAction(Main.this, pkgName, true, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
                                     showToast(Main.this, R.string.UFCompleted);
                                 }
-                                askRun(Main.this, pkgName, false, null, false);
+                                Support.askRun(Main.this, pkgName, false, null, false);
                             }
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_autoUFOrFreezeAndRun:
                             if (realGetFrozenStatus(pkgName, null)) {
-                                processUnfreezeAction(Main.this, pkgName, true, false, null, false);
+                                Support.processUnfreezeAction(Main.this, pkgName, true, false, null, false);
                             } else {
-                                processFreezeAction(Main.this, pkgName, false, null, false);
+                                Support.processFreezeAction(Main.this, pkgName, false, null, false);
                             }
                             updateFrozenStatus();
                             break;
@@ -952,7 +944,7 @@ public class Main extends Activity {
      * @return true 则已冻结
      */
     private boolean realGetFrozenStatus(String packageName, PackageManager pm) {
-        return (checkRootFrozen(Main.this, packageName, pm) || checkMRootFrozen(Main.this, packageName));
+        return (Support.checkRootFrozen(Main.this, packageName, pm) || Support.checkMRootFrozen(Main.this, packageName));
     }
 
     private void processFrozenStatus(Map<String, Object> keyValuePair, String packageName, PackageManager packageManager) {
@@ -1023,10 +1015,10 @@ public class Main extends Activity {
     private void processDisableAndEnableImmediately(boolean freeze) {
         int size = selectedPackages.size();
         String[] pkgNameList = selectedPackages.toArray(new String[size]);
-        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(Main.this)) {
-            oneKeyActionMRoot(Main.this, freeze, pkgNameList);
+        if (Build.VERSION.SDK_INT >= 21 && Support.isDeviceOwner(Main.this)) {
+            Support.oneKeyActionMRoot(Main.this, freeze, pkgNameList);
         } else {
-            oneKeyActionRoot(Main.this, freeze, pkgNameList);
+            Support.oneKeyActionRoot(Main.this, freeze, pkgNameList);
         }
         generateList(filterNowStatus);
     }
@@ -1062,7 +1054,7 @@ public class Main extends Activity {
                         editor.putInt("Ver", getVersionCode(getApplicationContext()));
                         editor.putLong("Time", new Date().getTime());
                         editor.commit();
-                        if (Build.VERSION.SDK_INT >= 24)
+                        if (Build.VERSION.SDK_INT >= 24 && Support.isDeviceOwner(Main.this))
                             getDevicePolicyManager(Main.this).setOrganizationName(DeviceAdminReceiver.getComponentName(Main.this), "FreezeYou");
                     }
                     if ((new Date().getTime() - sharedPreferences.getLong("Time", 0)) > 1296000000) {

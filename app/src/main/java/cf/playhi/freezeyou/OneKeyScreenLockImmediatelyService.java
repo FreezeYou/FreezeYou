@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 public class OneKeyScreenLockImmediatelyService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Support.doLockScreen(getApplicationContext());
+        DevicePolicyManagerUtils.doLockScreen(getApplicationContext());
         return super.onStartCommand(intent, flags, startId);
     }
 

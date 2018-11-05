@@ -3,27 +3,22 @@ package cf.playhi.freezeyou;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.admin.DevicePolicyManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.PowerManager;
 import android.support.annotation.Nullable;
 
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.DataOutputStream;
-import java.util.Arrays;
 
-import static android.content.Context.POWER_SERVICE;
-import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
 import static cf.playhi.freezeyou.NotificationUtils.createNotification;
 import static cf.playhi.freezeyou.NotificationUtils.deleteNotification;
 import static cf.playhi.freezeyou.ProcessUtils.destroyProcess;
@@ -75,10 +70,6 @@ class Support {
 
     static boolean isDeviceOwner(Context context) {
         return Build.VERSION.SDK_INT >= 18 && getDevicePolicyManager(context).isDeviceOwnerApp(context.getPackageName());
-    }
-
-    static DevicePolicyManager getDevicePolicyManager(Context context) {
-        return (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
     }
 
     static boolean checkMRootFrozen(Context context, String pkgName) {
@@ -229,16 +220,6 @@ class Support {
         checkAndDoActivityFinish(activity, finish);
     }
 
-    static ApplicationInfo getApplicationInfoFromPkgName(String pkgName, Context context) {
-        ApplicationInfo applicationInfo = null;
-        try {
-            applicationInfo = context.getPackageManager().getApplicationInfo(pkgName, GET_UNINSTALLED_PACKAGES);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return applicationInfo;
-    }
-
     static void oneKeyActionRoot(Context context, boolean freeze, String[] pkgNameList) {
         if (pkgNameList != null) {
             String currentPackage = " ";
@@ -358,65 +339,6 @@ class Support {
         intent.setAction("cf.playhi.freezeyou.action.packageStatusChanged");
         intent.setPackage("cf.playhi.freezeyou");
         context.sendBroadcast(intent);
-    }
-
-    static boolean addToOneKeyList(Context context, String key, String pkgName) {
-        final AppPreferences sharedPreferences = new AppPreferences(context);
-        final String pkgNames = sharedPreferences.getString(key, "");
-        return existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(key, pkgNames + pkgName + ",");
-    }
-
-    static boolean removeFromOneKeyList(Context context, String key, String pkgName) {
-        final AppPreferences sharedPreferences = new AppPreferences(context);
-        final String pkgNames = sharedPreferences.getString(key, "");
-        return !existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(key, pkgNames.replace(pkgName + ",", ""));
-    }
-
-    static boolean existsInOneKeyList(@Nullable String pkgNames, String pkgName) {
-        return pkgNames != null && Arrays.asList(pkgNames.split(",")).contains(pkgName);
-    }
-
-    static boolean existsInOneKeyList(Context context, String onekeyName, String pkgName) {
-        final String pkgNames = new AppPreferences(context).getString(onekeyName, "");
-        return pkgNames != null && Arrays.asList(pkgNames.split(",")).contains(pkgName);
-    }
-
-    static void openDevicePolicyManager(Context context) {
-        showToast(context, R.string.needActiveAccessibilityService);
-        ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
-        Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
-        context.startActivity(intent);
-    }
-
-    static void doLockScreen(Context context) {
-        //先走ROOT，有权限的话就可以不影响SmartLock之类的了
-        try {
-            Process process = Runtime.getRuntime().exec("su");
-            DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
-            outputStream.writeBytes("input keyevent KEYCODE_POWER" + "\n");
-            outputStream.writeBytes("exit\n");
-            outputStream.flush();
-            process.waitFor();
-            destroyProcess(outputStream, process);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        PowerManager pm = (PowerManager) context.getSystemService(POWER_SERVICE);
-        if (pm == null || pm.isScreenOn()) {
-            DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
-            ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
-            if (devicePolicyManager != null) {
-                if (devicePolicyManager.isAdminActive(componentName)) {
-                    devicePolicyManager.lockNow();
-                } else {
-                    openDevicePolicyManager(context);
-                }
-            } else {
-                showToast(context, R.string.devicePolicyManagerNotFound);
-            }
-        }
     }
 
 //    static void checkLanguage(Context context) {

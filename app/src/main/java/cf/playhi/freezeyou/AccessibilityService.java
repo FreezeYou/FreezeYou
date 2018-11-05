@@ -11,8 +11,6 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.util.Arrays;
 
-import static cf.playhi.freezeyou.Support.existsInOneKeyList;
-
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
     @SuppressLint("SwitchIntDef")
     @Override
@@ -38,7 +36,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             MainApplication.setCurrentPackage(pkgNameString);
                             if (!pkgNameString.equals(previousPkg)
                                     && new AppPreferences(getApplicationContext()).getBoolean("freezeOnceQuit", false)
-                                    && existsInOneKeyList(getApplicationContext(), getString(R.string.sFreezeOnceQuit), previousPkg)) {
+                                    && OneKeyListUtils.existsInOneKeyList(getApplicationContext(), getString(R.string.sFreezeOnceQuit), previousPkg)) {
                                 Support.processFreezeAction(getApplicationContext(), previousPkg, false, null, false);
                             }
 
