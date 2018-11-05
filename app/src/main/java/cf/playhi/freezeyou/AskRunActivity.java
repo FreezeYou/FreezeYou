@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkAndStartApp;
-import static cf.playhi.freezeyou.Support.getApplicationIcon;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ThemeUtils.processAddTranslucent;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 

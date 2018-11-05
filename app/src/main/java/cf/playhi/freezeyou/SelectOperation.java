@@ -21,12 +21,12 @@ import net.grandcentrix.tray.AppPreferences;
 
 import static cf.playhi.freezeyou.Support.addToOneKeyList;
 import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
-import static cf.playhi.freezeyou.Support.createShortCut;
+import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.Support.existsInOneKeyList;
-import static cf.playhi.freezeyou.Support.getApplicationIcon;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getApplicationInfoFromPkgName;
-import static cf.playhi.freezeyou.Support.isAccessibilitySettingsOn;
-import static cf.playhi.freezeyou.Support.openAccessibilitySettings;
+import static cf.playhi.freezeyou.AccessibilityUtils.isAccessibilitySettingsOn;
+import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 

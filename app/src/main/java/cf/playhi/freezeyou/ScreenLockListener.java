@@ -25,7 +25,7 @@ class ScreenLockListener {
                 switch (action) {
                     case Intent.ACTION_SCREEN_OFF:
                         if (new AppPreferences(context).getBoolean("onekeyFreezeWhenLockScreen", false)) {
-                            Support.startService(context,
+                            ServiceUtils.startService(context,
                                     new Intent(context, OneKeyFreezeService.class)
                                             .putExtra("autoCheckAndLockScreen", false)
                             );

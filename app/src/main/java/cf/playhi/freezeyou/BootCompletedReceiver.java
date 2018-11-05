@@ -15,10 +15,10 @@ import net.grandcentrix.tray.AppPreferences;
 import static android.content.Context.MODE_PRIVATE;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
-import static cf.playhi.freezeyou.Support.createNotification;
-import static cf.playhi.freezeyou.Support.getApplicationIcon;
-import static cf.playhi.freezeyou.Support.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.Support.publishTask;
+import static cf.playhi.freezeyou.NotificationUtils.createNotification;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.TasksUtils.publishTask;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
     @Override
@@ -129,12 +129,12 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                     }
                     switch (tg) {
                         case "onScreenOn":
-                            Support.startService(context,
+                            ServiceUtils.startService(context,
                                     new Intent(context, TriggerTasksService.class)
                                             .putExtra("OnScreenOn", true));
                             break;
                         case "onScreenOff":
-                            Support.startService(context,
+                            ServiceUtils.startService(context,
                                     new Intent(context, TriggerTasksService.class)
                                             .putExtra("OnScreenOff", true));
                             break;

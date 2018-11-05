@@ -24,7 +24,7 @@ import java.util.Set;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.Support.publishTask;
+import static cf.playhi.freezeyou.TasksUtils.publishTask;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class ScheduledTasksAddActivity extends Activity {
@@ -254,19 +254,19 @@ public class ScheduledTasksAddActivity extends Activity {
         if (enabled == 1 && trigger != null) {
             switch (trigger) {
                 case "onScreenOn":
-                    Support.startService(this,
+                    ServiceUtils.startService(this,
                             new Intent(this, TriggerTasksService.class)
                                     .putExtra("OnScreenOn", true));
                     break;
                 case "onScreenOff":
-                    Support.startService(this,
+                    ServiceUtils.startService(this,
                             new Intent(this, TriggerTasksService.class)
                                     .putExtra("OnScreenOff", true));
                     break;
                 case "onApplicationsForeground":
-                    if (!Support.isAccessibilitySettingsOn(this)) {
+                    if (!AccessibilityUtils.isAccessibilitySettingsOn(this)) {
                         showToast(this, R.string.needActiveAccessibilityService);
-                        Support.openAccessibilitySettings(this);
+                        AccessibilityUtils.openAccessibilitySettings(this);
                     }
                     break;
                 default:

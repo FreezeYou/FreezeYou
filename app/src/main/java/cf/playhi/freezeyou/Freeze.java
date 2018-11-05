@@ -11,9 +11,9 @@ import net.grandcentrix.tray.AppPreferences;
 
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
-import static cf.playhi.freezeyou.Support.getApplicationIcon;
-import static cf.playhi.freezeyou.Support.getApplicationLabel;
-import static cf.playhi.freezeyou.Support.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.ThemeUtils.processAddTranslucent;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.Support.shortcutMakeDialog;

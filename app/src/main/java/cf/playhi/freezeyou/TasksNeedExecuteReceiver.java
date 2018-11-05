@@ -18,11 +18,11 @@ public class TasksNeedExecuteReceiver extends BroadcastReceiver {
             if ("0".equals(repeat) && id != -5) {
                 db.execSQL("UPDATE tasks SET enabled = 0 WHERE _id = " + Integer.toString(id) + ";");
             } else {
-                Support.publishTask(context, id, hour, minute, repeat, task);
+                TasksUtils.publishTask(context, id, hour, minute, repeat, task);
             }
         }
         if (task != null && !"".equals(task)) {
-            Support.runTask(task.toLowerCase(), context, null);//全部转小写
+            TasksUtils.runTask(task.toLowerCase(), context, null);//全部转小写
         }
     }
 }

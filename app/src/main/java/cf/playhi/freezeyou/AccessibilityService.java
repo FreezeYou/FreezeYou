@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.PowerManager;
@@ -80,7 +79,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     if (enabled == 1 && "onApplicationsForeground".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
-                            Support.runTask(task.toLowerCase(), this, null);
+                            TasksUtils.runTask(task.toLowerCase(), this, null);
                         }
                     }
                     cursor.moveToNext();
@@ -110,7 +109,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     if (enabled == 1 && "onLeaveApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(previousPkg))) {
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
-                            Support.runTask(task.toLowerCase(), this, null);
+                            TasksUtils.runTask(task.toLowerCase(), this, null);
                         }
                     }
                     cursor.moveToNext();

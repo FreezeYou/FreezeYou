@@ -6,7 +6,7 @@ import android.content.Intent;
 
 import java.io.File;
 
-import static cf.playhi.freezeyou.Support.deleteNotifying;
+import static cf.playhi.freezeyou.NotificationUtils.deleteNotifying;
 import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
 
 public class UninstallReceiver extends BroadcastReceiver {
