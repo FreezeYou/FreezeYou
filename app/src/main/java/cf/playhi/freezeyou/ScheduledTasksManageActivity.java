@@ -27,7 +27,7 @@ import java.util.Map;
 import static cf.playhi.freezeyou.Support.getThemeDot;
 import static cf.playhi.freezeyou.Support.processActionBar;
 import static cf.playhi.freezeyou.Support.processSetTheme;
-import static cf.playhi.freezeyou.Support.showToast;
+import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class ScheduledTasksManageActivity extends Activity {
     private int themeDotResId;

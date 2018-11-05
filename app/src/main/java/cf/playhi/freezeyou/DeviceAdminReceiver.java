@@ -4,7 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
-import static cf.playhi.freezeyou.Support.showToast;
+import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class DeviceAdminReceiver extends android.app.admin.DeviceAdminReceiver {
 

@@ -28,7 +28,7 @@ import static cf.playhi.freezeyou.Support.getApplicationInfoFromPkgName;
 import static cf.playhi.freezeyou.Support.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.Support.openAccessibilitySettings;
 import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
-import static cf.playhi.freezeyou.Support.showToast;
+import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class SelectOperation extends Activity {
     @Override

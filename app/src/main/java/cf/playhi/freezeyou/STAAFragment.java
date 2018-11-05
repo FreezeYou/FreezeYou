@@ -9,7 +9,7 @@ import android.preference.PreferenceScreen;
 
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
-import static cf.playhi.freezeyou.Support.showToast;
+import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class STAAFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 

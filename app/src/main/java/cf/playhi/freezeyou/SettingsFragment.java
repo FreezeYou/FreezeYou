@@ -28,7 +28,7 @@ import static cf.playhi.freezeyou.Support.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.Support.openAccessibilitySettings;
 import static cf.playhi.freezeyou.Support.openDevicePolicyManager;
 import static cf.playhi.freezeyou.Support.requestOpenWebSite;
-import static cf.playhi.freezeyou.Support.showToast;
+import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 

@@ -74,7 +74,7 @@ import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.processUnfreezeAction;
 import static cf.playhi.freezeyou.Support.removeFromOneKeyList;
 import static cf.playhi.freezeyou.Support.requestOpenWebSite;
-import static cf.playhi.freezeyou.Support.showToast;
+import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class Main extends Activity {
 

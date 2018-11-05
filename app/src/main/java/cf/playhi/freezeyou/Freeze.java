@@ -17,7 +17,7 @@ import static cf.playhi.freezeyou.Support.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.Support.processAddTranslucent;
 import static cf.playhi.freezeyou.Support.processSetTheme;
 import static cf.playhi.freezeyou.Support.shortcutMakeDialog;
-import static cf.playhi.freezeyou.Support.showToast;
+import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class Freeze extends Activity {
     @Override

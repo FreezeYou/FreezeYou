@@ -13,7 +13,7 @@ import android.widget.EditText;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.processRootAction;
 import static cf.playhi.freezeyou.Support.processSetTheme;
-import static cf.playhi.freezeyou.Support.showToast;
+import static cf.playhi.freezeyou.ToastUtils.showToast;
 import static cf.playhi.freezeyou.Support.getDevicePolicyManager;
 
 public class ManualMode extends Activity {

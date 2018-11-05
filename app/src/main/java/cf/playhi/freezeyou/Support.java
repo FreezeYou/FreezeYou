@@ -123,14 +123,6 @@ class Support {
         }
     }
 
-    static void showToast(Context context, int id) {
-        Toast.makeText(context, id, Toast.LENGTH_LONG).show();
-    }
-
-    static void showToast(Context context, String string) {
-        Toast.makeText(context, string, Toast.LENGTH_LONG).show();
-    }
-
     static AlertDialog.Builder buildAlertDialog(Context context, int icon, int message, int title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setIcon(icon);
