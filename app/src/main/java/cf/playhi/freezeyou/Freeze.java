@@ -14,8 +14,8 @@ import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getApplicationLabel;
 import static cf.playhi.freezeyou.Support.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.Support.processAddTranslucent;
-import static cf.playhi.freezeyou.Support.processSetTheme;
+import static cf.playhi.freezeyou.ThemeUtils.processAddTranslucent;
+import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.Support.shortcutMakeDialog;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 

@@ -12,9 +12,9 @@ import android.widget.TextView;
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
 import static cf.playhi.freezeyou.VersionUtils.getVersionName;
-import static cf.playhi.freezeyou.Support.joinQQGroup;
-import static cf.playhi.freezeyou.Support.processActionBar;
-import static cf.playhi.freezeyou.Support.processSetTheme;
+import static cf.playhi.freezeyou.MoreUtils.joinQQGroup;
+import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
+import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 

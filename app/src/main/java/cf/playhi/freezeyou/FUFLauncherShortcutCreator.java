@@ -36,8 +36,8 @@ import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.getApplicationIcon;
 import static cf.playhi.freezeyou.Support.getApplicationLabel;
 import static cf.playhi.freezeyou.Support.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.Support.getThemeDot;
-import static cf.playhi.freezeyou.Support.processSetTheme;
+import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
+import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class FUFLauncherShortcutCreator extends Activity {
     @Override

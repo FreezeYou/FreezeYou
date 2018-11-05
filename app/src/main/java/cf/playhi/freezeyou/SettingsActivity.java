@@ -5,8 +5,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import static cf.playhi.freezeyou.Support.processActionBar;
-import static cf.playhi.freezeyou.Support.processSetTheme;
+import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
+import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class SettingsActivity extends Activity {
     @Override

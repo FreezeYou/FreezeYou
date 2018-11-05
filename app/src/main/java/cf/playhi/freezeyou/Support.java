@@ -2,7 +2,6 @@ package cf.playhi.freezeyou;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -34,15 +33,12 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -118,16 +114,6 @@ class Support {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    static void joinQQGroup(Context context) {
-        Intent intent = new Intent();
-        intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D92NGzlhmCK_UFrL_oEAV7Fe6QrvFR5y_"));
-        try {
-            context.startActivity(intent);
-        } catch (Exception e) {
-            requestOpenWebSite(context, "https://shang.qq.com/wpa/qunwpa?idkey=cbc8ae71402e8a1bc9bb4c39384bcfe5b9f7d18ff1548ea9bdd842f036832f3d");
         }
     }
 
@@ -724,66 +710,6 @@ class Support {
         context.startActivity(intent);
     }
 
-    static void processSetTheme(Context context) {
-        try {
-            String string = getUiTheme(context);
-            if (string != null) {
-                switch (string) {
-                    case "blue":
-                        context.setTheme(R.style.AppTheme_Default_Blue);
-                        break;
-                    case "orange":
-                        context.setTheme(R.style.AppTheme_Default_Orange);
-                        break;
-                    case "green":
-                        context.setTheme(R.style.AppTheme_Default_Green);
-                        break;
-                    case "pink":
-                        context.setTheme(R.style.AppTheme_Default_Pink);
-                        break;
-                    case "yellow":
-                        context.setTheme(R.style.AppTheme_Default_Yellow);
-                        break;
-                    case "black":
-                        context.setTheme(R.style.AppTheme_Default);
-                        break;
-                    case "white":
-                        context.setTheme(R.style.AppTheme_Default_White);
-                        break;
-                    default:
-                        if (Build.VERSION.SDK_INT >= 21) {
-                            context.setTheme(R.style.AppTheme_Default_Blue);
-                        } else {
-                            context.setTheme(R.style.AppTheme_Default);
-                        }
-                        break;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    static void processAddTranslucent(Activity activity) {
-        Window window = activity.getWindow();
-        if (window != null) {
-            window.requestFeature(Window.FEATURE_NO_TITLE);
-            window.setBackgroundDrawableResource(R.color.realTranslucent);
-            if (Build.VERSION.SDK_INT >= 19) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            }
-        }
-    }
-
-    static void processActionBar(ActionBar actionBar) {
-        if (actionBar != null) {
-            actionBar.setDisplayShowHomeEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
     static void doLockScreen(Context context) {
         //先走ROOT，有权限的话就可以不影响SmartLock之类的了
         try {
@@ -856,43 +782,6 @@ class Support {
             return false;
         }
         return false;
-    }
-
-    static int getThemeDot(Context context) {
-        int resId;
-        String string = getUiTheme(context);
-        if (string != null) {
-            switch (string) {
-                case "blue":
-                    resId = R.drawable.shapedotblue;
-                    break;
-                case "orange":
-                    resId = R.drawable.shapedotorange;
-                    break;
-                case "green":
-                    resId = R.drawable.shapedotgreen;
-                    break;
-                case "pink":
-                    resId = R.drawable.shapedotpink;
-                    break;
-                case "yellow":
-                    resId = R.drawable.shapedotyellow;
-                    break;
-                case "white":
-                    resId = R.drawable.shapedotblack;
-                    break;
-                default:
-                    resId = R.drawable.shapedotblue;
-                    break;
-            }
-        } else {
-            resId = R.drawable.shapedotblue;
-        }
-        return resId;
-    }
-
-    private static String getUiTheme(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default");
     }
 
     static void publishTask(Context context, int id, int hour, int minute, String repeat, String task) {

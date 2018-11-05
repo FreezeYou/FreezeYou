@@ -6,8 +6,8 @@ import android.os.Bundle;
 
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.doLockScreen;
-import static cf.playhi.freezeyou.Support.processAddTranslucent;
-import static cf.playhi.freezeyou.Support.processSetTheme;
+import static cf.playhi.freezeyou.ThemeUtils.processAddTranslucent;
+import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class AskLockScreenActivity extends Activity {
     @Override
