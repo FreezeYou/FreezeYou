@@ -8,7 +8,6 @@ import android.os.PowerManager;
 
 import java.io.DataOutputStream;
 
-import static cf.playhi.freezeyou.ProcessUtils.destroyProcess;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 final class DevicePolicyManagerUtils {
@@ -34,7 +33,7 @@ final class DevicePolicyManagerUtils {
             outputStream.writeBytes("exit\n");
             outputStream.flush();
             process.waitFor();
-            destroyProcess(outputStream, process);
+            ProcessUtils.destroyProcess(outputStream, process);
         } catch (Exception e) {
             e.printStackTrace();
         }
