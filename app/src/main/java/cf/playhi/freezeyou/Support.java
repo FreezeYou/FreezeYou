@@ -46,7 +46,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -60,6 +59,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import cf.playhi.freezeyou.receiver.NotificationDeletedReceiver;
+
+import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.CLIPBOARD_SERVICE;
