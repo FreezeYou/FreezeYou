@@ -1057,7 +1057,7 @@ public class Main extends Activity {
                         if (Build.VERSION.SDK_INT >= 24 && Support.isDeviceOwner(Main.this))
                             getDevicePolicyManager(Main.this).setOrganizationName(DeviceAdminReceiver.getComponentName(Main.this), "FreezeYou");
                     }
-                    if ((new Date().getTime() - sharedPreferences.getLong("Time", 0)) > 1296000000) {
+                    if ((new Date().getTime() - sharedPreferences.getLong("Time", 0)) > 1728000000) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
