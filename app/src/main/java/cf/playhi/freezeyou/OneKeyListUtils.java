@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -21,7 +20,7 @@ final class OneKeyListUtils {
         return !existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(key, pkgNames.replace(pkgName + ",", ""));
     }
 
-    static boolean existsInOneKeyList(@Nullable String pkgNames, String pkgName) {
+    static boolean existsInOneKeyList(String pkgNames, String pkgName) {
         return pkgNames != null && Arrays.asList(pkgNames.split(",")).contains(pkgName);
     }
 

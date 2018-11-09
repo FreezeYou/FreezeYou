@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -39,7 +38,7 @@ final class ApplicationIconUtils {
         }
     }
 
-    static Drawable getApplicationIcon(Context context, String pkgName, @Nullable ApplicationInfo applicationInfo, boolean resize) {
+    static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo, boolean resize) {
         String path = context.getFilesDir() + "/icon/" + pkgName + ".png";
         if (new File(path).exists()) {
             drawable = BitmapDrawable.createFromPath(path);

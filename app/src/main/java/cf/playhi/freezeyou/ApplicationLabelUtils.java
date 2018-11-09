@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.support.annotation.Nullable;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
 final class ApplicationLabelUtils {
 
-    static String getApplicationLabel(Context context, @Nullable PackageManager packageManager, @Nullable ApplicationInfo applicationInfo, String pkgName) {
+    static String getApplicationLabel(Context context, PackageManager packageManager, ApplicationInfo applicationInfo, String pkgName) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("NameOfPackages", MODE_PRIVATE);
         String name = sharedPreferences.getString(pkgName, "");
         if (!"".equals(name)) {

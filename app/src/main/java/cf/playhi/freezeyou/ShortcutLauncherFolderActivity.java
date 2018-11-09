@@ -35,6 +35,8 @@ public class ShortcutLauncherFolderActivity extends Activity {
             setContentView(R.layout.shortcut_launcher_folder);
             GridView slf_apps_gridView = findViewById(R.id.slf_apps_gridView);
 
+            slf_apps_gridView.setColumnWidth((int)(getResources().getDimension(android.R.dimen.app_icon_size)*1.5));
+
             ArrayList<HashMap<String, Object>> folderItems = new ArrayList<>();
 
 

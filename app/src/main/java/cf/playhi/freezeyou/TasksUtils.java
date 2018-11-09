@@ -10,8 +10,6 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -99,7 +97,7 @@ final class TasksUtils {
         }
     }
 
-    private static void setTask(@NonNull AlarmManager alarmManager, long triggerAtMillis, PendingIntent operation) {//RTC
+    private static void setTask(AlarmManager alarmManager, long triggerAtMillis, PendingIntent operation) {//RTC
         if (Build.VERSION.SDK_INT >= 23) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, operation);
         } else if (Build.VERSION.SDK_INT >= 19) {
@@ -109,7 +107,7 @@ final class TasksUtils {
         }
     }
 
-    private static void setRealTimeTask(@NonNull AlarmManager alarmManager, long triggerAtMillis, PendingIntent operation) {
+    private static void setRealTimeTask(AlarmManager alarmManager, long triggerAtMillis, PendingIntent operation) {
         if (Build.VERSION.SDK_INT >= 23) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtMillis, operation);
         } else if (Build.VERSION.SDK_INT >= 19) {
@@ -123,7 +121,7 @@ final class TasksUtils {
         return last - first;
     }
 
-    static void runTask(@NonNull String task, Context context, @Nullable String taskTrigger) {
+    static void runTask(String task, Context context, String taskTrigger) {
         String[] sTasks = task.split(";");
         for (String asTasks : sTasks) {
             if (asTasks.startsWith("okff")) {
@@ -194,7 +192,7 @@ final class TasksUtils {
         }
     }
 
-    private static boolean parseTaskAndReturnIfNeedExecuteImmediately(Context context, String task, @Nullable String taskTrigger) {
+    private static boolean parseTaskAndReturnIfNeedExecuteImmediately(Context context, String task, String taskTrigger) {
         String[] splitTask = task.split(" ");
         int splitTaskLength = splitTask.length;
         for (int i = 0; i < splitTaskLength; i++) {
@@ -237,7 +235,7 @@ final class TasksUtils {
 
     }
 
-    static void onUFApplications(Context context, @NonNull String pkgNameString) {
+    static void onUFApplications(Context context, String pkgNameString) {
         final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"

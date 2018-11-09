@@ -1,12 +1,11 @@
 package cf.playhi.freezeyou;
 
-import android.support.annotation.Nullable;
 
 import java.io.DataOutputStream;
 
 final class ProcessUtils {
 
-    static void destroyProcess(@Nullable DataOutputStream dataOutputStream, @Nullable Process process1) {
+    static void destroyProcess(DataOutputStream dataOutputStream, Process process1) {
         try {
             if (dataOutputStream != null) {
                 dataOutputStream.close();

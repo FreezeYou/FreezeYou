@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.support.annotation.Nullable;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -20,7 +19,7 @@ import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 final class NotificationUtils {
 
     @SuppressLint("ApplySharedPref")
-    static void createNotification(Context context, String pkgName, int iconResId, @Nullable Bitmap bitmap) {
+    static void createNotification(Context context, String pkgName, int iconResId, Bitmap bitmap) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             AppPreferences preferenceManager = new AppPreferences(context);
             boolean notificationBarFreezeImmediately = preferenceManager.getBoolean("notificationBarFreezeImmediately", true);

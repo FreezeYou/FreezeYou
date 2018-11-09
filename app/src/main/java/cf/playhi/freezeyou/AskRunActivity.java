@@ -3,7 +3,6 @@ package cf.playhi.freezeyou;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.Support.checkAndStartApp;
@@ -13,7 +12,7 @@ import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class AskRunActivity extends Activity {
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);
         processAddTranslucent(this);
         super.onCreate(savedInstanceState);

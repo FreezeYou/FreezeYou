@@ -11,7 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,7 +32,7 @@ public class ScheduledTasksAddActivity extends Activity {
     private int id;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stma_add);

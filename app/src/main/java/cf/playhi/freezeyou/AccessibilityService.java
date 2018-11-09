@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.PowerManager;
-import android.support.annotation.NonNull;
 import android.view.accessibility.AccessibilityEvent;
 
 import net.grandcentrix.tray.AppPreferences;
@@ -58,7 +57,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     }
 
-    private void onApplicationsForeground(String previousPkg, @NonNull String pkgNameString) {
+    private void onApplicationsForeground(String previousPkg,String pkgNameString) {
 
         if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
             final SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
@@ -88,7 +87,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         }
     }
 
-    private void onLeaveApplications(String previousPkg, @NonNull String pkgNameString) {
+    private void onLeaveApplications(String previousPkg, String pkgNameString) {
 
         if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
             final SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);

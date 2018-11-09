@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.annotation.Nullable;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -29,7 +28,7 @@ import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 class Support {
 
-    private static void makeDialog(final String title, final String message, final Context context, @Nullable final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled, @Nullable final Activity activity, final boolean finish) {
+    private static void makeDialog(final String title, final String message, final Context context, final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled, final Activity activity, final boolean finish) {
         AlertDialog.Builder builder =
                 buildAlertDialog(context, getApplicationIcon(context, pkgName, applicationInfo, true), message, title)
                         .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -90,7 +89,7 @@ class Support {
         return ((tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) || (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED));
     }
 
-    static void askRun(final Context context, final String pkgName, final boolean runImmediately, @Nullable Activity activity, boolean finish) {
+    static void askRun(final Context context, final String pkgName, final boolean runImmediately, Activity activity, boolean finish) {
         if (runImmediately || (new AppPreferences(context).getBoolean("openImmediately", false))) {
             checkAndStartApp(context, pkgName, activity, finish);
         } else {
@@ -100,7 +99,7 @@ class Support {
         }
     }
 
-    static void shortcutMakeDialog(Context context, String title, String message, final Activity activity, @Nullable final ApplicationInfo applicationInfo, final String pkgName, int ot, boolean auto, boolean finish) {
+    static void shortcutMakeDialog(Context context, String title, String message, final Activity activity, final ApplicationInfo applicationInfo, final String pkgName, int ot, boolean auto, boolean finish) {
         if (new AppPreferences(context).getBoolean("openAndUFImmediately", false) && auto) {
             if (ot == 2) {
                 checkAndStartApp(context, pkgName, activity, finish);
@@ -118,7 +117,7 @@ class Support {
         }
     }
 
-    static void processRootAction(final String pkgName, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, @Nullable Activity activity, boolean finish) {
+    static void processRootAction(final String pkgName, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
         String currentPackage = " ";
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
@@ -157,7 +156,7 @@ class Support {
     }
 
     @TargetApi(21)
-    static void processMRootAction(Context context, String pkgName, boolean hidden, boolean askRun, boolean runImmediately, @Nullable Activity activity, boolean finish) {
+    static void processMRootAction(Context context, String pkgName, boolean hidden, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
         String currentPackage = " ";
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
@@ -189,7 +188,7 @@ class Support {
         }
     }
 
-    static void checkAndStartApp(Context context, String pkgName, @Nullable Activity activity, boolean finish) {
+    static void checkAndStartApp(Context context, String pkgName, Activity activity, boolean finish) {
         if (context.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
             Intent intent = new Intent(
                     context.getPackageManager().getLaunchIntentForPackage(pkgName));
@@ -201,7 +200,7 @@ class Support {
         checkAndDoActivityFinish(activity, finish);
     }
 
-    static void processUnfreezeAction(Context context, String pkgName, boolean askRun, boolean runImmediately, @Nullable Activity activity, boolean finish) {
+    static void processUnfreezeAction(Context context, String pkgName, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
         startService(context, new Intent(context, FUFService.class)
                 .putExtra("askRun", askRun)
                 .putExtra("pkgName", pkgName)
@@ -211,7 +210,7 @@ class Support {
         checkAndDoActivityFinish(activity, finish);
     }
 
-    static void processFreezeAction(Context context, String pkgName, boolean askRun, @Nullable Activity activity, boolean finish) {
+    static void processFreezeAction(Context context, String pkgName, boolean askRun, Activity activity, boolean finish) {
         startService(context, new Intent(context, FUFService.class)
                 .putExtra("askRun", askRun)
                 .putExtra("pkgName", pkgName)
