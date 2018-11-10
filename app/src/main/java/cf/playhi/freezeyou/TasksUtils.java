@@ -2,6 +2,7 @@ package cf.playhi.freezeyou;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -185,6 +186,13 @@ final class TasksUtils {
                     break;
                 case "cd"://CellularData
                     setMobileDataEnabled(context, enable);
+                    break;
+                case "bluetooth"://Bluetooth
+                    if (enable) {
+                        BluetoothAdapter.getDefaultAdapter().enable();
+                    } else {
+                        BluetoothAdapter.getDefaultAdapter().disable();
+                    }
                     break;
                 default:
                     break;
