@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
@@ -35,25 +36,25 @@ public class ShortcutLauncherFolderActivity extends Activity {
             setContentView(R.layout.shortcut_launcher_folder);
             GridView slf_apps_gridView = findViewById(R.id.slf_apps_gridView);
 
-            slf_apps_gridView.setColumnWidth((int)(getResources().getDimension(android.R.dimen.app_icon_size)*1.5));
+            slf_apps_gridView.setColumnWidth((int) (getResources().getDimension(android.R.dimen.app_icon_size) * 1.5));
 
             ArrayList<HashMap<String, Object>> folderItems = new ArrayList<>();
 
 
-            List<ApplicationInfo> applicationInfo = getPackageManager().getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
+            final List<ApplicationInfo> applicationInfo = getPackageManager().getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
             int size = applicationInfo.size();
             for (int i = 0; i < size; i++) {
                 HashMap<String, Object> map = new HashMap<>();
 
                 map.put("Icon", ApplicationIconUtils.getApplicationIcon(this, applicationInfo.get(i).packageName, null, false));
-                map.put("Label", ApplicationLabelUtils.getApplicationLabel(this, null, null,  applicationInfo.get(i).packageName));
+                map.put("Label", ApplicationLabelUtils.getApplicationLabel(this, null, null, applicationInfo.get(i).packageName));
 
                 folderItems.add(map);
             }
 
             SimpleAdapter simpleAdapter = new SimpleAdapter(this, folderItems,
-                    R.layout.shortcut_launcher_folder_item, new String[] { "Icon", "Label" },
-                    new int[] { R.id.slfi_imageView, R.id.slfi_textView });
+                    R.layout.shortcut_launcher_folder_item, new String[]{"Icon", "Label"},
+                    new int[]{R.id.slfi_imageView, R.id.slfi_textView});
 
             simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
                 public boolean setViewValue(View view, Object data,
@@ -68,6 +69,17 @@ public class ShortcutLauncherFolderActivity extends Activity {
             });
 
             slf_apps_gridView.setAdapter(simpleAdapter);
+
+            slf_apps_gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Support.checkAndStartApp(
+                            ShortcutLauncherFolderActivity.this,
+                            applicationInfo.get(position).packageName,
+                            null,
+                            false);
+                }
+            });
         }
     }
 }

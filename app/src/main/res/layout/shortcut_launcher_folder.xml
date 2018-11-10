@@ -13,7 +13,8 @@
         android:layout_marginRight="50dp"
         android:gravity="center"
         android:padding="10dp"
-        android:text="@string/app_name" />
+        android:text="@string/app_name"
+        android:textSize="24sp" />
 
     <GridView
         android:id="@+id/slf_apps_gridView"
@@ -21,7 +22,7 @@
         android:layout_height="match_parent"
         android:layout_margin="20dp"
         android:gravity="center"
-        android:numColumns="3"
+        android:numColumns="auto_fit"
         android:stretchMode="spacingWidthUniform"
         android:verticalSpacing="20dp" />
 
