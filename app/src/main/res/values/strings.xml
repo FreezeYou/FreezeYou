@@ -161,6 +161,7 @@
     <string name="thirdPartyOpenSourceLicenses">第三方开放源代码许可</string>
     <string name="delAllScheduledTasks">删除全部计划任务</string>
     <string name="askIfDel">确认删除？</string>
+    <string name="folder">文件夹</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>

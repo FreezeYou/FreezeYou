@@ -36,7 +36,9 @@ public class ShortcutLauncherFolderActivity extends Activity {
             setContentView(R.layout.shortcut_launcher_folder);
             GridView slf_apps_gridView = findViewById(R.id.slf_apps_gridView);
 
-            slf_apps_gridView.setColumnWidth((int) (getResources().getDimension(android.R.dimen.app_icon_size) * 1.5));
+            slf_apps_gridView.setColumnWidth((int) (getResources().getDimension(android.R.dimen.app_icon_size) * 1.8));
+//            if (Build.VERSION.SDK_INT>=16)
+//                slf_apps_gridView.setVerticalSpacing(slf_apps_gridView.getRequestedColumnWidth()/slf_apps_gridView.getNumColumns());
 
             ArrayList<HashMap<String, Object>> folderItems = new ArrayList<>();
 
@@ -80,6 +82,7 @@ public class ShortcutLauncherFolderActivity extends Activity {
                             false);
                 }
             });
+
         }
     }
 }

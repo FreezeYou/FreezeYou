@@ -23,8 +23,8 @@ import java.util.Date;
 
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
-import static cf.playhi.freezeyou.ServiceUtils.startService;
 import static cf.playhi.freezeyou.ProcessUtils.destroyProcess;
+import static cf.playhi.freezeyou.ServiceUtils.startService;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 final class TasksUtils {

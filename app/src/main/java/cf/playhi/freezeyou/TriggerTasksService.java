@@ -27,14 +27,16 @@ public class TriggerTasksService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (triggerScreenLockListener == null && intent.getBooleanExtra("OnScreenOn", false)) {
-            triggerScreenLockListener = new TriggerScreenLockListener(getApplicationContext());
-            triggerScreenLockListener.registerListener();
-        }
+        if (intent != null) {
+            if (triggerScreenLockListener == null && intent.getBooleanExtra("OnScreenOn", false)) {
+                triggerScreenLockListener = new TriggerScreenLockListener(getApplicationContext());
+                triggerScreenLockListener.registerListener();
+            }
 
-        if (triggerScreenLockListener == null && intent.getBooleanExtra("OnScreenOff", false)) {
-            triggerScreenLockListener = new TriggerScreenLockListener(getApplicationContext());
-            triggerScreenLockListener.registerListener();
+            if (triggerScreenLockListener == null && intent.getBooleanExtra("OnScreenOff", false)) {
+                triggerScreenLockListener = new TriggerScreenLockListener(getApplicationContext());
+                triggerScreenLockListener.registerListener();
+            }
         }
 
         return super.onStartCommand(intent, flags, startId);
