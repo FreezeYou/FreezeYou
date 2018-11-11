@@ -10,9 +10,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.ActionMode;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -31,11 +28,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
@@ -61,6 +58,7 @@ public class FUFLauncherShortcutCreator extends Activity {
                     app_listView.setVisibility(View.GONE);
                 }
             });
+            app_listView.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
             final Context applicationContext = getApplicationContext();
             PackageManager packageManager = applicationContext.getPackageManager();
             List<ApplicationInfo> applicationInfo = packageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
@@ -111,7 +109,7 @@ public class FUFLauncherShortcutCreator extends Activity {
                 }
 
                 @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {//setFilterText报错不断，simpleAdapter这类似问题网上似乎隐隐约约也有人提出过……自己写一个蹩脚的筛选吧
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (TextUtils.isEmpty(charSequence)) {
                         app_listView.setAdapter(adapter);
                     } else {
@@ -153,46 +151,22 @@ public class FUFLauncherShortcutCreator extends Activity {
                 }
             });
 
-
-            app_listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-                @Override
-                public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
-                }
-
-                @Override
-                public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-                    return false;
-                }
-
-                @Override
-                public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                    return false;
-                }
-
-                @Override
-                public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                    return false;
-                }
-
-                @Override
-                public void onDestroyActionMode(ActionMode actionMode) {
-                    ;
-                }
-            });
-
-
             app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     HashMap<String, Object> map = (HashMap<String, Object>) app_listView.getItemAtPosition(i);
                     final String name = (String) map.get("Name");
                     final String pkgName = (String) map.get("PackageName");
-                    Intent shortcutIntent  = new Intent(FUFLauncherShortcutCreator.this, Freeze.class);
+                    Intent shortcutIntent = new Intent(FUFLauncherShortcutCreator.this, Freeze.class);
                     shortcutIntent.putExtra("pkgName", pkgName);
                     Intent intent = new Intent();
                     intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
                     intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
-                    intent.putExtra(Intent.EXTRA_SHORTCUT_ICON,getBitmapFromDrawable( getApplicationIcon(applicationContext,pkgName,null,false)));
+                    try {
+                        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getPackageManager().getApplicationIcon(pkgName)));
+                    } catch (Exception e) {
+                        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getApplicationIcon(applicationContext, pkgName, null, false)));
+                    }
                     setResult(RESULT_OK, intent);
                     finish();
                 }
@@ -203,7 +177,6 @@ public class FUFLauncherShortcutCreator extends Activity {
         }
 
     }
-
 
     private List<Map<String, Object>> processListFilter(CharSequence prefix, List<Map<String, Object>> unfilteredValues) {
 
