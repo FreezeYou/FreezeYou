@@ -163,7 +163,7 @@
     <string name="thirdPartyOpenSourceLicenses">Third-party Open Source Licenses</string>
     <string name="delAllScheduledTasks">Delete All Scheduled Tasks</string>
     <string name="askIfDel">Are you sure to delete?</string>
-    <string name="folder">文件夹</string>
+    <string name="folder">Folder</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
