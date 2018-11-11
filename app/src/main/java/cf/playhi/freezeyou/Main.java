@@ -1046,7 +1046,7 @@ public class Main extends Activity {
             @Override
             public void run() {
                 try {
-                    SharedPreferences sharedPreferences = getSharedPreferences("Ver", MODE_PRIVATE);
+                    final SharedPreferences sharedPreferences = getSharedPreferences("Ver", MODE_PRIVATE);
                     if (sharedPreferences.getInt("Ver", 0) < getVersionCode(getApplicationContext())) {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putInt("Ver", getVersionCode(getApplicationContext()));
@@ -1075,7 +1075,16 @@ public class Main extends Activity {
                                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                             }
-                                        }).create().show();
+                                        })
+                                        .setNeutralButton(R.string.later, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                editor.putLong("Time", new Date().getTime());
+                                                editor.commit();
+                                            }
+                                        })
+                                        .create().show();
                             }
                         });
                     }
