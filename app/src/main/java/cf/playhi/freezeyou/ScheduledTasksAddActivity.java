@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -62,18 +63,31 @@ public class ScheduledTasksAddActivity extends Activity {
                 finish();
                 return true;
             case R.id.menu_staa_delete:
-                setResult(RESULT_OK);
-                if (id != -5) {
-                    SQLiteDatabase db = openOrCreateDatabase(isTimeTask ? "scheduledTasks" : "scheduledTriggerTasks", MODE_PRIVATE, null);
-                    if (isTimeTask) {
-                        cancelTheTask(id);
-                    }
-                    db.execSQL("DELETE FROM tasks WHERE _id = " + id);
-                    db.close();
-                    finish();
-                } else {
-                    finish();
-                }
+                AlertDialogUtils.buildAlertDialog(this,android.R.drawable.ic_dialog_alert,R.string.askIfDel,R.string.notice)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                setResult(RESULT_OK);
+                                if (id != -5) {
+                                    SQLiteDatabase db = openOrCreateDatabase(isTimeTask ? "scheduledTasks" : "scheduledTriggerTasks", MODE_PRIVATE, null);
+                                    if (isTimeTask) {
+                                        cancelTheTask(id);
+                                    }
+                                    db.execSQL("DELETE FROM tasks WHERE _id = " + id);
+                                    db.close();
+                                    finish();
+                                } else {
+                                    finish();
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .create().show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
