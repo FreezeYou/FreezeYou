@@ -5,7 +5,10 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
@@ -99,6 +102,32 @@ final class ApplicationIconUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 参考：https://blog.csdn.net/xuwenneng/article/details/52634979
+     * 对图片进行灰度化处理
+     *
+     * @param bm 原始图片
+     * @return 灰度化图片
+     */
+    static Bitmap getGrayBitmap(Bitmap bm) {
+        Bitmap bitmap = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(), Bitmap.Config.ARGB_8888);
+        //创建画布
+        Canvas canvas = new Canvas(bitmap);
+        //创建画笔
+        Paint paint = new Paint();
+        //创建颜色矩阵
+        ColorMatrix matrix = new ColorMatrix();
+        //设置颜色矩阵的饱和度:0代表灰色,1表示原图
+        matrix.setSaturation(0);
+        //颜色过滤器
+        ColorMatrixColorFilter cmcf = new ColorMatrixColorFilter(matrix);
+        //设置画笔颜色过滤器
+        paint.setColorFilter(cmcf);
+        //画图
+        canvas.drawBitmap(bm, 0, 0, paint);
+        return bitmap;
     }
 
 }

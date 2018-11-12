@@ -200,6 +200,14 @@ class Support {
         checkAndDoActivityFinish(activity, finish);
     }
 
+    static void checkFrozenStatusAndStartApp(Context context, String pkgName) {
+        if (realGetFrozenStatus(context, pkgName, null)) {
+            processUnfreezeAction(context, pkgName, true, true, null, false);
+        } else {
+            checkAndStartApp(context, pkgName, null, false);
+        }
+    }
+
     static void processUnfreezeAction(Context context, String pkgName, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
         startService(context, new Intent(context, FUFService.class)
                 .putExtra("askRun", askRun)
@@ -338,6 +346,14 @@ class Support {
         intent.setAction("cf.playhi.freezeyou.action.packageStatusChanged");
         intent.setPackage("cf.playhi.freezeyou");
         context.sendBroadcast(intent);
+    }
+
+    /**
+     * @param packageName 应用包名
+     * @return true 则已冻结
+     */
+    static boolean realGetFrozenStatus(Context context, String packageName, PackageManager pm) {
+        return (Support.checkRootFrozen(context, packageName, pm) || Support.checkMRootFrozen(context, packageName));
     }
 
 //    static void checkLanguage(Context context) {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import static android.view.Window.FEATURE_NO_TITLE;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getGrayBitmap;
+import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class ShortcutLauncherFolderActivity extends Activity {
@@ -45,11 +50,14 @@ public class ShortcutLauncherFolderActivity extends Activity {
 
             final List<ApplicationInfo> applicationInfo = getPackageManager().getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
             int size = applicationInfo.size();
+            String pkgName;
             for (int i = 0; i < size; i++) {
                 HashMap<String, Object> map = new HashMap<>();
-
-                map.put("Icon", ApplicationIconUtils.getApplicationIcon(this, applicationInfo.get(i).packageName, null, false));
-                map.put("Label", ApplicationLabelUtils.getApplicationLabel(this, null, null, applicationInfo.get(i).packageName));
+                pkgName = applicationInfo.get(i).packageName;
+                map.put("Icon",
+                        Support.realGetFrozenStatus(this, pkgName, null) ? new BitmapDrawable(getGrayBitmap(getBitmapFromDrawable(getApplicationIcon(this, pkgName, null, false)))) : getApplicationIcon(this, pkgName, null, false)
+                );
+                map.put("Label", getApplicationLabel(this, null, null, pkgName));
 
                 folderItems.add(map);
             }
@@ -75,14 +83,13 @@ public class ShortcutLauncherFolderActivity extends Activity {
             slf_apps_gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Support.checkAndStartApp(
+                    Support.checkFrozenStatusAndStartApp(
                             ShortcutLauncherFolderActivity.this,
-                            applicationInfo.get(position).packageName,
-                            null,
-                            false);
+                            applicationInfo.get(position).packageName);
                 }
             });
 
         }
     }
+
 }

@@ -60,6 +60,7 @@ import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.OneKeyListUtils.addToOneKeyList;
 import static cf.playhi.freezeyou.OneKeyListUtils.removeFromOneKeyList;
+import static cf.playhi.freezeyou.Support.realGetFrozenStatus;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
@@ -681,7 +682,7 @@ public class Main extends Activity {
                             overridePendingTransition(R.anim.pullup, R.anim.pulldown);
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
-                            if (realGetFrozenStatus(pkgName, null)) {
+                            if (realGetFrozenStatus(Main.this,pkgName, null)) {
                                 Support.processUnfreezeAction(Main.this, pkgName, false, false, null, false);
                             } else {
                                 Support.processFreezeAction(Main.this, pkgName, false, null, false);
@@ -689,7 +690,7 @@ public class Main extends Activity {
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_freezeImmediately:
-                            if (!realGetFrozenStatus(pkgName, null)) {
+                            if (!realGetFrozenStatus(Main.this,pkgName, null)) {
                                 Support.processFreezeAction(Main.this, pkgName, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
@@ -699,7 +700,7 @@ public class Main extends Activity {
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_UFImmediately:
-                            if (realGetFrozenStatus(pkgName, null)) {
+                            if (realGetFrozenStatus(Main.this,pkgName, null)) {
                                 Support.processUnfreezeAction(Main.this, pkgName, false, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
@@ -709,7 +710,7 @@ public class Main extends Activity {
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_UFAndRun:
-                            if (realGetFrozenStatus(pkgName, null)) {
+                            if (realGetFrozenStatus(Main.this,pkgName, null)) {
                                 Support.processUnfreezeAction(Main.this, pkgName, true, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
@@ -720,7 +721,7 @@ public class Main extends Activity {
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_autoUFOrFreezeAndRun:
-                            if (realGetFrozenStatus(pkgName, null)) {
+                            if (realGetFrozenStatus(Main.this,pkgName, null)) {
                                 Support.processUnfreezeAction(Main.this, pkgName, true, false, null, false);
                             } else {
                                 Support.processFreezeAction(Main.this, pkgName, false, null, false);
@@ -934,15 +935,7 @@ public class Main extends Activity {
      * @return 资源 Id
      */
     private int getFrozenStatus(String packageName, PackageManager packageManager) {
-        return realGetFrozenStatus(packageName, packageManager) ? customThemeDisabledDot : R.drawable.shapedotwhite;
-    }
-
-    /**
-     * @param packageName 应用包名
-     * @return true 则已冻结
-     */
-    private boolean realGetFrozenStatus(String packageName, PackageManager pm) {
-        return (Support.checkRootFrozen(Main.this, packageName, pm) || Support.checkMRootFrozen(Main.this, packageName));
+        return realGetFrozenStatus(Main.this, packageName, packageManager) ? customThemeDisabledDot : R.drawable.shapedotwhite;
     }
 
     private void processFrozenStatus(Map<String, Object> keyValuePair, String packageName, PackageManager packageManager) {
