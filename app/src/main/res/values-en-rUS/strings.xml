@@ -164,6 +164,7 @@
     <string name="delAllScheduledTasks">Delete All Scheduled Tasks</string>
     <string name="askIfDel">Are you sure to delete?</string>
     <string name="folder">Folder</string>
+    <string name="later">Later</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
