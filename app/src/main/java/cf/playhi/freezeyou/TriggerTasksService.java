@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -17,8 +16,8 @@ import android.os.IBinder;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
+import static cf.playhi.freezeyou.TasksUtils.cancelAllUnexecutedDelayTasks;
 
 public class TriggerTasksService extends Service {
 
@@ -155,22 +154,4 @@ class TriggerScreenLockListener {
         return db.query("tasks", null, null, null, null, null, null);
     }
 
-    private void cancelAllUnexecutedDelayTasks(Context context, String typeNeedsCheck) {
-        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(context, TasksNeedExecuteReceiver.class);
-        AppPreferences appPreferences = new AppPreferences(context);
-        String unprocessed = appPreferences.getString(typeNeedsCheck, "");
-        if (unprocessed == null)
-            unprocessed = "";
-
-        for (String id : unprocessed.split(",")) {
-            if (id!=null&&!"".equals(id)){
-                PendingIntent alarmIntent = PendingIntent.getBroadcast(context, Integer.parseInt(id), intent, PendingIntent.FLAG_CANCEL_CURRENT);
-                if (alarmMgr != null) {
-                    alarmMgr.cancel(alarmIntent);
-                }
-            }
-        }
-        appPreferences.put(typeNeedsCheck, "");
-    }
 }

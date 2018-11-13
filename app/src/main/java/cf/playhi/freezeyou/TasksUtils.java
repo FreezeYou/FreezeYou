@@ -22,8 +22,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-import static android.content.Context.ALARM_SERVICE;
-import static android.content.Context.MODE_PRIVATE;
 import static cf.playhi.freezeyou.ProcessUtils.destroyProcess;
 import static cf.playhi.freezeyou.ServiceUtils.startService;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
@@ -31,7 +29,7 @@ import static cf.playhi.freezeyou.ToastUtils.showToast;
 final class TasksUtils {
 
     static void publishTask(Context context, int id, int hour, int minute, String repeat, String task) {
-        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TasksNeedExecuteReceiver.class)
                 .putExtra("id", id)
                 .putExtra("task", task)
@@ -208,7 +206,7 @@ final class TasksUtils {
                 case "-d":
                     if (splitTaskLength >= i + 1) {
                         long delayAtSeconds = Long.valueOf(splitTask[i + 1]);
-                        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+                        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         Intent intent = new Intent(context, TasksNeedExecuteReceiver.class)
                                 .putExtra("id", -6)
                                 .putExtra("task", task.replace(" -d " + splitTask[i + 1], ""))
@@ -244,7 +242,7 @@ final class TasksUtils {
     }
 
     static void onUFApplications(Context context, String pkgNameString) {
-        final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+        final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
         );
@@ -301,6 +299,25 @@ final class TasksUtils {
                 }
             }
         }
+    }
+
+    static void cancelAllUnexecutedDelayTasks(Context context, String typeNeedsCheckTaskTrigger) {
+        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, TasksNeedExecuteReceiver.class);
+        AppPreferences appPreferences = new AppPreferences(context);
+        String unprocessed = appPreferences.getString(typeNeedsCheckTaskTrigger, "");
+        if (unprocessed == null)
+            unprocessed = "";
+
+        for (String id : unprocessed.split(",")) {
+            if (id != null && !"".equals(id)) {
+                PendingIntent alarmIntent = PendingIntent.getBroadcast(context, Integer.parseInt(id), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                if (alarmMgr != null) {
+                    alarmMgr.cancel(alarmIntent);
+                }
+            }
+        }
+        appPreferences.put(typeNeedsCheckTaskTrigger, "");
     }
 
 }

@@ -10,6 +10,8 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.util.Arrays;
 
+import static cf.playhi.freezeyou.TasksUtils.cancelAllUnexecutedDelayTasks;
+
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
     @SuppressLint("SwitchIntDef")
     @Override
@@ -57,7 +59,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     }
 
-    private void onApplicationsForeground(String previousPkg,String pkgNameString) {
+    private void onApplicationsForeground(String previousPkg, String pkgNameString) {
 
         if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
             final SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
@@ -74,9 +76,14 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     String tg = cursor.getString(cursor.getColumnIndex("tg"));
                     int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
                     if (enabled == 1 && "onApplicationsForeground".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
+                        cancelAllUnexecutedDelayTasks(this, "OSA_" + ("".equals(tgExtra) ? "" : previousPkg));//撤销全部属于上一应用的未执行的打开应用时
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
-                            TasksUtils.runTask(task.toLowerCase(), this, null);
+                            TasksUtils.runTask(
+                                    task.replace("[ppkgn]", previousPkg).replace("[cpkgn]", pkgNameString),
+                                    this,
+                                    "OSA_" + ("".equals(tgExtra) ? "" : pkgNameString)
+                            );
                         }
                     }
                     cursor.moveToNext();
@@ -104,9 +111,14 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         tgExtra = "";
                     }
                     if (enabled == 1 && "onLeaveApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(previousPkg))) {
+                        cancelAllUnexecutedDelayTasks(this, "OLA_" + ("".equals(tgExtra) ? "" : pkgNameString));//撤销全部属于被打开应用的未执行的离开应用时
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
-                            TasksUtils.runTask(task.toLowerCase(), this, null);
+                            TasksUtils.runTask(
+                                    task.replace("[ppkgn]", previousPkg).replace("[cpkgn]", pkgNameString),
+                                    this,
+                                    "OLA_" + ("".equals(tgExtra) ? "" : previousPkg)
+                            );
                         }
                     }
                     cursor.moveToNext();
