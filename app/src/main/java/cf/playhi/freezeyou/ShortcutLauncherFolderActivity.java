@@ -49,7 +49,7 @@ public class ShortcutLauncherFolderActivity extends Activity {
 
 
             final List<ApplicationInfo> applicationInfo = getPackageManager().getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
-            int size = applicationInfo.size();
+            int size = applicationInfo == null ? 0 : applicationInfo.size();
             String pkgName;
             for (int i = 0; i < size; i++) {
                 HashMap<String, Object> map = new HashMap<>();

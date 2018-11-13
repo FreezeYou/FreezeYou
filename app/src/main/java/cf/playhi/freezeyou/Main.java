@@ -389,7 +389,7 @@ public class Main extends Activity {
         Context applicationContext = getApplicationContext();
         PackageManager packageManager = applicationContext.getPackageManager();
         List<ApplicationInfo> applicationInfo = packageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
-        int size = applicationInfo.size();
+        int size = applicationInfo == null ? 0 : applicationInfo.size();
         switch (filter) {
             case "all":
                 for (int i = 0; i < size; i++) {
@@ -682,7 +682,7 @@ public class Main extends Activity {
                             overridePendingTransition(R.anim.pullup, R.anim.pulldown);
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
-                            if (realGetFrozenStatus(Main.this,pkgName, null)) {
+                            if (realGetFrozenStatus(Main.this, pkgName, null)) {
                                 Support.processUnfreezeAction(Main.this, pkgName, false, false, null, false);
                             } else {
                                 Support.processFreezeAction(Main.this, pkgName, false, null, false);
@@ -690,7 +690,7 @@ public class Main extends Activity {
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_freezeImmediately:
-                            if (!realGetFrozenStatus(Main.this,pkgName, null)) {
+                            if (!realGetFrozenStatus(Main.this, pkgName, null)) {
                                 Support.processFreezeAction(Main.this, pkgName, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
@@ -700,7 +700,7 @@ public class Main extends Activity {
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_UFImmediately:
-                            if (realGetFrozenStatus(Main.this,pkgName, null)) {
+                            if (realGetFrozenStatus(Main.this, pkgName, null)) {
                                 Support.processUnfreezeAction(Main.this, pkgName, false, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
@@ -710,7 +710,7 @@ public class Main extends Activity {
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_UFAndRun:
-                            if (realGetFrozenStatus(Main.this,pkgName, null)) {
+                            if (realGetFrozenStatus(Main.this, pkgName, null)) {
                                 Support.processUnfreezeAction(Main.this, pkgName, true, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
@@ -721,7 +721,7 @@ public class Main extends Activity {
                             updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_autoUFOrFreezeAndRun:
-                            if (realGetFrozenStatus(Main.this,pkgName, null)) {
+                            if (realGetFrozenStatus(Main.this, pkgName, null)) {
                                 Support.processUnfreezeAction(Main.this, pkgName, true, false, null, false);
                             } else {
                                 Support.processFreezeAction(Main.this, pkgName, false, null, false);

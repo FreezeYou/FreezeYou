@@ -76,13 +76,13 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     String tg = cursor.getString(cursor.getColumnIndex("tg"));
                     int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
                     if (enabled == 1 && "onApplicationsForeground".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
-                        cancelAllUnexecutedDelayTasks(this, "OSA_" + ("".equals(tgExtra) ? "" : previousPkg));//撤销全部属于上一应用的未执行的打开应用时
+                        cancelAllUnexecutedDelayTasks(this, "".equals(tgExtra) ? null : "OSA_" + previousPkg);//撤销全部属于上一应用的未执行的打开应用时
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
                             TasksUtils.runTask(
                                     task.replace("[ppkgn]", previousPkg).replace("[cpkgn]", pkgNameString),
                                     this,
-                                    "OSA_" + ("".equals(tgExtra) ? "" : pkgNameString)
+                                    ("".equals(tgExtra) ? null : "OSA_" + pkgNameString)
                             );
                         }
                     }
@@ -111,13 +111,13 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         tgExtra = "";
                     }
                     if (enabled == 1 && "onLeaveApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(previousPkg))) {
-                        cancelAllUnexecutedDelayTasks(this, "OLA_" + ("".equals(tgExtra) ? "" : pkgNameString));//撤销全部属于被打开应用的未执行的离开应用时
+                        cancelAllUnexecutedDelayTasks(this, "".equals(tgExtra) ? null : "OLA_" + pkgNameString);//撤销全部属于被打开应用的未执行的离开应用时
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
                             TasksUtils.runTask(
                                     task.replace("[ppkgn]", previousPkg).replace("[cpkgn]", pkgNameString),
                                     this,
-                                    "OLA_" + ("".equals(tgExtra) ? "" : previousPkg)
+                                    "".equals(tgExtra) ? null : "OLA_" + previousPkg
                             );
                         }
                     }
