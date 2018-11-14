@@ -302,22 +302,24 @@ final class TasksUtils {
     }
 
     static void cancelAllUnexecutedDelayTasks(Context context, String typeNeedsCheckTaskTrigger) {
-        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, TasksNeedExecuteReceiver.class);
-        AppPreferences appPreferences = new AppPreferences(context);
-        String unprocessed = appPreferences.getString(typeNeedsCheckTaskTrigger, "");
-        if (unprocessed == null)
-            unprocessed = "";
+        if (typeNeedsCheckTaskTrigger != null) {
+            AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(context, TasksNeedExecuteReceiver.class);
+            AppPreferences appPreferences = new AppPreferences(context);
+            String unprocessed = appPreferences.getString(typeNeedsCheckTaskTrigger, "");
+            if (unprocessed == null)
+                unprocessed = "";
 
-        for (String id : unprocessed.split(",")) {
-            if (id != null && !"".equals(id)) {
-                PendingIntent alarmIntent = PendingIntent.getBroadcast(context, Integer.parseInt(id), intent, PendingIntent.FLAG_CANCEL_CURRENT);
-                if (alarmMgr != null) {
-                    alarmMgr.cancel(alarmIntent);
+            for (String id : unprocessed.split(",")) {
+                if (id != null && !"".equals(id)) {
+                    PendingIntent alarmIntent = PendingIntent.getBroadcast(context, Integer.parseInt(id), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    if (alarmMgr != null) {
+                        alarmMgr.cancel(alarmIntent);
+                    }
                 }
             }
+            appPreferences.put(typeNeedsCheckTaskTrigger, "");
         }
-        appPreferences.put(typeNeedsCheckTaskTrigger, "");
     }
 
 }
