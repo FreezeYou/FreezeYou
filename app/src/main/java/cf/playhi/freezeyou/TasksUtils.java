@@ -258,7 +258,7 @@ final class TasksUtils {
                 if (enabled == 1 && "onUFApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
                     String task = cursor.getString(cursor.getColumnIndex("task"));
                     if (task != null && !"".equals(task)) {
-                        runTask(task.toLowerCase(), context, null);
+                        runTask(task.replace("[cpkgn]", pkgNameString), context, null);
                     }
                 }
                 cursor.moveToNext();
