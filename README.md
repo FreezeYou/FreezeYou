@@ -1,7 +1,7 @@
 # FreezeYou  [![GitHub license](https://img.shields.io/badge/license-LGPL--3.0-brightgreen.svg)](https://github.com/Playhi/FreezeYou/blob/master/LICENSE) [![Maintainability](https://api.codeclimate.com/v1/badges/727a63c38deeadb0c468/maintainability)](https://codeclimate.com/github/Playhi/FreezeYou/maintainability) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/032d743157434a459f025e761c16dd8d)](https://www.codacy.com/app/Playhi/FreezeYou?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Playhi/FreezeYou&amp;utm_campaign=Badge_Grade) [![Build Status](https://travis-ci.org/Playhi/FreezeYou.svg?branch=master)](https://travis-ci.org/Playhi/FreezeYou) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/freezeyou/localized.svg)](https://crowdin.com/project/freezeyou) [![GitHub release](https://img.shields.io/github/release/Playhi/FreezeYou.svg)](https://github.com/Playhi/FreezeYou/releases)
 ###### _Github Readme 由于部分地区难以访问将不会经常更新了，欢迎移步_ [官方主页](https://freezeyou.playhi.net/)
 ## 介绍 Introduction
-* 冻结，轻量级的应用程序（免ROOT方法请点[这里](https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8)）
+* 冻结，轻量级的应用程序（免ROOT方法请点[这里](https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8)或[这里](https://freezeyou.playhi.net/MRootUse.html)）
 
 * 省电！省电！我不要一天三充！⚡
 * 流畅！流畅！我不要生硬动画！🌪
