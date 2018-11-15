@@ -165,8 +165,8 @@
     <string name="askIfDel">Are you sure to delete?</string>
     <string name="folder">Folder</string>
     <string name="later">Later</string>
-    <string name="onlyMROOTModeUse">仅免ROOT模式使用</string>
-    <string name="organizationName">组织名称</string>
+    <string name="onlyMROOTModeUse">Only used in No-Root mode</string>
+    <string name="organizationName">Organization Name</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
