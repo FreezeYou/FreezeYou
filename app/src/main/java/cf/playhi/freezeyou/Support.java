@@ -356,6 +356,11 @@ class Support {
         return (Support.checkRootFrozen(context, packageName, pm) || Support.checkMRootFrozen(context, packageName));
     }
 
+    static void checkAndSetOrganizationName(Context context, String name) {
+        if (Build.VERSION.SDK_INT >= 24 && Support.isDeviceOwner(context))
+            getDevicePolicyManager(context).setOrganizationName(DeviceAdminReceiver.getComponentName(context), name);
+    }
+
 //    static void checkLanguage(Context context) {
 //        Resources resources = context.getResources();
 //        DisplayMetrics dm = resources.getDisplayMetrics();

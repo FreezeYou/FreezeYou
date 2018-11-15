@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.preference.PreferenceManager;
 
 import net.grandcentrix.tray.AppPreferences;
@@ -70,17 +69,20 @@ public class MainApplication extends Application {
                                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                     }
                 }
+                appIconDataTransfer20181014.createNewFile();
+            }
+
+            File organizationName = new File(getFilesDir().getAbsolutePath() + File.separator + "organizationName.lock");
+            if (!organizationName.exists()) {
+                Support.checkAndSetOrganizationName(this, getString(R.string.app_name));
+                organizationName.createNewFile();
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         if (new AppPreferences(this).getBoolean("onekeyFreezeWhenLockScreen", false)) {
-            if (Build.VERSION.SDK_INT >= 26) {
-                startForegroundService(new Intent(this, ScreenLockOneKeyFreezeService.class));
-            } else {
-                startService(new Intent(this, ScreenLockOneKeyFreezeService.class));
-            }
+            ServiceUtils.startService(this, new Intent(this, ScreenLockOneKeyFreezeService.class));
         }
     }
 

@@ -54,7 +54,6 @@ import java.util.Map;
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
-import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
@@ -1045,8 +1044,6 @@ public class Main extends Activity {
                         editor.putInt("Ver", getVersionCode(getApplicationContext()));
                         editor.putLong("Time", new Date().getTime());
                         editor.commit();
-                        if (Build.VERSION.SDK_INT >= 24 && Support.isDeviceOwner(Main.this))
-                            getDevicePolicyManager(Main.this).setOrganizationName(DeviceAdminReceiver.getComponentName(Main.this), "FreezeYou");
                     }
                     if ((new Date().getTime() - sharedPreferences.getLong("Time", 0)) > 1728000000) {
                         runOnUiThread(new Runnable() {
