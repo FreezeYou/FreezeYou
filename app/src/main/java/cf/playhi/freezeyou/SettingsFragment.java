@@ -147,6 +147,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     openAccessibilitySettings(getActivity());
                 }
                 break;
+            case "organizationName":
+                Support.checkAndSetOrganizationName(getActivity(), sharedPreferences.getString(s, null));
+                break;
 //            case "languagePref":
 //                checkLanguage(getActivity().getApplicationContext());
 //                showToast(getActivity(),R.string.willTakeEffectsNextLaunch);
@@ -211,12 +214,12 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     getActivity().startActivity(uninstall);
                     break;
                 case "deleteAllScheduledTasks":
-                    buildAlertDialog(getActivity(),android.R.drawable.ic_dialog_alert,R.string.askIfDel,R.string.caution)
+                    buildAlertDialog(getActivity(), android.R.drawable.ic_dialog_alert, R.string.askIfDel, R.string.caution)
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     File file;
-                                    for (String name:new String[]{"scheduledTasks","scheduledTriggerTasks"}){
+                                    for (String name : new String[]{"scheduledTasks", "scheduledTriggerTasks"}) {
                                         file = getActivity().getApplicationContext().getDatabasePath(name);
                                         if (file.exists())
                                             file.delete();

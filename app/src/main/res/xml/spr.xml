@@ -160,6 +160,11 @@
             android:key="configureAccessibilityService"
             android:summary="@string/accessibility_service_description"
             android:title="@string/configureAccessibilityService" />
+        <EditTextPreference
+            android:defaultValue="@string/app_name"
+            android:key="organizationName"
+            android:summary="@string/onlyMROOTModeUse"
+            android:title="@string/organizationName" />
         <Preference android:title="@string/manualMode">
             <intent
                 android:data="ManualMode"
@@ -176,8 +181,8 @@
             android:title="@string/clearNameCache" />
         <Preference
             android:key="deleteAllScheduledTasks"
-            android:title="@string/delAllScheduledTasks"
-            android:summary="@string/delAllScheduledTasks" />
+            android:summary="@string/delAllScheduledTasks"
+            android:title="@string/delAllScheduledTasks" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/dangerZone">

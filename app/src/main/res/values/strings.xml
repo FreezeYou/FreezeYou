@@ -163,6 +163,8 @@
     <string name="askIfDel">确认删除？</string>
     <string name="folder">文件夹</string>
     <string name="later">延后</string>
+    <string name="onlyMROOTModeUse">仅免ROOT模式使用</string>
+    <string name="organizationName">组织名称</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
