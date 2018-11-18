@@ -10,12 +10,9 @@ public class OneKeyScreenLockQSTileService extends TileService {
     @Override
     public void onClick() {
         super.onClick();
-        if (Build.VERSION.SDK_INT >= 26) {
-            this.startForegroundService(
-                    new Intent(getApplicationContext(), OneKeyScreenLockImmediatelyService.class));
-        } else {
-            this.startService(
-                    new Intent(getApplicationContext(), OneKeyScreenLockImmediatelyService.class));
-        }
+        startActivity(
+                new Intent(this, OneKeyScreenLockImmediatelyActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        );
     }
 }

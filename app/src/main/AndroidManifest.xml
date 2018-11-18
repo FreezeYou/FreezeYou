@@ -389,11 +389,6 @@
             android:label="@string/oneKeyUF"
             android:process=":backgroundService" />
         <service
-            android:name=".OneKeyScreenLockImmediatelyService"
-            android:exported="false"
-            android:label="@string/oneKeyLockScreen"
-            android:process=":backgroundService" />
-        <service
             android:name=".FUFService"
             android:exported="false"
             android:label="@string/freezeAUF"
