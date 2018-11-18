@@ -55,7 +55,7 @@ public class ShortcutLauncherFolderActivity extends Activity {
                 HashMap<String, Object> map = new HashMap<>();
                 pkgName = applicationInfo.get(i).packageName;
                 map.put("Icon",
-                        Support.realGetFrozenStatus(this, pkgName, null) ? new BitmapDrawable(getGrayBitmap(getBitmapFromDrawable(getApplicationIcon(this, pkgName, null, false)))) : getApplicationIcon(this, pkgName, null, false)
+                        Support.realGetFrozenStatus(this, pkgName, null) ? new BitmapDrawable(getGrayBitmap(getBitmapFromDrawable(getApplicationIcon(this, pkgName, applicationInfo.get(i), false)))) : getApplicationIcon(this, pkgName, applicationInfo.get(i), false)
                 );
                 map.put("Label", getApplicationLabel(this, null, null, pkgName));
 
