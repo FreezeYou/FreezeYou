@@ -268,17 +268,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ShortcutLauncherFolderActivity"
-            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:excludeFromRecents="true"
-            android:label="@string/folder"
-            android:theme="@style/AppTheme.Default">
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        <!--<activity-->
+            <!--android:name=".ShortcutLauncherFolderActivity"-->
+            <!--android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"-->
+            <!--android:excludeFromRecents="true"-->
+            <!--android:label="@string/folder"-->
+            <!--android:theme="@style/AppTheme.Default">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.CREATE_SHORTCUT" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
 
 
         <receiver
