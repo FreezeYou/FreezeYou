@@ -30,18 +30,37 @@ public class AboutActivity extends Activity {
 
         TextView aboutSlogan = findViewById(R.id.about_slogan);
 
-        final String[] aboutData = new String[]{
-                getResources().getString(R.string.hToUse),
-                getResources().getString(R.string.faq),
-                getResources().getString(R.string.helpTranslate),
-                getResources().getString(R.string.thanksList),
-                getResources().getString(R.string.visitWebsite),
-                getResources().getString(R.string.addQQGroup),
-                getResources().getString(R.string.update),
-                getResources().getString(R.string.donate),
-                getResources().getString(R.string.thirdPartyOpenSourceLicenses),
-                "V" + getVersionName(getApplicationContext()) + "(" + getVersionCode(getApplicationContext()) + ")"
-        };
+        final boolean googleVersion = getVersionName(activity).contains("g");
+
+        String[] tmpAboutData;
+        if (googleVersion) {
+            tmpAboutData = new String[]{
+                    getResources().getString(R.string.hToUse),
+                    getResources().getString(R.string.faq),
+                    getResources().getString(R.string.helpTranslate),
+                    getResources().getString(R.string.thanksList),
+                    getResources().getString(R.string.visitWebsite),
+                    getResources().getString(R.string.addQQGroup),
+                    getResources().getString(R.string.update),
+                    getResources().getString(R.string.thirdPartyOpenSourceLicenses),
+                    "V" + getVersionName(getApplicationContext()) + "(" + getVersionCode(getApplicationContext()) + ")"
+            };
+        } else {
+            tmpAboutData = new String[]{
+                    getResources().getString(R.string.hToUse),
+                    getResources().getString(R.string.faq),
+                    getResources().getString(R.string.helpTranslate),
+                    getResources().getString(R.string.thanksList),
+                    getResources().getString(R.string.visitWebsite),
+                    getResources().getString(R.string.addQQGroup),
+                    getResources().getString(R.string.update),
+                    getResources().getString(R.string.donate),
+                    getResources().getString(R.string.thirdPartyOpenSourceLicenses),
+                    "V" + getVersionName(getApplicationContext()) + "(" + getVersionCode(getApplicationContext()) + ")"
+            };
+        }
+
+        final String[] aboutData = tmpAboutData;
 
         ListView aboutListView = findViewById(R.id.about_listView);
 
@@ -73,10 +92,14 @@ public class AboutActivity extends Activity {
                         checkUpdate(activity);
                         break;
                     case 7:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/sponsorship.html");
+                        requestOpenWebSite(activity, googleVersion ? "https://freezeyou.playhi.net/ThirdPartyOpenSourceLicenses.html" : "https://freezeyou.playhi.net/sponsorship.html");
                         break;
                     case 8:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/ThirdPartyOpenSourceLicenses.html");
+                        if (googleVersion) {
+                            showToast(activity, "V" + getVersionName(activity) + "(" + getVersionCode(activity) + ")");
+                        } else {
+                            requestOpenWebSite(activity, "https://freezeyou.playhi.net/ThirdPartyOpenSourceLicenses.html");
+                        }
                         break;
                     case 9:
                         showToast(activity, "V" + getVersionName(activity) + "(" + getVersionCode(activity) + ")");
