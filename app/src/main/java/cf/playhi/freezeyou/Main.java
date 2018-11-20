@@ -1005,12 +1005,18 @@ public class Main extends Activity {
     private void processDisableAndEnableImmediately(boolean freeze) {
         int size = selectedPackages.size();
         String[] pkgNameList = selectedPackages.toArray(new String[size]);
-        if (Build.VERSION.SDK_INT >= 21 && Support.isDeviceOwner(Main.this)) {
-            Support.oneKeyActionMRoot(Main.this, freeze, pkgNameList);
-        } else {
-            Support.oneKeyActionRoot(Main.this, freeze, pkgNameList);
-        }
-        generateList(filterNowStatus);
+//        if (Build.VERSION.SDK_INT >= 21 && Support.isDeviceOwner(Main.this)) {
+        ServiceUtils.startService(
+                Main.this,
+                new Intent(Main.this, FUFService.class)
+                        .putExtra("single", false)
+                        .putExtra("packages", pkgNameList)
+                        .putExtra("freeze", freeze));
+//            Support.oneKeyActionMRoot(Main.this, freeze, pkgNameList);
+//        } else {
+//            Support.oneKeyActionRoot(Main.this, freeze, pkgNameList);
+//        }
+//        generateList(filterNowStatus);
     }
 
     private void updateFrozenStatus() {

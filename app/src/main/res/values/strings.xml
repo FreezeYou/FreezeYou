@@ -165,6 +165,8 @@
     <string name="later">延后</string>
     <string name="onlyMROOTModeUse">仅免ROOT模式使用</string>
     <string name="organizationName">组织名称</string>
+    <string name="avoidFreezeNotifyingApplications">避免冻结有通知的应用程序</string>
+    <string name="needL">需要 Android 5.0 及以上</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>

@@ -44,6 +44,11 @@
             android:title="@string/avoidFreezeForegroundApplications" />
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="avoidFreezeNotifyingApplications"
+            android:summary="@string/needL"
+            android:title="@string/avoidFreezeNotifyingApplications" />
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="openImmediately"
             android:summary="@string/openImmediatelyEx"
             android:title="@string/openImmediately" />

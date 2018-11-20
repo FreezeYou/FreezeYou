@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.service.notification.StatusBarNotification;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -122,7 +123,7 @@ class Support {
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
         }
-        if ((!"cf.playhi.freezeyou".equals(pkgName)) && (!pkgName.equals(currentPackage))) {
+        if ((!"cf.playhi.freezeyou".equals(pkgName)) && (!pkgName.equals(currentPackage)) && (!isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, pkgName))) {
             try {
                 final int exitValue = fAURoot(pkgName, enable);
                 if (exitValue == 0) {
@@ -161,7 +162,7 @@ class Support {
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
         }
-        if ((!"cf.playhi.freezeyou".equals(pkgName)) && (!pkgName.equals(currentPackage))) {
+        if ((!"cf.playhi.freezeyou".equals(pkgName)) && (!pkgName.equals(currentPackage)) && (!isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, pkgName))) {
             if (getDevicePolicyManager(context).setApplicationHidden(
                     DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
                 if (hidden) {
@@ -240,7 +241,7 @@ class Support {
                 outputStream = new DataOutputStream(process.getOutputStream());
                 if (freeze) {
                     for (String aPkgNameList : pkgNameList) {
-                        if ((!"cf.playhi.freezeyou".equals(aPkgNameList)) && (!currentPackage.equals(aPkgNameList))) {
+                        if ((!"cf.playhi.freezeyou".equals(aPkgNameList)) && (!currentPackage.equals(aPkgNameList)) && (!isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, aPkgNameList))) {
                             try {
                                 int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList);
                                 if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
@@ -310,7 +311,7 @@ class Support {
             for (String aPkgNameList : pkgNameList) {
                 try {
                     if (freeze) {
-                        if ((!"cf.playhi.freezeyou".equals(aPkgNameList)) && (!currentPackage.equals(aPkgNameList)) && (!checkMRootFrozen(context, aPkgNameList))) {
+                        if ((!"cf.playhi.freezeyou".equals(aPkgNameList)) && (!currentPackage.equals(aPkgNameList)) && (!checkMRootFrozen(context, aPkgNameList)) && (!isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, aPkgNameList))) {
                             if (getDevicePolicyManager(context).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(context), aPkgNameList, true)) {
                                 deleteNotification(context, aPkgNameList);
@@ -359,6 +360,29 @@ class Support {
     static void checkAndSetOrganizationName(Context context, String name) {
         if (Build.VERSION.SDK_INT >= 24 && Support.isDeviceOwner(context))
             getDevicePolicyManager(context).setOrganizationName(DeviceAdminReceiver.getComponentName(context), name);
+    }
+
+    @TargetApi(21)
+    private static boolean isAppStillNotifying(String pkgName) {
+        if (pkgName != null) {
+            StatusBarNotification[] statusBarNotifications = MyNotificationListenerService.getStatusBarNotifications();
+            if (statusBarNotifications != null) {
+                for (StatusBarNotification aStatusBarNotifications : statusBarNotifications) {
+                    if (pkgName.equals(aStatusBarNotifications.getPackageName())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(Context context, String pkgName) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            return new AppPreferences(context).getBoolean("avoidFreezeNotifyingApplications", false) && isAppStillNotifying(pkgName);
+        } else {
+            return false;
+        }
     }
 
 //    static void checkLanguage(Context context) {
