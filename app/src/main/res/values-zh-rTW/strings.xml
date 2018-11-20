@@ -167,6 +167,8 @@
     <string name="later">延後</string>
     <string name="onlyMROOTModeUse">僅免ROOT模式使用</string>
     <string name="organizationName">組織名稱</string>
+    <string name="avoidFreezeNotifyingApplications">避免冻结有通知的应用程序</string>
+    <string name="needL">需要 Android 5.0 及以上</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
