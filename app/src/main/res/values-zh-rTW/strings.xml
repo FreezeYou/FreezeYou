@@ -161,12 +161,14 @@
     <string name="avoidFreezeForegroundApplications">避免凍結前臺應用程式</string>
     <string name="suggestUseTasksInstead">建議使用 計畫任務 替代</string>
     <string name="thirdPartyOpenSourceLicenses">協力廠商開放原始碼許可</string>
-    <string name="delAllScheduledTasks">删除全部计划任务</string>
-    <string name="askIfDel">确认删除？</string>
-    <string name="folder">文件夹</string>
-    <string name="later">延后</string>
-    <string name="onlyMROOTModeUse">仅免ROOT模式使用</string>
-    <string name="organizationName">组织名称</string>
+    <string name="delAllScheduledTasks">刪除全部計畫任務</string>
+    <string name="askIfDel">確認刪除？</string>
+    <string name="folder">文件夾</string>
+    <string name="later">延後</string>
+    <string name="onlyMROOTModeUse">僅免ROOT模式使用</string>
+    <string name="organizationName">組織名稱</string>
+    <string name="avoidFreezeNotifyingApplications">避免冻结有通知的应用程序</string>
+    <string name="needL">需要 Android 5.0 及以上</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
