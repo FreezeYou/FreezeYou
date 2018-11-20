@@ -62,6 +62,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     private void onApplicationsForeground(String previousPkg, String pkgNameString) {
 
         if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
+            cancelAllUnexecutedDelayTasks(this, "OSA_" + previousPkg);//撤销全部属于上一应用的未执行的打开应用时
             final SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
             db.execSQL(
                     "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
@@ -76,7 +77,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     String tg = cursor.getString(cursor.getColumnIndex("tg"));
                     int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
                     if (enabled == 1 && "onApplicationsForeground".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
-                        cancelAllUnexecutedDelayTasks(this, "".equals(tgExtra) ? null : "OSA_" + previousPkg);//撤销全部属于上一应用的未执行的打开应用时
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
                             TasksUtils.runTask(
@@ -97,6 +97,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     private void onLeaveApplications(String previousPkg, String pkgNameString) {
 
         if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
+            cancelAllUnexecutedDelayTasks(this, "OLA_" + pkgNameString);//撤销全部属于被打开应用的未执行的离开应用时
             final SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
             db.execSQL(
                     "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
@@ -111,7 +112,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         tgExtra = "";
                     }
                     if (enabled == 1 && "onLeaveApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(previousPkg))) {
-                        cancelAllUnexecutedDelayTasks(this, "".equals(tgExtra) ? null : "OLA_" + pkgNameString);//撤销全部属于被打开应用的未执行的离开应用时
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
                             TasksUtils.runTask(
