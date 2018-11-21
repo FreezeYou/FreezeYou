@@ -1,9 +1,11 @@
 package cf.playhi.freezeyou;
 
-
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import net.grandcentrix.tray.AppPreferences;
 
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
@@ -29,5 +31,13 @@ public class SettingsActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void finish() {
+        if (Build.VERSION.SDK_INT >= 21 && !(new AppPreferences(this).getBoolean("showInRecents", true))) {
+            finishAndRemoveTask();
+        }
+        super.finish();
     }
 }

@@ -212,6 +212,11 @@
             android:label="@string/about"
             android:theme="@style/AppTheme.Default" />
         <activity
+            android:name=".AutoDiagnosisActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:label="@string/autoDiagnosis"
+            android:theme="@style/AppTheme.Default" />
+        <activity
             android:name=".AskLockScreenActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"

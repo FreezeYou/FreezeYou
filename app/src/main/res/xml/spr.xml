@@ -172,6 +172,11 @@
             android:key="organizationName"
             android:summary="@string/onlyMROOTModeUse"
             android:title="@string/organizationName" />
+        <Preference android:title="@string/autoDiagnosis">
+            <intent
+                android:targetClass="cf.playhi.freezeyou.AutoDiagnosisActivity"
+                android:targetPackage="cf.playhi.freezeyou" />
+        </Preference>
         <Preference android:title="@string/manualMode">
             <intent
                 android:data="ManualMode"

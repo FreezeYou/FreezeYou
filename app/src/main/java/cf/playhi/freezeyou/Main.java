@@ -85,7 +85,7 @@ public class Main extends Activity {
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
     private int customThemeDisabledDot = R.drawable.shapedotblue;
     private View itemView;
-    private String filterNowStatus;
+//    private String filterNowStatus;
     private BroadcastReceiver updateFrozenStatusBroadcastReceiver;
 
     private boolean shortcutsCompleted = true;
@@ -364,7 +364,7 @@ public class Main extends Activity {
     }
 
     private void generateList(String filter) {
-        filterNowStatus = filter;
+//        filterNowStatus = filter;
         final ListView app_listView = findViewById(R.id.app_list);
         final ProgressBar progressBar = findViewById(R.id.progressBar);
         final TextView textView = findViewById(R.id.textView);
