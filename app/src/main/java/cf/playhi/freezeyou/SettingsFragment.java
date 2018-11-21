@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
@@ -30,6 +31,7 @@ import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.DevicePolicyManagerUtils.openDevicePolicyManager;
 import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.VersionUtils.getVersionName;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -41,6 +43,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.spr);//preferences
+        if (getVersionName(getActivity()).contains("g"))
+            ((PreferenceCategory) findPreference("more")).removePreference(findPreference("donate"));
         pm = getActivity().getPackageManager();
         initSummary(getPreferenceScreen());
     }

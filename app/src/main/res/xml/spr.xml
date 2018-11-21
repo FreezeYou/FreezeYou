@@ -126,7 +126,9 @@
         </Preference>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/more">
+    <PreferenceCategory
+        android:key="more"
+        android:title="@string/more">
         <Preference
             android:key="checkUpdate"
             android:title="@string/update" />
