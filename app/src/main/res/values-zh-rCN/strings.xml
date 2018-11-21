@@ -169,6 +169,7 @@
     <string name="organizationName">组织名称</string>
     <string name="avoidFreezeNotifyingApplications">避免冻结有通知的应用程序</string>
     <string name="needL">需要 Android 5.0 及以上</string>
+    <string name="autoDiagnosis">自检诊断</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>显示全部</item>
