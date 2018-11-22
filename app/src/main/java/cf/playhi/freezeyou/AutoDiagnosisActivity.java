@@ -62,16 +62,16 @@ public class AutoDiagnosisActivity extends Activity {
 
         if (Build.VERSION.SDK_INT < 21) {
             hashMap.clear();
-            hashMap.put("title", "系统版本偏低");
-            hashMap.put("sTitle", "部分功能无法使用");
+            hashMap.put("title", getString(R.string.sysVerLow));
+            hashMap.put("sTitle", getString(R.string.someFuncUn));
             problemsList.add(hashMap);
         }
         setProgress(adg_progressBar, 15);
 
         if ((getDatabasePath("scheduledTriggerTasks").exists() || appPreferences.getBoolean("freezeOnceQuit", false) || appPreferences.getBoolean("avoidFreezeForegroundApplications", false)) && !isAccessibilitySettingsOn(this)) {
             hashMap.clear();
-            hashMap.put("title", "无障碍服务未启用");
-            hashMap.put("sTitle", "影响 " + getString(R.string.avoidFreezeForegroundApplications) + " " + getString(R.string.scheduledTasks) + " 等");
+            hashMap.put("title", getString(R.string.ACBSNotEnabled));
+            hashMap.put("sTitle", getString(R.string.affect) + " " + getString(R.string.avoidFreezeForegroundApplications) + " " + getString(R.string.scheduledTasks) + " " + getString(R.string.etc));
             problemsList.add(hashMap);
         }
         setProgress(adg_progressBar, 30);
@@ -80,8 +80,8 @@ public class AutoDiagnosisActivity extends Activity {
             String s = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
             if (s == null || !s.contains("cf.playhi.freezeyou/cf.playhi.freezeyou.MyNotificationListenerService")) {
                 hashMap.clear();
-                hashMap.put("title", "未授予通知使用权");
-                hashMap.put("sTitle", "影响 " + getString(R.string.avoidFreezeNotifyingApplications));
+                hashMap.put("title", getString(R.string.noNotificationListenerPermission));
+                hashMap.put("sTitle", getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications));
                 problemsList.add(hashMap);
             }
         }
@@ -90,16 +90,16 @@ public class AutoDiagnosisActivity extends Activity {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (notificationManager == null || (Build.VERSION.SDK_INT >= 24 && !notificationManager.areNotificationsEnabled())) {
             hashMap.clear();
-            hashMap.put("title", "未授予发送通知栏消息");
-            hashMap.put("sTitle", "可能无法发送通知栏消息");
+            hashMap.put("title", getString(R.string.noNotifyPermission));
+            hashMap.put("sTitle", getString(R.string.mayCannotNotify));
             problemsList.add(hashMap);
         }
         setProgress(adg_progressBar, 50);
 
         if (problemsList.isEmpty()) {
             hashMap.clear();
-            hashMap.put("title", "未发现问题");
-            hashMap.put("sTitle", "似乎一切正常");
+            hashMap.put("title", getString(R.string.noProblemsFound));
+            hashMap.put("sTitle", getString(R.string.everySeemsAllRight));
             problemsList.add(hashMap);
         }
         setProgress(adg_progressBar, 90);
