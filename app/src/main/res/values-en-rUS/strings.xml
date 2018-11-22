@@ -169,6 +169,17 @@
     <string name="organizationName">Organization Name</string>
     <string name="avoidFreezeNotifyingApplications">Avoid freezing notifying applications</string>
     <string name="needL">Requires Android 5.0 and newer</string>
+    <string name="autoDiagnosis">Diagnosis</string>
+    <string name="sysVerLow">Low system version</string>
+    <string name="someFuncUn">Some features may not available</string>
+    <string name="ACBSNotEnabled">Accessibility service not enabled</string>
+    <string name="affect">Affects</string>
+    <string name="etc">etc.</string>
+    <string name="mayCannotNotify">May can not send notifications</string>
+    <string name="noNotifyPermission">Sending notification permission not granted</string>
+    <string name="noNotificationListenerPermission">Notification listener permission not granted</string>
+    <string name="noProblemsFound">No problems found</string>
+    <string name="everySeemsAllRight">Seems everything is all right</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
