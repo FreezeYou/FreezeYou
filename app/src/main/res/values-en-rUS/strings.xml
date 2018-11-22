@@ -170,16 +170,16 @@
     <string name="avoidFreezeNotifyingApplications">Avoid freezing notifying applications</string>
     <string name="needL">Requires Android 5.0 and newer</string>
     <string name="autoDiagnosis">Diagnosis</string>
-    <string name="sysVerLow">系统版本偏低</string>
-    <string name="someFuncUn">部分功能无法使用</string>
-    <string name="ACBSNotEnabled">无障碍服务未启用</string>
-    <string name="affect">影响</string>
-    <string name="etc">等</string>
-    <string name="mayCannotNotify">可能无法发送通知栏消息</string>
-    <string name="noNotifyPermission">未授予发送通知栏消息</string>
-    <string name="noNotificationListenerPermission">未授予通知使用权</string>
-    <string name="noProblemsFound">未发现问题</string>
-    <string name="everySeemsAllRight">似乎一切正常</string>
+    <string name="sysVerLow">Low system version</string>
+    <string name="someFuncUn">Some features may not available</string>
+    <string name="ACBSNotEnabled">Accessibility service not enabled</string>
+    <string name="affect">Affects</string>
+    <string name="etc">etc.</string>
+    <string name="mayCannotNotify">May can not send notifications</string>
+    <string name="noNotifyPermission">Sending notification permission not granted</string>
+    <string name="noNotificationListenerPermission">Notification listener permission not granted</string>
+    <string name="noProblemsFound">No problems found</string>
+    <string name="everySeemsAllRight">Seems everything is all right</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
