@@ -60,25 +60,25 @@ public class AutoDiagnosisActivity extends Activity {
         disableIndeterminate(adg_progressBar);
         setProgress(adg_progressBar, 5);
 
-        checkSystemVersion( problemsList);
+        checkSystemVersion(problemsList);
         setProgress(adg_progressBar, 15);
 
-        checkAccessibilityService( problemsList, appPreferences);
+        checkAccessibilityService(problemsList, appPreferences);
         setProgress(adg_progressBar, 30);
 
-        checkNotificationListenerPermission( problemsList, appPreferences);
+        checkNotificationListenerPermission(problemsList, appPreferences);
         setProgress(adg_progressBar, 40);
 
-        checkNotifyPermission( problemsList);
+        checkNotifyPermission(problemsList);
         setProgress(adg_progressBar, 50);
 
-        checkIsDeviceOwner( problemsList);
+        checkIsDeviceOwner(problemsList);
         setProgress(adg_progressBar, 60);
 
-        checkRootPermission( problemsList);
+        checkRootPermission(problemsList);
         setProgress(adg_progressBar, 70);
 
-        checkIfNoProblemFound( problemsList);
+        checkIfNoProblemFound(problemsList);
         setProgress(adg_progressBar, 90);
 
         SimpleAdapter adapter =
@@ -126,19 +126,17 @@ public class AutoDiagnosisActivity extends Activity {
     }
 
     protected void checkSystemVersion(List<Map<String, String>> problemsList) {
-        HashMap<String, String> hashMap = new HashMap<>();
         if (Build.VERSION.SDK_INT < 21) {
-            hashMap.clear();
+            HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("title", getString(R.string.sysVerLow));
             hashMap.put("sTitle", getString(R.string.someFuncUn));
             problemsList.add(hashMap);
         }
     }
 
-    protected void checkAccessibilityService( List<Map<String, String>> problemsList, AppPreferences appPreferences) {
-        HashMap<String, String> hashMap = new HashMap<>();
+    protected void checkAccessibilityService(List<Map<String, String>> problemsList, AppPreferences appPreferences) {
         if ((getDatabasePath("scheduledTriggerTasks").exists() || appPreferences.getBoolean("freezeOnceQuit", false) || appPreferences.getBoolean("avoidFreezeForegroundApplications", false)) && !isAccessibilitySettingsOn(this)) {
-            hashMap.clear();
+            HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("title", getString(R.string.ACBSNotEnabled));
             hashMap.put("sTitle", getString(R.string.affect) + " " + getString(R.string.avoidFreezeForegroundApplications) + " " + getString(R.string.scheduledTasks) + " " + getString(R.string.etc));
             problemsList.add(hashMap);
@@ -146,11 +144,10 @@ public class AutoDiagnosisActivity extends Activity {
     }
 
     protected void checkNotificationListenerPermission(List<Map<String, String>> problemsList, AppPreferences appPreferences) {
-        HashMap<String, String> hashMap = new HashMap<>();
         if (appPreferences.getBoolean("avoidFreezeNotifyingApplications", false)) {
             String s = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
             if (s == null || !s.contains("cf.playhi.freezeyou/cf.playhi.freezeyou.MyNotificationListenerService")) {
-                hashMap.clear();
+                HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("title", getString(R.string.noNotificationListenerPermission));
                 hashMap.put("sTitle", getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications));
                 problemsList.add(hashMap);
@@ -159,10 +156,9 @@ public class AutoDiagnosisActivity extends Activity {
     }
 
     protected void checkNotifyPermission(List<Map<String, String>> problemsList) {
-        HashMap<String, String> hashMap = new HashMap<>();
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (notificationManager == null || (Build.VERSION.SDK_INT >= 24 && !notificationManager.areNotificationsEnabled())) {
-            hashMap.clear();
+            HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("title", getString(R.string.noNotifyPermission));
             hashMap.put("sTitle", getString(R.string.mayCannotNotify));
             problemsList.add(hashMap);
@@ -172,7 +168,6 @@ public class AutoDiagnosisActivity extends Activity {
     protected void checkIsDeviceOwner(List<Map<String, String>> problemsList) {
         HashMap<String, String> hashMap = new HashMap<>();
         if (!Support.isDeviceOwner(this)) {
-            hashMap.clear();
             hashMap.put("title", getString(R.string.noMRootPermission));
             hashMap.put("sTitle", getString(R.string.someFuncMayRestrict));
             problemsList.add(hashMap);
@@ -180,7 +175,6 @@ public class AutoDiagnosisActivity extends Activity {
     }
 
     protected void checkRootPermission(List<Map<String, String>> problemsList) {
-        HashMap<String, String> hashMap = new HashMap<>();
         boolean hasPermission = true;
         int value = -1;
         try {
@@ -196,7 +190,7 @@ public class AutoDiagnosisActivity extends Activity {
             }
         }
         if (!hasPermission || value != 0) {
-            hashMap.clear();
+            HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("title", getString(R.string.noRootPermission));
             hashMap.put("sTitle", getString(R.string.someFuncMayRestrict));
             problemsList.add(hashMap);
@@ -204,9 +198,8 @@ public class AutoDiagnosisActivity extends Activity {
     }
 
     protected void checkIfNoProblemFound(List<Map<String, String>> problemsList) {
-        HashMap<String, String> hashMap = new HashMap<>();
         if (problemsList.isEmpty()) {
-            hashMap.clear();
+            HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("title", getString(R.string.noProblemsFound));
             hashMap.put("sTitle", getString(R.string.everySeemsAllRight));
             problemsList.add(hashMap);
