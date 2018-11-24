@@ -169,6 +169,17 @@
     <string name="organizationName">組織名稱</string>
     <string name="avoidFreezeNotifyingApplications">避免冻结有通知的应用程序</string>
     <string name="needL">需要 Android 5.0 及以上</string>
+    <string name="autoDiagnosis">自检诊断</string>
+    <string name="sysVerLow">系统版本偏低</string>
+    <string name="someFuncUn">部分功能无法使用</string>
+    <string name="ACBSNotEnabled">无障碍服务未启用</string>
+    <string name="affect">影响</string>
+    <string name="etc">等</string>
+    <string name="mayCannotNotify">可能无法发送通知栏消息</string>
+    <string name="noNotifyPermission">未授予发送通知栏消息</string>
+    <string name="noNotificationListenerPermission">未授予通知使用权</string>
+    <string name="noProblemsFound">未发现问题</string>
+    <string name="everySeemsAllRight">似乎一切正常</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
