@@ -180,6 +180,9 @@
     <string name="noNotificationListenerPermission">Notification listener permission not granted</string>
     <string name="noProblemsFound">No problems found</string>
     <string name="everySeemsAllRight">Seems everything is all right</string>
+    <string name="noMRootPermission">免 ROOT 权限未授予</string>
+    <string name="someFuncMayRestrict">部分功能可能受到限制</string>
+    <string name="noRootPermission">无 ROOT 权限</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
