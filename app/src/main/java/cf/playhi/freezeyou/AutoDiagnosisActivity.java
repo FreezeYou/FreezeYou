@@ -13,6 +13,7 @@ import android.widget.SimpleAdapter;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,54 +55,30 @@ public class AutoDiagnosisActivity extends Activity {
         ListView adg_listView = findViewById(R.id.adg_listView);
         ProgressBar adg_progressBar = findViewById(R.id.adg_progressBar);
         List<Map<String, String>> problemsList = new ArrayList<>();
-        HashMap<String, String> hashMap = new HashMap<>();
 
         AppPreferences appPreferences = new AppPreferences(this);
         disableIndeterminate(adg_progressBar);
         setProgress(adg_progressBar, 5);
 
-        if (Build.VERSION.SDK_INT < 21) {
-            hashMap.clear();
-            hashMap.put("title", getString(R.string.sysVerLow));
-            hashMap.put("sTitle", getString(R.string.someFuncUn));
-            problemsList.add(hashMap);
-        }
+        checkSystemVersion( problemsList);
         setProgress(adg_progressBar, 15);
 
-        if ((getDatabasePath("scheduledTriggerTasks").exists() || appPreferences.getBoolean("freezeOnceQuit", false) || appPreferences.getBoolean("avoidFreezeForegroundApplications", false)) && !isAccessibilitySettingsOn(this)) {
-            hashMap.clear();
-            hashMap.put("title", getString(R.string.ACBSNotEnabled));
-            hashMap.put("sTitle", getString(R.string.affect) + " " + getString(R.string.avoidFreezeForegroundApplications) + " " + getString(R.string.scheduledTasks) + " " + getString(R.string.etc));
-            problemsList.add(hashMap);
-        }
+        checkAccessibilityService( problemsList, appPreferences);
         setProgress(adg_progressBar, 30);
 
-        if (appPreferences.getBoolean("avoidFreezeNotifyingApplications", false)) {
-            String s = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
-            if (s == null || !s.contains("cf.playhi.freezeyou/cf.playhi.freezeyou.MyNotificationListenerService")) {
-                hashMap.clear();
-                hashMap.put("title", getString(R.string.noNotificationListenerPermission));
-                hashMap.put("sTitle", getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications));
-                problemsList.add(hashMap);
-            }
-        }
+        checkNotificationListenerPermission( problemsList, appPreferences);
         setProgress(adg_progressBar, 40);
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (notificationManager == null || (Build.VERSION.SDK_INT >= 24 && !notificationManager.areNotificationsEnabled())) {
-            hashMap.clear();
-            hashMap.put("title", getString(R.string.noNotifyPermission));
-            hashMap.put("sTitle", getString(R.string.mayCannotNotify));
-            problemsList.add(hashMap);
-        }
+        checkNotifyPermission( problemsList);
         setProgress(adg_progressBar, 50);
 
-        if (problemsList.isEmpty()) {
-            hashMap.clear();
-            hashMap.put("title", getString(R.string.noProblemsFound));
-            hashMap.put("sTitle", getString(R.string.everySeemsAllRight));
-            problemsList.add(hashMap);
-        }
+        checkIsDeviceOwner( problemsList);
+        setProgress(adg_progressBar, 60);
+
+        checkRootPermission( problemsList);
+        setProgress(adg_progressBar, 70);
+
+        checkIfNoProblemFound( problemsList);
         setProgress(adg_progressBar, 90);
 
         SimpleAdapter adapter =
@@ -111,7 +88,6 @@ public class AutoDiagnosisActivity extends Activity {
                         R.layout.adg_list_item,
                         new String[]{"title", "sTitle"},
                         new int[]{R.id.adgli_title_textView, R.id.adgli_subTitle_textView});
-
         setProgress(adg_progressBar, 100);
 
         done(adg_progressBar, adg_listView, adapter);
@@ -147,5 +123,93 @@ public class AutoDiagnosisActivity extends Activity {
                 }
             }
         });
+    }
+
+    protected void checkSystemVersion(List<Map<String, String>> problemsList) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        if (Build.VERSION.SDK_INT < 21) {
+            hashMap.clear();
+            hashMap.put("title", getString(R.string.sysVerLow));
+            hashMap.put("sTitle", getString(R.string.someFuncUn));
+            problemsList.add(hashMap);
+        }
+    }
+
+    protected void checkAccessibilityService( List<Map<String, String>> problemsList, AppPreferences appPreferences) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        if ((getDatabasePath("scheduledTriggerTasks").exists() || appPreferences.getBoolean("freezeOnceQuit", false) || appPreferences.getBoolean("avoidFreezeForegroundApplications", false)) && !isAccessibilitySettingsOn(this)) {
+            hashMap.clear();
+            hashMap.put("title", getString(R.string.ACBSNotEnabled));
+            hashMap.put("sTitle", getString(R.string.affect) + " " + getString(R.string.avoidFreezeForegroundApplications) + " " + getString(R.string.scheduledTasks) + " " + getString(R.string.etc));
+            problemsList.add(hashMap);
+        }
+    }
+
+    protected void checkNotificationListenerPermission(List<Map<String, String>> problemsList, AppPreferences appPreferences) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        if (appPreferences.getBoolean("avoidFreezeNotifyingApplications", false)) {
+            String s = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
+            if (s == null || !s.contains("cf.playhi.freezeyou/cf.playhi.freezeyou.MyNotificationListenerService")) {
+                hashMap.clear();
+                hashMap.put("title", getString(R.string.noNotificationListenerPermission));
+                hashMap.put("sTitle", getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications));
+                problemsList.add(hashMap);
+            }
+        }
+    }
+
+    protected void checkNotifyPermission(List<Map<String, String>> problemsList) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (notificationManager == null || (Build.VERSION.SDK_INT >= 24 && !notificationManager.areNotificationsEnabled())) {
+            hashMap.clear();
+            hashMap.put("title", getString(R.string.noNotifyPermission));
+            hashMap.put("sTitle", getString(R.string.mayCannotNotify));
+            problemsList.add(hashMap);
+        }
+    }
+
+    protected void checkIsDeviceOwner(List<Map<String, String>> problemsList) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        if (!Support.isDeviceOwner(this)) {
+            hashMap.clear();
+            hashMap.put("title", getString(R.string.noMRootPermission));
+            hashMap.put("sTitle", getString(R.string.someFuncMayRestrict));
+            problemsList.add(hashMap);
+        }
+    }
+
+    protected void checkRootPermission(List<Map<String, String>> problemsList) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        boolean hasPermission = true;
+        int value = -1;
+        try {
+            Process process = Runtime.getRuntime().exec("su");
+            DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
+            outputStream.writeBytes("exit\n");
+            outputStream.flush();
+            value = process.waitFor();
+            ProcessUtils.destroyProcess(outputStream, process);
+        } catch (Exception e) {
+            if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
+                hasPermission = false;
+            }
+        }
+        if (!hasPermission || value != 0) {
+            hashMap.clear();
+            hashMap.put("title", getString(R.string.noRootPermission));
+            hashMap.put("sTitle", getString(R.string.someFuncMayRestrict));
+            problemsList.add(hashMap);
+        }
+    }
+
+    protected void checkIfNoProblemFound(List<Map<String, String>> problemsList) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        if (problemsList.isEmpty()) {
+            hashMap.clear();
+            hashMap.put("title", getString(R.string.noProblemsFound));
+            hashMap.put("sTitle", getString(R.string.everySeemsAllRight));
+            problemsList.add(hashMap);
+        }
     }
 }
