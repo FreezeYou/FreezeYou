@@ -125,21 +125,26 @@ public class AutoDiagnosisActivity extends Activity {
         });
     }
 
+    protected HashMap<String, String> generateHashMap(String title, String sTitle) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("title", title);
+        hashMap.put("sTitle", sTitle);
+        return hashMap;
+    }
+
     protected void checkSystemVersion(List<Map<String, String>> problemsList) {
         if (Build.VERSION.SDK_INT < 21) {
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("title", getString(R.string.sysVerLow));
-            hashMap.put("sTitle", getString(R.string.someFuncUn));
-            problemsList.add(hashMap);
+            problemsList.add(
+                    generateHashMap(getString(R.string.sysVerLow), getString(R.string.someFuncUn))
+            );
         }
     }
 
     protected void checkAccessibilityService(List<Map<String, String>> problemsList, AppPreferences appPreferences) {
         if ((getDatabasePath("scheduledTriggerTasks").exists() || appPreferences.getBoolean("freezeOnceQuit", false) || appPreferences.getBoolean("avoidFreezeForegroundApplications", false)) && !isAccessibilitySettingsOn(this)) {
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("title", getString(R.string.ACBSNotEnabled));
-            hashMap.put("sTitle", getString(R.string.affect) + " " + getString(R.string.avoidFreezeForegroundApplications) + " " + getString(R.string.scheduledTasks) + " " + getString(R.string.etc));
-            problemsList.add(hashMap);
+            problemsList.add(
+                    generateHashMap(getString(R.string.ACBSNotEnabled), getString(R.string.affect) + " " + getString(R.string.avoidFreezeForegroundApplications) + " " + getString(R.string.scheduledTasks) + " " + getString(R.string.etc))
+            );
         }
     }
 
@@ -147,10 +152,9 @@ public class AutoDiagnosisActivity extends Activity {
         if (appPreferences.getBoolean("avoidFreezeNotifyingApplications", false)) {
             String s = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
             if (s == null || !s.contains("cf.playhi.freezeyou/cf.playhi.freezeyou.MyNotificationListenerService")) {
-                HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("title", getString(R.string.noNotificationListenerPermission));
-                hashMap.put("sTitle", getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications));
-                problemsList.add(hashMap);
+                problemsList.add(
+                        generateHashMap(getString(R.string.noNotificationListenerPermission), getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications))
+                );
             }
         }
     }
@@ -158,19 +162,13 @@ public class AutoDiagnosisActivity extends Activity {
     protected void checkNotifyPermission(List<Map<String, String>> problemsList) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (notificationManager == null || (Build.VERSION.SDK_INT >= 24 && !notificationManager.areNotificationsEnabled())) {
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("title", getString(R.string.noNotifyPermission));
-            hashMap.put("sTitle", getString(R.string.mayCannotNotify));
-            problemsList.add(hashMap);
+            problemsList.add(generateHashMap(getString(R.string.noNotifyPermission), getString(R.string.mayCannotNotify)));
         }
     }
 
     protected void checkIsDeviceOwner(List<Map<String, String>> problemsList) {
-        HashMap<String, String> hashMap = new HashMap<>();
         if (!Support.isDeviceOwner(this)) {
-            hashMap.put("title", getString(R.string.noMRootPermission));
-            hashMap.put("sTitle", getString(R.string.someFuncMayRestrict));
-            problemsList.add(hashMap);
+            problemsList.add(generateHashMap(getString(R.string.noMRootPermission), getString(R.string.someFuncMayRestrict)));
         }
     }
 
@@ -190,19 +188,13 @@ public class AutoDiagnosisActivity extends Activity {
             }
         }
         if (!hasPermission || value != 0) {
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("title", getString(R.string.noRootPermission));
-            hashMap.put("sTitle", getString(R.string.someFuncMayRestrict));
-            problemsList.add(hashMap);
+            problemsList.add(generateHashMap(getString(R.string.noRootPermission), getString(R.string.someFuncMayRestrict)));
         }
     }
 
     protected void checkIfNoProblemFound(List<Map<String, String>> problemsList) {
         if (problemsList.isEmpty()) {
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("title", getString(R.string.noProblemsFound));
-            hashMap.put("sTitle", getString(R.string.everySeemsAllRight));
-            problemsList.add(hashMap);
+            problemsList.add(generateHashMap(getString(R.string.noProblemsFound), getString(R.string.everySeemsAllRight)));
         }
     }
 }
