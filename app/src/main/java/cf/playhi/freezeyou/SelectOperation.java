@@ -48,10 +48,10 @@ public class SelectOperation extends Activity {
         String[] operationData = new String[]{
                 getResources().getString(R.string.createDisEnableShortCut),
                 getResources().getString(R.string.disableAEnable),
-                getResources().getString(R.string.copyPkgName),
                 getResources().getString(R.string.addToOneKeyList),
                 getResources().getString(R.string.addToOneKeyUFList),
                 getResources().getString(R.string.addToFreezeOnceQuit),
+                getResources().getString(R.string.copyPkgName),
                 getResources().getString(R.string.appDetail)
         };
 
@@ -59,17 +59,17 @@ public class SelectOperation extends Activity {
 
         final String pkgNames = sharedPreferences.getString(getString(R.string.sAutoFreezeApplicationList), "");
         if (existsInOneKeyList(pkgNames, pkgName)) {
-            operationData[3] = getResources().getString(R.string.removeFromOneKeyList);
+            operationData[2] = getResources().getString(R.string.removeFromOneKeyList);
         }
 
         final String UFPkgNames = sharedPreferences.getString(getString(R.string.sOneKeyUFApplicationList), "");
         if (existsInOneKeyList(UFPkgNames, pkgName)) {
-            operationData[4] = getResources().getString(R.string.removeFromOneKeyUFList);
+            operationData[3] = getResources().getString(R.string.removeFromOneKeyUFList);
         }
 
         final String FreezeOnceQuitPkgNames = sharedPreferences.getString(getString(R.string.sFreezeOnceQuit), "");
         if (existsInOneKeyList(FreezeOnceQuitPkgNames, pkgName)) {
-            operationData[5] = getResources().getString(R.string.removeFromFreezeOnceQuit);
+            operationData[4] = getResources().getString(R.string.removeFromFreezeOnceQuit);
         }
 
         final ListAdapter adapt = new ArrayAdapter<>(SelectOperation.this, R.layout.so_item, operationData);
@@ -108,19 +108,19 @@ public class SelectOperation extends Activity {
                         finish();
                         break;
                     case 2:
-                        copyToClipboard(SelectOperation.this, pkgName);
-                        finish();
-                        break;
-                    case 3:
                         checkAddOrRemove(pkgNames, pkgName, getString(R.string.sAutoFreezeApplicationList));
                         finish();
                         break;
-                    case 4:
+                    case 3:
                         checkAddOrRemove(UFPkgNames, pkgName, getString(R.string.sOneKeyUFApplicationList));
                         finish();
                         break;
-                    case 5:
+                    case 4:
                         checkAddOrRemove(FreezeOnceQuitPkgNames, pkgName, getString(R.string.sFreezeOnceQuit));
+                        finish();
+                        break;
+                    case 5:
+                        copyToClipboard(SelectOperation.this, pkgName);
                         finish();
                         break;
                     case 6:
