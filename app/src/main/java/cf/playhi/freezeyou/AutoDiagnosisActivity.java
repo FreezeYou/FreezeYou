@@ -2,8 +2,11 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +18,7 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.io.DataOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +65,10 @@ public class AutoDiagnosisActivity extends Activity {
         setProgress(adg_progressBar, 5);
 
         checkSystemVersion(problemsList);
-        setProgress(adg_progressBar, 15);
+        setProgress(adg_progressBar, 10);
+
+        checkLongTimeNoUpdate(problemsList);
+        setProgress(adg_progressBar, 20);
 
         checkAccessibilityService(problemsList, appPreferences);
         setProgress(adg_progressBar, 30);
@@ -77,6 +84,9 @@ public class AutoDiagnosisActivity extends Activity {
 
         checkRootPermission(problemsList);
         setProgress(adg_progressBar, 70);
+
+        checkIsIgnoringBatteryOptimizations(problemsList);
+        setProgress(adg_progressBar, 80);
 
         checkIfNoProblemFound(problemsList);
         setProgress(adg_progressBar, 90);
@@ -172,6 +182,12 @@ public class AutoDiagnosisActivity extends Activity {
         }
     }
 
+    protected void checkLongTimeNoUpdate(List<Map<String, String>> problemsList) {
+        SharedPreferences sharedPreferences = getSharedPreferences("Ver", MODE_PRIVATE);
+        if ((new Date().getTime() - sharedPreferences.getLong("Time", 0)) > 1728000000)
+            problemsList.add(generateHashMap(getString(R.string.notUpdatedForALongTime), getString(R.string.someNewFuncMayPub)));
+    }
+
     protected void checkRootPermission(List<Map<String, String>> problemsList) {
         boolean hasPermission = true;
         int value = -1;
@@ -190,6 +206,13 @@ public class AutoDiagnosisActivity extends Activity {
         if (!hasPermission || value != 0) {
             problemsList.add(generateHashMap(getString(R.string.noRootPermission), getString(R.string.someFuncMayRestrict)));
         }
+    }
+
+    protected void checkIsIgnoringBatteryOptimizations(List<Map<String, String>> problemsList) {
+        if (Build.VERSION.SDK_INT >= 23)
+            if (!((PowerManager) getSystemService(Context.POWER_SERVICE)).isIgnoringBatteryOptimizations("cf.playhi.freezeyou")) {
+                problemsList.add(generateHashMap(getString(R.string.noIgnoringBO), getString(R.string.someFuncMayBeAff)));
+            }
     }
 
     protected void checkIfNoProblemFound(List<Map<String, String>> problemsList) {
