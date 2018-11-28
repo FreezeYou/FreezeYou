@@ -187,6 +187,7 @@
     <string name="someFuncMayBeAff">部分功能可能受到影响</string>
     <string name="notUpdatedForALongTime">长时间未更新</string>
     <string name="someNewFuncMayPub">一些新功能可能已发布</string>
+    <string name="inPowerSaveMode">省电模式已开启</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>显示全部</item>
