@@ -183,6 +183,11 @@
     <string name="noMRootPermission">No-root permission not granted</string>
     <string name="someFuncMayRestrict">Some features may be restricted</string>
     <string name="noRootPermission">Root permission not granted</string>
+    <string name="noIgnoringBO">Battery optimization not ignored</string>
+    <string name="someFuncMayBeAff">Some features may be affected</string>
+    <string name="notUpdatedForALongTime">Not updated for a long time</string>
+    <string name="someNewFuncMayPub">Some new features may have been released</string>
+    <string name="inPowerSaveMode">Power save mode is on</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
