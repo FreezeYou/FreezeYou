@@ -81,6 +81,11 @@
             android:key="notificationBarDisableClickDisappear"
             android:summary="@string/effectNextCreate"
             android:title="@string/disableClickDisappear" />
+        <Preference android:title="@string/manageQuickFUFNoti">
+            <intent
+                android:targetClass="cf.playhi.freezeyou.FUFNotificationsManageActivity"
+                android:targetPackage="cf.playhi.freezeyou" />
+        </Preference>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/automation">
