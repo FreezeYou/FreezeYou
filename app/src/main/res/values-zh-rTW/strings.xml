@@ -188,6 +188,7 @@
     <string name="notUpdatedForALongTime">长时间未更新</string>
     <string name="someNewFuncMayPub">一些新功能可能已发布</string>
     <string name="inPowerSaveMode">省电模式已开启</string>
+    <string name="manageQuickFUFNoti">管理冻结解冻快捷通知</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
