@@ -29,7 +29,7 @@ public class FUFNotificationsManageActivity extends Activity {
         init();
     }
 
-    private void init(){
+    private void init() {
         ListView fufnmListView = findViewById(R.id.fufnm_listView);
         final AppPreferences defaultSharedPreferences = new AppPreferences(this);
         final String string = defaultSharedPreferences.getString("notifying", "");
