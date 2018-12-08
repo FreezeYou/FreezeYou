@@ -14,7 +14,13 @@ final class MoreUtils {
         Uri webPage = Uri.parse(url);
         Intent about = new Intent(Intent.ACTION_VIEW, webPage);
         if (about.resolveActivity(context.getPackageManager()) != null) {
-            context.startActivity(about);
+            try {
+                context.startActivity(about);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+                about.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(about);
+            }
         } else {
             showToast(context, context.getString(R.string.plsVisit) + " " + url);
             copyToClipboard(context, url);
