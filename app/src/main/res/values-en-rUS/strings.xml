@@ -188,6 +188,7 @@
     <string name="notUpdatedForALongTime">Not updated for a long time</string>
     <string name="someNewFuncMayPub">Some new features may have been released</string>
     <string name="inPowerSaveMode">Power save mode is on</string>
+    <string name="manageQuickFUFNoti">Manage quick freeze notifications</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
