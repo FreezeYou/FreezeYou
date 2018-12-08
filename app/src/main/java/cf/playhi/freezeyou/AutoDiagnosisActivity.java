@@ -49,6 +49,18 @@ public class AutoDiagnosisActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                go();
+            }
+        }).start();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -131,6 +143,12 @@ public class AutoDiagnosisActivity extends Activity {
                         checkUpdate(AutoDiagnosisActivity.this);
                         break;
                     case "4":
+                        if (Build.VERSION.SDK_INT >= 23) {
+                            Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                            if (intent.resolveActivity(getPackageManager()) != null) {
+                                startActivity(intent);
+                            }
+                        }
                         break;
                     default:
                         break;
