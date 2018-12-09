@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/main_sca_menu_createDisEnableShortCut"
+        android:title="@string/createDisEnableShortCut" />
+    <item
+        android:id="@+id/main_sca_menu_disableAEnable"
+        android:title="@string/disableAEnable" />
+
+    <item android:title="@string/addTo">
+        <menu>
+            <item
+                android:id="@+id/main_sca_menu_addToOneKeyList"
+                android:title="@string/addToOneKeyList" />
+            <item
+                android:id="@+id/main_sca_menu_addToOneKeyUFList"
+                android:title="@string/addToOneKeyUFList" />
+            <item
+                android:id="@+id/main_sca_menu_addToFreezeOnceQuit"
+                android:title="@string/addToFreezeOnceQuit" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/main_sca_menu_copyPkgName"
+        android:title="@string/copyPkgName" />
+    <item
+        android:id="@+id/main_sca_menu_appDetail"
+        android:title="@string/appDetail" />
+</menu>

@@ -672,12 +672,13 @@ public class Main extends Activity {
                 if (!getString(R.string.notAvailable).equals(name)) {
                     switch (appListViewOnClickMode) {
                         case APPListViewOnClickMode_chooseAction:
-                            startActivityForResult(
-                                    new Intent(Main.this, SelectOperation.class).
-                                            putExtra("Name", name).
-                                            putExtra("pkgName", pkgName),
-                                    1092
-                            );
+//                            startActivityForResult(
+//                                    new Intent(Main.this, SelectOperation.class).
+//                                            putExtra("Name", name).
+//                                            putExtra("pkgName", pkgName),
+//                                    1092
+//                            );
+
                             overridePendingTransition(R.anim.pullup, R.anim.pulldown);
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
