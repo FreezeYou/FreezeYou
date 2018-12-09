@@ -189,7 +189,7 @@
     <string name="someNewFuncMayPub">一些新功能可能已發佈</string>
     <string name="inPowerSaveMode">節約耗電量模式已開啟</string>
     <string name="manageQuickFUFNoti">管理凍結解凍快捷通知</string>
-    <string name="addTo">加入</string>
+    <string name="addToRemoveFrom">加入/移出</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
