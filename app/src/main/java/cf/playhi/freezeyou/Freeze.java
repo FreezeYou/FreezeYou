@@ -6,17 +6,21 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.Support.processFreezeAction;
+import static cf.playhi.freezeyou.Support.processUnfreezeAction;
+import static cf.playhi.freezeyou.Support.realGetFrozenStatus;
+import static cf.playhi.freezeyou.Support.shortcutMakeDialog;
 import static cf.playhi.freezeyou.ThemeUtils.processAddTranslucent;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.Support.shortcutMakeDialog;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class Freeze extends Activity {
@@ -53,7 +57,13 @@ public class Freeze extends Activity {
             showToast(getApplicationContext(), R.string.invalidArguments);
             Freeze.this.finish();
         }
-        if ((!checkRootFrozen(Freeze.this, pkgName, null)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("shortcutAutoFUF", false)) {
+            if (realGetFrozenStatus(this, pkgName, getPackageManager())) {
+                processUnfreezeAction(this, pkgName, true, true, this, true);
+            } else {
+                processFreezeAction(this, pkgName, true, this, true);
+            }
+        } else if ((!checkRootFrozen(Freeze.this, pkgName, null)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
             processDialog(pkgName, auto, 2);
         } else {
             processDialog(pkgName, auto, 1);

@@ -63,6 +63,11 @@
             android:key="openAndUFImmediately"
             android:summary="@string/openAndUFImmediatelyEx"
             android:title="@string/openAndUFImmediately" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="shortcutAutoFUF"
+            android:summary="@string/shortcutAutoFUFEx"
+            android:title="@string/shortcutAutoFUF" />
         <ListPreference
             android:defaultValue="nothing"
             android:entries="@array/shortCutOneKeyFreezeAdditionalOptionsSelection"
