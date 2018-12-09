@@ -190,6 +190,7 @@
     <string name="inPowerSaveMode">省电模式已开启</string>
     <string name="manageQuickFUFNoti">管理冻结解冻快捷通知</string>
     <string name="addToRemoveFrom">加入/移出</string>
+    <string name="onClickFuncChooseActionStyle">单击功能选择操作风格</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>显示全部</item>
