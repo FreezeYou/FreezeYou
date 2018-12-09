@@ -14,6 +14,12 @@
             android:entryValues="@array/launchModeSelectionValues"
             android:key="launchMode"
             android:title="@string/launchMode" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/onClickFuncChooseActionStyles"
+            android:entryValues="@array/onClickFuncChooseActionStyles"
+            android:key="onClickFuncChooseActionStyle"
+            android:title="@string/onClickFuncChooseActionStyle" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="noCaution"

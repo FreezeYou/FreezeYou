@@ -8,7 +8,7 @@
         android:id="@+id/main_sca_menu_disableAEnable"
         android:title="@string/disableAEnable" />
 
-    <item android:title="@string/addTo">
+    <item android:title="@string/addToRemoveFrom">
         <menu>
             <item
                 android:id="@+id/main_sca_menu_addToOneKeyList"

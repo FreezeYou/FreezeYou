@@ -6,21 +6,28 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.service.notification.StatusBarNotification;
 
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.DataOutputStream;
 
+import static cf.playhi.freezeyou.AccessibilityUtils.isAccessibilitySettingsOn;
+import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
 import static cf.playhi.freezeyou.NotificationUtils.createNotification;
 import static cf.playhi.freezeyou.NotificationUtils.deleteNotification;
+import static cf.playhi.freezeyou.OneKeyListUtils.addToOneKeyList;
+import static cf.playhi.freezeyou.OneKeyListUtils.existsInOneKeyList;
+import static cf.playhi.freezeyou.OneKeyListUtils.removeFromOneKeyList;
 import static cf.playhi.freezeyou.ProcessUtils.destroyProcess;
 import static cf.playhi.freezeyou.ProcessUtils.fAURoot;
 import static cf.playhi.freezeyou.ServiceUtils.startService;
@@ -382,6 +389,32 @@ class Support {
             return new AppPreferences(context).getBoolean("avoidFreezeNotifyingApplications", false) && isAppStillNotifying(pkgName);
         } else {
             return false;
+        }
+    }
+
+
+    static void checkAddOrRemove(Context context, String pkgNames, String pkgName, String oneKeyName) {
+        if (existsInOneKeyList(pkgNames, pkgName)) {
+            showToast(context,
+                    removeFromOneKeyList(context,
+                            oneKeyName,
+                            pkgName) ? R.string.removed : R.string.removeFailed);
+        } else {
+            showToast(context,
+                    addToOneKeyList(context,
+                            oneKeyName,
+                            pkgName) ? R.string.added : R.string.addFailed);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            if (context.getString(R.string.sFreezeOnceQuit).equals(oneKeyName)) {
+                if (!preferences.getBoolean("freezeOnceQuit", false)) {
+                    preferences.edit().putBoolean("freezeOnceQuit", true).apply();
+                    new AppPreferences(context).put("freezeOnceQuit", true);
+                }
+                if (!isAccessibilitySettingsOn(context)) {
+                    showToast(context, R.string.needActiveAccessibilityService);
+                    openAccessibilitySettings(context);
+                }
+            }
         }
     }
 

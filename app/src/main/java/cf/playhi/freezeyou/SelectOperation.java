@@ -2,12 +2,10 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,15 +17,11 @@ import android.widget.TextView;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static cf.playhi.freezeyou.OneKeyListUtils.addToOneKeyList;
-import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
-import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
-import static cf.playhi.freezeyou.OneKeyListUtils.existsInOneKeyList;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationInfoUtils.getApplicationInfoFromPkgName;
-import static cf.playhi.freezeyou.AccessibilityUtils.isAccessibilitySettingsOn;
-import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
-import static cf.playhi.freezeyou.OneKeyListUtils.removeFromOneKeyList;
+import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
+import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
+import static cf.playhi.freezeyou.OneKeyListUtils.existsInOneKeyList;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class SelectOperation extends Activity {
@@ -108,15 +102,15 @@ public class SelectOperation extends Activity {
                         finish();
                         break;
                     case 2:
-                        checkAddOrRemove(pkgNames, pkgName, getString(R.string.sAutoFreezeApplicationList));
+                        Support.checkAddOrRemove(SelectOperation.this, pkgNames, pkgName, getString(R.string.sAutoFreezeApplicationList));
                         finish();
                         break;
                     case 3:
-                        checkAddOrRemove(UFPkgNames, pkgName, getString(R.string.sOneKeyUFApplicationList));
+                        Support.checkAddOrRemove(SelectOperation.this, UFPkgNames, pkgName, getString(R.string.sOneKeyUFApplicationList));
                         finish();
                         break;
                     case 4:
-                        checkAddOrRemove(FreezeOnceQuitPkgNames, pkgName, getString(R.string.sFreezeOnceQuit));
+                        Support.checkAddOrRemove(SelectOperation.this, FreezeOnceQuitPkgNames, pkgName, getString(R.string.sFreezeOnceQuit));
                         finish();
                         break;
                     case 5:
@@ -149,28 +143,4 @@ public class SelectOperation extends Activity {
         this.overridePendingTransition(R.anim.pullup, R.anim.pulldown);
     }
 
-    private void checkAddOrRemove(String pkgNames, String pkgName, String oneKeyName) {
-        if (existsInOneKeyList(pkgNames, pkgName)) {
-            showToast(getApplicationContext(),
-                    removeFromOneKeyList(getApplicationContext(),
-                            oneKeyName,
-                            pkgName) ? R.string.removed : R.string.removeFailed);
-        } else {
-            showToast(getApplicationContext(),
-                    addToOneKeyList(getApplicationContext(),
-                            oneKeyName,
-                            pkgName) ? R.string.added : R.string.addFailed);
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            if (getString(R.string.sFreezeOnceQuit).equals(oneKeyName)) {
-                if (!preferences.getBoolean("freezeOnceQuit", false)) {
-                    preferences.edit().putBoolean("freezeOnceQuit", true).apply();
-                    new AppPreferences(getApplicationContext()).put("freezeOnceQuit", true);
-                }
-                if (!isAccessibilitySettingsOn(getApplicationContext())) {
-                    showToast(SelectOperation.this, R.string.needActiveAccessibilityService);
-                    openAccessibilitySettings(SelectOperation.this);
-                }
-            }
-        }
-    }
 }

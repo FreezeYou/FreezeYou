@@ -188,6 +188,7 @@
     <string name="inPowerSaveMode">省电模式已开启</string>
     <string name="manageQuickFUFNoti">管理冻结解冻快捷通知</string>
     <string name="addToRemoveFrom">加入/移出</string>
+    <string name="onClickFuncChooseActionStyle">单击功能选择操作风格</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
@@ -273,6 +274,10 @@
         <item>onApplicationsForeground</item>
         <item>onLeaveApplications</item>
         <item>onUFApplications</item>
+    </string-array>
+    <string-array name="onClickFuncChooseActionStyles" translatable="false">
+        <item>1</item>
+        <item>2</item>
     </string-array>
     <!--<string-array name="displayLanguageOptionsSelection" translatable="false">-->
         <!--<item>Default</item>-->
