@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/adgli_title_textView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="1dp"
-        android:text="@string/autoDiagnosis"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/adgli_subTitle_textView"
-        android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/adgli_title_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="1dp"
+            android:text="@string/autoDiagnosis"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/adgli_subTitle_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="1dp"
+            android:text="@string/autoDiagnosis" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/adgli_status_imageView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="1dp"
-        android:text="@string/autoDiagnosis" />
-</LinearLayout>
+        android:layout_gravity="right|center_vertical|end"
+        android:scaleType="fitCenter"
+        android:src="@android:drawable/ic_dialog_alert" />
+
+</FrameLayout>

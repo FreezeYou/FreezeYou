@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -19,6 +21,7 @@ import android.widget.SimpleAdapter;
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -74,7 +77,7 @@ public class AutoDiagnosisActivity extends Activity {
     private void go() {
         ListView adg_listView = findViewById(R.id.adg_listView);
         ProgressBar adg_progressBar = findViewById(R.id.adg_progressBar);
-        List<Map<String, String>> problemsList = new ArrayList<>();
+        final List<Map<String, String>> problemsList = new ArrayList<>();
 
         AppPreferences appPreferences = new AppPreferences(this);
         disableIndeterminate(adg_progressBar);
@@ -101,6 +104,9 @@ public class AutoDiagnosisActivity extends Activity {
         checkRootPermission(problemsList);
         setProgress(adg_progressBar, 70);
 
+        doRegenerateSomeCache(problemsList);
+        setProgress(adg_progressBar, 75);
+
         checkIsPowerSaveMode(problemsList);
         setProgress(adg_progressBar, 80);
 
@@ -115,13 +121,16 @@ public class AutoDiagnosisActivity extends Activity {
                         this,
                         problemsList,
                         R.layout.adg_list_item,
-                        new String[]{"title", "sTitle", "id"},
-                        new int[]{R.id.adgli_title_textView, R.id.adgli_subTitle_textView});
+                        new String[]{"title", "sTitle", "status", "id"},
+                        new int[]{R.id.adgli_title_textView, R.id.adgli_subTitle_textView, R.id.adgli_status_imageView});
 
         adg_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (((Map<String, String>) adapter.getItem(position)).get("id")) {
+                String s = problemsList.get(position).get("id");
+                if (s == null)
+                    s = "";
+                switch (s) {
                     case "1":
                         AccessibilityUtils.openAccessibilitySettings(AutoDiagnosisActivity.this);
                         break;
@@ -193,7 +202,7 @@ public class AutoDiagnosisActivity extends Activity {
         });
     }
 
-    private HashMap<String, String> generateHashMap(String title, String sTitle, String id) {
+    private HashMap<String, String> generateHashMap(String title, String sTitle, String id, int statusId) {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("title", title);
         hashMap.put("sTitle", sTitle);
@@ -204,7 +213,7 @@ public class AutoDiagnosisActivity extends Activity {
     private void checkSystemVersion(List<Map<String, String>> problemsList) {
         if (Build.VERSION.SDK_INT < 21) {
             problemsList.add(
-                    generateHashMap(getString(R.string.sysVerLow), getString(R.string.someFuncUn), "-1")
+                    generateHashMap(getString(R.string.sysVerLow), getString(R.string.someFuncUn), "-1", R.drawable.ic_notification)
             );
         }
     }
@@ -212,7 +221,7 @@ public class AutoDiagnosisActivity extends Activity {
     private void checkAccessibilityService(List<Map<String, String>> problemsList, AppPreferences appPreferences) {
         if ((getDatabasePath("scheduledTriggerTasks").exists() || appPreferences.getBoolean("freezeOnceQuit", false) || appPreferences.getBoolean("avoidFreezeForegroundApplications", false)) && !isAccessibilitySettingsOn(this)) {
             problemsList.add(
-                    generateHashMap(getString(R.string.ACBSNotEnabled), getString(R.string.affect) + " " + getString(R.string.avoidFreezeForegroundApplications) + " " + getString(R.string.scheduledTasks) + " " + getString(R.string.etc), "1")
+                    generateHashMap(getString(R.string.ACBSNotEnabled), getString(R.string.affect) + " " + getString(R.string.avoidFreezeForegroundApplications) + " " + getString(R.string.scheduledTasks) + " " + getString(R.string.etc), "1", R.drawable.ic_notification)
             );
         }
     }
@@ -222,7 +231,7 @@ public class AutoDiagnosisActivity extends Activity {
             String s = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
             if (s == null || !s.contains("cf.playhi.freezeyou/cf.playhi.freezeyou.MyNotificationListenerService")) {
                 problemsList.add(
-                        generateHashMap(getString(R.string.noNotificationListenerPermission), getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications), "2")
+                        generateHashMap(getString(R.string.noNotificationListenerPermission), getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications), "2", R.drawable.ic_notification)
                 );
             }
         }
@@ -231,20 +240,20 @@ public class AutoDiagnosisActivity extends Activity {
     private void checkNotifyPermission(List<Map<String, String>> problemsList) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (notificationManager == null || (Build.VERSION.SDK_INT >= 24 && !notificationManager.areNotificationsEnabled())) {
-            problemsList.add(generateHashMap(getString(R.string.noNotifyPermission), getString(R.string.mayCannotNotify), "-1"));
+            problemsList.add(generateHashMap(getString(R.string.noNotifyPermission), getString(R.string.mayCannotNotify), "-1", R.drawable.ic_notification));
         }
     }
 
     private void checkIsDeviceOwner(List<Map<String, String>> problemsList) {
         if (!Support.isDeviceOwner(this)) {
-            problemsList.add(generateHashMap(getString(R.string.noMRootPermission), getString(R.string.someFuncMayRestrict), "-1"));
+            problemsList.add(generateHashMap(getString(R.string.noMRootPermission), getString(R.string.someFuncMayRestrict), "-1", R.drawable.ic_notification));
         }
     }
 
     private void checkLongTimeNoUpdate(List<Map<String, String>> problemsList) {
         SharedPreferences sharedPreferences = getSharedPreferences("Ver", MODE_PRIVATE);
         if ((new Date().getTime() - sharedPreferences.getLong("Time", 0)) > 1728000000)
-            problemsList.add(generateHashMap(getString(R.string.notUpdatedForALongTime), getString(R.string.someNewFuncMayPub), "3"));
+            problemsList.add(generateHashMap(getString(R.string.notUpdatedForALongTime), getString(R.string.someNewFuncMayPub), "3", R.drawable.ic_notification));
     }
 
     private void checkRootPermission(List<Map<String, String>> problemsList) {
@@ -263,26 +272,56 @@ public class AutoDiagnosisActivity extends Activity {
             }
         }
         if (!hasPermission || value != 0) {
-            problemsList.add(generateHashMap(getString(R.string.noRootPermission), getString(R.string.someFuncMayRestrict), "-1"));
+            problemsList.add(generateHashMap(getString(R.string.noRootPermission), getString(R.string.someFuncMayRestrict), "-1", R.drawable.ic_notification));
         }
     }
 
     private void checkIsIgnoringBatteryOptimizations(List<Map<String, String>> problemsList) {
         if (Build.VERSION.SDK_INT >= 23)
             if (!((PowerManager) getSystemService(Context.POWER_SERVICE)).isIgnoringBatteryOptimizations("cf.playhi.freezeyou")) {
-                problemsList.add(generateHashMap(getString(R.string.noIgnoringBO), getString(R.string.someFuncMayBeAff), "4"));
+                problemsList.add(generateHashMap(getString(R.string.noIgnoringBO), getString(R.string.someFuncMayBeAff), "4", R.drawable.ic_notification));
             }
     }
 
     private void checkIsPowerSaveMode(List<Map<String, String>> problemsList) {
         if (Build.VERSION.SDK_INT >= 21)
             if (((PowerManager) getSystemService(Context.POWER_SERVICE)).isPowerSaveMode())
-                problemsList.add(generateHashMap(getString(R.string.inPowerSaveMode), getString(R.string.someFuncMayBeAff), "-1"));
+                problemsList.add(generateHashMap(getString(R.string.inPowerSaveMode), getString(R.string.someFuncMayBeAff), "-1", R.drawable.ic_notification));
+    }
+
+    private void doRegenerateSomeCache(List<Map<String, String>> problemsList) {
+        getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE).edit().clear().apply();
+        try {
+            File file = new File(getFilesDir() + "/icon");
+            if (file.exists() && file.isDirectory()) {
+                File[] childFile = file.listFiles();
+                if (childFile == null || childFile.length == 0) {
+                    file.delete();
+                } else {
+                    for (File f : childFile) {
+                        if (f.isFile()) {
+                            f.delete();
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        PackageManager pm = getPackageManager();
+        for (ApplicationInfo applicationInfo : pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES)) {
+            ApplicationLabelUtils.getApplicationLabel(this, pm, applicationInfo, applicationInfo.packageName);
+            ApplicationIconUtils.getApplicationIcon(this, applicationInfo.packageName, applicationInfo, false);
+        }
+        problemsList.add(generateHashMap(getString(R.string.regenerateSomeCache), getString(R.string.updateSomeData), "-1", R.drawable.ic_notification));
+
     }
 
     private void checkIfNoProblemFound(List<Map<String, String>> problemsList) {
         if (problemsList.isEmpty()) {
-            problemsList.add(generateHashMap(getString(R.string.noProblemsFound), getString(R.string.everySeemsAllRight), "-1"));
+            problemsList.add(generateHashMap(getString(R.string.noProblemsFound), getString(R.string.everySeemsAllRight), "-1", R.drawable.ic_notification));
         }
     }
+
 }
