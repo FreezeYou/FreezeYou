@@ -23,6 +23,8 @@ import net.grandcentrix.tray.AppPreferences;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -116,6 +118,14 @@ public class AutoDiagnosisActivity extends Activity {
         checkIfNoProblemFound(problemsList);
         setProgress(adg_progressBar, 90);
 
+        Collections.sort(problemsList, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> t0, Map<String, Object> t1) {
+                int i = ((Integer) t0.get("status")).compareTo((Integer) t1.get("status"));
+                return i == 0 ? ((String) t0.get("id")).compareTo((String) t1.get("id")) : i;
+            }
+        });
+
         final SimpleAdapter adapter =
                 new SimpleAdapter(
                         this,
@@ -127,7 +137,7 @@ public class AutoDiagnosisActivity extends Activity {
         adg_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String s = (String)problemsList.get(position).get("id");
+                String s = (String) problemsList.get(position).get("id");
                 if (s == null)
                     s = "";
                 switch (s) {
@@ -214,17 +224,19 @@ public class AutoDiagnosisActivity extends Activity {
     private void checkSystemVersion(List<Map<String, Object>> problemsList) {
         if (Build.VERSION.SDK_INT < 21) {
             problemsList.add(
-                    generateHashMap(getString(R.string.sysVerLow), getString(R.string.someFuncUn), "-1", R.drawable.ic_notification)
+                    generateHashMap(getString(R.string.sysVerLow), getString(R.string.someFuncUn), "-50", R.drawable.ic_attention)
+            );
+        } else {
+            problemsList.add(
+                    generateHashMap(getString(R.string.sysVerLow), getString(R.string.someFuncUn), "-1", R.drawable.ic_done)
             );
         }
     }
 
     private void checkAccessibilityService(List<Map<String, Object>> problemsList, AppPreferences appPreferences) {
-        if ((getDatabasePath("scheduledTriggerTasks").exists() || appPreferences.getBoolean("freezeOnceQuit", false) || appPreferences.getBoolean("avoidFreezeForegroundApplications", false)) && !isAccessibilitySettingsOn(this)) {
-            problemsList.add(
-                    generateHashMap(getString(R.string.ACBSNotEnabled), getString(R.string.affect) + " " + getString(R.string.avoidFreezeForegroundApplications) + " " + getString(R.string.scheduledTasks) + " " + getString(R.string.etc), "1", R.drawable.ic_notification)
-            );
-        }
+        problemsList.add(
+                (getDatabasePath("scheduledTriggerTasks").exists() || appPreferences.getBoolean("freezeOnceQuit", false) || appPreferences.getBoolean("avoidFreezeForegroundApplications", false)) && !isAccessibilitySettingsOn(this) ? generateHashMap(getString(R.string.ACBSNotEnabled), getString(R.string.affect) + " " + getString(R.string.avoidFreezeForegroundApplications) + " " + getString(R.string.scheduledTasks) + " " + getString(R.string.etc), "1", R.drawable.ic_attention) : generateHashMap(getString(R.string.ACBSNotEnabled), getString(R.string.affect) + " " + getString(R.string.avoidFreezeForegroundApplications) + " " + getString(R.string.scheduledTasks) + " " + getString(R.string.etc), "1", R.drawable.ic_done)
+        );
     }
 
     private void checkNotificationListenerPermission(List<Map<String, Object>> problemsList, AppPreferences appPreferences) {
@@ -232,7 +244,11 @@ public class AutoDiagnosisActivity extends Activity {
             String s = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
             if (s == null || !s.contains("cf.playhi.freezeyou/cf.playhi.freezeyou.MyNotificationListenerService")) {
                 problemsList.add(
-                        generateHashMap(getString(R.string.noNotificationListenerPermission), getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications), "2", R.drawable.ic_notification)
+                        generateHashMap(getString(R.string.noNotificationListenerPermission), getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications), "2", R.drawable.ic_attention)
+                );
+            } else {
+                problemsList.add(
+                        generateHashMap(getString(R.string.noNotificationListenerPermission), getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications), "2", R.drawable.ic_done)
                 );
             }
         }
@@ -241,20 +257,26 @@ public class AutoDiagnosisActivity extends Activity {
     private void checkNotifyPermission(List<Map<String, Object>> problemsList) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (notificationManager == null || (Build.VERSION.SDK_INT >= 24 && !notificationManager.areNotificationsEnabled())) {
-            problemsList.add(generateHashMap(getString(R.string.noNotifyPermission), getString(R.string.mayCannotNotify), "-1", R.drawable.ic_notification));
+            problemsList.add(generateHashMap(getString(R.string.noNotifyPermission), getString(R.string.mayCannotNotify), "6", R.drawable.ic_attention));
+        } else {
+            problemsList.add(generateHashMap(getString(R.string.noNotifyPermission), getString(R.string.mayCannotNotify), "6", R.drawable.ic_done));
         }
     }
 
     private void checkIsDeviceOwner(List<Map<String, Object>> problemsList) {
         if (!Support.isDeviceOwner(this)) {
-            problemsList.add(generateHashMap(getString(R.string.noMRootPermission), getString(R.string.someFuncMayRestrict), "-1", R.drawable.ic_notification));
+            problemsList.add(generateHashMap(getString(R.string.noMRootPermission), getString(R.string.someFuncMayRestrict), "-3", R.drawable.ic_attention));
+        } else {
+            problemsList.add(generateHashMap(getString(R.string.noMRootPermission), getString(R.string.someFuncMayRestrict), "-3", R.drawable.ic_done));
         }
     }
 
     private void checkLongTimeNoUpdate(List<Map<String, Object>> problemsList) {
         SharedPreferences sharedPreferences = getSharedPreferences("Ver", MODE_PRIVATE);
         if ((new Date().getTime() - sharedPreferences.getLong("Time", 0)) > 1728000000)
-            problemsList.add(generateHashMap(getString(R.string.notUpdatedForALongTime), getString(R.string.someNewFuncMayPub), "3", R.drawable.ic_notification));
+            problemsList.add(generateHashMap(getString(R.string.notUpdatedForALongTime), getString(R.string.someNewFuncMayPub), "-30", R.drawable.ic_attention));
+        else
+            problemsList.add(generateHashMap(getString(R.string.notUpdatedForALongTime), getString(R.string.someNewFuncMayPub), "-30", R.drawable.ic_done));
     }
 
     private void checkRootPermission(List<Map<String, Object>> problemsList) {
@@ -273,21 +295,25 @@ public class AutoDiagnosisActivity extends Activity {
             }
         }
         if (!hasPermission || value != 0) {
-            problemsList.add(generateHashMap(getString(R.string.noRootPermission), getString(R.string.someFuncMayRestrict), "-1", R.drawable.ic_notification));
+            problemsList.add(generateHashMap(getString(R.string.noRootPermission), getString(R.string.someFuncMayRestrict), "-3", R.drawable.ic_attention));
+        } else {
+            problemsList.add(generateHashMap(getString(R.string.noRootPermission), getString(R.string.someFuncMayRestrict), "-3", R.drawable.ic_done));
         }
     }
 
     private void checkIsIgnoringBatteryOptimizations(List<Map<String, Object>> problemsList) {
-        if (Build.VERSION.SDK_INT >= 23)
-            if (!((PowerManager) getSystemService(Context.POWER_SERVICE)).isIgnoringBatteryOptimizations("cf.playhi.freezeyou")) {
-                problemsList.add(generateHashMap(getString(R.string.noIgnoringBO), getString(R.string.someFuncMayBeAff), "4", R.drawable.ic_notification));
-            }
+        if (Build.VERSION.SDK_INT >= 23 && !((PowerManager) getSystemService(Context.POWER_SERVICE)).isIgnoringBatteryOptimizations("cf.playhi.freezeyou")) {
+            problemsList.add(generateHashMap(getString(R.string.noIgnoringBO), getString(R.string.someFuncMayBeAff), "4", R.drawable.ic_attention));
+        } else {
+            problemsList.add(generateHashMap(getString(R.string.noIgnoringBO), getString(R.string.someFuncMayBeAff), "4", R.drawable.ic_done));
+        }
     }
 
     private void checkIsPowerSaveMode(List<Map<String, Object>> problemsList) {
-        if (Build.VERSION.SDK_INT >= 21)
-            if (((PowerManager) getSystemService(Context.POWER_SERVICE)).isPowerSaveMode())
-                problemsList.add(generateHashMap(getString(R.string.inPowerSaveMode), getString(R.string.someFuncMayBeAff), "-1", R.drawable.ic_notification));
+        if (Build.VERSION.SDK_INT >= 21 && ((PowerManager) getSystemService(Context.POWER_SERVICE)).isPowerSaveMode())
+            problemsList.add(generateHashMap(getString(R.string.inPowerSaveMode), getString(R.string.someFuncMayBeAff), "5", R.drawable.ic_attention));
+        else
+            problemsList.add(generateHashMap(getString(R.string.inPowerSaveMode), getString(R.string.someFuncMayBeAff), "5", R.drawable.ic_done));
     }
 
     private void doRegenerateSomeCache(List<Map<String, Object>> problemsList) {
@@ -315,13 +341,13 @@ public class AutoDiagnosisActivity extends Activity {
             ApplicationLabelUtils.getApplicationLabel(this, pm, applicationInfo, applicationInfo.packageName);
             ApplicationIconUtils.getApplicationIcon(this, applicationInfo.packageName, applicationInfo, false);
         }
-        problemsList.add(generateHashMap(getString(R.string.regenerateSomeCache), getString(R.string.updateSomeData), "-1", R.drawable.ic_notification));
+        problemsList.add(generateHashMap(getString(R.string.regenerateSomeCache), getString(R.string.updateSomeData), "10", R.drawable.ic_done));
 
     }
 
     private void checkIfNoProblemFound(List<Map<String, Object>> problemsList) {
         if (problemsList.isEmpty()) {
-            problemsList.add(generateHashMap(getString(R.string.noProblemsFound), getString(R.string.everySeemsAllRight), "-1", R.drawable.ic_notification));
+            problemsList.add(generateHashMap(getString(R.string.noProblemsFound), getString(R.string.everySeemsAllRight), "-99", R.drawable.ic_done));
         }
     }
 
