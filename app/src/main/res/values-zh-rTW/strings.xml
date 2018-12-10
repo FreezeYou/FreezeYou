@@ -193,6 +193,8 @@
     <string name="onClickFuncChooseActionStyle">单击功能选择操作风格</string>
     <string name="shortcutAutoFUF">快捷方式自动冻解</string>
     <string name="shortcutAutoFUFEx">已冻结则解冻，已解冻则冻结</string>
+    <string name="regenerateSomeCache">重建一些缓存</string>
+    <string name="updateSomeData">更新一些数据</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
