@@ -195,9 +195,9 @@
     <string name="shortcutAutoFUFEx">Frozen unfreeze, unfrozen freeze</string>
     <string name="regenerateSomeCache">Regenerate some caches</string>
     <string name="updateSomeData">Update some data</string>
-    <string name="backupAndRestore">备份与还原</string>
-    <string name="backup">备份</string>
-    <string name="restore">还原</string>
+    <string name="backupAndRestore">Backup and restore</string>
+    <string name="backup">Backup</string>
+    <string name="restore">Restore</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
