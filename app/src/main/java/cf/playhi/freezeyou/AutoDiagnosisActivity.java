@@ -89,34 +89,34 @@ public class AutoDiagnosisActivity extends Activity {
         setProgress(adg_progressBar, 10);
 
         checkLongTimeNoUpdate(problemsList);
-        setProgress(adg_progressBar, 20);
+        setProgress(adg_progressBar, 15);
 
         checkAccessibilityService(problemsList, appPreferences);
-        setProgress(adg_progressBar, 30);
+        setProgress(adg_progressBar, 20);
 
         checkNotificationListenerPermission(problemsList, appPreferences);
-        setProgress(adg_progressBar, 40);
+        setProgress(adg_progressBar, 25);
 
         checkNotifyPermission(problemsList);
-        setProgress(adg_progressBar, 50);
+        setProgress(adg_progressBar, 30);
 
         checkIsDeviceOwner(problemsList);
-        setProgress(adg_progressBar, 60);
+        setProgress(adg_progressBar, 35);
 
         checkRootPermission(problemsList);
-        setProgress(adg_progressBar, 70);
+        setProgress(adg_progressBar, 40);
 
-        doRegenerateSomeCache(problemsList);
-        setProgress(adg_progressBar, 75);
+        doRegenerateSomeCache(problemsList, adg_progressBar);
+        setProgress(adg_progressBar, 90);
 
         checkIsPowerSaveMode(problemsList);
-        setProgress(adg_progressBar, 80);
+        setProgress(adg_progressBar, 95);
 
         checkIsIgnoringBatteryOptimizations(problemsList);
-        setProgress(adg_progressBar, 85);
+        setProgress(adg_progressBar, 97);
 
         checkIfNoProblemFound(problemsList);
-        setProgress(adg_progressBar, 90);
+        setProgress(adg_progressBar, 98);
 
         Collections.sort(problemsList, new Comparator<Map<String, Object>>() {
             @Override
@@ -145,20 +145,15 @@ public class AutoDiagnosisActivity extends Activity {
                         AccessibilityUtils.openAccessibilitySettings(AutoDiagnosisActivity.this);
                         break;
                     case "2":
-                        if (Build.VERSION.SDK_INT >= 21) {//这项不兼容 5.0 以下了
-                            String enabledNotificationListeners = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
-                            if (enabledNotificationListeners != null) {
-                                if (!enabledNotificationListeners.contains("cf." + "playhi." + "freezeyou")) {
-                                    try {
-                                        startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-                                    } catch (Exception e) {
-                                        showToast(AutoDiagnosisActivity.this, R.string.failed);
-                                    }
-                                }
+                        if (Build.VERSION.SDK_INT >= 21) {
+                            try {
+                                startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                            } catch (Exception e) {
+                                showToast(AutoDiagnosisActivity.this, R.string.failed);
                             }
                         }
                         break;
-                    case "3":
+                    case "-30":
                         checkUpdate(AutoDiagnosisActivity.this);
                         break;
                     case "4":
@@ -316,7 +311,7 @@ public class AutoDiagnosisActivity extends Activity {
             problemsList.add(generateHashMap(getString(R.string.inPowerSaveMode), getString(R.string.someFuncMayBeAff), "5", R.drawable.ic_done));
     }
 
-    private void doRegenerateSomeCache(List<Map<String, Object>> problemsList) {
+    private void doRegenerateSomeCache(List<Map<String, Object>> problemsList, ProgressBar progressBar) {
         getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE).edit().clear().apply();
         try {
             File file = new File(getFilesDir() + "/icon");
@@ -337,9 +332,12 @@ public class AutoDiagnosisActivity extends Activity {
         }
 
         PackageManager pm = getPackageManager();
-        for (ApplicationInfo applicationInfo : pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES)) {
+        List<ApplicationInfo> installedApplications = pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
+        for (int i = 0; i < installedApplications.size(); i++) {
+            ApplicationInfo applicationInfo = installedApplications.get(i);
             ApplicationLabelUtils.getApplicationLabel(this, pm, applicationInfo, applicationInfo.packageName);
             ApplicationIconUtils.getApplicationIcon(this, applicationInfo.packageName, applicationInfo, false);
+            setProgress(progressBar, 40 + (int) ((double) i / (double) installedApplications.size() * 50));
         }
         problemsList.add(generateHashMap(getString(R.string.regenerateSomeCache), getString(R.string.updateSomeData), "10", R.drawable.ic_done));
 
