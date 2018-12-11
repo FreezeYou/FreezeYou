@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou;
 
+import android.Manifest;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -252,6 +254,30 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
                                 }
                             })
+                            .create().show();
+                    break;
+                case "backup":
+                    //打包压缩
+                    break;
+                case "restore":
+                    buildAlertDialog(getActivity(), android.R.drawable.ic_dialog_alert, R.string.plsConfirm, R.string.restore)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (Build.VERSION.SDK_INT >= 23 && getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                        getActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 6001);
+                                        showToast(getActivity(), R.string.failed);
+                                    } else {
+                                        File theBackup = new File(Environment.getExternalStorageDirectory().toString()+File.separator+"FreezeYou"+File.separator+"backup.zip");
+                                        if (theBackup.exists()&&theBackup.isFile()){
+                                            //解压+覆盖
+                                        }else {
+                                            showToast(getActivity(),R.string.failed);
+                                        }
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.no, null)
                             .create().show();
                     break;
                 default:

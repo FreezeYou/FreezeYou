@@ -193,6 +193,9 @@
     <string name="shortcutAutoFUFEx">已冻结则解冻，已解冻则冻结</string>
     <string name="regenerateSomeCache">重建一些缓存</string>
     <string name="updateSomeData">更新一些数据</string>
+    <string name="backupAndRestore">备份与还原</string>
+    <string name="backup">备份</string>
+    <string name="restore">还原</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
