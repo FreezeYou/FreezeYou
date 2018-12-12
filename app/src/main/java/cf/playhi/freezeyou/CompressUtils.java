@@ -24,7 +24,13 @@ final class CompressUtils {
         File srcFile = new File(srcPath);
         File dstFile = new File(dstPath);
         if (!srcFile.exists()) {
-            throw new FileNotFoundException(srcPath + "not found.");
+            throw new FileNotFoundException(srcPath + " not found.");
+        }
+        if (!dstFile.exists()) {
+            if (!dstFile.getParentFile().mkdirs())
+                throw new IOException("Cannot create parent dirs of " + dstPath);
+            if (dstFile.createNewFile())
+                throw new IOException("Cannot create file " + dstPath);
         }
         FileOutputStream out = null;
         ZipOutputStream zipOut = null;
@@ -81,7 +87,6 @@ final class CompressUtils {
             while ((count = bis.read(data, 0, BUFFER)) != -1) {
                 zipOut.write(data, 0, count);
             }
-
         } finally {
             if (null != bis) {
                 bis.close();

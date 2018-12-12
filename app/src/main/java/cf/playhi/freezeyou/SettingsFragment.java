@@ -22,17 +22,18 @@ import android.provider.Settings;
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
+import java.io.IOException;
 
-import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
-import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
-import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
-import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
-import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
 import static cf.playhi.freezeyou.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
+import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
+import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
 import static cf.playhi.freezeyou.DevicePolicyManagerUtils.openDevicePolicyManager;
 import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
+import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
+import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.VersionUtils.getVersionName;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -258,8 +259,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     break;
                 case "backup":
                     //打包压缩
-                    if (Build.VERSION.SDK_INT >= 23 && getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        getActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 6001);
+                    if (Build.VERSION.SDK_INT >= 23 && getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        getActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 6002);
                         showToast(getActivity(), R.string.failed);
                     } else {
                         try {
@@ -293,15 +294,22 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                                         if (theBackup.exists() && theBackup.isFile()) {
                                             //解压+覆盖
                                             try {
-                                                CompressUtils.decompress(theBackup.getAbsolutePath(),
+                                                deleteAllFiles(new File(
                                                         Build.VERSION.SDK_INT < 24 ?
-                                                                Environment.getDataDirectory().getPath()
+                                                                Environment.getDataDirectory().getCanonicalPath()
                                                                         + File.separator
                                                                         + "data"
                                                                         + File.separator
                                                                         + "cf.playhi.freezeyou"
                                                                 :
-                                                                getActivity().getDataDir().getAbsolutePath()
+                                                                getActivity().getDataDir().getCanonicalPath()), false);
+                                                CompressUtils.decompress(theBackup.getCanonicalPath(),
+                                                        Build.VERSION.SDK_INT < 24 ?
+                                                                Environment.getDataDirectory().getPath()
+                                                                        + File.separator
+                                                                        + "data"
+                                                                :
+                                                                getActivity().getDataDir().getCanonicalPath().replace("cf.playhi.freezeyou", "")
                                                 );
                                                 showToast(getActivity(), R.string.success);
                                             } catch (Exception e) {
@@ -322,6 +330,29 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             }
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
+    }
+
+    private void deleteAllFiles(File file, boolean deleteSelfFolder) throws IOException {
+        if (file.exists()) {
+            if (file.isFile()) {
+                if (!file.delete())
+                    throw new IOException(file.getAbsolutePath() + " delete failed");
+            } else if (file.isDirectory()) {
+                String[] strings = file.list();
+                if (deleteSelfFolder && strings == null) {
+                    if (!file.delete())
+                        throw new IOException(file.getAbsolutePath() + " delete failed");
+                } else {
+                    for (String s : strings) {
+                        deleteAllFiles(new File(s), true);
+                    }
+                    if (deleteSelfFolder) {
+                        if (!file.delete())
+                            throw new IOException(file.getAbsolutePath() + " delete failed");
+                    }
+                }
+            }
+        }
     }
 
     @Override
