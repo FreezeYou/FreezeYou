@@ -189,6 +189,15 @@
     <string name="someNewFuncMayPub">Some new features may have been released</string>
     <string name="inPowerSaveMode">Power save mode is on</string>
     <string name="manageQuickFUFNoti">Manage quick freeze notifications</string>
+    <string name="addToRemoveFrom">Add to/Remove from</string>
+    <string name="onClickFuncChooseActionStyle">The style of on click choose action</string>
+    <string name="shortcutAutoFUF">Shortcut auto freeze or unfreeze</string>
+    <string name="shortcutAutoFUFEx">Frozen unfreeze, unfrozen freeze</string>
+    <string name="regenerateSomeCache">Regenerate some caches</string>
+    <string name="updateSomeData">Update some data</string>
+    <string name="backupAndRestore">Backup and restore</string>
+    <string name="backup">Backup</string>
+    <string name="restore">Restore</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>

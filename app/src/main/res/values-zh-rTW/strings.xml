@@ -189,6 +189,15 @@
     <string name="someNewFuncMayPub">一些新功能可能已發佈</string>
     <string name="inPowerSaveMode">節約耗電量模式已開啟</string>
     <string name="manageQuickFUFNoti">管理凍結解凍快捷通知</string>
+    <string name="addToRemoveFrom">加入/移出</string>
+    <string name="onClickFuncChooseActionStyle">单击功能选择操作风格</string>
+    <string name="shortcutAutoFUF">快捷方式自动冻解</string>
+    <string name="shortcutAutoFUFEx">已冻结则解冻，已解冻则冻结</string>
+    <string name="regenerateSomeCache">重建一些缓存</string>
+    <string name="updateSomeData">更新一些数据</string>
+    <string name="backupAndRestore">备份与还原</string>
+    <string name="backup">备份</string>
+    <string name="restore">还原</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
