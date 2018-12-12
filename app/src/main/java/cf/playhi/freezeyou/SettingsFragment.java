@@ -258,6 +258,27 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     break;
                 case "backup":
                     //打包压缩
+                    if (Build.VERSION.SDK_INT >= 23 && getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        getActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 6001);
+                        showToast(getActivity(), R.string.failed);
+                    } else {
+                        try {
+                            CompressUtils.compress(
+                                    Build.VERSION.SDK_INT < 24 ?
+                                            Environment.getDataDirectory().getPath()
+                                                    + File.separator
+                                                    + "data"
+                                                    + File.separator
+                                                    + "cf.playhi.freezeyou"
+                                            :
+                                            getActivity().getDataDir().getAbsolutePath(),
+                                    Environment.getExternalStorageDirectory().toString() + File.separator + "FreezeYou" + File.separator + "backup.zip");
+                            showToast(getActivity(), R.string.success);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            showToast(getActivity(), R.string.failed);
+                        }
+                    }
                     break;
                 case "restore":
                     buildAlertDialog(getActivity(), android.R.drawable.ic_dialog_alert, R.string.plsConfirm, R.string.restore)
@@ -268,11 +289,27 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                                         getActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 6001);
                                         showToast(getActivity(), R.string.failed);
                                     } else {
-                                        File theBackup = new File(Environment.getExternalStorageDirectory().toString()+File.separator+"FreezeYou"+File.separator+"backup.zip");
-                                        if (theBackup.exists()&&theBackup.isFile()){
+                                        File theBackup = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "FreezeYou" + File.separator + "backup.zip");
+                                        if (theBackup.exists() && theBackup.isFile()) {
                                             //解压+覆盖
-                                        }else {
-                                            showToast(getActivity(),R.string.failed);
+                                            try {
+                                                CompressUtils.decompress(theBackup.getAbsolutePath(),
+                                                        Build.VERSION.SDK_INT < 24 ?
+                                                                Environment.getDataDirectory().getPath()
+                                                                        + File.separator
+                                                                        + "data"
+                                                                        + File.separator
+                                                                        + "cf.playhi.freezeyou"
+                                                                :
+                                                                getActivity().getDataDir().getAbsolutePath()
+                                                );
+                                                showToast(getActivity(), R.string.success);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                                showToast(getActivity(), R.string.failed);
+                                            }
+                                        } else {
+                                            showToast(getActivity(), R.string.failed);
                                         }
                                     }
                                 }
