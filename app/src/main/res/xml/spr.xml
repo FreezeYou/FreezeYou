@@ -178,14 +178,14 @@
         </Preference>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/backupAndRestore">
-        <Preference
-            android:key="backup"
-            android:title="@string/backup"/>
-        <Preference
-            android:key="restore"
-            android:title="@string/restore"/>
-    </PreferenceCategory>
+    <!--<PreferenceCategory android:title="@string/backupAndRestore">-->
+        <!--<Preference-->
+            <!--android:key="backup"-->
+            <!--android:title="@string/backup"/>-->
+        <!--<Preference-->
+            <!--android:key="restore"-->
+            <!--android:title="@string/restore"/>-->
+    <!--</PreferenceCategory>-->
 
     <PreferenceCategory android:title="@string/advance">
         <Preference

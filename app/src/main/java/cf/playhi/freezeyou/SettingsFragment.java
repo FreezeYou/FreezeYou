@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -22,7 +21,6 @@ import android.provider.Settings;
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
-import java.io.IOException;
 
 import static cf.playhi.freezeyou.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
@@ -263,22 +261,40 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                         getActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 6002);
                         showToast(getActivity(), R.string.failed);
                     } else {
-                        try {
-                            CompressUtils.compress(
-                                    Build.VERSION.SDK_INT < 24 ?
-                                            Environment.getDataDirectory().getPath()
-                                                    + File.separator
-                                                    + "data"
-                                                    + File.separator
-                                                    + "cf.playhi.freezeyou"
-                                            :
-                                            getActivity().getDataDir().getAbsolutePath(),
-                                    Environment.getExternalStorageDirectory().toString() + File.separator + "FreezeYou" + File.separator + "backup.zip");
-                            showToast(getActivity(), R.string.success);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            showToast(getActivity(), R.string.failed);
-                        }
+//                        try {
+//                            String dataDir = Build.VERSION.SDK_INT < 24 ?
+//                                    Environment.getDataDirectory().getPath()
+//                                            + File.separator
+//                                            + "data"
+//                                            + File.separator
+//                                            + "cf.playhi.freezeyou"
+//                                    :
+//                                    getActivity().getDataDir().getAbsolutePath();
+//                            String rawBackupDir = Environment.getExternalStorageDirectory().toString() + File.separator + "FreezeYou" + File.separator + "backup";
+//                            copyAllFiles(new File(dataDir + File.separator + "shared_prefs"), rawBackupDir + File.separator + "shared_prefs");
+//                            copyAllFiles(new File(dataDir + File.separator + "databases"), rawBackupDir + File.separator + "databases");
+//                            copyAllFiles(new File(dataDir + File.separator + "files"), rawBackupDir + File.separator + "files");
+//                            showToast(getActivity(), R.string.success);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                            showToast(getActivity(), R.string.failed);
+//                        }
+//                        try {
+//                            CompressUtils.compress(
+//                                    Build.VERSION.SDK_INT < 24 ?
+//                                            Environment.getDataDirectory().getPath()
+//                                                    + File.separator
+//                                                    + "data"
+//                                                    + File.separator
+//                                                    + "cf.playhi.freezeyou"
+//                                            :
+//                                            getActivity().getDataDir().getAbsolutePath(),
+//                                    Environment.getExternalStorageDirectory().toString() + File.separator + "FreezeYou" + File.separator + "backup.zip");
+//                            showToast(getActivity(), R.string.success);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                            showToast(getActivity(), R.string.failed);
+//                        }
                     }
                     break;
                 case "restore":
@@ -290,35 +306,35 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                                         getActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 6001);
                                         showToast(getActivity(), R.string.failed);
                                     } else {
-                                        File theBackup = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "FreezeYou" + File.separator + "backup.zip");
-                                        if (theBackup.exists() && theBackup.isFile()) {
-                                            //解压+覆盖
-                                            try {
-                                                deleteAllFiles(new File(
-                                                        Build.VERSION.SDK_INT < 24 ?
-                                                                Environment.getDataDirectory().getCanonicalPath()
-                                                                        + File.separator
-                                                                        + "data"
-                                                                        + File.separator
-                                                                        + "cf.playhi.freezeyou"
-                                                                :
-                                                                getActivity().getDataDir().getCanonicalPath()), false);
-                                                CompressUtils.decompress(theBackup.getCanonicalPath(),
-                                                        Build.VERSION.SDK_INT < 24 ?
-                                                                Environment.getDataDirectory().getPath()
-                                                                        + File.separator
-                                                                        + "data"
-                                                                :
-                                                                getActivity().getDataDir().getCanonicalPath().replace("cf.playhi.freezeyou", "")
-                                                );
-                                                showToast(getActivity(), R.string.success);
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                                showToast(getActivity(), R.string.failed);
-                                            }
-                                        } else {
-                                            showToast(getActivity(), R.string.failed);
-                                        }
+//                                        File theBackup = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "FreezeYou" + File.separator + "backup.zip");
+//                                        if (theBackup.exists() && theBackup.isFile()) {
+//                                            //解压+覆盖
+//                                            try {
+//                                                deleteAllFiles(new File(
+//                                                        Build.VERSION.SDK_INT < 24 ?
+//                                                                Environment.getDataDirectory().getCanonicalPath()
+//                                                                        + File.separator
+//                                                                        + "data"
+//                                                                        + File.separator
+//                                                                        + "cf.playhi.freezeyou"
+//                                                                :
+//                                                                getActivity().getDataDir().getCanonicalPath()), false);
+//                                                CompressUtils.decompress(theBackup.getCanonicalPath(),
+//                                                        Build.VERSION.SDK_INT < 24 ?
+//                                                                Environment.getDataDirectory().getPath()
+//                                                                        + File.separator
+//                                                                        + "data"
+//                                                                :
+//                                                                getActivity().getDataDir().getCanonicalPath().replace("cf.playhi.freezeyou", "")
+//                                                );
+//                                                showToast(getActivity(), R.string.success);
+//                                            } catch (Exception e) {
+//                                                e.printStackTrace();
+//                                                showToast(getActivity(), R.string.failed);
+//                                            }
+//                                        } else {
+//                                            showToast(getActivity(), R.string.failed);
+//                                        }
                                     }
                                 }
                             })
@@ -331,29 +347,57 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
-
-    private void deleteAllFiles(File file, boolean deleteSelfFolder) throws IOException {
-        if (file.exists()) {
-            if (file.isFile()) {
-                if (!file.delete())
-                    throw new IOException(file.getAbsolutePath() + " delete failed");
-            } else if (file.isDirectory()) {
-                String[] strings = file.list();
-                if (deleteSelfFolder && strings == null) {
-                    if (!file.delete())
-                        throw new IOException(file.getAbsolutePath() + " delete failed");
-                } else {
-                    for (String s : strings) {
-                        deleteAllFiles(new File(s), true);
-                    }
-                    if (deleteSelfFolder) {
-                        if (!file.delete())
-                            throw new IOException(file.getAbsolutePath() + " delete failed");
-                    }
-                }
-            }
-        }
-    }
+//
+//    private void deleteAllFiles(File file, boolean deleteSelfFolder) throws IOException {
+//        if (file.exists()) {
+//            if (file.isFile()) {
+//                if (!file.delete())
+//                    throw new IOException(file.getAbsolutePath() + " delete failed");
+//            } else if (file.isDirectory()) {
+//                String[] strings = file.list();
+//                if (deleteSelfFolder && strings == null) {
+//                    if (!file.delete())
+//                        throw new IOException(file.getAbsolutePath() + " delete failed");
+//                } else {
+//                    for (String s : strings) {
+//                        deleteAllFiles(new File(s), true);
+//                    }
+//                    if (deleteSelfFolder) {
+//                        if (!file.delete())
+//                            throw new IOException(file.getAbsolutePath() + " delete failed");
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    private void copyAllFiles(File file, String destination) throws IOException {
+//        if (file.exists()) {
+//            if (file.isFile()) {
+//                if (new File(destination).getParentFile().exists()) {
+//                    if (!new File(destination).getParentFile().mkdirs())
+//                        throw new IOException("Cannot make dirs for " + destination);
+//                }
+//                if (!new File(destination).exists())
+//                    if (!new File(destination).createNewFile())
+//                        throw new IOException("Cannot create file " + destination);
+//                BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+//                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(destination));
+//                int i;
+//                byte[] bt = new byte[Byte.MAX_VALUE];
+//                while ((i = bis.read(bt)) != -1) {
+//                    bos.write(bt, 0, i);
+//                }
+//                bos.close();
+//                bis.close();
+//            } else if (file.isDirectory()) {
+//                File[] files = file.listFiles();
+//                for (File f : files) {
+//                    copyAllFiles(f, destination + File.separator + f.getName());
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public void onPause() {
