@@ -21,10 +21,10 @@ import android.widget.ImageButton;
 import java.util.HashSet;
 import java.util.Set;
 
+import static cf.playhi.freezeyou.TasksUtils.publishTask;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.TasksUtils.publishTask;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class ScheduledTasksAddActivity extends Activity {
@@ -60,10 +60,13 @@ public class ScheduledTasksAddActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (Build.VERSION.SDK_INT >= 21)
+                    finishAfterTransition();
+                else
+                    finish();
                 return true;
             case R.id.menu_staa_delete:
-                AlertDialogUtils.buildAlertDialog(this,android.R.drawable.ic_dialog_alert,R.string.askIfDel,R.string.notice)
+                AlertDialogUtils.buildAlertDialog(this, android.R.drawable.ic_dialog_alert, R.string.askIfDel, R.string.notice)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

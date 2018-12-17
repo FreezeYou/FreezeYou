@@ -6,12 +6,15 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
     <style name="AppTheme.Default.Light" parent="android:Theme.DeviceDefault.Light.DarkActionBar">
         <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
     <style name="AppTheme.Default.Light.LightActionBar" parent="android:Theme.DeviceDefault.Light">
         <item name="android:actionOverflowButtonStyle">@style/OverflowStyle.LightBackground</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
     <style name="AppTheme.Default.Blue" parent="AppTheme.Default.Light">
         <item name="android:colorPrimary">#0383E9</item>
