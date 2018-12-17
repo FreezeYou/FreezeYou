@@ -2,6 +2,7 @@ package cf.playhi.freezeyou;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -230,7 +231,16 @@ public class Main extends Activity {
                 );
                 return true;
             case R.id.menu_timedTasks:
-                startActivity(new Intent(this, ScheduledTasksManageActivity.class));
+                if (Build.VERSION.SDK_INT >= 21) {
+                    View mttView = findViewById(R.id.menu_timedTasks);
+                    mttView.setTransitionName("stma_main");
+                    startActivity(new Intent(this, ScheduledTasksManageActivity.class),
+                            ActivityOptions.makeSceneTransitionAnimation(
+                                    Main.this,
+                                    mttView,
+                                    "stma_main").toBundle());
+                } else
+                    startActivity(new Intent(this, ScheduledTasksManageActivity.class));
                 return true;
             case R.id.menu_about:
                 startActivity(new Intent(this, AboutActivity.class));

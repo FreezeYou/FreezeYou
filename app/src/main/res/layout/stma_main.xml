@@ -7,7 +7,8 @@
         android:id="@+id/stma_tasksListview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fastScrollEnabled="true" />
+        android:fastScrollEnabled="true"
+        android:transitionName="stma_main"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

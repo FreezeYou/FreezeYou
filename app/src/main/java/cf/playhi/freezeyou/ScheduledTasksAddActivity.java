@@ -78,9 +78,15 @@ public class ScheduledTasksAddActivity extends Activity {
                                     }
                                     db.execSQL("DELETE FROM tasks WHERE _id = " + id);
                                     db.close();
-                                    finish();
+                                    if (Build.VERSION.SDK_INT >= 21)
+                                        finishAfterTransition();
+                                    else
+                                        finish();
                                 } else {
-                                    finish();
+                                    if (Build.VERSION.SDK_INT >= 21)
+                                        finishAfterTransition();
+                                    else
+                                        finish();
                                 }
                             }
                         })
