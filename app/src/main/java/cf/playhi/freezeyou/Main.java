@@ -2,7 +2,6 @@ package cf.playhi.freezeyou;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -85,6 +84,7 @@ public class Main extends Activity {
     private final static int APPListViewOnClickMode_removeFromFOQList = 9;
     private final static int APPListViewOnClickMode_UFAndRun = 10;
     private final static int APPListViewOnClickMode_autoUFOrFreezeAndRun = 11;
+    private final static int APPListViewOnClickMode_createFUFShortcut = 12;
 
     private final ArrayList<String> selectedPackages = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
@@ -231,16 +231,7 @@ public class Main extends Activity {
                 );
                 return true;
             case R.id.menu_timedTasks:
-                if (Build.VERSION.SDK_INT >= 21) {
-                    View mttView = findViewById(R.id.menu_timedTasks);
-                    mttView.setTransitionName("stma_main");
-                    startActivity(new Intent(this, ScheduledTasksManageActivity.class),
-                            ActivityOptions.makeSceneTransitionAnimation(
-                                    Main.this,
-                                    mttView,
-                                    "stma_main").toBundle());
-                } else
-                    startActivity(new Intent(this, ScheduledTasksManageActivity.class));
+                startActivity(new Intent(this, ScheduledTasksManageActivity.class));
                 return true;
             case R.id.menu_about:
                 startActivity(new Intent(this, AboutActivity.class));
@@ -370,6 +361,10 @@ public class Main extends Activity {
                 return true;
             case R.id.menu_onClickFunc_autoUFOrFreezeAndRun:
                 appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreezeAndRun;
+                saveOnClickFunctionStatus(appListViewOnClickMode);
+                return true;
+            case R.id.menu_onClickFunc_createFUFShortcut:
+                appListViewOnClickMode = APPListViewOnClickMode_createFUFShortcut;
                 saveOnClickFunctionStatus(appListViewOnClickMode);
                 return true;
             default:
@@ -762,6 +757,16 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_removeFromFOQList:
                             showToast(Main.this, removeFromOneKeyList(Main.this, getString(R.string.sFreezeOnceQuit), pkgName) ? R.string.removed : R.string.failed);
+                            break;
+                        case APPListViewOnClickMode_createFUFShortcut:
+                            createShortCut(
+                                    getApplicationLabel(Main.this, null, null, pkgName),
+                                    pkgName,
+                                    getApplicationIcon(Main.this, pkgName, null, false),
+                                    Freeze.class,
+                                    "FreezeYou! " + pkgName,
+                                    Main.this
+                            );
                             break;
                         default:
                             break;

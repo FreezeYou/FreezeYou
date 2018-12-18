@@ -101,6 +101,9 @@
             <item
                 android:id="@+id/menu_onClickFunc_removeFromFOQList"
                 android:title="@string/removeFromFreezeOnceQuit" />
+            <item
+                android:id="@+id/menu_onClickFunc_createFUFShortcut"
+                android:title="@string/createDisEnableShortCut" />
         </menu>
     </item>
 
