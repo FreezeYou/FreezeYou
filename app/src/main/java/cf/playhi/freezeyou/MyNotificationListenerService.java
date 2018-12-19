@@ -9,7 +9,7 @@ import android.service.notification.StatusBarNotification;
 @TargetApi(21)
 public class MyNotificationListenerService extends NotificationListenerService {
 
-    static StatusBarNotification[] statusBarNotifications = new StatusBarNotification[]{};
+    private static StatusBarNotification[] statusBarNotifications = new StatusBarNotification[]{};
 
     @Override
     public void onListenerConnected() {

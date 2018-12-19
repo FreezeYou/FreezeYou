@@ -10,7 +10,7 @@ import java.io.FileWriter;
 import java.util.Date;
 
 //部分参考 https://blog.csdn.net/soul_code/article/details/50601960
-public class CrashHandler implements Thread.UncaughtExceptionHandler {
+class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private final Date date = new Date();
     private String logPath2;

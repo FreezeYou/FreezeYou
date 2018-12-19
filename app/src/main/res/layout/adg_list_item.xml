@@ -30,8 +30,9 @@
         android:id="@+id/adgli_status_imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|center_vertical|end"
+        android:layout_gravity="center_vertical|end"
         android:scaleType="fitCenter"
-        android:src="@android:drawable/ic_dialog_alert" />
+        android:src="@android:drawable/ic_dialog_alert"
+        android:contentDescription="@string/status" />
 
 </FrameLayout>
