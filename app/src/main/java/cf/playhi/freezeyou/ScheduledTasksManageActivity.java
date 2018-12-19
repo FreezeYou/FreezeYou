@@ -157,7 +157,6 @@ public class ScheduledTasksManageActivity extends Activity {
         addTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeFloatButtonsStatus(false);
                 if (Build.VERSION.SDK_INT >= 21)
                     startActivityForResult(
                             new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
@@ -168,19 +167,20 @@ public class ScheduledTasksManageActivity extends Activity {
                                     .makeSceneTransitionAnimation(
                                             ScheduledTasksManageActivity.this, addTimeButton, "add")
                                     .toBundle());
-                else
+                else {
+                    changeFloatButtonsStatus(false);
                     startActivityForResult(
                             new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
                                     .putExtra("label", getString(R.string.add))
                                     .putExtra("time", true),
                             1);
+                }
             }
         });
 
         addTriggerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeFloatButtonsStatus(false);
                 if (Build.VERSION.SDK_INT >= 21) {
                     startActivityForResult(
                             new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
@@ -192,6 +192,7 @@ public class ScheduledTasksManageActivity extends Activity {
                                             ScheduledTasksManageActivity.this, addTriggerButton, "add")
                                     .toBundle());
                 } else {
+                    changeFloatButtonsStatus(false);
                     startActivityForResult(
                             new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
                                     .putExtra("label", getString(R.string.add))
