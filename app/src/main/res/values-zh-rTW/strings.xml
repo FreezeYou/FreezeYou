@@ -198,6 +198,7 @@
     <string name="backupAndRestore">备份与还原</string>
     <string name="backup">备份</string>
     <string name="restore">还原</string>
+    <string name="status">状态</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
