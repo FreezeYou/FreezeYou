@@ -13,6 +13,7 @@ import net.grandcentrix.tray.AppPreferences;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
+import static cf.playhi.freezeyou.DebugModeUtils.isDebugModeEnabled;
 import static cf.playhi.freezeyou.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.Support.processFreezeAction;
@@ -40,36 +41,43 @@ public class Freeze extends Activity {
 
     private void init() {
         Intent intent = getIntent();
-        String pkgName;
-        boolean auto;
-        if ("freezeyou".equals(intent.getScheme())) {
-            Uri dataUri = intent.getData();
-            pkgName = (dataUri == null) ? null : dataUri.getQueryParameter("pkgName");
-            auto = false;
-        } else {
-            pkgName = intent.getStringExtra("pkgName");
-            auto = intent.getBooleanExtra("auto", true);
-        }
-        if (pkgName == null) {
-            showToast(getApplicationContext(), R.string.invalidArguments);
-            Freeze.this.finish();
-        } else if ("".equals(pkgName)) {
-            showToast(getApplicationContext(), R.string.invalidArguments);
-            Freeze.this.finish();
-        }
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("shortcutAutoFUF", false)) {
-            if (realGetFrozenStatus(this, pkgName, getPackageManager())) {
-                processUnfreezeAction(this, pkgName, true, true, this, true);
-            } else {
-                processFreezeAction(this, pkgName, true, this, true);
+        if (intent != null) {
+
+            if (isDebugModeEnabled(this)) {
+                showToast(this, intent.toString());
             }
-        } else if ((!checkRootFrozen(Freeze.this, pkgName, null)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
-            processDialog(pkgName, auto, 2);
-        } else {
-            processDialog(pkgName, auto, 1);
-        }
-        if (Build.VERSION.SDK_INT >= 21) {
-            setTaskDescription(new ActivityManager.TaskDescription(getApplicationLabel(this, null, null, pkgName) + " - " + getString(R.string.app_name), getBitmapFromDrawable(getApplicationIcon(this, pkgName, null, false))));
+
+            String pkgName;
+            boolean auto;
+            if ("freezeyou".equals(intent.getScheme())) {
+                Uri dataUri = intent.getData();
+                pkgName = (dataUri == null) ? null : dataUri.getQueryParameter("pkgName");
+                auto = false;
+            } else {
+                pkgName = intent.getStringExtra("pkgName");
+                auto = intent.getBooleanExtra("auto", true);
+            }
+            if (pkgName == null) {
+                showToast(getApplicationContext(), R.string.invalidArguments);
+                Freeze.this.finish();
+            } else if ("".equals(pkgName)) {
+                showToast(getApplicationContext(), R.string.invalidArguments);
+                Freeze.this.finish();
+            }
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("shortcutAutoFUF", false)) {
+                if (realGetFrozenStatus(this, pkgName, getPackageManager())) {
+                    processUnfreezeAction(this, pkgName, true, true, this, true);
+                } else {
+                    processFreezeAction(this, pkgName, true, this, true);
+                }
+            } else if ((!checkRootFrozen(Freeze.this, pkgName, null)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
+                processDialog(pkgName, auto, 2);
+            } else {
+                processDialog(pkgName, auto, 1);
+            }
+            if (Build.VERSION.SDK_INT >= 21) {
+                setTaskDescription(new ActivityManager.TaskDescription(getApplicationLabel(this, null, null, pkgName) + " - " + getString(R.string.app_name), getBitmapFromDrawable(getApplicationIcon(this, pkgName, null, false))));
+            }
         }
     }
 
