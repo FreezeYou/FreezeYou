@@ -199,6 +199,7 @@
     <string name="backup">Backup</string>
     <string name="restore">Restore</string>
     <string name="status">Status</string>
+    <string name="debugMode">调试模式</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
