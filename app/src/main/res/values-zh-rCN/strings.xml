@@ -199,6 +199,7 @@
     <string name="backup">备份</string>
     <string name="restore">还原</string>
     <string name="status">状态</string>
+    <string name="debugMode">调试模式</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>显示全部</item>
