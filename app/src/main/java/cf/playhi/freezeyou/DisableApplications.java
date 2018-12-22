@@ -4,12 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import static cf.playhi.freezeyou.DebugModeUtils.isDebugModeEnabled;
 import static cf.playhi.freezeyou.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
 import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class DisableApplications extends Activity {
     @Override
@@ -17,12 +17,16 @@ public class DisableApplications extends Activity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
 
-        if (isDebugModeEnabled(this)) {
-            showToast(this, intent == null ? "null" : intent.toString());
-        }
-
         if (intent != null) {
             String[] packages = intent.getStringArrayExtra("packages");
+
+            if (isDebugModeEnabled(this)) {
+                Log.e("DebugModeLogcat", "Intent toString:" + intent.toString());
+                for (String p : packages) {
+                    Log.e("DebugModeLogcat", "Intent packages:" + p);
+                }
+            }
+
             if (packages != null) {
                 setResult(Activity.RESULT_OK);
                 if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(DisableApplications.this)) {
@@ -32,6 +36,10 @@ public class DisableApplications extends Activity {
                     oneKeyActionRoot(DisableApplications.this, true, packages);
                     finish();
                 }
+            }
+        } else {
+            if (isDebugModeEnabled(this)) {
+                Log.e("DebugModeLogcat", "Intent: null");
             }
         }
     }

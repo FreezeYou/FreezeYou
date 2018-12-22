@@ -198,6 +198,7 @@
     <string name="restore">还原</string>
     <string name="status">状态</string>
     <string name="debugMode">调试模式</string>
+    <string name="showLogcat">查看日志</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>

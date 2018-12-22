@@ -217,6 +217,11 @@
             android:label="@string/autoDiagnosis"
             android:theme="@style/AppTheme.Default" />
         <activity
+            android:name=".ShowLogcatActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:label="@string/showLogcat"
+            android:theme="@style/AppTheme.Default" />
+        <activity
             android:name=".FUFNotificationsManageActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/manageQuickFUFNoti"

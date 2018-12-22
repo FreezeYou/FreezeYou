@@ -224,6 +224,11 @@
             android:defaultValue="false"
             android:key="debugModeEnabled"
             android:title="@string/debugMode" />
+        <Preference android:title="@string/showLogcat">
+            <intent
+                android:targetClass="cf.playhi.freezeyou.ShowLogcatActivity"
+                android:targetPackage="cf.playhi.freezeyou" />
+        </Preference>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/dangerZone">

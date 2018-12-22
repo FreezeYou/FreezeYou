@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -44,7 +45,14 @@ public class Freeze extends Activity {
         if (intent != null) {
 
             if (isDebugModeEnabled(this)) {
-                showToast(this, intent.toString());
+                Log.e("DebugModeLogcat", "Intent toString: " + intent.toString());
+                Log.e("DebugModeLogcat", "Intent getDataString: " + intent.getDataString());
+                Log.e("DebugModeLogcat", "Intent getStringExtra_pkgName: " + intent.getStringExtra("pkgName"));
+                Log.e("DebugModeLogcat", "Intent getBooleanExtra_auto: " + intent.getBooleanExtra("auto", true));
+                Log.e("DebugModeLogcat", "Intent getAction: " + intent.getAction());
+                Log.e("DebugModeLogcat", "Intent getPackage: " + intent.getPackage());
+                Log.e("DebugModeLogcat", "Intent getScheme: " + intent.getScheme());
+                Log.e("DebugModeLogcat", "Intent getType: " + intent.getType());
             }
 
             String pkgName;
