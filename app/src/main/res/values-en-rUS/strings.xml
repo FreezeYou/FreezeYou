@@ -200,7 +200,7 @@
     <string name="restore">Restore</string>
     <string name="status">Status</string>
     <string name="debugMode">Debug Mode</string>
-    <string name="showLogcat">查看日志</string>
+    <string name="showLogcat">View Logs</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
