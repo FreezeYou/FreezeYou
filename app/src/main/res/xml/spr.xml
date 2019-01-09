@@ -136,9 +136,9 @@
         <Preference
             android:summary="@string/dialEntry_Ex"
             android:title="@string/dialEntry">
-            <intent
-                android:action="android.intent.action.DIAL"
-                android:data="tel:*#*#373393968#*#*" />
+            <!--<intent-->
+                <!--android:action="android.intent.action.DIAL"-->
+                <!--android:data="tel:*#*#373393968#*#*" />-->
         </Preference>
     </PreferenceCategory>
 

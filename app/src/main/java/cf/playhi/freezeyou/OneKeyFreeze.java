@@ -2,7 +2,6 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 public class OneKeyFreeze extends Activity {
@@ -16,15 +15,10 @@ public class OneKeyFreeze extends Activity {
             intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(this, R.mipmap.ic_launcher_new_round));
             setResult(RESULT_OK, intent);
         } else {
-            if (Build.VERSION.SDK_INT >= 26) {
-                this.startForegroundService(
-                        new Intent(getApplicationContext(), OneKeyFreezeService.class)
-                                .putExtra("autoCheckAndLockScreen", getIntent().getBooleanExtra("autoCheckAndLockScreen", true)));
-            } else {
-                this.startService(
-                        new Intent(getApplicationContext(), OneKeyFreezeService.class)
-                                .putExtra("autoCheckAndLockScreen", getIntent().getBooleanExtra("autoCheckAndLockScreen", true)));
-            }
+            ServiceUtils.startService(
+                    this,
+                    new Intent(getApplicationContext(), OneKeyFreezeService.class)
+                            .putExtra("autoCheckAndLockScreen", getIntent().getBooleanExtra("autoCheckAndLockScreen", true)));
         }
         finish();
     }

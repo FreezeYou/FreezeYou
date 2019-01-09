@@ -333,11 +333,14 @@ public class AutoDiagnosisActivity extends Activity {
 
         PackageManager pm = getPackageManager();
         List<ApplicationInfo> installedApplications = pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
-        for (int i = 0; i < installedApplications.size(); i++) {
-            ApplicationInfo applicationInfo = installedApplications.get(i);
-            ApplicationLabelUtils.getApplicationLabel(this, pm, applicationInfo, applicationInfo.packageName);
-            ApplicationIconUtils.getApplicationIcon(this, applicationInfo.packageName, applicationInfo, false);
-            setProgress(progressBar, 40 + (int) ((double) i / (double) installedApplications.size() * 50));
+        if (installedApplications != null) {
+            int size = installedApplications.size();
+            for (int i = 0; i < size; i++) {
+                ApplicationInfo applicationInfo = installedApplications.get(i);
+                ApplicationLabelUtils.getApplicationLabel(this, pm, applicationInfo, applicationInfo.packageName);
+                ApplicationIconUtils.getApplicationIcon(this, applicationInfo.packageName, applicationInfo, false);
+                setProgress(progressBar, 40 + (int) ((double) i / (double) size * 50));
+            }
         }
         problemsList.add(generateHashMap(getString(R.string.regenerateSomeCache), getString(R.string.updateSomeData), "10", R.drawable.ic_done));
 

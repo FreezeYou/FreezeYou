@@ -17,7 +17,7 @@ public class GetDisabledApplications extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
-        int size = applicationInfo.size();
+        int size = applicationInfo == null ? 0 : applicationInfo.size();
         String packageName;
         ArrayList<String> appList = new ArrayList<>();
         for (int i = 0; i < size; i++) {

@@ -44,7 +44,7 @@ public class TriggerTasksService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (new AppPreferences(getApplicationContext()).getBoolean("useForegroundService", false) || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
+        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) || new AppPreferences(getApplicationContext()).getBoolean("useForegroundService", false)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Notification.Builder mBuilder = new Notification.Builder(this);
                 mBuilder.setSmallIcon(R.drawable.ic_notification);
@@ -95,7 +95,11 @@ class TriggerScreenLockListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            Cursor cursor = getCursor(context);
+            final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+            db.execSQL(
+                    "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+            );
+            Cursor cursor = db.query("tasks", null, null, null, null, null, null);
             if (action != null && cursor.moveToFirst()) {
                 switch (action) {
                     case Intent.ACTION_SCREEN_OFF:
@@ -131,6 +135,7 @@ class TriggerScreenLockListener {
                 }
             }
             cursor.close();
+            db.close();
         }
     }
 
@@ -143,15 +148,6 @@ class TriggerScreenLockListener {
 
     void unregisterListener() {
         mContext.unregisterReceiver(mScreenLockReceiver);
-    }
-
-    private Cursor getCursor(Context context) {
-        final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
-        db.execSQL(
-                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
-        );
-
-        return db.query("tasks", null, null, null, null, null, null);
     }
 
 }

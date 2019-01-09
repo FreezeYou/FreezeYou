@@ -7,17 +7,16 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.preference.PreferenceManager;
 
 import net.grandcentrix.tray.AppPreferences;
 
 import static android.content.Context.MODE_PRIVATE;
-import static cf.playhi.freezeyou.Support.checkMRootFrozen;
-import static cf.playhi.freezeyou.Support.checkRootFrozen;
-import static cf.playhi.freezeyou.NotificationUtils.createNotification;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.NotificationUtils.createNotification;
+import static cf.playhi.freezeyou.Support.checkMRootFrozen;
+import static cf.playhi.freezeyou.Support.checkRootFrozen;
 import static cf.playhi.freezeyou.TasksUtils.publishTask;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
@@ -43,11 +42,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
     private void runBackgroundService(Context context) {
         if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("onekeyFreezeWhenLockScreen", false)) {
-            if (Build.VERSION.SDK_INT >= 26) {
-                context.startForegroundService(new Intent(context, ScreenLockOneKeyFreezeService.class));
-            } else {
-                context.startService(new Intent(context, ScreenLockOneKeyFreezeService.class));
-            }
+            ServiceUtils.startService(context, new Intent(context, ScreenLockOneKeyFreezeService.class));
         }
     }
 

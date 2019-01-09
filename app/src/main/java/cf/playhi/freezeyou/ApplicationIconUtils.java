@@ -18,30 +18,31 @@ import java.io.FileOutputStream;
 
 final class ApplicationIconUtils {
 
-    private static Drawable drawable;
-    private static Bitmap bitmap;
-
-    //最初参考 http://www.cnblogs.com/zhou2016/p/6281678.html
-
     /**
      * Drawable转Bitmap
+     * 最初参考 http://www.cnblogs.com/zhou2016/p/6281678.html
      *
      * @param drawable drawable
      * @return Bitmap
      */
     static Bitmap getBitmapFromDrawable(Drawable drawable) {
-        try {
-            return ((BitmapDrawable) drawable).getBitmap();
-        } catch (Exception e) {
-            Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
-            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-            drawable.draw(canvas);
-            return bitmap;
+        if (drawable == null) {
+            return Bitmap.createBitmap(144, 144, Bitmap.Config.ARGB_8888);
+        } else {
+            try {
+                return ((BitmapDrawable) drawable).getBitmap();
+            } catch (Exception e) {
+                Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
+                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+                drawable.draw(canvas);
+                return bitmap;
+            }
         }
     }
 
     static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo, boolean resize) {
+        Drawable drawable = null;
         String path = context.getFilesDir() + "/icon/" + pkgName + ".png";
         if (new File(path).exists()) {
             drawable = BitmapDrawable.createFromPath(path);
@@ -64,7 +65,7 @@ final class ApplicationIconUtils {
             drawable = context.getResources().getDrawable(R.mipmap.ic_launcher_round);
         }
         if (resize) {
-            bitmap = getBitmapFromDrawable(drawable);
+            Bitmap bitmap = getBitmapFromDrawable(drawable);
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
             Matrix matrix = new Matrix();

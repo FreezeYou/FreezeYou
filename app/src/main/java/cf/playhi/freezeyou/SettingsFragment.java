@@ -105,11 +105,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             case "onekeyFreezeWhenLockScreen":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));
                 if (sharedPreferences.getBoolean(s, false)) {
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        getActivity().startForegroundService(new Intent(getActivity().getApplicationContext(), ScreenLockOneKeyFreezeService.class));
-                    } else {
-                        getActivity().startService(new Intent(getActivity().getApplicationContext(), ScreenLockOneKeyFreezeService.class));
-                    }
+                    ServiceUtils.startService(
+                            getActivity(),
+                            new Intent(getActivity().getApplicationContext(), ScreenLockOneKeyFreezeService.class));
                 } else {
                     getActivity().stopService(new Intent(getActivity().getApplicationContext(), ScreenLockOneKeyFreezeService.class));
                 }

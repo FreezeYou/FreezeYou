@@ -62,7 +62,7 @@ public class FUFLauncherShortcutCreator extends Activity {
             final Context applicationContext = getApplicationContext();
             PackageManager packageManager = applicationContext.getPackageManager();
             List<ApplicationInfo> applicationInfo = packageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
-            int size = applicationInfo.size();
+            int size = applicationInfo == null ? 0 : applicationInfo.size();
             for (int i = 0; i < size; i++) {
                 ApplicationInfo applicationInfo1 = applicationInfo.get(i);
                 Map<String, Object> keyValuePair = processAppStatus(

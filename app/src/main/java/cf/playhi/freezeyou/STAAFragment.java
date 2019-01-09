@@ -35,8 +35,14 @@ public class STAAFragment extends PreferenceFragment implements SharedPreference
                 String time = sharedPreferences.getString("stma_add_time", "09:09");
                 if (time != null) {
                     if (time.contains(":")) {
-                        int hour = Integer.valueOf(time.substring(0, time.indexOf(":")));
-                        int minutes = Integer.valueOf(time.substring(time.indexOf(":") + 1));
+                        String sHour = time.substring(0, time.indexOf(":"));
+                        String sMin = time.substring(time.indexOf(":") + 1);
+                        if ("".equals(sHour))
+                            sHour = "0";
+                        if ("".equals(sMin))
+                            sMin = "0";
+                        int hour = Integer.valueOf(sHour);
+                        int minutes = Integer.valueOf(sMin);
                         if (hour < 0 || hour >= 24) {
                             showToast(getActivity(), R.string.hourShouldBetween);
                         }
