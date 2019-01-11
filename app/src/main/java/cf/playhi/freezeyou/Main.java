@@ -687,7 +687,6 @@ public class Main extends Activity {
                             } else {
                                 Support.processFreezeAction(Main.this, pkgName, false, null, false);
                             }
-                            updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_freezeImmediately:
                             if (!realGetFrozenStatus(Main.this, pkgName, null)) {
@@ -697,7 +696,6 @@ public class Main extends Activity {
                                     showToast(Main.this, R.string.freezeCompleted);
                                 }
                             }
-                            updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_UFImmediately:
                             if (realGetFrozenStatus(Main.this, pkgName, null)) {
@@ -707,7 +705,6 @@ public class Main extends Activity {
                                     showToast(Main.this, R.string.UFCompleted);
                                 }
                             }
-                            updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_UFAndRun:
                             if (realGetFrozenStatus(Main.this, pkgName, null)) {
@@ -718,7 +715,6 @@ public class Main extends Activity {
                                 }
                                 Support.askRun(Main.this, pkgName, false, null, false);
                             }
-                            updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_autoUFOrFreezeAndRun:
                             if (realGetFrozenStatus(Main.this, pkgName, null)) {
@@ -726,7 +722,6 @@ public class Main extends Activity {
                             } else {
                                 Support.processFreezeAction(Main.this, pkgName, false, null, false);
                             }
-                            updateFrozenStatus();
                             break;
                         case APPListViewOnClickMode_addToOFList:
                             showToast(Main.this, addToOneKeyList(Main.this, getString(R.string.sAutoFreezeApplicationList), pkgName) ? R.string.added : R.string.failed);
@@ -1039,7 +1034,7 @@ public class Main extends Activity {
             processFrozenStatus(hm, (String) hm.get("PackageName"), pm);
             adapter.notifyDataSetChanged();
         }
-
+        needUpdate_index.clear();
     }
 
     private void saveOnClickFunctionStatus(int status) {

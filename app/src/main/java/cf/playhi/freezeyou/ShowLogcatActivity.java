@@ -2,6 +2,7 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import java.io.BufferedReader;
@@ -37,6 +38,17 @@ public class ShowLogcatActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
             editText.setText(editText.getText().append(e.getLocalizedMessage()));
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
