@@ -171,7 +171,10 @@ public class ScheduledTasksAddActivity extends Activity {
                 } else {
                     saveTriggerTaskData(defaultSharedPreferences, id);
                 }
-                finish();
+                if (Build.VERSION.SDK_INT >= 21)
+                    finishAfterTransition();
+                else
+                    finish();
             }
         });
     }

@@ -35,7 +35,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import net.grandcentrix.tray.AppPreferences;
@@ -87,9 +86,9 @@ public class Main extends Activity {
     private final static int APPListViewOnClickMode_createFUFShortcut = 12;
 
     private final ArrayList<String> selectedPackages = new ArrayList<>();
+    private final ArrayList<Integer> needUpdate_index = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
     private int customThemeDisabledDot = R.drawable.shapedotblue;
-    private View itemView;
     //    private String filterNowStatus;
     private BroadcastReceiver updateFrozenStatusBroadcastReceiver;
 
@@ -373,12 +372,11 @@ public class Main extends Activity {
     }
 
     private void generateList(String filter) {
-//        filterNowStatus = filter;
         final ListView app_listView = findViewById(R.id.app_list);
         final ProgressBar progressBar = findViewById(R.id.progressBar);
         final TextView textView = findViewById(R.id.textView);
         final LinearLayout linearLayout = findViewById(R.id.layout2);
-        final List<Map<String, Object>> AppList = new ArrayList<>();
+        final ArrayList<Map<String, Object>> AppList = new ArrayList<>();
         final EditText search_editText = findViewById(R.id.search_editText);
         runOnUiThread(new Runnable() {
             @Override
@@ -510,16 +508,18 @@ public class Main extends Activity {
             });
         }
 
-        final SimpleAdapter adapter = new SimpleAdapter(Main.this, AppList,
-                R.layout.app_list_1, new String[]{"Img", "Name",
-                "PackageName", "isFrozen"}, new int[]{R.id.img, R.id.name, R.id.pkgName, R.id.isFrozen});//isFrozen、isAutoList传图像资源id
+        final MainAppListSimpleAdapter adapter =
+                new MainAppListSimpleAdapter(
+                        Main.this,
+                        (ArrayList<Map<String, Object>>) AppList.clone(),
+                        R.layout.app_list_1,
+                        new String[]{"Img", "Name", "PackageName", "isFrozen"},
+                        new int[]{R.id.img, R.id.name, R.id.pkgName, R.id.isFrozen});//isFrozen、isAutoList传图像资源id
 
-        adapter.setViewBinder(new SimpleAdapter.ViewBinder() {
-            public boolean setViewValue(View view, Object data,
-                                        String textRepresentation) {
+        adapter.setViewBinder(new MainAppListSimpleAdapter.ViewBinder() {
+            public boolean setViewValue(View view, Object data, String textRepresentation) {
                 if (view instanceof ImageView && data instanceof Drawable) {
-                    ImageView imageView = (ImageView) view;
-                    imageView.setImageDrawable((Drawable) data);
+                    ((ImageView) view).setImageDrawable((Drawable) data);
                     return true;
                 } else
                     return false;
@@ -533,26 +533,11 @@ public class Main extends Activity {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {//setFilterText报错不断，simpleAdapter这类似问题网上似乎隐隐约约也有人提出过……自己写一个蹩脚的筛选吧
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (TextUtils.isEmpty(charSequence)) {
-                    app_listView.setAdapter(adapter);
+                    adapter.replaceAllInFormerArrayList(AppList);
                 } else {
-                    SimpleAdapter processedAdapter = new SimpleAdapter(Main.this, processListFilter(charSequence, AppList),
-                            R.layout.app_list_1, new String[]{"Img", "Name",
-                            "PackageName", "isFrozen"}, new int[]{R.id.img, R.id.name, R.id.pkgName, R.id.isFrozen});
-
-                    processedAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
-                        public boolean setViewValue(View view, Object data,
-                                                    String textRepresentation) {
-                            if (view instanceof ImageView && data instanceof Drawable) {
-                                ImageView imageView = (ImageView) view;
-                                imageView.setImageDrawable((Drawable) data);
-                                return true;
-                            } else
-                                return false;
-                        }
-                    });
-                    app_listView.setAdapter(processedAdapter);
+                    adapter.replaceAllInFormerArrayList(processListFilter(charSequence, AppList));
                 }
             }
 
@@ -568,7 +553,6 @@ public class Main extends Activity {
                 progressBar.setVisibility(View.GONE);
                 textView.setVisibility(View.GONE);
                 linearLayout.setVisibility(View.GONE);
-                app_listView.setTextFilterEnabled(true);
                 app_listView.setAdapter(adapter);
                 app_listView.setTextFilterEnabled(true);
                 app_listView.setVisibility(View.VISIBLE);
@@ -581,9 +565,11 @@ public class Main extends Activity {
                 final String pkgName = ((HashMap<String, String>) app_listView.getItemAtPosition(i)).get("PackageName");
                 if (b) {
                     selectedPackages.add(pkgName);
+                    needUpdate_index.add(i);
                     actionMode.setTitle(Integer.toString(selectedPackages.size()));
                 } else {
                     selectedPackages.remove(pkgName);
+                    needUpdate_index.remove(Integer.valueOf(i));
                     actionMode.setTitle(Integer.toString(selectedPackages.size()));
                 }
             }
@@ -591,6 +577,7 @@ public class Main extends Activity {
             @Override
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 Main.this.getMenuInflater().inflate(R.menu.multichoicemenu, menu);
+                needUpdate_index.clear();
                 return true;
             }
 
@@ -668,6 +655,7 @@ public class Main extends Activity {
             @Override
             public void onDestroyActionMode(ActionMode actionMode) {
                 selectedPackages.clear();
+                //不要清空需要更新的索引，后台服务很可能还在执行操作。宁可多更新一些内容的。
             }
         });
 
@@ -677,7 +665,7 @@ public class Main extends Activity {
                 HashMap<String, Object> map = (HashMap<String, Object>) app_listView.getItemAtPosition(i);
                 final String name = (String) map.get("Name");
                 final String pkgName = (String) map.get("PackageName");
-                itemView = view;
+                needUpdate_index.add(i);
                 if (!getString(R.string.notAvailable).equals(name)) {
                     switch (appListViewOnClickMode) {
                         case APPListViewOnClickMode_chooseAction:
@@ -847,14 +835,14 @@ public class Main extends Activity {
         }
     }
 
-    private List<Map<String, Object>> processListFilter(CharSequence prefix, List<Map<String, Object>> unfilteredValues) {
+    private ArrayList<Map<String, Object>> processListFilter(CharSequence prefix, ArrayList<Map<String, Object>> unfilteredValues) {
 
         String prefixString = prefix.toString().toLowerCase();
 
         if (unfilteredValues != null) {
             int count = unfilteredValues.size();
 
-            List<Map<String, Object>> newValues = new ArrayList<>(count);
+            ArrayList<Map<String, Object>> newValues = new ArrayList<>(count);
             for (int i = 0; i < count; i++) {
                 try {
                     Map<String, Object> h = unfilteredValues.get(i);
@@ -1043,15 +1031,15 @@ public class Main extends Activity {
     }
 
     private void updateFrozenStatus() {
-        if (itemView != null) {
-            try {
-                ImageView imageView = itemView.findViewById(R.id.isFrozen);
-                TextView textView = itemView.findViewById(R.id.pkgName);
-                imageView.setImageResource(getFrozenStatus(textView.getText().toString(), null));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        final ListView app_listView = findViewById(R.id.app_list);
+        MainAppListSimpleAdapter adapter = (MainAppListSimpleAdapter) app_listView.getAdapter();
+        PackageManager pm = getPackageManager();
+        for (int i : needUpdate_index) {
+            Map<String, Object> hm = (Map<String, Object>) adapter.getItem(i);
+            processFrozenStatus(hm, (String) hm.get("PackageName"), pm);
+            adapter.notifyDataSetChanged();
         }
+
     }
 
     private void saveOnClickFunctionStatus(int status) {
