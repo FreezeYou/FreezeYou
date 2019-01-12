@@ -242,6 +242,7 @@
         <item>打開應用時</item>
         <item>離開應用時</item>
         <item>解凍應用時</item>
+        <item>冻结应用时</item>
     </string-array>
     <!--<string-array name="displayLanguageOptionsSelection" translatable="false">-->
     <!--<item>Default</item>-->
