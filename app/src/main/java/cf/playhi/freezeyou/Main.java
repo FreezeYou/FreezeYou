@@ -88,7 +88,6 @@ public class Main extends Activity {
     private final ArrayList<String> selectedPackages = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
     private int customThemeDisabledDot = R.drawable.shapedotblue;
-    //    private String filterNowStatus;
     private BroadcastReceiver updateFrozenStatusBroadcastReceiver;
 
     private boolean shortcutsCompleted = true;

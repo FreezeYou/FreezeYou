@@ -30,6 +30,8 @@ import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class ScheduledTasksManageActivity extends Activity {
+
+    private final ArrayList<Integer> integerArrayList = new ArrayList<>();
     private int themeDotResId;
 
     @Override
@@ -62,18 +64,23 @@ public class ScheduledTasksManageActivity extends Activity {
                 if (findViewById(R.id.stma_addTimeButton).getVisibility() == View.VISIBLE)
                     changeFloatButtonsStatus(false);
                 if (resultCode == RESULT_OK)
-                    generateTasksList();
+                    updateTasksList();
                 break;
             case 2:
                 if (findViewById(R.id.stma_addTriggerButton).getVisibility() == View.VISIBLE)
                     changeFloatButtonsStatus(false);
                 if (resultCode == RESULT_OK)
-                    generateTasksList();
+                    updateTasksList();
                 break;
             default:
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     private void init() {
@@ -91,7 +98,6 @@ public class ScheduledTasksManageActivity extends Activity {
     }
 
     private void generateTasksList() {
-        final ArrayList<Integer> integerArrayList = new ArrayList<>();
         themeDotResId = getThemeDot(ScheduledTasksManageActivity.this);
         final ListView tasksListView = findViewById(R.id.stma_tasksListview);
         final List<Map<String, Object>> tasksData = new ArrayList<>();
@@ -298,5 +304,16 @@ public class ScheduledTasksManageActivity extends Activity {
         }
         cursor.close();
         db.close();
+    }
+
+    private void updateTasksList() {
+        final ListView tasksListView = findViewById(R.id.stma_tasksListview);
+        ScheduledTasksManageSimpleAdapter adapter = (ScheduledTasksManageSimpleAdapter) tasksListView.getAdapter();
+        if (adapter != null) {
+            ArrayList<Map<String, Object>> tasksData = new ArrayList<>();
+            generateTimeTaskList(integerArrayList, tasksData);
+            generateTriggerTaskList(integerArrayList, tasksData);
+            adapter.replaceAllInFormerArrayList(tasksData);
+        }
     }
 }
