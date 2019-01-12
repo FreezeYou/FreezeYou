@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
@@ -133,6 +134,14 @@ final class TasksUtils {
                 String string = asTasks.substring(0, 2);
                 String[] tasks = asTasks.substring(3).split(",");
                 switch (string) {
+                    case "ds": //disableSettings
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                            enableAndDisableSysSettings(tasks, context, false);
+                        break;
+                    case "es": //enableSettings
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                            enableAndDisableSysSettings(tasks, context, true);
+                        break;
                     case "ff":
                         if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             startService(
@@ -141,6 +150,18 @@ final class TasksUtils {
                                             .putExtra("packages", tasks)
                                             .putExtra("freeze", true)
                             );
+                        break;
+                    case "lg"://LOG.E
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                            Log.e("TasksLogE", asTasks.substring(3));
+                        break;
+                    case "st"://showToast
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                            showToast(context, asTasks.substring(3));
+                        break;
+                    case "sp"://getLaunchIntentForPackage,startActivity
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                            startPackages(context, tasks);
                         break;
                     case "uf":
                         if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
@@ -151,26 +172,17 @@ final class TasksUtils {
                                             .putExtra("freeze", false)
                             );
                         break;
-                    case "es": //enableSettings
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
-                            enableAndDisableSysSettings(tasks, context, true);
-                        break;
-                    case "ds": //disableSettings
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
-                            enableAndDisableSysSettings(tasks, context, false);
-                        break;
-                    case "st"://showToast
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
-                            showToast(context, asTasks.substring(3));
-                        break;
-                    case "lg"://LOG.E
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
-                            Log.e("TasksLogE", asTasks.substring(3));
-                        break;
                     default:
                         break;
                 }
             }
+        }
+    }
+
+    private static void startPackages(Context context, String[] packages) {
+        PackageManager pm = context.getPackageManager();
+        for (String aPackage : packages) {
+            context.startActivity(pm.getLaunchIntentForPackage(aPackage));
         }
     }
 
@@ -256,6 +268,33 @@ final class TasksUtils {
                 String tg = cursor.getString(cursor.getColumnIndex("tg"));
                 int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
                 if (enabled == 1 && "onUFApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
+                    String task = cursor.getString(cursor.getColumnIndex("task"));
+                    if (task != null && !"".equals(task)) {
+                        runTask(task.replace("[cpkgn]", pkgNameString), context, null);
+                    }
+                }
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+    }
+
+    static void onFApplications(Context context, String pkgNameString) {
+        final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+        Cursor cursor = db.query("tasks", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                String tgExtra = cursor.getString(cursor.getColumnIndex("tgextra"));
+                if (tgExtra == null) {
+                    tgExtra = "";
+                }
+                String tg = cursor.getString(cursor.getColumnIndex("tg"));
+                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                if (enabled == 1 && "onFApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
                     String task = cursor.getString(cursor.getColumnIndex("task"));
                     if (task != null && !"".equals(task)) {
                         runTask(task.replace("[cpkgn]", pkgNameString), context, null);

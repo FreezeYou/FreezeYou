@@ -277,6 +277,7 @@
         <item>打开应用时</item>
         <item>离开应用时</item>
         <item>解冻应用时</item>
+        <item>冻结应用时</item>
     </string-array>
     <string-array name="triggersValues" translatable="false">
         <item>onScreenOn</item>
@@ -284,6 +285,7 @@
         <item>onApplicationsForeground</item>
         <item>onLeaveApplications</item>
         <item>onUFApplications</item>
+        <item>onFApplications</item>
     </string-array>
     <string-array name="onClickFuncChooseActionStyles" translatable="false">
         <item>1</item>

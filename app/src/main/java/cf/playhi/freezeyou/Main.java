@@ -86,7 +86,6 @@ public class Main extends Activity {
     private final static int APPListViewOnClickMode_createFUFShortcut = 12;
 
     private final ArrayList<String> selectedPackages = new ArrayList<>();
-    private final ArrayList<Integer> needUpdate_index = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
     private int customThemeDisabledDot = R.drawable.shapedotblue;
     //    private String filterNowStatus;
@@ -565,11 +564,9 @@ public class Main extends Activity {
                 final String pkgName = ((HashMap<String, String>) app_listView.getItemAtPosition(i)).get("PackageName");
                 if (b) {
                     selectedPackages.add(pkgName);
-                    needUpdate_index.add(i);
                     actionMode.setTitle(Integer.toString(selectedPackages.size()));
                 } else {
                     selectedPackages.remove(pkgName);
-                    needUpdate_index.remove(Integer.valueOf(i));
                     actionMode.setTitle(Integer.toString(selectedPackages.size()));
                 }
             }
@@ -577,7 +574,6 @@ public class Main extends Activity {
             @Override
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 Main.this.getMenuInflater().inflate(R.menu.multichoicemenu, menu);
-                needUpdate_index.clear();
                 return true;
             }
 
@@ -665,7 +661,6 @@ public class Main extends Activity {
                 HashMap<String, Object> map = (HashMap<String, Object>) app_listView.getItemAtPosition(i);
                 final String name = (String) map.get("Name");
                 final String pkgName = (String) map.get("PackageName");
-                needUpdate_index.add(i);
                 if (!getString(R.string.notAvailable).equals(name)) {
                     switch (appListViewOnClickMode) {
                         case APPListViewOnClickMode_chooseAction:
@@ -1011,30 +1006,25 @@ public class Main extends Activity {
     private void processDisableAndEnableImmediately(boolean freeze) {
         int size = selectedPackages.size();
         String[] pkgNameList = selectedPackages.toArray(new String[size]);
-//        if (Build.VERSION.SDK_INT >= 21 && Support.isDeviceOwner(Main.this)) {
         ServiceUtils.startService(
                 Main.this,
                 new Intent(Main.this, FUFService.class)
                         .putExtra("single", false)
                         .putExtra("packages", pkgNameList)
                         .putExtra("freeze", freeze));
-//            Support.oneKeyActionMRoot(Main.this, freeze, pkgNameList);
-//        } else {
-//            Support.oneKeyActionRoot(Main.this, freeze, pkgNameList);
-//        }
-//        generateList(filterNowStatus);
     }
 
     private void updateFrozenStatus() {
         final ListView app_listView = findViewById(R.id.app_list);
         MainAppListSimpleAdapter adapter = (MainAppListSimpleAdapter) app_listView.getAdapter();
-        PackageManager pm = getPackageManager();
-        for (int i : needUpdate_index) {
-            Map<String, Object> hm = (Map<String, Object>) adapter.getItem(i);
-            processFrozenStatus(hm, (String) hm.get("PackageName"), pm);
-            adapter.notifyDataSetChanged();
+        if (adapter != null) {
+            PackageManager pm = getPackageManager();
+            for (int i = 0; i < adapter.getCount(); i++) {
+                Map<String, Object> hm = (Map<String, Object>) adapter.getItem(i);
+                processFrozenStatus(hm, (String) hm.get("PackageName"), pm);
+                adapter.notifyDataSetChanged();
+            }
         }
-        needUpdate_index.clear();
     }
 
     private void saveOnClickFunctionStatus(int status) {

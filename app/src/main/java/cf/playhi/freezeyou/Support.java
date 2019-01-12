@@ -31,6 +31,7 @@ import static cf.playhi.freezeyou.OneKeyListUtils.removeFromOneKeyList;
 import static cf.playhi.freezeyou.ProcessUtils.destroyProcess;
 import static cf.playhi.freezeyou.ProcessUtils.fAURoot;
 import static cf.playhi.freezeyou.ServiceUtils.startService;
+import static cf.playhi.freezeyou.TasksUtils.onFApplications;
 import static cf.playhi.freezeyou.TasksUtils.onUFApplications;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
@@ -144,6 +145,7 @@ class Support {
                             askRun(context, pkgName, runImmediately, activity, finish);
                         }
                     } else {
+                        onFApplications(context, pkgName);
                         if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
                             showToast(context, R.string.executed);
                         }
@@ -173,6 +175,7 @@ class Support {
             if (getDevicePolicyManager(context).setApplicationHidden(
                     DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
                 if (hidden) {
+                    onFApplications(context, pkgName);
                     sendStatusChangedBroadcast(context);
                     if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
                         showToast(context, R.string.freezeCompleted);
@@ -281,6 +284,7 @@ class Support {
                 if (exitValue == 0) {
                     if (freeze) {
                         for (String aPkgNameList : pkgNameList) {
+                            onFApplications(context, aPkgNameList);
                             deleteNotification(context, aPkgNameList);
                         }
                     } else {
@@ -321,6 +325,7 @@ class Support {
                         if ((!"cf.playhi.freezeyou".equals(aPkgNameList)) && (!currentPackage.equals(aPkgNameList)) && (!checkMRootFrozen(context, aPkgNameList)) && (!isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, aPkgNameList))) {
                             if (getDevicePolicyManager(context).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(context), aPkgNameList, true)) {
+                                onFApplications(context, aPkgNameList);
                                 deleteNotification(context, aPkgNameList);
                             } else {
                                 showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
