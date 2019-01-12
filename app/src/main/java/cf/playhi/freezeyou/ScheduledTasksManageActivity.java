@@ -7,11 +7,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ActionMode;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
@@ -78,11 +81,6 @@ public class ScheduledTasksManageActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     private void init() {
         if (Intent.ACTION_CREATE_SHORTCUT.equals(getIntent().getAction())) {
             Intent intent = new Intent();
@@ -108,10 +106,38 @@ public class ScheduledTasksManageActivity extends Activity {
         ListAdapter adapter =
                 new SimpleAdapter(this, tasksData, R.layout.stma_item, new String[]{"label",
                         "time", "enabled"}, new int[]{R.id.stma_label, R.id.stma_time, R.id.stma_status});
+
+        tasksListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
+            }
+        });
+
         tasksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                HashMap<String, Object> map = (HashMap<String, Object>) tasksListView.getItemAtPosition(i);
+                Map<String, Object> map = (Map<String, Object>) tasksListView.getItemAtPosition(i);
                 final String label = (String) map.get("label");
                 final String s = ((String) map.get("time"));
                 final boolean isTimeTask = ((s != null) && s.contains(":"));
