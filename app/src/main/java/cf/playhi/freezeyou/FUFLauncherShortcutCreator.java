@@ -30,8 +30,7 @@ import java.util.Map;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
-import static cf.playhi.freezeyou.Support.checkMRootFrozen;
-import static cf.playhi.freezeyou.Support.checkRootFrozen;
+import static cf.playhi.freezeyou.Support.realGetFrozenStatus;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
@@ -200,13 +199,13 @@ public class FUFLauncherShortcutCreator extends Activity {
         return null;
     }
 
-    /**
-     * @param packageName 应用包名
-     * @return true 则已冻结
-     */
-    private boolean realGetFrozenStatus(String packageName, PackageManager pm) {
-        return (checkRootFrozen(FUFLauncherShortcutCreator.this, packageName, pm) || checkMRootFrozen(FUFLauncherShortcutCreator.this, packageName));
-    }
+//    /**
+//     * @param packageName 应用包名
+//     * @return true 则已冻结
+//     */
+//    private boolean realGetFrozenStatus(String packageName, PackageManager pm) {
+//        return (checkRootFrozen(FUFLauncherShortcutCreator.this, packageName, pm) || checkMRootFrozen(FUFLauncherShortcutCreator.this, packageName));
+//    }
 
     private void processFrozenStatus(Map<String, Object> keyValuePair, String packageName, PackageManager packageManager) {
         keyValuePair.put("isFrozen", getFrozenStatus(packageName, packageManager));
@@ -217,7 +216,7 @@ public class FUFLauncherShortcutCreator extends Activity {
      * @return 资源 Id
      */
     private int getFrozenStatus(String packageName, PackageManager packageManager) {
-        return realGetFrozenStatus(packageName, packageManager) ? getThemeDot(FUFLauncherShortcutCreator.this) : R.drawable.shapedotwhite;
+        return realGetFrozenStatus(FUFLauncherShortcutCreator.this, packageName, packageManager) ? getThemeDot(FUFLauncherShortcutCreator.this) : R.drawable.shapedotwhite;
     }
 
 }

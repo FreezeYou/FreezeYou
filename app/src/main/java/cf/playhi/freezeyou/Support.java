@@ -361,11 +361,11 @@ class Support {
      * @return true 则已冻结
      */
     static boolean realGetFrozenStatus(Context context, String packageName, PackageManager pm) {
-        return (Support.checkRootFrozen(context, packageName, pm) || Support.checkMRootFrozen(context, packageName));
+        return (checkRootFrozen(context, packageName, pm) || checkMRootFrozen(context, packageName));
     }
 
     static void checkAndSetOrganizationName(Context context, String name) {
-        if (Build.VERSION.SDK_INT >= 24 && Support.isDeviceOwner(context))
+        if (Build.VERSION.SDK_INT >= 24 && isDeviceOwner(context))
             getDevicePolicyManager(context).setOrganizationName(DeviceAdminReceiver.getComponentName(context), name);
     }
 

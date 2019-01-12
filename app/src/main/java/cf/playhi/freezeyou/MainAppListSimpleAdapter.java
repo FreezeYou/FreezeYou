@@ -6,46 +6,44 @@ import android.widget.SimpleAdapter;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class MainAppListSimpleAdapter extends SimpleAdapter {
+class MainAppListSimpleAdapter extends SimpleAdapter {
 
-    private Context mContext;
     private ArrayList<Map<String, Object>> mAppList;
 
     MainAppListSimpleAdapter(Context context, ArrayList<Map<String, Object>> list, int resource, String[] from, int[] to) {
         super(context, list, resource, from, to);
-        mContext = context;
         mAppList = list;
     }
+//
+//    public void clearArrayListData() {
+//        mAppList.clear();
+//        notifyDataSetChanged();
+//    }
+//
+//    public boolean addToArrayList(Map<String, Object> map) {
+//        boolean b = mAppList.add(map);
+//        notifyDataSetChanged();
+//        return b;
+//    }
+//
+//    public void addToArrayList(int index, Map<String, Object> map) {
+//        mAppList.add(index, map);
+//        notifyDataSetChanged();
+//    }
+//
+//    public boolean removeFromArrayList(Map<String, Object> map) {
+//        boolean b = mAppList.remove(map);
+//        notifyDataSetChanged();
+//        return b;
+//    }
+//
+//    public Map<String, Object> removeFromArrayList(int index) {
+//        Map<String, Object> m = mAppList.remove(index);
+//        notifyDataSetChanged();
+//        return m;
+//    }
 
-    public void clearArrayListData() {
-        mAppList.clear();
-        notifyDataSetChanged();
-    }
-
-    public boolean addToArrayList(Map<String, Object> map) {
-        boolean b = mAppList.add(map);
-        notifyDataSetChanged();
-        return b;
-    }
-
-    public void addToArrayList(int index, Map<String, Object> map) {
-        mAppList.add(index, map);
-        notifyDataSetChanged();
-    }
-
-    public boolean removeFromArrayList(Map<String, Object> map) {
-        boolean b = mAppList.remove(map);
-        notifyDataSetChanged();
-        return b;
-    }
-
-    public Map<String, Object> removeFromArrayList(int index) {
-        Map<String, Object> m = mAppList.remove(index);
-        notifyDataSetChanged();
-        return m;
-    }
-
-    public boolean replaceAllInFormerArrayList(ArrayList<Map<String, Object>> list) {
+    boolean replaceAllInFormerArrayList(ArrayList<Map<String, Object>> list) {
         mAppList.clear();
         boolean b = mAppList.addAll(list);
         notifyDataSetChanged();

@@ -160,13 +160,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));
                 if (Build.VERSION.SDK_INT >= 21) {//这项不兼容 5.0 以下了
                     String enabledNotificationListeners = Settings.Secure.getString(getActivity().getContentResolver(), "enabled_notification_listeners");
-                    if (enabledNotificationListeners != null) {
-                        if (!enabledNotificationListeners.contains("cf." + "playhi." + "freezeyou")) {
-                            try {
-                                getActivity().startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-                            } catch (Exception e) {
-                                showToast(getActivity(), R.string.failed);
-                            }
+                    if (enabledNotificationListeners != null && !enabledNotificationListeners.contains("cf." + "playhi." + "freezeyou")) {
+                        try {
+                            getActivity().startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                        } catch (Exception e) {
+                            showToast(getActivity(), R.string.failed);
                         }
                     }
                 }
