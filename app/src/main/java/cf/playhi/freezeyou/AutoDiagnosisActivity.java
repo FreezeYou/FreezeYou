@@ -237,15 +237,13 @@ public class AutoDiagnosisActivity extends Activity {
     private void checkNotificationListenerPermission(List<Map<String, Object>> problemsList, AppPreferences appPreferences) {
         if (Build.VERSION.SDK_INT >= 21 && appPreferences.getBoolean("avoidFreezeNotifyingApplications", false)) {
             String s = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
-            if (s == null || !s.contains("cf.playhi.freezeyou/cf.playhi.freezeyou.MyNotificationListenerService")) {
-                problemsList.add(
-                        generateHashMap(getString(R.string.noNotificationListenerPermission), getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications), "2", R.drawable.ic_attention)
-                );
-            } else {
-                problemsList.add(
-                        generateHashMap(getString(R.string.noNotificationListenerPermission), getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications), "2", R.drawable.ic_done)
-                );
-            }
+            problemsList.add(
+                    s == null || !s.contains("cf.playhi.freezeyou/cf.playhi.freezeyou.MyNotificationListenerService")
+                            ?
+                            generateHashMap(getString(R.string.noNotificationListenerPermission), getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications), "2", R.drawable.ic_attention)
+                            :
+                            generateHashMap(getString(R.string.noNotificationListenerPermission), getString(R.string.affect) + " " + getString(R.string.avoidFreezeNotifyingApplications), "2", R.drawable.ic_done)
+            );
         }
     }
 
