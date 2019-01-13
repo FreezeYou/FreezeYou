@@ -256,6 +256,10 @@ public class ScheduledTasksAddActivity extends Activity {
         String label = defaultSharedPreferences.getString("stma_add_label", getString(R.string.label));
         String task = defaultSharedPreferences.getString("stma_add_task", "okuf");
         String trigger = defaultSharedPreferences.getString("stma_add_trigger", "");
+        if ("".equals(trigger)){//未指定触发器，直接return，抛failed
+            showToast(this,R.string.failed);
+            return;
+        }
         SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"

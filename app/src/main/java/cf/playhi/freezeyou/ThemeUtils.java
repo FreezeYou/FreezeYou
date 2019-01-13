@@ -34,11 +34,11 @@ final class ThemeUtils {
                     resId = R.drawable.shapedotblack;
                     break;
                 default:
-                    resId = R.drawable.shapedotblue;
+                    resId = R.drawable.shapedotblack;//resId = R.drawable.shapedotblue;
                     break;
             }
         } else {
-            resId = R.drawable.shapedotblue;
+            resId = R.drawable.shapedotblack;//resId = R.drawable.shapedotblue;
         }
         return resId;
     }
@@ -94,11 +94,12 @@ final class ThemeUtils {
                         context.setTheme(R.style.AppTheme_Default_White);
                         break;
                     default:
-                        if (Build.VERSION.SDK_INT >= 21) {
-                            context.setTheme(R.style.AppTheme_Default_Blue);
-                        } else {
-                            context.setTheme(R.style.AppTheme_Default);
-                        }
+                        context.setTheme(R.style.AppTheme_Default_White);
+//                        if (Build.VERSION.SDK_INT >= 21) {
+//                            context.setTheme(R.style.AppTheme_Default_Blue);
+//                        } else {
+//                            context.setTheme(R.style.AppTheme_Default);
+//                        }
                         break;
                 }
             }
