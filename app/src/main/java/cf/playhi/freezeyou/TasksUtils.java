@@ -361,4 +361,14 @@ final class TasksUtils {
         }
     }
 
+    static void cancelTheTask(Context context, int id) {
+        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, TasksNeedExecuteReceiver.class)
+                .putExtra("id", id);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        if (alarmMgr != null) {
+            alarmMgr.cancel(alarmIntent);
+        }
+    }
+
 }

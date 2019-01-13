@@ -2,8 +2,6 @@ package cf.playhi.freezeyou;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -74,7 +72,7 @@ public class ScheduledTasksAddActivity extends Activity {
                                 if (id != -5) {
                                     SQLiteDatabase db = openOrCreateDatabase(isTimeTask ? "scheduledTasks" : "scheduledTriggerTasks", MODE_PRIVATE, null);
                                     if (isTimeTask) {
-                                        cancelTheTask(id);
+                                        TasksUtils.cancelTheTask(ScheduledTasksAddActivity.this, id);
                                     }
                                     db.execSQL("DELETE FROM tasks WHERE _id = " + id);
                                     db.close();
@@ -179,16 +177,6 @@ public class ScheduledTasksAddActivity extends Activity {
         });
     }
 
-    private void cancelTheTask(int id) {
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(this, TasksNeedExecuteReceiver.class)
-                .putExtra("id", id);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        if (alarmMgr != null) {
-            alarmMgr.cancel(alarmIntent);
-        }
-    }
-
     private void saveTimeTaskData(SharedPreferences defaultSharedPreferences, int id) {
         String time = defaultSharedPreferences.getString("stma_add_time", "09:09");
         if (time == null) {
@@ -255,7 +243,7 @@ public class ScheduledTasksAddActivity extends Activity {
                     + task + "' WHERE _id = " + Integer.toString(id) + ";");
         }
         db.close();
-        cancelTheTask(id);
+        TasksUtils.cancelTheTask(ScheduledTasksAddActivity.this, id);
         if (enabled == 1) {
             publishTask(ScheduledTasksAddActivity.this, id, hour, minutes, repeat, task);
         }

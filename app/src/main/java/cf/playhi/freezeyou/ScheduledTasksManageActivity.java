@@ -17,14 +17,11 @@ import android.view.animation.RotateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
@@ -35,6 +32,7 @@ import static cf.playhi.freezeyou.ToastUtils.showToast;
 public class ScheduledTasksManageActivity extends Activity {
 
     private final ArrayList<Integer> integerArrayList = new ArrayList<>();
+    private final ArrayList<Integer> selectedTasksPositions = new ArrayList<>();
     private int themeDotResId;
 
     @Override
@@ -98,24 +96,31 @@ public class ScheduledTasksManageActivity extends Activity {
     private void generateTasksList() {
         themeDotResId = getThemeDot(ScheduledTasksManageActivity.this);
         final ListView tasksListView = findViewById(R.id.stma_tasksListview);
-        final List<Map<String, Object>> tasksData = new ArrayList<>();
+        final ArrayList<Map<String, Object>> tasksData = new ArrayList<>();
 
         generateTimeTaskList(integerArrayList, tasksData);
         generateTriggerTaskList(integerArrayList, tasksData);
 
-        ListAdapter adapter =
-                new SimpleAdapter(this, tasksData, R.layout.stma_item, new String[]{"label",
+        ScheduledTasksManageSimpleAdapter adapter =
+                new ScheduledTasksManageSimpleAdapter(this, tasksData, R.layout.stma_item, new String[]{"label",
                         "time", "enabled"}, new int[]{R.id.stma_label, R.id.stma_time, R.id.stma_status});
 
         tasksListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-
+                if (checked) {
+                    selectedTasksPositions.add(position);
+                    mode.setTitle(Integer.toString(selectedTasksPositions.size()));
+                } else {
+                    selectedTasksPositions.remove(Integer.valueOf(position));
+                    mode.setTitle(Integer.toString(selectedTasksPositions.size()));
+                }
             }
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                return false;
+                ScheduledTasksManageActivity.this.getMenuInflater().inflate(R.menu.stma_multichoicemenu, menu);
+                return true;
             }
 
             @Override
@@ -125,12 +130,29 @@ public class ScheduledTasksManageActivity extends Activity {
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                return false;
+                switch (item.getItemId()) {
+                    case R.id.stma_menu_mc_delete:
+                        for (int aSelectedTaskPosition : selectedTasksPositions) {
+                            boolean isTimeTask = (boolean) ((Map<String, Object>) tasksListView.getItemAtPosition(aSelectedTaskPosition)).get("isTimeTask");
+                            int id = integerArrayList.get(aSelectedTaskPosition);
+                            SQLiteDatabase db = openOrCreateDatabase(isTimeTask ? "scheduledTasks" : "scheduledTriggerTasks", MODE_PRIVATE, null);
+                            if (isTimeTask) {
+                                TasksUtils.cancelTheTask(ScheduledTasksManageActivity.this, id);
+                            }
+                            db.execSQL("DELETE FROM tasks WHERE _id = " + id);
+                            db.close();
+                        }
+                        mode.finish();
+                        return true;
+                    default:
+                        return false;
+                }
             }
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-
+                selectedTasksPositions.clear();
+                updateTasksList();
             }
         });
 
@@ -268,7 +290,7 @@ public class ScheduledTasksManageActivity extends Activity {
         }
     }
 
-    private void generateTimeTaskList(ArrayList<Integer> integerArrayList, List<Map<String, Object>> tasksData) {
+    private void generateTimeTaskList(ArrayList<Integer> integerArrayList, ArrayList<Map<String, Object>> tasksData) {
         //时间触发
         final SQLiteDatabase db = ScheduledTasksManageActivity.this.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
         db.execSQL(
@@ -286,6 +308,7 @@ public class ScheduledTasksManageActivity extends Activity {
                     Map<String, Object> keyValuePair = new HashMap<>();
                     keyValuePair.put("label", label);
                     keyValuePair.put("time", time);
+                    keyValuePair.put("isTimeTask", true);
                     keyValuePair.put("enabled", enabled == 1 ? themeDotResId : R.drawable.shapedotwhite);
                     tasksData.add(keyValuePair);
                     integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
@@ -300,7 +323,7 @@ public class ScheduledTasksManageActivity extends Activity {
         db.close();
     }
 
-    private void generateTriggerTaskList(ArrayList<Integer> integerArrayList, List<Map<String, Object>> tasksData) {
+    private void generateTriggerTaskList(ArrayList<Integer> integerArrayList, ArrayList<Map<String, Object>> tasksData) {
         //事件触发器触发
         final SQLiteDatabase db = ScheduledTasksManageActivity.this.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
         db.execSQL(
@@ -318,6 +341,7 @@ public class ScheduledTasksManageActivity extends Activity {
                     keyValuePair.put("time",
                             Arrays.asList(getResources().getStringArray(R.array.triggers))
                                     .get(Arrays.asList(getResources().getStringArray(R.array.triggersValues)).indexOf(tg)));
+                    keyValuePair.put("isTimeTask", false);
                     keyValuePair.put("enabled", enabled == 1 ? themeDotResId : R.drawable.shapedotwhite);
                     tasksData.add(keyValuePair);
                     integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
@@ -337,6 +361,7 @@ public class ScheduledTasksManageActivity extends Activity {
         ScheduledTasksManageSimpleAdapter adapter = (ScheduledTasksManageSimpleAdapter) tasksListView.getAdapter();
         if (adapter != null) {
             ArrayList<Map<String, Object>> tasksData = new ArrayList<>();
+            integerArrayList.clear();
             generateTimeTaskList(integerArrayList, tasksData);
             generateTriggerTaskList(integerArrayList, tasksData);
             adapter.replaceAllInFormerArrayList(tasksData);

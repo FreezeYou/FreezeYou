@@ -650,7 +650,6 @@ public class Main extends Activity {
             @Override
             public void onDestroyActionMode(ActionMode actionMode) {
                 selectedPackages.clear();
-                //不要清空需要更新的索引，后台服务很可能还在执行操作。宁可多更新一些内容的。
             }
         });
 
