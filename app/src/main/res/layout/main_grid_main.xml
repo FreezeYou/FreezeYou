@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mgm_linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp">
+    <!--<GridView-->
+    <!--android:id="@+id/main_grid_gridView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:fastScrollEnabled="true"-->
+    <!--android:gravity="center"-->
+    <!--android:numColumns="auto_fit"-->
+    <!--android:overScrollMode="never"-->
+    <!--android:scrollbars="vertical"-->
+    <!--android:stretchMode="spacingWidthUniform"-->
+    <!--android:verticalSpacing="20dp" />-->
 
-    <GridView
-        android:id="@+id/main_grid_gridView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fastScrollEnabled="true"
-        android:gravity="center"
-        android:numColumns="auto_fit"
-        android:overScrollMode="never"
-        android:padding="5dp"
-        android:scrollbars="vertical"
-        android:stretchMode="spacingWidthUniform"
-        android:verticalSpacing="20dp" />
-
-</RelativeLayout>
+</LinearLayout>

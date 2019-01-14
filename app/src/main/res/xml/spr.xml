@@ -14,12 +14,12 @@
             android:entryValues="@array/launchModeSelectionValues"
             android:key="launchMode"
             android:title="@string/launchMode" />
-        <ListPreference
-            android:defaultValue="default"
-            android:entries="@array/mainActivityPatternSelection"
-            android:entryValues="@array/mainActivityPatternSelectionValues"
-            android:key="mainActivityPattern"
-            android:title="@string/mainActivityPattern" />
+        <!--<ListPreference-->
+            <!--android:defaultValue="default"-->
+            <!--android:entries="@array/mainActivityPatternSelection"-->
+            <!--android:entryValues="@array/mainActivityPatternSelectionValues"-->
+            <!--android:key="mainActivityPattern"-->
+            <!--android:title="@string/mainActivityPattern" />-->
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/onClickFuncChooseActionStyles"
