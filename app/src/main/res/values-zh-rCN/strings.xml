@@ -202,6 +202,7 @@
     <string name="debugMode">调试模式</string>
     <string name="showLogcat">查看日志</string>
     <string name="freezeOrLaunch">冻结/启动</string>
+    <string name="askIfSave">是否保存？</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>显示全部</item>
