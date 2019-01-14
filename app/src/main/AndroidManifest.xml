@@ -227,6 +227,11 @@
             android:label="@string/manageQuickFUFNoti"
             android:theme="@style/AppTheme.Default" />
         <activity
+            android:name=".MainGridActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.Default" />
+        <activity
             android:name=".AskLockScreenActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"

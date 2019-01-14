@@ -137,7 +137,8 @@ public class Main extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(updateFrozenStatusBroadcastReceiver);
+        if (updateFrozenStatusBroadcastReceiver != null)
+            unregisterReceiver(updateFrozenStatusBroadcastReceiver);
     }
 
     @Override
@@ -849,82 +850,88 @@ public class Main extends Activity {
     }
 
     private void go() {
-        if (updateFrozenStatusBroadcastReceiver == null) {
-            updateFrozenStatusBroadcastReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    updateFrozenStatus();
-                }
-            };
-            IntentFilter filter = new IntentFilter("cf.playhi.freezeyou.action.packageStatusChanged");
-            filter.addAction("cf.playhi.freezeyou.action.packageStatusChanged");
-            this.registerReceiver(updateFrozenStatusBroadcastReceiver, filter);
-        }
-        Thread initThread;
-        initThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String mode = getIntent().getStringExtra("pkgName");//快捷方式提供
-                if (mode == null) {
-                    mode = PreferenceManager.getDefaultSharedPreferences(Main.this).getString("launchMode", "all");
-                }
-                if (mode == null) {
-                    mode = "";
-                }
-                switch (mode) {
-                    case "OF":
-                        generateList("OF");
-                        break;
-                    case "UF":
-                        generateList("UF");
-                        break;
-                    case "OO":
-                        generateList("OO");
-                        break;
-                    case "OOU":
-                        generateList("OOU");
-                        break;
-                    case "OS":
-                        generateList("OS");
-                        break;
-                    case "OU":
-                        generateList("OU");
-                        break;
-                    case "FOQ":
-                        generateList("FOQ");
-                        break;
-                    default:
-                        generateList("all");
-                        break;
-                }
+        if ("grid".equals(PreferenceManager.getDefaultSharedPreferences(Main.this).getString("mainActivityPattern", "default"))) {
+            startActivity(new Intent(this, MainGridActivity.class));
+            this.finish();
+            return;
+        } else {
+            if (updateFrozenStatusBroadcastReceiver == null) {
+                updateFrozenStatusBroadcastReceiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        updateFrozenStatus();
+                    }
+                };
+                IntentFilter filter = new IntentFilter("cf.playhi.freezeyou.action.packageStatusChanged");
+                filter.addAction("cf.playhi.freezeyou.action.packageStatusChanged");
+                this.registerReceiver(updateFrozenStatusBroadcastReceiver, filter);
             }
-        });
-        initThread.start();
-        checkLongTimeNotUpdated();
-        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
-        if (sharedPref.getBoolean("saveOnClickFunctionStatus", false)) {
-            appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", 0);
-        }
-        if (!sharedPref.getBoolean("noCaution", false)) {
-            buildAlertDialog(Main.this, R.mipmap.ic_launcher_new_round, R.string.cautionContent, R.string.caution)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int ii) {
-                        }
-                    })
-                    .setNeutralButton(R.string.hToUse, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            requestOpenWebSite(Main.this, "https://freezeyou.playhi.net/");
-                        }
-                    })
-                    .setNegativeButton(R.string.nCaution, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            sharedPref.edit().putBoolean("noCaution", true).apply();
-                        }
-                    })
-                    .create().show();
+            Thread initThread;
+            initThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String mode = getIntent().getStringExtra("pkgName");//快捷方式提供
+                    if (mode == null) {
+                        mode = PreferenceManager.getDefaultSharedPreferences(Main.this).getString("launchMode", "all");
+                    }
+                    if (mode == null) {
+                        mode = "";
+                    }
+                    switch (mode) {
+                        case "OF":
+                            generateList("OF");
+                            break;
+                        case "UF":
+                            generateList("UF");
+                            break;
+                        case "OO":
+                            generateList("OO");
+                            break;
+                        case "OOU":
+                            generateList("OOU");
+                            break;
+                        case "OS":
+                            generateList("OS");
+                            break;
+                        case "OU":
+                            generateList("OU");
+                            break;
+                        case "FOQ":
+                            generateList("FOQ");
+                            break;
+                        default:
+                            generateList("all");
+                            break;
+                    }
+                }
+            });
+            initThread.start();
+            checkLongTimeNotUpdated();
+            final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
+            if (sharedPref.getBoolean("saveOnClickFunctionStatus", false)) {
+                appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", 0);
+            }
+            if (!sharedPref.getBoolean("noCaution", false)) {
+                buildAlertDialog(Main.this, R.mipmap.ic_launcher_new_round, R.string.cautionContent, R.string.caution)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int ii) {
+                            }
+                        })
+                        .setNeutralButton(R.string.hToUse, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                requestOpenWebSite(Main.this, "https://freezeyou.playhi.net/");
+                            }
+                        })
+                        .setNegativeButton(R.string.nCaution, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sharedPref.edit().putBoolean("noCaution", true).apply();
+                            }
+                        })
+                        .create().show();
+            }
         }
     }
 

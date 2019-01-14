@@ -15,6 +15,12 @@
             android:key="launchMode"
             android:title="@string/launchMode" />
         <ListPreference
+            android:defaultValue="default"
+            android:entries="@array/mainActivityPatternSelection"
+            android:entryValues="@array/mainActivityPatternSelectionValues"
+            android:key="mainActivityPattern"
+            android:title="@string/mainActivityPattern" />
+        <ListPreference
             android:defaultValue="1"
             android:entries="@array/onClickFuncChooseActionStyles"
             android:entryValues="@array/onClickFuncChooseActionStyles"
@@ -137,8 +143,8 @@
             android:summary="@string/dialEntry_Ex"
             android:title="@string/dialEntry">
             <!--<intent-->
-                <!--android:action="android.intent.action.DIAL"-->
-                <!--android:data="tel:*#*#373393968#*#*" />-->
+            <!--android:action="android.intent.action.DIAL"-->
+            <!--android:data="tel:*#*#373393968#*#*" />-->
         </Preference>
     </PreferenceCategory>
 
