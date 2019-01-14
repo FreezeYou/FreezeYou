@@ -201,7 +201,7 @@
     <string name="status">狀態</string>
     <string name="debugMode">Debug模式</string>
     <string name="showLogcat">檢視紀錄</string>
-    <string name="freezeOrLaunch">冻结/启动</string>
+    <string name="freezeOrLaunch">凍結/啟動</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
@@ -243,7 +243,7 @@
         <item>打開應用時</item>
         <item>離開應用時</item>
         <item>解凍應用時</item>
-        <item>冻结应用时</item>
+        <item>凍結應用時</item>
     </string-array>
     <!--<string-array name="displayLanguageOptionsSelection" translatable="false">-->
     <!--<item>Default</item>-->
