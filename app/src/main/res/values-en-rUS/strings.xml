@@ -203,6 +203,7 @@
     <string name="showLogcat">View Logs</string>
     <string name="freezeOrLaunch">Freeze/Run</string>
     <string name="askIfSave">是否保存？</string>
+    <string name="mainActivityPattern">首页格局</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
@@ -218,6 +219,11 @@
         <item>None</item>
         <item>Ask if Lock Screen</item>
         <item>Lock Screen Immediately</item>
+    </string-array>
+    <string-array name="mainActivityPatternSelection">
+        <item>默认</item>
+        <item>列表</item>
+        <item>网格</item>
     </string-array>
     <string-array name="uiStyleSelection">
         <item>Default</item>
