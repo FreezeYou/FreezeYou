@@ -107,7 +107,7 @@ public class ShortcutLauncherFolderActivity extends Activity {
                                 new Intent(
                                         ShortcutLauncherFolderActivity.this,
                                         FUFLauncherShortcutCreator.class)
-                                        .putExtra(uuid,"slf_n"),
+                                        .putExtra("slf_n",uuid),
                                 7001);
                     } else {
                         Support.checkFrozenStatusAndStartApp(
