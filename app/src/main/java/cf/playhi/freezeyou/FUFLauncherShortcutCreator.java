@@ -3,6 +3,7 @@ package cf.playhi.freezeyou;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -39,7 +40,7 @@ public class FUFLauncherShortcutCreator extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
-        if (Intent.ACTION_CREATE_SHORTCUT.equals(getIntent().getAction())) {
+        if (Intent.ACTION_CREATE_SHORTCUT.equals(getIntent().getAction()) || getIntent().getStringExtra("slf_n") != null) {
             setContentView(R.layout.main);
 
             final ListView app_listView = findViewById(R.id.app_list);
@@ -141,17 +142,23 @@ public class FUFLauncherShortcutCreator extends Activity {
                     HashMap<String, Object> map = (HashMap<String, Object>) app_listView.getItemAtPosition(i);
                     final String name = (String) map.get("Name");
                     final String pkgName = (String) map.get("PackageName");
-                    Intent shortcutIntent = new Intent(FUFLauncherShortcutCreator.this, Freeze.class);
-                    shortcutIntent.putExtra("pkgName", pkgName);
-                    Intent intent = new Intent();
-                    intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-                    intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
-                    try {
-                        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getPackageManager().getApplicationIcon(pkgName)));
-                    } catch (Exception e) {
-                        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getApplicationIcon(applicationContext, pkgName, null, false)));
+                    if (getIntent().getStringExtra("slf_n") != null) {
+                        SharedPreferences sp = getSharedPreferences(getIntent().getStringExtra("slf_n"), MODE_PRIVATE);
+                        sp.edit().putString("pkgS", sp.getString("pkgS", "") + pkgName + ",").apply();
+                        setResult(RESULT_OK);
+                    } else {
+                        Intent shortcutIntent = new Intent(FUFLauncherShortcutCreator.this, Freeze.class);
+                        shortcutIntent.putExtra("pkgName", pkgName);
+                        Intent intent = new Intent();
+                        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+                        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
+                        try {
+                            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getPackageManager().getApplicationIcon(pkgName)));
+                        } catch (Exception e) {
+                            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getApplicationIcon(applicationContext, pkgName, null, false)));
+                        }
+                        setResult(RESULT_OK, intent);
                     }
-                    setResult(RESULT_OK, intent);
                     finish();
                 }
             });

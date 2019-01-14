@@ -41,7 +41,7 @@ public class ShortcutLauncherFolderActivity extends Activity {
             finish();
         } else {
             setContentView(R.layout.shortcut_launcher_folder);
-            String uuid = getIntent().getStringExtra("UUID");
+            final String uuid = getIntent().getStringExtra("UUID");
             GridView slf_apps_gridView = findViewById(R.id.slf_apps_gridView);
 
             slf_apps_gridView.setColumnWidth((int) (getResources().getDimension(android.R.dimen.app_icon_size) * 1.8));
@@ -49,7 +49,6 @@ public class ShortcutLauncherFolderActivity extends Activity {
 //                slf_apps_gridView.setVerticalSpacing(slf_apps_gridView.getRequestedColumnWidth()/slf_apps_gridView.getNumColumns());
 
             final ArrayList<HashMap<String, Object>> folderItems = new ArrayList<>();
-
 
 //            final List<ApplicationInfo> applicationInfo = getPackageManager().getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
 //            int size = applicationInfo == null ? 0 : applicationInfo.size();
@@ -107,7 +106,8 @@ public class ShortcutLauncherFolderActivity extends Activity {
                         startActivityForResult(
                                 new Intent(
                                         ShortcutLauncherFolderActivity.this,
-                                        FUFLauncherShortcutCreator.class),
+                                        FUFLauncherShortcutCreator.class)
+                                        .putExtra(uuid,"slf_n"),
                                 7001);
                     } else {
                         Support.checkFrozenStatusAndStartApp(
