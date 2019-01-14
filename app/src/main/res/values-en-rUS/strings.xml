@@ -202,6 +202,7 @@
     <string name="debugMode">Debug Mode</string>
     <string name="showLogcat">View Logs</string>
     <string name="freezeOrLaunch">Freeze/Run</string>
+    <string name="askIfSave">是否保存？</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
