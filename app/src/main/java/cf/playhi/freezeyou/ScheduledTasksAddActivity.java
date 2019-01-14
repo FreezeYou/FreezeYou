@@ -58,10 +58,34 @@ public class ScheduledTasksAddActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (Build.VERSION.SDK_INT >= 21)
-                    finishAfterTransition();
-                else
-                    finish();
+                AlertDialogUtils.buildAlertDialog(this, R.mipmap.ic_launcher_new_round, R.string.askIfSave, R.string.notice)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (isTimeTask) {
+                                    saveTimeTaskData(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()), id);
+                                } else {
+                                    saveTriggerTaskData(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()), id);
+                                }
+
+                                if (Build.VERSION.SDK_INT >= 21)
+                                    finishAfterTransition();
+                                else
+                                    finish();
+                            }
+                        })
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                if (Build.VERSION.SDK_INT >= 21)
+                                    finishAfterTransition();
+                                else
+                                    finish();
+                            }
+                        })
+                        .setNeutralButton(R.string.cancel, null)
+                        .create().show();
                 return true;
             case R.id.menu_staa_delete:
                 AlertDialogUtils.buildAlertDialog(this, android.R.drawable.ic_dialog_alert, R.string.askIfDel, R.string.notice)
@@ -256,8 +280,8 @@ public class ScheduledTasksAddActivity extends Activity {
         String label = defaultSharedPreferences.getString("stma_add_label", getString(R.string.label));
         String task = defaultSharedPreferences.getString("stma_add_task", "okuf");
         String trigger = defaultSharedPreferences.getString("stma_add_trigger", "");
-        if ("".equals(trigger)){//未指定触发器，直接return，抛failed
-            showToast(this,R.string.failed);
+        if ("".equals(trigger)) {//未指定触发器，直接return，抛failed
+            showToast(this, R.string.failed);
             return;
         }
         SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);

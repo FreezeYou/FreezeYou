@@ -1017,11 +1017,12 @@ public class Main extends Activity {
         MainAppListSimpleAdapter adapter = (MainAppListSimpleAdapter) app_listView.getAdapter();
         if (adapter != null) {
             PackageManager pm = getPackageManager();
-            for (int i = 0; i < adapter.getCount(); i++) {
+            int count = adapter.getCount();
+            for (int i = 0; i < count; i++) {
                 Map<String, Object> hm = (Map<String, Object>) adapter.getItem(i);
                 processFrozenStatus(hm, (String) hm.get("PackageName"), pm);
-                adapter.notifyDataSetChanged();
             }
+            adapter.notifyDataSetChanged();
         }
     }
 
