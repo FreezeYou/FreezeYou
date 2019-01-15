@@ -9,9 +9,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -22,7 +27,10 @@ import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.ApplicationInfoUtils.getApplicationInfoFromPkgName;
 import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
+import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
+import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.NotificationUtils.createNotification;
 import static cf.playhi.freezeyou.NotificationUtils.deleteNotification;
 import static cf.playhi.freezeyou.OneKeyListUtils.addToOneKeyList;
@@ -421,6 +429,78 @@ class Support {
                 }
             }
         }
+    }
+
+    static void showChooseActionPopupMenu(final Context context, View view, final String pkgName, final String name) {
+        PopupMenu popup = new PopupMenu(context, view);
+        popup.inflate(R.menu.main_single_choose_action_menu);
+
+        final AppPreferences sharedPreferences = new AppPreferences(context);
+
+        final String pkgNames = sharedPreferences.getString(context.getString(R.string.sAutoFreezeApplicationList), "");
+        if (existsInOneKeyList(pkgNames, pkgName)) {
+            popup.getMenu().findItem(R.id.main_sca_menu_addToOneKeyList).setTitle(R.string.removeFromOneKeyList);
+        }
+
+        final String FreezeOnceQuitPkgNames = sharedPreferences.getString(context.getString(R.string.sFreezeOnceQuit), "");
+        if (existsInOneKeyList(FreezeOnceQuitPkgNames, pkgName)) {
+            popup.getMenu().findItem(R.id.main_sca_menu_addToFreezeOnceQuit).setTitle(R.string.removeFromFreezeOnceQuit);
+        }
+
+        final String UFPkgNames = sharedPreferences.getString(context.getString(R.string.sOneKeyUFApplicationList), "");
+        if (existsInOneKeyList(UFPkgNames, pkgName)) {
+            popup.getMenu().findItem(R.id.main_sca_menu_addToOneKeyUFList).setTitle(R.string.removeFromOneKeyUFList);
+        }
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.main_sca_menu_addToFreezeOnceQuit:
+                        Support.checkAddOrRemove(context, FreezeOnceQuitPkgNames, pkgName, context.getString(R.string.sFreezeOnceQuit));
+                        break;
+                    case R.id.main_sca_menu_addToOneKeyList:
+                        Support.checkAddOrRemove(context, pkgNames, pkgName, context.getString(R.string.sAutoFreezeApplicationList));
+                        break;
+                    case R.id.main_sca_menu_addToOneKeyUFList:
+                        Support.checkAddOrRemove(context, UFPkgNames, pkgName, context.getString(R.string.sOneKeyUFApplicationList));
+                        break;
+                    case R.id.main_sca_menu_appDetail:
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", pkgName, null);
+                        intent.setData(uri);
+                        try {
+                            context.startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            showToast(context, e.getLocalizedMessage());
+                        }
+                        break;
+                    case R.id.main_sca_menu_copyPkgName:
+                        copyToClipboard(context, pkgName);
+                        break;
+                    case R.id.main_sca_menu_disableAEnable:
+                        if (!(context.getString(R.string.notAvailable).equals(name))) {
+                            context.startActivity(new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false));
+                        }
+                        break;
+                    case R.id.main_sca_menu_createDisEnableShortCut:
+                        createShortCut(
+                                name,
+                                pkgName,
+                                getApplicationIcon(context, pkgName, getApplicationInfoFromPkgName(pkgName, context), false),
+                                Freeze.class,
+                                "FreezeYou! " + pkgName,
+                                context
+                        );
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+        popup.show();
     }
 
 //    static void checkLanguage(Context context) {

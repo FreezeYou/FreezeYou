@@ -42,6 +42,9 @@ public class ShortcutLauncherFolderActivity extends Activity {
         } else {
             setContentView(R.layout.shortcut_launcher_folder);
             final String uuid = getIntent().getStringExtra("UUID");
+            if (uuid == null) {
+                ToastUtils.showToast(this, R.string.failed);
+            }
             GridView slf_apps_gridView = findViewById(R.id.slf_apps_gridView);
 
             slf_apps_gridView.setColumnWidth((int) (getResources().getDimension(android.R.dimen.app_icon_size) * 1.8));
@@ -107,13 +110,26 @@ public class ShortcutLauncherFolderActivity extends Activity {
                                 new Intent(
                                         ShortcutLauncherFolderActivity.this,
                                         FUFLauncherShortcutCreator.class)
-                                        .putExtra("slf_n",uuid),
+                                        .putExtra("slf_n", uuid),
                                 7001);
                     } else {
                         Support.checkFrozenStatusAndStartApp(
                                 ShortcutLauncherFolderActivity.this,
                                 pkg);
                     }
+                }
+            });
+
+            slf_apps_gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    HashMap<String, Object> hm = folderItems.get(position);
+                    String pkgName = (String) hm.get("Package");
+                    if (!"freezeyou@add".equals(pkgName)) {
+                        String name = (String) hm.get("Label");
+                        Support.showChooseActionPopupMenu(ShortcutLauncherFolderActivity.this, view, pkgName, name);
+                    }
+                    return true;
                 }
             });
 

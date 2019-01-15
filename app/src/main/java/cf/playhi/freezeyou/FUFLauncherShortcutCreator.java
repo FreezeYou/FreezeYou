@@ -40,8 +40,16 @@ public class FUFLauncherShortcutCreator extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
-        if (Intent.ACTION_CREATE_SHORTCUT.equals(getIntent().getAction()) || getIntent().getStringExtra("slf_n") != null) {
+
+        Intent intent = getIntent();
+        String slf_n = intent.getStringExtra("slf_n");
+        boolean isSlfMode = slf_n != null;
+
+        if (Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction()) || isSlfMode) {
             setContentView(R.layout.main);
+
+            if (isSlfMode)
+                setTitle(R.string.add);
 
             final ListView app_listView = findViewById(R.id.app_list);
             final ProgressBar progressBar = findViewById(R.id.progressBar);

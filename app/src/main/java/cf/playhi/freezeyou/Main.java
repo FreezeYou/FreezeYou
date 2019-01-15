@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -33,7 +32,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -54,13 +52,11 @@ import java.util.Map;
 
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.ApplicationInfoUtils.getApplicationInfoFromPkgName;
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.OneKeyListUtils.addToOneKeyList;
-import static cf.playhi.freezeyou.OneKeyListUtils.existsInOneKeyList;
 import static cf.playhi.freezeyou.OneKeyListUtils.removeFromOneKeyList;
 import static cf.playhi.freezeyou.Support.realGetFrozenStatus;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
@@ -672,7 +668,7 @@ public class Main extends Activity {
                                 );
                                 overridePendingTransition(R.anim.pullup, R.anim.pulldown);
                             } else {
-                                showChooseActionPopupMenu(view, pkgName, name);
+                                Support.showChooseActionPopupMenu(Main.this, view, pkgName, name);
                             }
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
@@ -1105,78 +1101,6 @@ public class Main extends Activity {
                     Main.this
             );
         }
-    }
-
-    private void showChooseActionPopupMenu(View view, final String pkgName, final String name) {
-        PopupMenu popup = new PopupMenu(Main.this, view);
-        popup.inflate(R.menu.main_single_choose_action_menu);
-
-        final AppPreferences sharedPreferences = new AppPreferences(Main.this);
-
-        final String pkgNames = sharedPreferences.getString(getString(R.string.sAutoFreezeApplicationList), "");
-        if (existsInOneKeyList(pkgNames, pkgName)) {
-            popup.getMenu().findItem(R.id.main_sca_menu_addToOneKeyList).setTitle(R.string.removeFromOneKeyList);
-        }
-
-        final String FreezeOnceQuitPkgNames = sharedPreferences.getString(getString(R.string.sFreezeOnceQuit), "");
-        if (existsInOneKeyList(FreezeOnceQuitPkgNames, pkgName)) {
-            popup.getMenu().findItem(R.id.main_sca_menu_addToFreezeOnceQuit).setTitle(R.string.removeFromFreezeOnceQuit);
-        }
-
-        final String UFPkgNames = sharedPreferences.getString(getString(R.string.sOneKeyUFApplicationList), "");
-        if (existsInOneKeyList(UFPkgNames, pkgName)) {
-            popup.getMenu().findItem(R.id.main_sca_menu_addToOneKeyUFList).setTitle(R.string.removeFromOneKeyUFList);
-        }
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.main_sca_menu_addToFreezeOnceQuit:
-                        Support.checkAddOrRemove(Main.this, FreezeOnceQuitPkgNames, pkgName, getString(R.string.sFreezeOnceQuit));
-                        break;
-                    case R.id.main_sca_menu_addToOneKeyList:
-                        Support.checkAddOrRemove(Main.this, pkgNames, pkgName, getString(R.string.sAutoFreezeApplicationList));
-                        break;
-                    case R.id.main_sca_menu_addToOneKeyUFList:
-                        Support.checkAddOrRemove(Main.this, UFPkgNames, pkgName, getString(R.string.sOneKeyUFApplicationList));
-                        break;
-                    case R.id.main_sca_menu_appDetail:
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package", pkgName, null);
-                        intent.setData(uri);
-                        try {
-                            startActivity(intent);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            showToast(getApplicationContext(), e.getLocalizedMessage());
-                        }
-                        break;
-                    case R.id.main_sca_menu_copyPkgName:
-                        copyToClipboard(Main.this, pkgName);
-                        break;
-                    case R.id.main_sca_menu_disableAEnable:
-                        if (!(getString(R.string.notAvailable).equals(name))) {
-                            startActivity(new Intent(Main.this, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false));
-                        }
-                        break;
-                    case R.id.main_sca_menu_createDisEnableShortCut:
-                        createShortCut(
-                                name,
-                                pkgName,
-                                getApplicationIcon(Main.this, pkgName, getApplicationInfoFromPkgName(pkgName, getApplicationContext()), false),
-                                Freeze.class,
-                                "FreezeYou! " + pkgName,
-                                Main.this
-                        );
-                        break;
-                    default:
-                        break;
-                }
-                return true;
-            }
-        });
-        popup.show();
     }
 
     @Override
