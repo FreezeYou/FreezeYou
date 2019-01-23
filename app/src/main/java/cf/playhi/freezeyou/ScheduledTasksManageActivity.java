@@ -47,10 +47,7 @@ public class ScheduledTasksManageActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (Build.VERSION.SDK_INT >= 21)
-                    finishAfterTransition();
-                else
-                    finish();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

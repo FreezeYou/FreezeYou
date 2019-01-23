@@ -73,7 +73,20 @@
             android:defaultValue="false"
             android:key="shortcutAutoFUF"
             android:summary="@string/shortcutAutoFUFEx"
-            android:title="@string/shortcutAutoFUF" />
+            android:title="@string/shortcutAutoFUF"
+            android:disableDependentsState="false"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="needConfirmWhenFreezeUseShortcutAutoFUF"
+            android:summary="@string/workWithShortcutAutoFUF"
+            android:title="@string/needCfmWhenFreeze"
+            android:dependency="shortcutAutoFUF"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="openImmediatelyAfterUnfreezeUseShortcutAutoFUF"
+            android:summary="@string/workWithShortcutAutoFUF"
+            android:title="@string/openImmediatelyAfterUF"
+            android:dependency="shortcutAutoFUF"/>
         <ListPreference
             android:defaultValue="nothing"
             android:entries="@array/shortCutOneKeyFreezeAdditionalOptionsSelection"

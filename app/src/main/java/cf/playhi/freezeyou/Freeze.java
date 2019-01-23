@@ -3,6 +3,7 @@ package cf.playhi.freezeyou;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,11 +73,16 @@ public class Freeze extends Activity {
                 showToast(getApplicationContext(), R.string.invalidArguments);
                 Freeze.this.finish();
             }
-            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("shortcutAutoFUF", false)) {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            if (auto && sp.getBoolean("shortcutAutoFUF", false)) {
                 if (realGetFrozenStatus(this, pkgName, getPackageManager())) {
-                    processUnfreezeAction(this, pkgName, true, true, this, true);
+                    processUnfreezeAction(this, pkgName, true, sp.getBoolean("openImmediatelyAfterUnfreezeUseShortcutAutoFUF", true), this, true);
                 } else {
-                    processFreezeAction(this, pkgName, true, this, true);
+                    if (sp.getBoolean("needConfirmWhenFreezeUseShortcutAutoFUF", false)) {
+                        processDialog(pkgName, false, 2);
+                    } else {
+                        processFreezeAction(this, pkgName, true, this, true);
+                    }
                 }
             } else if ((!checkRootFrozen(Freeze.this, pkgName, null)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
                 processDialog(pkgName, auto, 2);

@@ -68,20 +68,14 @@ public class ScheduledTasksAddActivity extends Activity {
                                     saveTriggerTaskData(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()), id);
                                 }
 
-                                if (Build.VERSION.SDK_INT >= 21)
-                                    finishAfterTransition();
-                                else
-                                    finish();
+                                finish();
                             }
                         })
                         .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                if (Build.VERSION.SDK_INT >= 21)
-                                    finishAfterTransition();
-                                else
-                                    finish();
+                                finish();
                             }
                         })
                         .setNeutralButton(R.string.cancel, null)
@@ -100,15 +94,9 @@ public class ScheduledTasksAddActivity extends Activity {
                                     }
                                     db.execSQL("DELETE FROM tasks WHERE _id = " + id);
                                     db.close();
-                                    if (Build.VERSION.SDK_INT >= 21)
-                                        finishAfterTransition();
-                                    else
-                                        finish();
+                                    finish();
                                 } else {
-                                    if (Build.VERSION.SDK_INT >= 21)
-                                        finishAfterTransition();
-                                    else
-                                        finish();
+                                    finish();
                                 }
                             }
                         })
@@ -193,10 +181,8 @@ public class ScheduledTasksAddActivity extends Activity {
                 } else {
                     saveTriggerTaskData(defaultSharedPreferences, id);
                 }
-                if (Build.VERSION.SDK_INT >= 21)
-                    finishAfterTransition();
-                else
-                    finish();
+
+                finish();
             }
         });
     }
