@@ -202,6 +202,8 @@
     <string name="debugMode">Debug Mode</string>
     <string name="showLogcat">View Logs</string>
     <string name="freezeOrLaunch">Freeze/Run</string>
+    <string name="askIfSave">Save?</string>
+    <string name="mainActivityPattern">Home pattern</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
@@ -217,6 +219,11 @@
         <item>None</item>
         <item>Ask if Lock Screen</item>
         <item>Lock Screen Immediately</item>
+    </string-array>
+    <string-array name="mainActivityPatternSelection">
+        <item>Default</item>
+        <item>List</item>
+        <item>Grid</item>
     </string-array>
     <string-array name="uiStyleSelection">
         <item>Default</item>
