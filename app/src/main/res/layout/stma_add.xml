@@ -6,8 +6,7 @@
     <FrameLayout
         android:id="@+id/staa_sp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:transitionName="add" />
+        android:layout_height="match_parent" />
 
     <ImageButton
         android:id="@+id/staa_saveButton"

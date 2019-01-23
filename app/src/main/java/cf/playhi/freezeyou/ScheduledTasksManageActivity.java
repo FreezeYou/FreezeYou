@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -159,26 +158,25 @@ public class ScheduledTasksManageActivity extends Activity {
                 final String label = (String) map.get("label");
                 final String s = ((String) map.get("time"));
                 final boolean isTimeTask = ((s != null) && s.contains(":"));
-                if (Build.VERSION.SDK_INT >= 21) {
-                    view.setTransitionName("add");
-                    startActivityForResult(
-                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
-                                    .putExtra("label", label)
-                                    .putExtra("time", isTimeTask)
-                                    .putExtra("id", integerArrayList.get(i)),
-                            isTimeTask ? 1 : 2,
-                            ActivityOptions
-                                    .makeSceneTransitionAnimation(
-                                            ScheduledTasksManageActivity.this, view, "add")
-                                    .toBundle());
-                } else {
+//                if (Build.VERSION.SDK_INT >= 21) {
+//                    startActivityForResult(
+//                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
+//                                    .putExtra("label", label)
+//                                    .putExtra("time", isTimeTask)
+//                                    .putExtra("id", integerArrayList.get(i)),
+//                            isTimeTask ? 1 : 2,
+//                            ActivityOptions
+//                                    .makeSceneTransitionAnimation(
+//                                            ScheduledTasksManageActivity.this, view, "add")
+//                                    .toBundle());
+//                } else {
                     startActivityForResult(
                             new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
                                     .putExtra("label", label)
                                     .putExtra("time", isTimeTask)
                                     .putExtra("id", integerArrayList.get(i)),
                             isTimeTask ? 1 : 2);
-                }
+//                }
             }
         });
         tasksListView.setAdapter(adapter);
@@ -207,48 +205,48 @@ public class ScheduledTasksManageActivity extends Activity {
         addTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= 21)
-                    startActivityForResult(
-                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
-                                    .putExtra("label", getString(R.string.add))
-                                    .putExtra("time", true),
-                            1,
-                            ActivityOptions
-                                    .makeSceneTransitionAnimation(
-                                            ScheduledTasksManageActivity.this, addTimeButton, "add")
-                                    .toBundle());
-                else {
+//                if (Build.VERSION.SDK_INT >= 21)
+//                    startActivityForResult(
+//                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
+//                                    .putExtra("label", getString(R.string.add))
+//                                    .putExtra("time", true),
+//                            1,
+//                            ActivityOptions
+//                                    .makeSceneTransitionAnimation(
+//                                            ScheduledTasksManageActivity.this, addTimeButton, "add")
+//                                    .toBundle());
+//                else {
                     changeFloatButtonsStatus(false);
                     startActivityForResult(
                             new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
                                     .putExtra("label", getString(R.string.add))
                                     .putExtra("time", true),
                             1);
-                }
+//                }
             }
         });
 
         addTriggerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= 21) {
-                    startActivityForResult(
-                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
-                                    .putExtra("label", getString(R.string.add))
-                                    .putExtra("time", false),
-                            2,
-                            ActivityOptions
-                                    .makeSceneTransitionAnimation(
-                                            ScheduledTasksManageActivity.this, addTriggerButton, "add")
-                                    .toBundle());
-                } else {
+//                if (Build.VERSION.SDK_INT >= 21) {
+//                    startActivityForResult(
+//                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
+//                                    .putExtra("label", getString(R.string.add))
+//                                    .putExtra("time", false),
+//                            2,
+//                            ActivityOptions
+//                                    .makeSceneTransitionAnimation(
+//                                            ScheduledTasksManageActivity.this, addTriggerButton, "add")
+//                                    .toBundle());
+//                } else {
                     changeFloatButtonsStatus(false);
                     startActivityForResult(
                             new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
                                     .putExtra("label", getString(R.string.add))
                                     .putExtra("time", false),
                             2);
-                }
+//                }
             }
         });
     }
