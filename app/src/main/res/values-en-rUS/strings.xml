@@ -16,11 +16,11 @@
     <string name="removeFromOneKeyUFList">Remove from the Onekey Unfreeze list</string>
     <string name="removeFromFreezeOnceQuit">Remove from the Freeze Once Quit list</string>
     <string name="removed">Removed</string>
-    <string name="removeFailed">Remove failed</string>
+    <string name="removeFailed">Failed to remove</string>
     <string name="addToOneKeyList">Add to the Onekey Freeze list</string>
     <string name="addToOneKeyUFList">Add to the Onekey Unfreeze list</string>
     <string name="addToFreezeOnceQuit">Add to the Freeze Once Quit list</string>
-    <string name="addFailed">Add failed</string>
+    <string name="addFailed">Failed to add</string>
     <string name="caution">CAUTION</string>
     <string name="cautionContent">Attention! \nDo not freeze the application which is very important to the system, that may cause the system to crash!</string>
     <string name="yes">Yes</string>
