@@ -204,7 +204,7 @@
     <string name="freezeOrLaunch">Freeze/Run</string>
     <string name="askIfSave">Save?</string>
     <string name="mainActivityPattern">Home pattern</string>
-    <string name="workWithShortcutAutoFUF">启用\"快捷方式自动冻解\"时生效</string>
+    <string name="workWithShortcutAutoFUF">Effective when \"Shortcut auto freeze or unfreeze\" is enabled</string>
     <string name="needCfmWhenFreeze">Extra confirmation when freeze</string>
     <string name="openImmediatelyAfterUF">Run immediately after unfreezing</string>
     <!--<string name="displayLanguage">显示语言</string>-->
