@@ -15,11 +15,11 @@
             android:key="launchMode"
             android:title="@string/launchMode" />
         <!--<ListPreference-->
-            <!--android:defaultValue="default"-->
-            <!--android:entries="@array/mainActivityPatternSelection"-->
-            <!--android:entryValues="@array/mainActivityPatternSelectionValues"-->
-            <!--android:key="mainActivityPattern"-->
-            <!--android:title="@string/mainActivityPattern" />-->
+        <!--android:defaultValue="default"-->
+        <!--android:entries="@array/mainActivityPatternSelection"-->
+        <!--android:entryValues="@array/mainActivityPatternSelectionValues"-->
+        <!--android:key="mainActivityPattern"-->
+        <!--android:title="@string/mainActivityPattern" />-->
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/onClickFuncChooseActionStyles"
@@ -71,22 +71,22 @@
             android:title="@string/openAndUFImmediately" />
         <CheckBoxPreference
             android:defaultValue="false"
+            android:disableDependentsState="false"
             android:key="shortcutAutoFUF"
             android:summary="@string/shortcutAutoFUFEx"
-            android:title="@string/shortcutAutoFUF"
-            android:disableDependentsState="false"/>
+            android:title="@string/shortcutAutoFUF" />
         <CheckBoxPreference
             android:defaultValue="false"
+            android:dependency="shortcutAutoFUF"
             android:key="needConfirmWhenFreezeUseShortcutAutoFUF"
             android:summary="@string/workWithShortcutAutoFUF"
-            android:title="@string/needCfmWhenFreeze"
-            android:dependency="shortcutAutoFUF"/>
+            android:title="@string/needCfmWhenFreeze" />
         <CheckBoxPreference
             android:defaultValue="true"
+            android:dependency="shortcutAutoFUF"
             android:key="openImmediatelyAfterUnfreezeUseShortcutAutoFUF"
             android:summary="@string/workWithShortcutAutoFUF"
-            android:title="@string/openImmediatelyAfterUF"
-            android:dependency="shortcutAutoFUF"/>
+            android:title="@string/openImmediatelyAfterUF" />
         <ListPreference
             android:defaultValue="nothing"
             android:entries="@array/shortCutOneKeyFreezeAdditionalOptionsSelection"
