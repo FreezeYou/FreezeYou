@@ -204,6 +204,9 @@
     <string name="freezeOrLaunch">冻结/启动</string>
     <string name="askIfSave">是否保存？</string>
     <string name="mainActivityPattern">首页格局</string>
+    <string name="workWithShortcutAutoFUF">启用\"快捷方式自动冻解\"时生效</string>
+    <string name="needCfmWhenFreeze">冻结时额外弹窗确认</string>
+    <string name="openImmediatelyAfterUF">解冻后立即启动</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>显示全部</item>
