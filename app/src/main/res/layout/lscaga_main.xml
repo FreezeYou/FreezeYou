@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/lscaga_displayName_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/name" />
+
+    <EditText
+        android:id="@+id/lscaga_displayName_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lscaga_displayName_textView"
+        android:hint="@string/name"
+        android:inputType="textPersonName"
+        android:text="@string/name" />
+
+    <TextView
+        android:id="@+id/lscaga_icon_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lscaga_displayName_editText"
+        android:layout_marginTop="20dp"
+        android:text="@string/icon" />
+
+    <ImageButton
+        android:id="@+id/lscaga_icon_imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lscaga_icon_textView"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@mipmap/ic_launcher_round"
+        android:contentDescription="@string/icon" />
+
+    <TextView
+        android:id="@+id/lscaga_target_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lscaga_icon_imageButton"
+        android:layout_marginTop="20dp"
+        android:text="@string/target" />
+
+    <LinearLayout
+        android:id="@+id/lscaga_target_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lscaga_target_textView"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/lscaga_target_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:enabled="false"
+            android:hint="@string/target"
+            android:text="@string/target" />
+
+        <Button
+            android:id="@+id/lscaga_target_button"
+            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="..."
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/lscaga_generate_button"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="?android:attr/listDivider" />
+
+    <Button
+        android:id="@+id/lscaga_generate_button"
+        style="@android:style/Widget.Material.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="生成" />
+</RelativeLayout>
