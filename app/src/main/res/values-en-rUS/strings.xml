@@ -207,10 +207,11 @@
     <string name="workWithShortcutAutoFUF">Effective when \"Shortcut auto freeze or unfreeze\" is enabled</string>
     <string name="needCfmWhenFreeze">Extra confirmation when freeze</string>
     <string name="openImmediatelyAfterUF">Run immediately after unfreezing</string>
-    <string name="createLauncherShortcut">创建桌面快捷方式</string>
-    <string name="name">名称</string>
-    <string name="icon">图标</string>
-    <string name="target">目标</string>
+    <string name="createLauncherShortcut">Create Launcher Shortcut</string>
+    <string name="name">Name</string>
+    <string name="icon">Icon</string>
+    <string name="target">Target</string>
+    <string name="generate">生成</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
