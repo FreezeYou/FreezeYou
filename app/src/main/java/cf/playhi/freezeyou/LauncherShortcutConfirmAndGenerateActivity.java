@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -38,8 +37,6 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
         TextView lscaga_displayName_textView = findViewById(R.id.lscaga_displayName_textView);
         EditText lscaga_displayName_editText = findViewById(R.id.lscaga_displayName_editText);
 
-        if (Build.VERSION.SDK_INT>=23){
-        }
 
     }
 }
