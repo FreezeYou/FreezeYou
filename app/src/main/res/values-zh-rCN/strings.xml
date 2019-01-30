@@ -212,6 +212,8 @@
     <string name="icon">图标</string>
     <string name="target">目标</string>
     <string name="generate">生成</string>
+    <string name="plsSelect">请选择</string>
+    <string name="application">应用</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>显示全部</item>
