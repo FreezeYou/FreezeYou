@@ -66,13 +66,17 @@
         android:text="@string/icon" />
 
     <ImageButton
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:maxHeight="200dp"
+        android:maxWidth="200dp"
         android:id="@+id/lscaga_icon_imageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/lscaga_icon_textView"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@mipmap/ic_launcher_round"
+        android:background="@drawable/grid_add"
         android:contentDescription="@string/icon" />
 
     <TextView

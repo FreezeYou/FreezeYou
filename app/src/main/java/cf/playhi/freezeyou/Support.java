@@ -27,9 +27,7 @@ import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.ApplicationInfoUtils.getApplicationInfoFromPkgName;
 import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
-import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.NotificationUtils.createNotification;
 import static cf.playhi.freezeyou.NotificationUtils.deleteNotification;
@@ -485,14 +483,20 @@ class Support {
                         }
                         break;
                     case R.id.main_sca_menu_createDisEnableShortCut:
-                        createShortCut(
-                                name,
-                                pkgName,
-                                getApplicationIcon(context, pkgName, getApplicationInfoFromPkgName(pkgName, context), false),
-                                Freeze.class,
-                                "FreezeYou! " + pkgName,
-                                context
-                        );
+                        //TODO: ID 生成
+                        context.startActivity(
+                                new Intent(
+                                        context, LauncherShortcutConfirmAndGenerateActivity.class)
+                                        .putExtra("pkgName", pkgName)
+                                        .putExtra("class", new SerializableClass().setStoredClass(Freeze.class)));
+//                        createShortCut(
+//                                name,
+//                                pkgName,
+//                                getApplicationIcon(context, pkgName, getApplicationInfoFromPkgName(pkgName, context), false),
+//                                Freeze.class,
+//                                "FreezeYou! " + pkgName,
+//                                context
+//                        );
                         break;
                     default:
                         break;

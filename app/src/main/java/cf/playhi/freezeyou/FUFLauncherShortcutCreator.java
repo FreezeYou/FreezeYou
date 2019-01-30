@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -19,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,30 +33,46 @@ import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.Support.realGetFrozenStatus;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
+import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class FUFLauncherShortcutCreator extends Activity {
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
+        processActionBar(getActionBar());
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         String slf_n = intent.getStringExtra("slf_n");
+        boolean returnPkgName = intent.getBooleanExtra("returnPkgName", false);
         boolean isSlfMode = slf_n != null;
 
-        if (Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction()) || isSlfMode) {
-            setContentView(R.layout.main);
+        if (Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction()) || isSlfMode || returnPkgName) {
+            setContentView(R.layout.fuflsc_select_application);
 
             if (isSlfMode)
                 setTitle(R.string.add);
+            else if (returnPkgName)
+                setTitle(R.string.plsSelect);
 
-            final ListView app_listView = findViewById(R.id.app_list);
-            final ProgressBar progressBar = findViewById(R.id.progressBar);
-            final TextView textView = findViewById(R.id.textView);
-            final LinearLayout linearLayout = findViewById(R.id.layout2);
+            final ListView app_listView = findViewById(R.id.fuflsc_app_list);
+            final ProgressBar progressBar = findViewById(R.id.fuflsc_progressBar);
+            final LinearLayout linearLayout = findViewById(R.id.fuflsc_linearLayout);
             final ArrayList<Map<String, Object>> AppList = new ArrayList<>();
-            final EditText search_editText = findViewById(R.id.search_editText);
+            final EditText search_editText = findViewById(R.id.fuflsc_search_editText);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -136,7 +152,6 @@ public class FUFLauncherShortcutCreator extends Activity {
                 @Override
                 public void run() {
                     progressBar.setVisibility(View.GONE);
-                    textView.setVisibility(View.GONE);
                     linearLayout.setVisibility(View.GONE);
                     app_listView.setAdapter(adapter);
                     app_listView.setTextFilterEnabled(true);
@@ -150,10 +165,13 @@ public class FUFLauncherShortcutCreator extends Activity {
                     HashMap<String, Object> map = (HashMap<String, Object>) app_listView.getItemAtPosition(i);
                     final String name = (String) map.get("Name");
                     final String pkgName = (String) map.get("PackageName");
-                    if (getIntent().getStringExtra("slf_n") != null) {
+                    Intent it = getIntent();
+                    if (it.getStringExtra("slf_n") != null) {
                         SharedPreferences sp = getSharedPreferences(getIntent().getStringExtra("slf_n"), MODE_PRIVATE);
                         sp.edit().putString("pkgS", sp.getString("pkgS", "") + pkgName + ",").apply();
                         setResult(RESULT_OK);
+                    } else if (it.getBooleanExtra("returnPkgName", false)) {
+                        setResult(RESULT_OK, new Intent().putExtra("pkgName", pkgName));
                     } else {
                         Intent shortcutIntent = new Intent(FUFLauncherShortcutCreator.this, Freeze.class);
                         shortcutIntent.putExtra("pkgName", pkgName);
