@@ -17,7 +17,7 @@ import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
 
 public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
 
-    Class<?> targetSelfCls;
+    private Class<?> targetSelfCls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
