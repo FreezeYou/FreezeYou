@@ -5,10 +5,47 @@
     android:layout_height="match_parent"
     android:padding="20dp">
 
+
+    <TextView
+        android:id="@+id/lscaga_package_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/application" />
+
+    <LinearLayout
+        android:id="@+id/lscaga_package_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lscaga_package_textView"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/lscaga_package_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:enabled="false"
+            android:hint="@string/application"
+            android:inputType="none"
+            android:text="@string/plsSelect" />
+
+        <Button
+            android:id="@+id/lscaga_package_button"
+            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="..."
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/lscaga_displayName_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/lscaga_package_linearLayout"
+        android:layout_marginTop="20dp"
         android:text="@string/name" />
 
     <EditText
@@ -59,8 +96,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:enabled="false"
-            android:inputType="none"
             android:hint="@string/target"
+            android:inputType="none"
             android:text="@string/target" />
 
         <Button
@@ -88,5 +125,5 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="@string/generate" />
-    
+
 </RelativeLayout>
