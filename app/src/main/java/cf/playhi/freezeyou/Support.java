@@ -483,11 +483,12 @@ class Support {
                         }
                         break;
                     case R.id.main_sca_menu_createDisEnableShortCut:
-                        //TODO: ID 生成
                         context.startActivity(
                                 new Intent(
                                         context, LauncherShortcutConfirmAndGenerateActivity.class)
                                         .putExtra("pkgName", pkgName)
+                                        .putExtra("name", name)
+                                        .putExtra("id", "FreezeYou! " + pkgName)
                                         .putExtra("class", new SerializableClass().setStoredClass(Freeze.class)));
 //                        createShortCut(
 //                                name,

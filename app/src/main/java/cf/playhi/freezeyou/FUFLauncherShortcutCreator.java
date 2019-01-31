@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.Support.realGetFrozenStatus;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
@@ -60,12 +59,12 @@ public class FUFLauncherShortcutCreator extends Activity {
         boolean returnPkgName = intent.getBooleanExtra("returnPkgName", false);
         boolean isSlfMode = slf_n != null;
 
-        if (Intent.ACTION_CREATE_SHORTCUT.equals(intent.getAction()) || isSlfMode || returnPkgName) {
+        if (isSlfMode || returnPkgName) {
             setContentView(R.layout.fuflsc_select_application);
 
             if (isSlfMode)
                 setTitle(R.string.add);
-            else if (returnPkgName)
+            else
                 setTitle(R.string.plsSelect);
 
             final ListView app_listView = findViewById(R.id.fuflsc_app_list);
@@ -172,18 +171,21 @@ public class FUFLauncherShortcutCreator extends Activity {
                         setResult(RESULT_OK);
                     } else if (it.getBooleanExtra("returnPkgName", false)) {
                         setResult(RESULT_OK, new Intent().putExtra("pkgName", pkgName));
-                    } else {
-                        Intent shortcutIntent = new Intent(FUFLauncherShortcutCreator.this, Freeze.class);
-                        shortcutIntent.putExtra("pkgName", pkgName);
-                        Intent intent = new Intent();
-                        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-                        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
-                        try {
-                            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getPackageManager().getApplicationIcon(pkgName)));
-                        } catch (Exception e) {
-                            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getApplicationIcon(applicationContext, pkgName, null, false)));
-                        }
-                        setResult(RESULT_OK, intent);
+//                    } else {
+//
+//                        <!--桌面快捷方式（类小部件）入口已迁移至 LauncherShortcutConfirmAndGenerateActivity.java -->
+//
+//                        Intent shortcutIntent = new Intent(FUFLauncherShortcutCreator.this, Freeze.class);
+//                        shortcutIntent.putExtra("pkgName", pkgName);
+//                        Intent intent = new Intent();
+//                        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+//                        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
+//                        try {
+//                            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getPackageManager().getApplicationIcon(pkgName)));
+//                        } catch (Exception e) {
+//                            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getApplicationIcon(applicationContext, pkgName, null, false)));
+//                        }
+//                        setResult(RESULT_OK, intent);
                     }
                     finish();
                 }

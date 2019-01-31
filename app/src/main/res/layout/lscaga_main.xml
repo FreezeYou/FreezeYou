@@ -66,13 +66,15 @@
 
     <ImageButton
         android:id="@+id/lscaga_icon_imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="192dp"
+        android:layout_height="192dp"
         android:layout_below="@id/lscaga_icon_textView"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@mipmap/ic_launcher_round"
-        android:contentDescription="@string/icon" />
+        android:background="@color/realTranslucent"
+        android:contentDescription="@string/icon"
+        android:scaleType="fitCenter"
+        android:src="@drawable/grid_add" />
 
     <TextView
         android:id="@+id/lscaga_target_textView"
