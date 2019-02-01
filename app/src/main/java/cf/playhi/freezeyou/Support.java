@@ -267,7 +267,9 @@ class Support {
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                showToast(context, R.string.plsRemoveUninstalledApplications);
+                                if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                                    showToast(context, R.string.plsRemoveUninstalledApplications);
+                                }
                             }
                         }
                     }
@@ -281,7 +283,9 @@ class Support {
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            showToast(context, R.string.plsRemoveUninstalledApplications);
+                            if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                                showToast(context, R.string.plsRemoveUninstalledApplications);
+                            }
                         }
                     }
                 }
