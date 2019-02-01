@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.OneKeyListUtils.existsInOneKeyList;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
@@ -82,21 +84,13 @@ public class SelectOperation extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0:
-                        startActivity(
-                                new Intent(
-                                        SelectOperation.this, LauncherShortcutConfirmAndGenerateActivity.class)
-                                        .putExtra("pkgName", pkgName)
-                                        .putExtra("name", name)
-                                        .putExtra("id", "FreezeYou! " + pkgName)
-                                        .putExtra("class", new SerializableClass().setStoredClass(Freeze.class)));
-//                        createShortCut(
-//                                name,
-//                                pkgName,
-//                                getApplicationIcon(SelectOperation.this, pkgName, getApplicationInfoFromPkgName(pkgName, getApplicationContext()), false),
-//                                Freeze.class,
-//                                "FreezeYou! " + pkgName,
-//                                SelectOperation.this
-//                        );
+                        checkSettingsAndRequestCreateShortcut(
+                                name,
+                                pkgName,
+                                getApplicationIcon(SelectOperation.this, pkgName, null, false),
+                                Freeze.class,
+                                "FreezeYou! " + pkgName,
+                                SelectOperation.this);
                         finish();
                         break;
                     case 1:

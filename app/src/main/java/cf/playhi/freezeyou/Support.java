@@ -28,6 +28,7 @@ import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
+import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.NotificationUtils.createNotification;
 import static cf.playhi.freezeyou.NotificationUtils.deleteNotification;
@@ -483,13 +484,20 @@ class Support {
                         }
                         break;
                     case R.id.main_sca_menu_createDisEnableShortCut:
-                        context.startActivity(
-                                new Intent(
-                                        context, LauncherShortcutConfirmAndGenerateActivity.class)
-                                        .putExtra("pkgName", pkgName)
-                                        .putExtra("name", name)
-                                        .putExtra("id", "FreezeYou! " + pkgName)
-                                        .putExtra("class", new SerializableClass().setStoredClass(Freeze.class)));
+                        checkSettingsAndRequestCreateShortcut(
+                                name,
+                                pkgName,
+                                getApplicationIcon(context, pkgName, null, false),
+                                Freeze.class,
+                                "FreezeYou! " + pkgName,
+                                context);
+//                        context.startActivity(
+//                                new Intent(
+//                                        context, LauncherShortcutConfirmAndGenerateActivity.class)
+//                                        .putExtra("pkgName", pkgName)
+//                                        .putExtra("name", name)
+//                                        .putExtra("id", "FreezeYou! " + pkgName)
+//                                        .putExtra("class", new SerializableClass().setStoredClass(Freeze.class)));
 //                        createShortCut(
 //                                name,
 //                                pkgName,

@@ -10,11 +10,26 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.os.Build;
+import android.preference.PreferenceManager;
 
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 final class LauncherShortcutUtils {
+
+    static void checkSettingsAndRequestCreateShortcut(String title, String pkgName, Drawable icon, Class<?> cls, String id, Context context) {
+        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("allowEditWhenCreateShortcut", true)) {
+            context.startActivity(
+                    new Intent(
+                            context, LauncherShortcutConfirmAndGenerateActivity.class)
+                            .putExtra("pkgName", pkgName)
+                            .putExtra("name", title)
+                            .putExtra("id", id)
+                            .putExtra("class", cls));
+        } else {
+            createShortCut(title, pkgName, icon, cls, id, context);
+        }
+    }
 
     static void createShortCut(String title, String pkgName, Drawable icon, Class<?> cls, String id, Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {

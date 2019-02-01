@@ -53,6 +53,7 @@ import java.util.Map;
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
+import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
@@ -150,13 +151,20 @@ public class Main extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_createOneKeyFreezeShortCut:
-                startActivity(
-                        new Intent(
-                                this, LauncherShortcutConfirmAndGenerateActivity.class)
-                                .putExtra("pkgName", "cf.playhi.freezeyou.extra.fuf")
-                                .putExtra("name", getString(R.string.oneKeyFreeze))
-                                .putExtra("id", "OneKeyFreeze")
-                                .putExtra("class", new SerializableClass().setStoredClass(OneKeyFreeze.class)));
+                checkSettingsAndRequestCreateShortcut(
+                        getString(R.string.oneKeyFreeze),
+                        "cf.playhi.freezeyou.extra.fuf",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),
+                        OneKeyFreeze.class,
+                        "OneKeyFreeze",
+                        this);
+//                startActivity(
+//                        new Intent(
+//                                this, LauncherShortcutConfirmAndGenerateActivity.class)
+//                                .putExtra("pkgName", )
+//                                .putExtra("name", )
+//                                .putExtra("id", "OneKeyFreeze")
+//                                .putExtra("class", new SerializableClass().setStoredClass(OneKeyFreeze.class)));
 //                createShortCut(
 //                        getString(R.string.oneKeyFreeze),
 //                        "",
@@ -167,13 +175,20 @@ public class Main extends Activity {
 //                );
                 return true;
             case R.id.menu_createOneKeyUFShortCut:
-                startActivity(
-                        new Intent(
-                                this, LauncherShortcutConfirmAndGenerateActivity.class)
-                                .putExtra("pkgName", "cf.playhi.freezeyou.extra.fuf")
-                                .putExtra("name", getString(R.string.oneKeyUF))
-                                .putExtra("id", "OneKeyUF")
-                                .putExtra("class", new SerializableClass().setStoredClass(OneKeyUF.class)));
+                checkSettingsAndRequestCreateShortcut(
+                        getString(R.string.oneKeyUF),
+                        "cf.playhi.freezeyou.extra.fuf",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),
+                        OneKeyUF.class,
+                        "OneKeyUF",
+                        this);
+//                startActivity(
+//                        new Intent(
+//                                this, LauncherShortcutConfirmAndGenerateActivity.class)
+//                                .putExtra("pkgName", "cf.playhi.freezeyou.extra.fuf")
+//                                .putExtra("name", getString(R.string.oneKeyUF))
+//                                .putExtra("id", "OneKeyUF")
+//                                .putExtra("class", new SerializableClass().setStoredClass(OneKeyUF.class)));
 //                createShortCut(
 //                        getString(R.string.oneKeyUF),
 //                        "",
@@ -184,13 +199,20 @@ public class Main extends Activity {
 //                );
                 return true;
             case R.id.menu_createOneKeyLockScreenShortCut:
-                startActivity(
-                        new Intent(
-                                this, LauncherShortcutConfirmAndGenerateActivity.class)
-                                .putExtra("pkgName", "cf.playhi.freezeyou.extra.oklock")
-                                .putExtra("name", getString(R.string.oneKeyLockScreen))
-                                .putExtra("id", "OneKeyLockScreen")
-                                .putExtra("class", new SerializableClass().setStoredClass(OneKeyScreenLockImmediatelyActivity.class)));
+                checkSettingsAndRequestCreateShortcut(
+                        getString(R.string.oneKeyLockScreen),
+                        "cf.playhi.freezeyou.extra.oklock",
+                        getResources().getDrawable(R.drawable.screenlock),
+                        OneKeyScreenLockImmediatelyActivity.class,
+                        "OneKeyLockScreen",
+                        this);
+//                startActivity(
+//                        new Intent(
+//                                this, LauncherShortcutConfirmAndGenerateActivity.class)
+//                                .putExtra("pkgName", "cf.playhi.freezeyou.extra.oklock")
+//                                .putExtra("name", getString(R.string.oneKeyLockScreen))
+//                                .putExtra("id", "OneKeyLockScreen")
+//                                .putExtra("class", new SerializableClass().setStoredClass(OneKeyScreenLockImmediatelyActivity.class)));
 //                createShortCut(
 //                        getString(R.string.oneKeyLockScreen),
 //                        "",
@@ -201,13 +223,20 @@ public class Main extends Activity {
 //                );
                 return true;
             case R.id.menu_createOnlyFrozenShortCut:
-                startActivity(
-                        new Intent(
-                                this, LauncherShortcutConfirmAndGenerateActivity.class)
-                                .putExtra("pkgName", "cf.playhi.freezeyou.extra.sof")
-                                .putExtra("name", getString(R.string.onlyFrozen))
-                                .putExtra("id", "OF")
-                                .putExtra("class", new SerializableClass().setStoredClass(Main.class)));
+                checkSettingsAndRequestCreateShortcut(
+                        getString(R.string.onlyFrozen),
+                        "OF",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),
+                        Main.class,
+                        "OF",
+                        this);
+//                startActivity(
+//                        new Intent(
+//                                this, LauncherShortcutConfirmAndGenerateActivity.class)
+//                                .putExtra("pkgName", "OF")
+//                                .putExtra("name", getString(R.string.onlyFrozen))
+//                                .putExtra("id", "OF")
+//                                .putExtra("class", new SerializableClass().setStoredClass(Main.class)));
 //                createShortCut(
 //                        getString(R.string.onlyFrozen),
 //                        "OF",
@@ -217,13 +246,20 @@ public class Main extends Activity {
 //                );
                 return true;
             case R.id.menu_createOnlyUFShortCut:
-                startActivity(
-                        new Intent(
-                                this, LauncherShortcutConfirmAndGenerateActivity.class)
-                                .putExtra("pkgName", "cf.playhi.freezeyou.extra.suf")
-                                .putExtra("name", getString(R.string.onlyUF))
-                                .putExtra("id", "UF")
-                                .putExtra("class", new SerializableClass().setStoredClass(Main.class)));
+                checkSettingsAndRequestCreateShortcut(
+                        getString(R.string.onlyUF),
+                        "UF",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),
+                        Main.class,
+                        "UF",
+                        this);
+//                startActivity(
+//                        new Intent(
+//                                this, LauncherShortcutConfirmAndGenerateActivity.class)
+//                                .putExtra("pkgName", "UF")
+//                                .putExtra("name", getString(R.string.onlyUF))
+//                                .putExtra("id", "UF")
+//                                .putExtra("class", new SerializableClass().setStoredClass(Main.class)));
 //                createShortCut(
 //                        getString(R.string.onlyUF),
 //                        "UF",
@@ -233,13 +269,20 @@ public class Main extends Activity {
 //                );
                 return true;
             case R.id.menu_createOnlyOnekeyShortCut:
-                startActivity(
-                        new Intent(
-                                this, LauncherShortcutConfirmAndGenerateActivity.class)
-                                .putExtra("pkgName", "cf.playhi.freezeyou.extra.soo")
-                                .putExtra("name", getString(R.string.onlyOnekey))
-                                .putExtra("id", "OO")
-                                .putExtra("class", new SerializableClass().setStoredClass(Main.class)));
+                checkSettingsAndRequestCreateShortcut(
+                        getString(R.string.onlyOnekey),
+                        "OO",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),
+                        Main.class,
+                        "OO",
+                        this);
+//                startActivity(
+//                        new Intent(
+//                                this, LauncherShortcutConfirmAndGenerateActivity.class)
+//                                .putExtra("pkgName", "OO")
+//                                .putExtra("name", getString(R.string.onlyOnekey))
+//                                .putExtra("id", "OO")
+//                                .putExtra("class", new SerializableClass().setStoredClass(Main.class)));
 //                createShortCut(
 //                        getString(R.string.onlyOnekey),
 //                        "OO",
@@ -249,13 +292,20 @@ public class Main extends Activity {
 //                );
                 return true;
             case R.id.menu_createOnlyOnekeyUFShortCut:
-                startActivity(
-                        new Intent(
-                                this, LauncherShortcutConfirmAndGenerateActivity.class)
-                                .putExtra("pkgName", "cf.playhi.freezeyou.extra.soou")
-                                .putExtra("name", getString(R.string.oneKeyUF))
-                                .putExtra("id", "OOU")
-                                .putExtra("class", new SerializableClass().setStoredClass(Main.class)));
+                checkSettingsAndRequestCreateShortcut(
+                        getString(R.string.oneKeyUF),
+                        "OOU",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),
+                        Main.class,
+                        "OOU",
+                        this);
+//                startActivity(
+//                        new Intent(
+//                                this, LauncherShortcutConfirmAndGenerateActivity.class)
+//                                .putExtra("pkgName", "OOU")
+//                                .putExtra("name", getString(R.string.oneKeyUF))
+//                                .putExtra("id", "OOU")
+//                                .putExtra("class", new SerializableClass().setStoredClass(Main.class)));
 //                createShortCut(
 //                        getString(R.string.oneKeyUF),
 //                        "OOU",
@@ -265,13 +315,20 @@ public class Main extends Activity {
 //                );
                 return true;
             case R.id.menu_createFreezeOnceQuitShortCut:
-                startActivity(
-                        new Intent(
-                                this, LauncherShortcutConfirmAndGenerateActivity.class)
-                                .putExtra("pkgName", "cf.playhi.freezeyou.extra.sfoq")
-                                .putExtra("name", getString(R.string.freezeOnceQuit))
-                                .putExtra("id", "FOQ")
-                                .putExtra("class", new SerializableClass().setStoredClass(Main.class)));
+                checkSettingsAndRequestCreateShortcut(
+                        getString(R.string.freezeOnceQuit),
+                        "FOQ",
+                        getResources().getDrawable(R.mipmap.ic_launcher_round),
+                        Main.class,
+                        "FOQ",
+                        this);
+//                startActivity(
+//                        new Intent(
+//                                this, LauncherShortcutConfirmAndGenerateActivity.class)
+//                                .putExtra("pkgName", "FOQ")
+//                                .putExtra("name", getString(R.string.freezeOnceQuit))
+//                                .putExtra("id", "FOQ")
+//                                .putExtra("class", new SerializableClass().setStoredClass(Main.class)));
 //                createShortCut(
 //                        getString(R.string.freezeOnceQuit),
 //                        "FOQ",
@@ -788,13 +845,20 @@ public class Main extends Activity {
                             showToast(Main.this, removeFromOneKeyList(Main.this, getString(R.string.sFreezeOnceQuit), pkgName) ? R.string.removed : R.string.failed);
                             break;
                         case APPListViewOnClickMode_createFUFShortcut:
-                            startActivity(
-                                    new Intent(
-                                            Main.this, LauncherShortcutConfirmAndGenerateActivity.class)
-                                            .putExtra("pkgName", pkgName)
-                                            .putExtra("name", name)
-                                            .putExtra("id", "FreezeYou! " + pkgName)
-                                            .putExtra("class", new SerializableClass().setStoredClass(Freeze.class)));
+                            checkSettingsAndRequestCreateShortcut(
+                                    name,
+                                    pkgName,
+                                    getApplicationIcon(Main.this, pkgName, null, false),
+                                    Freeze.class,
+                                    "FreezeYou! " + pkgName,
+                                    Main.this);
+//                            startActivity(
+//                                    new Intent(
+//                                            Main.this, LauncherShortcutConfirmAndGenerateActivity.class)
+//                                            .putExtra("pkgName", pkgName)
+//                                            .putExtra("name", name)
+//                                            .putExtra("id", "FreezeYou! " + pkgName)
+//                                            .putExtra("class", new SerializableClass().setStoredClass(Freeze.class)));
 //                            createShortCut(
 //                                    getApplicationLabel(Main.this, null, null, pkgName),
 //                                    pkgName,

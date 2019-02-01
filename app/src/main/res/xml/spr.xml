@@ -27,6 +27,11 @@
             android:key="onClickFuncChooseActionStyle"
             android:title="@string/onClickFuncChooseActionStyle" />
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="allowEditWhenCreateShortcut"
+            android:summary="@string/allowEditWhCreateShortcut"
+            android:title="@string/allowEditWhCreateShortcut" />
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="noCaution"
             android:summary="@string/nSCaution"

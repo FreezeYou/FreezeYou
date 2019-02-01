@@ -47,7 +47,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
                         ?
                         Freeze.class
                         :
-                        ((SerializableClass) intent.getSerializableExtra("class")).getStoredClass();
+                        ((Class<?>) intent.getSerializableExtra("class"));
 
         init();
     }
@@ -151,19 +151,19 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
                 case "cf.playhi.freezeyou.extra.oklock":
                     icon = getResources().getDrawable(R.drawable.screenlock);
                     break;
-                case "cf.playhi.freezeyou.extra.sof"://shortcutOF
+                case "OF":
                     icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
-                case "cf.playhi.freezeyou.extra.suf"://shortcutUF
+                case "UF":
                     icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
-                case "cf.playhi.freezeyou.extra.soo":
+                case "OO":
                     icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
-                case "cf.playhi.freezeyou.extra.soou":
+                case "OOU":
                     icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
-                case "cf.playhi.freezeyou.extra.sfoq":
+                case "FOQ":
                     icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
                 default:
