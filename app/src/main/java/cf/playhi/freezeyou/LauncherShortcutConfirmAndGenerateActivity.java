@@ -142,18 +142,47 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
     }
 
     private void processChangeIconImageButton(String pkgName, ImageButton lscaga_icon_imageButton) {
-        lscaga_icon_imageButton.setImageDrawable(
-                getApplicationIcon(this, pkgName, null, false));
-        lscaga_icon_imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(intent, 21);
-                }
+        if (pkgName != null) {
+            Drawable icon;
+            switch (pkgName) {
+                case "cf.playhi.freezeyou.extra.fuf":
+                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                    break;
+                case "cf.playhi.freezeyou.extra.oklock":
+                    icon = getResources().getDrawable(R.drawable.screenlock);
+                    break;
+                case "cf.playhi.freezeyou.extra.sof"://shortcutOF
+                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                    break;
+                case "cf.playhi.freezeyou.extra.suf"://shortcutUF
+                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                    break;
+                case "cf.playhi.freezeyou.extra.soo":
+                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                    break;
+                case "cf.playhi.freezeyou.extra.soou":
+                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                    break;
+                case "cf.playhi.freezeyou.extra.sfoq":
+                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                    break;
+                default:
+                    icon = getApplicationIcon(this, pkgName, null, false);
+                    break;
             }
-        });
+
+            lscaga_icon_imageButton.setImageDrawable(icon);
+            lscaga_icon_imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 21);
+                    }
+                }
+            });
+        }
     }
 
     private void processSelectPackageButton(Button lscaga_package_button) {

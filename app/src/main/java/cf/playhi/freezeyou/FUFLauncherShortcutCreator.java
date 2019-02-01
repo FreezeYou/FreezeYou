@@ -170,7 +170,10 @@ public class FUFLauncherShortcutCreator extends Activity {
                         sp.edit().putString("pkgS", sp.getString("pkgS", "") + pkgName + ",").apply();
                         setResult(RESULT_OK);
                     } else if (it.getBooleanExtra("returnPkgName", false)) {
-                        setResult(RESULT_OK, new Intent().putExtra("pkgName", pkgName));
+                        setResult(RESULT_OK, new Intent()
+                                .putExtra("pkgName", pkgName)
+                                .putExtra("name", name)
+                                .putExtra("id", "FreezeYou! " + pkgName));
 //                    } else {
 //
 //                        <!--桌面快捷方式（类小部件）入口已迁移至 LauncherShortcutConfirmAndGenerateActivity.java -->
