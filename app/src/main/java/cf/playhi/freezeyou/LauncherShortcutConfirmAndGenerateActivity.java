@@ -175,11 +175,9 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
             lscaga_icon_imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/*");
-                    if (intent.resolveActivity(getPackageManager()) != null) {
-                        startActivityForResult(intent, 21);
-                    }
+                    startActivityForResult(
+                            new Intent(LauncherShortcutConfirmAndGenerateActivity.this, SelectShortcutIconActivity.class),
+                            21);
                 }
             });
         }
