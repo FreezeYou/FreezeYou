@@ -215,6 +215,7 @@
     <string name="plsSelect">请选择</string>
     <string name="application">应用</string>
     <string name="allowEditWhCreateShortcut">创建快捷方式时允许编辑</string>
+    <string name="clearAllUserData">清除全部数据</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
