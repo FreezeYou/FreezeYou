@@ -245,6 +245,7 @@
         <item>Yellow</item>
         <item>Orange</item>
         <item>White</item>
+        <item>红色</item>
     </string-array>
     <string-array name="sevenDays">
         <item>Monday</item>
