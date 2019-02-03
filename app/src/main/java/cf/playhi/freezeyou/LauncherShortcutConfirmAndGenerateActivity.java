@@ -78,16 +78,16 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
         }
     }
 
-    private String checkAndAvoidNull(String s) {
-        return s == null ? "" : s;
+    private String checkAndAvoidNull(String s, String alternate) {
+        return s == null ? (alternate == null ? "" : alternate) : s;
     }
 
     private void init() {
         Intent intent = getIntent();
 
-        String name = checkAndAvoidNull(requestFromLauncher ? getString(R.string.name) : intent.getStringExtra("name"));
-        id = checkAndAvoidNull(requestFromLauncher ? "" : intent.getStringExtra("id"));//若桌面（类小部件快捷方式）发起，id 值无需考虑，无需使用。
-        String pkgName = checkAndAvoidNull(requestFromLauncher ? getString(R.string.plsSelect) : intent.getStringExtra("pkgName"));
+        String name = checkAndAvoidNull(intent.getStringExtra("name"), getString(R.string.name));
+        id = checkAndAvoidNull(intent.getStringExtra("id"), "");//若桌面（类小部件快捷方式）发起，id 值无需考虑，无需使用。
+        String pkgName = checkAndAvoidNull(intent.getStringExtra("pkgName"), getString(R.string.plsSelect));
 
         Button lscaga_package_button = findViewById(R.id.lscaga_package_button);
         Button lscaga_target_button = findViewById(R.id.lscaga_target_button);
