@@ -1,14 +1,10 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,13 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import java.io.FileNotFoundException;
 import java.util.Date;
 
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
 
@@ -75,17 +69,8 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
                 break;
             case 21:
                 if (resultCode == RESULT_OK) {
-                    Uri fullPhotoUri = data.getData();
-                    if (fullPhotoUri != null) {
-                        ContentResolver contentResolver = getContentResolver();
-                        try {
-                            Bitmap bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(fullPhotoUri));
-                            ImageButton lscaga_icon_imageButton = findViewById(R.id.lscaga_icon_imageButton);
-                            lscaga_icon_imageButton.setImageDrawable(new BitmapDrawable(bitmap));
-                        } catch (FileNotFoundException e) {
-                            showToast(this, R.string.failed);
-                        }
-                    }
+                    ImageButton lscaga_icon_imageButton = findViewById(R.id.lscaga_icon_imageButton);
+                    lscaga_icon_imageButton.setImageBitmap((Bitmap) data.getParcelableExtra("Icon"));
                 }
                 break;
             default:

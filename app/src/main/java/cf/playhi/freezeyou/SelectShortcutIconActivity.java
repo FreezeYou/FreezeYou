@@ -1,23 +1,28 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class SelectShortcutIconActivity extends Activity {
     @Override
@@ -29,9 +34,37 @@ public class SelectShortcutIconActivity extends Activity {
         init();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 21) {
+            Uri fullPhotoUri = data.getData();
+            if (fullPhotoUri != null) {
+                ContentResolver contentResolver = getContentResolver();
+                try {
+                    setResult(
+                            RESULT_OK,
+                            new Intent()
+                                    .putExtra(
+                                            "Icon",
+                                            BitmapFactory.decodeStream(
+                                                    contentResolver.openInputStream(fullPhotoUri)
+                                            )
+                                    )
+                    );
+                    finish();
+                } catch (FileNotFoundException e) {
+                    showToast(this, R.string.failed);
+                }
+            }
+        }
+    }
+
     private void init() {
         final ArrayList<HashMap<String, Drawable>> icons = new ArrayList<>();
 
+        //选择更多（扔第一个，免得被淹没看不到）
+        addToIconsArrayList(icons, getResources().getDrawable(R.drawable.grid_add));
         //自带
         addToIconsArrayList(icons, getResources().getDrawable(R.mipmap.ic_launcher_new_round));
         //自带
@@ -58,19 +91,15 @@ public class SelectShortcutIconActivity extends Activity {
             }
         }
 
-        //选择更多
-        addToIconsArrayList(icons, getResources().getDrawable(R.drawable.grid_add));
-
         SimpleAdapter simpleAdapter = new SimpleAdapter(this, icons,
                 R.layout.ssia_main_grid_item, new String[]{"Icon"},
-                new int[]{R.id.ssia_mgi_imageButton});
+                new int[]{R.id.ssia_mgi_imageView});
 
         simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
             public boolean setViewValue(View view, Object data,
                                         String textRepresentation) {
-                if (view instanceof ImageButton && data instanceof Drawable) {
-                    ImageButton imageButton = (ImageButton) view;
-                    imageButton.setImageDrawable((Drawable) data);
+                if (view instanceof ImageView && data instanceof Drawable) {
+                    ((ImageView) view).setImageDrawable((Drawable) data);
                     return true;
                 } else
                     return false;
@@ -84,8 +113,7 @@ public class SelectShortcutIconActivity extends Activity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Drawable drawable = icons.get(position).get("Icon");
-                if (getResources().getDrawable(R.drawable.grid_add).equals(drawable)) {
+                if (position == 0) {
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("image/*");
                     if (intent.resolveActivity(getPackageManager()) != null) {
@@ -97,7 +125,7 @@ public class SelectShortcutIconActivity extends Activity {
                             new Intent()
                                     .putExtra(
                                             "Icon",
-                                            getBitmapFromDrawable(drawable)));
+                                            getBitmapFromDrawable(icons.get(position).get("Icon"))));
                     finish();
                 }
             }
