@@ -33,6 +33,9 @@ final class ThemeUtils {
                 case "white":
                     resId = R.drawable.shapedotblack;
                     break;
+                case "red":
+                    resId = R.drawable.shapedotred;
+                    break;
                 default:
                     resId = R.drawable.shapedotblack;//resId = R.drawable.shapedotblue;
                     break;
@@ -43,7 +46,7 @@ final class ThemeUtils {
         return resId;
     }
 
-    private static String getUiTheme(Context context) {
+    static String getUiTheme(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default");
     }
 
@@ -92,6 +95,9 @@ final class ThemeUtils {
                         break;
                     case "white":
                         context.setTheme(R.style.AppTheme_Default_White);
+                        break;
+                    case "red":
+                        context.setTheme(R.style.AppTheme_Default_Red);
                         break;
                     default:
                         context.setTheme(R.style.AppTheme_Default_White);

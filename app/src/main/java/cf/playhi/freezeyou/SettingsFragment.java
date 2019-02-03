@@ -101,6 +101,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 break;
             case "uiStyleSelection":
                 showToast(getActivity(), R.string.willTakeEffectsNextLaunch);
+                getActivity().recreate();
                 break;
             case "onekeyFreezeWhenLockScreen":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));

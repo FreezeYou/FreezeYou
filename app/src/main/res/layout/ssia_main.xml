@@ -8,10 +8,11 @@
         android:id="@+id/ssia_main_gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:columnWidth="80dp"
         android:fastScrollEnabled="true"
         android:gravity="center"
         android:numColumns="auto_fit"
-        android:columnWidth="80dp"
+        android:padding="20dp"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical"
         android:stretchMode="spacingWidthUniform" />

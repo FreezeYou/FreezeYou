@@ -5,114 +5,129 @@
     android:layout_height="match_parent"
     android:padding="20dp">
 
-
-    <TextView
-        android:id="@+id/lscaga_package_textView"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/lscaga_generate_divider"
         android:layout_alignParentTop="true"
-        android:text="@string/application" />
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
-    <LinearLayout
-        android:id="@+id/lscaga_package_linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lscaga_package_textView"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/lscaga_package_editText"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:enabled="false"
-            android:hint="@string/application"
-            android:inputType="none"
-            android:text="@string/plsSelect" />
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/lscaga_package_button"
-            style="@android:style/Widget.Material.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="..."
-            tools:ignore="HardcodedText" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/lscaga_package_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="@string/application" />
 
-    <TextView
-        android:id="@+id/lscaga_displayName_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lscaga_package_linearLayout"
-        android:layout_marginTop="20dp"
-        android:text="@string/name" />
+            <LinearLayout
+                android:id="@+id/lscaga_package_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lscaga_package_textView"
+                android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/lscaga_displayName_editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lscaga_displayName_textView"
-        android:hint="@string/name"
-        android:inputType="text"
-        android:text="@string/name" />
+                <EditText
+                    android:id="@+id/lscaga_package_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:enabled="false"
+                    android:hint="@string/application"
+                    android:inputType="none"
+                    android:text="@string/plsSelect" />
 
-    <TextView
-        android:id="@+id/lscaga_icon_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lscaga_displayName_editText"
-        android:layout_marginTop="20dp"
-        android:text="@string/icon" />
+                <Button
+                    android:id="@+id/lscaga_package_button"
+                    style="@android:style/Widget.Material.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="..."
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/lscaga_icon_imageButton"
-        android:layout_width="192dp"
-        android:layout_height="192dp"
-        android:layout_below="@id/lscaga_icon_textView"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@color/realTranslucent"
-        android:contentDescription="@string/icon"
-        android:scaleType="fitCenter"
-        android:src="@drawable/grid_add" />
+            <TextView
+                android:id="@+id/lscaga_displayName_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lscaga_package_linearLayout"
+                android:layout_marginTop="20dp"
+                android:text="@string/name" />
 
-    <TextView
-        android:id="@+id/lscaga_target_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lscaga_icon_imageButton"
-        android:layout_marginTop="20dp"
-        android:text="@string/target" />
+            <EditText
+                android:id="@+id/lscaga_displayName_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lscaga_displayName_textView"
+                android:hint="@string/name"
+                android:inputType="text"
+                android:text="@string/name" />
 
-    <LinearLayout
-        android:id="@+id/lscaga_target_linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lscaga_target_textView"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/lscaga_icon_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lscaga_displayName_editText"
+                android:layout_marginTop="20dp"
+                android:text="@string/icon" />
 
-        <EditText
-            android:id="@+id/lscaga_target_editText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:enabled="false"
-            android:hint="@string/target"
-            android:inputType="none"
-            android:text="@string/target" />
+            <ImageButton
+                android:id="@+id/lscaga_icon_imageButton"
+                android:layout_width="192dp"
+                android:layout_height="192dp"
+                android:layout_below="@id/lscaga_icon_textView"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/realTranslucent"
+                android:contentDescription="@string/icon"
+                android:scaleType="fitCenter"
+                android:src="@drawable/grid_add" />
 
-        <Button
-            android:id="@+id/lscaga_target_button"
-            style="@android:style/Widget.Material.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="..."
-            tools:ignore="HardcodedText" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/lscaga_target_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lscaga_icon_imageButton"
+                android:layout_marginTop="20dp"
+                android:text="@string/target" />
+
+            <LinearLayout
+                android:id="@+id/lscaga_target_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lscaga_target_textView"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/lscaga_target_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:enabled="false"
+                    android:hint="@string/target"
+                    android:inputType="none"
+                    android:text="@string/target" />
+
+                <Button
+                    android:id="@+id/lscaga_target_button"
+                    style="@android:style/Widget.Material.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="..."
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
 
     <View
+        android:id="@+id/lscaga_generate_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_above="@id/lscaga_generate_button"
