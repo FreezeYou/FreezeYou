@@ -215,6 +215,7 @@
     <string name="plsSelect">Please select</string>
     <string name="application">Application</string>
     <string name="allowEditWhCreateShortcut">Allow editing when creating shortcuts</string>
+    <string name="clearAllUserData">清除全部数据</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
