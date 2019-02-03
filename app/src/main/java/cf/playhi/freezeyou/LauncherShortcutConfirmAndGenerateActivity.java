@@ -3,10 +3,13 @@ package cf.playhi.freezeyou;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import java.util.Date;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
+import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
 
@@ -112,7 +116,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
 
         processChangeIconImageButton(pkgName, lscaga_icon_imageButton);
 
-        processSelectTargetButton(lscaga_target_button);
+        processSelectTargetButton(pkgName, lscaga_target_button);
 
         processGenerateButton(lscaga_generate_button, lscaga_package_editText, lscaga_displayName_editText, lscaga_icon_imageButton);
 
@@ -194,11 +198,23 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
         });
     }
 
-    private void processSelectTargetButton(Button lscaga_target_button) {
+    private void processSelectTargetButton(final String pkgName, Button lscaga_target_button) {
         lscaga_target_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                    ActivityInfo[] activityInfos = getPackageManager().getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES).activities;
+                    for (ActivityInfo activityInfo : activityInfos) {
+                        String ais = activityInfo.name;
+                        if (ais != null && activityInfo.exported) {
+                            Log.e("ai", ais);
+                            showToast(LauncherShortcutConfirmAndGenerateActivity.this, ais);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showToast(LauncherShortcutConfirmAndGenerateActivity.this, R.string.packageNotFound);
+                }
             }
         });
     }
