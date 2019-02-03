@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou;
 
+import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -252,6 +253,22 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
                                 }
                             })
+                            .create().show();
+                    break;
+                case "clearAllUserData":
+                    buildAlertDialog(getActivity(), R.mipmap.ic_launcher_new_round, R.string.clearAllUserData, R.string.notice)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ActivityManager activityManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+                                    if (activityManager != null && Build.VERSION.SDK_INT >= 19) {
+                                        showToast(getActivity(), activityManager.clearApplicationUserData() ? R.string.success : R.string.failed);
+                                    } else {
+                                        showToast(getActivity(), R.string.failed);
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.no, null)
                             .create().show();
                     break;
 //                case "backup":

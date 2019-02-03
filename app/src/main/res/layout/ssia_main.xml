@@ -12,9 +12,15 @@
         android:fastScrollEnabled="true"
         android:gravity="center"
         android:numColumns="auto_fit"
-        android:padding="10dp"
+        android:paddingStart="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="20dp"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical"
-        android:stretchMode="spacingWidthUniform" />
+        android:stretchMode="spacingWidthUniform"
+        android:verticalSpacing="10dp" />
 
 </LinearLayout>

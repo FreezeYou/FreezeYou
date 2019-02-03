@@ -257,6 +257,10 @@
 
     <PreferenceCategory android:title="@string/dangerZone">
         <Preference
+            android:key="clearAllUserData"
+            android:summary="@string/app_name"
+            android:title="@string/clearAllUserData" />
+        <Preference
             android:summary="@string/disableMRootModeEx"
             android:title="@string/disableMRootMode">
             <intent

@@ -77,8 +77,8 @@
 
             <ImageButton
                 android:id="@+id/lscaga_icon_imageButton"
-                android:layout_width="144dp"
-                android:layout_height="144dp"
+                android:layout_width="192dp"
+                android:layout_height="192dp"
                 android:layout_below="@id/lscaga_icon_textView"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"

@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,6 +25,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
     private boolean requestFromLauncher;
     private Class<?> targetSelfCls;
     private String id = Long.toString(new Date().getTime());
+    private Drawable finalDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +72,9 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
                 break;
             case 21:
                 if (resultCode == RESULT_OK) {
+                    finalDrawable = new BitmapDrawable((Bitmap) data.getParcelableExtra("Icon"));
                     ImageButton lscaga_icon_imageButton = findViewById(R.id.lscaga_icon_imageButton);
-                    lscaga_icon_imageButton.setImageBitmap((Bitmap) data.getParcelableExtra("Icon"));
+                    lscaga_icon_imageButton.setImageDrawable(finalDrawable);
                 }
                 break;
             default:
@@ -127,36 +131,46 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
     }
 
     private void processChangeIconImageButton(String pkgName, ImageButton lscaga_icon_imageButton) {
+        int widthAndHeight = (int) (getResources().getDisplayMetrics().widthPixels * 0.35);
+        if (widthAndHeight <= 0)
+            widthAndHeight = 1;
+        ViewGroup.LayoutParams layoutParams = lscaga_icon_imageButton.getLayoutParams();
+        layoutParams.height = widthAndHeight;
+        layoutParams.width = widthAndHeight;
+        lscaga_icon_imageButton.setLayoutParams(layoutParams);
         if (pkgName != null) {
-            Drawable icon;
             switch (pkgName) {
                 case "cf.playhi.freezeyou.extra.fuf":
-                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                    finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
                 case "cf.playhi.freezeyou.extra.oklock":
-                    icon = getResources().getDrawable(R.drawable.screenlock);
+                    finalDrawable = getResources().getDrawable(R.drawable.screenlock);
                     break;
                 case "OF":
-                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                    finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
                 case "UF":
-                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                    finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
                 case "OO":
-                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                    finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
                 case "OOU":
-                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                    finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
                 case "FOQ":
-                    icon = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                    finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
                 default:
-                    icon = getApplicationIcon(this, pkgName, null, false);
+                    finalDrawable = getString(R.string.plsSelect).equals(pkgName)
+                            ?
+                            getResources().getDrawable(R.drawable.grid_add)
+                            :
+                            getApplicationIcon(this, pkgName, null, false);
                     break;
             }
 
-            lscaga_icon_imageButton.setImageDrawable(icon);
+            lscaga_icon_imageButton.setImageDrawable(finalDrawable);
             lscaga_icon_imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -194,7 +208,6 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
         lscaga_generate_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Drawable icon = lscaga_icon_imageButton.getDrawable();
                 Context context = getApplicationContext();
                 String pkgName = lscaga_package_editText.getText().toString();
                 String title = lscaga_displayName_editText.getText().toString();
@@ -204,13 +217,14 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
                     Intent intent = new Intent();
                     intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
                     intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
-                    intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(icon));
+                    intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(finalDrawable));
                     setResult(RESULT_OK, intent);
+                    finish();
                 } else {
                     createShortCut(
                             title,
                             pkgName,
-                            icon,
+                            finalDrawable,
                             targetSelfCls,
                             id,
                             context

@@ -5,10 +5,13 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -37,20 +40,24 @@ public class SelectShortcutIconActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 21) {
+        if (requestCode == 21 && data != null) {
             Uri fullPhotoUri = data.getData();
             if (fullPhotoUri != null) {
                 ContentResolver contentResolver = getContentResolver();
                 try {
+                    Bitmap bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(fullPhotoUri));
+                    if (bitmap.getByteCount() > getBitmapFromDrawable(getResources().getDrawable(R.mipmap.ic_launcher_new_round)).getByteCount() * 5) {
+                        int width = bitmap.getWidth();
+                        int height = bitmap.getHeight();
+                        Matrix matrix = new Matrix();
+                        float scaleWidth = ((float) 192) / width;
+                        float scaleHeight = ((float) 192) / height;
+                        matrix.postScale(scaleWidth, scaleHeight);
+                        bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+                    }
                     setResult(
                             RESULT_OK,
-                            new Intent()
-                                    .putExtra(
-                                            "Icon",
-                                            BitmapFactory.decodeStream(
-                                                    contentResolver.openInputStream(fullPhotoUri)
-                                            )
-                                    )
+                            new Intent().putExtra("Icon", bitmap)
                     );
                     finish();
                 } catch (FileNotFoundException e) {
@@ -58,6 +65,15 @@ public class SelectShortcutIconActivity extends Activity {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void init() {
