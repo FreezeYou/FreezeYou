@@ -68,6 +68,12 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            case 8:
+                if (resultCode==RESULT_OK){
+                    EditText lscaga_target_editText = findViewById(R.id.lscaga_target_editText);
+                    lscaga_target_editText.setText(data.getStringExtra("name"));
+                }
+                break;
             case 11:
                 if (resultCode == RESULT_OK) {
                     setIntent(data);
@@ -203,14 +209,13 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
             @Override
             public void onClick(View v) {
                 try {
-                    ActivityInfo[] activityInfos = getPackageManager().getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES).activities;
-                    for (ActivityInfo activityInfo : activityInfos) {
-                        String ais = activityInfo.name;
-                        if (ais != null && activityInfo.exported) {
-                            Log.e("ai", ais);
-                            showToast(LauncherShortcutConfirmAndGenerateActivity.this, ais);
-                        }
-                    }
+                    ActivityInfo[] activityInfoS = getPackageManager().getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES).activities;
+                    startActivityForResult(
+                            new Intent(
+                                    LauncherShortcutConfirmAndGenerateActivity.this,
+                                    SelectTargetActivityActivity.class)
+                                    .putExtra("acInfoS", activityInfoS),
+                            8);
                 } catch (Exception e) {
                     e.printStackTrace();
                     showToast(LauncherShortcutConfirmAndGenerateActivity.this, R.string.packageNotFound);
