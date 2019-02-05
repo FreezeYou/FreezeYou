@@ -3,6 +3,7 @@ package cf.playhi.freezeyou;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,7 +45,7 @@ import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 class Support {
 
-    private static void makeDialog(final String title, final String message, final Context context, final ApplicationInfo applicationInfo, final String pkgName, final boolean enabled, final Activity activity, final boolean finish) {
+    private static void makeDialog(final String title, final String message, final Context context, final ApplicationInfo applicationInfo, final String pkgName, final String target, final boolean enabled, final Activity activity, final boolean finish) {
         AlertDialog.Builder builder =
                 buildAlertDialog(context, getApplicationIcon(context, pkgName, applicationInfo, true), message, title)
                         .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -63,20 +64,20 @@ class Support {
             builder.setPositiveButton(R.string.launch, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    checkAndStartApp(context, pkgName, activity, finish);
+                    checkAndStartApp(context, pkgName, target, activity, finish);
                 }
             });
             builder.setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    processFreezeAction(context, pkgName, true, activity, finish);
+                    processFreezeAction(context, pkgName, target, true, activity, finish);
                 }
             });
         } else {
             builder.setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    processUnfreezeAction(context, pkgName, true, false, activity, finish);
+                    processUnfreezeAction(context, pkgName, target, true, false, activity, finish);
                 }
             });
         }
@@ -105,25 +106,26 @@ class Support {
         return ((tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) || (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED));
     }
 
-    static void askRun(final Context context, final String pkgName, final boolean runImmediately, Activity activity, boolean finish) {
+    static void askRun(final Context context, final String pkgName, String target, final boolean runImmediately, Activity activity, boolean finish) {
         if (runImmediately || (new AppPreferences(context).getBoolean("openImmediately", false))) {
-            checkAndStartApp(context, pkgName, activity, finish);
+            checkAndStartApp(context, pkgName, target, activity, finish);
         } else {
             context.startActivity(new Intent(context, AskRunActivity.class)
                     .putExtra("pkgName", pkgName)
+                    .putExtra("target", target)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     }
 
-    static void shortcutMakeDialog(Context context, String title, String message, final Activity activity, final ApplicationInfo applicationInfo, final String pkgName, int ot, boolean auto, boolean finish) {
+    static void shortcutMakeDialog(Context context, String title, String message, final Activity activity, final ApplicationInfo applicationInfo, final String pkgName, String target, int ot, boolean auto, boolean finish) {
         if (new AppPreferences(context).getBoolean("openAndUFImmediately", false) && auto) {
             if (ot == 2) {
-                checkAndStartApp(context, pkgName, activity, finish);
+                checkAndStartApp(context, pkgName, target, activity, finish);
             } else {
-                processUnfreezeAction(context, pkgName, true, true, activity, finish);//ot==1
+                processUnfreezeAction(context, pkgName, target, true, true, activity, finish);//ot==1
             }
         } else {
-            makeDialog(title, message, context, applicationInfo, pkgName, ot == 2, activity, finish);
+            makeDialog(title, message, context, applicationInfo, pkgName, target, ot == 2, activity, finish);
         }
     }
 
@@ -133,7 +135,7 @@ class Support {
         }
     }
 
-    static void processRootAction(final String pkgName, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+    static void processRootAction(final String pkgName, String target, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
         String currentPackage = " ";
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
@@ -149,7 +151,7 @@ class Support {
                         }
                         createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
                         if (askRun) {
-                            askRun(context, pkgName, runImmediately, activity, finish);
+                            askRun(context, pkgName, target, runImmediately, activity, finish);
                         }
                     } else {
                         onFApplications(context, pkgName);
@@ -173,7 +175,7 @@ class Support {
     }
 
     @TargetApi(21)
-    static void processMRootAction(Context context, String pkgName, boolean hidden, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+    static void processMRootAction(Context context, String pkgName, String target, boolean hidden, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
         String currentPackage = " ";
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
@@ -196,7 +198,7 @@ class Support {
                     }
                     createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
                     if (askRun) {
-                        askRun(context, pkgName, runImmediately, activity, finish);
+                        askRun(context, pkgName, target, runImmediately, activity, finish);
                     }
                 }
             } else {
@@ -206,8 +208,15 @@ class Support {
         }
     }
 
-    static void checkAndStartApp(Context context, String pkgName, Activity activity, boolean finish) {
-        if (context.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
+    static void checkAndStartApp(Context context, String pkgName, String target, Activity activity, boolean finish) {
+        if (target != null) {
+            ComponentName component = new ComponentName(pkgName, target);
+            Intent intent = new Intent();
+            intent.setComponent(component);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setAction(Intent.ACTION_MAIN);
+            context.startActivity(intent);
+        } else if (context.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
             Intent intent = new Intent(
                     context.getPackageManager().getLaunchIntentForPackage(pkgName));
             context.startActivity(intent);
@@ -218,28 +227,30 @@ class Support {
         checkAndDoActivityFinish(activity, finish);
     }
 
-    static void checkFrozenStatusAndStartApp(Context context, String pkgName) {
+    static void checkFrozenStatusAndStartApp(Context context, String pkgName, String target) {
         if (realGetFrozenStatus(context, pkgName, null)) {
-            processUnfreezeAction(context, pkgName, true, true, null, false);
+            processUnfreezeAction(context, pkgName, target, true, true, null, false);
         } else {
-            checkAndStartApp(context, pkgName, null, false);
+            checkAndStartApp(context, pkgName, target, null, false);
         }
     }
 
-    static void processUnfreezeAction(Context context, String pkgName, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+    static void processUnfreezeAction(Context context, String pkgName, String target, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
         startService(context, new Intent(context, FUFService.class)
                 .putExtra("askRun", askRun)
                 .putExtra("pkgName", pkgName)
                 .putExtra("freeze", false)
+                .putExtra("target", target)//目标 Activity
                 .putExtra("single", true)
                 .putExtra("runImmediately", runImmediately));
         checkAndDoActivityFinish(activity, finish);
     }
 
-    static void processFreezeAction(Context context, String pkgName, boolean askRun, Activity activity, boolean finish) {
+    static void processFreezeAction(Context context, String pkgName, String target, boolean askRun, Activity activity, boolean finish) {
         startService(context, new Intent(context, FUFService.class)
                 .putExtra("askRun", askRun)
                 .putExtra("pkgName", pkgName)
+                .putExtra("target", target)//目标 Activity
                 .putExtra("freeze", true)
                 .putExtra("single", true));
         checkAndDoActivityFinish(activity, finish);

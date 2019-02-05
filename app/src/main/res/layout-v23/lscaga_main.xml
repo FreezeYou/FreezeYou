@@ -122,6 +122,24 @@
                     android:text="..."
                     tools:ignore="HardcodedText" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/lscaga_id_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lscaga_target_linearLayout"
+                android:layout_marginTop="20dp"
+                android:text="@string/id" />
+
+            <EditText
+                android:id="@+id/lscaga_id_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lscaga_id_textView"
+                android:hint="@string/id"
+                android:inputType="text"
+                android:text="@string/id" />
+
         </RelativeLayout>
     </ScrollView>
 

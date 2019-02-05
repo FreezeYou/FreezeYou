@@ -17,6 +17,7 @@ public class AskRunActivity extends Activity {
         processAddTranslucent(this);
         super.onCreate(savedInstanceState);
         final String pkgName = getIntent().getStringExtra("pkgName");
+        final String target = getIntent().getStringExtra("target");
         buildAlertDialog(
                 this,
                 getApplicationIcon(
@@ -35,7 +36,7 @@ public class AskRunActivity extends Activity {
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int ii) {
-                        checkAndStartApp(AskRunActivity.this,  pkgName,null,false);
+                        checkAndStartApp(AskRunActivity.this, pkgName, target, null, false);
                         finish();
                     }
                 })

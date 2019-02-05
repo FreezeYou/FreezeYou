@@ -787,14 +787,14 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
                             if (realGetFrozenStatus(Main.this, pkgName, null)) {
-                                Support.processUnfreezeAction(Main.this, pkgName, false, false, null, false);
+                                Support.processUnfreezeAction(Main.this, pkgName, null, false, false, null, false);
                             } else {
-                                Support.processFreezeAction(Main.this, pkgName, false, null, false);
+                                Support.processFreezeAction(Main.this, pkgName, null, false, null, false);
                             }
                             break;
                         case APPListViewOnClickMode_freezeImmediately:
                             if (!realGetFrozenStatus(Main.this, pkgName, null)) {
-                                Support.processFreezeAction(Main.this, pkgName, false, null, false);
+                                Support.processFreezeAction(Main.this, pkgName, null, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
                                     showToast(Main.this, R.string.freezeCompleted);
@@ -803,7 +803,7 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_UFImmediately:
                             if (realGetFrozenStatus(Main.this, pkgName, null)) {
-                                Support.processUnfreezeAction(Main.this, pkgName, false, false, null, false);
+                                Support.processUnfreezeAction(Main.this, pkgName, null, false, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
                                     showToast(Main.this, R.string.UFCompleted);
@@ -812,19 +812,19 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_UFAndRun:
                             if (realGetFrozenStatus(Main.this, pkgName, null)) {
-                                Support.processUnfreezeAction(Main.this, pkgName, true, false, null, false);
+                                Support.processUnfreezeAction(Main.this, pkgName, null, true, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
                                     showToast(Main.this, R.string.UFCompleted);
                                 }
-                                Support.askRun(Main.this, pkgName, false, null, false);
+                                Support.askRun(Main.this, pkgName, null, false, null, false);
                             }
                             break;
                         case APPListViewOnClickMode_autoUFOrFreezeAndRun:
                             if (realGetFrozenStatus(Main.this, pkgName, null)) {
-                                Support.processUnfreezeAction(Main.this, pkgName, true, false, null, false);
+                                Support.processUnfreezeAction(Main.this, pkgName, null, true, false, null, false);
                             } else {
-                                Support.processFreezeAction(Main.this, pkgName, false, null, false);
+                                Support.processFreezeAction(Main.this, pkgName, null, false, null, false);
                             }
                             break;
                         case APPListViewOnClickMode_addToOFList:

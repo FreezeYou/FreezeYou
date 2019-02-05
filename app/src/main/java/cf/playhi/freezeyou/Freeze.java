@@ -49,6 +49,7 @@ public class Freeze extends Activity {
                 Log.e("DebugModeLogcat", "Intent toString: " + intent.toString());
                 Log.e("DebugModeLogcat", "Intent getDataString: " + intent.getDataString());
                 Log.e("DebugModeLogcat", "Intent getStringExtra_pkgName: " + intent.getStringExtra("pkgName"));
+                Log.e("DebugModeLogcat", "Intent getStringExtra_target: " + intent.getStringExtra("target"));
                 Log.e("DebugModeLogcat", "Intent getBooleanExtra_auto: " + intent.getBooleanExtra("auto", true));
                 Log.e("DebugModeLogcat", "Intent getAction: " + intent.getAction());
                 Log.e("DebugModeLogcat", "Intent getPackage: " + intent.getPackage());
@@ -56,6 +57,8 @@ public class Freeze extends Activity {
                 Log.e("DebugModeLogcat", "Intent getType: " + intent.getType());
             }
 
+
+            String target = getIntent().getStringExtra("target");
             String pkgName;
             boolean auto;
             if ("freezeyou".equals(intent.getScheme())) {
@@ -73,21 +76,22 @@ public class Freeze extends Activity {
                 showToast(getApplicationContext(), R.string.invalidArguments);
                 Freeze.this.finish();
             }
+
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
             if (auto && sp.getBoolean("shortcutAutoFUF", false)) {
                 if (realGetFrozenStatus(this, pkgName, getPackageManager())) {
-                    processUnfreezeAction(this, pkgName, true, sp.getBoolean("openImmediatelyAfterUnfreezeUseShortcutAutoFUF", true), this, true);
+                    processUnfreezeAction(this, pkgName, target, true, sp.getBoolean("openImmediatelyAfterUnfreezeUseShortcutAutoFUF", true), this, true);
                 } else {
                     if (sp.getBoolean("needConfirmWhenFreezeUseShortcutAutoFUF", false)) {
-                        processDialog(pkgName, false, 2);
+                        processDialog(pkgName, target, false, 2);
                     } else {
-                        processFreezeAction(this, pkgName, true, this, true);
+                        processFreezeAction(this, pkgName, target, true, this, true);
                     }
                 }
             } else if ((!checkRootFrozen(Freeze.this, pkgName, null)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
-                processDialog(pkgName, auto, 2);
+                processDialog(pkgName, target, auto, 2);
             } else {
-                processDialog(pkgName, auto, 1);
+                processDialog(pkgName, target, auto, 1);
             }
             if (Build.VERSION.SDK_INT >= 21) {
                 setTaskDescription(new ActivityManager.TaskDescription(getApplicationLabel(this, null, null, pkgName) + " - " + getString(R.string.app_name), getBitmapFromDrawable(getApplicationIcon(this, pkgName, null, false))));
@@ -95,8 +99,18 @@ public class Freeze extends Activity {
         }
     }
 
-    private void processDialog(String pkgName, boolean auto, int ot) {
-        shortcutMakeDialog(Freeze.this, getApplicationLabel(Freeze.this, null, null, pkgName), getString(R.string.chooseDetailAction), Freeze.this, null, pkgName, ot, auto, true);
+    private void processDialog(String pkgName, String target, boolean auto, int ot) {
+        shortcutMakeDialog(
+                Freeze.this,
+                getApplicationLabel(Freeze.this, null, null, pkgName),
+                getString(R.string.chooseDetailAction),
+                Freeze.this,
+                null,
+                pkgName,
+                target,
+                ot,
+                auto,
+                true);
     }
 
     @Override

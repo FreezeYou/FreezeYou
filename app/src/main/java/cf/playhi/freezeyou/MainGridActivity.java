@@ -58,7 +58,8 @@ public class MainGridActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Support.checkFrozenStatusAndStartApp(
                         MainGridActivity.this,
-                        (String) ((HashMap) simpleAdapter.getItem(position)).get("PkgName"));
+                        (String) ((HashMap) simpleAdapter.getItem(position)).get("PkgName"),
+                        null);
             }
         });
 
