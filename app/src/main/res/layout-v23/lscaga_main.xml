@@ -148,17 +148,42 @@
         android:id="@+id/lscaga_generate_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_above="@id/lscaga_generate_button"
+        android:layout_above="@id/lscaga_bottomButton_linearLyout"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="?android:attr/listDivider" />
 
-    <Button
-        android:id="@+id/lscaga_generate_button"
-        style="@android:style/Widget.Material.Button.Colored"
+    <LinearLayout
+        android:id="@+id/lscaga_bottomButton_linearLyout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/generate" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/lscaga_cancel_button"
+            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/lscaga_generate_button"
+            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/generate" />
+
+        <Button
+            android:id="@+id/lscaga_simulate_button"
+            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/simulate" />
+
+    </LinearLayout>
 
 </RelativeLayout>

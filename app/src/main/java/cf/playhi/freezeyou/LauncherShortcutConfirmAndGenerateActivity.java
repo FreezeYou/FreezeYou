@@ -28,7 +28,6 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
 
     private boolean requestFromLauncher;
     private Class<?> targetSelfCls;
-    private String id = Long.toString(new Date().getTime());
     private Drawable finalDrawable;
 
     @Override
@@ -108,18 +107,19 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
         Intent intent = getIntent();
 
         String name = checkAndAvoidNull(intent.getStringExtra("name"), getString(R.string.name));
-        id = checkAndAvoidNull(intent.getStringExtra("id"), "");//若桌面（类小部件快捷方式）发起，id 值无需考虑，无需使用。
+        String id = checkAndAvoidNull(intent.getStringExtra("id"), Long.toString(new Date().getTime()));//若桌面（类小部件快捷方式）发起，id 值无需考虑，无需使用。
         String pkgName = checkAndAvoidNull(intent.getStringExtra("pkgName"), getString(R.string.plsSelect));
 
         Button lscaga_package_button = findViewById(R.id.lscaga_package_button);
         Button lscaga_target_button = findViewById(R.id.lscaga_target_button);
         Button lscaga_generate_button = findViewById(R.id.lscaga_generate_button);
+        Button lscaga_cancel_button = findViewById(R.id.lscaga_cancel_button);
+        Button lscaga_simulate_button = findViewById(R.id.lscaga_simulate_button);
         EditText lscaga_package_editText = findViewById(R.id.lscaga_package_editText);
         EditText lscaga_displayName_editText = findViewById(R.id.lscaga_displayName_editText);
         EditText lscaga_target_editText = findViewById(R.id.lscaga_target_editText);
         EditText lscaga_id_editText = findViewById(R.id.lscaga_id_editText);
         ImageButton lscaga_icon_imageButton = findViewById(R.id.lscaga_icon_imageButton);
-
 
         processSelectedPackageEditText(pkgName, lscaga_package_editText);
 
@@ -133,9 +133,13 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
 
         processSelectTargetButton(pkgName, lscaga_target_button);
 
-        processIDEditText(lscaga_id_editText);
+        processIDEditText(id, lscaga_id_editText);
 
-        processGenerateButton(lscaga_generate_button, lscaga_package_editText, lscaga_displayName_editText, lscaga_target_editText);
+        processCancelButton(lscaga_cancel_button);
+
+        processSimulateButton(lscaga_package_editText, lscaga_displayName_editText, lscaga_target_editText, lscaga_simulate_button);
+
+        processGenerateButton(lscaga_generate_button, lscaga_package_editText, lscaga_displayName_editText, lscaga_target_editText, lscaga_id_editText);
 
     }
 
@@ -151,7 +155,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
         lscaga_package_editText.setText(pkgName);
     }
 
-    private void processIDEditText(EditText lscaga_id_editText) {
+    private void processIDEditText(String id, EditText lscaga_id_editText) {
         lscaga_id_editText.setText(id);
     }
 
@@ -242,7 +246,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
         });
     }
 
-    private void processGenerateButton(Button lscaga_generate_button, final EditText lscaga_package_editText, final EditText lscaga_displayName_editText, final EditText lscaga_target_editText) {
+    private void processGenerateButton(Button lscaga_generate_button, final EditText lscaga_package_editText, final EditText lscaga_displayName_editText, final EditText lscaga_target_editText, final EditText lscaga_id_editText) {
 
         lscaga_generate_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,7 +273,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
                             pkgName,
                             finalDrawable,
                             targetSelfCls,
-                            id,
+                            lscaga_id_editText.getText().toString(),
                             context,
                             target
                     );
@@ -277,6 +281,32 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
             }
         });
 
+    }
+
+    private void processCancelButton(Button lscaga_cancel_button) {
+        lscaga_cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    private void processSimulateButton(final EditText lscaga_package_editText, final EditText lscaga_displayName_editText, final EditText lscaga_target_editText, final Button lscaga_simulate_button) {
+        lscaga_simulate_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String pkgName = lscaga_package_editText.getText().toString();
+                String target = lscaga_target_editText.getText().toString();
+                if (getString(R.string.launch).equals(target))
+                    target = null;
+                startActivity(
+                        new Intent(LauncherShortcutConfirmAndGenerateActivity.this, Freeze.class)
+                                .putExtra("pkgName", pkgName)
+                                .putExtra("target", target)
+                );
+            }
+        });
     }
 
 }
