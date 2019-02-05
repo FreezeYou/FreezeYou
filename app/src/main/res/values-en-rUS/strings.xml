@@ -217,6 +217,7 @@
     <string name="allowEditWhCreateShortcut">Allow editing when creating shortcuts</string>
     <string name="clearAllUserData">Clear all data</string>
     <string name="packageNotFound">The application was not found</string>
+    <string name="id">ID</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
