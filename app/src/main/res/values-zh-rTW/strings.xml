@@ -217,6 +217,7 @@
     <string name="allowEditWhCreateShortcut">創建快捷方式時允許編輯</string>
     <string name="clearAllUserData">清除全部資料</string>
     <string name="packageNotFound">未找到該應用程式</string>
+    <string name="id">ID</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
