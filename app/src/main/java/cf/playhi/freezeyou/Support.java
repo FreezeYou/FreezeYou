@@ -110,10 +110,12 @@ class Support {
         if (runImmediately || (new AppPreferences(context).getBoolean("openImmediately", false))) {
             checkAndStartApp(context, pkgName, target, activity, finish);
         } else {
-            context.startActivity(new Intent(context, AskRunActivity.class)
-                    .putExtra("pkgName", pkgName)
-                    .putExtra("target", target)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            if (!context.getString(R.string.onlyUnfreeze).equals(target)) {
+                context.startActivity(new Intent(context, AskRunActivity.class)
+                        .putExtra("pkgName", pkgName)
+                        .putExtra("target", target)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
         }
     }
 
@@ -210,16 +212,18 @@ class Support {
 
     static void checkAndStartApp(Context context, String pkgName, String target, Activity activity, boolean finish) {
         if (target != null) {
-            try {
-                ComponentName component = new ComponentName(pkgName, target);
-                Intent intent = new Intent();
-                intent.setComponent(component);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setAction(Intent.ACTION_MAIN);
-                context.startActivity(intent);
-            } catch (SecurityException e) {
-                e.printStackTrace();
-                showToast(context, R.string.insufficientPermission);
+            if (!context.getString(R.string.onlyUnfreeze).equals(target)) {
+                try {
+                    ComponentName component = new ComponentName(pkgName, target);
+                    Intent intent = new Intent();
+                    intent.setComponent(component);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setAction(Intent.ACTION_MAIN);
+                    context.startActivity(intent);
+                } catch (SecurityException e) {
+                    e.printStackTrace();
+                    showToast(context, R.string.insufficientPermission);
+                }
             }
         } else if (context.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
             Intent intent = new Intent(

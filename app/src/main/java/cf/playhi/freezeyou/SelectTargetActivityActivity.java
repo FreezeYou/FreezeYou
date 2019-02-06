@@ -53,6 +53,11 @@ public class SelectTargetActivityActivity extends Activity {
                 hm.put("Name", getString(R.string.launch));
                 arrayList.add(hm);
 
+                HashMap<String, Object> hm2 = new HashMap<>();
+                hm2.put("Img", ApplicationIconUtils.getApplicationIcon(this, pkgName, null, false));
+                hm2.put("Name", getString(R.string.onlyUnfreeze));
+                arrayList.add(hm2);
+
                 try {
                     PackageManager pm = getPackageManager();
                     ActivityInfo[] activityInfos = pm.getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES).activities;
