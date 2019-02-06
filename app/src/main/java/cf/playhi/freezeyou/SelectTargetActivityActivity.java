@@ -49,7 +49,7 @@ public class SelectTargetActivityActivity extends Activity {
                 finish();
             } else {
                 HashMap<String, Object> hm = new HashMap<>();
-                hm.put("Img", null);
+                hm.put("Img", ApplicationIconUtils.getApplicationIcon(this, pkgName, null, false));
                 hm.put("Name", getString(R.string.launch));
                 arrayList.add(hm);
 
