@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -137,7 +136,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
 
         processCancelButton(lscaga_cancel_button);
 
-        processSimulateButton(lscaga_package_editText, lscaga_displayName_editText, lscaga_target_editText, lscaga_simulate_button);
+        processSimulateButton(lscaga_package_editText, lscaga_target_editText, lscaga_simulate_button);
 
         processGenerateButton(lscaga_generate_button, lscaga_package_editText, lscaga_displayName_editText, lscaga_target_editText, lscaga_id_editText);
 
@@ -292,7 +291,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
         });
     }
 
-    private void processSimulateButton(final EditText lscaga_package_editText, final EditText lscaga_displayName_editText, final EditText lscaga_target_editText, final Button lscaga_simulate_button) {
+    private void processSimulateButton(final EditText lscaga_package_editText, final EditText lscaga_target_editText, final Button lscaga_simulate_button) {
         lscaga_simulate_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
