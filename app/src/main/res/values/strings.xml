@@ -217,6 +217,7 @@
     <string name="packageNotFound">未找到该应用程序</string>
     <string name="id">ID</string>
     <string name="simulate">模拟</string>
+    <string name="insufficientPermission">权限不足</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>

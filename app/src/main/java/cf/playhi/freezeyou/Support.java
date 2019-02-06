@@ -210,12 +210,17 @@ class Support {
 
     static void checkAndStartApp(Context context, String pkgName, String target, Activity activity, boolean finish) {
         if (target != null) {
-            ComponentName component = new ComponentName(pkgName, target);
-            Intent intent = new Intent();
-            intent.setComponent(component);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setAction(Intent.ACTION_MAIN);
-            context.startActivity(intent);
+            try {
+                ComponentName component = new ComponentName(pkgName, target);
+                Intent intent = new Intent();
+                intent.setComponent(component);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setAction(Intent.ACTION_MAIN);
+                context.startActivity(intent);
+            } catch (SecurityException e) {
+                e.printStackTrace();
+                showToast(context, R.string.insufficientPermission);
+            }
         } else if (context.getPackageManager().getLaunchIntentForPackage(pkgName) != null) {
             Intent intent = new Intent(
                     context.getPackageManager().getLaunchIntentForPackage(pkgName));
