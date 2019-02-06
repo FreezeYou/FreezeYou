@@ -32,35 +32,33 @@ public class AboutActivity extends Activity {
 
         final boolean googleVersion = getVersionName(activity).contains("g");
 
-        String[] tmpAboutData;
-        if (googleVersion) {
-            tmpAboutData = new String[]{
-                    getResources().getString(R.string.hToUse),
-                    getResources().getString(R.string.faq),
-                    getResources().getString(R.string.helpTranslate),
-                    getResources().getString(R.string.thanksList),
-                    getResources().getString(R.string.visitWebsite),
-                    getResources().getString(R.string.addQQGroup),
-                    getResources().getString(R.string.update),
-                    getResources().getString(R.string.thirdPartyOpenSourceLicenses),
-                    "V" + getVersionName(getApplicationContext()) + "(" + getVersionCode(getApplicationContext()) + ")"
-            };
-        } else {
-            tmpAboutData = new String[]{
-                    getResources().getString(R.string.hToUse),
-                    getResources().getString(R.string.faq),
-                    getResources().getString(R.string.helpTranslate),
-                    getResources().getString(R.string.thanksList),
-                    getResources().getString(R.string.visitWebsite),
-                    getResources().getString(R.string.addQQGroup),
-                    getResources().getString(R.string.update),
-                    getResources().getString(R.string.donate),
-                    getResources().getString(R.string.thirdPartyOpenSourceLicenses),
-                    "V" + getVersionName(getApplicationContext()) + "(" + getVersionCode(getApplicationContext()) + ")"
-            };
-        }
-
-        final String[] aboutData = tmpAboutData;
+        final String[] aboutData =
+                googleVersion
+                        ?
+                        new String[]{
+                                getResources().getString(R.string.hToUse),
+                                getResources().getString(R.string.faq),
+                                getResources().getString(R.string.helpTranslate),
+                                getResources().getString(R.string.thanksList),
+                                getResources().getString(R.string.visitWebsite),
+                                getResources().getString(R.string.addQQGroup),
+                                getResources().getString(R.string.update),
+                                getResources().getString(R.string.thirdPartyOpenSourceLicenses),
+                                "V" + getVersionName(getApplicationContext()) + "(" + getVersionCode(getApplicationContext()) + ")"
+                        }
+                        :
+                        new String[]{
+                                getResources().getString(R.string.hToUse),
+                                getResources().getString(R.string.faq),
+                                getResources().getString(R.string.helpTranslate),
+                                getResources().getString(R.string.thanksList),
+                                getResources().getString(R.string.visitWebsite),
+                                getResources().getString(R.string.addQQGroup),
+                                getResources().getString(R.string.update),
+                                getResources().getString(R.string.donate),
+                                getResources().getString(R.string.thirdPartyOpenSourceLicenses),
+                                "V" + getVersionName(getApplicationContext()) + "(" + getVersionCode(getApplicationContext()) + ")"
+                        };
 
         ListView aboutListView = findViewById(R.id.about_listView);
 

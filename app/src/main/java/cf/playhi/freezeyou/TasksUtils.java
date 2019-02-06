@@ -288,12 +288,12 @@ final class TasksUtils {
         Cursor cursor = db.query("tasks", null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
+                String tg = cursor.getString(cursor.getColumnIndex("tg"));
                 String tgExtra = cursor.getString(cursor.getColumnIndex("tgextra"));
+                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
                 if (tgExtra == null) {
                     tgExtra = "";
                 }
-                String tg = cursor.getString(cursor.getColumnIndex("tg"));
-                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
                 if (enabled == 1 && "onFApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
                     String task = cursor.getString(cursor.getColumnIndex("task"));
                     if (task != null && !"".equals(task)) {
