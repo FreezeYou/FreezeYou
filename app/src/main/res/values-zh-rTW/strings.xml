@@ -203,17 +203,23 @@
     <string name="showLogcat">檢視紀錄</string>
     <string name="freezeOrLaunch">凍結/啟動</string>
     <string name="askIfSave">是否保存？</string>
-    <string name="mainActivityPattern">首页格局</string>
-    <string name="workWithShortcutAutoFUF">启用\"快捷方式自动冻解\"时生效</string>
-    <string name="needCfmWhenFreeze">冻结时额外弹窗确认</string>
-    <string name="openImmediatelyAfterUF">解冻后立即启动</string>
-    <string name="createLauncherShortcut">创建桌面快捷方式</string>
-    <string name="name">名称</string>
-    <string name="icon">图标</string>
-    <string name="target">目标</string>
-    <string name="generate">生成</string>
-    <string name="plsSelect">请选择</string>
-    <string name="application">应用</string>
+    <string name="mainActivityPattern">首頁格局</string>
+    <string name="workWithShortcutAutoFUF">啟用\"快捷方式自動凍解\"時生效</string>
+    <string name="needCfmWhenFreeze">凍結時額外彈窗確認</string>
+    <string name="openImmediatelyAfterUF">解凍後立即啟動</string>
+    <string name="createLauncherShortcut">建立桌面捷徑</string>
+    <string name="name">名稱</string>
+    <string name="icon">圖示</string>
+    <string name="target">目標</string>
+    <string name="generate">產生</string>
+    <string name="plsSelect">請選擇</string>
+    <string name="application">程式集</string>
+    <string name="allowEditWhCreateShortcut">創建快捷方式時允許編輯</string>
+    <string name="clearAllUserData">清除全部資料</string>
+    <string name="packageNotFound">未找到該應用程式</string>
+    <string name="id">ID</string>
+    <string name="simulate">模拟</string>
+    <string name="insufficientPermission">权限不足</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
@@ -231,9 +237,9 @@
         <item>立即鎖屏</item>
     </string-array>
     <string-array name="mainActivityPatternSelection">
-        <item>默认</item>
-        <item>列表</item>
-        <item>网格</item>
+        <item>預設</item>
+        <item>清單</item>
+        <item>網格</item>
     </string-array>
     <string-array name="uiStyleSelection">
         <item>預設</item>
@@ -244,6 +250,7 @@
         <item>黃色</item>
         <item>橙色</item>
         <item>白色</item>
+        <item>紅色</item>
     </string-array>
     <string-array name="sevenDays">
         <item>星期一</item>
