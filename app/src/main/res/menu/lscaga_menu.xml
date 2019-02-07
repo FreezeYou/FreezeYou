@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/lscaga_menu_help"
+        android:contentDescription="@string/help"
+        android:icon="@drawable/ic_action_help_outline_light"
+        android:showAsAction="always"
+        android:title="@string/help" />
+
+</menu>

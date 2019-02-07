@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,10 +54,23 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.lscaga_menu, menu);
+        String cTheme = ThemeUtils.getUiTheme(this);
+        if ("white".equals(cTheme) || "default".equals(cTheme))
+            menu.findItem(R.id.lscaga_menu_help).setIcon(R.drawable.ic_action_help_outline);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.lscaga_menu_help:
+                MoreUtils.requestOpenWebSite(this, "https://wiki.playhi.net/index.php?title=%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1_-_FreezeYou");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

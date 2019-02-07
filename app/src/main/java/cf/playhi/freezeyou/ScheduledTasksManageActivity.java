@@ -115,6 +115,9 @@ public class ScheduledTasksManageActivity extends Activity {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 ScheduledTasksManageActivity.this.getMenuInflater().inflate(R.menu.stma_multichoicemenu, menu);
+                String cTheme = ThemeUtils.getUiTheme(ScheduledTasksManageActivity.this);
+                if ("white".equals(cTheme) || "default".equals(cTheme))
+                    menu.findItem(R.id.stma_menu_mc_delete).setIcon(R.drawable.ic_action_delete_light);
                 return true;
             }
 

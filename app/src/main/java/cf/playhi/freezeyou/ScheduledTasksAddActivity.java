@@ -49,7 +49,8 @@ public class ScheduledTasksAddActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.staa_menu, menu);
-        if (getThemeDot(ScheduledTasksAddActivity.this) == R.drawable.shapedotblack)
+        String cTheme = ThemeUtils.getUiTheme(ScheduledTasksAddActivity.this);
+        if ("white".equals(cTheme) || "default".equals(cTheme))
             menu.findItem(R.id.menu_staa_delete).setIcon(R.drawable.ic_action_delete_light);
         return true;
     }
