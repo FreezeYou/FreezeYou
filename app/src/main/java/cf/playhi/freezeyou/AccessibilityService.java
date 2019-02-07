@@ -38,7 +38,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             if (!pkgNameString.equals(previousPkg)
                                     && new AppPreferences(getApplicationContext()).getBoolean("freezeOnceQuit", false)
                                     && OneKeyListUtils.existsInOneKeyList(getApplicationContext(), getString(R.string.sFreezeOnceQuit), previousPkg)) {
-                                Support.processFreezeAction(getApplicationContext(), previousPkg, null, false, null, false);
+                                Support.processFreezeAction(getApplicationContext(), previousPkg, null, null, false, null, false);
                             }
 
                             onLeaveApplications(previousPkg, pkgNameString);//检测+执行

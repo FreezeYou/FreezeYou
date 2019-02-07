@@ -59,6 +59,7 @@ public class Freeze extends Activity {
 
 
             String target = getIntent().getStringExtra("target");
+            String tasks = getIntent().getStringExtra("tasks");
             String pkgName;
             boolean auto;
             if ("freezeyou".equals(intent.getScheme())) {
@@ -80,18 +81,18 @@ public class Freeze extends Activity {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
             if (auto && sp.getBoolean("shortcutAutoFUF", false)) {
                 if (realGetFrozenStatus(this, pkgName, getPackageManager())) {
-                    processUnfreezeAction(this, pkgName, target, true, sp.getBoolean("openImmediatelyAfterUnfreezeUseShortcutAutoFUF", true), this, true);
+                    processUnfreezeAction(this, pkgName, target, tasks, true, sp.getBoolean("openImmediatelyAfterUnfreezeUseShortcutAutoFUF", true), this, true);
                 } else {
                     if (sp.getBoolean("needConfirmWhenFreezeUseShortcutAutoFUF", false)) {
-                        processDialog(pkgName, target, false, 2);
+                        processDialog(pkgName, target, tasks, false, 2);
                     } else {
-                        processFreezeAction(this, pkgName, target, true, this, true);
+                        processFreezeAction(this, pkgName, target, tasks, true, this, true);
                     }
                 }
             } else if ((!checkRootFrozen(Freeze.this, pkgName, null)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
-                processDialog(pkgName, target, auto, 2);
+                processDialog(pkgName, target, tasks, auto, 2);
             } else {
-                processDialog(pkgName, target, auto, 1);
+                processDialog(pkgName, target, tasks, auto, 1);
             }
             if (Build.VERSION.SDK_INT >= 21) {
                 setTaskDescription(new ActivityManager.TaskDescription(getApplicationLabel(this, null, null, pkgName) + " - " + getString(R.string.app_name), getBitmapFromDrawable(getApplicationIcon(this, pkgName, null, false))));
@@ -99,7 +100,7 @@ public class Freeze extends Activity {
         }
     }
 
-    private void processDialog(String pkgName, String target, boolean auto, int ot) {
+    private void processDialog(String pkgName, String target, String tasks, boolean auto, int ot) {
         shortcutMakeDialog(
                 Freeze.this,
                 getApplicationLabel(Freeze.this, null, null, pkgName),
@@ -108,6 +109,7 @@ public class Freeze extends Activity {
                 null,
                 pkgName,
                 target,
+                tasks,
                 ot,
                 auto,
                 true);

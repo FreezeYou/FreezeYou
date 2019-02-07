@@ -36,8 +36,12 @@ final class LauncherShortcutUtils {
     }
 
     static void createShortCut(String title, String pkgName, Drawable icon, Class<?> cls, String id, Context context, String target) {
+        createShortCut(title, pkgName, icon, cls, id, context, target, null);
+    }
+
+    static void createShortCut(String title, String pkgName, Drawable icon, Class<?> cls, String id, Context context, String target, String tasks) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            createShortCutOldApi(title, pkgName, icon, cls, context, target);
+            createShortCutOldApi(title, pkgName, icon, cls, context, target, tasks);
         } else {
             ShortcutManager mShortcutManager =
                     context.getSystemService(ShortcutManager.class);
@@ -51,6 +55,7 @@ final class LauncherShortcutUtils {
                                     .setAction(Intent.ACTION_MAIN)
                                     .putExtra("pkgName", pkgName)
                                     .putExtra("target", target)
+                                    .putExtra("tasks", tasks)
                     );
                     shortcutInfoBuilder.setShortLabel(title);
                     shortcutInfoBuilder.setLongLabel(title);
@@ -73,19 +78,20 @@ final class LauncherShortcutUtils {
                             successCallback.getIntentSender());
                     showToast(context, R.string.requested);
                 } else {
-                    createShortCutOldApi(title, pkgName, icon, cls, context, target);
+                    createShortCutOldApi(title, pkgName, icon, cls, context, target, tasks);
                 }
             } else {
-                createShortCutOldApi(title, pkgName, icon, cls, context, target);
+                createShortCutOldApi(title, pkgName, icon, cls, context, target, tasks);
             }
         }
     }
 
-    private static void createShortCutOldApi(String title, String pkgName, Drawable icon, Class<?> cls, Context context, String target) {
+    private static void createShortCutOldApi(String title, String pkgName, Drawable icon, Class<?> cls, Context context, String target, String tasks) {
         Intent addShortCut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
         Intent intent = new Intent(context, cls);
         intent.putExtra("pkgName", pkgName);
         intent.putExtra("target", target);
+        intent.putExtra("tasks", tasks);
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
         addShortCut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
         try {

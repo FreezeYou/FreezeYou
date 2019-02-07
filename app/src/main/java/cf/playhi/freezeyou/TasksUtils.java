@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.SystemClock;
@@ -155,13 +156,17 @@ final class TasksUtils {
                         if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             Log.e("TasksLogE", asTasks.substring(3));
                         break;
+                    case "sp"://getLaunchIntentForPackage,startActivity
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                            startPackages(context, tasks);
+                        break;
                     case "st"://showToast
                         if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             showToast(context, asTasks.substring(3));
                         break;
-                    case "sp"://getLaunchIntentForPackage,startActivity
+                    case "su"://startActivity_uri
                         if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
-                            startPackages(context, tasks);
+                            startActivity_uri(context, tasks);
                         break;
                     case "uf":
                         if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
@@ -176,6 +181,20 @@ final class TasksUtils {
                         break;
                 }
             }
+        }
+    }
+
+    private static void startActivity_uri(Context context, String[] uris) {
+        try {
+            for (String uri_s : uris) {
+                Intent intent =
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(uri_s))
+                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showToast(context, R.string.failed);
         }
     }
 

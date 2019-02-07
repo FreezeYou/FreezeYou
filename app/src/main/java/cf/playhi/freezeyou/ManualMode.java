@@ -52,6 +52,7 @@ public class ManualMode extends Activity {
                 processRootAction(
                         packageNameEditText.getText().toString(),
                         null,
+                        null,
                         context,
                         false,
                         false,
@@ -65,6 +66,7 @@ public class ManualMode extends Activity {
             public void onClick(View view) {
                 processRootAction(
                         packageNameEditText.getText().toString(),
+                        null,
                         null,
                         context,
                         true,

@@ -18,6 +18,7 @@ public class AskRunActivity extends Activity {
         super.onCreate(savedInstanceState);
         final String pkgName = getIntent().getStringExtra("pkgName");
         final String target = getIntent().getStringExtra("target");
+        final String tasks = getIntent().getStringExtra("tasks");
         buildAlertDialog(
                 this,
                 getApplicationIcon(
@@ -36,7 +37,14 @@ public class AskRunActivity extends Activity {
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int ii) {
-                        checkAndStartApp(AskRunActivity.this, pkgName, target, null, false);
+                        checkAndStartApp(
+                                AskRunActivity.this,
+                                pkgName,
+                                target,
+                                tasks,
+                                null,
+                                false
+                        );
                         finish();
                     }
                 })

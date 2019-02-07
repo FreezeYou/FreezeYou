@@ -117,6 +117,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
         EditText lscaga_package_editText = findViewById(R.id.lscaga_package_editText);
         EditText lscaga_displayName_editText = findViewById(R.id.lscaga_displayName_editText);
         EditText lscaga_target_editText = findViewById(R.id.lscaga_target_editText);
+        EditText lscaga_task_editText = findViewById(R.id.lscaga_task_editText);
         EditText lscaga_id_editText = findViewById(R.id.lscaga_id_editText);
         ImageButton lscaga_icon_imageButton = findViewById(R.id.lscaga_icon_imageButton);
 
@@ -132,13 +133,15 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
 
         processSelectTargetButton(pkgName, lscaga_target_button);
 
+        processTaskEditText(lscaga_task_editText);
+
         processIDEditText(id, lscaga_id_editText);
 
         processCancelButton(lscaga_cancel_button);
 
-        processSimulateButton(lscaga_package_editText, lscaga_target_editText, lscaga_simulate_button);
+        processSimulateButton(lscaga_package_editText, lscaga_target_editText, lscaga_task_editText, lscaga_simulate_button);
 
-        processGenerateButton(lscaga_generate_button, lscaga_package_editText, lscaga_displayName_editText, lscaga_target_editText, lscaga_id_editText);
+        processGenerateButton(lscaga_generate_button, lscaga_package_editText, lscaga_displayName_editText, lscaga_target_editText, lscaga_id_editText, lscaga_task_editText);
 
     }
 
@@ -152,6 +155,10 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
 
     private void processSelectedPackageEditText(String pkgName, EditText lscaga_package_editText) {
         lscaga_package_editText.setText(pkgName);
+    }
+
+    private void processTaskEditText(EditText lscaga_task_editText) {
+        lscaga_task_editText.setText("");
     }
 
     private void processIDEditText(String id, EditText lscaga_id_editText) {
@@ -245,7 +252,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
         });
     }
 
-    private void processGenerateButton(Button lscaga_generate_button, final EditText lscaga_package_editText, final EditText lscaga_displayName_editText, final EditText lscaga_target_editText, final EditText lscaga_id_editText) {
+    private void processGenerateButton(Button lscaga_generate_button, final EditText lscaga_package_editText, final EditText lscaga_displayName_editText, final EditText lscaga_target_editText, final EditText lscaga_id_editText, final EditText lscaga_task_editText) {
 
         lscaga_generate_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,12 +261,14 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
                 String pkgName = lscaga_package_editText.getText().toString();
                 String title = lscaga_displayName_editText.getText().toString();
                 String target = lscaga_target_editText.getText().toString();
+                String tasks = lscaga_task_editText.getText().toString();
                 if (getString(R.string.launch).equals(target))
                     target = null;
                 if (requestFromLauncher) {
                     Intent shortcutIntent = new Intent(LauncherShortcutConfirmAndGenerateActivity.this, Freeze.class);
                     shortcutIntent.putExtra("pkgName", pkgName);
                     shortcutIntent.putExtra("target", target);
+                    shortcutIntent.putExtra("tasks", tasks);
                     Intent intent = new Intent();
                     intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
                     intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
@@ -274,7 +283,8 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
                             targetSelfCls,
                             lscaga_id_editText.getText().toString(),
                             context,
-                            target
+                            target,
+                            tasks
                     );
                 }
             }
@@ -291,18 +301,20 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
         });
     }
 
-    private void processSimulateButton(final EditText lscaga_package_editText, final EditText lscaga_target_editText, final Button lscaga_simulate_button) {
+    private void processSimulateButton(final EditText lscaga_package_editText, final EditText lscaga_target_editText, final EditText lscaga_task_editText, final Button lscaga_simulate_button) {
         lscaga_simulate_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String pkgName = lscaga_package_editText.getText().toString();
                 String target = lscaga_target_editText.getText().toString();
+                String tasks = lscaga_task_editText.getText().toString();
                 if (getString(R.string.launch).equals(target))
                     target = null;
                 startActivity(
                         new Intent(LauncherShortcutConfirmAndGenerateActivity.this, Freeze.class)
                                 .putExtra("pkgName", pkgName)
                                 .putExtra("target", target)
+                                .putExtra("tasks", tasks)
                 );
             }
         });

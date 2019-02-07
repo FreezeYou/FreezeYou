@@ -59,7 +59,7 @@ public class MainGridActivity extends Activity {
                 Support.checkFrozenStatusAndStartApp(
                         MainGridActivity.this,
                         (String) ((HashMap) simpleAdapter.getItem(position)).get("PkgName"),
-                        null);
+                        null,null);
             }
         });
 

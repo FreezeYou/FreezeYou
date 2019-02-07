@@ -116,6 +116,7 @@ public class ShortcutLauncherFolderActivity extends Activity {
                         Support.checkFrozenStatusAndStartApp(
                                 ShortcutLauncherFolderActivity.this,
                                 pkg,
+                                null,
                                 null);
                     }
                 }
