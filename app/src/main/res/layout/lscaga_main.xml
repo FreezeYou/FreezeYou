@@ -122,10 +122,27 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/lscaga_id_textView"
+                android:id="@+id/lscaga_task_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lscaga_target_linearLayout"
+                android:layout_marginTop="20dp"
+                android:text="@string/task" />
+
+            <EditText
+                android:id="@+id/lscaga_task_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lscaga_task_textView"
+                android:hint="@string/task"
+                android:inputType="textMultiLine"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/lscaga_id_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lscaga_task_editText"
                 android:layout_marginTop="20dp"
                 android:text="@string/id" />
 
