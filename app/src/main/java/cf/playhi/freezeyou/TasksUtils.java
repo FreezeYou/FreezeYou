@@ -166,7 +166,7 @@ final class TasksUtils {
                         break;
                     case "su"://startActivity_uri
                         if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
-                            startActivity_uri(context, tasks);
+                            startActivityByUri(context, tasks);
                         break;
                     case "uf":
                         if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
@@ -184,11 +184,11 @@ final class TasksUtils {
         }
     }
 
-    private static void startActivity_uri(Context context, String[] uris) {
+    private static void startActivityByUri(Context context, String[] uris) {
         try {
-            for (String uri_s : uris) {
+            for (String uriS : uris) {
                 Intent intent =
-                        new Intent(Intent.ACTION_VIEW, Uri.parse(uri_s))
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(uriS))
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

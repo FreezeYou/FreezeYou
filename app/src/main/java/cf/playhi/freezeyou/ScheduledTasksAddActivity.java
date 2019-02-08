@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -59,28 +60,7 @@ public class ScheduledTasksAddActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                AlertDialogUtils.buildAlertDialog(this, R.mipmap.ic_launcher_new_round, R.string.askIfSave, R.string.notice)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (isTimeTask) {
-                                    saveTimeTaskData(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()), id);
-                                } else {
-                                    saveTriggerTaskData(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()), id);
-                                }
-
-                                finish();
-                            }
-                        })
-                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                finish();
-                            }
-                        })
-                        .setNeutralButton(R.string.cancel, null)
-                        .create().show();
+                checkAndDecideIfFinish();
                 return true;
             case R.id.menu_staa_delete:
                 AlertDialogUtils.buildAlertDialog(this, android.R.drawable.ic_dialog_alert, R.string.askIfDel, R.string.notice)
@@ -112,6 +92,15 @@ public class ScheduledTasksAddActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            checkAndDecideIfFinish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void init() {
@@ -302,5 +291,30 @@ public class ScheduledTasksAddActivity extends Activity {
             }
         }
         setResult(RESULT_OK);
+    }
+
+    private void checkAndDecideIfFinish() {
+        AlertDialogUtils.buildAlertDialog(this, R.mipmap.ic_launcher_new_round, R.string.askIfSave, R.string.notice)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (isTimeTask) {
+                            saveTimeTaskData(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()), id);
+                        } else {
+                            saveTriggerTaskData(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()), id);
+                        }
+
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        finish();
+                    }
+                })
+                .setNeutralButton(R.string.cancel, null)
+                .create().show();
     }
 }
