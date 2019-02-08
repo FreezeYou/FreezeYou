@@ -262,9 +262,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                                 public void onClick(DialogInterface dialog, int which) {
                                     ActivityManager activityManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
                                     if (activityManager != null && Build.VERSION.SDK_INT >= 19) {
-                                        showToast(getActivity(), activityManager.clearApplicationUserData() ? R.string.success : R.string.failed);
+                                        try {
+                                            showToast(getActivity(), activityManager.clearApplicationUserData() ? R.string.success : R.string.failed);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            showToast(getActivity(), R.string.failed);
+                                        }
                                     } else {
-                                        showToast(getActivity(), R.string.failed);
+                                        showToast(getActivity(), R.string.sysVerLow);
                                     }
                                 }
                             })

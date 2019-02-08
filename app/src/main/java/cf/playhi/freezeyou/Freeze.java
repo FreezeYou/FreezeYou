@@ -50,6 +50,7 @@ public class Freeze extends Activity {
                 Log.e("DebugModeLogcat", "Intent getDataString: " + intent.getDataString());
                 Log.e("DebugModeLogcat", "Intent getStringExtra_pkgName: " + intent.getStringExtra("pkgName"));
                 Log.e("DebugModeLogcat", "Intent getStringExtra_target: " + intent.getStringExtra("target"));
+                Log.e("DebugModeLogcat", "Intent getStringExtra_tasks: " + intent.getStringExtra("tasks"));
                 Log.e("DebugModeLogcat", "Intent getBooleanExtra_auto: " + intent.getBooleanExtra("auto", true));
                 Log.e("DebugModeLogcat", "Intent getAction: " + intent.getAction());
                 Log.e("DebugModeLogcat", "Intent getPackage: " + intent.getPackage());
