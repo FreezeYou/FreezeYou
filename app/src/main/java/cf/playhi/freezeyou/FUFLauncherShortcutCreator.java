@@ -56,8 +56,8 @@ public class FUFLauncherShortcutCreator extends Activity {
 
         final Intent intent = getIntent();
         String slf_n = intent.getStringExtra("slf_n");
-        boolean returnPkgName = intent.getBooleanExtra("returnPkgName", false);
-        boolean isSlfMode = slf_n != null;
+        final boolean returnPkgName = intent.getBooleanExtra("returnPkgName", false);
+        final boolean isSlfMode = slf_n != null;
 
         if (isSlfMode || returnPkgName) {
             setContentView(R.layout.fuflsc_select_application);
@@ -165,11 +165,11 @@ public class FUFLauncherShortcutCreator extends Activity {
                     final String name = (String) map.get("Name");
                     final String pkgName = (String) map.get("PackageName");
                     Intent it = getIntent();
-                    if (it.getStringExtra("slf_n") != null) {
+                    if (isSlfMode) {
                         SharedPreferences sp = getSharedPreferences(getIntent().getStringExtra("slf_n"), MODE_PRIVATE);
                         sp.edit().putString("pkgS", sp.getString("pkgS", "") + pkgName + ",").apply();
                         setResult(RESULT_OK);
-                    } else if (it.getBooleanExtra("returnPkgName", false)) {
+                    } else {// if (returnPkgName)s
                         setResult(RESULT_OK, new Intent()
                                 .putExtra("pkgName", pkgName)
                                 .putExtra("name", name)
