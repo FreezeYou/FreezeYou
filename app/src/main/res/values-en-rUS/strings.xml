@@ -220,7 +220,7 @@
     <string name="id">Id</string>
     <string name="simulate">Simulate</string>
     <string name="insufficientPermission">Insufficient permissions</string>
-    <string name="onlyUnfreeze">仅解冻</string>
+    <string name="onlyUnfreeze">Only Unfreeze</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
