@@ -3,6 +3,7 @@ package cf.playhi.freezeyou;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -19,18 +20,18 @@ import java.io.OutputStream;
 import java.util.Date;
 
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
+import static cf.playhi.freezeyou.ThemeUtils.processAddTranslucent;
+import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 //Install and uninstall
 public class InstallPackagesActivity extends Activity {
-    private boolean isObsd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        processSetTheme(this);
-//        processAddTranslucent(this);
+        processSetTheme(this);
+        processAddTranslucent(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.about);
         Intent intent = getIntent();
         final Uri packageUri = intent.getData();
 
@@ -151,37 +152,45 @@ public class InstallPackagesActivity extends Activity {
             alertDialogMessage.append("是否允许？");
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(install ? "安装" : "卸载");
-        builder.setMessage(alertDialogMessage);
-        builder.setPositiveButton(R.string.yes, new AlertDialog.OnClickListener() {
+        final InstallPackagesAlertDialog installPackagesAlertDialog = new InstallPackagesAlertDialog(this);
+        installPackagesAlertDialog.setTitle(install ? "安装" : "卸载");
+        installPackagesAlertDialog.setMessage(alertDialogMessage);
+        installPackagesAlertDialog.setButton(
+                DialogInterface.BUTTON_POSITIVE,
+                getString(R.string.yes),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (installPackagesAlertDialog.isObsd()) {
+                            if (install) clearTempFile(apkFilePath);
+                            showToast(InstallPackagesActivity.this, "Dangerous");
+                        } else {
+                            ServiceUtils.startService(
+                                    InstallPackagesActivity.this,
+                                    new Intent(InstallPackagesActivity.this, InstallPackagesService.class)
+                                            .putExtra("install", install)
+                                            .putExtra("packageUri", packageUri)
+                                            .putExtra("apkFilePath", apkFilePath));
+                            finish();
+                        }
+                    }
+                });
+        installPackagesAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (true) {
-                    showToast(InstallPackagesActivity.this, "Dangerous");
-                } else {
-                    ServiceUtils.startService(
-                            InstallPackagesActivity.this,
-                            new Intent(InstallPackagesActivity.this, InstallPackagesService.class)
-                                    .putExtra("install", install)
-                                    .putExtra("packageUri", packageUri)
-                                    .putExtra("apkFilePath", apkFilePath));
-                    finish();
-                }
-            }
-        });
-        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                if (install) clearTempFile(apkFilePath);
                 finish();
             }
         });
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        installPackagesAlertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
+                if (install) clearTempFile(apkFilePath);
                 finish();
             }
         });
+        installPackagesAlertDialog.show();
+
 //        try {
 //            getDevicePolicyManager(this).clearPackagePersistentPreferredActivities(
 //                    DeviceAdminReceiver.getComponentName(this), getPackageName()
@@ -192,11 +201,29 @@ public class InstallPackagesActivity extends Activity {
 //        }
     }
 
+    private void clearTempFile(String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+}
+
+class InstallPackagesAlertDialog extends AlertDialog {
+    private boolean isObsd;
+
+    InstallPackagesAlertDialog(Context context) {
+        super(context);
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         isObsd = (ev.getFlags() & MotionEvent.FLAG_WINDOW_IS_OBSCURED) != 0;
-        showToast(this, isObsd ? "1" : "not");
         return super.dispatchTouchEvent(ev);
+    }
+
+    boolean isObsd() {
+        return isObsd;
     }
 }
 

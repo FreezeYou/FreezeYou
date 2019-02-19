@@ -7,6 +7,7 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /><!-- 开关蓝牙 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.INSTALL_SHORTCUT" /><!-- 安装快捷方式 -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" /><!-- 安装快捷方式 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -195,7 +196,7 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:label="安装与卸载"
-            android:theme="@android:style/Theme.Dialog">
+            android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.INSTALL_PACKAGE" />
