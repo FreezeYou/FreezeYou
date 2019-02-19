@@ -10,7 +10,8 @@ final class ToastUtils {
     }
 
     static void showToast(Context context, String string) {
-        Toast.makeText(context, string, Toast.LENGTH_LONG).show();
+        if (string != null)
+            Toast.makeText(context, string, Toast.LENGTH_LONG).show();
     }
 
 }

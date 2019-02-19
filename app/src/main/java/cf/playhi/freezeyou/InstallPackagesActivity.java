@@ -2,6 +2,7 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,7 +37,7 @@ public class InstallPackagesActivity extends Activity {
         final Uri packageUri = intent.getData();
 
         if (packageUri == null) {
-            showToast(this, "INVALID_URI");
+            showToast(this, String.format(getString(R.string.invalidUriToast), "null"));
             finish();
             return;
         }
@@ -45,81 +46,96 @@ public class InstallPackagesActivity extends Activity {
 
         if ((!ContentResolver.SCHEME_FILE.equals(scheme)
                 && !ContentResolver.SCHEME_CONTENT.equals(scheme)) && !"package".equals(scheme)) {
-            showToast(this, "INVALID_URI");
+            showToast(this, String.format(getString(R.string.invalidUriToast), packageUri));
             finish();
             return;
         }
 
-        final boolean install = !(Intent.ACTION_DELETE.equals(intent.getAction()) || Intent.ACTION_UNINSTALL_PACKAGE.equals(intent.getAction()));
+        final boolean install =
+                !(Intent.ACTION_DELETE.equals(intent.getAction()) ||
+                        Intent.ACTION_UNINSTALL_PACKAGE.equals(intent.getAction()));
 
-        String apkFileName = "package" + new Date().getTime() + "F.apk";
+        final String apkFileName = "package" + new Date().getTime() + "F.apk";
         final String apkFilePath = getExternalCacheDir() + File.separator + apkFileName;
 
-        StringBuilder alertDialogMessage = new StringBuilder();
+        final StringBuilder alertDialogMessage = new StringBuilder();
+        final ProgressDialog progressDialog =
+                ProgressDialog.show(this, getString(R.string.plsWait), getString(R.string.loading___));
         if (install) {
-            try {
-                InputStream in = getContentResolver().openInputStream(packageUri);
-                if (in == null) {
-                    return;
-                }
-                OutputStream out = new FileOutputStream(apkFilePath);
-                byte[] buffer = new byte[1024 * 1024];
-                int bytesRead;
-                while ((bytesRead = in.read(buffer)) >= 0) {
-                    out.write(buffer, 0, bytesRead);
-                }
-                out.close();
-                in.close();
-                PackageManager pm = getPackageManager();
-                PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePath, 0);
-                packageInfo.applicationInfo.sourceDir = apkFilePath;
-                packageInfo.applicationInfo.publicSourceDir = apkFilePath;
-                alertDialogMessage.append("来源应用：");
-                alertDialogMessage.append(System.getProperty("line.separator"));
-                if (Build.VERSION.SDK_INT >= 22) {
-                    Uri referrerUri = getReferrer();
-                    if (referrerUri == null || !"android-app".equals(referrerUri.getScheme())) {
-                        alertDialogMessage.append("Unknown");
-                    } else {
-                        String refererPackageLabel =
-                                getApplicationLabel(
-                                        this, null, null,
-                                        referrerUri.getEncodedSchemeSpecificPart().substring(2));
-                        if (refererPackageLabel.equals(getString(R.string.uninstalled))) {
-                            alertDialogMessage.append("Unknown");
-                        } else {
-                            alertDialogMessage.append(refererPackageLabel);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        InputStream in = getContentResolver().openInputStream(packageUri);
+                        if (in == null) {
+                            return;
                         }
+                        OutputStream out = new FileOutputStream(apkFilePath);
+                        byte[] buffer = new byte[1024 * 1024];
+                        int bytesRead;
+                        while ((bytesRead = in.read(buffer)) >= 0) {
+                            out.write(buffer, 0, bytesRead);
+                        }
+                        out.close();
+                        in.close();
+                        PackageManager pm = getPackageManager();
+                        PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePath, 0);
+                        packageInfo.applicationInfo.sourceDir = apkFilePath;
+                        packageInfo.applicationInfo.publicSourceDir = apkFilePath;
+                        alertDialogMessage.append(getString(R.string.requestFromPackage_colon));
+                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        if (Build.VERSION.SDK_INT >= 22) {
+                            Uri referrerUri = getReferrer();
+                            if (referrerUri == null || !"android-app".equals(referrerUri.getScheme())) {
+                                alertDialogMessage.append(getString(R.string.unknown));
+                            } else {
+                                String refererPackageLabel =
+                                        getApplicationLabel(
+                                                InstallPackagesActivity.this, null, null,
+                                                referrerUri.getEncodedSchemeSpecificPart().substring(2));
+                                if (refererPackageLabel.equals(getString(R.string.uninstalled))) {
+                                    alertDialogMessage.append(getString(R.string.unknown));
+                                } else {
+                                    alertDialogMessage.append(refererPackageLabel);
+                                }
+                            }
+                        } else {
+                            alertDialogMessage.append(getString(R.string.unknown));
+                        }
+                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        alertDialogMessage.append(getString(R.string.installPackage_colon));
+                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        alertDialogMessage.append(getString(R.string.application_colon));
+                        alertDialogMessage.append(pm.getApplicationLabel(packageInfo.applicationInfo));
+                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        alertDialogMessage.append(getString(R.string.pkgName_colon));
+                        alertDialogMessage.append(packageInfo.packageName);
+                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        alertDialogMessage.append(getString(R.string.version_colon));
+                        alertDialogMessage.append(packageInfo.versionName);
+                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        alertDialogMessage.append(getString(R.string.whetherAllow));
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showInstallDialog(progressDialog, install, alertDialogMessage, apkFilePath, packageUri);
+                            }
+                        });
+                    } catch (Exception e) {
+                        alertDialogMessage.append(getString(R.string.cannotInstall_colon)).append(e.getLocalizedMessage());
                     }
-                } else {
-                    alertDialogMessage.append("Unknown");
                 }
-                alertDialogMessage.append(System.getProperty("line.separator"));
-                alertDialogMessage.append(System.getProperty("line.separator"));
-                alertDialogMessage.append("安装应用：");
-                alertDialogMessage.append(System.getProperty("line.separator"));
-                alertDialogMessage.append("应用：");
-                alertDialogMessage.append(pm.getApplicationLabel(packageInfo.applicationInfo));
-                alertDialogMessage.append(System.getProperty("line.separator"));
-                alertDialogMessage.append("包名：");
-                alertDialogMessage.append(packageInfo.packageName);
-                alertDialogMessage.append(System.getProperty("line.separator"));
-                alertDialogMessage.append("版本：");
-                alertDialogMessage.append(packageInfo.versionName);
-                alertDialogMessage.append(System.getProperty("line.separator"));
-                alertDialogMessage.append(System.getProperty("line.separator"));
-                alertDialogMessage.append("是否允许？");
-            } catch (Exception e) {
-                alertDialogMessage.append("无法安装：").append(e.getLocalizedMessage());
-            }
+            }).start();
         } else {
             String packageName = packageUri.getEncodedSchemeSpecificPart();
             if (packageName == null) {
-                showToast(this, "Invalid package name in URI: " + packageUri);
+                showToast(this, String.format(getString(R.string.invalidUriToast), packageUri));
                 finish();
                 return;
             }
-            alertDialogMessage.append("来源应用：");
+            alertDialogMessage.append(getString(R.string.requestFromPackage_colon));
             alertDialogMessage.append(System.getProperty("line.separator"));
             if (Build.VERSION.SDK_INT >= 22) {
                 Uri referrerUri = getReferrer();
@@ -129,31 +145,51 @@ public class InstallPackagesActivity extends Activity {
                                     this, null, null,
                                     referrerUri.getEncodedSchemeSpecificPart().substring(2));
                     if (refererPackageLabel.equals(getString(R.string.uninstalled))) {
-                        alertDialogMessage.append("Unknown");
+                        alertDialogMessage.append(getString(R.string.unknown));
                     } else {
                         alertDialogMessage.append(refererPackageLabel);
                     }
                 } else {
-                    alertDialogMessage.append("Unknown");
+                    alertDialogMessage.append(getString(R.string.unknown));
                 }
             } else {
-                alertDialogMessage.append("Unknown");
+                alertDialogMessage.append(getString(R.string.unknown));
             }
             alertDialogMessage.append(System.getProperty("line.separator"));
             alertDialogMessage.append(System.getProperty("line.separator"));
-            alertDialogMessage.append("卸载应用：");
+            alertDialogMessage.append(getString(R.string.uninstallPackage_colon));
             alertDialogMessage.append(System.getProperty("line.separator"));
-            alertDialogMessage.append("应用：");
+            alertDialogMessage.append(getString(R.string.application_colon));
             alertDialogMessage.append(getApplicationLabel(this, null, null, packageName));
             alertDialogMessage.append(System.getProperty("line.separator"));
-            alertDialogMessage.append("包名：");
+            alertDialogMessage.append(getString(R.string.pkgName_colon));
             alertDialogMessage.append(packageName);
             alertDialogMessage.append(System.getProperty("line.separator"));
-            alertDialogMessage.append("是否允许？");
+            alertDialogMessage.append(getString(R.string.whetherAllow));
+            showInstallDialog(progressDialog, install, alertDialogMessage, apkFilePath, packageUri);
         }
 
+
+//        try {
+//            getDevicePolicyManager(this).clearPackagePersistentPreferredActivities(
+//                    DeviceAdminReceiver.getComponentName(this), getPackageName()
+//            );
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+    }
+
+    private void clearTempFile(String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+    private void showInstallDialog(final ProgressDialog progressDialog, final boolean install, final CharSequence alertDialogMessage, final String apkFilePath, final Uri packageUri) {
         final InstallPackagesAlertDialog installPackagesAlertDialog = new InstallPackagesAlertDialog(this);
-        installPackagesAlertDialog.setTitle(install ? "安装" : "卸载");
+        installPackagesAlertDialog.setTitle(install ? R.string.install : R.string.uninstall);
         installPackagesAlertDialog.setMessage(alertDialogMessage);
         installPackagesAlertDialog.setButton(
                 DialogInterface.BUTTON_POSITIVE,
@@ -189,23 +225,8 @@ public class InstallPackagesActivity extends Activity {
                 finish();
             }
         });
+        progressDialog.cancel();
         installPackagesAlertDialog.show();
-
-//        try {
-//            getDevicePolicyManager(this).clearPackagePersistentPreferredActivities(
-//                    DeviceAdminReceiver.getComponentName(this), getPackageName()
-//            );
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-    }
-
-    private void clearTempFile(String filePath) {
-        File file = new File(filePath);
-        if (file.exists()) {
-            file.delete();
-        }
     }
 }
 
