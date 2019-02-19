@@ -15,11 +15,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,9 +56,10 @@ public class InstallPackagesService extends Service {
         if (Build.VERSION.SDK_INT >= 26) {
             Notification.Builder mBuilder = new Notification.Builder(this);
             mBuilder.setSmallIcon(R.drawable.ic_notification);
-            mBuilder.setContentText("安装与卸载");
-            mBuilder.setContentTitle("安装与卸载");
-            NotificationChannel channel = new NotificationChannel("InstallPackages", "安装与卸载", NotificationManager.IMPORTANCE_NONE);
+            mBuilder.setContentText(getString(R.string.installAndUninstall));
+            NotificationChannel channel =
+                    new NotificationChannel("InstallPackages",
+                            getString(R.string.installAndUninstall), NotificationManager.IMPORTANCE_NONE);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             if (notificationManager != null)
                 notificationManager.createNotificationChannel(channel);
@@ -65,8 +68,7 @@ public class InstallPackagesService extends Service {
         } else {
             Notification.Builder mBuilder = new Notification.Builder(this);
             mBuilder.setSmallIcon(R.drawable.ic_notification);
-            mBuilder.setContentTitle("安装与卸载");
-            mBuilder.setContentText("安装与卸载");
+            mBuilder.setContentText(getString(R.string.installAndUninstall));
             startForeground(5, mBuilder.getNotification());
         }
     }
@@ -107,14 +109,14 @@ public class InstallPackagesService extends Service {
             Uri packageUri = intent.getParcelableExtra("packageUri");
             String packageName = packageUri.getEncodedSchemeSpecificPart();
             if (packageName == null) {
-                showToast(this, "Invalid package name in URI: " + packageUri);
+                showToast(this, getString(R.string.invalidArguments) + " " + packageUri);
                 return;
             }
 
             String willBeUninstalledName = getApplicationLabel(this, null, null, packageName);
             Drawable willBeUninstalledIcon = getApplicationIcon(this, packageName, null, false);
 
-            builder.setContentTitle("正在卸载 " + willBeUninstalledName);
+            builder.setContentTitle(getString(R.string.uninstalling) + " " + willBeUninstalledName);
             builder.setLargeIcon(getBitmapFromDrawable(willBeUninstalledIcon));
             notificationManager.notify(packageName.hashCode(), builder.getNotification());
 
@@ -137,12 +139,12 @@ public class InstallPackagesService extends Service {
                 outputStream.flush();
                 process.waitFor();
                 destroyProcess(outputStream, process);
-                builder.setContentTitle(willBeUninstalledName + " 卸载完成");
+                builder.setContentTitle(willBeUninstalledName + " " + getString(R.string.uninstallFinished));
                 notificationManager.notify(packageName.hashCode(), builder.getNotification());
             }
         } catch (Exception e) {
             e.printStackTrace();
-            showToast(this, "Error uninstalling apk from content URI:" + e);
+            showToast(this, String.format(getString(R.string.errorUninstallToast), e.getLocalizedMessage()));
         }
     }
 
@@ -177,7 +179,7 @@ public class InstallPackagesService extends Service {
             String willBeInstalledName = pm.getApplicationLabel(packageInfo.applicationInfo).toString();
             Drawable willBeInstalledIcon = pm.getApplicationIcon(packageInfo.applicationInfo);
 
-            builder.setContentTitle("正在安装 " + willBeInstalledName);
+            builder.setContentTitle(getString(R.string.installing) + " " + willBeInstalledName);
             builder.setLargeIcon(getBitmapFromDrawable(willBeInstalledIcon));
             notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
 
@@ -221,15 +223,23 @@ public class InstallPackagesService extends Service {
                 File file = new File(apkFilePath);
                 if (file.exists()) {
                     if (!file.delete())
-                        if (!file.delete())
-                            showToast(this, "Cannot delete temp file: " + apkFilePath);
+                        file.delete();
                 }
-                builder.setContentTitle(willBeInstalledName + " 安装完成");
-                notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
+                InputStream pi = process.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(pi));
+                String result = bufferedReader.readLine();
+                if (result != null && result.toLowerCase().contains("success")) {
+                    builder.setContentTitle(willBeInstalledName + " " + getString(R.string.installFinished));
+                    notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
+                } else {
+                    builder.setContentTitle(willBeInstalledName + " " + getString(R.string.installFailed));
+                    builder.setContentText(getString(R.string.reason_colon) + result);
+                    notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            showToast(this, "Error installing apk from content URI:" + e);
+            showToast(this, String.format(getString(R.string.errorInstallToast), e.getLocalizedMessage()));
         }
 
     }
