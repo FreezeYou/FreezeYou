@@ -236,7 +236,7 @@
     <string name="installAndUninstall">安装与卸载</string>
     <string name="errorUninstallToast">卸载应用时发生错误： %1$s </string>
     <string name="errorInstallToast">安装应用时发生错误： %1$s </string>
-    <string name="invalidUri_colon">无效的Uri:  %1$s </string>
+    <string name="invalidUriToast">无效的Uri:  %1$s </string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
