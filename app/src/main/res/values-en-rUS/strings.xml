@@ -221,6 +221,24 @@
     <string name="simulate">Simulate</string>
     <string name="insufficientPermission">Insufficient permissions</string>
     <string name="onlyUnfreeze">Only Unfreeze</string>
+    <string name="unknown">Unknown</string>
+    <string name="installPackage_colon">Install Package:</string>
+    <string name="requestFromPackage_colon">From Package:</string>
+    <string name="application_colon">Application:</string>
+    <string name="pkgName_colon">Package Name:</string>
+    <string name="version_colon">Version:</string>
+    <string name="whetherAllow">Allow?</string>
+    <string name="cannotInstall_colon">Cannot install:</string>
+    <string name="uninstallPackage_colon">Uninstall Package:</string>
+    <string name="install">Install</string>
+    <string name="installing">Installing</string>
+    <string name="uninstalling">Uninstalling</string>
+    <string name="installFinished">Installation Completed</string>
+    <string name="uninstallFinished">Uninstallation Completed</string>
+    <string name="installAndUninstall">Install and Uninstall</string>
+    <string name="errorUninstallToast">An error occurred while uninstalling the app: %1$s </string>
+    <string name="errorInstallToast">An error occurred while installing the app: %1$s </string>
+    <string name="invalidUriToast">Invalid URI: %1$s </string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
