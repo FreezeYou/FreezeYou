@@ -244,8 +244,8 @@
     <string name="reason_colon">Reason: %1$s </string>
     <string name="plsWait">Please wait</string>
     <string name="loading___">Loading...</string>
-    <string name="freezeSlashRun">冻结/启动</string>
-    <string name="UfSlashRun">解冻/启动</string>
+    <string name="freezeSlashRun">Freeze/Run</string>
+    <string name="UfSlashRun">Unfreeze/Run</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
