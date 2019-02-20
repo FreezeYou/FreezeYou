@@ -234,11 +234,16 @@
     <string name="installing">Installing</string>
     <string name="uninstalling">Uninstalling</string>
     <string name="installFinished">Installation Completed</string>
+    <string name="installFailed">Installation Failed</string>
     <string name="uninstallFinished">Uninstallation Completed</string>
+    <string name="uninstallFailed">Uninstallation Failed</string>
     <string name="installAndUninstall">Install and Uninstall</string>
     <string name="errorUninstallToast">An error occurred while uninstalling the app: %1$s </string>
     <string name="errorInstallToast">An error occurred while installing the app: %1$s </string>
     <string name="invalidUriToast">Invalid URI: %1$s </string>
+    <string name="reason_colon">Reason: %1$s </string>
+    <string name="plsWait">Please wait</string>
+    <string name="loading___">Loading...</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>

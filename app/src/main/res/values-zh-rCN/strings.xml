@@ -234,11 +234,16 @@
     <string name="installing">正在安装</string>
     <string name="uninstalling">正在卸载</string>
     <string name="installFinished">安装完成</string>
+    <string name="installFailed">安装失败</string>
     <string name="uninstallFinished">卸载完成</string>
+    <string name="uninstallFailed">卸载失败</string>
     <string name="installAndUninstall">安装与卸载</string>
     <string name="errorUninstallToast">卸载应用时发生错误： %1$s </string>
     <string name="errorInstallToast">安装应用时发生错误： %1$s </string>
     <string name="invalidUriToast">无效的Uri:  %1$s </string>
+    <string name="reason_colon">原因： %1$s </string>
+    <string name="plsWait">请稍候</string>
+    <string name="loading___">正在加载...</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>显示全部</item>
