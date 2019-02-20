@@ -21,6 +21,7 @@ import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.OneKeyListUtils.existsInOneKeyList;
+import static cf.playhi.freezeyou.Support.realGetFrozenStatus;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 public class SelectOperation extends Activity {
@@ -47,6 +48,10 @@ public class SelectOperation extends Activity {
                 getResources().getString(R.string.copyPkgName),
                 getResources().getString(R.string.appDetail)
         };
+
+        operationData[1] =
+                realGetFrozenStatus(this, pkgName, null) ?
+                        getString(R.string.UfSlashRun) : getString(R.string.freezeSlashRun);
 
         final AppPreferences sharedPreferences = new AppPreferences(getApplicationContext());
 

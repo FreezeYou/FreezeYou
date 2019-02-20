@@ -242,6 +242,8 @@
     <string name="reason_colon">原因： %1$s </string>
     <string name="plsWait">请稍候</string>
     <string name="loading___">正在加载...</string>
+    <string name="freezeSlashRun">冻结/启动</string>
+    <string name="UfSlashRun">解冻/启动</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
