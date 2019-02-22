@@ -26,7 +26,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
@@ -128,7 +127,7 @@ public class InstallPackagesService extends Service {
                                         InstallPackagesFinishedReceiver.class)
                                         .putExtra("name", willBeUninstalledName)
                                         .putExtra("pkgName", packageName)
-                                        .putExtra("install", false), FLAG_UPDATE_CURRENT)
+                                        .putExtra("install", false), PendingIntent.FLAG_UPDATE_CURRENT)
                                 .getIntentSender());
             } else {
                 // Root Mode
@@ -208,7 +207,7 @@ public class InstallPackagesService extends Service {
                                         InstallPackagesFinishedReceiver.class)
                                         .putExtra("name", willBeInstalledName)
                                         .putExtra("pkgName", willBeInstalledPackageName)
-                                        .putExtra("apkFilePath", apkFilePath), FLAG_UPDATE_CURRENT)
+                                        .putExtra("apkFilePath", apkFilePath), PendingIntent.FLAG_UPDATE_CURRENT)
                                 .getIntentSender());
             } else {
                 // Root Mode
