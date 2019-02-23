@@ -232,7 +232,7 @@ public class InstallPackagesService extends Service {
                     notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
                 } else {
                     builder.setContentTitle(willBeInstalledName + " " + getString(R.string.installFailed));
-                    builder.setContentText(getString(R.string.reason_colon) + result);
+                    builder.setContentText(String.format(getString(R.string.reason_colon), result));
                     notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
                 }
             }

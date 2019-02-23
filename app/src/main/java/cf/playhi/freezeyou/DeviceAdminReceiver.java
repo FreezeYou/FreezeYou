@@ -10,7 +10,7 @@ public class DeviceAdminReceiver extends android.app.admin.DeviceAdminReceiver {
 
     @Override
     public void onEnabled(Context context, Intent intent) {
-        showToast(context, R.string.activated);
+//        showToast(context, R.string.activated);
     }
 
     @Override
