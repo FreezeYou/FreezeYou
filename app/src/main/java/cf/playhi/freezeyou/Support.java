@@ -144,37 +144,43 @@ class Support {
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
         }
-        if ((!"cf.playhi.freezeyou".equals(pkgName)) && (!pkgName.equals(currentPackage)) && (!isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, pkgName))) {
-            try {
-                final int exitValue = fAURoot(pkgName, enable);
-                if (exitValue == 0) {
-                    if (enable) {
-                        onUFApplications(context, pkgName);
-                        if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
-                            showToast(context, R.string.executed);
-                        }
-                        createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
-                        if (askRun) {
-                            askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
+        if ((!"cf.playhi.freezeyou".equals(pkgName))) {
+            if (isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, pkgName)) {
+                checkAndShowAppStillNotifyingToast(context, pkgName);
+            } else if (pkgName.equals(currentPackage)) {
+                checkAndShowAppIsForegroundApplicationToast(context, pkgName);
+            } else {
+                try {
+                    final int exitValue = fAURoot(pkgName, enable);
+                    if (exitValue == 0) {
+                        if (enable) {
+                            onUFApplications(context, pkgName);
+                            if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                                showToast(context, R.string.executed);
+                            }
+                            createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
+                            if (askRun) {
+                                askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
+                            }
+                        } else {
+                            onFApplications(context, pkgName);
+                            if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                                showToast(context, R.string.executed);
+                            }
+                            deleteNotification(context, pkgName);
                         }
                     } else {
-                        onFApplications(context, pkgName);
-                        if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
-                            showToast(context, R.string.executed);
-                        }
-                        deleteNotification(context, pkgName);
+                        showToast(context, R.string.mayUnrootedOrOtherEx);
                     }
-                } else {
-                    showToast(context, R.string.mayUnrootedOrOtherEx);
+                } catch (final Exception e) {
+                    e.printStackTrace();
+                    showToast(context, context.getString(R.string.exception) + e.getMessage());
+                    if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
+                        showToast(context, R.string.mayUnrooted);
+                    }
                 }
-            } catch (final Exception e) {
-                e.printStackTrace();
-                showToast(context, context.getString(R.string.exception) + e.getMessage());
-                if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
-                    showToast(context, R.string.mayUnrooted);
-                }
+                sendStatusChangedBroadcast(context);
             }
-            sendStatusChangedBroadcast(context);
         }
     }
 
@@ -184,8 +190,12 @@ class Support {
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
         }
-        if ((!"cf.playhi.freezeyou".equals(pkgName)) && (!pkgName.equals(currentPackage)) && (!isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, pkgName))) {
-            if (getDevicePolicyManager(context).setApplicationHidden(
+        if ((!"cf.playhi.freezeyou".equals(pkgName))) {
+            if (isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, pkgName)) {
+                checkAndShowAppStillNotifyingToast(context, pkgName);
+            } else if (pkgName.equals(currentPackage)) {
+                checkAndShowAppIsForegroundApplicationToast(context, pkgName);
+            } else if (getDevicePolicyManager(context).setApplicationHidden(
                     DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
                 if (hidden) {
                     onFApplications(context, pkgName);
@@ -287,17 +297,23 @@ class Support {
                 outputStream = new DataOutputStream(process.getOutputStream());
                 if (freeze) {
                     for (String aPkgNameList : pkgNameList) {
-                        if ((!"cf.playhi.freezeyou".equals(aPkgNameList)) && (!currentPackage.equals(aPkgNameList)) && (!isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, aPkgNameList))) {
-                            try {
-                                int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList);
-                                if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                                    outputStream.writeBytes(
-                                            "pm disable " + aPkgNameList + "\n");
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
-                                    showToast(context, R.string.plsRemoveUninstalledApplications);
+                        if ((!"cf.playhi.freezeyou".equals(aPkgNameList))) {
+                            if (isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, aPkgNameList)) {
+                                checkAndShowAppStillNotifyingToast(context, aPkgNameList);
+                            } else if (currentPackage.equals(aPkgNameList)) {
+                                checkAndShowAppIsForegroundApplicationToast(context, aPkgNameList);
+                            } else {
+                                try {
+                                    int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList);
+                                    if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+                                        outputStream.writeBytes(
+                                                "pm disable " + aPkgNameList + "\n");
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                                        showToast(context, R.string.plsRemoveUninstalledApplications);
+                                    }
                                 }
                             }
                         }
@@ -362,13 +378,19 @@ class Support {
             for (String aPkgNameList : pkgNameList) {
                 try {
                     if (freeze) {
-                        if ((!"cf.playhi.freezeyou".equals(aPkgNameList)) && (!currentPackage.equals(aPkgNameList)) && (!checkMRootFrozen(context, aPkgNameList)) && (!isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, aPkgNameList))) {
-                            if (getDevicePolicyManager(context).setApplicationHidden(
-                                    DeviceAdminReceiver.getComponentName(context), aPkgNameList, true)) {
-                                onFApplications(context, aPkgNameList);
-                                deleteNotification(context, aPkgNameList);
+                        if ((!"cf.playhi.freezeyou".equals(aPkgNameList)) && (!checkMRootFrozen(context, aPkgNameList))) {
+                            if (currentPackage.equals(aPkgNameList)) {
+                                checkAndShowAppIsForegroundApplicationToast(context, aPkgNameList);
+                            } else if (isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, aPkgNameList)) {
+                                checkAndShowAppStillNotifyingToast(context, aPkgNameList);
                             } else {
-                                showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                                if (getDevicePolicyManager(context).setApplicationHidden(
+                                        DeviceAdminReceiver.getComponentName(context), aPkgNameList, true)) {
+                                    onFApplications(context, aPkgNameList);
+                                    deleteNotification(context, aPkgNameList);
+                                } else {
+                                    showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+                                }
                             }
                         }
                     } else {
@@ -553,6 +575,40 @@ class Support {
             }
         });
         popup.show();
+    }
+
+    private static void checkAndShowAppStillNotifyingToast(Context context, String pkgName) {
+        String label =
+                ApplicationLabelUtils.getApplicationLabel(
+                        context,
+                        null,
+                        null,
+                        pkgName);
+        if (!context.getString(R.string.uninstalled).equals(label))
+            showToast(
+                    context,
+                    String.format(
+                            context.getString(R.string.appHasNotifi),
+                            label
+                    )
+            );
+    }
+
+    private static void checkAndShowAppIsForegroundApplicationToast(Context context, String pkgName) {
+        String label =
+                ApplicationLabelUtils.getApplicationLabel(
+                        context,
+                        null,
+                        null,
+                        pkgName);
+        if (!context.getString(R.string.uninstalled).equals(label))
+            showToast(
+                    context,
+                    String.format(
+                            context.getString(R.string.isForegroundApplication),
+                            label
+                    )
+            );
     }
 
 //    static void checkLanguage(Context context) {

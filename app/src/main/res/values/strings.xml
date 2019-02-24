@@ -244,6 +244,8 @@
     <string name="loading___">正在加载...</string>
     <string name="freezeSlashRun">冻结/启动</string>
     <string name="UfSlashRun">解冻/启动</string>
+    <string name="isForegroundApplication">%1$s 为前台应用程序</string>
+    <string name="appHasNotifi">%1$s 在通知栏有通知</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
