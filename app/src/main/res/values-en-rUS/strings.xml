@@ -246,6 +246,8 @@
     <string name="loading___">Loading...</string>
     <string name="freezeSlashRun">Freeze/Run</string>
     <string name="UfSlashRun">Unfreeze/Run</string>
+    <string name="isForegroundApplication">%1$s is foreground application</string>
+    <string name="appHasNotifi">%1$s is still notifying</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
