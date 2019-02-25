@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.provider.Settings.EXTRA_APP_PACKAGE;
 import static cf.playhi.freezeyou.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
@@ -141,6 +143,9 @@ public class AutoDiagnosisActivity extends Activity {
                 if (s == null)
                     s = "";
                 switch (s) {
+                    case "-30":
+                        checkUpdate(AutoDiagnosisActivity.this);
+                        break;
                     case "1":
                         AccessibilityUtils.openAccessibilitySettings(AutoDiagnosisActivity.this);
                         break;
@@ -153,15 +158,31 @@ public class AutoDiagnosisActivity extends Activity {
                             }
                         }
                         break;
-                    case "-30":
-                        checkUpdate(AutoDiagnosisActivity.this);
-                        break;
                     case "4":
                         if (Build.VERSION.SDK_INT >= 23) {
                             Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
                             if (intent.resolveActivity(getPackageManager()) != null) {
                                 startActivity(intent);
                             }
+                        }
+                        break;
+                    case "6":
+                        Intent intent;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            intent = new Intent("android.settings.APP_NOTIFICATION_SETTINGS");
+                            intent.putExtra("app_package", "cf.play" + "hi.freezeyou");
+                            intent.putExtra("app_uid", getApplicationInfo().uid);
+                            intent.putExtra("android.provider.extra.APP_PACKAGE", getPackageName());
+                        } else {
+                            intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.parse("package:cf.playhi.freezeyou");
+                            intent.setData(uri);
+                        }
+                        try {
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            showToast(getApplicationContext(), e.getLocalizedMessage());
                         }
                         break;
                     default:
