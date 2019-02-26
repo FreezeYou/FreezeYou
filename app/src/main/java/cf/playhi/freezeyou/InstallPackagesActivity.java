@@ -198,8 +198,25 @@ public class InstallPackagesActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (installPackagesAlertDialog.isObsd()) {
-                            if (install) clearTempFile(apkFilePath);
-                            showToast(InstallPackagesActivity.this, "Dangerous");
+                            AlertDialogUtils.buildAlertDialog(
+                                    InstallPackagesActivity.this,
+                                    android.R.drawable.ic_dialog_alert,
+                                    R.string.alert_isObsd,
+                                    R.string.dangerous)
+                                    .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            showInstallDialog(progressDialog, install, alertDialogMessage, apkFilePath, packageUri);
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (install) clearTempFile(apkFilePath);
+                                            finish();
+                                        }
+                                    })
+                                    .create().show();
                         } else {
                             ServiceUtils.startService(
                                     InstallPackagesActivity.this,
