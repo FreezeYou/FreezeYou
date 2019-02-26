@@ -249,7 +249,7 @@
     <string name="isForegroundApplication">%1$s is foreground application</string>
     <string name="appHasNotifi">%1$s is still notifying</string>
     <string name="dangerous">Dangerous</string>
-    <string name="alert_isObsd">存在遮罩层，操作已被拦截，请移除后重试</string>
+    <string name="alert_isObsd">The window is obscured, the operation has been rejected, please remove the mask layer and retry</string>
     <string name="retry">Retry</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
