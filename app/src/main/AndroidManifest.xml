@@ -199,6 +199,11 @@
             android:label="@string/manualMode"
             android:theme="@style/AppTheme.Default" />
         <activity
+            android:name=".UriFreezeActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:label="@string/disableAEnable"
+            android:theme="@style/AppTheme.Translucent.NoTitleBar" />
+        <activity
             android:name=".ScheduledTasksManageActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/scheduledTasks"

@@ -216,6 +216,10 @@
             android:key="configureAccessibilityService"
             android:summary="@string/accessibility_service_description"
             android:title="@string/configureAccessibilityService" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:title="@string/enableInstallPkgFunc"
+            android:key="enableInstallPkgFunc" />
         <EditTextPreference
             android:defaultValue="@string/app_name"
             android:key="organizationName"

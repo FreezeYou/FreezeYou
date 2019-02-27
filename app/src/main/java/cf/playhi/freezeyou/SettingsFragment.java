@@ -171,6 +171,15 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     }
                 }
                 break;
+            case "enableInstallPkgFunc":
+                if (sharedPreferences.getBoolean(s, true)) {
+                    pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.InstallPackagesActivity"),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+                } else {
+                    pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.InstallPackagesActivity"),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                }
+                break;
 //            case "languagePref":
 //                checkLanguage(getActivity().getApplicationContext());
 //                showToast(getActivity(),R.string.willTakeEffectsNextLaunch);
