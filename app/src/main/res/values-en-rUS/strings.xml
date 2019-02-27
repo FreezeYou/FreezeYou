@@ -251,7 +251,7 @@
     <string name="dangerous">Dangerous</string>
     <string name="alert_isObsd">The window is obscured, the operation has been rejected, please remove the mask layer and retry</string>
     <string name="retry">Retry</string>
-    <string name="enableInstallPkgFunc">启用安装应用能力</string>
+    <string name="enableInstallPkgFunc">Enable install packages function</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
