@@ -1,10 +1,8 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -12,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.MotionEvent;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -188,7 +185,7 @@ public class InstallPackagesActivity extends Activity {
     }
 
     private void showInstallDialog(final ProgressDialog progressDialog, final boolean install, final CharSequence alertDialogMessage, final String apkFilePath, final Uri packageUri) {
-        final InstallPackagesAlertDialog installPackagesAlertDialog = new InstallPackagesAlertDialog(this);
+        final ObsdAlertDialog installPackagesAlertDialog = new ObsdAlertDialog(this);
         installPackagesAlertDialog.setTitle(install ? R.string.install : R.string.uninstall);
         installPackagesAlertDialog.setMessage(alertDialogMessage);
         installPackagesAlertDialog.setButton(
@@ -246,22 +243,3 @@ public class InstallPackagesActivity extends Activity {
         installPackagesAlertDialog.show();
     }
 }
-
-class InstallPackagesAlertDialog extends AlertDialog {
-    private boolean isObsd;
-
-    InstallPackagesAlertDialog(Context context) {
-        super(context);
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        isObsd = (ev.getFlags() & MotionEvent.FLAG_WINDOW_IS_OBSCURED) != 0;
-        return super.dispatchTouchEvent(ev);
-    }
-
-    boolean isObsd() {
-        return isObsd;
-    }
-}
-
