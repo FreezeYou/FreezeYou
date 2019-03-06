@@ -152,16 +152,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="fuf"
-                    android:scheme="freezeyou" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".OneKeyFreeze"
@@ -201,8 +191,20 @@
         <activity
             android:name=".UriFreezeActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:excludeFromRecents="true"
             android:label="@string/disableAEnable"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar" />
+            android:theme="@style/AppTheme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="fuf"
+                    android:scheme="freezeyou" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ScheduledTasksManageActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
