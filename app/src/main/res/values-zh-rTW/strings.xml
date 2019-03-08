@@ -251,6 +251,7 @@
     <string name="dangerous">危險</string>
     <string name="alert_isObsd">存在遮罩層，操作已被攔截，請移除後重試</string>
     <string name="retry">再試一次</string>
+    <string name="enableInstallPkgFunc">启用安装应用能力</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
