@@ -164,7 +164,6 @@ public class FUFLauncherShortcutCreator extends Activity {
                     HashMap<String, Object> map = (HashMap<String, Object>) app_listView.getItemAtPosition(i);
                     final String name = (String) map.get("Name");
                     final String pkgName = (String) map.get("PackageName");
-                    Intent it = getIntent();
                     if (isSlfMode) {
                         SharedPreferences sp = getSharedPreferences(getIntent().getStringExtra("slf_n"), MODE_PRIVATE);
                         sp.edit().putString("pkgS", sp.getString("pkgS", "") + pkgName + ",").apply();

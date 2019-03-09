@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.provider.Settings.EXTRA_APP_PACKAGE;
 import static cf.playhi.freezeyou.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;

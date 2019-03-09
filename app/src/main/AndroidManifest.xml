@@ -193,7 +193,7 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:label="@string/disableAEnable"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar">
+            android:theme="@style/AppTheme.Default.Dialog">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -223,8 +223,9 @@
             android:name=".InstallPackagesActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
-            android:label="安装与卸载"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar">
+            android:label="@string/installAndUninstall"
+            android:theme="@style/AppTheme.Translucent.NoTitleBar"
+            android:process=":installAndUninstall">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.INSTALL_PACKAGE" />

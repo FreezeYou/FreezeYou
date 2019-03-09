@@ -71,36 +71,40 @@ final class ThemeUtils {
     }
 
     static void processSetTheme(Context context) {
+        processSetTheme(context, false);
+    }
+
+    static void processSetTheme(Context context, boolean isDialog) {
         try {
             String string = getUiTheme(context);
             if (string != null) {
                 switch (string) {
                     case "blue":
-                        context.setTheme(R.style.AppTheme_Default_Blue);
+                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Blue : R.style.AppTheme_Default_Blue);
                         break;
                     case "orange":
-                        context.setTheme(R.style.AppTheme_Default_Orange);
+                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Orange : R.style.AppTheme_Default_Orange);
                         break;
                     case "green":
-                        context.setTheme(R.style.AppTheme_Default_Green);
+                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Green : R.style.AppTheme_Default_Green);
                         break;
                     case "pink":
-                        context.setTheme(R.style.AppTheme_Default_Pink);
+                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Pink : R.style.AppTheme_Default_Pink);
                         break;
                     case "yellow":
-                        context.setTheme(R.style.AppTheme_Default_Yellow);
+                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Yellow : R.style.AppTheme_Default_Yellow);
                         break;
                     case "black":
-                        context.setTheme(R.style.AppTheme_Default);
+                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog : R.style.AppTheme_Default);
                         break;
                     case "white":
-                        context.setTheme(R.style.AppTheme_Default_White);
+                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_White : R.style.AppTheme_Default_White);
                         break;
                     case "red":
-                        context.setTheme(R.style.AppTheme_Default_Red);
+                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Red : R.style.AppTheme_Default_Red);
                         break;
                     default:
-                        context.setTheme(R.style.AppTheme_Default_White);
+                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_White : R.style.AppTheme_Default_White);
 //                        if (Build.VERSION.SDK_INT >= 21) {
 //                            context.setTheme(R.style.AppTheme_Default_Blue);
 //                        } else {
