@@ -73,7 +73,7 @@ public class UriFreezeActivity extends Activity {
         }
     }
 
-    private void checkAndCreateUserCheckDialog(Intent intent, String pkgName, int mode) {
+    private void checkAndCreateUserCheckDialog(final Intent intent, final String pkgName, final int mode) {
 
         boolean suitableForAutoAllow = mode != MODE_FUF;
 
@@ -99,25 +99,48 @@ public class UriFreezeActivity extends Activity {
             refererPackageLabel = getString(R.string.unknown);
         }
 
-        View checkBoxView = View.inflate(this, R.layout.checkbox, null);//https://stackoverflow.com/questions/9763643/how-to-add-a-check-box-to-an-alert-dialog
-        final CheckBox checkBox = checkBoxView.findViewById(R.id.checkBox);
-        if (refererPackageLabel.equals(getString(R.string.unknown))) {
-            checkBox.setVisibility(View.GONE);
-        } else {
-            checkBox.setText(String.format("总是允许 %1$s", refererPackageLabel));
+        if (suitableForAutoAllow) {
+            View checkBoxView = View.inflate(this, R.layout.checkbox, null);//https://stackoverflow.com/questions/9763643/how-to-add-a-check-box-to-an-alert-dialog
+            CheckBox checkBox = checkBoxView.findViewById(R.id.checkBox);
+            if (refererPackageLabel.equals(getString(R.string.unknown))) {
+                checkBox.setVisibility(View.GONE);
+            } else {
+                checkBox.setText(String.format("总是允许 %1$s", refererPackageLabel));
+            }
+            obsdAlertDialog.setView(checkBoxView);
         }
-        obsdAlertDialog.setView(checkBoxView);
         obsdAlertDialog.setTitle("标题");
         obsdAlertDialog.setMessage(pkgName);
         obsdAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "允许", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (((ObsdAlertDialog) dialog).isObsd()) {
-                    ToastUtils.showToast(UriFreezeActivity.this, "isObsd");
+                    AlertDialogUtils.buildAlertDialog(
+                            UriFreezeActivity.this,
+                            android.R.drawable.ic_dialog_alert,
+                            R.string.alert_isObsd,
+                            R.string.dangerous)
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            })
+                            .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    checkAndCreateUserCheckDialog(intent, pkgName, mode);
+                                }
+                            })
+                            .create().show();
                 } else {
-                    ToastUtils.showToast(UriFreezeActivity.this, "notObsd");
+                    CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.checkBox);
+                    if (checkBox != null) {
+                        checkBox.isChecked();
+                    }
+
+                    finish();
                 }
-                finish();
             }
         });
         obsdAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "拒绝", new DialogInterface.OnClickListener() {
