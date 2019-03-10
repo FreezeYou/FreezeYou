@@ -6,14 +6,12 @@ import android.os.Bundle;
 
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.DevicePolicyManagerUtils.doLockScreen;
-import static cf.playhi.freezeyou.ThemeUtils.processAddTranslucent;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class AskLockScreenActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        processSetTheme(this);
-        processAddTranslucent(this);
+        processSetTheme(this, true);
         super.onCreate(savedInstanceState);
         buildAlertDialog(this, R.mipmap.ic_launcher_new_round, R.string.askIfLockScreen, R.string.notice)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {

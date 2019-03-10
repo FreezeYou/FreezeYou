@@ -14,6 +14,11 @@ import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 
 public class UriFreezeActivity extends Activity {
 
+    private static final int MODE_FREEZE = 11;
+    private static final int MODE_UNFREEZE = 21;
+    private static final int MODE_FUF = 31;
+    private static final int MODE_UNFREEZEANDRUN = 22;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ThemeUtils.processSetTheme(this, true);
@@ -38,77 +43,25 @@ public class UriFreezeActivity extends Activity {
                     if (action == null || "".equals(action))
                         action = "fuf";
                     pkgName = dataUri.getQueryParameter("pkgName");
-                    ObsdAlertDialog obsdAlertDialog = new ObsdAlertDialog(this);
 
-                    String refererPackageLabel;
-                    if (Build.VERSION.SDK_INT >= 22
-                            && intent.getParcelableExtra(Intent.EXTRA_REFERRER) == null
-                            && intent.getStringExtra(Intent.EXTRA_REFERRER_NAME) == null) {
-                        Uri referrerUri = getReferrer();
-                        if (referrerUri != null && "android-app".equals(referrerUri.getScheme())) {
-                            refererPackageLabel =
-                                    getApplicationLabel(
-                                            UriFreezeActivity.this, null, null,
-                                            referrerUri.getEncodedSchemeSpecificPart().substring(2));
-                            if (refererPackageLabel.equals(getString(R.string.uninstalled))) {
-                                refererPackageLabel = getString(R.string.unknown);
-                            }
-                        } else {
-                            refererPackageLabel = getString(R.string.unknown);
-                        }
-                    } else {
-                        refererPackageLabel = getString(R.string.unknown);
+                    switch (action) {
+                        case "freeze":
+                            checkAndCreateUserCheckDialog(intent, pkgName, MODE_FREEZE);
+                            break;
+                        case "unfreeze":
+                            checkAndCreateUserCheckDialog(intent, pkgName, MODE_UNFREEZE);
+                            break;
+                        case "fuf":
+                            checkAndCreateUserCheckDialog(intent, pkgName, MODE_FUF);
+                            break;
+                        case "unFreezeAndRun":
+                            checkAndCreateUserCheckDialog(intent, pkgName, MODE_UNFREEZEANDRUN);
+                            break;
+                        default://按照 fuf 方案执行
+                            checkAndCreateUserCheckDialog(intent, pkgName, MODE_FUF);
+                            break;
                     }
 
-                    View checkBoxView = View.inflate(this, R.layout.checkbox, null);//https://stackoverflow.com/questions/9763643/how-to-add-a-check-box-to-an-alert-dialog
-                    final CheckBox checkBox = checkBoxView.findViewById(R.id.checkBox);
-                    if (refererPackageLabel.equals(getString(R.string.unknown))) {
-                        checkBox.setVisibility(View.GONE);
-                    } else {
-                        checkBox.setText(String.format("总是允许 %1$s", refererPackageLabel));
-                    }
-                    obsdAlertDialog.setView(checkBoxView);
-                    obsdAlertDialog.setTitle("标题");
-                    obsdAlertDialog.setMessage(pkgName);
-                    obsdAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "允许", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (((ObsdAlertDialog) dialog).isObsd()) {
-                                ToastUtils.showToast(UriFreezeActivity.this, "isObsd");
-                            } else {
-                                ToastUtils.showToast(UriFreezeActivity.this, "notObsd");
-                            }
-                            finish();
-                        }
-                    });
-                    obsdAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "拒绝", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ToastUtils.showToast(UriFreezeActivity.this, "拒绝");
-                            finish();
-                        }
-                    });
-                    obsdAlertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ToastUtils.showToast(UriFreezeActivity.this, "取消");
-                            finish();
-                        }
-                    });
-                    obsdAlertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            finish();
-                        }
-                    });
-                    obsdAlertDialog.show();
-                    Window w = obsdAlertDialog.getWindow();
-                    if (w != null) {
-                        View v = (View) w.findViewById(android.R.id.custom).getParent();
-                        if (v != null) {
-                            v.setMinimumHeight(0);
-                        }
-                    }
                 } else {
                     finish();
                 }
@@ -117,6 +70,83 @@ public class UriFreezeActivity extends Activity {
             }
         } else {
             finish();
+        }
+    }
+
+    private void checkAndCreateUserCheckDialog(Intent intent, String pkgName, int mode) {
+
+        boolean suitableForAutoAllow = mode != MODE_FUF;
+
+        ObsdAlertDialog obsdAlertDialog = new ObsdAlertDialog(this);
+
+        String refererPackageLabel;
+        if (Build.VERSION.SDK_INT >= 22
+                && intent.getParcelableExtra(Intent.EXTRA_REFERRER) == null
+                && intent.getStringExtra(Intent.EXTRA_REFERRER_NAME) == null) {
+            Uri referrerUri = getReferrer();
+            if (referrerUri != null && "android-app".equals(referrerUri.getScheme())) {
+                refererPackageLabel =
+                        getApplicationLabel(
+                                UriFreezeActivity.this, null, null,
+                                referrerUri.getEncodedSchemeSpecificPart().substring(2));
+                if (refererPackageLabel.equals(getString(R.string.uninstalled))) {
+                    refererPackageLabel = getString(R.string.unknown);
+                }
+            } else {
+                refererPackageLabel = getString(R.string.unknown);
+            }
+        } else {
+            refererPackageLabel = getString(R.string.unknown);
+        }
+
+        View checkBoxView = View.inflate(this, R.layout.checkbox, null);//https://stackoverflow.com/questions/9763643/how-to-add-a-check-box-to-an-alert-dialog
+        final CheckBox checkBox = checkBoxView.findViewById(R.id.checkBox);
+        if (refererPackageLabel.equals(getString(R.string.unknown))) {
+            checkBox.setVisibility(View.GONE);
+        } else {
+            checkBox.setText(String.format("总是允许 %1$s", refererPackageLabel));
+        }
+        obsdAlertDialog.setView(checkBoxView);
+        obsdAlertDialog.setTitle("标题");
+        obsdAlertDialog.setMessage(pkgName);
+        obsdAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "允许", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (((ObsdAlertDialog) dialog).isObsd()) {
+                    ToastUtils.showToast(UriFreezeActivity.this, "isObsd");
+                } else {
+                    ToastUtils.showToast(UriFreezeActivity.this, "notObsd");
+                }
+                finish();
+            }
+        });
+        obsdAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "拒绝", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ToastUtils.showToast(UriFreezeActivity.this, "拒绝");
+                finish();
+            }
+        });
+        obsdAlertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ToastUtils.showToast(UriFreezeActivity.this, "取消");
+                finish();
+            }
+        });
+        obsdAlertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });
+        obsdAlertDialog.show();
+        Window w = obsdAlertDialog.getWindow();
+        if (w != null) {
+            View v = (View) w.findViewById(android.R.id.custom).getParent();
+            if (v != null) {
+                v.setMinimumHeight(0);
+            }
         }
     }
 

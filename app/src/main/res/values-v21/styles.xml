@@ -112,6 +112,7 @@
     </style>
 
     <style name="AppTheme.Default.Dialog" parent="AppTheme.Default">
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowBackground">@color/realTranslucent</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -122,6 +123,7 @@
     </style>
 
     <style name="AppTheme.Default.Dialog.Blue" parent="AppTheme.Default.Blue">
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowBackground">@color/realTranslucent</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -132,6 +134,7 @@
     </style>
 
     <style name="AppTheme.Default.Dialog.Yellow" parent="AppTheme.Default.Yellow">
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowBackground">@color/realTranslucent</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -142,6 +145,7 @@
     </style>
 
     <style name="AppTheme.Default.Dialog.Orange" parent="AppTheme.Default.Orange">
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowBackground">@color/realTranslucent</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -152,6 +156,7 @@
     </style>
 
     <style name="AppTheme.Default.Dialog.Green" parent="AppTheme.Default.Green">
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowBackground">@color/realTranslucent</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -162,6 +167,7 @@
     </style>
 
     <style name="AppTheme.Default.Dialog.Pink" parent="AppTheme.Default.Pink">
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowBackground">@color/realTranslucent</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -172,6 +178,7 @@
     </style>
 
     <style name="AppTheme.Default.Dialog.Red" parent="AppTheme.Default.Red">
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowBackground">@color/realTranslucent</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -182,6 +189,7 @@
     </style>
 
     <style name="AppTheme.Default.Dialog.White" parent="AppTheme.Default.White">
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowBackground">@color/realTranslucent</item>
         <item name="android:windowIsTranslucent">true</item>

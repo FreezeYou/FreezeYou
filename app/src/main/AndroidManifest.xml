@@ -146,7 +146,7 @@
             android:label="@string/disableAEnable"
             android:launchMode="standard"
             android:maxRecents="6"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar"
+            android:theme="@style/AppTheme.Default.Dialog"
             tools:ignore="UnusedAttribute">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -224,8 +224,8 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:label="@string/installAndUninstall"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar"
-            android:process=":installAndUninstall">
+            android:process=":installAndUninstall"
+            android:theme="@style/AppTheme.Default.Dialog">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.INSTALL_PACKAGE" />
@@ -323,12 +323,12 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:label="@string/askIfLockScreen"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar" />
+            android:theme="@style/AppTheme.Default.Dialog" />
         <activity
             android:name=".AskRunActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
-            android:theme="@style/AppTheme.Translucent.NoTitleBar" />
+            android:theme="@style/AppTheme.Default.Dialog" />
         <activity
             android:name=".GetDisabledApplications"
             android:excludeFromRecents="true"

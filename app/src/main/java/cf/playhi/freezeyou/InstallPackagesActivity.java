@@ -18,7 +18,6 @@ import java.io.OutputStream;
 import java.util.Date;
 
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
-import static cf.playhi.freezeyou.ThemeUtils.processAddTranslucent;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
@@ -27,8 +26,7 @@ public class InstallPackagesActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        processSetTheme(this);
-        processAddTranslucent(this);
+        processSetTheme(this, true);
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         final Uri packageUri = intent.getData();
