@@ -18,6 +18,7 @@ public class UriFreezeActivity extends Activity {
     private static final int MODE_UNFREEZE = 21;
     private static final int MODE_FUF = 31;
     private static final int MODE_UNFREEZEANDRUN = 22;
+    private static final String ILLEGALPKGNAME = "Fy^&IllegalPN*@!1024`+=：:";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,8 @@ public class UriFreezeActivity extends Activity {
 
     private void checkAndCreateUserCheckDialog(final Intent intent, final String pkgName, final int mode) {
 
-        boolean suitableForAutoAllow = mode != MODE_FUF;
+        final boolean suitableForAutoAllow = mode != MODE_FUF;
+        final boolean isFrozen = Support.realGetFrozenStatus(this, pkgName, getPackageManager());
 
         ObsdAlertDialog obsdAlertDialog = new ObsdAlertDialog(this);
 
@@ -90,70 +92,186 @@ public class UriFreezeActivity extends Activity {
                                 UriFreezeActivity.this, null, null,
                                 referrerUri.getEncodedSchemeSpecificPart().substring(2));
                 if (refererPackageLabel.equals(getString(R.string.uninstalled))) {
-                    refererPackageLabel = getString(R.string.unknown);
+                    refererPackageLabel = ILLEGALPKGNAME;
                 }
             } else {
-                refererPackageLabel = getString(R.string.unknown);
+                refererPackageLabel = ILLEGALPKGNAME;
             }
         } else {
-            refererPackageLabel = getString(R.string.unknown);
+            refererPackageLabel = ILLEGALPKGNAME;
         }
 
         if (suitableForAutoAllow) {
+            //TODO:Auto Allow
+
             View checkBoxView = View.inflate(this, R.layout.checkbox, null);//https://stackoverflow.com/questions/9763643/how-to-add-a-check-box-to-an-alert-dialog
             CheckBox checkBox = checkBoxView.findViewById(R.id.checkBox);
-            if (refererPackageLabel.equals(getString(R.string.unknown))) {
+            if (refererPackageLabel.equals(ILLEGALPKGNAME)) {
                 checkBox.setVisibility(View.GONE);
             } else {
-                checkBox.setText(String.format("总是允许 %1$s", refererPackageLabel));
+                checkBox.setText(String.format(getString(R.string.alwaysAllow_name), refererPackageLabel));
             }
             obsdAlertDialog.setView(checkBoxView);
         }
-        obsdAlertDialog.setTitle("标题");
-        obsdAlertDialog.setMessage(pkgName);
-        obsdAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "允许", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (((ObsdAlertDialog) dialog).isObsd()) {
-                    AlertDialogUtils.buildAlertDialog(
-                            UriFreezeActivity.this,
-                            android.R.drawable.ic_dialog_alert,
-                            R.string.alert_isObsd,
-                            R.string.dangerous)
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
+        obsdAlertDialog.setTitle(R.string.plsConfirm);
+        StringBuilder message = new StringBuilder();
+        String nl = System.getProperty("line.separator");
+        message.append(getString(R.string.target_colon));
+        message.append(nl);
+        message.append(getString(R.string.application_colon));
+        message.append(
+                ApplicationLabelUtils.
+                        getApplicationLabel(
+                                this, null,
+                                null, pkgName));
+        message.append(nl);
+        message.append(getString(R.string.pkgName_colon));
+        message.append(pkgName);
+        message.append(nl);
+        message.append(nl);
+        message.append(getString(R.string.execute_colon));
+        message.append(nl);
+        switch (mode) {
+            case MODE_FREEZE:
+                message.append(getString(R.string.freeze));
+                break;
+            case MODE_UNFREEZE:
+                message.append(getString(R.string.unfreeze));
+                break;
+            case MODE_UNFREEZEANDRUN:
+                message.append(getString(R.string.openImmediatelyAfterUF));
+                break;
+            default:
+                message.append(getString(R.string.plsSelect));
+                break;
+        }
+        obsdAlertDialog.setMessage(message);
+        obsdAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+                getString(suitableForAutoAllow ?
+                        R.string.allow :
+                        isFrozen ?
+                                R.string.unfreeze :
+                                R.string.launch),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (((ObsdAlertDialog) dialog).isObsd()) {
+                            AlertDialogUtils.buildAlertDialog(
+                                    UriFreezeActivity.this,
+                                    android.R.drawable.ic_dialog_alert,
+                                    R.string.alert_isObsd,
+                                    R.string.dangerous)
+                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            finish();
+                                        }
+                                    })
+                                    .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            checkAndCreateUserCheckDialog(intent, pkgName, mode);
+                                        }
+                                    })
+                                    .create().show();
+                        } else {
+                            CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.checkBox);
+                            if (checkBox != null) {
+                                //TODO:Save
+                                checkBox.isChecked();
+                            }
+                            if (suitableForAutoAllow) {
+                                switch (mode) {
+                                    case MODE_FREEZE:
+                                        Support.processFreezeAction(
+                                                UriFreezeActivity.this,
+                                                pkgName,
+                                                null,
+                                                null,
+                                                false,
+                                                UriFreezeActivity.this,
+                                                true
+                                        );
+                                        break;
+                                    case MODE_UNFREEZE:
+                                        Support.processUnfreezeAction(
+                                                UriFreezeActivity.this,
+                                                pkgName,
+                                                null,
+                                                null,
+                                                false,
+                                                false,
+                                                UriFreezeActivity.this,
+                                                true
+                                        );
+                                        break;
+                                    case MODE_UNFREEZEANDRUN:
+                                        Support.processUnfreezeAction(
+                                                UriFreezeActivity.this,
+                                                pkgName,
+                                                null,
+                                                null,
+                                                true,
+                                                true,
+                                                UriFreezeActivity.this,
+                                                true
+                                        );
+                                        break;
+                                    default:
+                                        break;
                                 }
-                            })
-                            .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    checkAndCreateUserCheckDialog(intent, pkgName, mode);
+                            } else {
+                                if (isFrozen) {
+                                    Support.processUnfreezeAction(
+                                            UriFreezeActivity.this,
+                                            pkgName,
+                                            null,
+                                            null,
+                                            true,
+                                            false,
+                                            UriFreezeActivity.this,
+                                            true
+                                    );
+                                } else {
+                                    Support.checkAndStartApp(
+                                            UriFreezeActivity.this,
+                                            pkgName,
+                                            null,
+                                            null,
+                                            UriFreezeActivity.this,
+                                            true
+                                    );
                                 }
-                            })
-                            .create().show();
-                } else {
-                    CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.checkBox);
-                    if (checkBox != null) {
-                        checkBox.isChecked();
+                            }
+                        }
                     }
-
-                    finish();
-                }
-            }
-        });
-        obsdAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "拒绝", new DialogInterface.OnClickListener() {
+                });
+        obsdAlertDialog.setButton(
+                DialogInterface.BUTTON_NEGATIVE,
+                getString(
+                        suitableForAutoAllow ?
+                                R.string.reject : R.string.freeze),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (suitableForAutoAllow) {
+                            finish();
+                        } else {
+                            Support.processFreezeAction(
+                                    UriFreezeActivity.this,
+                                    pkgName,
+                                    null,
+                                    null,
+                                    false,
+                                    UriFreezeActivity.this,
+                                    true
+                            );
+                        }
+                    }
+                });
+        obsdAlertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ToastUtils.showToast(UriFreezeActivity.this, "拒绝");
-                finish();
-            }
-        });
-        obsdAlertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ToastUtils.showToast(UriFreezeActivity.this, "取消");
                 finish();
             }
         });

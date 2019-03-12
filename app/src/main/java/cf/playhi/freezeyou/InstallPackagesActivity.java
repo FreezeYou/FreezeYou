@@ -56,6 +56,7 @@ public class InstallPackagesActivity extends Activity {
         final StringBuilder alertDialogMessage = new StringBuilder();
         final ProgressDialog progressDialog =
                 ProgressDialog.show(this, getString(R.string.plsWait), getString(R.string.loading___));
+        final String nl = System.getProperty("line.separator");
         if (install) {
             new Thread(new Runnable() {
                 @Override
@@ -78,7 +79,7 @@ public class InstallPackagesActivity extends Activity {
                         packageInfo.applicationInfo.sourceDir = apkFilePath;
                         packageInfo.applicationInfo.publicSourceDir = apkFilePath;
                         alertDialogMessage.append(getString(R.string.requestFromPackage_colon));
-                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        alertDialogMessage.append(nl);
                         if (Build.VERSION.SDK_INT >= 22) {
                             Uri referrerUri = getReferrer();
                             if (referrerUri == null || !"android-app".equals(referrerUri.getScheme())) {
@@ -97,20 +98,30 @@ public class InstallPackagesActivity extends Activity {
                         } else {
                             alertDialogMessage.append(getString(R.string.unknown));
                         }
-                        alertDialogMessage.append(System.getProperty("line.separator"));
-                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        alertDialogMessage.append(nl);
+                        alertDialogMessage.append(nl);
                         alertDialogMessage.append(getString(R.string.installPackage_colon));
-                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        alertDialogMessage.append(nl);
                         alertDialogMessage.append(getString(R.string.application_colon));
                         alertDialogMessage.append(pm.getApplicationLabel(packageInfo.applicationInfo));
-                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        alertDialogMessage.append(nl);
                         alertDialogMessage.append(getString(R.string.pkgName_colon));
                         alertDialogMessage.append(packageInfo.packageName);
-                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        alertDialogMessage.append(nl);
                         alertDialogMessage.append(getString(R.string.version_colon));
                         alertDialogMessage.append(packageInfo.versionName);
-                        alertDialogMessage.append(System.getProperty("line.separator"));
-                        alertDialogMessage.append(System.getProperty("line.separator"));
+                        try {
+                            String installedVerName = getPackageManager().getPackageInfo(
+                                    packageInfo.packageName,
+                                    PackageManager.GET_UNINSTALLED_PACKAGES
+                            ).versionName;
+                            alertDialogMessage.append(nl);
+                            alertDialogMessage.append(String.format(getString(R.string.existed_colon), installedVerName));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        alertDialogMessage.append(nl);
+                        alertDialogMessage.append(nl);
                         alertDialogMessage.append(getString(R.string.whetherAllow));
                         runOnUiThread(new Runnable() {
                             @Override
@@ -131,7 +142,7 @@ public class InstallPackagesActivity extends Activity {
                 return;
             }
             alertDialogMessage.append(getString(R.string.requestFromPackage_colon));
-            alertDialogMessage.append(System.getProperty("line.separator"));
+            alertDialogMessage.append(nl);
             if (Build.VERSION.SDK_INT >= 22) {
                 Uri referrerUri = getReferrer();
                 if (referrerUri != null && "android-app".equals(referrerUri.getScheme())) {
@@ -150,16 +161,16 @@ public class InstallPackagesActivity extends Activity {
             } else {
                 alertDialogMessage.append(getString(R.string.unknown));
             }
-            alertDialogMessage.append(System.getProperty("line.separator"));
-            alertDialogMessage.append(System.getProperty("line.separator"));
+            alertDialogMessage.append(nl);
+            alertDialogMessage.append(nl);
             alertDialogMessage.append(getString(R.string.uninstallPackage_colon));
-            alertDialogMessage.append(System.getProperty("line.separator"));
+            alertDialogMessage.append(nl);
             alertDialogMessage.append(getString(R.string.application_colon));
             alertDialogMessage.append(getApplicationLabel(this, null, null, packageName));
-            alertDialogMessage.append(System.getProperty("line.separator"));
+            alertDialogMessage.append(nl);
             alertDialogMessage.append(getString(R.string.pkgName_colon));
             alertDialogMessage.append(packageName);
-            alertDialogMessage.append(System.getProperty("line.separator"));
+            alertDialogMessage.append(nl);
             alertDialogMessage.append(getString(R.string.whetherAllow));
             showInstallDialog(progressDialog, install, alertDialogMessage, apkFilePath, packageUri);
         }
