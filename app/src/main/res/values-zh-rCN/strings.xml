@@ -252,6 +252,12 @@
     <string name="alert_isObsd">存在遮罩层，操作已被拦截，请移除后重试</string>
     <string name="retry">重试</string>
     <string name="enableInstallPkgFunc">启用安装应用能力</string>
+    <string name="allow">允许</string>
+    <string name="reject">拒绝</string>
+    <string name="execute_colon">执行：</string>
+    <string name="target_colon">目标：</string>
+    <string name="alwaysAllow_name">总是允许 %1$s</string>
+    <string name="existed_colon">现存：%1$s</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>显示全部</item>
