@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
+
+import net.grandcentrix.tray.AppPreferences;
 
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 
@@ -45,7 +48,7 @@ public class UriFreezeActivity extends Activity {
                         action = "fuf";
                     pkgName = dataUri.getQueryParameter("pkgName");
 
-                    switch (action) {
+                    switch (action.toLowerCase()) {
                         case "freeze":
                             checkAndCreateUserCheckDialog(intent, pkgName, MODE_FREEZE);
                             break;
@@ -55,7 +58,7 @@ public class UriFreezeActivity extends Activity {
                         case "fuf":
                             checkAndCreateUserCheckDialog(intent, pkgName, MODE_FUF);
                             break;
-                        case "unFreezeAndRun":
+                        case "unfreezeandrun"://unFreezeAndRun
                             checkAndCreateUserCheckDialog(intent, pkgName, MODE_UNFREEZEANDRUN);
                             break;
                         default://按照 fuf 方案执行
@@ -82,28 +85,39 @@ public class UriFreezeActivity extends Activity {
         ObsdAlertDialog obsdAlertDialog = new ObsdAlertDialog(this);
 
         String refererPackageLabel;
+        final String refererPackage;
         if (Build.VERSION.SDK_INT >= 22
                 && intent.getParcelableExtra(Intent.EXTRA_REFERRER) == null
                 && intent.getStringExtra(Intent.EXTRA_REFERRER_NAME) == null) {
             Uri referrerUri = getReferrer();
             if (referrerUri != null && "android-app".equals(referrerUri.getScheme())) {
+                refererPackage = referrerUri.getEncodedSchemeSpecificPart().substring(2);
                 refererPackageLabel =
                         getApplicationLabel(
-                                UriFreezeActivity.this, null, null,
-                                referrerUri.getEncodedSchemeSpecificPart().substring(2));
+                                UriFreezeActivity.this,
+                                null, null,
+                                refererPackage
+                        );
                 if (refererPackageLabel.equals(getString(R.string.uninstalled))) {
                     refererPackageLabel = ILLEGALPKGNAME;
                 }
             } else {
                 refererPackageLabel = ILLEGALPKGNAME;
+                refererPackage = ILLEGALPKGNAME;
             }
         } else {
             refererPackageLabel = ILLEGALPKGNAME;
+            refererPackage = ILLEGALPKGNAME;
         }
 
         if (suitableForAutoAllow) {
-            //TODO:Auto Allow
-
+            //Check AutoAllow
+            AppPreferences sp = new AppPreferences(this);
+            String originData = sp.getString("uriAutoAllowPkgs_allows", "");
+            if (originData != null && !ILLEGALPKGNAME.equals(refererPackage) && originData.contains(Base64.encodeToString(refererPackage.getBytes(), Base64.DEFAULT) + ",")) {
+                doSuitableForAutoAllowAllow(mode, pkgName, isFrozen);
+            }
+            //Init CheckBox
             View checkBoxView = View.inflate(this, R.layout.checkbox, null);//https://stackoverflow.com/questions/9763643/how-to-add-a-check-box-to-an-alert-dialog
             CheckBox checkBox = checkBoxView.findViewById(R.id.checkBox);
             if (refererPackageLabel.equals(ILLEGALPKGNAME)) {
@@ -177,49 +191,28 @@ public class UriFreezeActivity extends Activity {
                         } else {
                             CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.checkBox);
                             if (checkBox != null) {
-                                //TODO:Save
-                                checkBox.isChecked();
+                                if (checkBox.isChecked()) {
+                                    AppPreferences sp = new AppPreferences(UriFreezeActivity.this);
+                                    String originData = sp.getString("uriAutoAllowPkgs_allows", "");
+                                    if (!ILLEGALPKGNAME.equals(refererPackage)
+                                            &&
+                                            (originData == null ||
+                                                    !originData.contains(
+                                                            Base64.encodeToString(
+                                                                    refererPackage.getBytes(), Base64.DEFAULT) + ","))) {
+                                        sp.put(
+                                                "uriAutoAllowPkgs_allows",
+                                                originData
+                                                        +
+                                                        Base64.encodeToString(refererPackage.getBytes(), Base64.DEFAULT)
+                                                        +
+                                                        ","
+                                        );
+                                    }
+                                }
                             }
                             if (suitableForAutoAllow) {
-                                switch (mode) {
-                                    case MODE_FREEZE:
-                                        Support.processFreezeAction(
-                                                UriFreezeActivity.this,
-                                                pkgName,
-                                                null,
-                                                null,
-                                                false,
-                                                UriFreezeActivity.this,
-                                                true
-                                        );
-                                        break;
-                                    case MODE_UNFREEZE:
-                                        Support.processUnfreezeAction(
-                                                UriFreezeActivity.this,
-                                                pkgName,
-                                                null,
-                                                null,
-                                                false,
-                                                false,
-                                                UriFreezeActivity.this,
-                                                true
-                                        );
-                                        break;
-                                    case MODE_UNFREEZEANDRUN:
-                                        Support.processUnfreezeAction(
-                                                UriFreezeActivity.this,
-                                                pkgName,
-                                                null,
-                                                null,
-                                                true,
-                                                true,
-                                                UriFreezeActivity.this,
-                                                true
-                                        );
-                                        break;
-                                    default:
-                                        break;
-                                }
+                                doSuitableForAutoAllowAllow(mode, pkgName, isFrozen);
                             } else {
                                 if (isFrozen) {
                                     Support.processUnfreezeAction(
@@ -288,6 +281,65 @@ public class UriFreezeActivity extends Activity {
             if (v != null) {
                 v.setMinimumHeight(0);
             }
+        }
+    }
+
+    private void doSuitableForAutoAllowAllow(int mode, String pkgName, boolean isFrozen) {
+        switch (mode) {
+            case MODE_FREEZE:
+                if (!isFrozen)
+                    Support.processFreezeAction(
+                            UriFreezeActivity.this,
+                            pkgName,
+                            null,
+                            null,
+                            false,
+                            UriFreezeActivity.this,
+                            true
+                    );
+                else
+                    finish();
+                break;
+            case MODE_UNFREEZE:
+                if (isFrozen)
+                    Support.processUnfreezeAction(
+                            UriFreezeActivity.this,
+                            pkgName,
+                            null,
+                            null,
+                            false,
+                            false,
+                            UriFreezeActivity.this,
+                            true
+                    );
+                else
+                    finish();
+                break;
+            case MODE_UNFREEZEANDRUN:
+                if (isFrozen)
+                    Support.processUnfreezeAction(
+                            UriFreezeActivity.this,
+                            pkgName,
+                            null,
+                            null,
+                            true,
+                            true,
+                            UriFreezeActivity.this,
+                            true
+                    );
+                else
+                    Support.checkAndStartApp(
+                            this,
+                            pkgName,
+                            null,
+                            null,
+                            this,
+                            true
+                    );
+                break;
+            default:
+                finish();
+                break;
         }
     }
 

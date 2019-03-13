@@ -169,6 +169,11 @@
     <PreferenceCategory
         android:key="more"
         android:title="@string/more">
+        <Preference android:title="@string/manageUriAutoAllow">
+            <intent
+                android:targetClass="cf.playhi.freezeyou.UriAutoAllowManageActivity"
+                android:targetPackage="cf.playhi.freezeyou" />
+        </Preference>
         <Preference
             android:key="checkUpdate"
             android:title="@string/update" />

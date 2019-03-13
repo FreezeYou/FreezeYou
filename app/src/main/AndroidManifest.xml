@@ -294,6 +294,11 @@
             android:label="@string/manageQuickFUFNoti"
             android:theme="@style/AppTheme.Default" />
         <activity
+            android:name=".UriAutoAllowManageActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:label="@string/manageUriAutoAllow"
+            android:theme="@style/AppTheme.Default" />
+        <activity
             android:name=".SelectShortcutIconActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/createLauncherShortcut"
