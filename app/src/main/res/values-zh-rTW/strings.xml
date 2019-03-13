@@ -258,6 +258,7 @@
     <string name="target_colon">目標：</string>
     <string name="alwaysAllow_name">總是允許 %1$s</string>
     <string name="existed_colon">現存：%1$s</string>
+    <string name="manageUriAutoAllow">管理 URI 请求白名单</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
