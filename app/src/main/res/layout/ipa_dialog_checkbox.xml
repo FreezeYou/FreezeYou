@@ -8,7 +8,7 @@
     android:paddingRight="20dp">
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/ipa_dialog_checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="false"

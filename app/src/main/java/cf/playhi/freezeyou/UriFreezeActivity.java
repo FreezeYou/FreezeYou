@@ -119,8 +119,8 @@ public class UriFreezeActivity extends Activity {
                 doSuitableForAutoAllowAllow(mode, pkgName, isFrozen);
             }
             //Init CheckBox
-            View checkBoxView = View.inflate(this, R.layout.checkbox, null);//https://stackoverflow.com/questions/9763643/how-to-add-a-check-box-to-an-alert-dialog
-            CheckBox checkBox = checkBoxView.findViewById(R.id.checkBox);
+            View checkBoxView = View.inflate(this, R.layout.ufa_dialog_checkbox, null);//https://stackoverflow.com/questions/9763643/how-to-add-a-check-box-to-an-alert-dialog
+            CheckBox checkBox = checkBoxView.findViewById(R.id.ufa_dialog_checkBox);
             if (refererPackageLabel.equals(ILLEGALPKGNAME)) {
                 checkBox.setVisibility(View.GONE);
             } else {
@@ -190,7 +190,7 @@ public class UriFreezeActivity extends Activity {
                                     })
                                     .create().show();
                         } else {
-                            CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.checkBox);
+                            CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.ufa_dialog_checkBox);
                             if (checkBox != null) {
                                 if (checkBox.isChecked()) {
                                     AppPreferences sp = new AppPreferences(UriFreezeActivity.this);
