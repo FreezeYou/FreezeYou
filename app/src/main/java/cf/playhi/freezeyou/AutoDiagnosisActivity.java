@@ -22,7 +22,6 @@ import android.widget.SimpleAdapter;
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.DataOutputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -332,19 +331,19 @@ public class AutoDiagnosisActivity extends Activity {
     private void doRegenerateSomeCache(List<Map<String, Object>> problemsList, ProgressBar progressBar) {
         getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE).edit().clear().apply();
         try {
-            File file = new File(getFilesDir() + "/icon");
-            if (file.exists() && file.isDirectory()) {
-                File[] childFile = file.listFiles();
-                if (childFile == null || childFile.length == 0) {
-                    file.delete();
-                } else {
-                    for (File f : childFile) {
-                        if (f.isFile()) {
-                            f.delete();
-                        }
-                    }
-                }
-            }
+//            File file = new File(getFilesDir() + "/icon");
+//            if (file.exists() && file.isDirectory()) {
+//                File[] childFile = file.listFiles();
+//                if (childFile == null || childFile.length == 0) {
+//                    file.delete();
+//                } else {
+//                    for (File f : childFile) {
+//                        if (f.isFile()) {
+//                            f.delete();
+//                        }
+//                    }
+//                }
+//            }
 
             PackageManager pm = getPackageManager();
             List<ApplicationInfo> installedApplications = pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
@@ -353,7 +352,7 @@ public class AutoDiagnosisActivity extends Activity {
                 for (int i = 0; i < size; i++) {
                     ApplicationInfo applicationInfo = installedApplications.get(i);
                     ApplicationLabelUtils.getApplicationLabel(this, pm, applicationInfo, applicationInfo.packageName);
-                    ApplicationIconUtils.getApplicationIcon(this, applicationInfo.packageName, applicationInfo, false);
+//                    ApplicationIconUtils.getApplicationIcon(this, applicationInfo.packageName, applicationInfo, false);
                     setProgress(progressBar, 40 + (int) ((double) i / (double) size * 50));
                 }
             }

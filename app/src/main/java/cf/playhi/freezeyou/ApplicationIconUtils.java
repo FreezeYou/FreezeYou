@@ -12,10 +12,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-
 final class ApplicationIconUtils {
 
     /**
@@ -43,18 +39,19 @@ final class ApplicationIconUtils {
 
     static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo, boolean resize) {
         Drawable drawable = null;
-        String path = context.getFilesDir() + "/icon/" + pkgName + ".png";
-        if (new File(path).exists()) {
-            drawable = BitmapDrawable.createFromPath(path);
-        } else if (applicationInfo != null) {
+//        String path = context.getFilesDir() + "/icon/" + pkgName + ".png";
+//        if (new File(path).exists()) {
+//            drawable = BitmapDrawable.createFromPath(path);
+//        } else if (applicationInfo != null) {
+        if (applicationInfo != null) {
             drawable = applicationInfo.loadIcon(context.getPackageManager());
-            folderCheck(context.getFilesDir() + "/icon");
-            writeBitmapToFile(path, getBitmapFromDrawable(drawable));
+//            folderCheck(context.getFilesDir() + "/icon");
+//            writeBitmapToFile(path, getBitmapFromDrawable(drawable));
         } else if (!"".equals(pkgName)) {
             try {
                 drawable = context.getPackageManager().getApplicationIcon(pkgName);
-                folderCheck(context.getFilesDir() + "/icon");
-                writeBitmapToFile(path, getBitmapFromDrawable(drawable));
+//                folderCheck(context.getFilesDir() + "/icon");
+//                writeBitmapToFile(path, getBitmapFromDrawable(drawable));
             } catch (PackageManager.NameNotFoundException e) {
                 drawable = context.getResources().getDrawable(android.R.drawable.ic_menu_delete);
             } catch (Exception e) {
@@ -78,32 +75,32 @@ final class ApplicationIconUtils {
         }
     }
 
-    private static void writeBitmapToFile(String filePath, Bitmap b) {
-        try {
-            File file = new File(filePath);
-            FileOutputStream fos = new FileOutputStream(file);
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            b.compress(Bitmap.CompressFormat.PNG, 100, bos);
-            bos.flush();
-            bos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private static void writeBitmapToFile(String filePath, Bitmap b) {
+//        try {
+//            File file = new File(filePath);
+//            FileOutputStream fos = new FileOutputStream(file);
+//            BufferedOutputStream bos = new BufferedOutputStream(fos);
+//            b.compress(Bitmap.CompressFormat.PNG, 100, bos);
+//            bos.flush();
+//            bos.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    private static void folderCheck(String path) {
-        try {
-            File file = new File(path);
-            if (!file.isDirectory()) {
-                file.delete();
-            }
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private static void folderCheck(String path) {
+//        try {
+//            File file = new File(path);
+//            if (!file.isDirectory()) {
+//                file.delete();
+//            }
+//            if (!file.exists()) {
+//                file.mkdirs();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * 参考：https://blog.csdn.net/xuwenneng/article/details/52634979
