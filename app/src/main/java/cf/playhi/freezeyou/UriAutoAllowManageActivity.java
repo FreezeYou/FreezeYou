@@ -19,6 +19,8 @@ import java.util.List;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
+// Important!
+// Also used to deal with ipa_autoAllow
 public class UriAutoAllowManageActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +34,17 @@ public class UriAutoAllowManageActivity extends Activity {
 
     private void init() {
         ListView uaamListView = findViewById(R.id.uaam_listView);
+        final boolean ipaMode = getIntent().getBooleanExtra("isIpaMode", false);//Install Package
+        if (ipaMode)
+            setTitle(R.string.manageIpaAutoAllow);
         final AppPreferences defaultSharedPreferences = new AppPreferences(this);
-        final String string = defaultSharedPreferences.getString("uriAutoAllowPkgs_allows", "");
+        final String string =
+                defaultSharedPreferences.getString(
+                        ipaMode ?
+                                "installPkgs_autoAllowPkgs_allows" :
+                                "uriAutoAllowPkgs_allows",
+                        ""
+                );
         if (string != null && !"".equals(string)) {
             List<HashMap<String, String>> pkgList = new ArrayList<>();
             String[] strings = string.split(",");
@@ -65,7 +76,9 @@ public class UriAutoAllowManageActivity extends Activity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         defaultSharedPreferences.put(
-                                                "uriAutoAllowPkgs_allows",
+                                                ipaMode ?
+                                                        "installPkgs_autoAllowPkgs_allows" :
+                                                        "uriAutoAllowPkgs_allows",
                                                 string.replace(
                                                         Base64.encodeToString(
                                                                 pkgName.getBytes(), Base64.DEFAULT) + ",",

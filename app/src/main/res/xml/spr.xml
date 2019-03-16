@@ -175,6 +175,9 @@
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
+            android:key="manageIpaAutoAllow"
+            android:title="@string/manageIpaAutoAllow" />
+        <Preference
             android:key="checkUpdate"
             android:title="@string/update" />
         <Preference android:title="@string/scheduledTasks">
@@ -223,8 +226,8 @@
             android:title="@string/configureAccessibilityService" />
         <CheckBoxPreference
             android:defaultValue="true"
-            android:title="@string/enableInstallPkgFunc"
-            android:key="enableInstallPkgFunc" />
+            android:key="enableInstallPkgFunc"
+            android:title="@string/enableInstallPkgFunc" />
         <EditTextPreference
             android:defaultValue="@string/app_name"
             android:key="organizationName"

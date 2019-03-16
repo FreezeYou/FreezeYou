@@ -285,6 +285,12 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                             .setNegativeButton(R.string.no, null)
                             .create().show();
                     break;
+                case "manageIpaAutoAllow":
+                    getActivity().startActivity(
+                            new Intent(getActivity(), UriAutoAllowManageActivity.class)
+                                    .putExtra("isIpaMode", true)
+                    );
+                    break;
 //                case "backup":
 //
 //                    break;

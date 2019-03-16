@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
+import android.view.Window;
 import android.widget.CheckBox;
 
 import net.grandcentrix.tray.AppPreferences;
@@ -59,6 +60,51 @@ public class InstallPackagesActivity extends Activity {
         final String apkFileName = "package" + new Date().getTime() + "F.apk";
         final String apkFilePath = getExternalCacheDir() + File.separator + apkFileName;
 
+        final String fromPkgLabel;
+        final String fromPkgName;
+        if (Build.VERSION.SDK_INT >= 22) {
+            Uri referrerUri = getReferrer();
+            if (referrerUri == null || !"android-app".equals(referrerUri.getScheme())) {
+                fromPkgLabel = ILLEGALPKGNAME;
+                fromPkgName = ILLEGALPKGNAME;
+            } else {
+                fromPkgName = referrerUri.getEncodedSchemeSpecificPart().substring(2);
+                String refererPackageLabel =
+                        getApplicationLabel(
+                                InstallPackagesActivity.this,
+                                null, null,
+                                fromPkgName
+                        );
+                if (refererPackageLabel.equals(getString(R.string.uninstalled))) {
+                    fromPkgLabel = ILLEGALPKGNAME;
+                } else {
+                    fromPkgLabel = refererPackageLabel;
+                }
+            }
+        } else {
+            fromPkgLabel = ILLEGALPKGNAME;
+            fromPkgName = ILLEGALPKGNAME;
+        }
+        if (install) {
+            //Check AutoAllow
+            AppPreferences sp = new AppPreferences(this);
+            String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
+            if (originData != null
+                    && !ILLEGALPKGNAME.equals(fromPkgLabel)
+                    && originData.contains(
+                    Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT) + ",")) {
+                //Allow
+                ServiceUtils.startService(
+                        InstallPackagesActivity.this,
+                        new Intent(InstallPackagesActivity.this, InstallPackagesService.class)
+                                .putExtra("install", true)
+                                .putExtra("packageUri", packageUri)
+                                .putExtra("apkFilePath", apkFilePath));
+                finish();
+                return;
+            }
+        }
+
         final StringBuilder alertDialogMessage = new StringBuilder();
         final ProgressDialog progressDialog =
                 ProgressDialog.show(this, getString(R.string.plsWait), getString(R.string.loading___));
@@ -86,31 +132,6 @@ public class InstallPackagesActivity extends Activity {
                         packageInfo.applicationInfo.publicSourceDir = apkFilePath;
                         alertDialogMessage.append(getString(R.string.requestFromPackage_colon));
                         alertDialogMessage.append(nl);
-                        final String fromPkgLabel;
-                        final String fromPkgName;
-                        if (Build.VERSION.SDK_INT >= 22) {
-                            Uri referrerUri = getReferrer();
-                            if (referrerUri == null || !"android-app".equals(referrerUri.getScheme())) {
-                                fromPkgLabel = ILLEGALPKGNAME;
-                                fromPkgName = ILLEGALPKGNAME;
-                            } else {
-                                fromPkgName = referrerUri.getEncodedSchemeSpecificPart().substring(2);
-                                String refererPackageLabel =
-                                        getApplicationLabel(
-                                                InstallPackagesActivity.this,
-                                                null, null,
-                                                fromPkgName
-                                        );
-                                if (refererPackageLabel.equals(getString(R.string.uninstalled))) {
-                                    fromPkgLabel = ILLEGALPKGNAME;
-                                } else {
-                                    fromPkgLabel = refererPackageLabel;
-                                }
-                            }
-                        } else {
-                            fromPkgLabel = ILLEGALPKGNAME;
-                            fromPkgName = ILLEGALPKGNAME;
-                        }
                         alertDialogMessage.append(
                                 ILLEGALPKGNAME.equals(fromPkgLabel) ?
                                         getString(R.string.unknown) : fromPkgLabel);
@@ -163,31 +184,6 @@ public class InstallPackagesActivity extends Activity {
             }
             alertDialogMessage.append(getString(R.string.requestFromPackage_colon));
             alertDialogMessage.append(nl);
-            final String fromPkgLabel;
-            final String fromPkgName;
-            if (Build.VERSION.SDK_INT >= 22) {
-                Uri referrerUri = getReferrer();
-                if (referrerUri == null || !"android-app".equals(referrerUri.getScheme())) {
-                    fromPkgLabel = ILLEGALPKGNAME;
-                    fromPkgName = ILLEGALPKGNAME;
-                } else {
-                    fromPkgName = referrerUri.getEncodedSchemeSpecificPart().substring(2);
-                    String refererPackageLabel =
-                            getApplicationLabel(
-                                    InstallPackagesActivity.this,
-                                    null, null,
-                                    fromPkgName
-                            );
-                    if (refererPackageLabel.equals(getString(R.string.uninstalled))) {
-                        fromPkgLabel = ILLEGALPKGNAME;
-                    } else {
-                        fromPkgLabel = refererPackageLabel;
-                    }
-                }
-            } else {
-                fromPkgLabel = ILLEGALPKGNAME;
-                fromPkgName = ILLEGALPKGNAME;
-            }
             alertDialogMessage.append(
                     ILLEGALPKGNAME.equals(fromPkgLabel) ?
                             getString(R.string.unknown) : fromPkgLabel);
@@ -230,15 +226,6 @@ public class InstallPackagesActivity extends Activity {
     private void showInstallDialog(final ProgressDialog progressDialog, final boolean install, final CharSequence alertDialogMessage, final String apkFilePath, final Uri packageUri, final String fromPkgLabel, final String fromPkgName) {
         final ObsdAlertDialog installPackagesAlertDialog = new ObsdAlertDialog(this);
         if (install) {
-            //Check AutoAllow
-            AppPreferences sp = new AppPreferences(this);
-            String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
-            if (originData != null
-                    && !ILLEGALPKGNAME.equals(fromPkgLabel)
-                    && originData.contains(
-                    Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT) + ",")) {
-                //TODO:Allow
-            }
             //Init CheckBox
             View checkBoxView = View.inflate(this, R.layout.ipa_dialog_checkbox, null);
             CheckBox checkBox = checkBoxView.findViewById(R.id.ipa_dialog_checkBox);
@@ -278,6 +265,30 @@ public class InstallPackagesActivity extends Activity {
                                     })
                                     .create().show();
                         } else {
+                            if (install) {
+                                CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.ipa_dialog_checkBox);
+                                if (checkBox != null) {
+                                    if (checkBox.isChecked()) {
+                                        AppPreferences sp = new AppPreferences(InstallPackagesActivity.this);
+                                        String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
+                                        if (!ILLEGALPKGNAME.equals(fromPkgLabel)
+                                                &&
+                                                (originData == null ||
+                                                        !originData.contains(
+                                                                Base64.encodeToString(
+                                                                        fromPkgName.getBytes(), Base64.DEFAULT) + ","))) {
+                                            sp.put(
+                                                    "installPkgs_autoAllowPkgs_allows",
+                                                    originData
+                                                            +
+                                                            Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT)
+                                                            +
+                                                            ","
+                                            );
+                                        }
+                                    }
+                                }
+                            }
                             ServiceUtils.startService(
                                     InstallPackagesActivity.this,
                                     new Intent(InstallPackagesActivity.this, InstallPackagesService.class)
@@ -304,5 +315,12 @@ public class InstallPackagesActivity extends Activity {
         });
         progressDialog.cancel();
         installPackagesAlertDialog.show();
+        Window w = installPackagesAlertDialog.getWindow();
+        if (w != null) {
+            View v = (View) w.findViewById(android.R.id.custom).getParent();
+            if (v != null) {
+                v.setMinimumHeight(0);
+            }
+        }
     }
 }

@@ -257,6 +257,7 @@
     <string name="alwaysAllow_name">总是允许 %1$s</string>
     <string name="existed_colon">现存：%1$s</string>
     <string name="manageUriAutoAllow">管理 URI 请求白名单</string>
+    <string name="manageIpaAutoAllow">管理安装应用请求白名单</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
