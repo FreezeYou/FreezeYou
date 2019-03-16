@@ -252,6 +252,14 @@
     <string name="alert_isObsd">The window is obscured, the operation has been rejected, please remove the mask layer and retry</string>
     <string name="retry">Retry</string>
     <string name="enableInstallPkgFunc">Enable install packages function</string>
+    <string name="allow">Allow</string>
+    <string name="reject">Reject</string>
+    <string name="execute_colon">Execute:</string>
+    <string name="target_colon">Target:</string>
+    <string name="alwaysAllow_name">Always allow %1$s</string>
+    <string name="existed_colon">Existed:%1$s</string>
+    <string name="manageUriAutoAllow">Manage URI Request Whitelist</string>
+    <string name="manageIpaAutoAllow">Manage Request Install Applications Whitelist</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
