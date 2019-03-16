@@ -1,5 +1,5 @@
 ---
-name: 功能建议（简体中文）
+name: 功能建议(简体中文)
 about: 提出意见建议
 title: ''
 labels: ''
