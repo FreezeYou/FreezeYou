@@ -119,7 +119,7 @@ public class InstallPackagesService extends Service {
             builder.setLargeIcon(getBitmapFromDrawable(willBeUninstalledIcon));
             notificationManager.notify(packageName.hashCode(), builder.getNotification());
 
-            if (Build.VERSION.SDK_INT >= 21) {
+            if (Build.VERSION.SDK_INT >= 21 && Support.isDeviceOwner(this)) {
                 getPackageManager().getPackageInstaller().uninstall(packageName,
                         PendingIntent.getBroadcast(this, packageName.hashCode(),
                                 new Intent(
@@ -182,7 +182,7 @@ public class InstallPackagesService extends Service {
             builder.setLargeIcon(getBitmapFromDrawable(willBeInstalledIcon));
             notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
 
-            if (Build.VERSION.SDK_INT >= 21) {// && isDeviceOwner(this)
+            if (Build.VERSION.SDK_INT >= 21 && Support.isDeviceOwner(this)) {
                 PackageInstaller packageInstaller = pm.getPackageInstaller();
                 PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(
                         PackageInstaller.SessionParams.MODE_FULL_INSTALL);
@@ -211,29 +211,33 @@ public class InstallPackagesService extends Service {
                                 .getIntentSender());
             } else {
                 // Root Mode
-                Process process = Runtime.getRuntime().exec("su");
-                DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
-                outputStream.writeBytes("pm install -r \"" + apkFilePath + "\"\n");
-                outputStream.writeBytes("exit\n");
-                outputStream.flush();
-                process.waitFor();
-                destroyProcess(outputStream, process);
-                // Delete Temp File
-                File file = new File(apkFilePath);
-                if (file.exists()) {
-                    if (!file.delete())
-                        file.delete();
-                }
-                InputStream pi = process.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(pi));
-                String result = bufferedReader.readLine();
-                if (result != null && result.toLowerCase().contains("success")) {
-                    builder.setContentTitle(willBeInstalledName + " " + getString(R.string.installFinished));
-                    notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
-                } else {
-                    builder.setContentTitle(willBeInstalledName + " " + getString(R.string.installFailed));
-                    builder.setContentText(String.format(getString(R.string.reason_colon), result));
-                    notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
+                String result = null;
+                try {
+                    Process process = Runtime.getRuntime().exec("su");
+                    DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
+                    outputStream.writeBytes("pm install -r \"" + apkFilePath + "\"\n");
+                    outputStream.writeBytes("exit\n");
+                    outputStream.flush();
+                    process.waitFor();
+                    destroyProcess(outputStream, process);
+                    // Delete Temp File
+                    File file = new File(apkFilePath);
+                    if (file.exists()) {
+                        if (!file.delete())
+                            file.delete();
+                    }
+                    InputStream pi = process.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(pi));
+                    result = bufferedReader.readLine();
+                } finally {
+                    if (result != null && result.toLowerCase().contains("success")) {
+                        builder.setContentTitle(willBeInstalledName + " " + getString(R.string.installFinished));
+                        notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
+                    } else {
+                        builder.setContentTitle(willBeInstalledName + " " + getString(R.string.installFailed));
+                        builder.setContentText(String.format(getString(R.string.reason_colon), result));
+                        notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
+                    }
                 }
             }
         } catch (Exception e) {

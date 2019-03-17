@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.List;
 
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
@@ -91,8 +92,8 @@ public class InstallPackagesActivity extends Activity {
             String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
             if (originData != null
                     && !ILLEGALPKGNAME.equals(fromPkgLabel)
-                    && originData.contains(
-                    Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT) + ",")) {
+                    && MoreUtils.convertToList(originData, ",").contains(
+                    Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT))) {
                 //Allow
                 ServiceUtils.startService(
                         InstallPackagesActivity.this,
@@ -271,19 +272,18 @@ public class InstallPackagesActivity extends Activity {
                                     if (checkBox.isChecked()) {
                                         AppPreferences sp = new AppPreferences(InstallPackagesActivity.this);
                                         String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
+                                        List<String> originData_list = MoreUtils.convertToList(originData, ",");
                                         if (!ILLEGALPKGNAME.equals(fromPkgLabel)
                                                 &&
                                                 (originData == null ||
-                                                        !originData.contains(
+                                                        !MoreUtils.convertToList(originData, ",").contains(
                                                                 Base64.encodeToString(
-                                                                        fromPkgName.getBytes(), Base64.DEFAULT) + ","))) {
+                                                                        fromPkgName.getBytes(), Base64.DEFAULT)))) {
+                                            originData_list.add(
+                                                    Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT));
                                             sp.put(
                                                     "installPkgs_autoAllowPkgs_allows",
-                                                    originData
-                                                            +
-                                                            Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT)
-                                                            +
-                                                            ","
+                                                    MoreUtils.listToString(originData_list, ",")
                                             );
                                         }
                                     }

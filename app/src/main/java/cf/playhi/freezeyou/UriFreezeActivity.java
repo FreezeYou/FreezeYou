@@ -13,6 +13,8 @@ import android.widget.CheckBox;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import java.util.List;
+
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 
 public class UriFreezeActivity extends Activity {
@@ -115,7 +117,13 @@ public class UriFreezeActivity extends Activity {
             //Check AutoAllow
             AppPreferences sp = new AppPreferences(this);
             String originData = sp.getString("uriAutoAllowPkgs_allows", "");
-            if (originData != null && !ILLEGALPKGNAME.equals(refererPackage) && originData.contains(Base64.encodeToString(refererPackage.getBytes(), Base64.DEFAULT) + ",")) {
+            if (originData != null &&
+                    !ILLEGALPKGNAME.equals(refererPackage) &&
+                    MoreUtils.convertToList(originData, ",")
+                            .contains(
+                                    Base64.encodeToString(
+                                            refererPackage.getBytes(),
+                                            Base64.DEFAULT))) {
                 doSuitableForAutoAllowAllow(mode, pkgName, isFrozen);
             }
             //Init CheckBox
@@ -195,19 +203,18 @@ public class UriFreezeActivity extends Activity {
                                 if (checkBox.isChecked()) {
                                     AppPreferences sp = new AppPreferences(UriFreezeActivity.this);
                                     String originData = sp.getString("uriAutoAllowPkgs_allows", "");
+                                    List<String> originData_list = MoreUtils.convertToList(originData, ",");
                                     if (!ILLEGALPKGNAME.equals(refererPackage)
                                             &&
                                             (originData == null ||
-                                                    !originData.contains(
+                                                    !originData_list.contains(
                                                             Base64.encodeToString(
-                                                                    refererPackage.getBytes(), Base64.DEFAULT) + ","))) {
+                                                                    refererPackage.getBytes(), Base64.DEFAULT)))) {
+                                        originData_list.add(
+                                                Base64.encodeToString(refererPackage.getBytes(), Base64.DEFAULT));
                                         sp.put(
                                                 "uriAutoAllowPkgs_allows",
-                                                originData
-                                                        +
-                                                        Base64.encodeToString(refererPackage.getBytes(), Base64.DEFAULT)
-                                                        +
-                                                        ","
+                                                MoreUtils.listToString(originData_list, ",")
                                         );
                                     }
                                 }

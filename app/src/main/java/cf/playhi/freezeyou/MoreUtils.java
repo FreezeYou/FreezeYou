@@ -6,6 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
 final class MoreUtils {
@@ -46,6 +50,27 @@ final class MoreUtils {
         } catch (Exception e) {
             requestOpenWebSite(context, "https://shang.qq.com/wpa/qunwpa?idkey=cbc8ae71402e8a1bc9bb4c39384bcfe5b9f7d18ff1548ea9bdd842f036832f3d");
         }
+    }
+
+    static ArrayList<String> convertToList(String origin, String s) {
+        return origin == null ? new ArrayList<String>() : new ArrayList<>(Arrays.asList(origin.split(s)));
+    }
+
+    static ArrayList<String> convertToList(String[] origin) {
+        return origin == null ? new ArrayList<String>() : new ArrayList<>(Arrays.asList(origin));
+    }
+
+    static String listToString(List<String> l, String s) {
+
+        if (l == null)
+            return "";
+
+        StringBuilder sb = new StringBuilder();
+        for (String s1 : l) {
+            sb.append(s1);
+            sb.append(s);
+        }
+        return sb.toString();
     }
 
 }

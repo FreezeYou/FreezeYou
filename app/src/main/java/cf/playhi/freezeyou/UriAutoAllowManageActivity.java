@@ -47,7 +47,7 @@ public class UriAutoAllowManageActivity extends Activity {
                 );
         if (string != null && !"".equals(string)) {
             List<HashMap<String, String>> pkgList = new ArrayList<>();
-            String[] strings = string.split(",");
+            final String[] strings = string.split(",");
             for (String aString : strings) {
                 String s = new String(Base64.decode(aString, Base64.DEFAULT));
                 HashMap<String, String> hashMap = new HashMap<>();
@@ -75,14 +75,13 @@ public class UriAutoAllowManageActivity extends Activity {
                                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        List<String> ls = MoreUtils.convertToList(strings);
+                                        ls.remove(Base64.encodeToString(pkgName.getBytes(), Base64.DEFAULT));
                                         defaultSharedPreferences.put(
                                                 ipaMode ?
                                                         "installPkgs_autoAllowPkgs_allows" :
                                                         "uriAutoAllowPkgs_allows",
-                                                string.replace(
-                                                        Base64.encodeToString(
-                                                                pkgName.getBytes(), Base64.DEFAULT) + ",",
-                                                        "")
+                                                MoreUtils.listToString(ls, ",")
                                         );
                                         init();
                                     }
