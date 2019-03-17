@@ -1,17 +1,21 @@
 ---
-name: Bug report
+name: Bug Report (English)
 about: Create a report to help us improve
 title: ''
 labels: ''
 assignees: ''
 ---
-**Describe the bug** A clear and concise description of what the bug is.
+**Describe the bug**  
+A clear and concise description of what the bug is.
 
-**To Reproduce** Steps to reproduce the behavior: 1. Go to '...' 2. Click on '....' 3. Scroll down to '....' 4. See error
+**To Reproduce**  
+Steps to reproduce the behavior: 1. Go to '...' 2. Click on '....' 3. Scroll down to '....' 4. See error
 
-**Expected behavior** A clear and concise description of what you expected to happen.
+**Expected behavior**  
+A clear and concise description of what you expected to happen.
 
-**Screenshots** If applicable, add screenshots to help explain your problem.
+**Screenshots**  
+If applicable, add screenshots to help explain your problem.
 
 **Smartphone (please complete the following information):**
 
@@ -19,4 +23,5 @@ assignees: ''
 - OS: [e.g. Android6.0] 
 - FreezeYou Version: [e.g. 8.2.20001011(Can be found in "About")] 
 
-**Additional context** Add any other context about the problem here.
+**Additional context**  
+Add any other context about the problem here.
