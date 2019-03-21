@@ -216,7 +216,12 @@ public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
                             ?
                             getResources().getDrawable(R.drawable.grid_add)
                             :
-                            getApplicationIcon(this, pkgName, null, false);
+                            getApplicationIcon(
+                                    this,
+                                    pkgName,
+                                    ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this),
+                                    false
+                            );
                     break;
             }
 
