@@ -223,8 +223,7 @@ public class InstallPackagesService extends Service {
                     // Delete Temp File
                     File file = new File(apkFilePath);
                     if (file.exists()) {
-                        if (!file.delete())
-                            file.delete();
+                        file.delete();
                     }
                     InputStream pi = process.getInputStream();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(pi));

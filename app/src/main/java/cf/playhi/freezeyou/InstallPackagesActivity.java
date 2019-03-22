@@ -268,24 +268,22 @@ public class InstallPackagesActivity extends Activity {
                         } else {
                             if (install) {
                                 CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.ipa_dialog_checkBox);
-                                if (checkBox != null) {
-                                    if (checkBox.isChecked()) {
-                                        AppPreferences sp = new AppPreferences(InstallPackagesActivity.this);
-                                        String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
-                                        List<String> originData_list = MoreUtils.convertToList(originData, ",");
-                                        if (!ILLEGALPKGNAME.equals(fromPkgLabel)
-                                                &&
-                                                (originData == null ||
-                                                        !MoreUtils.convertToList(originData, ",").contains(
-                                                                Base64.encodeToString(
-                                                                        fromPkgName.getBytes(), Base64.DEFAULT)))) {
-                                            originData_list.add(
-                                                    Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT));
-                                            sp.put(
-                                                    "installPkgs_autoAllowPkgs_allows",
-                                                    MoreUtils.listToString(originData_list, ",")
-                                            );
-                                        }
+                                if (checkBox != null && checkBox.isChecked()) {
+                                    AppPreferences sp = new AppPreferences(InstallPackagesActivity.this);
+                                    String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
+                                    List<String> originData_list = MoreUtils.convertToList(originData, ",");
+                                    if (!ILLEGALPKGNAME.equals(fromPkgLabel)
+                                            &&
+                                            (originData == null ||
+                                                    !MoreUtils.convertToList(originData, ",").contains(
+                                                            Base64.encodeToString(
+                                                                    fromPkgName.getBytes(), Base64.DEFAULT)))) {
+                                        originData_list.add(
+                                                Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT));
+                                        sp.put(
+                                                "installPkgs_autoAllowPkgs_allows",
+                                                MoreUtils.listToString(originData_list, ",")
+                                        );
                                     }
                                 }
                             }
