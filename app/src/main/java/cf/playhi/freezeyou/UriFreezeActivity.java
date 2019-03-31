@@ -143,10 +143,9 @@ public class UriFreezeActivity extends Activity {
         message.append(nl);
         message.append(getString(R.string.application_colon));
         message.append(
-                ApplicationLabelUtils.
-                        getApplicationLabel(
-                                this, null,
-                                null, pkgName));
+                getApplicationLabel(
+                        this, null,
+                        null, pkgName));
         message.append(nl);
         message.append(getString(R.string.pkgName_colon));
         message.append(pkgName);

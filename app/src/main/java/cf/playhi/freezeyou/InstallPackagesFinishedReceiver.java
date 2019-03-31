@@ -35,9 +35,9 @@ public class InstallPackagesFinishedReceiver extends BroadcastReceiver {
             // Delete Temp File
             File file = new File(apkFilePath);
             if (file.exists()) {
-                if (!file.delete())
-                    file.delete();
+                file.delete();
             }
+
             if (installStatus == PackageInstaller.STATUS_SUCCESS) {
                 builder.setContentTitle(name + " " + context.getString(R.string.installFinished));
                 builder.setLargeIcon(getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));

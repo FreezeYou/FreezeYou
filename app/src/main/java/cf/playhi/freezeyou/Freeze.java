@@ -105,7 +105,7 @@ public class Freeze extends Activity {
                 getApplicationLabel(Freeze.this, null, null, pkgName),
                 getString(R.string.chooseDetailAction),
                 Freeze.this,
-                null,
+                ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this),
                 pkgName,
                 target,
                 tasks,
