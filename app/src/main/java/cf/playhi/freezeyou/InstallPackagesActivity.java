@@ -165,7 +165,7 @@ public class InstallPackagesActivity extends Activity {
                             @Override
                             public void run() {
                                 showInstallDialog(
-                                        progressDialog, true,
+                                        progressDialog, 1,
                                         alertDialogMessage, apkFilePath,
                                         packageUri, fromPkgLabel, fromPkgName
                                 );
@@ -173,6 +173,16 @@ public class InstallPackagesActivity extends Activity {
                         });
                     } catch (Exception e) {
                         alertDialogMessage.append(getString(R.string.cannotInstall_colon)).append(e.getLocalizedMessage());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showInstallDialog(
+                                        progressDialog, 2,
+                                        alertDialogMessage, apkFilePath,
+                                        packageUri, fromPkgLabel, fromPkgName
+                                );
+                            }
+                        });
                     }
                 }
             }).start();
@@ -200,7 +210,7 @@ public class InstallPackagesActivity extends Activity {
             alertDialogMessage.append(nl);
             alertDialogMessage.append(getString(R.string.whetherAllow));
             showInstallDialog(
-                    progressDialog, false,
+                    progressDialog, 0,
                     alertDialogMessage, apkFilePath,
                     packageUri, fromPkgLabel, fromPkgName
             );
@@ -224,9 +234,10 @@ public class InstallPackagesActivity extends Activity {
         }
     }
 
-    private void showInstallDialog(final ProgressDialog progressDialog, final boolean install, final CharSequence alertDialogMessage, final String apkFilePath, final Uri packageUri, final String fromPkgLabel, final String fromPkgName) {
+    //install: 0-uninstall, 1-install, 2-failed.
+    private void showInstallDialog(final ProgressDialog progressDialog, final int install, final CharSequence alertDialogMessage, final String apkFilePath, final Uri packageUri, final String fromPkgLabel, final String fromPkgName) {
         final ObsdAlertDialog installPackagesAlertDialog = new ObsdAlertDialog(this);
-        if (install) {
+        if (install == 1) {
             //Init CheckBox
             View checkBoxView = View.inflate(this, R.layout.ipa_dialog_checkbox, null);
             CheckBox checkBox = checkBoxView.findViewById(R.id.ipa_dialog_checkBox);
@@ -237,7 +248,21 @@ public class InstallPackagesActivity extends Activity {
             }
             installPackagesAlertDialog.setView(checkBoxView);
         }
-        installPackagesAlertDialog.setTitle(install ? R.string.install : R.string.uninstall);
+
+        switch (install) {
+            case 0:
+                installPackagesAlertDialog.setTitle(R.string.uninstall);
+                break;
+            case 1:
+                installPackagesAlertDialog.setTitle(R.string.install);
+                break;
+            case 2:
+                installPackagesAlertDialog.setTitle(R.string.failed);
+                break;
+            default:
+                break;
+        }
+
         installPackagesAlertDialog.setMessage(alertDialogMessage);
         installPackagesAlertDialog.setButton(
                 DialogInterface.BUTTON_POSITIVE,
@@ -260,13 +285,13 @@ public class InstallPackagesActivity extends Activity {
                                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            if (install) clearTempFile(apkFilePath);
+                                            if (install != 0) clearTempFile(apkFilePath);
                                             finish();
                                         }
                                     })
                                     .create().show();
                         } else {
-                            if (install) {
+                            if (install == 1) {
                                 CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.ipa_dialog_checkBox);
                                 if (checkBox != null) {
                                     if (checkBox.isChecked()) {
@@ -289,12 +314,16 @@ public class InstallPackagesActivity extends Activity {
                                     }
                                 }
                             }
-                            ServiceUtils.startService(
-                                    InstallPackagesActivity.this,
-                                    new Intent(InstallPackagesActivity.this, InstallPackagesService.class)
-                                            .putExtra("install", install)
-                                            .putExtra("packageUri", packageUri)
-                                            .putExtra("apkFilePath", apkFilePath));
+                            if (install == 2) {
+                                clearTempFile(apkFilePath);
+                            } else {
+                                ServiceUtils.startService(
+                                        InstallPackagesActivity.this,
+                                        new Intent(InstallPackagesActivity.this, InstallPackagesService.class)
+                                                .putExtra("install", install == 1)
+                                                .putExtra("packageUri", packageUri)
+                                                .putExtra("apkFilePath", apkFilePath));
+                            }
                             finish();
                         }
                     }
@@ -302,14 +331,14 @@ public class InstallPackagesActivity extends Activity {
         installPackagesAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (install) clearTempFile(apkFilePath);
+                if (install != 0) clearTempFile(apkFilePath);
                 finish();
             }
         });
         installPackagesAlertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                if (install) clearTempFile(apkFilePath);
+                if (install != 0) clearTempFile(apkFilePath);
                 finish();
             }
         });
@@ -322,5 +351,11 @@ public class InstallPackagesActivity extends Activity {
                 v.setMinimumHeight(0);
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 }
