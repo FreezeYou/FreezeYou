@@ -340,7 +340,11 @@ public class InstallPackagesActivity extends Activity {
                 finish();
             }
         });
-        progressDialog.cancel();
+
+        if (progressDialog.isShowing()) {
+            progressDialog.cancel();
+        }
+
         installPackagesAlertDialog.show();
         Window w = installPackagesAlertDialog.getWindow();
         if (w != null) {

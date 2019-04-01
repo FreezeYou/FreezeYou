@@ -125,14 +125,14 @@ final class TasksUtils {
     static void runTask(String task, Context context, String taskTrigger) {
         String[] sTasks = task.split(";");
         for (String asTasks : sTasks) {
-            if (asTasks.startsWith("okff")) {
+            if (asTasks.toLowerCase().startsWith("okff")) {
                 if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                     startService(context, new Intent(context, OneKeyFreezeService.class).putExtra("autoCheckAndLockScreen", false));
-            } else if (asTasks.startsWith("okuf")) {
+            } else if (asTasks.toLowerCase().startsWith("okuf")) {
                 if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                     startService(context, new Intent(context, OneKeyUFService.class));
             } else if (asTasks.length() >= 4) {
-                String string = asTasks.substring(0, 2);
+                String string = asTasks.substring(0, 2).toLowerCase();
                 String[] tasks = asTasks.substring(3).split(",");
                 switch (string) {
                     case "ds": //disableSettings

@@ -110,7 +110,7 @@ class TriggerScreenLockListener {
                             if (enabled == 1 && "onScreenOff".equals(tg)) {
                                 String task = cursor.getString(cursor.getColumnIndex("task"));
                                 if (task != null && !"".equals(task)) {
-                                    TasksUtils.runTask(task.toLowerCase(), context, "onScreenOff");
+                                    TasksUtils.runTask(task, context, "onScreenOff");
                                 }
                             }
                             cursor.moveToNext();
@@ -124,7 +124,7 @@ class TriggerScreenLockListener {
                             if (enabled == 1 && "onScreenOn".equals(tg)) {
                                 String task = cursor.getString(cursor.getColumnIndex("task"));
                                 if (task != null && !"".equals(task)) {
-                                    TasksUtils.runTask(task.toLowerCase(), context, "onScreenOn");
+                                    TasksUtils.runTask(task, context, "onScreenOn");
                                 }
                             }
                             cursor.moveToNext();
