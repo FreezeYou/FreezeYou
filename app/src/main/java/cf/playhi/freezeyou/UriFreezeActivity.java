@@ -198,24 +198,22 @@ public class UriFreezeActivity extends Activity {
                                     .create().show();
                         } else {
                             CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.ufa_dialog_checkBox);
-                            if (checkBox != null) {
-                                if (checkBox.isChecked()) {
-                                    AppPreferences sp = new AppPreferences(UriFreezeActivity.this);
-                                    String originData = sp.getString("uriAutoAllowPkgs_allows", "");
-                                    List<String> originData_list = MoreUtils.convertToList(originData, ",");
-                                    if (!ILLEGALPKGNAME.equals(refererPackage)
-                                            &&
-                                            (originData == null ||
-                                                    !originData_list.contains(
-                                                            Base64.encodeToString(
-                                                                    refererPackage.getBytes(), Base64.DEFAULT)))) {
-                                        originData_list.add(
-                                                Base64.encodeToString(refererPackage.getBytes(), Base64.DEFAULT));
-                                        sp.put(
-                                                "uriAutoAllowPkgs_allows",
-                                                MoreUtils.listToString(originData_list, ",")
-                                        );
-                                    }
+                            if (checkBox != null && checkBox.isChecked()) {
+                                AppPreferences sp = new AppPreferences(UriFreezeActivity.this);
+                                String originData = sp.getString("uriAutoAllowPkgs_allows", "");
+                                List<String> originData_list = MoreUtils.convertToList(originData, ",");
+                                if (!ILLEGALPKGNAME.equals(refererPackage)
+                                        &&
+                                        (originData == null ||
+                                                !originData_list.contains(
+                                                        Base64.encodeToString(
+                                                                refererPackage.getBytes(), Base64.DEFAULT)))) {
+                                    originData_list.add(
+                                            Base64.encodeToString(refererPackage.getBytes(), Base64.DEFAULT));
+                                    sp.put(
+                                            "uriAutoAllowPkgs_allows",
+                                            MoreUtils.listToString(originData_list, ",")
+                                    );
                                 }
                             }
                             if (suitableForAutoAllow) {
