@@ -22,7 +22,7 @@ public class AskRunActivity extends Activity {
                 getApplicationIcon(
                         this,
                         pkgName,
-                        null,
+                        ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this),
                         true),
                 getResources().getString(R.string.unfreezedAndAskLaunch),
                 getResources().getString(R.string.notice))

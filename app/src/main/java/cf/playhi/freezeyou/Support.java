@@ -158,7 +158,7 @@ class Support {
                             if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
                                 showToast(context, R.string.executed);
                             }
-                            createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
+                            createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context), false)));
                             if (askRun) {
                                 askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
                             }
@@ -210,7 +210,7 @@ class Support {
                     if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
                         showToast(context, R.string.UFCompleted);
                     }
-                    createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
+                    createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context), false)));
                     if (askRun) {
                         askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
                     }
@@ -346,7 +346,7 @@ class Support {
                     } else {
                         for (String aPkgNameList : pkgNameList) {
                             onUFApplications(context, aPkgNameList);
-                            createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
+                            createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkgNameList, context), false)));
                         }
                     }
                     if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
@@ -398,7 +398,7 @@ class Support {
                             if (getDevicePolicyManager(context).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(context), aPkgNameList, false)) {
                                 onUFApplications(context, aPkgNameList);
-                                createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, null, false)));
+                                createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkgNameList, context), false)));
                             } else {
                                 showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
                             }
@@ -548,7 +548,11 @@ class Support {
                         checkSettingsAndRequestCreateShortcut(
                                 name,
                                 pkgName,
-                                getApplicationIcon(context, pkgName, null, false),
+                                getApplicationIcon(
+                                        context,
+                                        pkgName,
+                                        ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context),
+                                        false),
                                 Freeze.class,
                                 "FreezeYou! " + pkgName,
                                 context);

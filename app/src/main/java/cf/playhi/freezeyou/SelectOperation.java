@@ -92,7 +92,11 @@ public class SelectOperation extends Activity {
                         checkSettingsAndRequestCreateShortcut(
                                 name,
                                 pkgName,
-                                getApplicationIcon(SelectOperation.this, pkgName, null, false),
+                                getApplicationIcon(
+                                        SelectOperation.this,
+                                        pkgName,
+                                        ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, SelectOperation.this),
+                                        false),
                                 Freeze.class,
                                 "FreezeYou! " + pkgName,
                                 SelectOperation.this);

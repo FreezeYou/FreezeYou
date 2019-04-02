@@ -40,7 +40,13 @@ public class InstallPackagesFinishedReceiver extends BroadcastReceiver {
 
             if (installStatus == PackageInstaller.STATUS_SUCCESS) {
                 builder.setContentTitle(name + " " + context.getString(R.string.installFinished));
-                builder.setLargeIcon(getBitmapFromDrawable(getApplicationIcon(context, pkgName, null, false)));
+                builder.setLargeIcon(getBitmapFromDrawable(
+                        getApplicationIcon(
+                                context,
+                                pkgName,
+                                ApplicationInfoUtils
+                                        .getApplicationInfoFromPkgName(pkgName, context),
+                                false)));
             } else {
                 builder.setContentTitle(name + " " + context.getString(R.string.installFailed));
             }

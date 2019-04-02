@@ -121,7 +121,11 @@ public class Main extends Activity {
             createShortCut(
                     getApplicationLabel(Main.this, null, null, pkgName),
                     pkgName,
-                    getApplicationIcon(Main.this, pkgName, null, false),
+                    getApplicationIcon(
+                            Main.this,
+                            pkgName,
+                            ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this),
+                            false),
                     Freeze.class,
                     "FreezeYou! " + pkgName,
                     Main.this
@@ -732,7 +736,11 @@ public class Main extends Activity {
                                 createShortCut(
                                         getApplicationLabel(Main.this, null, null, pkgName),
                                         pkgName,
-                                        getApplicationIcon(Main.this, pkgName, null, false),
+                                        getApplicationIcon(
+                                                Main.this,
+                                                pkgName,
+                                                ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, Main.this),
+                                                false),
                                         Freeze.class,
                                         "FreezeYou! " + pkgName,
                                         Main.this
@@ -849,7 +857,11 @@ public class Main extends Activity {
                             checkSettingsAndRequestCreateShortcut(
                                     name,
                                     pkgName,
-                                    getApplicationIcon(Main.this, pkgName, null, false),
+                                    getApplicationIcon(
+                                            Main.this,
+                                            pkgName,
+                                            ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, Main.this),
+                                            false),
                                     Freeze.class,
                                     "FreezeYou! " + pkgName,
                                     Main.this);
@@ -1088,7 +1100,11 @@ public class Main extends Activity {
             name = getApplicationLabel(getApplicationContext(), null, null, aPkgNameList);
             if (!("android".equals(aPkgNameList) || "cf.playhi.freezeyou".equals(aPkgNameList) || "".equals(aPkgNameList))) {
                 Map<String, Object> keyValuePair = new HashMap<>();
-                icon = getApplicationIcon(Main.this, aPkgNameList, null, true);
+                icon = getApplicationIcon(
+                        Main.this,
+                        aPkgNameList,
+                        ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkgNameList, Main.this),
+                        true);
                 keyValuePair.put("Img", icon);
                 keyValuePair.put("Name", name);
                 processFrozenStatus(keyValuePair, aPkgNameList, null);
@@ -1223,7 +1239,11 @@ public class Main extends Activity {
             createShortCut(
                     getApplicationLabel(Main.this, null, null, pkgName),
                     pkgName,
-                    getApplicationIcon(Main.this, pkgName, null, false),
+                    getApplicationIcon(
+                            Main.this,
+                            pkgName,
+                            ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, Main.this),
+                            false),
                     Freeze.class,
                     "FreezeYou! " + pkgName,
                     Main.this

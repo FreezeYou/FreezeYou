@@ -49,12 +49,22 @@ public class SelectTargetActivityActivity extends Activity {
                 finish();
             } else {
                 HashMap<String, Object> hm = new HashMap<>();
-                hm.put("Img", ApplicationIconUtils.getApplicationIcon(this, pkgName, null, false));
+                hm.put("Img",
+                        ApplicationIconUtils.getApplicationIcon(
+                                this,
+                                pkgName,
+                                ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this),
+                                false));
                 hm.put("Name", getString(R.string.launch));
                 arrayList.add(hm);
 
                 HashMap<String, Object> hm2 = new HashMap<>();
-                hm2.put("Img", ApplicationIconUtils.getApplicationIcon(this, pkgName, null, false));
+                hm2.put("Img",
+                        ApplicationIconUtils.getApplicationIcon(
+                                this,
+                                pkgName,
+                                ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this),
+                                false));
                 hm2.put("Name", getString(R.string.onlyUnfreeze));
                 arrayList.add(hm2);
 

@@ -54,7 +54,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
             PackageManager pm = context.getPackageManager();
             for (String aPkgName : strings) {
                 if (!checkFrozenStatus(context, aPkgName, pm)) {
-                    createNotification(context, aPkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgName, null, false)));
+                    createNotification(context, aPkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgName, ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkgName, context), false)));
                 }
             }
         }
@@ -65,7 +65,22 @@ public class BootCompletedReceiver extends BroadcastReceiver {
             PackageManager pm = context.getPackageManager();
             for (String aPkgName : oldNotifyings) {
                 if (!checkFrozenStatus(context, aPkgName, pm)) {
-                    createNotification(context, aPkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgName, null, false)));
+                    createNotification(
+                            context,
+                            aPkgName,
+                            R.drawable.ic_notification,
+                            getBitmapFromDrawable(
+                                    getApplicationIcon(
+                                            context,
+                                            aPkgName,
+                                            ApplicationInfoUtils
+                                                    .getApplicationInfoFromPkgName(
+                                                            aPkgName,
+                                                            context
+                                                    ),
+                                            false)
+                            )
+                    );
                 }
             }
             sharedPreferences.edit().putString("notifying", "").apply();

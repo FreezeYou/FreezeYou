@@ -113,7 +113,12 @@ public class InstallPackagesService extends Service {
             }
 
             String willBeUninstalledName = getApplicationLabel(this, null, null, packageName);
-            Drawable willBeUninstalledIcon = getApplicationIcon(this, packageName, null, false);
+            Drawable willBeUninstalledIcon =
+                    getApplicationIcon(
+                            this,
+                            packageName,
+                            ApplicationInfoUtils.getApplicationInfoFromPkgName(packageName, this),
+                            false);
 
             builder.setContentTitle(getString(R.string.uninstalling) + " " + willBeUninstalledName);
             builder.setLargeIcon(getBitmapFromDrawable(willBeUninstalledIcon));
