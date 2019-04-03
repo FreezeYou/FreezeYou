@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
@@ -44,8 +43,18 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.spr);//preferences
-        if (getVersionName(getActivity()).contains("g"))
-            ((PreferenceCategory) findPreference("more")).removePreference(findPreference("donate"));
+
+        if (getVersionName(getActivity()).contains("g")) {
+            ((PreferenceScreen) findPreference("more")).removePreference(findPreference("donate"));
+        }
+        if (Support.isDeviceOwner(getActivity())) {
+            ((PreferenceScreen) findPreference("dangerZone")).removePreference(findPreference("clearAllUserData"));
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ((PreferenceScreen) findPreference("backgroundService")).removeAll();
+            ((PreferenceScreen) findPreference("root")).removePreference(findPreference("backgroundService"));
+        }
+
         pm = getActivity().getPackageManager();
         initSummary(getPreferenceScreen());
     }

@@ -1,31 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="root">
 
-    <PreferenceCategory android:title="@string/common">
-        <ListPreference
-            android:defaultValue="default"
-            android:entries="@array/uiStyleSelection"
-            android:entryValues="@array/uiStyleSelectionValues"
-            android:key="uiStyleSelection"
-            android:title="@string/uiStyle" />
-        <ListPreference
-            android:defaultValue="all"
-            android:entries="@array/launchModeSelection"
-            android:entryValues="@array/launchModeSelectionValues"
-            android:key="launchMode"
-            android:title="@string/launchMode" />
-        <!--<ListPreference-->
-        <!--android:defaultValue="default"-->
-        <!--android:entries="@array/mainActivityPatternSelection"-->
-        <!--android:entryValues="@array/mainActivityPatternSelectionValues"-->
-        <!--android:key="mainActivityPattern"-->
-        <!--android:title="@string/mainActivityPattern" />-->
-        <ListPreference
-            android:defaultValue="1"
-            android:entries="@array/onClickFuncChooseActionStyles"
-            android:entryValues="@array/onClickFuncChooseActionStyles"
-            android:key="onClickFuncChooseActionStyle"
-            android:title="@string/onClickFuncChooseActionStyle" />
+    <PreferenceScreen android:title="@string/common">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="allowEditWhenCreateShortcut"
@@ -36,6 +13,12 @@
             android:key="noCaution"
             android:summary="@string/nSCaution"
             android:title="@string/nSCaution" />
+        <!--<ListPreference-->
+        <!--android:defaultValue="default"-->
+        <!--android:entries="@array/mainActivityPatternSelection"-->
+        <!--android:entryValues="@array/mainActivityPatternSelectionValues"-->
+        <!--android:key="mainActivityPattern"-->
+        <!--android:title="@string/mainActivityPattern" />-->
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="saveOnClickFunctionStatus"
@@ -51,9 +34,27 @@
             android:key="lesserToast"
             android:summary="@string/lesserToast"
             android:title="@string/lesserToast" />
-    </PreferenceCategory>
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/onClickFuncChooseActionStyles"
+            android:entryValues="@array/onClickFuncChooseActionStyles"
+            android:key="onClickFuncChooseActionStyle"
+            android:title="@string/onClickFuncChooseActionStyle" />
+        <ListPreference
+            android:defaultValue="default"
+            android:entries="@array/uiStyleSelection"
+            android:entryValues="@array/uiStyleSelectionValues"
+            android:key="uiStyleSelection"
+            android:title="@string/uiStyle" />
+        <ListPreference
+            android:defaultValue="all"
+            android:entries="@array/launchModeSelection"
+            android:entryValues="@array/launchModeSelectionValues"
+            android:key="launchMode"
+            android:title="@string/launchMode" />
+    </PreferenceScreen>
 
-    <PreferenceCategory android:title="@string/freezeAUF">
+    <PreferenceScreen android:title="@string/freezeAUF">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="avoidFreezeForegroundApplications"
@@ -98,9 +99,9 @@
             android:entryValues="@array/shortCutOneKeyFreezeAdditionalOptionsSelectionValues"
             android:key="shortCutOneKeyFreezeAdditionalOptions"
             android:title="@string/shortCutOneKeyFreezeAdditionalOptions" />
-    </PreferenceCategory>
+    </PreferenceScreen>
 
-    <PreferenceCategory android:title="@string/notificationBar">
+    <PreferenceScreen android:title="@string/notificationBar">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="notificationBarFreezeImmediately"
@@ -121,9 +122,9 @@
                 android:targetClass="cf.playhi.freezeyou.FUFNotificationsManageActivity"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
-    </PreferenceCategory>
+    </PreferenceScreen>
 
-    <PreferenceCategory android:title="@string/automation">
+    <PreferenceScreen android:title="@string/automation">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="onekeyFreezeWhenLockScreen"
@@ -134,17 +135,19 @@
             android:key="freezeOnceQuit"
             android:summary="@string/suggestUseTasksInstead"
             android:title="@string/freezeOnceQuit" />
-    </PreferenceCategory>
+    </PreferenceScreen>
 
-    <PreferenceCategory android:title="@string/backgroundService">
+    <PreferenceScreen
+        android:key="backgroundService"
+        android:title="@string/backgroundService">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="useForegroundService"
             android:summary="@string/serviceLongerEx"
             android:title="@string/useForegroundService" />
-    </PreferenceCategory>
+    </PreferenceScreen>
 
-    <PreferenceCategory android:title="@string/iconAEntry">
+    <PreferenceScreen android:title="@string/iconAEntry">
         <CheckBoxPreference
             android:defaultValue="false"
             android:icon="@mipmap/ic_launcher"
@@ -164,9 +167,9 @@
             <!--android:action="android.intent.action.DIAL"-->
             <!--android:data="tel:*#*#373393968#*#*" />-->
         </Preference>
-    </PreferenceCategory>
+    </PreferenceScreen>
 
-    <PreferenceCategory
+    <PreferenceScreen
         android:key="more"
         android:title="@string/more">
         <Preference android:title="@string/manageUriAutoAllow">
@@ -208,7 +211,7 @@
                 android:targetClass="cf.playhi.freezeyou.AboutActivity"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
-    </PreferenceCategory>
+    </PreferenceScreen>
 
     <!--<PreferenceCategory android:title="@string/backupAndRestore">-->
     <!--<Preference-->
@@ -219,20 +222,24 @@
     <!--android:title="@string/restore"/>-->
     <!--</PreferenceCategory>-->
 
-    <PreferenceCategory android:title="@string/advance">
-        <Preference
-            android:key="configureAccessibilityService"
-            android:summary="@string/accessibility_service_description"
-            android:title="@string/configureAccessibilityService" />
+    <PreferenceScreen android:title="@string/advance">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="enableInstallPkgFunc"
             android:title="@string/enableInstallPkgFunc" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="debugModeEnabled"
+            android:title="@string/debugMode" />
         <EditTextPreference
             android:defaultValue="@string/app_name"
             android:key="organizationName"
             android:summary="@string/onlyMROOTModeUse"
             android:title="@string/organizationName" />
+        <Preference
+            android:key="configureAccessibilityService"
+            android:summary="@string/accessibility_service_description"
+            android:title="@string/configureAccessibilityService" />
         <Preference android:title="@string/autoDiagnosis">
             <intent
                 android:targetClass="cf.playhi.freezeyou.AutoDiagnosisActivity"
@@ -256,18 +263,16 @@
             android:key="deleteAllScheduledTasks"
             android:summary="@string/delAllScheduledTasks"
             android:title="@string/delAllScheduledTasks" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="debugModeEnabled"
-            android:title="@string/debugMode" />
         <Preference android:title="@string/showLogcat">
             <intent
                 android:targetClass="cf.playhi.freezeyou.ShowLogcatActivity"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
-    </PreferenceCategory>
+    </PreferenceScreen>
 
-    <PreferenceCategory android:title="@string/dangerZone">
+    <PreferenceScreen
+        android:key="dangerZone"
+        android:title="@string/dangerZone">
         <Preference
             android:key="clearAllUserData"
             android:summary="@string/app_name"
@@ -283,6 +288,6 @@
         <Preference
             android:key="uninstall"
             android:title="@string/uninstall" />
-    </PreferenceCategory>
+    </PreferenceScreen>
 
 </PreferenceScreen>
