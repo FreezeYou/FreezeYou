@@ -125,6 +125,23 @@
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/automation">
+        <Preference android:title="@string/scheduledTasks">
+            <intent
+                android:targetClass="cf.playhi.freezeyou.ScheduledTasksManageActivity"
+                android:targetPackage="cf.playhi.freezeyou" />
+        </Preference>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="enableInstallPkgFunc"
+            android:title="@string/enableInstallPkgFunc" />
+        <Preference android:title="@string/manageUriAutoAllow">
+            <intent
+                android:targetClass="cf.playhi.freezeyou.UriAutoAllowManageActivity"
+                android:targetPackage="cf.playhi.freezeyou" />
+        </Preference>
+        <Preference
+            android:key="manageIpaAutoAllow"
+            android:title="@string/manageIpaAutoAllow" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="onekeyFreezeWhenLockScreen"
@@ -172,22 +189,9 @@
     <PreferenceScreen
         android:key="more"
         android:title="@string/more">
-        <Preference android:title="@string/manageUriAutoAllow">
-            <intent
-                android:targetClass="cf.playhi.freezeyou.UriAutoAllowManageActivity"
-                android:targetPackage="cf.playhi.freezeyou" />
-        </Preference>
-        <Preference
-            android:key="manageIpaAutoAllow"
-            android:title="@string/manageIpaAutoAllow" />
         <Preference
             android:key="checkUpdate"
             android:title="@string/update" />
-        <Preference android:title="@string/scheduledTasks">
-            <intent
-                android:targetClass="cf.playhi.freezeyou.ScheduledTasksManageActivity"
-                android:targetPackage="cf.playhi.freezeyou" />
-        </Preference>
         <!--<ListPreference-->
         <!--android:defaultValue="default"-->
         <!--android:entries="@array/displayLanguageOptionsSelection"-->
@@ -223,10 +227,6 @@
     <!--</PreferenceCategory>-->
 
     <PreferenceScreen android:title="@string/advance">
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="enableInstallPkgFunc"
-            android:title="@string/enableInstallPkgFunc" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="debugModeEnabled"
