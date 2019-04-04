@@ -1084,7 +1084,7 @@ public class Main extends Activity {
     private Map<String, Object> processAppStatus(String name, String packageName, ApplicationInfo applicationInfo, PackageManager packageManager) {
         if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
             Map<String, Object> keyValuePair = new HashMap<>();
-            keyValuePair.put("Img", getApplicationIcon(Main.this, packageName, applicationInfo, true));
+            keyValuePair.put("Img", getApplicationIcon(Main.this, packageName, applicationInfo, false));
             keyValuePair.put("Name", name);
             processFrozenStatus(keyValuePair, packageName, packageManager);
             keyValuePair.put("PackageName", packageName);
