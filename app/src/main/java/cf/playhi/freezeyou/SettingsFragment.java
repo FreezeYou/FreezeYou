@@ -20,6 +20,7 @@ import android.provider.Settings;
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
+import java.io.IOException;
 
 import static cf.playhi.freezeyou.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
@@ -204,26 +205,43 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         String key = preference.getKey();
         if (key != null) {
             switch (key) {
+                case "clearAllCache":
+                    try {
+                        getActivity().getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE).edit().clear().apply();
+                        deleteAllFiles(getActivity().getCacheDir(), false);
+                        deleteAllFiles(getActivity().getExternalCacheDir(), false);
+                        deleteAllFiles(new File(getActivity().getFilesDir() + "/icon"), false);
+                        showToast(getActivity(), R.string.success);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        showToast(getActivity(), R.string.failed);
+                    }
                 case "clearNameCache":
                     getActivity().getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE).edit().clear().apply();
+                    showToast(getActivity(), R.string.success);
                     break;
                 case "clearIconCache":
                     try {
-                        File file = new File(getActivity().getFilesDir() + "/icon");
-                        if (file.exists() && file.isDirectory()) {
-                            File[] childFile = file.listFiles();
-                            if (childFile == null || childFile.length == 0) {
-                                file.delete();
-                            } else {
-                                for (File f : childFile) {
-                                    if (f.isFile()) {
-                                        f.delete();
-                                    }
-                                }
-                            }
-                        }
+                        deleteAllFiles(new File(getActivity().getFilesDir() + "/icon"), false);
+                        showToast(getActivity(), R.string.success);
+
+//                        File file = new File(getActivity().getFilesDir() + "/icon");
+//                        if (file.exists() && file.isDirectory()) {
+//                            File[] childFile = file.listFiles();
+//                            if (childFile == null || childFile.length == 0) {
+//                                file.delete();
+//                            } else {
+//                                for (File f : childFile) {
+//                                    if (f.isFile()) {
+//                                        f.delete();
+//                                    }
+//                                }
+//                            }
+//                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
+                        showToast(getActivity(), R.string.failed);
                     }
                     break;
                 case "checkUpdate":
@@ -312,30 +330,34 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
-//
-//    private void deleteAllFiles(File file, boolean deleteSelfFolder) throws IOException {
-//        if (file.exists()) {
-//            if (file.isFile()) {
-//                if (!file.delete())
-//                    throw new IOException(file.getAbsolutePath() + " delete failed");
-//            } else if (file.isDirectory()) {
-//                String[] strings = file.list();
-//                if (deleteSelfFolder && strings == null) {
-//                    if (!file.delete())
-//                        throw new IOException(file.getAbsolutePath() + " delete failed");
-//                } else {
-//                    for (String s : strings) {
-//                        deleteAllFiles(new File(s), true);
-//                    }
-//                    if (deleteSelfFolder) {
-//                        if (!file.delete())
-//                            throw new IOException(file.getAbsolutePath() + " delete failed");
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
+
+    private void deleteAllFiles(File file, boolean deleteSelfFolder) throws IOException {
+        if (file == null) {
+            return;
+        }
+
+        if (file.exists()) {
+            if (file.isFile()) {
+                if (!file.delete())
+                    throw new IOException(file.getAbsolutePath() + " delete failed");
+            } else if (file.isDirectory()) {
+                File[] files = file.listFiles();
+                if (deleteSelfFolder && files == null) {
+                    if (!file.delete())
+                        throw new IOException(file.getAbsolutePath() + " delete failed");
+                } else {
+                    for (File f : files) {
+                        deleteAllFiles(f, true);
+                    }
+                    if (deleteSelfFolder) {
+                        if (!file.delete())
+                            throw new IOException(file.getAbsolutePath() + " delete failed");
+                    }
+                }
+            }
+        }
+    }
+
 //    private void copyAllFiles(File file, String destination) throws IOException {
 //        if (file.exists()) {
 //            if (file.isFile()) {

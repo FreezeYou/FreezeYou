@@ -52,6 +52,11 @@
             android:entryValues="@array/launchModeSelectionValues"
             android:key="launchMode"
             android:title="@string/launchMode" />
+        <EditTextPreference
+            android:defaultValue="@string/app_name"
+            android:key="organizationName"
+            android:summary="@string/onlyMROOTModeUse"
+            android:title="@string/organizationName" />
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/freezeAUF">
@@ -186,36 +191,36 @@
         </Preference>
     </PreferenceScreen>
 
-    <PreferenceScreen
-        android:key="more"
-        android:title="@string/more">
-        <Preference
-            android:key="checkUpdate"
-            android:title="@string/update" />
-        <!--<ListPreference-->
-        <!--android:defaultValue="default"-->
-        <!--android:entries="@array/displayLanguageOptionsSelection"-->
-        <!--android:entryValues="@array/displayLanguageOptionsSelectionValues"-->
-        <!--android:key="languagePref"-->
-        <!--android:title="@string/displayLanguage" />-->
-        <Preference
-            android:key="faq"
-            android:title="@string/faq" />
-        <Preference
-            android:key="donate"
-            android:title="@string/donate" />
-        <Preference
-            android:key="helpTranslate"
-            android:title="@string/helpTranslate" />
-        <Preference
-            android:key="thanksList"
-            android:title="@string/thanksList" />
-        <Preference android:title="@string/about">
-            <intent
-                android:targetClass="cf.playhi.freezeyou.AboutActivity"
-                android:targetPackage="cf.playhi.freezeyou" />
-        </Preference>
-    </PreferenceScreen>
+<!--    <PreferenceScreen-->
+<!--        android:key="more"-->
+<!--        android:title="@string/more">-->
+<!--        <Preference-->
+<!--            android:key="checkUpdate"-->
+<!--            android:title="@string/update" />-->
+<!--        &lt;!&ndash;<ListPreference&ndash;&gt;-->
+<!--        &lt;!&ndash;android:defaultValue="default"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:entries="@array/displayLanguageOptionsSelection"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:entryValues="@array/displayLanguageOptionsSelectionValues"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:key="languagePref"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:title="@string/displayLanguage" />&ndash;&gt;-->
+<!--        <Preference-->
+<!--            android:key="faq"-->
+<!--            android:title="@string/faq" />-->
+<!--        <Preference-->
+<!--            android:key="donate"-->
+<!--            android:title="@string/donate" />-->
+<!--        <Preference-->
+<!--            android:key="helpTranslate"-->
+<!--            android:title="@string/helpTranslate" />-->
+<!--        <Preference-->
+<!--            android:key="thanksList"-->
+<!--            android:title="@string/thanksList" />-->
+<!--        <Preference android:title="@string/about">-->
+<!--            <intent-->
+<!--                android:targetClass="cf.playhi.freezeyou.AboutActivity"-->
+<!--                android:targetPackage="cf.playhi.freezeyou" />-->
+<!--        </Preference>-->
+<!--    </PreferenceScreen>-->
 
     <!--<PreferenceCategory android:title="@string/backupAndRestore">-->
     <!--<Preference-->
@@ -260,6 +265,10 @@
             android:summary="@string/refreshCache"
             android:title="@string/clearNameCache" />
         <Preference
+            android:key="clearAllCache"
+            android:summary="@string/delAllCache"
+            android:title="@string/delAllCache" />
+        <Preference
             android:key="deleteAllScheduledTasks"
             android:summary="@string/delAllScheduledTasks"
             android:title="@string/delAllScheduledTasks" />
@@ -289,5 +298,12 @@
             android:key="uninstall"
             android:title="@string/uninstall" />
     </PreferenceScreen>
+
+    <Preference
+        android:title="@string/about">
+        <intent
+            android:targetClass="cf.playhi.freezeyou.AboutActivity"
+            android:targetPackage="cf.playhi.freezeyou" />
+    </Preference>
 
 </PreferenceScreen>
