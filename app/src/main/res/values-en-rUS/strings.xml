@@ -261,6 +261,8 @@
     <string name="manageUriAutoAllow">Manage URI Request Whitelist</string>
     <string name="manageIpaAutoAllow">Manage Request Install Applications Whitelist</string>
     <string name="delAllCache">Clear all Caches</string>
+    <string name="needStoragePermission">需要存储权限</string>
+    <string name="okay">好的</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
