@@ -260,7 +260,7 @@
     <string name="existed_colon">Existed:%1$s</string>
     <string name="manageUriAutoAllow">Manage URI Request Whitelist</string>
     <string name="manageIpaAutoAllow">Manage Request Install Applications Whitelist</string>
-    <string name="delAllCache">清除全部缓存</string>
+    <string name="delAllCache">Clear all Caches</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
