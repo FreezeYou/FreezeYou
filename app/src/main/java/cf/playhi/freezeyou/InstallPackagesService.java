@@ -163,7 +163,7 @@ public class InstallPackagesService extends Service {
                 }
 
                 String apkFileName = "package" + new Date().getTime() + "F.apk";
-                apkFilePath = getExternalCacheDir() + File.separator + apkFileName;
+                apkFilePath = getExternalCacheDir() + File.separator + "ZDF-" + apkFileName;
 
                 OutputStream out = new FileOutputStream(apkFilePath);
                 byte[] buffer = new byte[1024 * 1024];
@@ -226,9 +226,11 @@ public class InstallPackagesService extends Service {
                     process.waitFor();
                     destroyProcess(outputStream, process);
                     // Delete Temp File
-                    File file = new File(apkFilePath);
-                    if (file.exists()) {
-                        file.delete();
+                    if (apkFilePath.startsWith(getExternalCacheDir() + File.separator + "ZDF-")) {
+                        File file = new File(apkFilePath);
+                        if (file.exists()) {
+                            file.delete();
+                        }
                     }
                     InputStream pi = process.getInputStream();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(pi));

@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -36,7 +37,30 @@ public class InstallPackagesActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this, true);
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
+
+        init();
+//        try {
+//            getDevicePolicyManager(this).clearPackagePersistentPreferredActivities(
+//                    DeviceAdminReceiver.getComponentName(this), getPackageName()
+//            );
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+    }
+
+    private void clearTempFile(String filePath) {
+        if (filePath.startsWith(getExternalCacheDir() + File.separator + "ZDF-")) {
+            File file = new File(filePath);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+    }
+
+    private void init() {
+
+        final Intent intent = getIntent();
         final Uri packageUri = intent.getData();
 
         if (packageUri == null) {
@@ -58,8 +82,59 @@ public class InstallPackagesActivity extends Activity {
                 !(Intent.ACTION_DELETE.equals(intent.getAction()) ||
                         Intent.ACTION_UNINSTALL_PACKAGE.equals(intent.getAction()));
 
-        final String apkFileName = "package" + new Date().getTime() + "F.apk";
-        final String apkFilePath = getExternalCacheDir() + File.separator + apkFileName;
+        final String apkFilePath;
+
+        if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+            // Check Storage Permission
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    AlertDialogUtils
+                            .buildAlertDialog(
+                                    this,
+                                    android.R.drawable.ic_dialog_alert,
+                                    R.string.needStoragePermission,
+                                    R.string.notice)
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    finish();
+                                }
+                            })
+                            .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestPermissions(
+                                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                            301
+                                    );
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            })
+                            .create().show();
+                } else {
+                    apkFilePath = packageUri.getEncodedPath();
+                    checkAutoAndPrepareInstallDialog(install, packageUri, apkFilePath);
+                }
+            } else {
+                apkFilePath = packageUri.getEncodedPath();
+                checkAutoAndPrepareInstallDialog(install, packageUri, apkFilePath);
+            }
+        } else {
+            String apkFileName = "package" + new Date().getTime() + "F.apk";
+            apkFilePath = getExternalCacheDir() + File.separator + "ZDF-" + apkFileName;
+
+            checkAutoAndPrepareInstallDialog(install, packageUri, apkFilePath);
+        }
+
+    }
+
+    private void checkAutoAndPrepareInstallDialog(boolean install, Uri packageUri, String apkFilePath) {
 
         final String fromPkgLabel;
         final String fromPkgName;
@@ -86,6 +161,7 @@ public class InstallPackagesActivity extends Activity {
             fromPkgLabel = ILLEGALPKGNAME;
             fromPkgName = ILLEGALPKGNAME;
         }
+
         if (install) {
             //Check AutoAllow
             AppPreferences sp = new AppPreferences(this);
@@ -106,6 +182,10 @@ public class InstallPackagesActivity extends Activity {
             }
         }
 
+        prepareInstallDialog(install, packageUri, apkFilePath, fromPkgLabel, fromPkgName);
+    }
+
+    private void prepareInstallDialog(final boolean install, final Uri packageUri, final String apkFilePath, final String fromPkgLabel, final String fromPkgName) {
         final StringBuilder alertDialogMessage = new StringBuilder();
         final ProgressDialog progressDialog =
                 ProgressDialog.show(this, getString(R.string.plsWait), getString(R.string.loading___));
@@ -115,18 +195,20 @@ public class InstallPackagesActivity extends Activity {
                 @Override
                 public void run() {
                     try {
-                        InputStream in = getContentResolver().openInputStream(packageUri);
-                        if (in == null) {
-                            return;
+                        if (apkFilePath.startsWith(getExternalCacheDir() + File.separator + "ZDF-")) {
+                            InputStream in = getContentResolver().openInputStream(packageUri);
+                            if (in == null) {
+                                return;
+                            }
+                            OutputStream out = new FileOutputStream(apkFilePath);
+                            byte[] buffer = new byte[1024 * 1024];
+                            int bytesRead;
+                            while ((bytesRead = in.read(buffer)) >= 0) {
+                                out.write(buffer, 0, bytesRead);
+                            }
+                            out.close();
+                            in.close();
                         }
-                        OutputStream out = new FileOutputStream(apkFilePath);
-                        byte[] buffer = new byte[1024 * 1024];
-                        int bytesRead;
-                        while ((bytesRead = in.read(buffer)) >= 0) {
-                            out.write(buffer, 0, bytesRead);
-                        }
-                        out.close();
-                        in.close();
                         PackageManager pm = getPackageManager();
                         PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePath, 0);
                         packageInfo.applicationInfo.sourceDir = apkFilePath;
@@ -214,23 +296,6 @@ public class InstallPackagesActivity extends Activity {
                     alertDialogMessage, apkFilePath,
                     packageUri, fromPkgLabel, fromPkgName
             );
-        }
-
-
-//        try {
-//            getDevicePolicyManager(this).clearPackagePersistentPreferredActivities(
-//                    DeviceAdminReceiver.getComponentName(this), getPackageName()
-//            );
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-    }
-
-    private void clearTempFile(String filePath) {
-        File file = new File(filePath);
-        if (file.exists()) {
-            file.delete();
         }
     }
 
@@ -353,6 +418,18 @@ public class InstallPackagesActivity extends Activity {
                 v.setMinimumHeight(0);
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 301) {
+            if (resultCode == RESULT_OK) {
+                init();
+            } else {
+                finish();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

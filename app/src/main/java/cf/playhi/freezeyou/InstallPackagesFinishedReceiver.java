@@ -33,9 +33,11 @@ public class InstallPackagesFinishedReceiver extends BroadcastReceiver {
         if (intent.getBooleanExtra("install", true)) {
             String apkFilePath = intent.getStringExtra("apkFilePath");
             // Delete Temp File
-            File file = new File(apkFilePath);
-            if (file.exists()) {
-                file.delete();
+            if (apkFilePath.startsWith(context.getExternalCacheDir() + File.separator + "ZDF-")) {
+                File file = new File(apkFilePath);
+                if (file.exists()) {
+                    file.delete();
+                }
             }
 
             if (installStatus == PackageInstaller.STATUS_SUCCESS) {
