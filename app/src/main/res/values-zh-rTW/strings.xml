@@ -261,6 +261,8 @@
     <string name="manageUriAutoAllow">管理 URI 请求白名单</string>
     <string name="manageIpaAutoAllow">管理安装应用请求白名单</string>
     <string name="delAllCache">清除全部缓存</string>
+    <string name="needStoragePermission">需要存储权限</string>
+    <string name="okay">好的</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
