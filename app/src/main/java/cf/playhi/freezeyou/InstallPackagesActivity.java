@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
@@ -50,12 +51,7 @@ public class InstallPackagesActivity extends Activity {
     }
 
     private void clearTempFile(String filePath) {
-        if (filePath.startsWith(getExternalCacheDir() + File.separator + "ZDF-")) {
-            File file = new File(filePath);
-            if (file.exists()) {
-                file.delete();
-            }
-        }
+        InstallPackagesUtils.deleteTempFile(this, filePath, false);
     }
 
     private void init() {

@@ -104,15 +104,16 @@ public class InstallPackagesService extends Service {
     }
 
     private void uninstall(Intent intent, Notification.Builder builder, NotificationManager notificationManager) {
+
+        Uri packageUri = intent.getParcelableExtra("packageUri");
+        String packageName = packageUri.getEncodedSchemeSpecificPart();
+        String willBeUninstalledName = getApplicationLabel(this, null, null, packageName);
         try {
-            Uri packageUri = intent.getParcelableExtra("packageUri");
-            String packageName = packageUri.getEncodedSchemeSpecificPart();
             if (packageName == null) {
                 showToast(this, getString(R.string.invalidArguments) + " " + packageUri);
                 return;
             }
 
-            String willBeUninstalledName = getApplicationLabel(this, null, null, packageName);
             Drawable willBeUninstalledIcon =
                     getApplicationIcon(
                             this,
@@ -143,11 +144,25 @@ public class InstallPackagesService extends Service {
                 outputStream.flush();
                 process.waitFor();
                 destroyProcess(outputStream, process);
-                builder.setContentTitle(willBeUninstalledName + " " + getString(R.string.uninstallFinished));
-                notificationManager.notify(packageName.hashCode(), builder.getNotification());
+                InstallPackagesUtils
+                        .notifyFinishNotification(
+                                this, notificationManager, builder,
+                                false,
+                                packageName,
+                                willBeUninstalledName + " " + getString(R.string.uninstallFinished),
+                                null,
+                                true);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            InstallPackagesUtils
+                    .notifyFinishNotification(
+                            this, notificationManager, builder,
+                            false,
+                            packageName,
+                            getString(R.string.uninstallFailed),
+                            e.getLocalizedMessage(),
+                            false);
             showToast(this, String.format(getString(R.string.errorUninstallToast), e.getLocalizedMessage()));
         }
     }
@@ -225,29 +240,45 @@ public class InstallPackagesService extends Service {
                     outputStream.flush();
                     process.waitFor();
                     destroyProcess(outputStream, process);
+
                     // Delete Temp File
-                    if (apkFilePath.startsWith(getExternalCacheDir() + File.separator + "ZDF-")) {
-                        File file = new File(apkFilePath);
-                        if (file.exists()) {
-                            file.delete();
-                        }
-                    }
+                    InstallPackagesUtils.deleteTempFile(this, apkFilePath, false);
+
                     InputStream pi = process.getInputStream();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(pi));
                     result = bufferedReader.readLine();
                 } finally {
                     if (result != null && result.toLowerCase().contains("success")) {
-                        builder.setContentTitle(willBeInstalledName + " " + getString(R.string.installFinished));
-                        notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
+                        InstallPackagesUtils
+                                .notifyFinishNotification(
+                                        this, notificationManager, builder,
+                                        true,
+                                        willBeInstalledPackageName,
+                                        willBeInstalledName + " " + getString(R.string.installFinished),
+                                        null,
+                                        true);
                     } else {
-                        builder.setContentTitle(willBeInstalledName + " " + getString(R.string.installFailed));
-                        builder.setContentText(String.format(getString(R.string.reason_colon), result));
-                        notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
+                        InstallPackagesUtils
+                                .notifyFinishNotification(
+                                        this, notificationManager, builder,
+                                        true,
+                                        willBeInstalledPackageName,
+                                        willBeInstalledName + " " + getString(R.string.installFailed),
+                                        String.format(getString(R.string.reason_colon), result),
+                                        false);
                     }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            InstallPackagesUtils
+                    .notifyFinishNotification(
+                            this, notificationManager, builder,
+                            true,
+                            null,
+                            getString(R.string.installFailed),
+                            e.getLocalizedMessage(),
+                            false);
             showToast(this, String.format(getString(R.string.errorInstallToast), e.getLocalizedMessage()));
         }
 

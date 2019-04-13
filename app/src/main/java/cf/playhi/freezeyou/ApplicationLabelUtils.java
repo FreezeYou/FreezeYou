@@ -11,6 +11,11 @@ import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 final class ApplicationLabelUtils {
 
     static String getApplicationLabel(Context context, PackageManager packageManager, ApplicationInfo applicationInfo, String pkgName) {
+
+        if (pkgName == null) {
+            return "";
+        }
+
         SharedPreferences sharedPreferences = context.getSharedPreferences("NameOfPackages", MODE_PRIVATE);
         String name = sharedPreferences.getString(pkgName, "");
         if (!"".equals(name)) {
