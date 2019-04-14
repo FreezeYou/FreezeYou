@@ -168,11 +168,7 @@
             android:key="thirdIconEnabled" />
         <Preference
             android:summary="@string/dialEntry_Ex"
-            android:title="@string/dialEntry">
-            <!--<intent-->
-            <!--android:action="android.intent.action.DIAL"-->
-            <!--android:data="tel:*#*#373393968#*#*" />-->
-        </Preference>
+            android:title="@string/dialEntry" />
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/installAndUninstall">
@@ -194,37 +190,6 @@
             android:summary="@string/serviceLongerEx"
             android:title="@string/useForegroundService" />
     </PreferenceScreen>
-
-<!--    <PreferenceScreen-->
-<!--        android:key="more"-->
-<!--        android:title="@string/more">-->
-<!--        <Preference-->
-<!--            android:key="checkUpdate"-->
-<!--            android:title="@string/update" />-->
-<!--        &lt;!&ndash;<ListPreference&ndash;&gt;-->
-<!--        &lt;!&ndash;android:defaultValue="default"&ndash;&gt;-->
-<!--        &lt;!&ndash;android:entries="@array/displayLanguageOptionsSelection"&ndash;&gt;-->
-<!--        &lt;!&ndash;android:entryValues="@array/displayLanguageOptionsSelectionValues"&ndash;&gt;-->
-<!--        &lt;!&ndash;android:key="languagePref"&ndash;&gt;-->
-<!--        &lt;!&ndash;android:title="@string/displayLanguage" />&ndash;&gt;-->
-<!--        <Preference-->
-<!--            android:key="faq"-->
-<!--            android:title="@string/faq" />-->
-<!--        <Preference-->
-<!--            android:key="donate"-->
-<!--            android:title="@string/donate" />-->
-<!--        <Preference-->
-<!--            android:key="helpTranslate"-->
-<!--            android:title="@string/helpTranslate" />-->
-<!--        <Preference-->
-<!--            android:key="thanksList"-->
-<!--            android:title="@string/thanksList" />-->
-<!--        <Preference android:title="@string/about">-->
-<!--            <intent-->
-<!--                android:targetClass="cf.playhi.freezeyou.AboutActivity"-->
-<!--                android:targetPackage="cf.playhi.freezeyou" />-->
-<!--        </Preference>-->
-<!--    </PreferenceScreen>-->
 
     <!--<PreferenceCategory android:title="@string/backupAndRestore">-->
     <!--<Preference-->
