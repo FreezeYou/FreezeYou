@@ -114,7 +114,7 @@ public class InstallPackagesActivity extends Activity {
                             })
                             .create().show();
                 } else {
-                    apkFilePath = packageUri.getEncodedPath();
+                    apkFilePath = packageUri.getPath();
                     checkAutoAndPrepareInstallDialog(install, packageUri, apkFilePath);
                 }
             } else {
