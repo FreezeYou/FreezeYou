@@ -261,6 +261,7 @@
     <string name="delAllCache">清除全部缓存</string>
     <string name="needStoragePermission">需要存储权限</string>
     <string name="okay">好的</string>
+    <string name="scheduledTasksUserNotification">计划任务 - 用户通知</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>

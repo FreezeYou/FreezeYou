@@ -191,23 +191,11 @@ public class ScheduledTasksAddActivity extends Activity {
             for (String str : stringSet) {
                 switch (str) {
                     case "1":
-                        repeatStringBuilder.append(str);
-                        break;
                     case "2":
-                        repeatStringBuilder.append(str);
-                        break;
                     case "3":
-                        repeatStringBuilder.append(str);
-                        break;
                     case "4":
-                        repeatStringBuilder.append(str);
-                        break;
                     case "5":
-                        repeatStringBuilder.append(str);
-                        break;
                     case "6":
-                        repeatStringBuilder.append(str);
-                        break;
                     case "7":
                         repeatStringBuilder.append(str);
                         break;
@@ -281,6 +269,7 @@ public class ScheduledTasksAddActivity extends Activity {
                                     .putExtra("OnScreenOff", true));
                     break;
                 case "onApplicationsForeground":
+                case "onLeaveApplications":
                     if (!AccessibilityUtils.isAccessibilitySettingsOn(this)) {
                         showToast(this, R.string.needActiveAccessibilityService);
                         AccessibilityUtils.openAccessibilitySettings(this);

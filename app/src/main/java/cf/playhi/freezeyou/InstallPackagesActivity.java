@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
@@ -30,7 +29,9 @@ import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 
-//Install and uninstall
+/**
+ * Install and uninstall
+ */
 public class InstallPackagesActivity extends Activity {
     private static final String ILLEGALPKGNAME = "Fy^&IllegalPN*@!128`+=：:,.[";
 
