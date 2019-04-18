@@ -264,6 +264,7 @@
     <string name="needStoragePermission">Storage Permission Required</string>
     <string name="okay">OK</string>
     <string name="scheduledTasksUserNotification">计划任务 - 用户通知</string>
+    <string name="manageSpace">管理空间</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
