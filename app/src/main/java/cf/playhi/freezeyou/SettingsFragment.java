@@ -318,6 +318,24 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                                     .putExtra("isIpaMode", true)
                     );
                     break;
+                case "notificationBar_more":
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        startActivity(
+                                new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                                        .putExtra(
+                                                Settings.EXTRA_APP_PACKAGE,
+                                                getActivity().getPackageName()
+                                        )
+                        );
+                    } else {
+                        startActivity(
+                                new Intent(
+                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                        Uri.parse("package:" + getActivity().getPackageName())
+                                )
+                        );
+                    }
+                    break;
 //                case "backup":
 //
 //                    break;

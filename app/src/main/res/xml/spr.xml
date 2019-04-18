@@ -81,6 +81,9 @@
                 android:targetClass="cf.playhi.freezeyou.FUFNotificationsManageActivity"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
+        <Preference
+            android:title="@string/more"
+            android:key="notificationBar_more" />
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/automation">
@@ -104,6 +107,10 @@
             android:key="freezeOnceQuit"
             android:summary="@string/suggestUseTasksInstead"
             android:title="@string/freezeOnceQuit" />
+        <Preference
+            android:key="deleteAllScheduledTasks"
+            android:summary="@string/delAllScheduledTasks"
+            android:title="@string/delAllScheduledTasks" />
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/freezeAUF">
@@ -151,6 +158,11 @@
             android:entryValues="@array/shortCutOneKeyFreezeAdditionalOptionsSelectionValues"
             android:key="shortCutOneKeyFreezeAdditionalOptions"
             android:title="@string/shortCutOneKeyFreezeAdditionalOptions" />
+        <Preference android:title="@string/manageUriAutoAllow">
+            <intent
+                android:targetClass="cf.playhi.freezeyou.UriAutoAllowManageActivity"
+                android:targetPackage="cf.playhi.freezeyou" />
+        </Preference>
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/iconAEntry">
@@ -200,31 +212,13 @@
     <!--android:title="@string/restore"/>-->
     <!--</PreferenceCategory>-->
 
-    <PreferenceScreen android:title="@string/advance">
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="debugModeEnabled"
-            android:title="@string/debugMode" />
-        <EditTextPreference
-            android:defaultValue="@string/app_name"
-            android:key="organizationName"
-            android:summary="@string/onlyMROOTModeUse"
-            android:title="@string/organizationName" />
-        <Preference
-            android:key="configureAccessibilityService"
-            android:summary="@string/accessibility_service_description"
-            android:title="@string/configureAccessibilityService" />
-        <Preference android:title="@string/autoDiagnosis">
-            <intent
-                android:targetClass="cf.playhi.freezeyou.AutoDiagnosisActivity"
-                android:targetPackage="cf.playhi.freezeyou" />
-        </Preference>
-        <Preference android:title="@string/manualMode">
-            <intent
-                android:data="ManualMode"
-                android:targetClass="cf.playhi.freezeyou.ManualMode"
-                android:targetPackage="cf.playhi.freezeyou" />
-        </Preference>
+    <Preference android:title="@string/autoDiagnosis">
+        <intent
+            android:targetClass="cf.playhi.freezeyou.AutoDiagnosisActivity"
+            android:targetPackage="cf.playhi.freezeyou" />
+    </Preference>
+
+    <PreferenceScreen android:title="@string/manageSpace">
         <Preference
             android:key="clearIconCache"
             android:summary="@string/refreshCache"
@@ -241,6 +235,28 @@
             android:key="deleteAllScheduledTasks"
             android:summary="@string/delAllScheduledTasks"
             android:title="@string/delAllScheduledTasks" />
+    </PreferenceScreen>
+
+    <PreferenceScreen android:title="@string/advance">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="debugModeEnabled"
+            android:title="@string/debugMode" />
+        <EditTextPreference
+            android:defaultValue="@string/app_name"
+            android:key="organizationName"
+            android:summary="@string/onlyMROOTModeUse"
+            android:title="@string/organizationName" />
+        <Preference
+            android:key="configureAccessibilityService"
+            android:summary="@string/accessibility_service_description"
+            android:title="@string/configureAccessibilityService" />
+        <Preference android:title="@string/manualMode">
+            <intent
+                android:data="ManualMode"
+                android:targetClass="cf.playhi.freezeyou.ManualMode"
+                android:targetPackage="cf.playhi.freezeyou" />
+        </Preference>
         <Preference android:title="@string/showLogcat">
             <intent
                 android:targetClass="cf.playhi.freezeyou.ShowLogcatActivity"

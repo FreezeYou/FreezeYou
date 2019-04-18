@@ -224,6 +224,13 @@ final class TasksUtils {
 
         int id = (new Date().getTime() + title + text).hashCode();
 
+        builder.setContentIntent(
+                PendingIntent.getActivity(
+                        context, id,
+                        new Intent(context, ShowSimpleDialogActivity.class)
+                                .putExtra("title", title)
+                                .putExtra("text", text), PendingIntent.FLAG_UPDATE_CURRENT)
+        );
         builder.setAutoCancel(true);
 
         notificationManager.notify(id, builder.getNotification());

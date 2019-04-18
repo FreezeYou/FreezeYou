@@ -335,6 +335,11 @@
             android:excludeFromRecents="true"
             android:theme="@style/AppTheme.Default.Dialog" />
         <activity
+            android:name=".ShowSimpleDialogActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.Default.Dialog" />
+        <activity
             android:name=".GetDisabledApplications"
             android:excludeFromRecents="true"
             android:exported="true"
