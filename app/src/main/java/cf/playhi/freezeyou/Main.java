@@ -509,6 +509,9 @@ public class Main extends Activity {
         PackageManager packageManager = applicationContext.getPackageManager();
         List<ApplicationInfo> applicationInfo = packageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
         int size = applicationInfo == null ? 0 : applicationInfo.size();
+        boolean saveIconCache =
+                PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                        .getBoolean("cacheApplicationsIcons", false);
         switch (filter) {
             case "all":
                 for (int i = 0; i < size; i++) {
@@ -517,7 +520,8 @@ public class Main extends Activity {
                             getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
                             applicationInfo1.packageName,
                             applicationInfo1,
-                            packageManager
+                            packageManager,
+                            saveIconCache
                     );
                     if (keyValuePair != null) {
                         AppList.add(keyValuePair);
@@ -532,7 +536,8 @@ public class Main extends Activity {
                             getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
                             applicationInfo1.packageName,
                             applicationInfo1,
-                            packageManager
+                            packageManager,
+                            saveIconCache
                     );
                     if ((keyValuePair != null) && (R.drawable.shapedotwhite != (int) keyValuePair.get("isFrozen"))) {
                         AppList.add(keyValuePair);
@@ -547,7 +552,8 @@ public class Main extends Activity {
                             getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
                             applicationInfo1.packageName,
                             applicationInfo1,
-                            packageManager
+                            packageManager,
+                            saveIconCache
                     );
                     if (keyValuePair != null && R.drawable.shapedotwhite == (int) keyValuePair.get("isFrozen")) {
                         AppList.add(keyValuePair);
@@ -581,7 +587,8 @@ public class Main extends Activity {
                                 getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
                                 applicationInfo1.packageName,
                                 applicationInfo1,
-                                packageManager
+                                packageManager,
+                                saveIconCache
                         );
                         if (keyValuePair != null) {
                             AppList.add(keyValuePair);
@@ -598,7 +605,8 @@ public class Main extends Activity {
                                 getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
                                 applicationInfo1.packageName,
                                 applicationInfo1,
-                                packageManager
+                                packageManager,
+                                saveIconCache
                         );
                         if (keyValuePair != null) {
                             AppList.add(keyValuePair);
@@ -1081,10 +1089,10 @@ public class Main extends Activity {
         keyValuePair.put("isFrozen", getFrozenStatus(packageName, packageManager));
     }
 
-    private Map<String, Object> processAppStatus(String name, String packageName, ApplicationInfo applicationInfo, PackageManager packageManager) {
+    private Map<String, Object> processAppStatus(String name, String packageName, ApplicationInfo applicationInfo, PackageManager packageManager, boolean saveIconCache) {
         if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
             Map<String, Object> keyValuePair = new HashMap<>();
-            keyValuePair.put("Img", getApplicationIcon(Main.this, packageName, applicationInfo, false));
+            keyValuePair.put("Img", getApplicationIcon(Main.this, packageName, applicationInfo, false, saveIconCache));
             keyValuePair.put("Name", name);
             processFrozenStatus(keyValuePair, packageName, packageManager);
             keyValuePair.put("PackageName", packageName);

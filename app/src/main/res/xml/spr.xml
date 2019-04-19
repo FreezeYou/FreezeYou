@@ -6,12 +6,10 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="allowEditWhenCreateShortcut"
-            android:summary="@string/allowEditWhCreateShortcut"
             android:title="@string/allowEditWhCreateShortcut" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="noCaution"
-            android:summary="@string/nSCaution"
             android:title="@string/nSCaution" />
         <!--<ListPreference-->
         <!--android:defaultValue="default"-->
@@ -22,8 +20,11 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="saveOnClickFunctionStatus"
-            android:summary="@string/saveOnClickFunctionStatus"
             android:title="@string/saveOnClickFunctionStatus" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="cacheApplicationsIcons"
+            android:title="@string/cacheApplicationsIcons" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="showInRecents"
@@ -32,7 +33,6 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="lesserToast"
-            android:summary="@string/lesserToast"
             android:title="@string/lesserToast" />
         <ListPreference
             android:defaultValue="1"
@@ -82,8 +82,8 @@
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
-            android:title="@string/more"
-            android:key="notificationBar_more" />
+            android:key="notificationBar_more"
+            android:title="@string/more" />
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/automation">
@@ -284,8 +284,7 @@
             android:title="@string/uninstall" />
     </PreferenceScreen>
 
-    <Preference
-        android:title="@string/about">
+    <Preference android:title="@string/about">
         <intent
             android:targetClass="cf.playhi.freezeyou.AboutActivity"
             android:targetPackage="cf.playhi.freezeyou" />
