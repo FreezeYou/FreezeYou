@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -227,7 +228,8 @@ public class InstallPackagesService extends Service {
                                         InstallPackagesFinishedReceiver.class)
                                         .putExtra("name", willBeInstalledName)
                                         .putExtra("pkgName", willBeInstalledPackageName)
-                                        .putExtra("apkFilePath", apkFilePath), PendingIntent.FLAG_UPDATE_CURRENT)
+                                        .putExtra("apkFilePath", apkFilePath),
+                                PendingIntent.FLAG_UPDATE_CURRENT)
                                 .getIntentSender());
             } else {
                 // Root Mode
@@ -257,6 +259,9 @@ public class InstallPackagesService extends Service {
                                         willBeInstalledName + " " + getString(R.string.installFinished),
                                         null,
                                         true);
+                        if (PreferenceManager.getDefaultSharedPreferences(this)
+                                .getBoolean("tryDelApkAfterInstalled", false))
+                            InstallPackagesUtils.deleteTempFile(this, apkFilePath, true);
                     } else {
                         InstallPackagesUtils
                                 .notifyFinishNotification(

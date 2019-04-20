@@ -125,45 +125,26 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 }
                 break;
             case "freezeOnceQuit":
+            case "avoidFreezeForegroundApplications":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));
                 if (sharedPreferences.getBoolean(s, false) && !isAccessibilitySettingsOn(getActivity())) {
                     showToast(getActivity(), R.string.needActiveAccessibilityService);
                     openAccessibilitySettings(getActivity());
                 }
                 break;
-            case "useForegroundService":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                break;
-            case "openImmediately":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                break;
-            case "openAndUFImmediately":
+            case "useForegroundService":// 使用前台服务
+            case "openImmediately":// 解冻后立即打开
+            case "openAndUFImmediately":// 快捷方式立即解冻并启动
+            case "notificationBarDisableSlideOut":// 禁止滑动移除
+            case "notificationBarDisableClickDisappear":// 禁止点击消失
+            case "lesserToast":// 更少的 Toast
+            case "debugModeEnabled":// 启用 调试模式
+            case "tryDelApkAfterInstalled"://安装完成后尝试删除安装包
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));
                 break;
             case "notificationBarFreezeImmediately":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, true));
-                break;
-            case "notificationBarDisableSlideOut":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                break;
-            case "notificationBarDisableClickDisappear":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                break;
             case "showInRecents":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, true));
-                break;
-            case "lesserToast":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                break;
-            case "debugModeEnabled":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                break;
-            case "avoidFreezeForegroundApplications":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                if ((sharedPreferences.getBoolean(s, false)) && !isAccessibilitySettingsOn(getActivity())) {
-                    showToast(getActivity(), R.string.needActiveAccessibilityService);
-                    openAccessibilitySettings(getActivity());
-                }
                 break;
             case "organizationName":
                 Support.checkAndSetOrganizationName(getActivity(), sharedPreferences.getString(s, null));
@@ -223,21 +204,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 case "clearIconCache":
                     try {
                         deleteAllFiles(new File(getActivity().getFilesDir() + "/icon"), false);
+                        deleteAllFiles(new File(getActivity().getCacheDir() + "/icon"), false);
                         showToast(getActivity(), R.string.success);
-
-//                        File file = new File(getActivity().getFilesDir() + "/icon");
-//                        if (file.exists() && file.isDirectory()) {
-//                            File[] childFile = file.listFiles();
-//                            if (childFile == null || childFile.length == 0) {
-//                                file.delete();
-//                            } else {
-//                                for (File f : childFile) {
-//                                    if (f.isFile()) {
-//                                        f.delete();
-//                                    }
-//                                }
-//                            }
-//                        }
 
                     } catch (Exception e) {
                         e.printStackTrace();

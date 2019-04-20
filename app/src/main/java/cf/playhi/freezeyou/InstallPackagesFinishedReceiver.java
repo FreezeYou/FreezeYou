@@ -8,11 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInstaller;
 import android.os.Build;
-
-import java.io.File;
-
-import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
+import android.preference.PreferenceManager;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class InstallPackagesFinishedReceiver extends BroadcastReceiver {
@@ -56,6 +52,11 @@ public class InstallPackagesFinishedReceiver extends BroadcastReceiver {
                                 name + " " + context.getString(R.string.installFinished),
                                 null,
                                 true);
+
+                if (PreferenceManager.getDefaultSharedPreferences(context)
+                        .getBoolean("tryDelApkAfterInstalled", false))
+                    InstallPackagesUtils.deleteTempFile(context, apkFilePath, true);
+
             } else {
                 InstallPackagesUtils
                         .notifyFinishNotification(
