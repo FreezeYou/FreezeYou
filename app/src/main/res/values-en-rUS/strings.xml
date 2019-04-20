@@ -265,8 +265,8 @@
     <string name="okay">OK</string>
     <string name="scheduledTasksUserNotification">Scheduled Tasks - User notifications</string>
     <string name="manageSpace">Manage space</string>
-    <string name="cacheApplicationsIcons">缓存应用程序图标</string>
-    <string name="tryDelApkAfterInstalled">安装完成后尝试删除安装包</string>
+    <string name="cacheApplicationsIcons">Cache Applications Icons</string>
+    <string name="tryDelApkAfterInstalled">Try to delete the APK after installed</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
