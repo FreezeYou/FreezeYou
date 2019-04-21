@@ -50,4 +50,8 @@ class MainAppListSimpleAdapter extends SimpleAdapter {
         return b;
     }
 
+    ArrayList<Map<String, Object>> getStoredArrayList() {
+        return mAppList;
+    }
+
 }

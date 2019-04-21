@@ -154,6 +154,20 @@ public class Main extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        final ListView app_listView = findViewById(R.id.app_list);
+        ArrayList<Map<String, Object>> al = null;
+        MainAppListSimpleAdapter mainAppListSimpleAdapter = null;
+        if (app_listView != null) {
+            mainAppListSimpleAdapter = (MainAppListSimpleAdapter) app_listView.getAdapter();
+            if (mainAppListSimpleAdapter != null) {
+                al = mainAppListSimpleAdapter.getStoredArrayList();
+                if (al != null) {
+                    al = (ArrayList<Map<String, Object>>) al.clone();
+                }
+            }
+        }
+
         switch (item.getItemId()) {
             case R.id.menu_createOneKeyFreezeShortCut:
                 checkSettingsAndRequestCreateShortcut(
@@ -478,6 +492,65 @@ public class Main extends Activity {
             case R.id.menu_onClickFunc_createFUFShortcut:
                 appListViewOnClickMode = APPListViewOnClickMode_createFUFShortcut;
                 saveOnClickFunctionStatus(appListViewOnClickMode);
+                return true;
+            case R.id.menu_sB_default:
+                if (mainAppListSimpleAdapter != null && al != null) {
+                    Collections.sort(al, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
+                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+                        }
+                    });
+                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
+                }
+                return true;
+            case R.id.menu_sB_uf_ascending:
+                // TODO:解冻次数
+                if (mainAppListSimpleAdapter != null && al != null) {
+                    Collections.sort(al, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
+                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+                        }
+                    });
+                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
+                }
+                return true;
+            case R.id.menu_sB_uf_descending:
+                // TODO:解冻次数
+                if (mainAppListSimpleAdapter != null && al != null) {
+                    Collections.sort(al, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
+                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+                        }
+                    });
+                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
+                }
+                return true;
+            case R.id.menu_sB_us_ascending:
+                // TODO:使用次数
+                if (mainAppListSimpleAdapter != null && al != null) {
+                    Collections.sort(al, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
+                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+                        }
+                    });
+                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
+                }
+                return true;
+            case R.id.menu_sB_us_descending:
+                // TODO:使用次数
+                if (mainAppListSimpleAdapter != null && al != null) {
+                    Collections.sort(al, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
+                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+                        }
+                    });
+                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

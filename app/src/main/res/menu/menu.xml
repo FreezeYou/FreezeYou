@@ -30,6 +30,26 @@
         </menu>
     </item>
 
+    <item android:title="@string/sortBy">
+        <menu>
+            <item
+                android:id="@+id/menu_sB_default"
+                android:title="@string/sortBy_default" />
+            <item
+                android:id="@+id/menu_sB_uf_ascending"
+                android:title="@string/uf_ascending" />
+            <item
+                android:id="@+id/menu_sB_uf_descending"
+                android:title="@string/uf_descending" />
+            <item
+                android:id="@+id/menu_sB_us_ascending"
+                android:title="@string/us_ascending" />
+            <item
+                android:id="@+id/menu_sB_us_descending"
+                android:title="@string/us_descending" />
+        </menu>
+    </item>
+
     <item android:title="@string/shortCut">
         <menu>
             <item
