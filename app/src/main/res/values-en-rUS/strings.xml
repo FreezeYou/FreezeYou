@@ -267,6 +267,12 @@
     <string name="manageSpace">Manage space</string>
     <string name="cacheApplicationsIcons">Cache Applications Icons</string>
     <string name="tryDelApkAfterInstalled">Try to delete the APK after installed</string>
+    <string name="sortBy">排序方式</string>
+    <string name="sortBy_default">默认排序</string>
+    <string name="uf_ascending">解冻升序</string>
+    <string name="uf_descending">解冻降序</string>
+    <string name="us_ascending">使用升序</string>
+    <string name="us_descending">使用降序</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
@@ -315,6 +321,13 @@
         <item>When Leave Applications</item>
         <item>When Unfreeze Applications</item>
         <item>When Freeze Applications</item>
+    </string-array>
+    <string-array name="sortBySelection">
+        <item>默认排序</item>
+        <item>解冻升序</item>
+        <item>解冻降序</item>
+        <item>使用升序</item>
+        <item>使用降序</item>
     </string-array>
     <!--<string-array name="displayLanguageOptionsSelection" translatable="false">-->
     <!--<item>Default</item>-->
