@@ -505,24 +505,34 @@ public class Main extends Activity {
                 }
                 return true;
             case R.id.menu_sB_uf_ascending:
-                // TODO:解冻次数
                 if (mainAppListSimpleAdapter != null && al != null) {
                     Collections.sort(al, new Comparator<Map<String, Object>>() {
                         @Override
-                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
-                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+
+                            return new AppPreferences(Main.this)
+                                    .getInt("@ufTimeAP+" + m0.get("PackageName"), 0)
+                                    >
+                                    new AppPreferences(Main.this)
+                                            .getInt("@ufTimeAP+" + m1.get("PackageName"), 0)
+                                    ? 0 : -1;
                         }
                     });
                     mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
                 }
                 return true;
             case R.id.menu_sB_uf_descending:
-                // TODO:解冻次数
                 if (mainAppListSimpleAdapter != null && al != null) {
                     Collections.sort(al, new Comparator<Map<String, Object>>() {
                         @Override
-                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
-                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+
+                            return new AppPreferences(Main.this)
+                                    .getInt("@ufTimeAP+" + m0.get("PackageName"), 0)
+                                    <
+                                    new AppPreferences(Main.this)
+                                            .getInt("@ufTimeAP+" + m1.get("PackageName"), 0)
+                                    ? 0 : -1;
                         }
                     });
                     mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);

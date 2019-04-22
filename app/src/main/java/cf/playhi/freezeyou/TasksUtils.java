@@ -326,6 +326,11 @@ final class TasksUtils {
     }
 
     static void onUFApplications(Context context, String pkgNameString) {
+
+        AppPreferences ufTimeAP = new AppPreferences(context);
+        ufTimeAP.put("@ufTimeAP+" + pkgNameString,
+                ufTimeAP.getInt("@ufTimeAP+" + pkgNameString, 0) + 1);
+
         final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
@@ -353,6 +358,11 @@ final class TasksUtils {
     }
 
     static void onFApplications(Context context, String pkgNameString) {
+
+        AppPreferences ffTimeAP = new AppPreferences(context);
+        ffTimeAP.put("@ffTimeAP+" + pkgNameString,
+                ffTimeAP.getInt("@ffTimeAP+" + pkgNameString, 0) + 1);
+
         final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
