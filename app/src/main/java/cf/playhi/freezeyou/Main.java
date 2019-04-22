@@ -538,6 +538,40 @@ public class Main extends Activity {
                     mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
                 }
                 return true;
+            case R.id.menu_sB_ff_ascending:
+                if (mainAppListSimpleAdapter != null && al != null) {
+                    Collections.sort(al, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+
+                            return new AppPreferences(Main.this)
+                                    .getInt("@ffTimeAP+" + m0.get("PackageName"), 0)
+                                    >
+                                    new AppPreferences(Main.this)
+                                            .getInt("@ffTimeAP+" + m1.get("PackageName"), 0)
+                                    ? 0 : -1;
+                        }
+                    });
+                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
+                }
+                return true;
+            case R.id.menu_sB_ff_descending:
+                if (mainAppListSimpleAdapter != null && al != null) {
+                    Collections.sort(al, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+
+                            return new AppPreferences(Main.this)
+                                    .getInt("@ffTimeAP+" + m0.get("PackageName"), 0)
+                                    <
+                                    new AppPreferences(Main.this)
+                                            .getInt("@ffTimeAP+" + m1.get("PackageName"), 0)
+                                    ? 0 : -1;
+                        }
+                    });
+                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
+                }
+                return true;
             case R.id.menu_sB_us_ascending:
                 // TODO:使用次数
                 if (mainAppListSimpleAdapter != null && al != null) {

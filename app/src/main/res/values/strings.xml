@@ -269,6 +269,8 @@
     <string name="sortBy_default">默认排序</string>
     <string name="uf_ascending">解冻升序</string>
     <string name="uf_descending">解冻降序</string>
+    <string name="ff_ascending">冻结升序</string>
+    <string name="ff_descending">冻结降序</string>
     <string name="us_ascending">使用升序</string>
     <string name="us_descending">使用降序</string>
     <!--<string name="displayLanguage">显示语言</string>-->

@@ -42,6 +42,12 @@
                 android:id="@+id/menu_sB_uf_descending"
                 android:title="@string/uf_descending" />
             <item
+                android:id="@+id/menu_sB_ff_ascending"
+                android:title="@string/ff_ascending" />
+            <item
+                android:id="@+id/menu_sB_ff_descending"
+                android:title="@string/ff_descending" />
+            <item
                 android:id="@+id/menu_sB_us_ascending"
                 android:title="@string/us_ascending" />
             <item
