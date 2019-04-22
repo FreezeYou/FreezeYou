@@ -381,6 +381,8 @@
         <item>默认排序</item>
         <item>解冻升序</item>
         <item>解冻降序</item>
+        <item>冻结升序</item>
+        <item>冻结降序</item>
         <item>使用升序</item>
         <item>使用降序</item>
     </string-array>
@@ -388,6 +390,8 @@
         <item>default</item>
         <item>uf_a</item>
         <item>uf_d</item>
+        <item>ff_a</item>
+        <item>ff_d</item>
         <item>use_a</item>
         <item>use_d</item>
     </string-array>
