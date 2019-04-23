@@ -66,6 +66,18 @@ final class InstallPackagesUtils {
                         builder.setContentText(context.getString(R.string.openImmediately));
 
                 }
+            } else {
+                // 错误信息弹窗
+                PendingIntent resultPendingIntent =
+                        PendingIntent
+                                .getActivity(
+                                        context,
+                                        beOperatedPackageName.hashCode(),
+                                        new Intent(context, ShowSimpleDialogActivity.class)
+                                                .putExtra("title", title)
+                                                .putExtra("text", text),
+                                        PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setContentIntent(resultPendingIntent);
             }
 
             notificationManager.notify(
