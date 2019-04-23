@@ -92,6 +92,17 @@ final class InstallPackagesUtils {
             if (title != null)
                 builder.setContentTitle(title);
 
+            PendingIntent resultPendingIntent =
+                    PendingIntent
+                            .getActivity(
+                                    context,
+                                    beOperatedPackageName.hashCode(),
+                                    new Intent(context, ShowSimpleDialogActivity.class)
+                                            .putExtra("title", title)
+                                            .putExtra("text", text),
+                                    PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(resultPendingIntent);
+
             notificationManager.notify(
                     beOperatedPackageName.hashCode(), builder.getNotification()
             );
