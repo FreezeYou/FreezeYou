@@ -82,10 +82,21 @@ public class Main extends Activity {
     private final static int APPListViewOnClickMode_autoUFOrFreezeAndRun = 11;
     private final static int APPListViewOnClickMode_createFUFShortcut = 12;
 
+    private final static int SORT_BY_DEFAULT = 0;
+    private final static int SORT_BY_NO = 1;
+    private final static int SORT_BY_UF_ASCENDING = 2;
+    private final static int SORT_BY_UF_DESCENDING = 3;
+    private final static int SORT_BY_FF_ASCENDING = 4;
+    private final static int SORT_BY_FF_DESCENDING = 5;
+    private final static int SORT_BY_US_ASCENDING = 6;
+    private final static int SORT_BY_US_DESCENDING = 7;
+
     private final ArrayList<String> selectedPackages = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
     private int customThemeDisabledDot = R.drawable.shapedotblue;
     private BroadcastReceiver updateFrozenStatusBroadcastReceiver;
+    private String currentFilter = "all";
+    private int currentSortRule = SORT_BY_DEFAULT;
 
     private boolean shortcutsCompleted = true;
     private int shortcutsCount;
@@ -494,107 +505,97 @@ public class Main extends Activity {
                 saveOnClickFunctionStatus(appListViewOnClickMode);
                 return true;
             case R.id.menu_sB_default:
-                if (mainAppListSimpleAdapter != null && al != null) {
-                    Collections.sort(al, new Comparator<Map<String, Object>>() {
-                        @Override
-                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
-                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
-                        }
-                    });
-                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
-                }
+                generateList(currentFilter, SORT_BY_DEFAULT);
+//                if (mainAppListSimpleAdapter != null && al != null) {
+//                    Collections.sort(al, new Comparator<Map<String, Object>>() {
+//                        @Override
+//                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
+//                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+//                        }
+//                    });
+//                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
+//                }
+                return true;
+            case R.id.menu_sB_no:
+                generateList(currentFilter, SORT_BY_NO);
                 return true;
             case R.id.menu_sB_uf_ascending:
-                if (mainAppListSimpleAdapter != null && al != null) {
-                    Collections.sort(al, new Comparator<Map<String, Object>>() {
-                        @Override
-                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
-
-                            return new AppPreferences(Main.this)
-                                    .getInt("@ufTimeAP+" + m0.get("PackageName"), 0)
-                                    >
-                                    new AppPreferences(Main.this)
-                                            .getInt("@ufTimeAP+" + m1.get("PackageName"), 0)
-                                    ? 0 : -1;
-                        }
-                    });
-                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
-                }
+                generateList(currentFilter, SORT_BY_UF_ASCENDING);
+//                if (mainAppListSimpleAdapter != null && al != null) {
+//                    Collections.sort(al, new Comparator<Map<String, Object>>() {
+//                        @Override
+//                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+//
+//                            return new AppPreferences(Main.this)
+//                                    .getInt("@ufTimeAP+" + m0.get("PackageName"), 0)
+//                                    >
+//                                    new AppPreferences(Main.this)
+//                                            .getInt("@ufTimeAP+" + m1.get("PackageName"), 0)
+//                                    ? 0 : -1;
+//                        }
+//                    });
+//                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
+//                }
                 return true;
             case R.id.menu_sB_uf_descending:
-                if (mainAppListSimpleAdapter != null && al != null) {
-                    Collections.sort(al, new Comparator<Map<String, Object>>() {
-                        @Override
-                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
-
-                            return new AppPreferences(Main.this)
-                                    .getInt("@ufTimeAP+" + m0.get("PackageName"), 0)
-                                    <
-                                    new AppPreferences(Main.this)
-                                            .getInt("@ufTimeAP+" + m1.get("PackageName"), 0)
-                                    ? 0 : -1;
-                        }
-                    });
-                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
-                }
+                generateList(currentFilter, SORT_BY_UF_DESCENDING);
+//                if (mainAppListSimpleAdapter != null && al != null) {
+//                    Collections.sort(al, new Comparator<Map<String, Object>>() {
+//                        @Override
+//                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+//
+//                            return new AppPreferences(Main.this)
+//                                    .getInt("@ufTimeAP+" + m0.get("PackageName"), 0)
+//                                    <
+//                                    new AppPreferences(Main.this)
+//                                            .getInt("@ufTimeAP+" + m1.get("PackageName"), 0)
+//                                    ? 0 : -1;
+//                        }
+//                    });
+//                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
+//                }
                 return true;
             case R.id.menu_sB_ff_ascending:
-                if (mainAppListSimpleAdapter != null && al != null) {
-                    Collections.sort(al, new Comparator<Map<String, Object>>() {
-                        @Override
-                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
-
-                            return new AppPreferences(Main.this)
-                                    .getInt("@ffTimeAP+" + m0.get("PackageName"), 0)
-                                    >
-                                    new AppPreferences(Main.this)
-                                            .getInt("@ffTimeAP+" + m1.get("PackageName"), 0)
-                                    ? 0 : -1;
-                        }
-                    });
-                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
-                }
+                generateList(currentFilter, SORT_BY_FF_ASCENDING);
+//                if (mainAppListSimpleAdapter != null && al != null) {
+//                    Collections.sort(al, new Comparator<Map<String, Object>>() {
+//                        @Override
+//                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+//
+//                            return new AppPreferences(Main.this)
+//                                    .getInt("@ffTimeAP+" + m0.get("PackageName"), 0)
+//                                    >
+//                                    new AppPreferences(Main.this)
+//                                            .getInt("@ffTimeAP+" + m1.get("PackageName"), 0)
+//                                    ? 0 : -1;
+//                        }
+//                    });
+//                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
+//                }
                 return true;
             case R.id.menu_sB_ff_descending:
-                if (mainAppListSimpleAdapter != null && al != null) {
-                    Collections.sort(al, new Comparator<Map<String, Object>>() {
-                        @Override
-                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
-
-                            return new AppPreferences(Main.this)
-                                    .getInt("@ffTimeAP+" + m0.get("PackageName"), 0)
-                                    <
-                                    new AppPreferences(Main.this)
-                                            .getInt("@ffTimeAP+" + m1.get("PackageName"), 0)
-                                    ? 0 : -1;
-                        }
-                    });
-                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
-                }
+                generateList(currentFilter, SORT_BY_FF_DESCENDING);
+//                if (mainAppListSimpleAdapter != null && al != null) {
+//                    Collections.sort(al, new Comparator<Map<String, Object>>() {
+//                        @Override
+//                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+//
+//                            return new AppPreferences(Main.this)
+//                                    .getInt("@ffTimeAP+" + m0.get("PackageName"), 0)
+//                                    <
+//                                    new AppPreferences(Main.this)
+//                                            .getInt("@ffTimeAP+" + m1.get("PackageName"), 0)
+//                                    ? 0 : -1;
+//                        }
+//                    });
+//                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
+//                }
                 return true;
             case R.id.menu_sB_us_ascending:
-                // TODO:使用次数
-                if (mainAppListSimpleAdapter != null && al != null) {
-                    Collections.sort(al, new Comparator<Map<String, Object>>() {
-                        @Override
-                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
-                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
-                        }
-                    });
-                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
-                }
+                generateList(currentFilter, SORT_BY_US_ASCENDING);
                 return true;
             case R.id.menu_sB_us_descending:
-                // TODO:使用次数
-                if (mainAppListSimpleAdapter != null && al != null) {
-                    Collections.sort(al, new Comparator<Map<String, Object>>() {
-                        @Override
-                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
-                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
-                        }
-                    });
-                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
-                }
+                generateList(currentFilter, SORT_BY_US_DESCENDING);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -602,6 +603,12 @@ public class Main extends Activity {
     }
 
     private void generateList(String filter) {
+        generateList(filter, currentSortRule);
+    }
+
+    private void generateList(String filter, int sortRule) {
+        currentFilter = filter;
+        currentSortRule = sortRule;
         final ListView app_listView = findViewById(R.id.app_list);
         final ProgressBar progressBar = findViewById(R.id.progressBar);
         final TextView textView = findViewById(R.id.textView);
@@ -737,13 +744,81 @@ public class Main extends Activity {
         }
 
         if (!AppList.isEmpty()) {
-            Collections.sort(AppList, new Comparator<Map<String, Object>>() {
+            switch (sortRule) {
+                case SORT_BY_DEFAULT:
+                    setSortByDefault(AppList);
+                    break;
+                case SORT_BY_UF_ASCENDING:
+                    setSortByDefault(AppList);
+                    Collections.sort(AppList, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
 
-                @Override
-                public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
-                    return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
-                }
-            });
+                            return new AppPreferences(Main.this)
+                                    .getInt("@ufTimeAP+" + m0.get("PackageName"), 0)
+                                    >=
+                                    new AppPreferences(Main.this)
+                                            .getInt("@ufTimeAP+" + m1.get("PackageName"), 0)
+                                    ? 0 : -1;
+                        }
+                    });
+                    break;
+                case SORT_BY_UF_DESCENDING:
+                    setSortByDefault(AppList);
+                    Collections.sort(AppList, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+
+                            return new AppPreferences(Main.this)
+                                    .getInt("@ufTimeAP+" + m0.get("PackageName"), 0)
+                                    <=
+                                    new AppPreferences(Main.this)
+                                            .getInt("@ufTimeAP+" + m1.get("PackageName"), 0)
+                                    ? 0 : -1;
+                        }
+                    });
+                    break;
+                case SORT_BY_FF_ASCENDING:
+                    setSortByDefault(AppList);
+                    Collections.sort(AppList, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+
+                            return new AppPreferences(Main.this)
+                                    .getInt("@ffTimeAP+" + m0.get("PackageName"), 0)
+                                    >=
+                                    new AppPreferences(Main.this)
+                                            .getInt("@ffTimeAP+" + m1.get("PackageName"), 0)
+                                    ? 0 : -1;
+                        }
+                    });
+                    break;
+                case SORT_BY_FF_DESCENDING:
+                    setSortByDefault(AppList);
+                    Collections.sort(AppList, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+
+                            return new AppPreferences(Main.this)
+                                    .getInt("@ffTimeAP+" + m0.get("PackageName"), 0)
+                                    <=
+                                    new AppPreferences(Main.this)
+                                            .getInt("@ffTimeAP+" + m1.get("PackageName"), 0)
+                                    ? 0 : -1;
+                        }
+                    });
+                    break;
+                case SORT_BY_US_ASCENDING:
+                    // TODO:使用次数
+                    break;
+                case SORT_BY_US_DESCENDING:
+                    // TODO:使用次数
+                    break;
+                case SORT_BY_NO:
+                    break;
+                default:
+                    break;
+            }
         }
 
         final MainAppListSimpleAdapter adapter =
@@ -1376,6 +1451,15 @@ public class Main extends Activity {
         }
     }
 
+    private void setSortByDefault(ArrayList<Map<String, Object>> AppList) {
+        Collections.sort(AppList, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
+                return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1390,4 +1474,5 @@ public class Main extends Activity {
         }
         super.finish();
     }
+
 }

@@ -36,6 +36,9 @@
                 android:id="@+id/menu_sB_default"
                 android:title="@string/sortBy_default" />
             <item
+                android:id="@+id/menu_sB_no"
+                android:title="@string/sortBy_no" />
+            <item
                 android:id="@+id/menu_sB_uf_ascending"
                 android:title="@string/uf_ascending" />
             <item
