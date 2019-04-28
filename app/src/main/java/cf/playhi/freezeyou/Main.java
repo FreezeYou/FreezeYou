@@ -815,7 +815,6 @@ public class Main extends Activity {
                     // TODO:使用次数
                     break;
                 case SORT_BY_NO:
-                    break;
                 default:
                     break;
             }

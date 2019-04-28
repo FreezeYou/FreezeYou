@@ -120,7 +120,7 @@ public class ScheduledTasksAddActivity extends Activity {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ScheduledTasksAddActivity.this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             if (isTimeTask) {
-                final SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
+                final SQLiteDatabase db = openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
                 db.execSQL(
                         "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
                 );
@@ -207,7 +207,7 @@ public class ScheduledTasksAddActivity extends Activity {
         String repeat = repeatStringBuilder.toString().equals("") ? "0" : repeatStringBuilder.toString();
         String label = defaultSharedPreferences.getString("stma_add_label", getString(R.string.label));
         String task = defaultSharedPreferences.getString("stma_add_task", "okuf");
-        SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
+        SQLiteDatabase db = openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
         );//column1\2 留作备用
@@ -248,7 +248,7 @@ public class ScheduledTasksAddActivity extends Activity {
             showToast(this, R.string.failed);
             return;
         }
-        SQLiteDatabase db = ScheduledTasksAddActivity.this.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+        SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
         );

@@ -317,7 +317,7 @@ public class ScheduledTasksManageActivity extends Activity {
 
     private void generateTriggerTaskList(ArrayList<Integer> integerArrayList, ArrayList<Map<String, Object>> tasksData) {
         //事件触发器触发
-        final SQLiteDatabase db = ScheduledTasksManageActivity.this.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+        final SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
         );
