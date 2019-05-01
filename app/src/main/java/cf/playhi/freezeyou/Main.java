@@ -166,19 +166,6 @@ public class Main extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        final ListView app_listView = findViewById(R.id.app_list);
-        ArrayList<Map<String, Object>> al = null;
-        MainAppListSimpleAdapter mainAppListSimpleAdapter = null;
-        if (app_listView != null) {
-            mainAppListSimpleAdapter = (MainAppListSimpleAdapter) app_listView.getAdapter();
-            if (mainAppListSimpleAdapter != null) {
-                al = mainAppListSimpleAdapter.getStoredArrayList();
-                if (al != null) {
-                    al = (ArrayList<Map<String, Object>>) al.clone();
-                }
-            }
-        }
-
         switch (item.getItemId()) {
             case R.id.menu_createOneKeyFreezeShortCut:
                 checkSettingsAndRequestCreateShortcut(
@@ -505,7 +492,12 @@ public class Main extends Activity {
                 saveOnClickFunctionStatus(appListViewOnClickMode);
                 return true;
             case R.id.menu_sB_default:
-                generateList(currentFilter, SORT_BY_DEFAULT);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList(currentFilter, SORT_BY_DEFAULT);
+                    }
+                }).start();
 //                if (mainAppListSimpleAdapter != null && al != null) {
 //                    Collections.sort(al, new Comparator<Map<String, Object>>() {
 //                        @Override
@@ -517,10 +509,20 @@ public class Main extends Activity {
 //                }
                 return true;
             case R.id.menu_sB_no:
-                generateList(currentFilter, SORT_BY_NO);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList(currentFilter, SORT_BY_NO);
+                    }
+                }).start();
                 return true;
             case R.id.menu_sB_uf_ascending:
-                generateList(currentFilter, SORT_BY_UF_ASCENDING);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList(currentFilter, SORT_BY_UF_ASCENDING);
+                    }
+                }).start();
 //                if (mainAppListSimpleAdapter != null && al != null) {
 //                    Collections.sort(al, new Comparator<Map<String, Object>>() {
 //                        @Override
@@ -538,7 +540,12 @@ public class Main extends Activity {
 //                }
                 return true;
             case R.id.menu_sB_uf_descending:
-                generateList(currentFilter, SORT_BY_UF_DESCENDING);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList(currentFilter, SORT_BY_UF_DESCENDING);
+                    }
+                }).start();
 //                if (mainAppListSimpleAdapter != null && al != null) {
 //                    Collections.sort(al, new Comparator<Map<String, Object>>() {
 //                        @Override
@@ -556,7 +563,12 @@ public class Main extends Activity {
 //                }
                 return true;
             case R.id.menu_sB_ff_ascending:
-                generateList(currentFilter, SORT_BY_FF_ASCENDING);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList(currentFilter, SORT_BY_FF_ASCENDING);
+                    }
+                }).start();
 //                if (mainAppListSimpleAdapter != null && al != null) {
 //                    Collections.sort(al, new Comparator<Map<String, Object>>() {
 //                        @Override
@@ -574,7 +586,12 @@ public class Main extends Activity {
 //                }
                 return true;
             case R.id.menu_sB_ff_descending:
-                generateList(currentFilter, SORT_BY_FF_DESCENDING);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList(currentFilter, SORT_BY_FF_DESCENDING);
+                    }
+                }).start();
 //                if (mainAppListSimpleAdapter != null && al != null) {
 //                    Collections.sort(al, new Comparator<Map<String, Object>>() {
 //                        @Override
@@ -592,10 +609,20 @@ public class Main extends Activity {
 //                }
                 return true;
             case R.id.menu_sB_us_ascending:
-                generateList(currentFilter, SORT_BY_US_ASCENDING);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList(currentFilter, SORT_BY_US_ASCENDING);
+                    }
+                }).start();
                 return true;
             case R.id.menu_sB_us_descending:
-                generateList(currentFilter, SORT_BY_US_DESCENDING);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        generateList(currentFilter, SORT_BY_US_DESCENDING);
+                    }
+                }).start();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
