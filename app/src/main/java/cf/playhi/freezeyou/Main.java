@@ -777,6 +777,7 @@ public class Main extends Activity {
                     break;
                 case SORT_BY_UF_ASCENDING:
                     setSortByDefault(AppList);
+                    // TODO:加速
                     Collections.sort(AppList, new Comparator<Map<String, Object>>() {
                         @Override
                         public int compare(Map<String, Object> m0, Map<String, Object> m1) {
@@ -792,6 +793,7 @@ public class Main extends Activity {
                     break;
                 case SORT_BY_UF_DESCENDING:
                     setSortByDefault(AppList);
+                    // TODO:加速
                     Collections.sort(AppList, new Comparator<Map<String, Object>>() {
                         @Override
                         public int compare(Map<String, Object> m0, Map<String, Object> m1) {
@@ -807,6 +809,7 @@ public class Main extends Activity {
                     break;
                 case SORT_BY_FF_ASCENDING:
                     setSortByDefault(AppList);
+                    // TODO:加速
                     Collections.sort(AppList, new Comparator<Map<String, Object>>() {
                         @Override
                         public int compare(Map<String, Object> m0, Map<String, Object> m1) {
@@ -822,6 +825,7 @@ public class Main extends Activity {
                     break;
                 case SORT_BY_FF_DESCENDING:
                     setSortByDefault(AppList);
+                    // TODO:加速
                     Collections.sort(AppList, new Comparator<Map<String, Object>>() {
                         @Override
                         public int compare(Map<String, Object> m0, Map<String, Object> m1) {
@@ -836,10 +840,36 @@ public class Main extends Activity {
                     });
                     break;
                 case SORT_BY_US_ASCENDING:
-                    // TODO:使用次数
+                    setSortByDefault(AppList);
+                    // TODO:加速
+                    Collections.sort(AppList, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+
+                            return new AppPreferences(Main.this)
+                                    .getLong("@usTimeAP_" + m0.get("PackageName"), 0L)
+                                    >=
+                                    new AppPreferences(Main.this)
+                                            .getLong("@usTimeAP_" + m1.get("PackageName"), 0L)
+                                    ? 0 : -1;
+                        }
+                    });
                     break;
                 case SORT_BY_US_DESCENDING:
-                    // TODO:使用次数
+                    setSortByDefault(AppList);
+                    // TODO:加速
+                    Collections.sort(AppList, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+
+                            return new AppPreferences(Main.this)
+                                    .getLong("@usTimeAP_" + m0.get("PackageName"), 0L)
+                                    <=
+                                    new AppPreferences(Main.this)
+                                            .getLong("@usTimeAP_" + m1.get("PackageName"), 0L)
+                                    ? 0 : -1;
+                        }
+                    });
                     break;
                 case SORT_BY_NO:
                 default:

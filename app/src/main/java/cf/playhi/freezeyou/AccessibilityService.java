@@ -46,6 +46,8 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                         onApplicationsForeground(previousPkg, pkgNameString);//检测+执行
 
+                        addUpUseTimes(pkgNameString);//使用次数计数（增加）
+
                     }
                 }
                 break;
@@ -127,5 +129,11 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
             cursor.close();
             db.close();
         }
+    }
+
+    private void addUpUseTimes(String currentPackage) {
+        AppPreferences appPreferences = new AppPreferences(getApplicationContext());
+        appPreferences.put("@usTimeAP_" + currentPackage,
+                appPreferences.getLong("@usTimeAP_" + currentPackage, 0L) + 1L);
     }
 }
