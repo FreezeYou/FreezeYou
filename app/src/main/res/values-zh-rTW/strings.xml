@@ -267,6 +267,15 @@
     <string name="manageSpace">管理空间</string>
     <string name="cacheApplicationsIcons">缓存应用程序图标</string>
     <string name="tryDelApkAfterInstalled">安装完成后尝试删除安装包</string>
+    <string name="sortBy">排序方式</string>
+    <string name="sortBy_default">默认排序</string>
+    <string name="sortBy_no">不作处理</string>
+    <string name="uf_ascending">解冻升序</string>
+    <string name="uf_descending">解冻降序</string>
+    <string name="ff_ascending">冻结升序</string>
+    <string name="ff_descending">冻结降序</string>
+    <string name="us_ascending">使用升序</string>
+    <string name="us_descending">使用降序</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
@@ -315,6 +324,16 @@
         <item>離開應用時</item>
         <item>解凍應用時</item>
         <item>凍結應用時</item>
+    </string-array>
+    <string-array name="sortBySelection">
+        <item>默认排序</item>
+        <item>不作处理</item>
+        <item>解冻升序</item>
+        <item>解冻降序</item>
+        <item>冻结升序</item>
+        <item>冻结降序</item>
+        <item>使用升序</item>
+        <item>使用降序</item>
     </string-array>
     <!--<string-array name="displayLanguageOptionsSelection" translatable="false">-->
     <!--<item>Default</item>-->
