@@ -1,10 +1,13 @@
 package cf.playhi.freezeyou;
 
+import android.annotation.TargetApi;
+import android.app.AppOpsManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,6 +74,19 @@ final class MoreUtils {
             sb.append(s);
         }
         return sb.toString();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    static boolean canAccessUsagePermission(Context context) {
+
+        AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+
+        int mode = -1;
+
+        if (appOpsManager != null)
+            mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), context.getPackageName());
+
+        return mode == AppOpsManager.MODE_ALLOWED;
     }
 
 }
