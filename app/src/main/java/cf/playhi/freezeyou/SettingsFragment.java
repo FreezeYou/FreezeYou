@@ -206,7 +206,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                         deleteAllFiles(new File(getActivity().getFilesDir() + "/icon"), false);
                         deleteAllFiles(new File(getActivity().getCacheDir() + "/icon"), false);
                         showToast(getActivity(), R.string.success);
-
                     } catch (Exception e) {
                         e.printStackTrace();
                         showToast(getActivity(), R.string.failed);
@@ -303,6 +302,20 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                                 )
                         );
                     }
+                    break;
+                case "clearUninstalledPkgsInOKFFList":
+                    String okffPkgs = new AppPreferences(getActivity()).getString(getString(R.string.sOneKeyUFApplicationList),"");
+
+                    if (okffPkgs == null) {
+                        break;
+                    }
+
+                    // TODO: 清理
+
+                    break;
+                case "clearUninstalledPkgsInOKUFList":
+                    break;
+                case "clearUninstalledPkgsInFOQList":
                     break;
 //                case "backup":
 //

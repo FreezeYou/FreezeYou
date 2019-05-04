@@ -223,6 +223,18 @@
 
     <PreferenceScreen android:title="@string/manageSpace">
         <Preference
+            android:key="clearUninstalledPkgsInOKFFList"
+            android:summary="@string/clearUninstalledPkgsInOKFFList"
+            android:title="@string/clearUninstalledPkgsInOKFFList" />
+        <Preference
+            android:key="clearUninstalledPkgsInOKUFList"
+            android:summary="@string/clearUninstalledPkgsInOKUFList"
+            android:title="@string/clearUninstalledPkgsInOKUFList" />
+        <Preference
+            android:key="clearUninstalledPkgsInFOQList"
+            android:summary="@string/clearUninstalledPkgsInFOQList"
+            android:title="@string/clearUninstalledPkgsInFOQList" />
+        <Preference
             android:key="clearIconCache"
             android:summary="@string/refreshCache"
             android:title="@string/clearIconCache" />

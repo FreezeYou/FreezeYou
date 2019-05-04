@@ -274,6 +274,9 @@
     <string name="ff_descending">冻结降序</string>
     <string name="us_ascending">使用升序</string>
     <string name="us_descending">使用降序</string>
+    <string name="clearUninstalledPkgsInOKUFList">清除一键解冻列表中已卸载的应用</string>
+    <string name="clearUninstalledPkgsInOKFFList">清除一键冻结列表中已卸载的应用</string>
+    <string name="clearUninstalledPkgsInFOQList">清除离开冻结列表中已卸载的应用</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
