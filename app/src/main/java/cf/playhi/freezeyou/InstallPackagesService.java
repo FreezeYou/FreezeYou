@@ -13,7 +13,9 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 
 import java.io.BufferedReader;
@@ -115,12 +117,17 @@ public class InstallPackagesService extends Service {
 
     private void uninstall(Intent intent, Notification.Builder builder, NotificationManager notificationManager) {
 
-        Uri packageUri = intent.getParcelableExtra("packageUri");
+        final Uri packageUri = intent.getParcelableExtra("packageUri");
         String packageName = packageUri.getEncodedSchemeSpecificPart();
         String willBeUninstalledName = getApplicationLabel(this, null, null, packageName);
         try {
             if (packageName == null) {
-                showToast(this, getString(R.string.invalidArguments) + " " + packageUri);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast(getApplicationContext(), getString(R.string.invalidArguments) + " " + packageUri);
+                    }
+                });
                 return;
             }
 
@@ -163,7 +170,7 @@ public class InstallPackagesService extends Service {
                                 null,
                                 true);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
             InstallPackagesUtils
                     .notifyFinishNotification(
@@ -173,7 +180,12 @@ public class InstallPackagesService extends Service {
                             getString(R.string.uninstallFailed),
                             e.getLocalizedMessage(),
                             false);
-            showToast(this, String.format(getString(R.string.errorUninstallToast), e.getLocalizedMessage()));
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    showToast(getApplicationContext(), String.format(getString(R.string.errorUninstallToast), e.getLocalizedMessage()));
+                }
+            });
         }
     }
 
@@ -284,7 +296,7 @@ public class InstallPackagesService extends Service {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
             InstallPackagesUtils
                     .notifyFinishNotification(
@@ -294,7 +306,13 @@ public class InstallPackagesService extends Service {
                             getString(R.string.installFailed),
                             e.getLocalizedMessage(),
                             false);
-            showToast(this, String.format(getString(R.string.errorInstallToast), e.getLocalizedMessage()));
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    showToast(getApplicationContext(), String.format(getString(R.string.errorInstallToast), e.getLocalizedMessage()));
+                }
+            });
+
         }
 
     }
