@@ -41,13 +41,22 @@ public class InstallPackagesService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        intent.putExtra("requestTime", new Date().getTime());
+        if (intent == null)
+            return super.onStartCommand(null, flags, startId);
+
+        final Intent i = new Intent(intent);
+        i.putExtra("requestTime", new Date().getTime());
         if (processing) {
-            intentArrayList.add(intent);
+            intentArrayList.add(i);
         } else {
-            installAndUninstall(intent);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    installAndUninstall(i);
+                }
+            }).start();
         }
-        return super.onStartCommand(intent, flags, startId);
+        return super.onStartCommand(i, flags, startId);
     }
 
     @Override
@@ -200,6 +209,7 @@ public class InstallPackagesService extends Service {
             Drawable willBeInstalledIcon = pm.getApplicationIcon(packageInfo.applicationInfo);
 
             builder.setContentTitle(getString(R.string.installing) + " " + willBeInstalledName);
+            builder.setProgress(100, 0, true);
             builder.setLargeIcon(getBitmapFromDrawable(willBeInstalledIcon));
             notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
 
