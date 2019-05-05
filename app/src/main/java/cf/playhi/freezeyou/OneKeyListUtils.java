@@ -29,4 +29,27 @@ final class OneKeyListUtils {
         return pkgNames != null && Arrays.asList(pkgNames.split(",")).contains(pkgName);
     }
 
+    static boolean removeUninstalledFromOneKeyList(Context context, String oneKeyName) {
+        String s = new AppPreferences(context).getString(oneKeyName, "");
+
+        if (s == null) {
+            return false;
+        }
+
+        String[] strings = s.split(",");
+        for (String pkgName : strings) {
+            if (pkgName != null) {
+                if (ApplicationInfoUtils
+                        .getApplicationInfoFromPkgName(pkgName, context) == null) {
+                    OneKeyListUtils.removeFromOneKeyList(
+                            context,
+                            oneKeyName,
+                            pkgName
+                    );
+                }
+            }
+        }
+        return true;
+    }
+
 }

@@ -498,15 +498,6 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_DEFAULT);
                     }
                 }).start();
-//                if (mainAppListSimpleAdapter != null && al != null) {
-//                    Collections.sort(al, new Comparator<Map<String, Object>>() {
-//                        @Override
-//                        public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
-//                            return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
-//                        }
-//                    });
-//                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
-//                }
                 return true;
             case R.id.menu_sB_no:
                 new Thread(new Runnable() {
@@ -523,21 +514,6 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_UF_ASCENDING);
                     }
                 }).start();
-//                if (mainAppListSimpleAdapter != null && al != null) {
-//                    Collections.sort(al, new Comparator<Map<String, Object>>() {
-//                        @Override
-//                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
-//
-//                            return new AppPreferences(Main.this)
-//                                    .getInt("@ufTimeAP+" + m0.get("PackageName"), 0)
-//                                    >
-//                                    new AppPreferences(Main.this)
-//                                            .getInt("@ufTimeAP+" + m1.get("PackageName"), 0)
-//                                    ? 0 : -1;
-//                        }
-//                    });
-//                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
-//                }
                 return true;
             case R.id.menu_sB_uf_descending:
                 new Thread(new Runnable() {
@@ -546,21 +522,6 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_UF_DESCENDING);
                     }
                 }).start();
-//                if (mainAppListSimpleAdapter != null && al != null) {
-//                    Collections.sort(al, new Comparator<Map<String, Object>>() {
-//                        @Override
-//                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
-//
-//                            return new AppPreferences(Main.this)
-//                                    .getInt("@ufTimeAP+" + m0.get("PackageName"), 0)
-//                                    <
-//                                    new AppPreferences(Main.this)
-//                                            .getInt("@ufTimeAP+" + m1.get("PackageName"), 0)
-//                                    ? 0 : -1;
-//                        }
-//                    });
-//                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
-//                }
                 return true;
             case R.id.menu_sB_ff_ascending:
                 new Thread(new Runnable() {
@@ -569,21 +530,6 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_FF_ASCENDING);
                     }
                 }).start();
-//                if (mainAppListSimpleAdapter != null && al != null) {
-//                    Collections.sort(al, new Comparator<Map<String, Object>>() {
-//                        @Override
-//                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
-//
-//                            return new AppPreferences(Main.this)
-//                                    .getInt("@ffTimeAP+" + m0.get("PackageName"), 0)
-//                                    >
-//                                    new AppPreferences(Main.this)
-//                                            .getInt("@ffTimeAP+" + m1.get("PackageName"), 0)
-//                                    ? 0 : -1;
-//                        }
-//                    });
-//                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
-//                }
                 return true;
             case R.id.menu_sB_ff_descending:
                 new Thread(new Runnable() {
@@ -592,21 +538,6 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_FF_DESCENDING);
                     }
                 }).start();
-//                if (mainAppListSimpleAdapter != null && al != null) {
-//                    Collections.sort(al, new Comparator<Map<String, Object>>() {
-//                        @Override
-//                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
-//
-//                            return new AppPreferences(Main.this)
-//                                    .getInt("@ffTimeAP+" + m0.get("PackageName"), 0)
-//                                    <
-//                                    new AppPreferences(Main.this)
-//                                            .getInt("@ffTimeAP+" + m1.get("PackageName"), 0)
-//                                    ? 0 : -1;
-//                        }
-//                    });
-//                    mainAppListSimpleAdapter.replaceAllInFormerArrayList(al);
-//                }
                 return true;
             case R.id.menu_sB_us_ascending:
                 new Thread(new Runnable() {

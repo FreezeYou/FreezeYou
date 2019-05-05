@@ -304,18 +304,28 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     }
                     break;
                 case "clearUninstalledPkgsInOKFFList":
-                    String okffPkgs = new AppPreferences(getActivity()).getString(getString(R.string.sOneKeyUFApplicationList),"");
-
-                    if (okffPkgs == null) {
-                        break;
+                    if (OneKeyListUtils.removeUninstalledFromOneKeyList(getActivity(),
+                            getString(R.string.sAutoFreezeApplicationList))) {
+                        showToast(getActivity(), R.string.success);
+                    } else {
+                        showToast(getActivity(), R.string.failed);
                     }
-
-                    // TODO: 清理
-
                     break;
                 case "clearUninstalledPkgsInOKUFList":
+                    if (OneKeyListUtils.removeUninstalledFromOneKeyList(getActivity(),
+                            getString(R.string.sOneKeyUFApplicationList))) {
+                        showToast(getActivity(), R.string.success);
+                    } else {
+                        showToast(getActivity(), R.string.failed);
+                    }
                     break;
                 case "clearUninstalledPkgsInFOQList":
+                    if (OneKeyListUtils.removeUninstalledFromOneKeyList(getActivity(),
+                            getString(R.string.sFreezeOnceQuit))) {
+                        showToast(getActivity(), R.string.success);
+                    } else {
+                        showToast(getActivity(), R.string.failed);
+                    }
                     break;
 //                case "backup":
 //
