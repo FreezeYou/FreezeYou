@@ -128,26 +128,28 @@ final class TasksUtils {
     static void runTask(String task, Context context, String taskTrigger) {
         String[] sTasks = task.split(";");
         for (String asTasks : sTasks) {
+            int length = asTasks.length();
             if (asTasks.toLowerCase().startsWith("okff")) {
                 if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                     startService(context, new Intent(context, OneKeyFreezeService.class).putExtra("autoCheckAndLockScreen", false));
             } else if (asTasks.toLowerCase().startsWith("okuf")) {
                 if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                     startService(context, new Intent(context, OneKeyUFService.class));
-            } else if (asTasks.length() >= 4) {
+            } else if (length >= 2) {
                 String string = asTasks.substring(0, 2).toLowerCase();
-                String[] tasks = asTasks.substring(3).split(",");
+                String[] tasks =
+                        length < 4 ? new String[]{} : asTasks.substring(3).split(",");
                 switch (string) {
                     case "ds": //disableSettings
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                        if (length >= 4 && parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             enableAndDisableSysSettings(tasks, context, false);
                         break;
                     case "es": //enableSettings
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                        if (length >= 4 && parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             enableAndDisableSysSettings(tasks, context, true);
                         break;
                     case "ff":
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                        if (length >= 4 && parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             startService(
                                     context,
                                     new Intent(context, FUFService.class)
@@ -156,7 +158,7 @@ final class TasksUtils {
                             );
                         break;
                     case "lg"://LOG.E
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                        if (length >= 4 && parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             Log.e("TasksLogE", asTasks.substring(3));
                         break;
                     case "ls"://Lock Screen
@@ -167,26 +169,26 @@ final class TasksUtils {
                         }
                         break;
                     case "sn"://show a notification
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                        if (length >= 4 && parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             if (tasks.length == 2)
                                 showNotification(context, tasks[0], tasks[1]);
                             else
                                 showToast(context, R.string.invalidArguments);
                         break;
                     case "sp"://getLaunchIntentForPackage,startActivity
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                        if (length >= 4 && parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             startPackages(context, tasks);
                         break;
                     case "st"://showToast
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                        if (length >= 4 && parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             showToast(context, asTasks.substring(3));
                         break;
                     case "su"://startActivity_uri
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                        if (length >= 4 && parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             startActivityByUri(context, tasks);
                         break;
                     case "uf":
-                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                        if (length >= 4 && parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             startService(
                                     context,
                                     new Intent(context, FUFService.class)
