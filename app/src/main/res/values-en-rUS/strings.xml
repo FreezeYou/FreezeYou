@@ -276,9 +276,9 @@
     <string name="ff_descending">Freeze ↓</string>
     <string name="us_ascending">Using frequency ↑</string>
     <string name="us_descending">Using frequency ↓</string>
-    <string name="clearUninstalledPkgsInOKUFList">清除一键解冻列表中已卸载的应用</string>
-    <string name="clearUninstalledPkgsInOKFFList">清除一键冻结列表中已卸载的应用</string>
-    <string name="clearUninstalledPkgsInFOQList">清除离开冻结列表中已卸载的应用</string>
+    <string name="clearUninstalledPkgsInOKUFList">Remove uninstalled applications from the Onekey Unfreeze list</string>
+    <string name="clearUninstalledPkgsInOKFFList">Remove uninstalled applications from the Onekey Freeze list</string>
+    <string name="clearUninstalledPkgsInFOQList">Remove uninstalled applications from the Freeze Once Quit list</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
