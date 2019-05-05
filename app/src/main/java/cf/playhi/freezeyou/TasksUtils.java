@@ -159,6 +159,13 @@ final class TasksUtils {
                         if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             Log.e("TasksLogE", asTasks.substring(3));
                         break;
+                    case "ls"://Lock Screen
+                        if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger)) {
+                            if (!"onScreenOn".equals(taskTrigger)) {
+                                DevicePolicyManagerUtils.doLockScreen(context);
+                            }
+                        }
+                        break;
                     case "sn"://show a notification
                         if (parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
                             if (tasks.length == 2)

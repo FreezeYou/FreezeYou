@@ -24,6 +24,11 @@ final class DevicePolicyManagerUtils {
         context.startActivity(intent);
     }
 
+    /**
+     * 优先 ROOT 模式锁屏，失败则尝试 免ROOT 模式锁屏
+     *
+     * @param context Context
+     */
     static void doLockScreen(Context context) {
         //先走ROOT，有权限的话就可以不影响SmartLock之类的了
         try {
