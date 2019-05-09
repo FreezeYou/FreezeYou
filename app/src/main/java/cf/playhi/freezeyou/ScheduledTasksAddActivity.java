@@ -167,23 +167,40 @@ public class ScheduledTasksAddActivity extends Activity {
             public void onClick(View view) {
                 SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 if (isTimeTask) {
-                    saveTimeTaskData(defaultSharedPreferences, id);
+                    if (saveTimeTaskData(defaultSharedPreferences, id)) {
+                        finish();
+                    }
                 } else {
-                    saveTriggerTaskData(defaultSharedPreferences, id);
+                    if (saveTriggerTaskData(defaultSharedPreferences, id)) {
+                        finish();
+                    }
                 }
-
-                finish();
             }
         });
     }
 
-    private void saveTimeTaskData(SharedPreferences defaultSharedPreferences, int id) {
+    private boolean saveTimeTaskData(SharedPreferences defaultSharedPreferences, int id) {
         String time = defaultSharedPreferences.getString("stma_add_time", "09:09");
         if (time == null) {
             time = "09:09";
         }
-        int hour = Integer.valueOf(time.substring(0, time.indexOf(":")));
-        int minutes = Integer.valueOf(time.substring(time.indexOf(":") + 1));
+        int indexOfColon = time.indexOf(":");
+        if (indexOfColon == -1) {
+            showToast(this, R.string.mustContainColon);
+            return false;
+        }
+        int hour;
+        int minutes;
+        try {
+            hour = Integer.valueOf(time.substring(0, indexOfColon));
+            minutes = Integer.valueOf(time.substring(indexOfColon + 1));
+        } catch (Exception e) {
+            showToast(this,
+                    getString(R.string.minutesShouldBetween)
+                            + System.getProperty("line.separator")
+                            + getString(R.string.hourShouldBetween));
+            return false;
+        }
         int enabled = defaultSharedPreferences.getBoolean("stma_add_enable", true) ? 1 : 0;
         StringBuilder repeatStringBuilder = new StringBuilder();
         Set<String> stringSet = defaultSharedPreferences.getStringSet("stma_add_repeat", null);
@@ -236,9 +253,10 @@ public class ScheduledTasksAddActivity extends Activity {
             publishTask(ScheduledTasksAddActivity.this, id, hour, minutes, repeat, task);
         }
         setResult(RESULT_OK);
+        return true;
     }
 
-    private void saveTriggerTaskData(SharedPreferences defaultSharedPreferences, int id) {
+    private boolean saveTriggerTaskData(SharedPreferences defaultSharedPreferences, int id) {
         String triggerExtraParameters = defaultSharedPreferences.getString("stma_add_trigger_extra_parameters", "");
         int enabled = defaultSharedPreferences.getBoolean("stma_add_enable", true) ? 1 : 0;
         String label = defaultSharedPreferences.getString("stma_add_label", getString(R.string.label));
@@ -246,7 +264,7 @@ public class ScheduledTasksAddActivity extends Activity {
         String trigger = defaultSharedPreferences.getString("stma_add_trigger", "");
         if ("".equals(trigger)) {//未指定触发器，直接return，抛failed
             showToast(this, R.string.failed);
-            return;
+            return false;
         }
         SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
         db.execSQL(
@@ -280,6 +298,7 @@ public class ScheduledTasksAddActivity extends Activity {
             }
         }
         setResult(RESULT_OK);
+        return true;
     }
 
     private void checkAndDecideIfFinish() {
@@ -288,12 +307,14 @@ public class ScheduledTasksAddActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (isTimeTask) {
-                            saveTimeTaskData(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()), id);
+                            if (saveTimeTaskData(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()), id)) {
+                                finish();
+                            }
                         } else {
-                            saveTriggerTaskData(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()), id);
+                            if (saveTriggerTaskData(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()), id)) {
+                                finish();
+                            }
                         }
-
-                        finish();
                     }
                 })
                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

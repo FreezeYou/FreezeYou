@@ -41,8 +41,20 @@ public class STAAFragment extends PreferenceFragment implements SharedPreference
                             sHour = "0";
                         if ("".equals(sMin))
                             sMin = "0";
-                        int hour = Integer.valueOf(sHour);
-                        int minutes = Integer.valueOf(sMin);
+
+                        int hour;
+                        int minutes;
+                        try {
+                            hour = Integer.valueOf(sHour);
+                            minutes = Integer.valueOf(sMin);
+                        } catch (Exception e) {
+                            showToast(getActivity(),
+                                    getString(R.string.minutesShouldBetween)
+                                            + System.getProperty("line.separator")
+                                            + getString(R.string.hourShouldBetween));
+                            break;
+                        }
+
                         if (hour < 0 || hour >= 24) {
                             showToast(getActivity(), R.string.hourShouldBetween);
                         }
