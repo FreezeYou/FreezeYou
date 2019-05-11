@@ -206,15 +206,6 @@
             android:title="@string/useForegroundService" />
     </PreferenceScreen>
 
-    <!--<PreferenceCategory android:title="@string/backupAndRestore">-->
-    <!--<Preference-->
-    <!--android:key="backup"-->
-    <!--android:title="@string/backup"/>-->
-    <!--<Preference-->
-    <!--android:key="restore"-->
-    <!--android:title="@string/restore"/>-->
-    <!--</PreferenceCategory>-->
-
     <Preference android:title="@string/autoDiagnosis">
         <intent
             android:targetClass="cf.playhi.freezeyou.AutoDiagnosisActivity"
@@ -251,6 +242,10 @@
             android:summary="@string/delAllScheduledTasks"
             android:title="@string/delAllScheduledTasks" />
     </PreferenceScreen>
+
+    <Preference
+        android:key="backupAndRestore"
+        android:title="@string/backupAndRestore" />
 
     <PreferenceScreen android:title="@string/advance">
         <CheckBoxPreference

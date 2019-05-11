@@ -327,12 +327,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                         showToast(getActivity(), R.string.failed);
                     }
                     break;
-//                case "backup":
-//
-//                    break;
-//                case "restore":
-//
-//                    break;
+                case "backupAndRestore":
+                    startActivity(new Intent(getActivity(),BackupMainActivity.class));
+                    break;
                 default:
                     break;
             }
