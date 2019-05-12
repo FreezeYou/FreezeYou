@@ -418,20 +418,15 @@ public class InstallPackagesActivity extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 301) {
-            if (resultCode == RESULT_OK) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 init();
             } else {
                 finish();
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
-    }
 }

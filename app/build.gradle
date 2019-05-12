@@ -29,5 +29,6 @@ android {
 
 dependencies {
     implementation 'net.grandcentrix.tray:tray:0.12.0'
+    implementation 'com.google.zxing:core:3.3.3'
     testImplementation 'junit:junit:4.12'
 }
