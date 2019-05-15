@@ -84,95 +84,122 @@ public class BackupMainActivity extends Activity {
             JSONObject generalSettingsBooleanJSONObject = new JSONObject();
             generalSettingsBooleanJSONObject.put(
                     "allowEditWhenCreateShortcut",
-                    convertBooleanSharedPreference(defSP, "allowEditWhenCreateShortcut", true)
+                    convertSharedPreference(defSP, "allowEditWhenCreateShortcut", true)
             );
             generalSettingsBooleanJSONObject.put(
                     "noCaution",
-                    convertBooleanSharedPreference(defSP, "noCaution", false)
+                    convertSharedPreference(defSP, "noCaution", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "saveOnClickFunctionStatus",
-                    convertBooleanSharedPreference(defSP, "saveOnClickFunctionStatus", false)
+                    convertSharedPreference(defSP, "saveOnClickFunctionStatus", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "cacheApplicationsIcons",
-                    convertBooleanSharedPreference(defSP, "cacheApplicationsIcons", false)
+                    convertSharedPreference(defSP, "cacheApplicationsIcons", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "showInRecents",
-                    convertBooleanSharedPreference(appPreferences, "showInRecents", true)
+                    convertSharedPreference(appPreferences, "showInRecents", true)
             );
             generalSettingsBooleanJSONObject.put(
                     "lesserToast",
-                    convertBooleanSharedPreference(appPreferences, "lesserToast", false)
+                    convertSharedPreference(appPreferences, "lesserToast", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "notificationBarFreezeImmediately",
-                    convertBooleanSharedPreference(appPreferences, "notificationBarFreezeImmediately", true)
+                    convertSharedPreference(appPreferences, "notificationBarFreezeImmediately", true)
             );
             generalSettingsBooleanJSONObject.put(
                     "notificationBarDisableSlideOut",
-                    convertBooleanSharedPreference(appPreferences, "notificationBarDisableSlideOut", false)
+                    convertSharedPreference(appPreferences, "notificationBarDisableSlideOut", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "notificationBarDisableClickDisappear",
-                    convertBooleanSharedPreference(appPreferences, "notificationBarDisableClickDisappear", false)
+                    convertSharedPreference(appPreferences, "notificationBarDisableClickDisappear", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "onekeyFreezeWhenLockScreen",
-                    convertBooleanSharedPreference(appPreferences, "onekeyFreezeWhenLockScreen", false)
+                    convertSharedPreference(appPreferences, "onekeyFreezeWhenLockScreen", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "freezeOnceQuit",
-                    convertBooleanSharedPreference(appPreferences, "freezeOnceQuit", false)
+                    convertSharedPreference(appPreferences, "freezeOnceQuit", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "avoidFreezeForegroundApplications",
-                    convertBooleanSharedPreference(appPreferences, "avoidFreezeForegroundApplications", false)
+                    convertSharedPreference(appPreferences, "avoidFreezeForegroundApplications", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "avoidFreezeNotifyingApplications",
-                    convertBooleanSharedPreference(appPreferences, "avoidFreezeNotifyingApplications", false)
+                    convertSharedPreference(appPreferences, "avoidFreezeNotifyingApplications", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "openImmediately",
-                    convertBooleanSharedPreference(appPreferences, "openImmediately", false)
+                    convertSharedPreference(appPreferences, "openImmediately", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "openAndUFImmediately",
-                    convertBooleanSharedPreference(appPreferences, "openAndUFImmediately", false)
+                    convertSharedPreference(appPreferences, "openAndUFImmediately", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "shortcutAutoFUF",
-                    convertBooleanSharedPreference(defSP, "shortcutAutoFUF", false)
+                    convertSharedPreference(defSP, "shortcutAutoFUF", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "needConfirmWhenFreezeUseShortcutAutoFUF",
-                    convertBooleanSharedPreference(defSP, "needConfirmWhenFreezeUseShortcutAutoFUF", false)
+                    convertSharedPreference(defSP, "needConfirmWhenFreezeUseShortcutAutoFUF", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "openImmediatelyAfterUnfreezeUseShortcutAutoFUF",
-                    convertBooleanSharedPreference(defSP, "openImmediatelyAfterUnfreezeUseShortcutAutoFUF", true)
+                    convertSharedPreference(defSP, "openImmediatelyAfterUnfreezeUseShortcutAutoFUF", true)
             );
             generalSettingsBooleanJSONObject.put(
                     "enableInstallPkgFunc",
-                    convertBooleanSharedPreference(defSP, "enableInstallPkgFunc", true)
+                    convertSharedPreference(defSP, "enableInstallPkgFunc", true)
             );
             generalSettingsBooleanJSONObject.put(
                     "tryDelApkAfterInstalled",
-                    convertBooleanSharedPreference(appPreferences, "tryDelApkAfterInstalled", false)
+                    convertSharedPreference(appPreferences, "tryDelApkAfterInstalled", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "useForegroundService",
-                    convertBooleanSharedPreference(appPreferences, "useForegroundService", false)
+                    convertSharedPreference(appPreferences, "useForegroundService", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "debugModeEnabled",
-                    convertBooleanSharedPreference(appPreferences, "debugModeEnabled", false)
+                    convertSharedPreference(appPreferences, "debugModeEnabled", false)
             );
             generalSettingsBooleanJSONArray.put(generalSettingsBooleanJSONObject);
             finalOutputJsonObject.put("generalSettings_boolean", generalSettingsBooleanJSONArray);
             // boolean 结束
+
+            // String 开始
+            JSONArray generalSettingsStringJSONArray = new JSONArray();
+            JSONObject generalSettingsStringJSONObject = new JSONObject();
+            generalSettingsStringJSONObject.put(
+                    "onClickFuncChooseActionStyle",
+                    convertSharedPreference(defSP, "onClickFuncChooseActionStyle", "1")
+            );
+            generalSettingsStringJSONObject.put(
+                    "uiStyleSelection",
+                    convertSharedPreference(defSP, "uiStyleSelection", "default")
+            );
+            generalSettingsStringJSONObject.put(
+                    "launchMode",
+                    convertSharedPreference(defSP, "launchMode", "all")
+            );
+            generalSettingsStringJSONObject.put(
+                    "organizationName",
+                    convertSharedPreference(defSP, "organizationName", getString(R.string.app_name))
+            );
+            generalSettingsStringJSONObject.put(
+                    "shortCutOneKeyFreezeAdditionalOptions",
+                    convertSharedPreference(appPreferences, "shortCutOneKeyFreezeAdditionalOptions", "nothing")
+            );
+            generalSettingsStringJSONArray.put(generalSettingsStringJSONObject);
+            finalOutputJsonObject.put("generalSettings_string", generalSettingsStringJSONArray);
+            // String 结束
 
             // 通用设置转出结束
 
@@ -184,12 +211,22 @@ public class BackupMainActivity extends Activity {
         return GZipUtils.gzipCompress(finalOutputJsonObject.toString());//Base64.encodeToString(result.toString().getBytes(),Base64.DEFAULT)
     }
 
-    private boolean convertBooleanSharedPreference(
+    private String convertSharedPreference(
+            SharedPreferences sharedPreferences, String key, String defValue) {
+        return sharedPreferences.getString(key, defValue);
+    }
+
+    private String convertSharedPreference(
+            AppPreferences appPreferences, String key, String defValue) {
+        return appPreferences.getString(key, defValue);
+    }
+
+    private boolean convertSharedPreference(
             SharedPreferences sharedPreferences, String key, boolean defValue) {
         return sharedPreferences.getBoolean(key, defValue);
     }
 
-    private boolean convertBooleanSharedPreference(
+    private boolean convertSharedPreference(
             AppPreferences appPreferences, String key, boolean defValue) {
         return appPreferences.getBoolean(key, defValue);
     }
