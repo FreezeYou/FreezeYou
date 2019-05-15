@@ -309,6 +309,10 @@
             android:label="@string/backupAndRestore"
             android:theme="@style/AppTheme.Default" />
         <activity
+            android:name=".FullScreenImageViewerActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:theme="@style/AppTheme.Default" />
+        <activity
             android:name=".SelectTargetActivityActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/plsSelect"

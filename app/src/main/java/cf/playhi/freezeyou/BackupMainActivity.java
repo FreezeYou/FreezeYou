@@ -1,6 +1,7 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -11,6 +12,8 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.TypedValue;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.google.zxing.BarcodeFormat;
@@ -21,15 +24,23 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.Hashtable;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class BackupMainActivity extends Activity {
 
-    final static String false_base64_encoded = Base64.encodeToString("false".getBytes(), Base64.DEFAULT);
-    final static String true_base64_encoded = Base64.encodeToString("true".getBytes(), Base64.DEFAULT);
+    final static String false_base64_encoded = Base64.encodeToString("0".getBytes(), Base64.DEFAULT);
+    final static String true_base64_encoded = Base64.encodeToString("1".getBytes(), Base64.DEFAULT);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +52,19 @@ public class BackupMainActivity extends Activity {
         init();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void init() {
-        processQRCode(processQRCodeContent());
+        processQRCodeAndQRCodeImageView(processQRCodeContent());
     }
 
     private String processQRCodeContent() {
@@ -53,74 +75,79 @@ public class BackupMainActivity extends Activity {
         StringBuilder result = new StringBuilder("<target=FreezeYou,version=1,category=" + "base" + ">");
 
         // boolean 开始
-        result.append(nl).append("allowEditWhenCreateShortcut").append("::");
+        result.append(nl).append("<boolean>");
+
+        result.append(nl).append("allowEditWhenCreateShortcut").append(":");
         result.append(convertBooleanSharedPreference(defSP, "allowEditWhenCreateShortcut", true));
 
-        result.append(nl).append("noCaution").append("::");
+        result.append(nl).append("noCaution").append(":");
         result.append(convertBooleanSharedPreference(defSP, "noCaution", false));
 
-        result.append(nl).append("saveOnClickFunctionStatus").append("::");
+        result.append(nl).append("saveOnClickFunctionStatus").append(":");
         result.append(convertBooleanSharedPreference(defSP, "saveOnClickFunctionStatus", false));
 
-        result.append(nl).append("cacheApplicationsIcons").append("::");
+        result.append(nl).append("cacheApplicationsIcons").append(":");
         result.append(convertBooleanSharedPreference(defSP, "cacheApplicationsIcons", false));
 
-        result.append(nl).append("showInRecents").append("::");
+        result.append(nl).append("showInRecents").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "showInRecents", true));
 
-        result.append(nl).append("lesserToast").append("::");
+        result.append(nl).append("lesserToast").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "lesserToast", false));
 
-        result.append(nl).append("notificationBarFreezeImmediately").append("::");
+        result.append(nl).append("notificationBarFreezeImmediately").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "notificationBarFreezeImmediately", true));
 
-        result.append(nl).append("notificationBarDisableSlideOut").append("::");
+        result.append(nl).append("notificationBarDisableSlideOut").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "notificationBarDisableSlideOut", false));
 
-        result.append(nl).append("notificationBarDisableClickDisappear").append("::");
+        result.append(nl).append("notificationBarDisableClickDisappear").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "notificationBarDisableClickDisappear", false));
 
-        result.append(nl).append("onekeyFreezeWhenLockScreen").append("::");
+        result.append(nl).append("onekeyFreezeWhenLockScreen").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "onekeyFreezeWhenLockScreen", false));
 
-        result.append(nl).append("freezeOnceQuit").append("::");
+        result.append(nl).append("freezeOnceQuit").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "freezeOnceQuit", false));
 
-        result.append(nl).append("avoidFreezeForegroundApplications").append("::");
+        result.append(nl).append("avoidFreezeForegroundApplications").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "avoidFreezeForegroundApplications", false));
 
-        result.append(nl).append("avoidFreezeNotifyingApplications").append("::");
+        result.append(nl).append("avoidFreezeNotifyingApplications").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "avoidFreezeNotifyingApplications", false));
 
-        result.append(nl).append("openImmediately").append("::");
+        result.append(nl).append("openImmediately").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "openImmediately", false));
 
-        result.append(nl).append("openAndUFImmediately").append("::");
+        result.append(nl).append("openAndUFImmediately").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "openAndUFImmediately", false));
 
-        result.append(nl).append("shortcutAutoFUF").append("::");
+        result.append(nl).append("shortcutAutoFUF").append(":");
         result.append(convertBooleanSharedPreference(defSP, "shortcutAutoFUF", false));
 
-        result.append(nl).append("needConfirmWhenFreezeUseShortcutAutoFUF").append("::");
+        result.append(nl).append("needConfirmWhenFreezeUseShortcutAutoFUF").append(":");
         result.append(convertBooleanSharedPreference(defSP, "needConfirmWhenFreezeUseShortcutAutoFUF", false));
 
-        result.append(nl).append("openImmediatelyAfterUnfreezeUseShortcutAutoFUF").append("::");
+        result.append(nl).append("openImmediatelyAfterUnfreezeUseShortcutAutoFUF").append(":");
         result.append(convertBooleanSharedPreference(defSP, "openImmediatelyAfterUnfreezeUseShortcutAutoFUF", true));
 
-        result.append(nl).append("enableInstallPkgFunc").append("::");
+        result.append(nl).append("enableInstallPkgFunc").append(":");
         result.append(convertBooleanSharedPreference(defSP, "enableInstallPkgFunc", true));
 
-        result.append(nl).append("tryDelApkAfterInstalled").append("::");
+        result.append(nl).append("tryDelApkAfterInstalled").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "tryDelApkAfterInstalled", false));
 
-        result.append(nl).append("useForegroundService").append("::");
+        result.append(nl).append("useForegroundService").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "useForegroundService", false));
 
-        result.append(nl).append("debugModeEnabled").append("::");
+        result.append(nl).append("debugModeEnabled").append(":");
         result.append(convertBooleanSharedPreference(appPreferences, "debugModeEnabled", false));
+
+        result.append(nl).append("</boolean>");
         // boolean 结束
 
-        return result.toString();//Base64.encodeToString(result.toString().getBytes(),Base64.DEFAULT)
+
+        return GZipUtils.gzipCompress(result.toString());//Base64.encodeToString(result.toString().getBytes(),Base64.DEFAULT)
     }
 
     private String convertBooleanSharedPreference(
@@ -133,7 +160,7 @@ public class BackupMainActivity extends Activity {
         return appPreferences.getBoolean(key, defValue) ? true_base64_encoded : false_base64_encoded;
     }
 
-    private void processQRCode(String qrContent) {
+    private void processQRCodeAndQRCodeImageView(String qrContent) {
         ImageView bma_main_qrCode_imageView = findViewById(R.id.bma_main_qrCode_imageView);
 
         int width = getWindowManager().getDefaultDisplay().getWidth();
@@ -155,13 +182,25 @@ public class BackupMainActivity extends Activity {
             a.recycle();
         }
 
-        bma_main_qrCode_imageView.setImageBitmap(
-                QRCodeUtil.createQRCodeBitmap(
-                        qrContent == null ? "" : qrContent, wh, wh, "L", "1",
-                        frontColor, Color.TRANSPARENT)
-        );
+        final Bitmap qrCode = QRCodeUtil.createQRCodeBitmap(
+                qrContent == null ? "" : qrContent,
+                wh, wh, "L", "1", frontColor, Color.TRANSPARENT);
+
+        bma_main_qrCode_imageView.setImageBitmap(qrCode);
 
         bma_main_qrCode_imageView.setPadding(padding, padding, padding, padding);
+
+        bma_main_qrCode_imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String imgPath = getCacheDir() + File.separator + new Date().toString();
+                ApplicationIconUtils.writeBitmapToFile(imgPath, qrCode);
+                startActivity(
+                        new Intent(BackupMainActivity.this, FullScreenImageViewerActivity.class)
+                                .putExtra("imgPath", imgPath)
+                );
+            }
+        });
     }
 }
 
@@ -259,5 +298,64 @@ class QRCodeUtil {
         }
 
         return null;
+    }
+}
+
+class GZipUtils {
+    //参考 http://www.cnblogs.com/whoislcj/p/5473806.html
+
+    /**
+     * @param unGzipStr 被压缩字符串
+     * @return 压缩后字符串，失败返回 String s=""
+     */
+    public static String gzipCompress(String unGzipStr) {
+
+        if (TextUtils.isEmpty(unGzipStr)) {
+            return "";
+        }
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            GZIPOutputStream gzip = new GZIPOutputStream(byteArrayOutputStream);
+            gzip.write(unGzipStr.getBytes());
+            gzip.close();
+            byte[] b = byteArrayOutputStream.toByteArray();
+            byteArrayOutputStream.flush();
+            byteArrayOutputStream.close();
+            return Base64.encodeToString(b, Base64.DEFAULT);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    /**
+     * @param gzipStr 已压缩过的 String
+     * @return 解压缩后的 String
+     */
+    public static String gzipDecompress(String gzipStr) {
+        if (TextUtils.isEmpty(gzipStr)) {
+            return "";
+        }
+        byte[] t = Base64.decode(gzipStr, Base64.DEFAULT);
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ByteArrayInputStream in = new ByteArrayInputStream(t);
+            GZIPInputStream gzip = new GZIPInputStream(in);
+            byte[] buffer = new byte[1024 * 1024];
+            int n;
+            while ((n = gzip.read(buffer, 0, buffer.length)) > 0) {
+                out.write(buffer, 0, n);
+            }
+            gzip.close();
+            in.close();
+            out.close();
+            return out.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
