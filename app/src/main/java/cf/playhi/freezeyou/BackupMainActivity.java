@@ -14,13 +14,20 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import net.grandcentrix.tray.AppPreferences;
@@ -52,6 +59,12 @@ public class BackupMainActivity extends Activity {
         setContentView(R.layout.bma_main);
 
         init();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Override
@@ -233,6 +246,7 @@ public class BackupMainActivity extends Activity {
 
     private void processQRCodeAndQRCodeImageView(String qrContent) {
         ImageView bma_main_qrCode_imageView = findViewById(R.id.bma_main_qrCode_imageView);
+        SurfaceView bma_main_qrCode_surfaceView = findViewById(R.id.bma_main_qrCode_surfaceView);
 
         int width = getWindowManager().getDefaultDisplay().getWidth();
         if (width <= 0) {
@@ -277,7 +291,7 @@ public class BackupMainActivity extends Activity {
 
 
 class QRCodeUtil {
-    //修改自 https://www.jianshu.com/p/b275e818de6a
+    //部分来自 https://www.jianshu.com/p/b275e818de6a
 
     /**
      * 创建二维码位图
@@ -369,6 +383,34 @@ class QRCodeUtil {
         }
 
         return null;
+    }
+
+    private static String decodeQRCodeBitmap(Bitmap qrCode) {
+
+        try {
+
+            int width = qrCode.getWidth();
+            int height = qrCode.getHeight();
+
+            int[] qrCodeImgData = new int[width * height];
+            qrCode.getPixels(qrCodeImgData, 0, width, 0, 0, width, height);
+
+            RGBLuminanceSource rgbLuminanceSource =
+                    new RGBLuminanceSource(width, height, qrCodeImgData);
+
+            Result qrCodeReaderResult =
+                    new QRCodeReader().decode(
+                            new BinaryBitmap(
+                                    new HybridBinarizer(rgbLuminanceSource)
+                            )
+                    );
+
+            return qrCodeReaderResult.getText();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 }
 
