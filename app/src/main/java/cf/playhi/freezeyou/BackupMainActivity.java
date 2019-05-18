@@ -75,8 +75,11 @@ public class BackupMainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 EditText editText = findViewById(R.id.bma_main_inputAndoutput_editText);
-                String data = editText.getText().toString();
-                editText.setText(GZipUtils.gzipDecompress(data));
+                if (processImportContent(GZipUtils.gzipDecompress(editText.getText().toString()))) {
+                    ToastUtils.showToast(BackupMainActivity.this, R.string.success);
+                } else {
+                    ToastUtils.showToast(BackupMainActivity.this, R.string.failed);
+                }
             }
         });
 
@@ -96,6 +99,19 @@ public class BackupMainActivity extends Activity {
             }
         });
 
+    }
+
+    private boolean processImportContent(String jsonContent) {
+        final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final AppPreferences appPreferences = new AppPreferences(getApplicationContext());
+        try {
+            JSONObject jsonObject = new JSONObject(jsonContent);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     private String processExportContent() {
@@ -232,11 +248,13 @@ public class BackupMainActivity extends Activity {
 
             // 通用设置转出结束
 
+            // TODO:计划任务、一键列表
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return GZipUtils.gzipCompress(finalOutputJsonObject.toString());//Base64.encodeToString(result.toString().getBytes(),Base64.DEFAULT)
+        return GZipUtils.gzipCompress(finalOutputJsonObject.toString());
     }
 
     private String convertSharedPreference(
