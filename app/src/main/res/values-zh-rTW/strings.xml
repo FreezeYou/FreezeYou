@@ -279,6 +279,8 @@
     <string name="clearUninstalledPkgsInOKUFList">清除一键解冻列表中已卸载的应用</string>
     <string name="clearUninstalledPkgsInOKFFList">清除一键冻结列表中已卸载的应用</string>
     <string name="clearUninstalledPkgsInFOQList">清除离开冻结列表中已卸载的应用</string>
+    <string name="impt">导入</string>
+    <string name="expt">导出</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
