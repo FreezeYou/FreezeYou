@@ -17,6 +17,7 @@
 
             <Button
                 android:id="@+id/bma_main_copy_button"
+                style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -24,6 +25,7 @@
 
             <Button
                 android:id="@+id/bma_main_paste_button"
+                style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -38,6 +40,7 @@
 
             <Button
                 android:id="@+id/bma_main_export_button"
+                style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -45,6 +48,7 @@
 
             <Button
                 android:id="@+id/bma_main_import_button"
+                style="@android:style/Widget.Material.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -58,25 +62,9 @@
             android:layout_marginBottom="10dp"
             android:background="?android:attr/listDivider" />
 
-        <!--        <FrameLayout-->
-        <!--            android:id="@+id/bma_main_qrCode_frameLayout"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_below="@id/bma_main_part1_space"-->
-        <!--            android:layout_alignParentBottom="true"-->
-        <!--            android:layout_centerHorizontal="true">-->
-
-        <!--            <ImageView-->
-        <!--                android:id="@+id/bma_main_qrCode_imageView"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="match_parent"-->
-        <!--                android:scaleType="fitXY"-->
-        <!--                android:src="@android:drawable/ic_popup_sync" />-->
-        <!--            -->
-        <!--        </FrameLayout>-->
-
         <EditText
             android:id="@+id/bma_main_inputAndoutput_editText"
+            style="@android:style/Widget.Material.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start|top"

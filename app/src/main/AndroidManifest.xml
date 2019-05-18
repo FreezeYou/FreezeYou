@@ -17,7 +17,6 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" /><!-- 开关移动数据，需 pri app -->
-    <uses-permission android:name="android.permission.CAMERA" />
 
     <permission
         android:name="cf.playhi.freezeyou.permission.GET_DISABLED_APPLICATIONS"
@@ -308,7 +307,8 @@
             android:name=".BackupMainActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/backupAndRestore"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Default"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".FullScreenImageViewerActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"

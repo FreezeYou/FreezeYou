@@ -42,6 +42,18 @@ final class MoreUtils {
         }
     }
 
+    static CharSequence getClipboardItemText(Context context) {
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (!cm.hasPrimaryClip()) {
+            return "";
+        }
+        ClipData clip = cm.getPrimaryClip();
+        if (clip == null || clip.getItemCount() <= 0) {
+            return "";
+        }
+        return clip.getItemAt(0).getText();
+    }
+
     static void joinQQGroup(Context context) {
         Intent intent = new Intent();
         intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D92NGzlhmCK_UFrL_oEAV7Fe6QrvFR5y_"));

@@ -24,4 +24,5 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.google.zxing.qrcode.encoder.Encoder
+#-keep class com.google.zxing.qrcode.encoder.Encoder
+#-keep class com.google.zxing.qrcode.decoder.DataMask

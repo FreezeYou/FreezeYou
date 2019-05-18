@@ -29,6 +29,6 @@ android {
 
 dependencies {
     implementation 'net.grandcentrix.tray:tray:0.12.0'
-    implementation 'com.google.zxing:core:3.3.3'
+//    implementation 'com.google.zxing:core:3.3.3' 先把文本方式稳定下来，再做 QRCode
     testImplementation 'junit:junit:4.12'
 }
