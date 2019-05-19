@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -174,6 +175,13 @@ public class BackupMainActivity extends Activity {
                     generalSettingsStringJSONObject, defSP, appPreferences, "shortCutOneKeyFreezeAdditionalOptions");
             // String 结束
 
+            // Int 开始
+            JSONObject generalSettingsIntJSONObject =
+                    jsonObject.getJSONArray("generalSettings_int").getJSONObject(0);
+            importIntSharedPreference(
+                    generalSettingsIntJSONObject, defSP, appPreferences, "onClickFunctionStatus");
+            // Int 结束
+
             // 通用设置转出结束
 
         } catch (JSONException e) {
@@ -190,6 +198,14 @@ public class BackupMainActivity extends Activity {
         JSONObject finalOutputJsonObject = new JSONObject();
 
         try {
+            // 标记转出格式版本 开始
+            JSONArray formatVersionJSONArray = new JSONArray();
+            JSONObject formatVersionJSONObject = new JSONObject();
+            formatVersionJSONObject.put("version", 1); // 标记备份文件格式版本
+            formatVersionJSONObject.put("generateTime", new Date().getTime()); // 标记备份文件格式版本
+            formatVersionJSONArray.put(formatVersionJSONObject);
+            finalOutputJsonObject.put("format_version", formatVersionJSONArray);
+            // 标记转出格式版本 结束
 
             // 通用设置转出开始（更多设置 中的选项，不转移图标选择相关设置）
 
@@ -315,6 +331,17 @@ public class BackupMainActivity extends Activity {
             finalOutputJsonObject.put("generalSettings_string", generalSettingsStringJSONArray);
             // String 结束
 
+            // Int 开始
+            JSONArray generalSettingsIntJSONArray = new JSONArray();
+            JSONObject generalSettingsIntJSONObject = new JSONObject();
+            generalSettingsIntJSONObject.put(
+                    "onClickFunctionStatus",
+                    defSP.getInt("onClickFunctionStatus", 0)
+            );
+            generalSettingsIntJSONArray.put(generalSettingsIntJSONObject);
+            finalOutputJsonObject.put("generalSettings_int", generalSettingsIntJSONArray);
+            // Int 结束
+
             // 通用设置转出结束
 
             // TODO:计划任务、一键列表
@@ -355,6 +382,12 @@ public class BackupMainActivity extends Activity {
     private void importBooleanSharedPreference(
             JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) throws JSONException {
         sp.edit().putBoolean(key, jsonObject.getBoolean(key)).apply();
+        SettingsUtils.syncAndCheckSharedPreference(getApplicationContext(), this, sp, key, ap);
+    }
+
+    private void importIntSharedPreference(
+            JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) throws JSONException {
+        sp.edit().putInt(key, jsonObject.getInt(key)).apply();
         SettingsUtils.syncAndCheckSharedPreference(getApplicationContext(), this, sp, key, ap);
     }
 
