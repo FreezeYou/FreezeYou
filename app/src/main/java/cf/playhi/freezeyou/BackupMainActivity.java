@@ -107,6 +107,75 @@ public class BackupMainActivity extends Activity {
         try {
             JSONObject jsonObject = new JSONObject(jsonContent);
 
+            // 通用设置转入开始（更多设置 中的选项，不转移图标选择相关设置）
+
+            // boolean 开始
+            JSONObject generalSettingsBooleanJSONObject =
+                    jsonObject.getJSONArray("generalSettings_boolean").getJSONObject(0);
+
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "allowEditWhenCreateShortcut");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "noCaution");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "saveOnClickFunctionStatus");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "cacheApplicationsIcons");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "showInRecents");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "lesserToast");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "notificationBarFreezeImmediately");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "notificationBarDisableSlideOut");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "notificationBarDisableClickDisappear");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "onekeyFreezeWhenLockScreen");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "freezeOnceQuit");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "avoidFreezeForegroundApplications");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "avoidFreezeNotifyingApplications");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "openImmediately");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "openAndUFImmediately");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "shortcutAutoFUF");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "needConfirmWhenFreezeUseShortcutAutoFUF");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "openImmediatelyAfterUnfreezeUseShortcutAutoFUF");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "enableInstallPkgFunc");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "tryDelApkAfterInstalled");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "useForegroundService");
+            importBooleanSharedPreference(
+                    generalSettingsBooleanJSONObject, defSP, appPreferences, "debugModeEnabled");
+            // boolean 结束
+
+            // String 开始
+            JSONObject generalSettingsStringJSONObject =
+                    jsonObject.getJSONArray("generalSettings_string").getJSONObject(0);
+            importStringSharedPreference(generalSettingsStringJSONObject, defSP, appPreferences, "onClickFuncChooseActionStyle");
+
+            importStringSharedPreference(
+                    generalSettingsStringJSONObject, defSP, appPreferences, "uiStyleSelection");
+            importStringSharedPreference(
+                    generalSettingsStringJSONObject, defSP, appPreferences, "launchMode");
+            importStringSharedPreference(
+                    generalSettingsStringJSONObject, defSP, appPreferences, "organizationName");
+            importStringSharedPreference(
+                    generalSettingsStringJSONObject, defSP, appPreferences, "shortCutOneKeyFreezeAdditionalOptions");
+            // String 结束
+
+            // 通用设置转出结束
+
         } catch (JSONException e) {
             e.printStackTrace();
             return false;
@@ -275,6 +344,18 @@ public class BackupMainActivity extends Activity {
     private boolean convertSharedPreference(
             AppPreferences appPreferences, String key, boolean defValue) {
         return appPreferences.getBoolean(key, defValue);
+    }
+
+    private void importStringSharedPreference(
+            JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) throws JSONException {
+        sp.edit().putString(key, jsonObject.getString(key)).apply();
+        SettingsUtils.syncAndCheckSharedPreference(getApplicationContext(), this, sp, key, ap);
+    }
+
+    private void importBooleanSharedPreference(
+            JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) throws JSONException {
+        sp.edit().putBoolean(key, jsonObject.getBoolean(key)).apply();
+        SettingsUtils.syncAndCheckSharedPreference(getApplicationContext(), this, sp, key, ap);
     }
 
 //    先把文本方式稳定下来，再决定是否做 QRCode

@@ -1,13 +1,10 @@
 package cf.playhi.freezeyou;
 
 import android.app.ActivityManager;
-import android.app.admin.DevicePolicyManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,11 +19,8 @@ import net.grandcentrix.tray.AppPreferences;
 import java.io.File;
 import java.io.IOException;
 
-import static cf.playhi.freezeyou.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
-import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
-import static cf.playhi.freezeyou.DevicePolicyManagerUtils.openDevicePolicyManager;
 import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
@@ -36,7 +30,6 @@ import static cf.playhi.freezeyou.VersionUtils.getVersionName;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private PackageManager pm;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,8 +48,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             ((PreferenceScreen) findPreference("backgroundService")).removeAll();
             ((PreferenceScreen) findPreference("root")).removePreference(findPreference("backgroundService"));
         }
-
-        pm = getActivity().getPackageManager();
         initSummary(getPreferenceScreen());
     }
 
@@ -69,115 +60,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         final AppPreferences appPreferences = new AppPreferences(getActivity());
-        switch (s) {
-            case "firstIconEnabled":
-                if (sharedPreferences.getBoolean(s, true)) {
-                    pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.FirstIcon"),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-                } else {
-                    pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.FirstIcon"),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-                }
-                showToast(getActivity(), R.string.ciFinishedToast);
-                break;
-            case "secondIconEnabled":
-                if (sharedPreferences.getBoolean(s, true)) {
-                    pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.SecondIcon"),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-                } else {
-                    pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.SecondIcon"),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-                }
-                showToast(getActivity(), R.string.ciFinishedToast);
-                break;
-            case "thirdIconEnabled":
-                if (sharedPreferences.getBoolean(s, true)) {
-                    pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.ThirdIcon"),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-                } else {
-                    pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.ThirdIcon"),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-                }
-                showToast(getActivity(), R.string.ciFinishedToast);
-                break;
-            case "shortCutOneKeyFreezeAdditionalOptions":
-                if (!"nothing".equals(sharedPreferences.getString(s, "nothing"))) {
-                    appPreferences.put(s, sharedPreferences.getString(s, "nothing"));
-                    DevicePolicyManager devicePolicyManager = getDevicePolicyManager(getActivity());
-                    if (devicePolicyManager != null && !devicePolicyManager.isAdminActive(
-                            new ComponentName(getActivity(), DeviceAdminReceiver.class))) {
-                        openDevicePolicyManager(getActivity());
-                    }
-                }
-                break;
-            case "uiStyleSelection":
-                showToast(getActivity(), R.string.willTakeEffectsNextLaunch);
-                getActivity().recreate();
-                break;
-            case "onekeyFreezeWhenLockScreen":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                if (sharedPreferences.getBoolean(s, false)) {
-                    ServiceUtils.startService(
-                            getActivity(),
-                            new Intent(getActivity().getApplicationContext(), ScreenLockOneKeyFreezeService.class));
-                } else {
-                    getActivity().stopService(new Intent(getActivity().getApplicationContext(), ScreenLockOneKeyFreezeService.class));
-                }
-                break;
-            case "freezeOnceQuit":
-            case "avoidFreezeForegroundApplications":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                if (sharedPreferences.getBoolean(s, false) && !isAccessibilitySettingsOn(getActivity())) {
-                    showToast(getActivity(), R.string.needActiveAccessibilityService);
-                    openAccessibilitySettings(getActivity());
-                }
-                break;
-            case "useForegroundService":// 使用前台服务
-            case "openImmediately":// 解冻后立即打开
-            case "openAndUFImmediately":// 快捷方式立即解冻并启动
-            case "notificationBarDisableSlideOut":// 禁止滑动移除
-            case "notificationBarDisableClickDisappear":// 禁止点击消失
-            case "lesserToast":// 更少的 Toast
-            case "debugModeEnabled":// 启用 调试模式
-            case "tryDelApkAfterInstalled"://安装完成后尝试删除安装包
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                break;
-            case "notificationBarFreezeImmediately":
-            case "showInRecents":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, true));
-                break;
-            case "organizationName":
-                Support.checkAndSetOrganizationName(getActivity(), sharedPreferences.getString(s, null));
-                break;
-            case "avoidFreezeNotifyingApplications":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                if (Build.VERSION.SDK_INT >= 21) {//这项不兼容 5.0 以下了
-                    String enabledNotificationListeners = Settings.Secure.getString(getActivity().getContentResolver(), "enabled_notification_listeners");
-                    if (enabledNotificationListeners != null && !enabledNotificationListeners.contains("cf." + "playhi." + "freezeyou")) {
-                        try {
-                            getActivity().startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-                        } catch (Exception e) {
-                            showToast(getActivity(), R.string.failed);
-                        }
-                    }
-                }
-                break;
-            case "enableInstallPkgFunc":
-                if (sharedPreferences.getBoolean(s, true)) {
-                    pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.InstallPackagesActivity"),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-                } else {
-                    pm.setComponentEnabledSetting(new ComponentName(getActivity(), "cf.playhi.freezeyou.InstallPackagesActivity"),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-                }
-                break;
-//            case "languagePref":
-//                checkLanguage(getActivity().getApplicationContext());
-//                showToast(getActivity(),R.string.willTakeEffectsNextLaunch);
-//                break;
-            default:
-                break;
-        }
+        SettingsUtils.syncAndCheckSharedPreference(
+                getActivity().getApplicationContext(),
+                getActivity(), sharedPreferences, s, appPreferences);
         updatePrefSummary(findPreference(s));
     }
 
@@ -328,7 +213,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     }
                     break;
                 case "backupAndRestore":
-                    startActivity(new Intent(getActivity(),BackupMainActivity.class));
+                    startActivity(new Intent(getActivity(), BackupMainActivity.class));
                     break;
                 default:
                     break;
