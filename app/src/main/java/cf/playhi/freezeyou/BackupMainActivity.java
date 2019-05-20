@@ -108,7 +108,7 @@ public class BackupMainActivity extends Activity {
         try {
             JSONObject jsonObject = new JSONObject(jsonContent);
 
-            // 通用设置转入开始（更多设置 中的选项，不转移图标选择相关设置）
+            // 通用设置转入（更多设置 中的选项，不转移图标选择相关设置） 开始
 
             // boolean 开始
             JSONObject generalSettingsBooleanJSONObject =
@@ -163,8 +163,8 @@ public class BackupMainActivity extends Activity {
             // String 开始
             JSONObject generalSettingsStringJSONObject =
                     jsonObject.getJSONArray("generalSettings_string").getJSONObject(0);
-            importStringSharedPreference(generalSettingsStringJSONObject, defSP, appPreferences, "onClickFuncChooseActionStyle");
-
+            importStringSharedPreference(
+                    generalSettingsStringJSONObject, defSP, appPreferences, "onClickFuncChooseActionStyle");
             importStringSharedPreference(
                     generalSettingsStringJSONObject, defSP, appPreferences, "uiStyleSelection");
             importStringSharedPreference(
@@ -182,7 +182,21 @@ public class BackupMainActivity extends Activity {
                     generalSettingsIntJSONObject, defSP, appPreferences, "onClickFunctionStatus");
             // Int 结束
 
-            // 通用设置转出结束
+            // 通用设置转出 结束
+
+            // 一键冻结、一键解冻、离开冻结列表 开始
+            JSONObject oneKeyListJSONObject =
+                    jsonObject.getJSONArray("oneKeyList").getJSONObject(0);
+            appPreferences.put(
+                    getString(R.string.sAutoFreezeApplicationList),
+                    oneKeyListJSONObject.getString("okff"));
+            appPreferences.put(
+                    getString(R.string.sOneKeyUFApplicationList),
+                    oneKeyListJSONObject.getString("okuf"));
+            appPreferences.put(
+                    getString(R.string.sFreezeOnceQuit),
+                    oneKeyListJSONObject.getString("foq"));
+            // 一键冻结、一键解冻、离开冻结列表 结束
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -207,7 +221,7 @@ public class BackupMainActivity extends Activity {
             finalOutputJsonObject.put("format_version", formatVersionJSONArray);
             // 标记转出格式版本 结束
 
-            // 通用设置转出开始（更多设置 中的选项，不转移图标选择相关设置）
+            // 通用设置转出（更多设置 中的选项，不转移图标选择相关设置） 开始
 
             // boolean 开始
             JSONArray generalSettingsBooleanJSONArray = new JSONArray();
@@ -342,9 +356,29 @@ public class BackupMainActivity extends Activity {
             finalOutputJsonObject.put("generalSettings_int", generalSettingsIntJSONArray);
             // Int 结束
 
-            // 通用设置转出结束
+            // 通用设置转出 结束
 
-            // TODO:计划任务、一键列表
+            // 一键冻结、一键解冻、离开冻结列表 开始
+            JSONArray oneKeyListJSONArray = new JSONArray();
+            JSONObject oneKeyListJSONObject = new JSONObject();
+            oneKeyListJSONObject.put(
+                    "okff",
+                    appPreferences.getString(getString(R.string.sAutoFreezeApplicationList), "")
+            );
+            oneKeyListJSONObject.put(
+                    "okuf",
+                    appPreferences.getString(getString(R.string.sOneKeyUFApplicationList), "")
+            );
+            oneKeyListJSONObject.put(
+                    "foq",
+                    appPreferences.getString(getString(R.string.sFreezeOnceQuit), "")
+            );
+            oneKeyListJSONArray.put(oneKeyListJSONObject);
+            finalOutputJsonObject.put("oneKeyList", oneKeyListJSONArray);
+            // 一键冻结、一键解冻、离开冻结列表 结束
+
+            // TODO:计划任务
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -592,7 +626,7 @@ class GZipUtils {
      * @param unGzipStr 被压缩字符串
      * @return 压缩后字符串，失败返回 String s=""
      */
-    public static String gzipCompress(String unGzipStr) {
+    static String gzipCompress(String unGzipStr) {
 
         if (TextUtils.isEmpty(unGzipStr)) {
             return "";
@@ -619,7 +653,7 @@ class GZipUtils {
      * @param gzipStr 已压缩过的 String
      * @return 解压缩后的 String
      */
-    public static String gzipDecompress(String gzipStr) {
+    static String gzipDecompress(String gzipStr) {
         if (TextUtils.isEmpty(gzipStr)) {
             return "";
         }
