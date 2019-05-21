@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.content.Context.MODE_PRIVATE;
 import static cf.playhi.freezeyou.ProcessUtils.destroyProcess;
 import static cf.playhi.freezeyou.ServiceUtils.startService;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
@@ -340,7 +341,7 @@ final class TasksUtils {
         ufTimeAP.put("@ufTimeAP+" + pkgNameString,
                 ufTimeAP.getInt("@ufTimeAP+" + pkgNameString, 0) + 1);
 
-        final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null);
+        final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
         );
@@ -372,7 +373,7 @@ final class TasksUtils {
         ffTimeAP.put("@ffTimeAP+" + pkgNameString,
                 ffTimeAP.getInt("@ffTimeAP+" + pkgNameString, 0) + 1);
 
-        final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null);
+        final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
         );
@@ -460,6 +461,70 @@ final class TasksUtils {
         if (alarmMgr != null) {
             alarmMgr.cancel(alarmIntent);
         }
+    }
+
+    static void checkTimeTasks(Context context) {
+        SQLiteDatabase db = context.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+
+        final Cursor cursor = db.query("tasks", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                int id = cursor.getInt(cursor.getColumnIndex("_id"));
+                String repeat = cursor.getString(cursor.getColumnIndex("repeat"));
+                int hour = cursor.getInt(cursor.getColumnIndex("hour"));
+                int minutes = cursor.getInt(cursor.getColumnIndex("minutes"));
+                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                String task = cursor.getString(cursor.getColumnIndex("task"));
+                TasksUtils.cancelTheTask(context, id);
+                if (enabled == 1) {
+                    publishTask(context, id, hour, minutes, repeat, task);
+                }
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+    }
+
+    static void checkTriggerTasks(Context context) {
+        //事件触发器
+        final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+
+        final Cursor cursor = db.query("tasks", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                String tg = cursor.getString(cursor.getColumnIndex("tg"));
+                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                if (enabled == 1) {
+                    if (tg == null) {
+                        tg = "";
+                    }
+                    switch (tg) {
+                        case "onScreenOn":
+                            ServiceUtils.startService(context,
+                                    new Intent(context, TriggerTasksService.class)
+                                            .putExtra("OnScreenOn", true));
+                            break;
+                        case "onScreenOff":
+                            ServiceUtils.startService(context,
+                                    new Intent(context, TriggerTasksService.class)
+                                            .putExtra("OnScreenOff", true));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
     }
 
 }

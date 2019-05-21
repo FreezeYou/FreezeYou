@@ -2,6 +2,8 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -198,6 +200,14 @@ public class BackupMainActivity extends Activity {
                     oneKeyListJSONObject.getString("foq"));
             // 一键冻结、一键解冻、离开冻结列表 结束
 
+            // 计划任务 - 时间 开始
+            importUserTimeTasksJSONArray(jsonObject);
+            // 计划任务 - 时间 结束
+
+            // 计划任务 - 触发器 开始
+            importUserTriggerTasksJSONArray(jsonObject);
+            // 计划任务 - 触发器 结束
+
         } catch (JSONException e) {
             e.printStackTrace();
             return false;
@@ -377,14 +387,132 @@ public class BackupMainActivity extends Activity {
             finalOutputJsonObject.put("oneKeyList", oneKeyListJSONArray);
             // 一键冻结、一键解冻、离开冻结列表 结束
 
-            // TODO:计划任务
+            // 计划任务 - 时间 开始
+            finalOutputJsonObject.put("userTimeScheduledTasks", generateUserTimeTasksJSONArray());
+            // 计划任务 - 时间 结束
 
+            // 计划任务 - 触发器 开始
+            finalOutputJsonObject.put("userTriggerScheduledTasks", generateUserTriggerTasksJSONArray());
+            // 计划任务 - 触发器 结束
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         return GZipUtils.gzipCompress(finalOutputJsonObject.toString());
+    }
+
+    private JSONArray generateUserTimeTasksJSONArray() throws JSONException {
+        JSONArray userTimeScheduledTasksJSONArray = new JSONArray();
+        SQLiteDatabase db = openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+        Cursor cursor =
+                db.query("tasks", null, null, null,
+                        null, null, null);
+        if (cursor.moveToFirst()) {
+            boolean ifContinue = true;
+            while (ifContinue) {
+                JSONObject oneUserTimeScheduledTaskJSONObject = new JSONObject();
+                oneUserTimeScheduledTaskJSONObject.put("hour",
+                        cursor.getInt(cursor.getColumnIndex("hour")));
+                oneUserTimeScheduledTaskJSONObject.put("minutes",
+                        cursor.getInt(cursor.getColumnIndex("minutes")));
+                oneUserTimeScheduledTaskJSONObject.put("enabled",
+                        cursor.getInt(cursor.getColumnIndex("enabled")));
+                oneUserTimeScheduledTaskJSONObject.put("label",
+                        cursor.getString(cursor.getColumnIndex("label")));
+                oneUserTimeScheduledTaskJSONObject.put("task",
+                        cursor.getString(cursor.getColumnIndex("task")));
+                oneUserTimeScheduledTaskJSONObject.put("repeat",
+                        cursor.getString(cursor.getColumnIndex("repeat")));
+                userTimeScheduledTasksJSONArray.put(oneUserTimeScheduledTaskJSONObject);
+                ifContinue = cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return userTimeScheduledTasksJSONArray;
+    }
+
+    private JSONArray generateUserTriggerTasksJSONArray() throws JSONException {
+        JSONArray userTriggerScheduledTasksJSONArray = new JSONArray();
+        SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+        Cursor cursor =
+                db.query("tasks", null, null, null,
+                        null, null, null);
+        if (cursor.moveToFirst()) {
+            boolean ifContinue = true;
+            while (ifContinue) {
+                JSONObject oneUserTriggerScheduledTaskJSONObject = new JSONObject();
+                oneUserTriggerScheduledTaskJSONObject.put("tgextra",
+                        cursor.getString(cursor.getColumnIndex("tgextra")));
+                oneUserTriggerScheduledTaskJSONObject.put("enabled",
+                        cursor.getInt(cursor.getColumnIndex("enabled")));
+                oneUserTriggerScheduledTaskJSONObject.put("label",
+                        cursor.getString(cursor.getColumnIndex("label")));
+                oneUserTriggerScheduledTaskJSONObject.put("task",
+                        cursor.getString(cursor.getColumnIndex("task")));
+                oneUserTriggerScheduledTaskJSONObject.put("tg",
+                        cursor.getString(cursor.getColumnIndex("tg")));
+                userTriggerScheduledTasksJSONArray.put(oneUserTriggerScheduledTaskJSONObject);
+                ifContinue = cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return userTriggerScheduledTasksJSONArray;
+    }
+
+    private void importUserTimeTasksJSONArray(JSONObject jsonObject) throws JSONException {
+        JSONArray userTimeScheduledTasksJSONArray =
+                jsonObject.getJSONArray("userTimeScheduledTasks");
+        SQLiteDatabase db = openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+        JSONObject oneUserTimeScheduledTaskJSONObject;
+        for (int i = 0; i < userTimeScheduledTasksJSONArray.length(); ++i) {
+            oneUserTimeScheduledTaskJSONObject = userTimeScheduledTasksJSONArray.getJSONObject(i);
+            db.execSQL(
+                    "insert into tasks(_id,hour,minutes,repeat,enabled,label,task,column1,column2) values(null,"
+                            + oneUserTimeScheduledTaskJSONObject.getInt("hour") + ","
+                            + oneUserTimeScheduledTaskJSONObject.getInt("minutes") + ","
+                            + oneUserTimeScheduledTaskJSONObject.getString("repeat") + ","
+                            + oneUserTimeScheduledTaskJSONObject.getInt("enabled") + ","
+                            + "'" + oneUserTimeScheduledTaskJSONObject.getString("label") + "'" + ","
+                            + "'" + oneUserTimeScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
+            );
+        }
+        db.close();
+        TasksUtils.checkTimeTasks(this);
+    }
+
+    private void importUserTriggerTasksJSONArray(JSONObject jsonObject) throws JSONException {
+        JSONArray userTriggerScheduledTasksJSONArray =
+                jsonObject.getJSONArray("userTriggerScheduledTasks");
+        SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+        JSONObject oneUserTriggerScheduledTaskJSONObject;
+        for (int i = 0; i < userTriggerScheduledTasksJSONArray.length(); ++i) {
+            oneUserTriggerScheduledTaskJSONObject = userTriggerScheduledTasksJSONArray.getJSONObject(i);
+            db.execSQL(
+                    "insert into tasks(_id,hour,minutes,repeat,enabled,label,task,column1,column2) values(null,"
+                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tgextra") + "'" + ","
+                            + oneUserTriggerScheduledTaskJSONObject.getInt("enabled") + ","
+                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tg") + "'" + ","
+                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("label") + "'" + ","
+                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
+            );
+        }
+        db.close();
+        TasksUtils.checkTriggerTasks(this);
     }
 
     private String convertSharedPreference(
