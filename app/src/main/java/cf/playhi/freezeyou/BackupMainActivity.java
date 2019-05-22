@@ -503,10 +503,10 @@ public class BackupMainActivity extends Activity {
         for (int i = 0; i < userTriggerScheduledTasksJSONArray.length(); ++i) {
             oneUserTriggerScheduledTaskJSONObject = userTriggerScheduledTasksJSONArray.getJSONObject(i);
             db.execSQL(
-                    "insert into tasks(_id,hour,minutes,repeat,enabled,label,task,column1,column2) values(null,"
+                    "insert into tasks(_id,tg,tgextra,enabled,label,task,column1,column2) VALUES (null,"
+                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tg") + "'" + ","
                             + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tgextra") + "'" + ","
                             + oneUserTriggerScheduledTaskJSONObject.getInt("enabled") + ","
-                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tg") + "'" + ","
                             + "'" + oneUserTriggerScheduledTaskJSONObject.getString("label") + "'" + ","
                             + "'" + oneUserTriggerScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
             );
