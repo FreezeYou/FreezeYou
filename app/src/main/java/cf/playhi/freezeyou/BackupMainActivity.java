@@ -785,8 +785,8 @@ class GZipUtils {
         if (TextUtils.isEmpty(gzipStr)) {
             return "";
         }
-        byte[] t = Base64.decode(gzipStr, Base64.DEFAULT);
         try {
+            byte[] t = Base64.decode(gzipStr, Base64.DEFAULT);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ByteArrayInputStream in = new ByteArrayInputStream(t);
             GZIPInputStream gzip = new GZIPInputStream(in);
