@@ -12,6 +12,7 @@ final class AccessibilityUtils {
     static void openAccessibilitySettings(Context context) {
         try {
             Intent accessibilityIntent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            accessibilityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(accessibilityIntent);
         } catch (Exception e) {
             e.printStackTrace();
