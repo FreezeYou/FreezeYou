@@ -144,7 +144,10 @@ public class Main extends Activity {
             shortcutsCompleted = (shortcutsCount <= 0);
         }
         updateFrozenStatus();
-        appListViewOnClickMode = PreferenceManager.getDefaultSharedPreferences(this).getInt("onClickFunctionStatus", 0);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPref.getBoolean("saveOnClickFunctionStatus", false)) {
+            appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", 0);
+        }
     }
 
     @Override
