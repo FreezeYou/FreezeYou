@@ -281,6 +281,7 @@
     <string name="clearUninstalledPkgsInFOQList">Remove uninstalled applications from the Freeze Once Quit list</string>
     <string name="impt">Import</string>
     <string name="expt">Export</string>
+    <string name="appStore">应用市场</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
