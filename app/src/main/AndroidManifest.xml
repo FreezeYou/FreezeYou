@@ -279,6 +279,10 @@
             android:label="@string/about"
             android:theme="@style/AppTheme.Default" />
         <activity
+            android:name=".FirstTimeGuideActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:theme="@style/AppTheme.Default" />
+        <activity
             android:name=".AutoDiagnosisActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/autoDiagnosis"
