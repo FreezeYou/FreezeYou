@@ -20,6 +20,7 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:text="TextView"
             android:textSize="36sp" />
 
@@ -42,19 +43,52 @@
                 android:padding="20dp">
 
                 <CheckedTextView
-                    android:id="@+id/checkedTextView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:text="CheckedTextView" />
-
-                <CheckedTextView
                     android:id="@+id/checkedTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
                     android:text="CheckedTextView"
-                    android:textSize="14sp" />
+                    android:textSize="18sp" />
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="CheckedTextView"
+                    android:textSize="18sp" />
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="CheckedTextView"
+                    android:textSize="18sp" />
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="CheckedTextView"
+                    android:textSize="18sp" />
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="CheckedTextView"
+                    android:textSize="18sp" />
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="CheckedTextView"
+                    android:textSize="18sp" />
             </LinearLayout>
         </ScrollView>
 
