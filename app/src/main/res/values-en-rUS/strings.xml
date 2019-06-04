@@ -282,6 +282,10 @@
     <string name="impt">Import</string>
     <string name="expt">Export</string>
     <string name="appStore">App Store</string>
+    <string name="finish">完成</string>
+    <string name="welcomeToUseAppName">欢迎使用 %1$s</string>
+    <string name="quickSetup">快速设置</string>
+    <string name="importConfig">导入配置</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
