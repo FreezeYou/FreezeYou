@@ -2,6 +2,7 @@ package cf.playhi.freezeyou;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -110,7 +111,7 @@ public class Main extends Activity {
             manageCrashLog();
         } catch (Exception e) {
             e.printStackTrace();
-            go();
+            checkIfNeedAskFirstTimeSetupAndShowDialog();
         }
 //        throw new RuntimeException("自定义异常：仅于异常上报测试中使用");//发版前务必注释
     }
@@ -1119,26 +1120,26 @@ public class Main extends Activity {
                             } else {
                                 showToast(Main.this, R.string.failed);
                             }
-                            go();
+                            checkIfNeedAskFirstTimeSetupAndShowDialog();
                         }
                     })
                     .setNeutralButton(R.string.update, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             checkUpdate(Main.this);
-                            go();
+                            checkIfNeedAskFirstTimeSetupAndShowDialog();
                         }
                     })
                     .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            go();
+                            checkIfNeedAskFirstTimeSetupAndShowDialog();
                         }
                     })
                     .setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialogInterface) {
-                            go();
+                            checkIfNeedAskFirstTimeSetupAndShowDialog();
                         }
                     })
                     .create()
@@ -1147,7 +1148,7 @@ public class Main extends Activity {
             new File(filePath).delete();
             crashCheck.delete();
         } else {
-            go();
+            checkIfNeedAskFirstTimeSetupAndShowDialog();
         }
     }
 
@@ -1449,6 +1450,50 @@ public class Main extends Activity {
                 return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
             }
         });
+    }
+
+    private void checkIfNeedAskFirstTimeSetupAndShowDialog() {
+
+        if (getSharedPreferences("Ver", MODE_PRIVATE).getInt("Ver", 0) != 0) {
+            go();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.mipmap.ic_launcher_new_round);
+        builder.setTitle(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)));
+        builder.setMessage(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)));
+        builder.setPositiveButton(R.string.quickSetup, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivity(
+                        new Intent(getApplicationContext(), FirstTimeSetupActivity.class)
+                );
+                go();
+            }
+        });
+        builder.setNegativeButton(R.string.importConfig, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivity(
+                        new Intent(getApplicationContext(), BackupMainActivity.class)
+                );
+                go();
+            }
+        });
+        builder.setNeutralButton(R.string.okay, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                go();
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                go();
+            }
+        });
+        builder.create().show();
     }
 
     @Override

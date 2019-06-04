@@ -1,27 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/first_time_setup_main_next_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
-        android:text="Button" />
+        android:text="@string/finish" />
+
+<!--    <Button-->
+<!--        android:id="@+id/first_time_setup_main_previous_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom|start"-->
+<!--        android:layout_margin="20dp"-->
+<!--        android:visibility="gone"-->
+<!--        android:text="Previous" />-->
 
     <LinearLayout
+        android:id="@+id/first_time_setup_main_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="20dp">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/first_time_setup_main_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="TextView"
+            android:text="Title"
             android:textSize="36sp" />
 
         <View
@@ -43,54 +54,56 @@
                 android:padding="20dp">
 
                 <CheckedTextView
-                    android:id="@+id/checkedTextView"
+                    android:id="@+id/first_time_setup_main_checkedTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="CheckedTextView"
+                    android:text="CheckedTextView1"
                     android:textSize="18sp" />
 
                 <CheckedTextView
-                    android:id="@+id/checkedTextView2"
+                    android:id="@+id/first_time_setup_main_checkedTextView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="CheckedTextView"
+                    android:text="CheckedTextView2"
                     android:textSize="18sp" />
 
                 <CheckedTextView
-                    android:id="@+id/checkedTextView3"
+                    android:id="@+id/first_time_setup_main_checkedTextView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="CheckedTextView"
+                    android:text="CheckedTextView3"
                     android:textSize="18sp" />
 
                 <CheckedTextView
-                    android:id="@+id/checkedTextView4"
+                    android:id="@+id/first_time_setup_main_checkedTextView4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="CheckedTextView"
+                    android:text="CheckedTextView4"
                     android:textSize="18sp" />
 
                 <CheckedTextView
-                    android:id="@+id/checkedTextView5"
+                    android:id="@+id/first_time_setup_main_checkedTextView5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="CheckedTextView"
+                    android:text="CheckedTextView5"
                     android:textSize="18sp" />
 
                 <CheckedTextView
-                    android:id="@+id/checkedTextView6"
+                    android:id="@+id/first_time_setup_main_checkedTextView6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="CheckedTextView"
+                    android:text="CheckedTextView6"
                     android:textSize="18sp" />
             </LinearLayout>
+
         </ScrollView>
 
     </LinearLayout>
+
 </FrameLayout>
