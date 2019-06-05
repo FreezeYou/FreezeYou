@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/common">
+        <ListPreference
+            android:defaultValue="default"
+            android:entries="@array/uiStyleSelection"
+            android:entryValues="@array/uiStyleSelectionValues"
+            android:key="uiStyleSelection"
+            android:title="@string/uiStyle" />
+        <ListPreference
+            android:defaultValue="all"
+            android:entries="@array/launchModeSelection"
+            android:entryValues="@array/launchModeSelectionValues"
+            android:key="launchMode"
+            android:title="@string/launchMode" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="cacheApplicationsIcons"
+            android:title="@string/cacheApplicationsIcons" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="showInRecents"
+            android:summary="@string/mayHaveNoEffectsL"
+            android:title="@string/showInRecents" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="lesserToast"
+            android:title="@string/lesserToast" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/notificationBar">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="notificationBarFreezeImmediately"
+            android:summary="@string/effectNextCreate"
+            android:title="@string/notificationBarFreezeImmediately" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="notificationBarDisableSlideOut"
+            android:summary="@string/effectNextCreate"
+            android:title="@string/disableSlideOut" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="notificationBarDisableClickDisappear"
+            android:summary="@string/effectNextCreate"
+            android:title="@string/disableClickDisappear" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/freezeAUF">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="avoidFreezeForegroundApplications"
+            android:summary="@string/needActiveAccessibilityService"
+            android:title="@string/avoidFreezeForegroundApplications" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="avoidFreezeNotifyingApplications"
+            android:summary="@string/needL"
+            android:title="@string/avoidFreezeNotifyingApplications" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="openAndUFImmediately"
+            android:summary="@string/openAndUFImmediatelyEx"
+            android:title="@string/openAndUFImmediately" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/moreSettings">
+        <Preference android:title="@string/moreSettings">
+            <intent
+                android:targetClass="cf.playhi.freezeyou.SettingsActivity"
+                android:targetPackage="cf.playhi.freezeyou" />
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

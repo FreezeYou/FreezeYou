@@ -35,6 +35,7 @@
 
     <Button
         android:id="@+id/first_time_setup_main_next_button"
+        style="@android:style/Widget.Material.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

@@ -24,12 +24,15 @@ public class FirstTimeSetupActivity extends Activity {
 
     private void init() {
 
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.first_time_setup_main_frameLayout, new FirstTimeSetupFragment())
+                .commit();
+
         Button first_time_setup_main_next_button = findViewById(R.id.first_time_setup_main_next_button);
         first_time_setup_main_next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Save
-
                 finish();
             }
         });
