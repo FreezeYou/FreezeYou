@@ -1,6 +1,9 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -109,6 +112,35 @@ public class AboutActivity extends Activity {
         });
 
         aboutSlogan.setText(String.format("V %s", getVersionCode(activity)));
+
+        TextView about_appName = findViewById(R.id.about_appName);
+        about_appName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)));
+                builder.setIcon(R.mipmap.ic_launcher_new_round);
+                builder.setMessage(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)));
+                builder.setNegativeButton(R.string.importConfig, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivity(
+                                new Intent(getApplicationContext(), BackupMainActivity.class)
+                        );
+                    }
+                });
+                builder.setPositiveButton(R.string.quickSetup, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivity(
+                                new Intent(getApplicationContext(), FirstTimeSetupActivity.class)
+                        );
+                    }
+                });
+                builder.setNeutralButton(R.string.okay,null);
+                builder.create().show();
+            }
+        });
     }
 
     @Override
