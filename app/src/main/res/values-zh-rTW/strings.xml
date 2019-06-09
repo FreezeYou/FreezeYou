@@ -276,9 +276,9 @@
     <string name="ff_descending">凍結降序</string>
     <string name="us_ascending">使用升序</string>
     <string name="us_descending">使用降序</string>
-    <string name="clearUninstalledPkgsInOKUFList">清除一键解冻列表中已卸载的应用</string>
-    <string name="clearUninstalledPkgsInOKFFList">清除一键冻结列表中已卸载的应用</string>
-    <string name="clearUninstalledPkgsInFOQList">清除离开冻结列表中已卸载的应用</string>
+    <string name="clearUninstalledPkgsInOKUFList">安裝完成後嘗試刪除安裝包</string>
+    <string name="clearUninstalledPkgsInOKFFList">清除一鍵凍結列表中已卸載的應用</string>
+    <string name="clearUninstalledPkgsInFOQList">清除離開凍結列表中已卸載的應用</string>
     <string name="impt">匯入</string>
     <string name="expt">匯出</string>
     <string name="appStore">應用程式商店</string>
