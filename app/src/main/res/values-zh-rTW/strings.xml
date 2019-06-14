@@ -263,29 +263,29 @@
     <string name="delAllCache">清除全部緩存</string>
     <string name="needStoragePermission">需要儲存空間權限</string>
     <string name="okay">好的</string>
-    <string name="scheduledTasksUserNotification">计划任务 - 用户通知</string>
-    <string name="manageSpace">管理空间</string>
-    <string name="cacheApplicationsIcons">缓存应用程序图标</string>
-    <string name="tryDelApkAfterInstalled">安装完成后尝试删除安装包</string>
-    <string name="sortBy">排序方式</string>
-    <string name="sortBy_default">默认排序</string>
-    <string name="sortBy_no">不作处理</string>
-    <string name="uf_ascending">解冻升序</string>
-    <string name="uf_descending">解冻降序</string>
-    <string name="ff_ascending">冻结升序</string>
-    <string name="ff_descending">冻结降序</string>
+    <string name="scheduledTasksUserNotification">計劃任務 - 用戶通知</string>
+    <string name="manageSpace">管理空間</string>
+    <string name="cacheApplicationsIcons">緩存應用程式圖示</string>
+    <string name="tryDelApkAfterInstalled">安裝完成後嘗試刪除安裝包</string>
+    <string name="sortBy">排列方式</string>
+    <string name="sortBy_default">預設排序</string>
+    <string name="sortBy_no">不作處理</string>
+    <string name="uf_ascending">解凍升序</string>
+    <string name="uf_descending">解凍降序</string>
+    <string name="ff_ascending">凍結升序</string>
+    <string name="ff_descending">凍結降序</string>
     <string name="us_ascending">使用升序</string>
     <string name="us_descending">使用降序</string>
-    <string name="clearUninstalledPkgsInOKUFList">清除一键解冻列表中已卸载的应用</string>
-    <string name="clearUninstalledPkgsInOKFFList">清除一键冻结列表中已卸载的应用</string>
-    <string name="clearUninstalledPkgsInFOQList">清除离开冻结列表中已卸载的应用</string>
-    <string name="impt">导入</string>
-    <string name="expt">导出</string>
-    <string name="appStore">应用市场</string>
+    <string name="clearUninstalledPkgsInOKUFList">安裝完成後嘗試刪除安裝包</string>
+    <string name="clearUninstalledPkgsInOKFFList">清除一鍵凍結列表中已卸載的應用</string>
+    <string name="clearUninstalledPkgsInFOQList">清除離開凍結列表中已卸載的應用</string>
+    <string name="impt">匯入</string>
+    <string name="expt">匯出</string>
+    <string name="appStore">應用程式商店</string>
     <string name="finish">完成</string>
-    <string name="welcomeToUseAppName">欢迎使用 %1$s</string>
-    <string name="quickSetup">快速设置</string>
-    <string name="importConfig">导入配置</string>
+    <string name="welcomeToUseAppName">歡迎使用 %1$s</string>
+    <string name="quickSetup">快速設定</string>
+    <string name="importConfig">載入配置</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
@@ -336,12 +336,12 @@
         <item>凍結應用時</item>
     </string-array>
     <string-array name="sortBySelection">
-        <item>默认排序</item>
-        <item>不作处理</item>
-        <item>解冻升序</item>
-        <item>解冻降序</item>
-        <item>冻结升序</item>
-        <item>冻结降序</item>
+        <item>預設排序</item>
+        <item>不作處理</item>
+        <item>解凍升序</item>
+        <item>解凍降序</item>
+        <item>凍結升序</item>
+        <item>凍結降序</item>
         <item>使用升序</item>
         <item>使用降序</item>
     </string-array>
