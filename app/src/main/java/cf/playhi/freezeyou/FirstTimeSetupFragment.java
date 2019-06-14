@@ -2,13 +2,16 @@ package cf.playhi.freezeyou;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.view.View;
 import android.widget.ListView;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
 
@@ -51,6 +54,21 @@ public class FirstTimeSetupFragment extends PreferenceFragment implements Shared
                 getActivity().getApplicationContext(),
                 getActivity(), sharedPreferences, key, appPreferences);
         updatePrefSummary(findPreference(key));
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        String key = preference.getKey();
+        if (key != null) {
+            switch (key) {
+                case "howToUse":
+                    requestOpenWebSite(getActivity(), "https://zidon.net");
+                    break;
+                default:
+                    break;
+            }
+        }
+        return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
 }

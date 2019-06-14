@@ -2,6 +2,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="root">
 
+    <Preference
+        android:key="howToUse"
+        android:title="@string/hToUse" />
+
     <PreferenceScreen android:title="@string/common">
         <CheckBoxPreference
             android:defaultValue="true"

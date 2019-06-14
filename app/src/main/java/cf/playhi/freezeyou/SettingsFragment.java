@@ -215,6 +215,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 case "backupAndRestore":
                     startActivity(new Intent(getActivity(), BackupMainActivity.class));
                     break;
+                case "howToUse":
+                    requestOpenWebSite(getActivity(), "https://zidon.net");
+                    break;
                 default:
                     break;
             }

@@ -2,6 +2,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="@string/common">
+        <Preference
+            android:key="howToUse"
+            android:title="@string/hToUse" />
         <ListPreference
             android:defaultValue="default"
             android:entries="@array/uiStyleSelection"
