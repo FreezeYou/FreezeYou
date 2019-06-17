@@ -82,6 +82,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                         e.printStackTrace();
                         showToast(getActivity(), R.string.failed);
                     }
+                    break;
                 case "clearNameCache":
                     getActivity().getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE).edit().clear().apply();
                     showToast(getActivity(), R.string.success);
@@ -243,10 +244,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     for (File f : files) {
                         deleteAllFiles(f, true);
                     }
-                    if (deleteSelfFolder) {
-                        if (!file.delete())
-                            throw new IOException(file.getAbsolutePath() + " delete failed");
-                    }
+                    if (deleteSelfFolder && !file.delete())
+                        throw new IOException(file.getAbsolutePath() + " delete failed");
                 }
             }
         }

@@ -38,15 +38,14 @@ final class OneKeyListUtils {
 
         String[] strings = s.split(",");
         for (String pkgName : strings) {
-            if (pkgName != null) {
-                if (ApplicationInfoUtils
-                        .getApplicationInfoFromPkgName(pkgName, context) == null) {
-                    OneKeyListUtils.removeFromOneKeyList(
-                            context,
-                            oneKeyName,
-                            pkgName
-                    );
-                }
+            if (pkgName != null &&
+                    ApplicationInfoUtils
+                            .getApplicationInfoFromPkgName(pkgName, context) == null) {
+                OneKeyListUtils.removeFromOneKeyList(
+                        context,
+                        oneKeyName,
+                        pkgName
+                );
             }
         }
         return true;
