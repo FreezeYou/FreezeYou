@@ -126,7 +126,7 @@ public class ScheduledTasksAddActivity extends Activity {
                 );
                 Cursor cursor = db.query("tasks", null, "_id=?", new String[]{Integer.toString(id)}, null, null, null);
                 if (cursor.moveToFirst()) {
-                    editor.putString("stma_add_time", Integer.toString(cursor.getInt(cursor.getColumnIndex("hour"))) + ":" + Integer.toString(cursor.getInt(cursor.getColumnIndex("minutes"))));
+                    editor.putString("stma_add_time", cursor.getInt(cursor.getColumnIndex("hour")) + ":" + cursor.getInt(cursor.getColumnIndex("minutes")));
                     editor.putBoolean("stma_add_enable", cursor.getInt(cursor.getColumnIndex("enabled")) == 1);
                     editor.putString("stma_add_label", cursor.getString(cursor.getColumnIndex("label")));
                     editor.putString("stma_add_task", cursor.getString(cursor.getColumnIndex("task")));
@@ -245,7 +245,7 @@ public class ScheduledTasksAddActivity extends Activity {
                     + repeat + ", enabled = "
                     + enabled + ", label = '"
                     + label + "', task = '"
-                    + task + "' WHERE _id = " + Integer.toString(id) + ";");
+                    + task + "' WHERE _id = " + id + ";");
         }
         db.close();
         TasksUtils.cancelTheTask(ScheduledTasksAddActivity.this, id);

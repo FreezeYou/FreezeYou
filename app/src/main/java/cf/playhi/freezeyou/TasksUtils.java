@@ -316,7 +316,7 @@ final class TasksUtils {
                         createDelayTasks(alarmMgr, delayAtSeconds, pendingIntent);
                         if (taskTrigger != null) {//定时或无撤回判断能力或目前不计划实现撤销的任务直接null
                             AppPreferences appPreferences = new AppPreferences(context);
-                            appPreferences.put(taskTrigger, appPreferences.getString(taskTrigger, "") + Integer.toString(requestCode) + ",");
+                            appPreferences.put(taskTrigger, appPreferences.getString(taskTrigger, "") + requestCode + ",");
                         }
                         return false;
                     }

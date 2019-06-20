@@ -52,9 +52,6 @@ public class OneKeyFreezeService extends Service {
         if (options == null)
             options = "";
         switch (options) {
-            case "nothing":
-                doFinish();
-                break;
             case "askLockScreen":
                 startActivity(new Intent(getApplicationContext(), AskLockScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 doFinish();
@@ -63,6 +60,7 @@ public class OneKeyFreezeService extends Service {
                 doLockScreen(context);
                 doFinish();
                 break;
+            case "nothing":
             default:
                 doFinish();
                 break;

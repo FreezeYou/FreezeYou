@@ -77,7 +77,7 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
         try {
             FileWriter fw = new FileWriter(logPath + File.separator
-                    + Long.toString(date.getTime()) + ".log", true);
+                    + date.getTime() + ".log", true);
             fw.write(date + "\n");
             fw.write("Model: " + android.os.Build.MODEL + ","
                     + android.os.Build.VERSION.SDK + ","
@@ -115,7 +115,7 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
                     + File.separator
                     + "NeedUpload.log", true);
             fw.write(logPath2 + File.separator
-                    + Long.toString(date.getTime()) + ".log" + "\n");
+                    + date.getTime() + ".log" + "\n");
             fw.write("\n");
             fw.close();
         } catch (Exception e) {

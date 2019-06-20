@@ -8,7 +8,7 @@ import java.util.Map;
 
 class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
 
-    private ArrayList<Map<String, Object>> mTasksList;
+    private final ArrayList<Map<String, Object>> mTasksList;
 
     ScheduledTasksManageSimpleAdapter(Context context, ArrayList<Map<String, Object>> list, int resource, String[] from, int[] to) {
         super(context, list, resource, from, to);

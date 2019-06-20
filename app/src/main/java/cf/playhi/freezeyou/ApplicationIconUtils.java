@@ -86,7 +86,7 @@ final class ApplicationIconUtils {
         }
     }
 
-    static void writeBitmapToFile(String filePath, Bitmap b) {
+    private static void writeBitmapToFile(String filePath, Bitmap b) {
         try {
             File file = new File(filePath);
             FileOutputStream fos = new FileOutputStream(file);

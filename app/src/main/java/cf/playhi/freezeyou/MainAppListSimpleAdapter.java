@@ -8,7 +8,7 @@ import java.util.Map;
 
 class MainAppListSimpleAdapter extends SimpleAdapter {
 
-    private ArrayList<Map<String, Object>> mAppList;
+    private final ArrayList<Map<String, Object>> mAppList;
 
     MainAppListSimpleAdapter(Context context, ArrayList<Map<String, Object>> list, int resource, String[] from, int[] to) {
         super(context, list, resource, from, to);

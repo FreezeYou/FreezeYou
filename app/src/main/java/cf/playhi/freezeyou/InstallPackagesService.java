@@ -38,8 +38,8 @@ import static cf.playhi.freezeyou.ToastUtils.showToast;
 //Install and uninstall
 public class InstallPackagesService extends Service {
 
-    ArrayList<Intent> intentArrayList = new ArrayList<>();
-    boolean processing = false;
+    private final ArrayList<Intent> intentArrayList = new ArrayList<>();
+    private boolean processing = false;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

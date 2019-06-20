@@ -32,12 +32,12 @@ final class LauncherShortcutUtils {
     }
 
     static void createShortCut(String title, String pkgName, Drawable icon, Class<?> cls, String id, Context context) {
-        createShortCut(title, pkgName, icon, cls, id, context, null);
+        createShortCut(title, pkgName, icon, cls, id, context, null, null);
     }
 
-    static void createShortCut(String title, String pkgName, Drawable icon, Class<?> cls, String id, Context context, String target) {
-        createShortCut(title, pkgName, icon, cls, id, context, target, null);
-    }
+//    static void createShortCut(String title, String pkgName, Drawable icon, Class<?> cls, String id, Context context, String target) {
+//        createShortCut(title, pkgName, icon, cls, id, context, target, null);
+//    }
 
     static void createShortCut(String title, String pkgName, Drawable icon, Class<?> cls, String id, Context context, String target, String tasks) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
