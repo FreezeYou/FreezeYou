@@ -30,8 +30,8 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -575,7 +575,8 @@ public class Main extends Activity {
         final ListView app_listView = findViewById(R.id.app_list);
         final ProgressBar progressBar = findViewById(R.id.progressBar);
         final TextView textView = findViewById(R.id.textView);
-        final LinearLayout linearLayout = findViewById(R.id.layout2);
+        final TextView main_loading_progress_textView = findViewById(R.id.main_loading_progress_textView);
+        final FrameLayout linearLayout = findViewById(R.id.layout2);
         final ArrayList<Map<String, Object>> AppList = new ArrayList<>();
         final EditText search_editText = findViewById(R.id.search_editText);
         runOnUiThread(new Runnable() {
@@ -583,7 +584,9 @@ public class Main extends Activity {
             public void run() {
                 linearLayout.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
+                main_loading_progress_textView.setVisibility(View.VISIBLE);
                 app_listView.setVisibility(View.GONE);
+                main_loading_progress_textView.setText(R.string.loadingPkgList);
             }
         });
         try {
@@ -705,6 +708,13 @@ public class Main extends Activity {
             default:
                 break;
         }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                main_loading_progress_textView.setText(R.string.sorting);
+            }
+        });
 
         if (!AppList.isEmpty()) {
             switch (sortRule) {
@@ -855,8 +865,10 @@ public class Main extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                main_loading_progress_textView.setText(R.string.finish);
                 progressBar.setVisibility(View.GONE);
                 textView.setVisibility(View.GONE);
+                main_loading_progress_textView.setVisibility(View.GONE);
                 linearLayout.setVisibility(View.GONE);
                 app_listView.setAdapter(adapter);
                 app_listView.setTextFilterEnabled(true);
