@@ -286,6 +286,8 @@
     <string name="welcomeToUseAppName">歡迎使用 %1$s</string>
     <string name="quickSetup">快速設定</string>
     <string name="importConfig">載入配置</string>
+    <string name="loadingPkgList">载入应用列表</string>
+    <string name="sorting">正在排序</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
