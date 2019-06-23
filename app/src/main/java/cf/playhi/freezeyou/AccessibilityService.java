@@ -132,8 +132,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     }
 
     private void addUpUseTimes(String currentPackage) {
-        AppPreferences appPreferences = new AppPreferences(getApplicationContext());
-        appPreferences.put("@usTimeAP_" + currentPackage,
-                appPreferences.getLong("@usTimeAP_" + currentPackage, 0L) + 1L);
+        Support.addUseTimes(getApplicationContext(),currentPackage);
     }
 }

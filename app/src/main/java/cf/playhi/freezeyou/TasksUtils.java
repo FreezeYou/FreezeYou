@@ -336,9 +336,7 @@ final class TasksUtils {
 
     static void onUFApplications(Context context, String pkgNameString) {
 
-        AppPreferences ufTimeAP = new AppPreferences(context);
-        ufTimeAP.put("@ufTimeAP+" + pkgNameString,
-                ufTimeAP.getInt("@ufTimeAP+" + pkgNameString, 0) + 1);
+        Support.addUFreezeTimes(context, pkgNameString);
 
         final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null);
         db.execSQL(
@@ -368,9 +366,7 @@ final class TasksUtils {
 
     static void onFApplications(Context context, String pkgNameString) {
 
-        AppPreferences ffTimeAP = new AppPreferences(context);
-        ffTimeAP.put("@ffTimeAP+" + pkgNameString,
-                ffTimeAP.getInt("@ffTimeAP+" + pkgNameString, 0) + 1);
+        Support.addFreezeTimes(context, pkgNameString);
 
         final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null);
         db.execSQL(
