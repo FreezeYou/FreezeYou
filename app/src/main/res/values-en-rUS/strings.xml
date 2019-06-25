@@ -289,6 +289,9 @@
     <string name="loadingPkgList">Loading applications list</string>
     <string name="sorting">Sorting</string>
     <string name="saveSortMethodStatus">保存排序方式状态</string>
+    <string name="resetFreezeTimes">重置冻结次数计数</string>
+    <string name="resetUFTimes">重置解冻次数计数</string>
+    <string name="resetUseTimes">重置使用次数计数</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
