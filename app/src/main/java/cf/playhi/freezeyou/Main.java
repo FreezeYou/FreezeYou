@@ -149,7 +149,10 @@ public class Main extends Activity {
         updateFrozenStatus();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         if (sharedPref.getBoolean("saveOnClickFunctionStatus", false)) {
-            appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", 0);
+            appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", APPListViewOnClickMode_chooseAction);
+        }
+        if (sharedPref.getBoolean("saveSortMethodStatus", false)) {
+            currentSortRule = sharedPref.getInt("sortMethodStatus", SORT_BY_DEFAULT);
         }
     }
 
@@ -505,6 +508,7 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_DEFAULT);
                     }
                 }).start();
+                saveSortMethodStatus(SORT_BY_DEFAULT);
                 return true;
             case R.id.menu_sB_no:
                 new Thread(new Runnable() {
@@ -513,6 +517,7 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_NO);
                     }
                 }).start();
+                saveSortMethodStatus(SORT_BY_NO);
                 return true;
             case R.id.menu_sB_uf_ascending:
                 new Thread(new Runnable() {
@@ -521,6 +526,7 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_UF_ASCENDING);
                     }
                 }).start();
+                saveSortMethodStatus(SORT_BY_UF_ASCENDING);
                 return true;
             case R.id.menu_sB_uf_descending:
                 new Thread(new Runnable() {
@@ -529,6 +535,7 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_UF_DESCENDING);
                     }
                 }).start();
+                saveSortMethodStatus(SORT_BY_UF_DESCENDING);
                 return true;
             case R.id.menu_sB_ff_ascending:
                 new Thread(new Runnable() {
@@ -537,6 +544,7 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_FF_ASCENDING);
                     }
                 }).start();
+                saveSortMethodStatus(SORT_BY_FF_ASCENDING);
                 return true;
             case R.id.menu_sB_ff_descending:
                 new Thread(new Runnable() {
@@ -545,6 +553,7 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_FF_DESCENDING);
                     }
                 }).start();
+                saveSortMethodStatus(SORT_BY_FF_DESCENDING);
                 return true;
             case R.id.menu_sB_us_ascending:
                 new Thread(new Runnable() {
@@ -553,6 +562,7 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_US_ASCENDING);
                     }
                 }).start();
+                saveSortMethodStatus(SORT_BY_US_ASCENDING);
                 return true;
             case R.id.menu_sB_us_descending:
                 new Thread(new Runnable() {
@@ -561,6 +571,7 @@ public class Main extends Activity {
                         generateList(currentFilter, SORT_BY_US_DESCENDING);
                     }
                 }).start();
+                saveSortMethodStatus(SORT_BY_US_DESCENDING);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -1328,7 +1339,10 @@ public class Main extends Activity {
         checkLongTimeNotUpdated();
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
         if (sharedPref.getBoolean("saveOnClickFunctionStatus", false)) {
-            appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", 0);
+            appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", APPListViewOnClickMode_chooseAction);
+        }
+        if (sharedPref.getBoolean("saveSortMethodStatus", false)) {
+            currentSortRule = sharedPref.getInt("sortMethodStatus", SORT_BY_DEFAULT);
         }
         if (!sharedPref.getBoolean("noCaution", false)) {
             buildAlertDialog(Main.this, R.mipmap.ic_launcher_new_round, R.string.cautionContent, R.string.caution)
@@ -1459,6 +1473,13 @@ public class Main extends Activity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (sharedPreferences.getBoolean("saveOnClickFunctionStatus", false)) {
             sharedPreferences.edit().putInt("onClickFunctionStatus", status).apply();
+        }
+    }
+
+    private void saveSortMethodStatus(int status) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (sharedPreferences.getBoolean("saveSortMethodStatus", false)) {
+            sharedPreferences.edit().putInt("sortMethodStatus", status).apply();
         }
     }
 

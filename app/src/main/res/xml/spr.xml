@@ -27,6 +27,10 @@
             android:title="@string/saveOnClickFunctionStatus" />
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="saveSortMethodStatus"
+            android:title="@string/saveSortMethodStatus" />
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="cacheApplicationsIcons"
             android:title="@string/cacheApplicationsIcons" />
         <CheckBoxPreference
