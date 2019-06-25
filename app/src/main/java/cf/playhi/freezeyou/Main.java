@@ -12,6 +12,8 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -723,97 +725,175 @@ public class Main extends Activity {
                     break;
                 case SORT_BY_UF_ASCENDING:
                     setSortByDefault(AppList);
-                    // TODO:加速
+                    final HashMap<String, Integer> ufTimesMap = getUFreezeTimesMap();
                     Collections.sort(AppList, new Comparator<Map<String, Object>>() {
                         @Override
                         public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+                            String s0 =
+                                    Base64.encodeToString(
+                                            ((String) m0.get("PackageName")).getBytes(),
+                                            Base64.DEFAULT);
+                            String s1 =
+                                    Base64.encodeToString(
+                                            ((String) m1.get("PackageName")).getBytes(),
+                                            Base64.DEFAULT);
 
-                            return new AppPreferences(Main.this)
-                                    .getInt("@ufTimeAP+" + m0.get("PackageName"), 0)
-                                    >=
-                                    new AppPreferences(Main.this)
-                                            .getInt("@ufTimeAP+" + m1.get("PackageName"), 0)
-                                    ? 0 : -1;
+                            if (ufTimesMap.containsKey(s0) || ufTimesMap.containsKey(s1)) {
+                                if (ufTimesMap.containsKey(s0) && ufTimesMap.containsKey(s1)) {
+                                    return ufTimesMap.get(s0) > ufTimesMap.get(s1) ? 1 : -1;
+                                } else if (ufTimesMap.containsKey(s0)) {
+                                    return 1;
+                                } else {
+                                    return -1;
+                                }
+                            } else {
+                                return 0;
+                            }
                         }
                     });
                     break;
                 case SORT_BY_UF_DESCENDING:
                     setSortByDefault(AppList);
-                    // TODO:加速
+                    final HashMap<String, Integer> uFreezeTimesMapTimesMap = getUFreezeTimesMap();
                     Collections.sort(AppList, new Comparator<Map<String, Object>>() {
                         @Override
                         public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+                            String s0 =
+                                    Base64.encodeToString(
+                                            ((String) m0.get("PackageName")).getBytes(),
+                                            Base64.DEFAULT);
+                            String s1 =
+                                    Base64.encodeToString(
+                                            ((String) m1.get("PackageName")).getBytes(),
+                                            Base64.DEFAULT);
 
-                            return new AppPreferences(Main.this)
-                                    .getInt("@ufTimeAP+" + m0.get("PackageName"), 0)
-                                    <=
-                                    new AppPreferences(Main.this)
-                                            .getInt("@ufTimeAP+" + m1.get("PackageName"), 0)
-                                    ? 0 : -1;
+                            if (uFreezeTimesMapTimesMap.containsKey(s0) || uFreezeTimesMapTimesMap.containsKey(s1)) {
+                                if (uFreezeTimesMapTimesMap.containsKey(s0) && uFreezeTimesMapTimesMap.containsKey(s1)) {
+                                    return uFreezeTimesMapTimesMap.get(s0) > uFreezeTimesMapTimesMap.get(s1) ? -1 : 1;
+                                } else if (uFreezeTimesMapTimesMap.containsKey(s0)) {
+                                    return -1;
+                                } else {
+                                    return 1;
+                                }
+                            } else {
+                                return 0;
+                            }
                         }
                     });
                     break;
                 case SORT_BY_FF_ASCENDING:
                     setSortByDefault(AppList);
-                    // TODO:加速
+                    final HashMap<String, Integer> freezeTimesMap = getFreezeTimesMap();
                     Collections.sort(AppList, new Comparator<Map<String, Object>>() {
                         @Override
                         public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+                            String s0 =
+                                    Base64.encodeToString(
+                                            ((String) m0.get("PackageName")).getBytes(),
+                                            Base64.DEFAULT);
+                            String s1 =
+                                    Base64.encodeToString(
+                                            ((String) m1.get("PackageName")).getBytes(),
+                                            Base64.DEFAULT);
 
-                            return new AppPreferences(Main.this)
-                                    .getInt("@ffTimeAP+" + m0.get("PackageName"), 0)
-                                    >=
-                                    new AppPreferences(Main.this)
-                                            .getInt("@ffTimeAP+" + m1.get("PackageName"), 0)
-                                    ? 0 : -1;
+                            if (freezeTimesMap.containsKey(s0) || freezeTimesMap.containsKey(s1)) {
+                                if (freezeTimesMap.containsKey(s0) && freezeTimesMap.containsKey(s1)) {
+                                    return freezeTimesMap.get(s0) > freezeTimesMap.get(s1) ? 1 : -1;
+                                } else if (freezeTimesMap.containsKey(s0)) {
+                                    return 1;
+                                } else {
+                                    return -1;
+                                }
+                            } else {
+                                return 0;
+                            }
                         }
                     });
                     break;
                 case SORT_BY_FF_DESCENDING:
                     setSortByDefault(AppList);
-                    // TODO:加速
+                    final HashMap<String, Integer> freezeTimesMap1 = getFreezeTimesMap();
                     Collections.sort(AppList, new Comparator<Map<String, Object>>() {
                         @Override
                         public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+                            String s0 =
+                                    Base64.encodeToString(
+                                            ((String) m0.get("PackageName")).getBytes(),
+                                            Base64.DEFAULT);
+                            String s1 =
+                                    Base64.encodeToString(
+                                            ((String) m1.get("PackageName")).getBytes(),
+                                            Base64.DEFAULT);
 
-                            return new AppPreferences(Main.this)
-                                    .getInt("@ffTimeAP+" + m0.get("PackageName"), 0)
-                                    <=
-                                    new AppPreferences(Main.this)
-                                            .getInt("@ffTimeAP+" + m1.get("PackageName"), 0)
-                                    ? 0 : -1;
+                            if (freezeTimesMap1.containsKey(s0) || freezeTimesMap1.containsKey(s1)) {
+                                if (freezeTimesMap1.containsKey(s0) && freezeTimesMap1.containsKey(s1)) {
+                                    return freezeTimesMap1.get(s0) > freezeTimesMap1.get(s1) ? -1 : 1;
+                                } else if (freezeTimesMap1.containsKey(s0)) {
+                                    return -1;
+                                } else {
+                                    return 1;
+                                }
+                            } else {
+                                return 0;
+                            }
                         }
                     });
                     break;
                 case SORT_BY_US_ASCENDING:
                     setSortByDefault(AppList);
-                    // TODO:加速
+                    final HashMap<String, Integer> useTimesMap1 = getUseTimesMap();
                     Collections.sort(AppList, new Comparator<Map<String, Object>>() {
                         @Override
                         public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+                            String s0 =
+                                    Base64.encodeToString(
+                                            ((String) m0.get("PackageName")).getBytes(),
+                                            Base64.DEFAULT);
+                            String s1 =
+                                    Base64.encodeToString(
+                                            ((String) m1.get("PackageName")).getBytes(),
+                                            Base64.DEFAULT);
 
-                            return new AppPreferences(Main.this)
-                                    .getLong("@usTimeAP_" + m0.get("PackageName"), 0L)
-                                    >=
-                                    new AppPreferences(Main.this)
-                                            .getLong("@usTimeAP_" + m1.get("PackageName"), 0L)
-                                    ? 0 : -1;
+                            if (useTimesMap1.containsKey(s0) || useTimesMap1.containsKey(s1)) {
+                                if (useTimesMap1.containsKey(s0) && useTimesMap1.containsKey(s1)) {
+                                    return useTimesMap1.get(s0) > useTimesMap1.get(s1) ? 1 : -1;
+                                } else if (useTimesMap1.containsKey(s0)) {
+                                    return 1;
+                                } else {
+                                    return -1;
+                                }
+                            } else {
+                                return 0;
+                            }
                         }
                     });
                     break;
                 case SORT_BY_US_DESCENDING:
                     setSortByDefault(AppList);
-                    // TODO:加速
+                    final HashMap<String, Integer> useTimesMap = getUseTimesMap();
                     Collections.sort(AppList, new Comparator<Map<String, Object>>() {
                         @Override
                         public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+                            String s0 =
+                                    Base64.encodeToString(
+                                            ((String) m0.get("PackageName")).getBytes(),
+                                            Base64.DEFAULT);
+                            String s1 =
+                                    Base64.encodeToString(
+                                            ((String) m1.get("PackageName")).getBytes(),
+                                            Base64.DEFAULT);
 
-                            return new AppPreferences(Main.this)
-                                    .getLong("@usTimeAP_" + m0.get("PackageName"), 0L)
-                                    <=
-                                    new AppPreferences(Main.this)
-                                            .getLong("@usTimeAP_" + m1.get("PackageName"), 0L)
-                                    ? 0 : -1;
+                            if (useTimesMap.containsKey(s0) || useTimesMap.containsKey(s1)) {
+                                if (useTimesMap.containsKey(s0) && useTimesMap.containsKey(s1)) {
+                                    return useTimesMap.get(s0) > useTimesMap.get(s1) ? -1 : 1;
+                                } else if (useTimesMap.containsKey(s0)) {
+                                    return -1;
+                                } else {
+                                    return 1;
+                                }
+                            } else {
+                                return 0;
+                            }
                         }
                     });
                     break;
@@ -1506,6 +1586,56 @@ public class Main extends Activity {
             }
         });
         builder.create().show();
+    }
+
+    private HashMap<String, Integer> getUFreezeTimesMap() {
+        SQLiteDatabase db = openOrCreateDatabase("ApplicationsUFreezeTimes", Context.MODE_PRIVATE, null);
+        HashMap<String, Integer> hashMap = getTimesMap(db);
+        db.close();
+        return hashMap;
+    }
+
+    private HashMap<String, Integer> getFreezeTimesMap() {
+        SQLiteDatabase db = openOrCreateDatabase("ApplicationsFreezeTimes", Context.MODE_PRIVATE, null);
+        HashMap<String, Integer> hashMap = getTimesMap(db);
+        db.close();
+        return hashMap;
+    }
+
+    private HashMap<String, Integer> getUseTimesMap() {
+        SQLiteDatabase db = openOrCreateDatabase("ApplicationsUseTimes", Context.MODE_PRIVATE, null);
+        HashMap<String, Integer> hashMap = getTimesMap(db);
+        db.close();
+        return hashMap;
+    }
+
+    private HashMap<String, Integer> getTimesMap(SQLiteDatabase db) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+
+        if (db == null) {
+            return hashMap;
+        }
+
+        db.execSQL(
+                "create table if not exists TimesList(_id integer primary key autoincrement,pkg varchar,times int)"
+        );
+        Cursor cursor = db.query("TimesList", new String[]{"pkg", "times"}, null, null, null, null, null);
+
+        if (cursor == null) {
+            return hashMap;
+        }
+
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                hashMap.put(
+                        cursor.getString(cursor.getColumnIndex("pkg")),
+                        Integer.parseInt(cursor.getString(cursor.getColumnIndex("times")))
+                );
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return hashMap;
     }
 
     @Override
