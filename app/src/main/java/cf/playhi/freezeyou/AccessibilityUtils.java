@@ -53,4 +53,11 @@ final class AccessibilityUtils {
         return false;
     }
 
+    static void checkAndRequestIfAccessibilitySettingsOff(Context context){
+        if (!AccessibilityUtils.isAccessibilitySettingsOn(context)) {
+            showToast(context, R.string.needActiveAccessibilityService);
+            AccessibilityUtils.openAccessibilitySettings(context);
+        }
+    }
+
 }

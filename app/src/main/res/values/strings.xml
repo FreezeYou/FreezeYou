@@ -287,6 +287,9 @@
     <string name="loadingPkgList">载入应用列表</string>
     <string name="sorting">正在排序</string>
     <string name="saveSortMethodStatus">保存排序方式状态</string>
+    <string name="resetFreezeTimes">重置冻结次数计数</string>
+    <string name="resetUFTimes">重置解冻次数计数</string>
+    <string name="resetUseTimes">重置使用次数计数</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>

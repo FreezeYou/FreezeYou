@@ -246,6 +246,18 @@
             android:summary="@string/delAllCache"
             android:title="@string/delAllCache" />
         <Preference
+            android:key="resetFreezeTimes"
+            android:summary="@string/resetFreezeTimes"
+            android:title="@string/resetFreezeTimes" />
+        <Preference
+            android:key="resetUFTimes"
+            android:summary="@string/resetUFTimes"
+            android:title="@string/resetUFTimes" />
+        <Preference
+            android:key="resetUseTimes"
+            android:summary="@string/resetUseTimes"
+            android:title="@string/resetUseTimes" />
+        <Preference
             android:key="deleteAllScheduledTasks"
             android:summary="@string/delAllScheduledTasks"
             android:title="@string/delAllScheduledTasks" />

@@ -556,6 +556,7 @@ public class Main extends Activity {
                 saveSortMethodStatus(SORT_BY_FF_DESCENDING);
                 return true;
             case R.id.menu_sB_us_ascending:
+                AccessibilityUtils.checkAndRequestIfAccessibilitySettingsOff(this);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -565,6 +566,7 @@ public class Main extends Activity {
                 saveSortMethodStatus(SORT_BY_US_ASCENDING);
                 return true;
             case R.id.menu_sB_us_descending:
+                AccessibilityUtils.checkAndRequestIfAccessibilitySettingsOff(this);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

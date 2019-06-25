@@ -288,10 +288,7 @@ public class ScheduledTasksAddActivity extends Activity {
                     break;
                 case "onApplicationsForeground":
                 case "onLeaveApplications":
-                    if (!AccessibilityUtils.isAccessibilitySettingsOn(this)) {
-                        showToast(this, R.string.needActiveAccessibilityService);
-                        AccessibilityUtils.openAccessibilitySettings(this);
-                    }
+                    AccessibilityUtils.checkAndRequestIfAccessibilitySettingsOff(this);
                     break;
                 default:
                     break;

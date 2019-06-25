@@ -219,6 +219,15 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 case "howToUse":
                     requestOpenWebSite(getActivity(), "https://zidon.net");
                     break;
+                case "resetFreezeTimes":
+                    askIfResetTimes("ApplicationsFreezeTimes");
+                    break;
+                case "resetUFTimes":
+                    askIfResetTimes("ApplicationsUFreezeTimes");
+                    break;
+                case "resetUseTimes":
+                    askIfResetTimes("ApplicationsUseTimes");
+                    break;
                 default:
                     break;
             }
@@ -249,6 +258,18 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 }
             }
         }
+    }
+
+    private void askIfResetTimes(final String dbName) {
+        buildAlertDialog(getActivity(), android.R.drawable.ic_dialog_alert, R.string.askIfDel, R.string.caution)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Support.resetTimes(getActivity(), dbName);
+                    }
+                })
+                .setNegativeButton(R.string.no, null)
+                .create().show();
     }
 
 //    private void copyAllFiles(File file, String destination) throws IOException {

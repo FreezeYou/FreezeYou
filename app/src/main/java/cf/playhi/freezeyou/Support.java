@@ -26,8 +26,6 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.io.DataOutputStream;
 
-import static cf.playhi.freezeyou.AccessibilityUtils.isAccessibilitySettingsOn;
-import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
@@ -480,10 +478,7 @@ class Support {
                     preferences.edit().putBoolean("freezeOnceQuit", true).apply();
                     new AppPreferences(context).put("freezeOnceQuit", true);
                 }
-                if (!isAccessibilitySettingsOn(context)) {
-                    showToast(context, R.string.needActiveAccessibilityService);
-                    openAccessibilitySettings(context);
-                }
+                AccessibilityUtils.checkAndRequestIfAccessibilitySettingsOff(context);
             }
         }
     }
@@ -665,6 +660,22 @@ class Support {
         }
         cursor.close();
 
+    }
+
+    static void resetTimes(Context context,String dbName) {
+        SQLiteDatabase db = context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null);
+
+        if (db == null) {
+            return;
+        }
+
+        db.execSQL(
+                "create table if not exists TimesList(_id integer primary key autoincrement,pkg varchar,times int)"
+        );
+
+        db.execSQL("UPDATE TimesList SET times = '0';");
+
+        db.close();
     }
 
 //    static void checkLanguage(Context context) {
