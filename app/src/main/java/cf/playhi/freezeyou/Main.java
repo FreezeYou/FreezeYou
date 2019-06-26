@@ -753,11 +753,13 @@ public class Main extends Activity {
 
                             if (ufTimesMap.containsKey(s0) || ufTimesMap.containsKey(s1)) {
                                 if (ufTimesMap.containsKey(s0) && ufTimesMap.containsKey(s1)) {
-                                    return ufTimesMap.get(s0) > ufTimesMap.get(s1) ? 1 : -1;
-                                } else if (ufTimesMap.containsKey(s0)) {
+                                    return ufTimesMap.get(s0) == ufTimesMap.get(s1) ? 0 : ufTimesMap.get(s0) > ufTimesMap.get(s1) ? 1 : -1;
+                                } else if (ufTimesMap.containsKey(s0) && ufTimesMap.get(s0) > 0) {
                                     return 1;
-                                } else {
+                                } else if (ufTimesMap.containsKey(s1) && ufTimesMap.get(s1) > 0) {
                                     return -1;
+                                } else {
+                                    return 0;
                                 }
                             } else {
                                 return 0;
@@ -782,11 +784,13 @@ public class Main extends Activity {
 
                             if (uFreezeTimesMapTimesMap.containsKey(s0) || uFreezeTimesMapTimesMap.containsKey(s1)) {
                                 if (uFreezeTimesMapTimesMap.containsKey(s0) && uFreezeTimesMapTimesMap.containsKey(s1)) {
-                                    return uFreezeTimesMapTimesMap.get(s0) > uFreezeTimesMapTimesMap.get(s1) ? -1 : 1;
-                                } else if (uFreezeTimesMapTimesMap.containsKey(s0)) {
+                                    return uFreezeTimesMapTimesMap.get(s0) == uFreezeTimesMapTimesMap.get(s1) ? 0 : uFreezeTimesMapTimesMap.get(s0) > uFreezeTimesMapTimesMap.get(s1) ? -1 : 1;
+                                } else if (uFreezeTimesMapTimesMap.containsKey(s0) && uFreezeTimesMapTimesMap.get(s0) > 0) {
                                     return -1;
-                                } else {
+                                } else if (uFreezeTimesMapTimesMap.containsKey(s1) && uFreezeTimesMapTimesMap.get(s1) > 0) {
                                     return 1;
+                                } else {
+                                    return 0;
                                 }
                             } else {
                                 return 0;
@@ -811,11 +815,13 @@ public class Main extends Activity {
 
                             if (freezeTimesMap.containsKey(s0) || freezeTimesMap.containsKey(s1)) {
                                 if (freezeTimesMap.containsKey(s0) && freezeTimesMap.containsKey(s1)) {
-                                    return freezeTimesMap.get(s0) > freezeTimesMap.get(s1) ? 1 : -1;
-                                } else if (freezeTimesMap.containsKey(s0)) {
+                                    return freezeTimesMap.get(s0) == freezeTimesMap.get(s1) ? 0 : freezeTimesMap.get(s0) > freezeTimesMap.get(s1) ? 1 : -1;
+                                } else if (freezeTimesMap.containsKey(s0) && freezeTimesMap.get(s0) > 0) {
                                     return 1;
-                                } else {
+                                } else if (freezeTimesMap.containsKey(s1) && freezeTimesMap.get(s1) > 0) {
                                     return -1;
+                                } else {
+                                    return 0;
                                 }
                             } else {
                                 return 0;
@@ -840,11 +846,13 @@ public class Main extends Activity {
 
                             if (freezeTimesMap1.containsKey(s0) || freezeTimesMap1.containsKey(s1)) {
                                 if (freezeTimesMap1.containsKey(s0) && freezeTimesMap1.containsKey(s1)) {
-                                    return freezeTimesMap1.get(s0) > freezeTimesMap1.get(s1) ? -1 : 1;
-                                } else if (freezeTimesMap1.containsKey(s0)) {
+                                    return freezeTimesMap1.get(s0) == freezeTimesMap1.get(s1) ? 0 : freezeTimesMap1.get(s0) > freezeTimesMap1.get(s1) ? -1 : 1;
+                                } else if (freezeTimesMap1.containsKey(s0) && freezeTimesMap1.get(s0) > 0) {
                                     return -1;
-                                } else {
+                                } else if (freezeTimesMap1.containsKey(s1) && freezeTimesMap1.get(s1) > 0) {
                                     return 1;
+                                } else {
+                                    return 0;
                                 }
                             } else {
                                 return 0;
@@ -869,11 +877,13 @@ public class Main extends Activity {
 
                             if (useTimesMap1.containsKey(s0) || useTimesMap1.containsKey(s1)) {
                                 if (useTimesMap1.containsKey(s0) && useTimesMap1.containsKey(s1)) {
-                                    return useTimesMap1.get(s0) > useTimesMap1.get(s1) ? 1 : -1;
-                                } else if (useTimesMap1.containsKey(s0)) {
+                                    return useTimesMap1.get(s0) == useTimesMap1.get(s1) ? 0 : useTimesMap1.get(s0) > useTimesMap1.get(s1) ? 1 : -1;
+                                } else if (useTimesMap1.containsKey(s0) && useTimesMap1.get(s0) > 0) {
                                     return 1;
-                                } else {
+                                } else if (useTimesMap1.containsKey(s1) && useTimesMap1.get(s1) > 0) {
                                     return -1;
+                                } else {
+                                    return 0;
                                 }
                             } else {
                                 return 0;
@@ -898,11 +908,13 @@ public class Main extends Activity {
 
                             if (useTimesMap.containsKey(s0) || useTimesMap.containsKey(s1)) {
                                 if (useTimesMap.containsKey(s0) && useTimesMap.containsKey(s1)) {
-                                    return useTimesMap.get(s0) > useTimesMap.get(s1) ? -1 : 1;
-                                } else if (useTimesMap.containsKey(s0)) {
+                                    return useTimesMap.get(s0) == useTimesMap.get(s1) ? 0 : useTimesMap.get(s0) > useTimesMap.get(s1) ? -1 : 1;
+                                } else if (useTimesMap.containsKey(s0) && useTimesMap.get(s0) > 0) {
                                     return -1;
-                                } else {
+                                } else if (useTimesMap.containsKey(s1) && useTimesMap.get(s1) > 0) {
                                     return 1;
+                                } else {
+                                    return 0;
                                 }
                             } else {
                                 return 0;
