@@ -64,6 +64,7 @@ import static cf.playhi.freezeyou.OneKeyListUtils.addToOneKeyList;
 import static cf.playhi.freezeyou.OneKeyListUtils.removeFromOneKeyList;
 import static cf.playhi.freezeyou.Support.realGetFrozenStatus;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
+import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
@@ -97,6 +98,7 @@ public class Main extends Activity {
     private final ArrayList<String> selectedPackages = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
     private int customThemeDisabledDot = R.drawable.shapedotblue;
+    private int customThemeEnabledDot = R.drawable.shapedotblack;
     private BroadcastReceiver updateFrozenStatusBroadcastReceiver;
     private String currentFilter = "all";
     private int currentSortRule = SORT_BY_DEFAULT;
@@ -606,6 +608,7 @@ public class Main extends Activity {
         });
         try {
             customThemeDisabledDot = getThemeDot(Main.this);
+            customThemeEnabledDot = getThemeSecondDot(Main.this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1386,7 +1389,7 @@ public class Main extends Activity {
      * @return 资源 Id
      */
     private int getFrozenStatus(String packageName, PackageManager packageManager) {
-        return realGetFrozenStatus(Main.this, packageName, packageManager) ? customThemeDisabledDot : R.drawable.shapedotwhite;
+        return realGetFrozenStatus(Main.this, packageName, packageManager) ? customThemeDisabledDot : customThemeEnabledDot;
     }
 
     private void processFrozenStatus(Map<String, Object> keyValuePair, String packageName, PackageManager packageManager) {

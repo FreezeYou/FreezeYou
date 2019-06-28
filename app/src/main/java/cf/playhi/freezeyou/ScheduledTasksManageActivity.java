@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
+import static cf.playhi.freezeyou.ThemeUtils.getThemeFabDotBackground;
+import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
@@ -32,6 +34,7 @@ public class ScheduledTasksManageActivity extends Activity {
     private final ArrayList<Integer> integerArrayList = new ArrayList<>();
     private final ArrayList<Integer> selectedTasksPositions = new ArrayList<>();
     private int themeDotResId;
+    private int themeSecondDotResId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +93,7 @@ public class ScheduledTasksManageActivity extends Activity {
 
     private void generateTasksList() {
         themeDotResId = getThemeDot(ScheduledTasksManageActivity.this);
+        themeSecondDotResId = getThemeSecondDot(ScheduledTasksManageActivity.this);
         final ListView tasksListView = findViewById(R.id.stma_tasksListview);
         final ArrayList<Map<String, Object>> tasksData = new ArrayList<>();
 
@@ -195,7 +199,7 @@ public class ScheduledTasksManageActivity extends Activity {
             addTriggerButton.setBackgroundResource(R.drawable.oval_ripple_almost_white);
             addTimeButton.setBackgroundResource(R.drawable.oval_ripple_almost_white);
         } else {
-            addButton.setBackgroundResource(themeDotResId);
+            addButton.setBackgroundResource(getThemeFabDotBackground(this));
         }
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -305,7 +309,7 @@ public class ScheduledTasksManageActivity extends Activity {
                 keyValuePair.put("label", label);
                 keyValuePair.put("time", time);
                 keyValuePair.put("isTimeTask", true);
-                keyValuePair.put("enabled", enabled == 1 ? themeDotResId : R.drawable.shapedotwhite);
+                keyValuePair.put("enabled", enabled == 1 ? themeDotResId : themeSecondDotResId);
                 tasksData.add(keyValuePair);
                 integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
                 cursor.moveToNext();
@@ -334,7 +338,7 @@ public class ScheduledTasksManageActivity extends Activity {
                         Arrays.asList(getResources().getStringArray(R.array.triggers))
                                 .get(indexOf == -1 ? 0 : indexOf));
                 keyValuePair.put("isTimeTask", false);
-                keyValuePair.put("enabled", enabled == 1 ? themeDotResId : R.drawable.shapedotwhite);
+                keyValuePair.put("enabled", enabled == 1 ? themeDotResId : themeSecondDotResId);
                 tasksData.add(keyValuePair);
                 integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
                 cursor.moveToNext();

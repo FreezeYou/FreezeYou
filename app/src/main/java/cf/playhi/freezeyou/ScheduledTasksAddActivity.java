@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static cf.playhi.freezeyou.TasksUtils.publishTask;
-import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
+import static cf.playhi.freezeyou.ThemeUtils.getThemeFabDotBackground;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.ToastUtils.showToast;
@@ -161,7 +161,7 @@ public class ScheduledTasksAddActivity extends Activity {
 
     private void prepareSaveButton(final int id) {
         final ImageButton saveButton = findViewById(R.id.staa_saveButton);
-        saveButton.setBackgroundResource(Build.VERSION.SDK_INT < 21 ? getThemeDot(ScheduledTasksAddActivity.this) : R.drawable.oval_ripple);
+        saveButton.setBackgroundResource(Build.VERSION.SDK_INT < 21 ? getThemeFabDotBackground(ScheduledTasksAddActivity.this) : R.drawable.oval_ripple);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

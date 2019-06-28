@@ -32,6 +32,7 @@ import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.Support.realGetFrozenStatus;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
+import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
@@ -253,7 +254,9 @@ public class FUFLauncherShortcutCreator extends Activity {
      * @return 资源 Id
      */
     private int getFrozenStatus(String packageName, PackageManager packageManager) {
-        return realGetFrozenStatus(FUFLauncherShortcutCreator.this, packageName, packageManager) ? getThemeDot(FUFLauncherShortcutCreator.this) : R.drawable.shapedotwhite;
+        return realGetFrozenStatus(FUFLauncherShortcutCreator.this, packageName, packageManager)
+                ? getThemeDot(FUFLauncherShortcutCreator.this)
+                : getThemeSecondDot(FUFLauncherShortcutCreator.this);
     }
 
 }
