@@ -288,6 +288,10 @@
     <string name="importConfig">Import Config</string>
     <string name="loadingPkgList">Loading applications list</string>
     <string name="sorting">Sorting</string>
+    <string name="saveSortMethodStatus">Save sort method status</string>
+    <string name="resetFreezeTimes">Reset freeze times counter</string>
+    <string name="resetUFTimes">Reset unfreeze times counter</string>
+    <string name="resetUseTimes">Reset usage counter</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
