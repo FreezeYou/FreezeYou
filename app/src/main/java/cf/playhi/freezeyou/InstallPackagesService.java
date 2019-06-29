@@ -22,7 +22,6 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -202,14 +201,7 @@ public class InstallPackagesService extends Service {
                 String apkFileName = "package" + new Date().getTime() + "F.apk";
                 apkFilePath = getExternalCacheDir() + File.separator + "ZDF-" + apkFileName;
 
-                OutputStream out = new FileOutputStream(apkFilePath);
-                byte[] buffer = new byte[1024 * 1024];
-                int bytesRead;
-                while ((bytesRead = in.read(buffer)) >= 0) {
-                    out.write(buffer, 0, bytesRead);
-                }
-                out.close();
-                in.close();
+                InstallPackagesUtils.copyFile(in, apkFilePath);
             }
 
             PackageManager pm = getPackageManager();

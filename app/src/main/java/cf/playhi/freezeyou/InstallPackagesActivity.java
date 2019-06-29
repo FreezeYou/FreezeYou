@@ -19,9 +19,7 @@ import android.widget.CheckBox;
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -159,26 +157,6 @@ public class InstallPackagesActivity extends Activity {
             fromPkgName = ILLEGALPKGNAME;
         }
 
-        if (install) {
-            //Check AutoAllow
-            AppPreferences sp = new AppPreferences(this);
-            String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
-            if (originData != null
-                    && !ILLEGALPKGNAME.equals(fromPkgLabel)
-                    && MoreUtils.convertToList(originData, ",").contains(
-                    Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT))) {
-                //Allow
-                ServiceUtils.startService(
-                        InstallPackagesActivity.this,
-                        new Intent(InstallPackagesActivity.this, InstallPackagesService.class)
-                                .putExtra("install", true)
-                                .putExtra("packageUri", packageUri)
-                                .putExtra("apkFilePath", apkFilePath));
-                finish();
-                return;
-            }
-        }
-
         prepareInstallDialog(install, packageUri, apkFilePath, fromPkgLabel, fromPkgName);
     }
 
@@ -195,17 +173,37 @@ public class InstallPackagesActivity extends Activity {
                         if (apkFilePath.startsWith(getExternalCacheDir() + File.separator + "ZDF-")) {
                             InputStream in = getContentResolver().openInputStream(packageUri);
                             if (in == null) {
+                                finish();
                                 return;
                             }
-                            OutputStream out = new FileOutputStream(apkFilePath);
-                            byte[] buffer = new byte[1024 * 1024];
-                            int bytesRead;
-                            while ((bytesRead = in.read(buffer)) >= 0) {
-                                out.write(buffer, 0, bytesRead);
-                            }
-                            out.close();
-                            in.close();
+                            InstallPackagesUtils.copyFile(in, apkFilePath);
                         }
+
+                        //Check AutoAllow
+                        AppPreferences sp = new AppPreferences(InstallPackagesActivity.this);
+                        String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
+                        if (originData != null
+                                && !ILLEGALPKGNAME.equals(fromPkgLabel)
+                                && MoreUtils.convertToList(originData, ",").contains(
+                                Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT))) {
+                            //Allow
+                            ServiceUtils.startService(
+                                    InstallPackagesActivity.this,
+                                    new Intent(InstallPackagesActivity.this, InstallPackagesService.class)
+                                            .putExtra("install", true)
+                                            .putExtra("packageUri", packageUri)
+                                            .putExtra("apkFilePath", apkFilePath));
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (progressDialog.isShowing())
+                                        progressDialog.cancel();
+                                    finish();
+                                }
+                            });
+                        }
+
                         PackageManager pm = getPackageManager();
                         PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePath, 0);
                         packageInfo.applicationInfo.sourceDir = apkFilePath;
