@@ -38,6 +38,9 @@ import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class FUFLauncherShortcutCreator extends Activity {
 
+    private int customThemeDisabledDot = R.drawable.shapedotblue;
+    private int customThemeEnabledDot = R.drawable.shapedotblack;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -59,6 +62,13 @@ public class FUFLauncherShortcutCreator extends Activity {
         String slf_n = intent.getStringExtra("slf_n");
         final boolean returnPkgName = intent.getBooleanExtra("returnPkgName", false);
         final boolean isSlfMode = slf_n != null;
+
+        try {
+            customThemeDisabledDot = getThemeDot(this);
+            customThemeEnabledDot = getThemeSecondDot(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (isSlfMode || returnPkgName) {
             setContentView(R.layout.fuflsc_select_application);
@@ -255,8 +265,7 @@ public class FUFLauncherShortcutCreator extends Activity {
      */
     private int getFrozenStatus(String packageName, PackageManager packageManager) {
         return realGetFrozenStatus(FUFLauncherShortcutCreator.this, packageName, packageManager)
-                ? getThemeDot(FUFLauncherShortcutCreator.this)
-                : getThemeSecondDot(FUFLauncherShortcutCreator.this);
+                ? customThemeDisabledDot : customThemeEnabledDot;
     }
 
 }
