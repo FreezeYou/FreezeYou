@@ -989,7 +989,9 @@ public class Main extends Activity {
             public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
                 final String pkgName = ((HashMap<String, String>) app_listView.getItemAtPosition(i)).get("PackageName");
                 if (b) {
-                    selectedPackages.add(pkgName);
+                    if (!selectedPackages.contains(pkgName)) {
+                        selectedPackages.add(pkgName);
+                    }
                     actionMode.setTitle(Integer.toString(selectedPackages.size()));
                 } else {
                     selectedPackages.remove(pkgName);
@@ -1011,6 +1013,16 @@ public class Main extends Activity {
             @Override
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
+                    case R.id.list_menu_selectAll:
+                        for (int i = 0; i < app_listView.getAdapter().getCount(); i++) {
+                            app_listView.setItemChecked(i, true);
+                        }
+                        return true;
+                    case R.id.list_menu_selectUnselected:
+                        for (int i = 0; i < app_listView.getAdapter().getCount(); i++) {
+                            app_listView.setItemChecked(i, !app_listView.isItemChecked(i));
+                        }
+                        return true;
                     case R.id.list_menu_addToOneKeyFreezeList:
                         processAddToOneKeyList(getString(R.string.sAutoFreezeApplicationList));
                         return true;

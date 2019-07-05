@@ -78,112 +78,116 @@ public class FUFLauncherShortcutCreator extends Activity {
             else
                 setTitle(R.string.plsSelect);
 
-            final ListView app_listView = findViewById(R.id.fuflsc_app_list);
-            final ProgressBar progressBar = findViewById(R.id.fuflsc_progressBar);
-            final LinearLayout linearLayout = findViewById(R.id.fuflsc_linearLayout);
-            final ArrayList<Map<String, Object>> AppList = new ArrayList<>();
-            final EditText search_editText = findViewById(R.id.fuflsc_search_editText);
-            runOnUiThread(new Runnable() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    linearLayout.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.VISIBLE);
-                    app_listView.setVisibility(View.GONE);
-                }
-            });
-            app_listView.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
-            final Context applicationContext = getApplicationContext();
-            PackageManager packageManager = applicationContext.getPackageManager();
-            List<ApplicationInfo> applicationInfo = packageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
-            int size = applicationInfo == null ? 0 : applicationInfo.size();
-            for (int i = 0; i < size; i++) {
-                ApplicationInfo applicationInfo1 = applicationInfo.get(i);
-                Map<String, Object> keyValuePair = processAppStatus(
-                        getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
-                        applicationInfo1.packageName,
-                        applicationInfo1,
-                        packageManager
-                );
-                if (keyValuePair != null) {
-                    AppList.add(keyValuePair);
-                }
-            }
 
-            if (!AppList.isEmpty()) {
-                Collections.sort(AppList, new Comparator<Map<String, Object>>() {
-
-                    @Override
-                    public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
-                        return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+                    final ListView app_listView = findViewById(R.id.fuflsc_app_list);
+                    final ProgressBar progressBar = findViewById(R.id.fuflsc_progressBar);
+                    final LinearLayout linearLayout = findViewById(R.id.fuflsc_linearLayout);
+                    final ArrayList<Map<String, Object>> AppList = new ArrayList<>();
+                    final EditText search_editText = findViewById(R.id.fuflsc_search_editText);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            linearLayout.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.VISIBLE);
+                            app_listView.setVisibility(View.GONE);
+                        }
+                    });
+                    app_listView.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
+                    final Context applicationContext = getApplicationContext();
+                    PackageManager packageManager = applicationContext.getPackageManager();
+                    List<ApplicationInfo> applicationInfo = packageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
+                    int size = applicationInfo == null ? 0 : applicationInfo.size();
+                    for (int i = 0; i < size; i++) {
+                        ApplicationInfo applicationInfo1 = applicationInfo.get(i);
+                        Map<String, Object> keyValuePair = processAppStatus(
+                                getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
+                                applicationInfo1.packageName,
+                                applicationInfo1,
+                                packageManager
+                        );
+                        if (keyValuePair != null) {
+                            AppList.add(keyValuePair);
+                        }
                     }
-                });
-            }
 
-            final MainAppListSimpleAdapter adapter =
-                    new MainAppListSimpleAdapter(
-                            FUFLauncherShortcutCreator.this,
-                            (ArrayList<Map<String, Object>>) AppList.clone(),
-                            R.layout.app_list_1,
-                            new String[]{"Img", "Name", "PackageName", "isFrozen"},
-                            new int[]{R.id.img, R.id.name, R.id.pkgName, R.id.isFrozen});//isFrozen、isAutoList传图像资源id
+                    if (!AppList.isEmpty()) {
+                        Collections.sort(AppList, new Comparator<Map<String, Object>>() {
 
-            adapter.setViewBinder(new MainAppListSimpleAdapter.ViewBinder() {
-                public boolean setViewValue(View view, Object data, String textRepresentation) {
-                    if (view instanceof ImageView && data instanceof Drawable) {
-                        ((ImageView) view).setImageDrawable((Drawable) data);
-                        return true;
-                    } else
-                        return false;
-                }
-            });
-
-            search_editText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (TextUtils.isEmpty(charSequence)) {
-                        adapter.replaceAllInFormerArrayList(AppList);
-                    } else {
-                        adapter.replaceAllInFormerArrayList(processListFilter(charSequence, AppList));
+                            @Override
+                            public int compare(Map<String, Object> stringObjectMap, Map<String, Object> t1) {
+                                return ((String) stringObjectMap.get("PackageName")).compareTo((String) t1.get("PackageName"));
+                            }
+                        });
                     }
-                }
 
-                @Override
-                public void afterTextChanged(Editable editable) {
+                    final MainAppListSimpleAdapter adapter =
+                            new MainAppListSimpleAdapter(
+                                    FUFLauncherShortcutCreator.this,
+                                    (ArrayList<Map<String, Object>>) AppList.clone(),
+                                    R.layout.app_list_1,
+                                    new String[]{"Img", "Name", "PackageName", "isFrozen"},
+                                    new int[]{R.id.img, R.id.name, R.id.pkgName, R.id.isFrozen});//isFrozen、isAutoList传图像资源id
 
-                }
-            });
+                    adapter.setViewBinder(new MainAppListSimpleAdapter.ViewBinder() {
+                        public boolean setViewValue(View view, Object data, String textRepresentation) {
+                            if (view instanceof ImageView && data instanceof Drawable) {
+                                ((ImageView) view).setImageDrawable((Drawable) data);
+                                return true;
+                            } else
+                                return false;
+                        }
+                    });
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progressBar.setVisibility(View.GONE);
-                    linearLayout.setVisibility(View.GONE);
-                    app_listView.setAdapter(adapter);
-                    app_listView.setTextFilterEnabled(true);
-                    app_listView.setVisibility(View.VISIBLE);
-                }
-            });
+                    search_editText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    HashMap<String, Object> map = (HashMap<String, Object>) app_listView.getItemAtPosition(i);
-                    final String name = (String) map.get("Name");
-                    final String pkgName = (String) map.get("PackageName");
-                    if (isSlfMode) {
-                        SharedPreferences sp = getSharedPreferences(getIntent().getStringExtra("slf_n"), MODE_PRIVATE);
-                        sp.edit().putString("pkgS", sp.getString("pkgS", "") + pkgName + ",").apply();
-                        setResult(RESULT_OK);
-                    } else {// if (returnPkgName)s
-                        setResult(RESULT_OK, new Intent()
-                                .putExtra("pkgName", pkgName)
-                                .putExtra("name", name)
-                                .putExtra("id", "FreezeYou! " + pkgName));
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                            if (TextUtils.isEmpty(charSequence)) {
+                                adapter.replaceAllInFormerArrayList(AppList);
+                            } else {
+                                adapter.replaceAllInFormerArrayList(processListFilter(charSequence, AppList));
+                            }
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                        }
+                    });
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBar.setVisibility(View.GONE);
+                            linearLayout.setVisibility(View.GONE);
+                            app_listView.setAdapter(adapter);
+                            app_listView.setTextFilterEnabled(true);
+                            app_listView.setVisibility(View.VISIBLE);
+                        }
+                    });
+
+                    app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            HashMap<String, Object> map = (HashMap<String, Object>) app_listView.getItemAtPosition(i);
+                            final String name = (String) map.get("Name");
+                            final String pkgName = (String) map.get("PackageName");
+                            if (isSlfMode) {
+                                SharedPreferences sp = getSharedPreferences(getIntent().getStringExtra("slf_n"), MODE_PRIVATE);
+                                sp.edit().putString("pkgS", sp.getString("pkgS", "") + pkgName + ",").apply();
+                                setResult(RESULT_OK);
+                            } else {// if (returnPkgName)s
+                                setResult(RESULT_OK, new Intent()
+                                        .putExtra("pkgName", pkgName)
+                                        .putExtra("name", name)
+                                        .putExtra("id", "FreezeYou! " + pkgName));
 //                    } else {
 //
 //                        <!--桌面快捷方式（类小部件）入口已迁移至 LauncherShortcutConfirmAndGenerateActivity.java -->
@@ -199,10 +203,12 @@ public class FUFLauncherShortcutCreator extends Activity {
 //                            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getApplicationIcon(applicationContext, pkgName, null, false)));
 //                        }
 //                        setResult(RESULT_OK, intent);
-                    }
-                    finish();
+                            }
+                            finish();
+                        }
+                    });
                 }
-            });
+            }).start();
 
         } else {
             finish();
