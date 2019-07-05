@@ -292,6 +292,8 @@
     <string name="resetFreezeTimes">重置冻结次数计数</string>
     <string name="resetUFTimes">重置解冻次数计数</string>
     <string name="resetUseTimes">重置使用次数计数</string>
+    <string name="selectAll">全选</string>
+    <string name="selectUnselected">反选</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>显示全部</item>
