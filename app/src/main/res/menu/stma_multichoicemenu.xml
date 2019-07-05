@@ -2,6 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:showAsAction="never"
+        android:id="@+id/stma_menu_mc_selectAll"
+        android:title="@string/selectAll"/>
+    <item
+        android:showAsAction="never"
+        android:id="@+id/stma_menu_mc_selectUnselected"
+        android:title="@string/selectUnselected"/>
+    <item
+        android:showAsAction="ifRoom"
         android:id="@+id/stma_menu_mc_delete"
         android:icon="@drawable/ic_action_delete"
         android:title="@string/delete" />

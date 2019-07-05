@@ -1,6 +1,7 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -108,7 +109,9 @@ public class ScheduledTasksManageActivity extends Activity {
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
                 if (checked) {
-                    selectedTasksPositions.add(position);
+                    if (!selectedTasksPositions.contains(position)) {
+                        selectedTasksPositions.add(position);
+                    }
                     mode.setTitle(Integer.toString(selectedTasksPositions.size()));
                 } else {
                     selectedTasksPositions.remove(Integer.valueOf(position));
@@ -131,20 +134,39 @@ public class ScheduledTasksManageActivity extends Activity {
             }
 
             @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.stma_menu_mc_delete:
-                        for (int aSelectedTaskPosition : selectedTasksPositions) {
-                            boolean isTimeTask = (boolean) ((Map<String, Object>) tasksListView.getItemAtPosition(aSelectedTaskPosition)).get("isTimeTask");
-                            int id = integerArrayList.get(aSelectedTaskPosition);
-                            SQLiteDatabase db = openOrCreateDatabase(isTimeTask ? "scheduledTasks" : "scheduledTriggerTasks", MODE_PRIVATE, null);
-                            if (isTimeTask) {
-                                TasksUtils.cancelTheTask(ScheduledTasksManageActivity.this, id);
-                            }
-                            db.execSQL("DELETE FROM tasks WHERE _id = " + id);
-                            db.close();
+                        AlertDialogUtils.buildAlertDialog(ScheduledTasksManageActivity.this,
+                                android.R.drawable.ic_dialog_alert, R.string.askIfDel, R.string.notice)
+                                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        for (int aSelectedTaskPosition : selectedTasksPositions) {
+                                            boolean isTimeTask = (boolean) ((Map<String, Object>) tasksListView.getItemAtPosition(aSelectedTaskPosition)).get("isTimeTask");
+                                            int id = integerArrayList.get(aSelectedTaskPosition);
+                                            SQLiteDatabase db = openOrCreateDatabase(isTimeTask ? "scheduledTasks" : "scheduledTriggerTasks", MODE_PRIVATE, null);
+                                            if (isTimeTask) {
+                                                TasksUtils.cancelTheTask(ScheduledTasksManageActivity.this, id);
+                                            }
+                                            db.execSQL("DELETE FROM tasks WHERE _id = " + id);
+                                            db.close();
+                                        }
+                                        mode.finish();
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, null)
+                                .create().show();
+                        return true;
+                    case R.id.stma_menu_mc_selectAll:
+                        for (int i = 0; i < tasksListView.getAdapter().getCount(); i++) {
+                            tasksListView.setItemChecked(i, true);
                         }
-                        mode.finish();
+                        return true;
+                    case R.id.stma_menu_mc_selectUnselected:
+                        for (int i = 0; i < tasksListView.getAdapter().getCount(); i++) {
+                            tasksListView.setItemChecked(i, !tasksListView.isItemChecked(i));
+                        }
                         return true;
                     default:
                         return false;
@@ -177,12 +199,12 @@ public class ScheduledTasksManageActivity extends Activity {
 //                                            ScheduledTasksManageActivity.this, view, "add")
 //                                    .toBundle());
 //                } else {
-                    startActivityForResult(
-                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
-                                    .putExtra("label", label)
-                                    .putExtra("time", isTimeTask)
-                                    .putExtra("id", integerArrayList.get(i)),
-                            isTimeTask ? 1 : 2);
+                startActivityForResult(
+                        new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
+                                .putExtra("label", label)
+                                .putExtra("time", isTimeTask)
+                                .putExtra("id", integerArrayList.get(i)),
+                        isTimeTask ? 1 : 2);
 //                }
             }
         });
@@ -223,12 +245,12 @@ public class ScheduledTasksManageActivity extends Activity {
 //                                            ScheduledTasksManageActivity.this, addTimeButton, "add")
 //                                    .toBundle());
 //                else {
-                    changeFloatButtonsStatus(false);
-                    startActivityForResult(
-                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
-                                    .putExtra("label", getString(R.string.add))
-                                    .putExtra("time", true),
-                            1);
+                changeFloatButtonsStatus(false);
+                startActivityForResult(
+                        new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
+                                .putExtra("label", getString(R.string.add))
+                                .putExtra("time", true),
+                        1);
 //                }
             }
         });
@@ -247,12 +269,12 @@ public class ScheduledTasksManageActivity extends Activity {
 //                                            ScheduledTasksManageActivity.this, addTriggerButton, "add")
 //                                    .toBundle());
 //                } else {
-                    changeFloatButtonsStatus(false);
-                    startActivityForResult(
-                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
-                                    .putExtra("label", getString(R.string.add))
-                                    .putExtra("time", false),
-                            2);
+                changeFloatButtonsStatus(false);
+                startActivityForResult(
+                        new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
+                                .putExtra("label", getString(R.string.add))
+                                .putExtra("time", false),
+                        2);
 //                }
             }
         });
