@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -107,111 +108,193 @@ public class BackupMainActivity extends Activity {
     private boolean processImportContent(String jsonContent) {
         final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         final AppPreferences appPreferences = new AppPreferences(getApplicationContext());
+
+        JSONObject jsonObject;
         try {
-            JSONObject jsonObject = new JSONObject(jsonContent);
-
-            // 通用设置转入（更多设置 中的选项，不转移图标选择相关设置） 开始
-
-            // boolean 开始
-            JSONObject generalSettingsBooleanJSONObject =
-                    jsonObject.getJSONArray("generalSettings_boolean").getJSONObject(0);
-
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "allowEditWhenCreateShortcut");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "noCaution");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "saveOnClickFunctionStatus");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "cacheApplicationsIcons");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "showInRecents");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "lesserToast");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "notificationBarFreezeImmediately");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "notificationBarDisableSlideOut");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "notificationBarDisableClickDisappear");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "onekeyFreezeWhenLockScreen");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "freezeOnceQuit");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "avoidFreezeForegroundApplications");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "avoidFreezeNotifyingApplications");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "openImmediately");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "openAndUFImmediately");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "shortcutAutoFUF");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "needConfirmWhenFreezeUseShortcutAutoFUF");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "openImmediatelyAfterUnfreezeUseShortcutAutoFUF");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "enableInstallPkgFunc");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "tryDelApkAfterInstalled");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "useForegroundService");
-            importBooleanSharedPreference(
-                    generalSettingsBooleanJSONObject, defSP, appPreferences, "debugModeEnabled");
-            // boolean 结束
-
-            // String 开始
-            JSONObject generalSettingsStringJSONObject =
-                    jsonObject.getJSONArray("generalSettings_string").getJSONObject(0);
-            importStringSharedPreference(
-                    generalSettingsStringJSONObject, defSP, appPreferences, "onClickFuncChooseActionStyle");
-            importStringSharedPreference(
-                    generalSettingsStringJSONObject, defSP, appPreferences, "uiStyleSelection");
-            importStringSharedPreference(
-                    generalSettingsStringJSONObject, defSP, appPreferences, "launchMode");
-            importStringSharedPreference(
-                    generalSettingsStringJSONObject, defSP, appPreferences, "organizationName");
-            importStringSharedPreference(
-                    generalSettingsStringJSONObject, defSP, appPreferences, "shortCutOneKeyFreezeAdditionalOptions");
-            // String 结束
-
-            // Int 开始
-            JSONObject generalSettingsIntJSONObject =
-                    jsonObject.getJSONArray("generalSettings_int").getJSONObject(0);
-            importIntSharedPreference(
-                    generalSettingsIntJSONObject, defSP, appPreferences, "onClickFunctionStatus");
-            // Int 结束
-
-            // 通用设置转出 结束
-
-            // 一键冻结、一键解冻、离开冻结列表 开始
-            JSONObject oneKeyListJSONObject =
-                    jsonObject.getJSONArray("oneKeyList").getJSONObject(0);
-            appPreferences.put(
-                    getString(R.string.sAutoFreezeApplicationList),
-                    oneKeyListJSONObject.getString("okff"));
-            appPreferences.put(
-                    getString(R.string.sOneKeyUFApplicationList),
-                    oneKeyListJSONObject.getString("okuf"));
-            appPreferences.put(
-                    getString(R.string.sFreezeOnceQuit),
-                    oneKeyListJSONObject.getString("foq"));
-            // 一键冻结、一键解冻、离开冻结列表 结束
-
-            // 计划任务 - 时间 开始
-            importUserTimeTasksJSONArray(jsonObject);
-            // 计划任务 - 时间 结束
-
-            // 计划任务 - 触发器 开始
-            importUserTriggerTasksJSONArray(jsonObject);
-            // 计划任务 - 触发器 结束
-
+            jsonObject = new JSONObject(jsonContent);
         } catch (JSONException e) {
             e.printStackTrace();
             return false;
         }
+
+        Iterator<String> jsonKeysIterator = jsonObject.keys();
+        while (jsonKeysIterator.hasNext()) {
+            switch (jsonKeysIterator.next()) {
+                // 通用设置转入（更多设置 中的选项，不转移图标选择相关设置） 开始
+                case "generalSettings_boolean":
+                    importBooleanSharedPreferences(jsonObject, defSP, appPreferences);
+                    break;
+                case "generalSettings_string":
+                    importStringSharedPreferences(jsonObject, defSP, appPreferences);
+                    break;
+                case "generalSettings_int":
+                    importIntSharedPreferences(jsonObject, defSP, appPreferences);
+                    break;
+                // 通用设置转出 结束
+                // 一键冻结、一键解冻、离开冻结列表 开始
+                case "oneKeyList":
+                    importOneKeyLists(jsonObject, defSP, appPreferences);
+                    break;
+                // 一键冻结、一键解冻、离开冻结列表 结束
+                // 计划任务 - 时间 开始
+                case "userTimeScheduledTasks":
+                    importUserTimeTasksJSONArray(jsonObject);
+                    break;
+                // 计划任务 - 时间 结束
+                // 计划任务 - 触发器 开始
+                case "userTriggerScheduledTasks":
+                    importUserTriggerTasksJSONArray(jsonObject);
+                    break;
+                // 计划任务 - 触发器 结束
+                default:
+                    break;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean importOneKeyLists(JSONObject jsonObject, SharedPreferences defSP, AppPreferences appPreferences) {
+        JSONArray array = jsonObject.optJSONArray("oneKeyList");
+        if (array == null) {
+            return false;
+        }
+        JSONObject oneKeyListJSONObject = array.optJSONObject(0);
+        if (oneKeyListJSONObject == null) {
+            return false;
+        }
+        Iterator<String> it = oneKeyListJSONObject.keys();
+        String s;
+        while (it.hasNext()) {
+            s = it.next();
+            switch (s) {
+                case "okff":
+                    appPreferences.put(
+                            getString(R.string.sAutoFreezeApplicationList),
+                            oneKeyListJSONObject.optString("okff"));
+                    break;
+                case "okuf":
+                    appPreferences.put(
+                            getString(R.string.sOneKeyUFApplicationList),
+                            oneKeyListJSONObject.optString("okuf"));
+                    break;
+                case "foq":
+                    appPreferences.put(
+                            getString(R.string.sFreezeOnceQuit),
+                            oneKeyListJSONObject.optString("foq"));
+                    break;
+                default:
+                    break;
+            }
+        }
+        return true;
+    }
+
+    private boolean importIntSharedPreferences(JSONObject jsonObject, SharedPreferences defSP, AppPreferences appPreferences) {
+        // Int 开始
+        JSONArray array = jsonObject.optJSONArray("generalSettings_int");
+        if (array == null) {
+            return false;
+        }
+        JSONObject generalSettingsIntJSONObject = array.optJSONObject(0);
+        if (generalSettingsIntJSONObject == null) {
+            return false;
+        }
+        Iterator<String> it = generalSettingsIntJSONObject.keys();
+        String s;
+        while (it.hasNext()) {
+            s = it.next();
+            switch (s) {
+                case "onClickFunctionStatus":
+                    importStringSharedPreference(
+                            generalSettingsIntJSONObject, defSP, appPreferences, s);
+                    break;
+                default:
+                    break;
+            }
+        }
+        // Int 结束
+        return true;
+    }
+
+    private boolean importStringSharedPreferences(JSONObject jsonObject, SharedPreferences defSP, AppPreferences appPreferences) {
+        // String 开始
+        JSONArray array = jsonObject.optJSONArray("generalSettings_string");
+        if (array == null) {
+            return false;
+        }
+        JSONObject generalSettingsStringJSONObject = array.optJSONObject(0);
+        if (generalSettingsStringJSONObject == null) {
+            return false;
+        }
+
+        Iterator<String> it = generalSettingsStringJSONObject.keys();
+        String s;
+        while (it.hasNext()) {
+            s = it.next();
+            switch (s) {
+                case "onClickFuncChooseActionStyle":
+                case "uiStyleSelection":
+                case "launchMode":
+                case "organizationName":
+                case "shortCutOneKeyFreezeAdditionalOptions":
+                    importStringSharedPreference(
+                            generalSettingsStringJSONObject, defSP, appPreferences, s);
+                    break;
+                default:
+                    break;
+            }
+        }
+        // String 结束
+        return true;
+    }
+
+
+    private boolean importBooleanSharedPreferences(JSONObject jsonObject, SharedPreferences defSP, AppPreferences appPreferences) {
+        // boolean 开始
+        JSONArray array = jsonObject.optJSONArray("generalSettings_boolean");
+        if (array == null) {
+            return false;
+        }
+        JSONObject generalSettingsBooleanJSONObject = array.optJSONObject(0);
+        if (generalSettingsBooleanJSONObject == null) {
+            return false;
+        }
+
+        Iterator<String> it = generalSettingsBooleanJSONObject.keys();
+        String s;
+        while (it.hasNext()) {
+            s = it.next();
+            switch (s) {
+                case "allowEditWhenCreateShortcut":
+                case "noCaution":
+                case "saveOnClickFunctionStatus":
+                case "saveSortMethodStatus":
+                case "cacheApplicationsIcons":
+                case "showInRecents":
+                case "notificationBarDisableSlideOut":
+                case "notificationBarDisableClickDisappear":
+                case "onekeyFreezeWhenLockScreen":
+                case "freezeOnceQuit":
+                case "avoidFreezeForegroundApplications":
+                case "avoidFreezeNotifyingApplications":
+                case "openImmediately":
+                case "openAndUFImmediately":
+                case "shortcutAutoFUF":
+                case "needConfirmWhenFreezeUseShortcutAutoFUF":
+                case "openImmediatelyAfterUnfreezeUseShortcutAutoFUF":
+                case "enableInstallPkgFunc":
+                case "tryDelApkAfterInstalled":
+                case "useForegroundService":
+                case "debugModeEnabled":
+                    importBooleanSharedPreference(
+                            generalSettingsBooleanJSONObject, defSP, appPreferences, s);
+                    break;
+                default:
+                    break;
+            }
+        }
+        // boolean 结束
         return true;
     }
 
@@ -247,6 +330,10 @@ public class BackupMainActivity extends Activity {
             generalSettingsBooleanJSONObject.put(
                     "saveOnClickFunctionStatus",
                     convertSharedPreference(defSP, "saveOnClickFunctionStatus", false)
+            );
+            generalSettingsBooleanJSONObject.put(
+                    "saveSortMethodStatus",
+                    convertSharedPreference(defSP, "saveSortMethodStatus", false)
             );
             generalSettingsBooleanJSONObject.put(
                     "cacheApplicationsIcons",
@@ -468,51 +555,77 @@ public class BackupMainActivity extends Activity {
         return userTriggerScheduledTasksJSONArray;
     }
 
-    private void importUserTimeTasksJSONArray(JSONObject jsonObject) throws JSONException {
+    private boolean importUserTimeTasksJSONArray(JSONObject jsonObject) {
         JSONArray userTimeScheduledTasksJSONArray =
-                jsonObject.getJSONArray("userTimeScheduledTasks");
+                jsonObject.optJSONArray("userTimeScheduledTasks");
+        if (userTimeScheduledTasksJSONArray == null) {
+            return false;
+        }
+
         SQLiteDatabase db = openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
         );
+
+        boolean isCompletelySuccess = true;
         JSONObject oneUserTimeScheduledTaskJSONObject;
-        for (int i = 0; i < userTimeScheduledTasksJSONArray.length(); ++i) {
-            oneUserTimeScheduledTaskJSONObject = userTimeScheduledTasksJSONArray.getJSONObject(i);
-            db.execSQL(
-                    "insert into tasks(_id,hour,minutes,repeat,enabled,label,task,column1,column2) values(null,"
-                            + oneUserTimeScheduledTaskJSONObject.getInt("hour") + ","
-                            + oneUserTimeScheduledTaskJSONObject.getInt("minutes") + ","
-                            + oneUserTimeScheduledTaskJSONObject.getString("repeat") + ","
-                            + oneUserTimeScheduledTaskJSONObject.getInt("enabled") + ","
-                            + "'" + oneUserTimeScheduledTaskJSONObject.getString("label") + "'" + ","
-                            + "'" + oneUserTimeScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
-            );
+        try {
+            for (int i = 0; i < userTimeScheduledTasksJSONArray.length(); ++i) {
+                oneUserTimeScheduledTaskJSONObject = userTimeScheduledTasksJSONArray.getJSONObject(i);
+                db.execSQL(
+                        "insert into tasks(_id,hour,minutes,repeat,enabled,label,task,column1,column2) values(null,"
+                                + oneUserTimeScheduledTaskJSONObject.getInt("hour") + ","
+                                + oneUserTimeScheduledTaskJSONObject.getInt("minutes") + ","
+                                + oneUserTimeScheduledTaskJSONObject.getString("repeat") + ","
+                                + oneUserTimeScheduledTaskJSONObject.getInt("enabled") + ","
+                                + "'" + oneUserTimeScheduledTaskJSONObject.getString("label") + "'" + ","
+                                + "'" + oneUserTimeScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
+                );
+            }
+        } catch (JSONException e) {
+            isCompletelySuccess = false;
         }
+
         db.close();
         TasksUtils.checkTimeTasks(this);
+
+        return isCompletelySuccess;
     }
 
-    private void importUserTriggerTasksJSONArray(JSONObject jsonObject) throws JSONException {
+    private boolean importUserTriggerTasksJSONArray(JSONObject jsonObject) {
         JSONArray userTriggerScheduledTasksJSONArray =
-                jsonObject.getJSONArray("userTriggerScheduledTasks");
+                jsonObject.optJSONArray("userTriggerScheduledTasks");
+        if (userTriggerScheduledTasksJSONArray == null) {
+            return false;
+        }
+
         SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
         );
+
         JSONObject oneUserTriggerScheduledTaskJSONObject;
-        for (int i = 0; i < userTriggerScheduledTasksJSONArray.length(); ++i) {
-            oneUserTriggerScheduledTaskJSONObject = userTriggerScheduledTasksJSONArray.getJSONObject(i);
-            db.execSQL(
-                    "insert into tasks(_id,tg,tgextra,enabled,label,task,column1,column2) VALUES (null,"
-                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tg") + "'" + ","
-                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tgextra") + "'" + ","
-                            + oneUserTriggerScheduledTaskJSONObject.getInt("enabled") + ","
-                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("label") + "'" + ","
-                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
-            );
+        boolean isCompletelySuccess = true;
+        try {
+            for (int i = 0; i < userTriggerScheduledTasksJSONArray.length(); ++i) {
+                oneUserTriggerScheduledTaskJSONObject = userTriggerScheduledTasksJSONArray.getJSONObject(i);
+                db.execSQL(
+                        "insert into tasks(_id,tg,tgextra,enabled,label,task,column1,column2) VALUES (null,"
+                                + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tg") + "'" + ","
+                                + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tgextra") + "'" + ","
+                                + oneUserTriggerScheduledTaskJSONObject.getInt("enabled") + ","
+                                + "'" + oneUserTriggerScheduledTaskJSONObject.getString("label") + "'" + ","
+                                + "'" + oneUserTriggerScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
+                );
+            }
+        } catch (JSONException e) {
+            isCompletelySuccess = false;
         }
+
         db.close();
         TasksUtils.checkTriggerTasks(this);
+
+        return isCompletelySuccess;
     }
 
     private String convertSharedPreference(
@@ -536,20 +649,20 @@ public class BackupMainActivity extends Activity {
     }
 
     private void importStringSharedPreference(
-            JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) throws JSONException {
-        sp.edit().putString(key, jsonObject.getString(key)).apply();
+            JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) {
+        sp.edit().putString(key, jsonObject.optString(key, "")).apply();
         SettingsUtils.syncAndCheckSharedPreference(getApplicationContext(), this, sp, key, ap);
     }
 
     private void importBooleanSharedPreference(
-            JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) throws JSONException {
-        sp.edit().putBoolean(key, jsonObject.getBoolean(key)).apply();
+            JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) {
+        sp.edit().putBoolean(key, jsonObject.optBoolean(key, false)).apply();
         SettingsUtils.syncAndCheckSharedPreference(getApplicationContext(), this, sp, key, ap);
     }
 
     private void importIntSharedPreference(
-            JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) throws JSONException {
-        sp.edit().putInt(key, jsonObject.getInt(key)).apply();
+            JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) {
+        sp.edit().putInt(key, jsonObject.optInt(key, 0)).apply();
         SettingsUtils.syncAndCheckSharedPreference(getApplicationContext(), this, sp, key, ap);
     }
 
