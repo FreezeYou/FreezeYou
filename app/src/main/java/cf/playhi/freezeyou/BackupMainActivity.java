@@ -272,6 +272,8 @@ public class BackupMainActivity extends Activity {
                 case "saveSortMethodStatus":
                 case "cacheApplicationsIcons":
                 case "showInRecents":
+                case "lesserToast":
+                case "notificationBarFreezeImmediately":
                 case "notificationBarDisableSlideOut":
                 case "notificationBarDisableClickDisappear":
                 case "onekeyFreezeWhenLockScreen":
