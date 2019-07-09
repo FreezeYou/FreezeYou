@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 
+//导入导出整体结构复杂度高，处理流程复杂度高，待有可用的优化方案时需要进行优化（提示：后续导出时可修改导出时的 version，用以导入时区分方案）
 final class BackupUtils {
 
     static String convertSharedPreference(
@@ -70,9 +71,13 @@ final class BackupUtils {
 
         boolean isCompletelySuccess = true;
         JSONObject oneUserTimeScheduledTaskJSONObject;
-        try {
-            for (int i = 0; i < userTimeScheduledTasksJSONArray.length(); ++i) {
-                oneUserTimeScheduledTaskJSONObject = userTimeScheduledTasksJSONArray.getJSONObject(i);
+        for (int i = 0; i < userTimeScheduledTasksJSONArray.length(); ++i) {
+            try {
+                oneUserTimeScheduledTaskJSONObject = userTimeScheduledTasksJSONArray.optJSONObject(i);
+                if (oneUserTimeScheduledTaskJSONObject == null) {
+                    isCompletelySuccess = false;
+                    continue;
+                }
                 db.execSQL(
                         "insert into tasks(_id,hour,minutes,repeat,enabled,label,task,column1,column2) values(null,"
                                 + oneUserTimeScheduledTaskJSONObject.getInt("hour") + ","
@@ -82,9 +87,9 @@ final class BackupUtils {
                                 + "'" + oneUserTimeScheduledTaskJSONObject.getString("label") + "'" + ","
                                 + "'" + oneUserTimeScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
                 );
+            } catch (JSONException e) {
+                isCompletelySuccess = false;
             }
-        } catch (JSONException e) {
-            isCompletelySuccess = false;
         }
 
         db.close();
@@ -107,9 +112,13 @@ final class BackupUtils {
 
         JSONObject oneUserTriggerScheduledTaskJSONObject;
         boolean isCompletelySuccess = true;
-        try {
-            for (int i = 0; i < userTriggerScheduledTasksJSONArray.length(); ++i) {
-                oneUserTriggerScheduledTaskJSONObject = userTriggerScheduledTasksJSONArray.getJSONObject(i);
+        for (int i = 0; i < userTriggerScheduledTasksJSONArray.length(); ++i) {
+            try {
+                oneUserTriggerScheduledTaskJSONObject = userTriggerScheduledTasksJSONArray.optJSONObject(i);
+                if (oneUserTriggerScheduledTaskJSONObject == null) {
+                    isCompletelySuccess = false;
+                    continue;
+                }
                 db.execSQL(
                         "insert into tasks(_id,tg,tgextra,enabled,label,task,column1,column2) VALUES (null,"
                                 + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tg") + "'" + ","
@@ -118,9 +127,9 @@ final class BackupUtils {
                                 + "'" + oneUserTriggerScheduledTaskJSONObject.getString("label") + "'" + ","
                                 + "'" + oneUserTriggerScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
                 );
+            } catch (JSONException e) {
+                isCompletelySuccess = false;
             }
-        } catch (JSONException e) {
-            isCompletelySuccess = false;
         }
 
         db.close();
@@ -202,6 +211,7 @@ final class BackupUtils {
             s = it.next();
             switch (s) {
                 case "onClickFunctionStatus":
+                case "sortMethodStatus":
                     importIntSharedPreference(
                             context, activity, generalSettingsIntJSONObject, defSP, appPreferences, s);
                     break;

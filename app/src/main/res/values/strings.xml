@@ -292,6 +292,15 @@
     <string name="resetUseTimes">重置使用次数计数</string>
     <string name="selectAll">全选</string>
     <string name="selectUnselected">反选</string>
+    <string name="onClickFunctionStatus">单击功能状态</string>
+    <string name="sortMethodStatus">保存排序方式状态</string>
+    <string name="oneKeyFreezeList">一键冻结列表</string>
+    <string name="oneKeyUFList">一键解冻列表</string>
+    <string name="freezeOnceQuitList">离开冻结列表</string>
+    <string name="scheduledTaskDashLineLabel">计划任务 - %1$s</string>
+    <string name="moreSettingsDashLineLabel">更多设置 - %1$s</string>
+    <string name="parseFailed">解析失败</string>
+    <string name="nothing">无</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
