@@ -1,6 +1,7 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,6 +29,13 @@ import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import static cf.playhi.freezeyou.BackupUtils.convertSharedPreference;
+import static cf.playhi.freezeyou.BackupUtils.importBooleanSharedPreferences;
+import static cf.playhi.freezeyou.BackupUtils.importIntSharedPreferences;
+import static cf.playhi.freezeyou.BackupUtils.importOneKeyLists;
+import static cf.playhi.freezeyou.BackupUtils.importStringSharedPreferences;
+import static cf.playhi.freezeyou.BackupUtils.importUserTimeTasksJSONArray;
+import static cf.playhi.freezeyou.BackupUtils.importUserTriggerTasksJSONArray;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
@@ -117,33 +125,34 @@ public class BackupMainActivity extends Activity {
             return false;
         }
 
+        Context context = getApplicationContext();
         Iterator<String> jsonKeysIterator = jsonObject.keys();
         while (jsonKeysIterator.hasNext()) {
             switch (jsonKeysIterator.next()) {
                 // 通用设置转入（更多设置 中的选项，不转移图标选择相关设置） 开始
                 case "generalSettings_boolean":
-                    importBooleanSharedPreferences(jsonObject, defSP, appPreferences);
+                    importBooleanSharedPreferences(context, this, jsonObject, defSP, appPreferences);
                     break;
                 case "generalSettings_string":
-                    importStringSharedPreferences(jsonObject, defSP, appPreferences);
+                    importStringSharedPreferences(context, this, jsonObject, defSP, appPreferences);
                     break;
                 case "generalSettings_int":
-                    importIntSharedPreferences(jsonObject, defSP, appPreferences);
+                    importIntSharedPreferences(context, this, jsonObject, defSP, appPreferences);
                     break;
                 // 通用设置转出 结束
                 // 一键冻结、一键解冻、离开冻结列表 开始
                 case "oneKeyList":
-                    importOneKeyLists(jsonObject, defSP, appPreferences);
+                    importOneKeyLists(context, jsonObject, appPreferences);
                     break;
                 // 一键冻结、一键解冻、离开冻结列表 结束
                 // 计划任务 - 时间 开始
                 case "userTimeScheduledTasks":
-                    importUserTimeTasksJSONArray(jsonObject);
+                    importUserTimeTasksJSONArray(this, jsonObject);
                     break;
                 // 计划任务 - 时间 结束
                 // 计划任务 - 触发器 开始
                 case "userTriggerScheduledTasks":
-                    importUserTriggerTasksJSONArray(jsonObject);
+                    importUserTriggerTasksJSONArray(this, jsonObject);
                     break;
                 // 计划任务 - 触发器 结束
                 default:
@@ -151,152 +160,6 @@ public class BackupMainActivity extends Activity {
             }
         }
 
-        return true;
-    }
-
-    private boolean importOneKeyLists(JSONObject jsonObject, SharedPreferences defSP, AppPreferences appPreferences) {
-        JSONArray array = jsonObject.optJSONArray("oneKeyList");
-        if (array == null) {
-            return false;
-        }
-        JSONObject oneKeyListJSONObject = array.optJSONObject(0);
-        if (oneKeyListJSONObject == null) {
-            return false;
-        }
-        Iterator<String> it = oneKeyListJSONObject.keys();
-        String s;
-        while (it.hasNext()) {
-            s = it.next();
-            switch (s) {
-                case "okff":
-                    appPreferences.put(
-                            getString(R.string.sAutoFreezeApplicationList),
-                            oneKeyListJSONObject.optString("okff"));
-                    break;
-                case "okuf":
-                    appPreferences.put(
-                            getString(R.string.sOneKeyUFApplicationList),
-                            oneKeyListJSONObject.optString("okuf"));
-                    break;
-                case "foq":
-                    appPreferences.put(
-                            getString(R.string.sFreezeOnceQuit),
-                            oneKeyListJSONObject.optString("foq"));
-                    break;
-                default:
-                    break;
-            }
-        }
-        return true;
-    }
-
-    private boolean importIntSharedPreferences(JSONObject jsonObject, SharedPreferences defSP, AppPreferences appPreferences) {
-        // Int 开始
-        JSONArray array = jsonObject.optJSONArray("generalSettings_int");
-        if (array == null) {
-            return false;
-        }
-        JSONObject generalSettingsIntJSONObject = array.optJSONObject(0);
-        if (generalSettingsIntJSONObject == null) {
-            return false;
-        }
-        Iterator<String> it = generalSettingsIntJSONObject.keys();
-        String s;
-        while (it.hasNext()) {
-            s = it.next();
-            switch (s) {
-                case "onClickFunctionStatus":
-                    importStringSharedPreference(
-                            generalSettingsIntJSONObject, defSP, appPreferences, s);
-                    break;
-                default:
-                    break;
-            }
-        }
-        // Int 结束
-        return true;
-    }
-
-    private boolean importStringSharedPreferences(JSONObject jsonObject, SharedPreferences defSP, AppPreferences appPreferences) {
-        // String 开始
-        JSONArray array = jsonObject.optJSONArray("generalSettings_string");
-        if (array == null) {
-            return false;
-        }
-        JSONObject generalSettingsStringJSONObject = array.optJSONObject(0);
-        if (generalSettingsStringJSONObject == null) {
-            return false;
-        }
-
-        Iterator<String> it = generalSettingsStringJSONObject.keys();
-        String s;
-        while (it.hasNext()) {
-            s = it.next();
-            switch (s) {
-                case "onClickFuncChooseActionStyle":
-                case "uiStyleSelection":
-                case "launchMode":
-                case "organizationName":
-                case "shortCutOneKeyFreezeAdditionalOptions":
-                    importStringSharedPreference(
-                            generalSettingsStringJSONObject, defSP, appPreferences, s);
-                    break;
-                default:
-                    break;
-            }
-        }
-        // String 结束
-        return true;
-    }
-
-
-    private boolean importBooleanSharedPreferences(JSONObject jsonObject, SharedPreferences defSP, AppPreferences appPreferences) {
-        // boolean 开始
-        JSONArray array = jsonObject.optJSONArray("generalSettings_boolean");
-        if (array == null) {
-            return false;
-        }
-        JSONObject generalSettingsBooleanJSONObject = array.optJSONObject(0);
-        if (generalSettingsBooleanJSONObject == null) {
-            return false;
-        }
-
-        Iterator<String> it = generalSettingsBooleanJSONObject.keys();
-        String s;
-        while (it.hasNext()) {
-            s = it.next();
-            switch (s) {
-                case "allowEditWhenCreateShortcut":
-                case "noCaution":
-                case "saveOnClickFunctionStatus":
-                case "saveSortMethodStatus":
-                case "cacheApplicationsIcons":
-                case "showInRecents":
-                case "lesserToast":
-                case "notificationBarFreezeImmediately":
-                case "notificationBarDisableSlideOut":
-                case "notificationBarDisableClickDisappear":
-                case "onekeyFreezeWhenLockScreen":
-                case "freezeOnceQuit":
-                case "avoidFreezeForegroundApplications":
-                case "avoidFreezeNotifyingApplications":
-                case "openImmediately":
-                case "openAndUFImmediately":
-                case "shortcutAutoFUF":
-                case "needConfirmWhenFreezeUseShortcutAutoFUF":
-                case "openImmediatelyAfterUnfreezeUseShortcutAutoFUF":
-                case "enableInstallPkgFunc":
-                case "tryDelApkAfterInstalled":
-                case "useForegroundService":
-                case "debugModeEnabled":
-                    importBooleanSharedPreference(
-                            generalSettingsBooleanJSONObject, defSP, appPreferences, s);
-                    break;
-                default:
-                    break;
-            }
-        }
-        // boolean 结束
         return true;
     }
 
@@ -555,117 +418,6 @@ public class BackupMainActivity extends Activity {
         cursor.close();
         db.close();
         return userTriggerScheduledTasksJSONArray;
-    }
-
-    private boolean importUserTimeTasksJSONArray(JSONObject jsonObject) {
-        JSONArray userTimeScheduledTasksJSONArray =
-                jsonObject.optJSONArray("userTimeScheduledTasks");
-        if (userTimeScheduledTasksJSONArray == null) {
-            return false;
-        }
-
-        SQLiteDatabase db = openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
-        db.execSQL(
-                "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
-        );
-
-        boolean isCompletelySuccess = true;
-        JSONObject oneUserTimeScheduledTaskJSONObject;
-        try {
-            for (int i = 0; i < userTimeScheduledTasksJSONArray.length(); ++i) {
-                oneUserTimeScheduledTaskJSONObject = userTimeScheduledTasksJSONArray.getJSONObject(i);
-                db.execSQL(
-                        "insert into tasks(_id,hour,minutes,repeat,enabled,label,task,column1,column2) values(null,"
-                                + oneUserTimeScheduledTaskJSONObject.getInt("hour") + ","
-                                + oneUserTimeScheduledTaskJSONObject.getInt("minutes") + ","
-                                + oneUserTimeScheduledTaskJSONObject.getString("repeat") + ","
-                                + oneUserTimeScheduledTaskJSONObject.getInt("enabled") + ","
-                                + "'" + oneUserTimeScheduledTaskJSONObject.getString("label") + "'" + ","
-                                + "'" + oneUserTimeScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
-                );
-            }
-        } catch (JSONException e) {
-            isCompletelySuccess = false;
-        }
-
-        db.close();
-        TasksUtils.checkTimeTasks(this);
-
-        return isCompletelySuccess;
-    }
-
-    private boolean importUserTriggerTasksJSONArray(JSONObject jsonObject) {
-        JSONArray userTriggerScheduledTasksJSONArray =
-                jsonObject.optJSONArray("userTriggerScheduledTasks");
-        if (userTriggerScheduledTasksJSONArray == null) {
-            return false;
-        }
-
-        SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
-        db.execSQL(
-                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
-        );
-
-        JSONObject oneUserTriggerScheduledTaskJSONObject;
-        boolean isCompletelySuccess = true;
-        try {
-            for (int i = 0; i < userTriggerScheduledTasksJSONArray.length(); ++i) {
-                oneUserTriggerScheduledTaskJSONObject = userTriggerScheduledTasksJSONArray.getJSONObject(i);
-                db.execSQL(
-                        "insert into tasks(_id,tg,tgextra,enabled,label,task,column1,column2) VALUES (null,"
-                                + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tg") + "'" + ","
-                                + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tgextra") + "'" + ","
-                                + oneUserTriggerScheduledTaskJSONObject.getInt("enabled") + ","
-                                + "'" + oneUserTriggerScheduledTaskJSONObject.getString("label") + "'" + ","
-                                + "'" + oneUserTriggerScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
-                );
-            }
-        } catch (JSONException e) {
-            isCompletelySuccess = false;
-        }
-
-        db.close();
-        TasksUtils.checkTriggerTasks(this);
-
-        return isCompletelySuccess;
-    }
-
-    private String convertSharedPreference(
-            SharedPreferences sharedPreferences, String key, String defValue) {
-        return sharedPreferences.getString(key, defValue);
-    }
-
-    private String convertSharedPreference(
-            AppPreferences appPreferences, String key, String defValue) {
-        return appPreferences.getString(key, defValue);
-    }
-
-    private boolean convertSharedPreference(
-            SharedPreferences sharedPreferences, String key, boolean defValue) {
-        return sharedPreferences.getBoolean(key, defValue);
-    }
-
-    private boolean convertSharedPreference(
-            AppPreferences appPreferences, String key, boolean defValue) {
-        return appPreferences.getBoolean(key, defValue);
-    }
-
-    private void importStringSharedPreference(
-            JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) {
-        sp.edit().putString(key, jsonObject.optString(key, "")).apply();
-        SettingsUtils.syncAndCheckSharedPreference(getApplicationContext(), this, sp, key, ap);
-    }
-
-    private void importBooleanSharedPreference(
-            JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) {
-        sp.edit().putBoolean(key, jsonObject.optBoolean(key, false)).apply();
-        SettingsUtils.syncAndCheckSharedPreference(getApplicationContext(), this, sp, key, ap);
-    }
-
-    private void importIntSharedPreference(
-            JSONObject jsonObject, SharedPreferences sp, AppPreferences ap, String key) {
-        sp.edit().putInt(key, jsonObject.optInt(key, 0)).apply();
-        SettingsUtils.syncAndCheckSharedPreference(getApplicationContext(), this, sp, key, ap);
     }
 
 //    先把文本方式稳定下来，再决定是否做 QRCode
