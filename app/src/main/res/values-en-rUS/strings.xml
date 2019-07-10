@@ -294,7 +294,7 @@
     <string name="resetUseTimes">Reset usage counter</string>
     <string name="selectAll">Select all</string>
     <string name="selectUnselected">Inverse selection</string>
-    <string name="onClickFunctionStatus">单击功能状态</string>
+    <string name="onClickFunctionStatus">On click function status</string>
     <string name="sortMethodStatus">保存排序方式状态</string>
     <string name="oneKeyFreezeList">一键冻结列表</string>
     <string name="oneKeyUFList">一键解冻列表</string>
