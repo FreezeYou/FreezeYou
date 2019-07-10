@@ -24,6 +24,7 @@
 
         <Button
             android:id="@+id/bica_cancel_button"
+            style="@android:style/Widget.Material.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -31,6 +32,7 @@
 
         <Button
             android:id="@+id/bica_finish_button"
+            style="@android:style/Widget.Material.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -325,7 +325,7 @@
         <activity
             android:name=".BackupImportChooserActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:label="@string/plsSelect"
+            android:label="@string/impt"
             android:theme="@style/AppTheme.Default" />
         <activity
             android:name=".LauncherShortcutConfirmAndGenerateActivity"
