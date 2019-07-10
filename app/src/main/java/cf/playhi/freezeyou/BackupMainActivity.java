@@ -615,6 +615,8 @@ class GZipUtils {
             return out.toString();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
         return "";
     }
