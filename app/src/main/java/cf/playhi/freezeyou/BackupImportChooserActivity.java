@@ -1,14 +1,11 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
-
-import net.grandcentrix.tray.AppPreferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +45,7 @@ public class BackupImportChooserActivity extends Activity {
 
         generateKeyToStringIdValuePair();
 
-        String jsonContentString = intent.getStringExtra("jsonObject");
+        String jsonContentString = intent.getStringExtra("jsonObjectString");
         JSONObject jsonObject = null;
         if (jsonContentString == null) {
             HashMap<String, String> keyValuePair = new HashMap<>();
@@ -91,6 +88,31 @@ public class BackupImportChooserActivity extends Activity {
 
         mainListView.setAdapter(adapter);
 
+        processButtons();
+    }
+
+    private void processButtons() {
+        final Button bicaFinishButton = findViewById(R.id.bica_finish_button);
+        final Button bicaCancelButton = findViewById(R.id.bica_cancel_button);
+        bicaCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        bicaFinishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ListView mainListView = findViewById(R.id.bica_main_listView);
+                BackupImportChooserActivitySwitchSimpleAdapter adapter =
+                        (BackupImportChooserActivitySwitchSimpleAdapter) mainListView.getAdapter();
+                BackupUtils.importContents(
+                        getApplicationContext(),
+                        BackupImportChooserActivity.this,
+                        adapter.getFinalList());
+
+            }
+        });
     }
 
     private void generateKeyToStringIdValuePair() {
@@ -138,10 +160,6 @@ public class BackupImportChooserActivity extends Activity {
     }
 
     private void generateList(JSONObject jsonObject, ArrayList<HashMap<String, String>> list) {
-        final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        final AppPreferences appPreferences = new AppPreferences(getApplicationContext());
-        final Context context = getApplicationContext();
-
 
         final Iterator<String> jsonKeysIterator = jsonObject.keys();
         while (jsonKeysIterator.hasNext()) {

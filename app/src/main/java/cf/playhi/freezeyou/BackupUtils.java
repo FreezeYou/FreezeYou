@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -318,6 +319,48 @@ final class BackupUtils {
                     break;
             }
         }
+    }
+
+
+    static boolean importContents(Context context, Activity activity, JSONObject jsonObject) {
+        final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(context);
+        final AppPreferences appPreferences = new AppPreferences(context);
+
+        Iterator<String> jsonKeysIterator = jsonObject.keys();
+        while (jsonKeysIterator.hasNext()) {
+            switch (jsonKeysIterator.next()) {
+                // 通用设置转入（更多设置 中的选项，不转移图标选择相关设置） 开始
+                case "generalSettings_boolean":
+                    importBooleanSharedPreferences(context, activity, jsonObject, defSP, appPreferences);
+                    break;
+                case "generalSettings_string":
+                    importStringSharedPreferences(context, activity, jsonObject, defSP, appPreferences);
+                    break;
+                case "generalSettings_int":
+                    importIntSharedPreferences(context, activity, jsonObject, defSP, appPreferences);
+                    break;
+                // 通用设置转出 结束
+                // 一键冻结、一键解冻、离开冻结列表 开始
+                case "oneKeyList":
+                    importOneKeyLists(context, jsonObject, appPreferences);
+                    break;
+                // 一键冻结、一键解冻、离开冻结列表 结束
+                // 计划任务 - 时间 开始
+                case "userTimeScheduledTasks":
+                    importUserTimeTasksJSONArray(activity, jsonObject);
+                    break;
+                // 计划任务 - 时间 结束
+                // 计划任务 - 触发器 开始
+                case "userTriggerScheduledTasks":
+                    importUserTriggerTasksJSONArray(activity, jsonObject);
+                    break;
+                // 计划任务 - 触发器 结束
+                default:
+                    break;
+            }
+        }
+
+        return true;
     }
 
 }

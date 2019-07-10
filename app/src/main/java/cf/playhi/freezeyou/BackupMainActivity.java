@@ -1,7 +1,7 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,17 +25,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import static cf.playhi.freezeyou.BackupUtils.convertSharedPreference;
-import static cf.playhi.freezeyou.BackupUtils.importBooleanSharedPreferences;
-import static cf.playhi.freezeyou.BackupUtils.importIntSharedPreferences;
-import static cf.playhi.freezeyou.BackupUtils.importOneKeyLists;
-import static cf.playhi.freezeyou.BackupUtils.importStringSharedPreferences;
-import static cf.playhi.freezeyou.BackupUtils.importUserTimeTasksJSONArray;
-import static cf.playhi.freezeyou.BackupUtils.importUserTriggerTasksJSONArray;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
@@ -87,11 +80,15 @@ public class BackupMainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 EditText editText = findViewById(R.id.bma_main_inputAndoutput_editText);
-                if (processImportContent(GZipUtils.gzipDecompress(editText.getText().toString()))) {
-                    ToastUtils.showToast(BackupMainActivity.this, R.string.success);
-                } else {
-                    ToastUtils.showToast(BackupMainActivity.this, R.string.failed);
-                }
+                startActivity(
+                        new Intent(BackupMainActivity.this, BackupImportChooserActivity.class)
+                                .putExtra("jsonObjectString", GZipUtils.gzipDecompress(editText.getText().toString()))
+                );
+//                if (processImportContent(GZipUtils.gzipDecompress(editText.getText().toString()))) {
+//                    ToastUtils.showToast(BackupMainActivity.this, R.string.success);
+//                } else {
+//                    ToastUtils.showToast(BackupMainActivity.this, R.string.failed);
+//                }
             }
         });
 
@@ -111,56 +108,6 @@ public class BackupMainActivity extends Activity {
             }
         });
 
-    }
-
-    private boolean processImportContent(String jsonContent) {
-        final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        final AppPreferences appPreferences = new AppPreferences(getApplicationContext());
-
-        JSONObject jsonObject;
-        try {
-            jsonObject = new JSONObject(jsonContent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        Context context = getApplicationContext();
-        Iterator<String> jsonKeysIterator = jsonObject.keys();
-        while (jsonKeysIterator.hasNext()) {
-            switch (jsonKeysIterator.next()) {
-                // 通用设置转入（更多设置 中的选项，不转移图标选择相关设置） 开始
-                case "generalSettings_boolean":
-                    importBooleanSharedPreferences(context, this, jsonObject, defSP, appPreferences);
-                    break;
-                case "generalSettings_string":
-                    importStringSharedPreferences(context, this, jsonObject, defSP, appPreferences);
-                    break;
-                case "generalSettings_int":
-                    importIntSharedPreferences(context, this, jsonObject, defSP, appPreferences);
-                    break;
-                // 通用设置转出 结束
-                // 一键冻结、一键解冻、离开冻结列表 开始
-                case "oneKeyList":
-                    importOneKeyLists(context, jsonObject, appPreferences);
-                    break;
-                // 一键冻结、一键解冻、离开冻结列表 结束
-                // 计划任务 - 时间 开始
-                case "userTimeScheduledTasks":
-                    importUserTimeTasksJSONArray(this, jsonObject);
-                    break;
-                // 计划任务 - 时间 结束
-                // 计划任务 - 触发器 开始
-                case "userTriggerScheduledTasks":
-                    importUserTriggerTasksJSONArray(this, jsonObject);
-                    break;
-                // 计划任务 - 触发器 结束
-                default:
-                    break;
-            }
-        }
-
-        return true;
     }
 
     private String processExportContent() {
