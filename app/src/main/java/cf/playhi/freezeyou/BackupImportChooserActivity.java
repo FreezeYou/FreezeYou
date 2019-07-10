@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -50,8 +49,27 @@ public class BackupImportChooserActivity extends Activity {
         generateKeyToStringIdValuePair();
 
         String jsonContentString = intent.getStringExtra("jsonObject");
-        if (jsonContentString != null) {
-            if (generateList(jsonContentString, titleAndSpKeyArrayList)) {
+        JSONObject jsonObject = null;
+        if (jsonContentString == null) {
+            HashMap<String, String> keyValuePair = new HashMap<>();
+            keyValuePair.put("title", getString(R.string.failed));
+            keyValuePair.put("spKey", "Failed!");
+            keyValuePair.put("category", "Failed!");
+            titleAndSpKeyArrayList.add(keyValuePair);
+        } else {
+            try {
+                jsonObject = new JSONObject(jsonContentString);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (jsonObject == null) {
+                HashMap<String, String> keyValuePair = new HashMap<>();
+                keyValuePair.put("title", getString(R.string.parseFailed));
+                keyValuePair.put("spKey", "Failed!");
+                keyValuePair.put("category", "Failed!");
+                titleAndSpKeyArrayList.add(keyValuePair);
+            } else {
+                generateList(jsonObject, titleAndSpKeyArrayList);
                 if (titleAndSpKeyArrayList.size() == 0) {
                     HashMap<String, String> keyValuePair = new HashMap<>();
                     keyValuePair.put("title", getString(R.string.nothing));
@@ -59,18 +77,13 @@ public class BackupImportChooserActivity extends Activity {
                     keyValuePair.put("category", "Failed!");
                     titleAndSpKeyArrayList.add(keyValuePair);
                 }
-            } else {
-                HashMap<String, String> keyValuePair = new HashMap<>();
-                keyValuePair.put("title", getString(R.string.parseFailed));
-                keyValuePair.put("spKey", "Failed!");
-                keyValuePair.put("category", "Failed!");
-                titleAndSpKeyArrayList.add(keyValuePair);
             }
         }
 
-        final SimpleAdapter adapter =
-                new SimpleAdapter(
+        final BackupImportChooserActivitySwitchSimpleAdapter adapter =
+                new BackupImportChooserActivitySwitchSimpleAdapter(
                         this,
+                        jsonObject,
                         titleAndSpKeyArrayList,
                         R.layout.bica_list_item,
                         new String[]{"title"},
@@ -124,18 +137,11 @@ public class BackupImportChooserActivity extends Activity {
         // 一键冻结、一键解冻、离开冻结列表 结束
     }
 
-    private boolean generateList(String jsonContent, ArrayList<HashMap<String, String>> list) {
+    private void generateList(JSONObject jsonObject, ArrayList<HashMap<String, String>> list) {
         final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         final AppPreferences appPreferences = new AppPreferences(getApplicationContext());
         final Context context = getApplicationContext();
 
-        final JSONObject jsonObject;
-        try {
-            jsonObject = new JSONObject(jsonContent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return false;
-        }
 
         final Iterator<String> jsonKeysIterator = jsonObject.keys();
         while (jsonKeysIterator.hasNext()) {
@@ -170,8 +176,6 @@ public class BackupImportChooserActivity extends Activity {
                     break;
             }
         }
-
-        return true;
     }
 
     private void generateGeneralSettingsBooleanList(JSONObject jsonObject, ArrayList<HashMap<String, String>> list) {
@@ -184,7 +188,7 @@ public class BackupImportChooserActivity extends Activity {
             return;
         }
         Iterator<String> it = generalSettingsBooleanJSONObject.keys();
-        String moreSettingsDashLineLabel = getString(R.string.scheduledTaskDashLineLabel);
+        String moreSettingsDashLineLabel = getString(R.string.moreSettingsDashLineLabel);
         String s;
         while (it.hasNext()) {
             s = it.next();
@@ -238,7 +242,7 @@ public class BackupImportChooserActivity extends Activity {
         }
         Iterator<String> it = generalSettingsIntJSONObject.keys();
         String s;
-        String moreSettingsDashLineLabel = getString(R.string.scheduledTaskDashLineLabel);
+        String moreSettingsDashLineLabel = getString(R.string.moreSettingsDashLineLabel);
         while (it.hasNext()) {
             s = it.next();
             switch (s) {
@@ -268,7 +272,7 @@ public class BackupImportChooserActivity extends Activity {
         if (generalSettingsStringJSONObject == null) {
             return;
         }
-        String moreSettingsDashLineLabel = getString(R.string.scheduledTaskDashLineLabel);
+        String moreSettingsDashLineLabel = getString(R.string.moreSettingsDashLineLabel);
         Iterator<String> it = generalSettingsStringJSONObject.keys();
         String s;
         while (it.hasNext()) {

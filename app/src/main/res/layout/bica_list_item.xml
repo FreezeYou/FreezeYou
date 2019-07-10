@@ -7,6 +7,8 @@
     <Switch
         android:id="@+id/bica_list_item_switch"
         android:layout_width="match_parent"
+        android:textOn="@string/impt"
+        android:textOff="@string/no"
         android:layout_height="wrap_content"
         android:checked="true"
         android:padding="20dp" />
