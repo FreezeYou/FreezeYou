@@ -21,6 +21,7 @@ class BackupImportChooserActivitySwitchSimpleAdapter extends SimpleAdapter {
     private Context mContext;
     private ArrayList<HashMap<String, String>> mData;
     private ArrayList<HashMap<String, String>> needExcludeData = new ArrayList<>();
+    private ArrayList<Integer> isDisabledList = new ArrayList<>();
     private JSONObject mJsonObject = null;
 
     /**
@@ -52,39 +53,42 @@ class BackupImportChooserActivitySwitchSimpleAdapter extends SimpleAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        if (view == null) {
-            view = LayoutInflater.from(mContext).inflate(R.layout.bica_list_item, null);
-            Switch s = view.findViewById(R.id.bica_list_item_switch);
-            s.setText(mData.get(position).get("title"));
-            String category = mData.get(position).get("category");
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                if ("userTimeScheduledTasks".equals(category) || "userTriggerScheduledTasks".equals(category)) {
-                    s.setChecked(true);
-                    s.setEnabled(false);
-                }
-            }
-            if ("Failed!".equals(category)) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.bica_list_item, null);
+        Switch s = view.findViewById(R.id.bica_list_item_switch);
+        s.setText(mData.get(position).get("title"));
+        String category = mData.get(position).get("category");
+        s.setChecked(!isDisabledList.contains(position));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            if ("userTimeScheduledTasks".equals(category) || "userTriggerScheduledTasks".equals(category)) {
                 s.setChecked(true);
                 s.setEnabled(false);
             }
-            s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        needExcludeData.remove(mData.get(position));
-                    } else {
-                        if (!needExcludeData.contains(mData.get(position))) {
-                            needExcludeData.add(mData.get(position));
-                        }
+        }
+        if ("Failed!".equals(category)) {
+            s.setChecked(true);
+            s.setEnabled(false);
+        }
+        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    isDisabledList.remove((Integer) position);
+                    needExcludeData.remove(mData.get(position));
+                } else {
+                    if (!needExcludeData.contains(mData.get(position))) {
+                        needExcludeData.add(mData.get(position));
+                    }
+                    if (!isDisabledList.contains(position)) {
+                        isDisabledList.add(position);
                     }
                 }
-            });
-        }
+            }
+        });
+
         return view;
     }
 
-    public JSONObject getFinalList() {
+    JSONObject getFinalList() {
         if (mJsonObject == null) {
             return new JSONObject();
         }

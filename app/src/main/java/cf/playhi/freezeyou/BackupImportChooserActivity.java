@@ -3,6 +3,7 @@ package cf.playhi.freezeyou;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -30,6 +31,17 @@ public class BackupImportChooserActivity extends Activity {
         setContentView(R.layout.bica_main);
 
         onCreateInit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void onCreateInit() {
@@ -106,11 +118,15 @@ public class BackupImportChooserActivity extends Activity {
                 final ListView mainListView = findViewById(R.id.bica_main_listView);
                 BackupImportChooserActivitySwitchSimpleAdapter adapter =
                         (BackupImportChooserActivitySwitchSimpleAdapter) mainListView.getAdapter();
-                BackupUtils.importContents(
+                if (BackupUtils.importContents(
                         getApplicationContext(),
                         BackupImportChooserActivity.this,
-                        adapter.getFinalList());
-
+                        adapter.getFinalList())) {
+                    ToastUtils.showToast(BackupImportChooserActivity.this, R.string.success);
+                } else {
+                    ToastUtils.showToast(BackupImportChooserActivity.this, R.string.failed);
+                }
+                finish();
             }
         });
     }
