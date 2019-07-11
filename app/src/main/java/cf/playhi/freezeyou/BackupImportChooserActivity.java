@@ -276,7 +276,6 @@ public class BackupImportChooserActivity extends Activity {
         }
         Iterator<String> it = generalSettingsIntJSONObject.keys();
         String s;
-        String moreSettingsDashLineLabel = getString(R.string.moreSettingsDashLineLabel);
         while (it.hasNext()) {
             s = it.next();
             switch (s) {
@@ -284,9 +283,8 @@ public class BackupImportChooserActivity extends Activity {
                 case "sortMethodStatus":
                     HashMap<String, String> keyValuePair = new HashMap<>();
                     keyValuePair.put("title",
-                            String.format(moreSettingsDashLineLabel,
-                                    keyToStringIdValuePair.containsKey(s) ?
-                                            keyToStringIdValuePair.get(s) : s));
+                            keyToStringIdValuePair.containsKey(s) ?
+                                    keyToStringIdValuePair.get(s) : s);
                     keyValuePair.put("spKey", s);
                     keyValuePair.put("category", "generalSettings_int");
                     list.add(keyValuePair);

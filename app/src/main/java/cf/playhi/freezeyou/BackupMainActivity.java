@@ -261,6 +261,10 @@ public class BackupMainActivity extends Activity {
                     "onClickFunctionStatus",
                     defSP.getInt("onClickFunctionStatus", 0)
             );
+            generalSettingsIntJSONObject.put(
+                    "sortMethodStatus",
+                    defSP.getInt("sortMethodStatus", 0)
+            );
             generalSettingsIntJSONArray.put(generalSettingsIntJSONObject);
             finalOutputJsonObject.put("generalSettings_int", generalSettingsIntJSONArray);
             // Int 结束
