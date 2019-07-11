@@ -294,6 +294,15 @@
     <string name="resetUseTimes">Reset usage counter</string>
     <string name="selectAll">Select all</string>
     <string name="selectUnselected">Inverse selection</string>
+    <string name="onClickFunctionStatus">On click function status</string>
+    <string name="sortMethodStatus">Sort method status</string>
+    <string name="oneKeyFreezeList">Onekey freeze list</string>
+    <string name="oneKeyUFList">Onekey unfreeze list</string>
+    <string name="freezeOnceQuitList">Freeze once quit list</string>
+    <string name="scheduledTaskDashLineLabel">Scheduled Task - %1$s</string>
+    <string name="moreSettingsDashLineLabel">More Settings - %1$s</string>
+    <string name="parseFailed">Parse failed</string>
+    <string name="nothing">None</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
