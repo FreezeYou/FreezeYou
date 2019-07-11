@@ -303,6 +303,7 @@
     <string name="moreSettingsDashLineLabel">更多设置 - %1$s</string>
     <string name="parseFailed">解析失败</string>
     <string name="nothing">无</string>
+    <string name="share">分享</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>显示全部</item>
