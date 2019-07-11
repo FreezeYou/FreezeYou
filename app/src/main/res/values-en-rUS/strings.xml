@@ -295,7 +295,7 @@
     <string name="selectAll">Select all</string>
     <string name="selectUnselected">Inverse selection</string>
     <string name="onClickFunctionStatus">On click function status</string>
-    <string name="sortMethodStatus">保存排序方式状态</string>
+    <string name="sortMethodStatus">排序方式状态</string>
     <string name="oneKeyFreezeList">Onekey freeze list</string>
     <string name="oneKeyUFList">Onekey unfreeze list</string>
     <string name="freezeOnceQuitList">Freeze once quit list</string>
