@@ -301,6 +301,7 @@
     <string name="moreSettingsDashLineLabel">更多设置 - %1$s</string>
     <string name="parseFailed">解析失败</string>
     <string name="nothing">无</string>
+    <string name="share">分享</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>

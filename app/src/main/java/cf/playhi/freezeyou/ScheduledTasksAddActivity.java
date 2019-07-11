@@ -17,7 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static cf.playhi.freezeyou.TasksUtils.publishTask;
@@ -51,8 +56,10 @@ public class ScheduledTasksAddActivity extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.staa_menu, menu);
         String cTheme = ThemeUtils.getUiTheme(ScheduledTasksAddActivity.this);
-        if ("white".equals(cTheme) || "default".equals(cTheme))
+        if ("white".equals(cTheme) || "default".equals(cTheme)) {
             menu.findItem(R.id.menu_staa_delete).setIcon(R.drawable.ic_action_delete_light);
+            menu.findItem(R.id.menu_staa_share).setIcon(R.drawable.ic_action_share_light);
+        }
         return true;
     }
 
@@ -88,6 +95,52 @@ public class ScheduledTasksAddActivity extends Activity {
                             }
                         })
                         .create().show();
+                return true;
+            case R.id.menu_staa_share:
+                final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                JSONObject finalOutputJsonObject = new JSONObject();
+                JSONArray userScheduledTasksJSONArray = new JSONArray();
+                JSONObject oneUserScheduledTaskJSONObject = new JSONObject();
+                try {
+                    if (isTimeTask) {
+                        HashMap<String, Object> hm = new HashMap<>();
+                        if (!prepareSaveTimeTaskData(defSP, hm)) {
+                            return true;
+                        }
+                        oneUserScheduledTaskJSONObject.put("hour", (int) hm.get("hour"));
+                        oneUserScheduledTaskJSONObject.put("minutes", (int) hm.get("minutes"));
+                        oneUserScheduledTaskJSONObject.put("enabled", (int) hm.get("enabled"));
+                        oneUserScheduledTaskJSONObject.put("label", (String) hm.get("label"));
+                        oneUserScheduledTaskJSONObject.put("task", (String) hm.get("task"));
+                        oneUserScheduledTaskJSONObject.put("repeat", (String) hm.get("repeat"));
+                    } else {
+                        oneUserScheduledTaskJSONObject.put("tgextra",
+                                defSP.getString("stma_add_trigger_extra_parameters", ""));
+                        oneUserScheduledTaskJSONObject.put("enabled",
+                                defSP.getBoolean("stma_add_enable", true) ? 1 : 0);
+                        oneUserScheduledTaskJSONObject.put("label",
+                                defSP.getString("stma_add_label", getString(R.string.label)));
+                        oneUserScheduledTaskJSONObject.put("task",
+                                defSP.getString("stma_add_task", "okuf"));
+                        oneUserScheduledTaskJSONObject.put("tg",
+                                defSP.getString("stma_add_trigger", ""));
+                    }
+                    userScheduledTasksJSONArray.put(oneUserScheduledTaskJSONObject);
+                    finalOutputJsonObject.put(
+                            isTimeTask ? "userTimeScheduledTasks" : "userTriggerScheduledTasks",
+                            userScheduledTasksJSONArray
+                    );
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT,
+                            GZipUtils.gzipCompress(finalOutputJsonObject.toString()));
+                    shareIntent = Intent.createChooser(shareIntent, getString(R.string.share));
+                    startActivity(shareIntent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showToast(this, R.string.failed);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -179,7 +232,7 @@ public class ScheduledTasksAddActivity extends Activity {
         });
     }
 
-    private boolean saveTimeTaskData(SharedPreferences defaultSharedPreferences, int id) {
+    private boolean prepareSaveTimeTaskData(SharedPreferences defaultSharedPreferences, Map<String, Object> returnPreparedData) {
         String time = defaultSharedPreferences.getString("stma_add_time", "09:09");
         if (time == null) {
             time = "09:09";
@@ -224,6 +277,26 @@ public class ScheduledTasksAddActivity extends Activity {
         String repeat = repeatStringBuilder.toString().equals("") ? "0" : repeatStringBuilder.toString();
         String label = defaultSharedPreferences.getString("stma_add_label", getString(R.string.label));
         String task = defaultSharedPreferences.getString("stma_add_task", "okuf");
+        returnPreparedData.put("hour", hour);
+        returnPreparedData.put("minutes", minutes);
+        returnPreparedData.put("enabled", enabled);
+        returnPreparedData.put("repeat", repeat);
+        returnPreparedData.put("label", label == null ? "" : label);
+        returnPreparedData.put("task", task == null ? "" : task);
+        return true;
+    }
+
+    private boolean saveTimeTaskData(SharedPreferences defaultSharedPreferences, int id) {
+        HashMap<String, Object> returnData = new HashMap<>();
+        if (!prepareSaveTimeTaskData(defaultSharedPreferences, returnData)) {
+            return false;
+        }
+        int hour = (int) returnData.get("hour");
+        int minutes = (int) returnData.get("minutes");
+        int enabled = (int) returnData.get("enabled");
+        String repeat = (String) returnData.get("repeat");
+        String label = (String) returnData.get("label");
+        String task = (String) returnData.get("task");
         SQLiteDatabase db = openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
