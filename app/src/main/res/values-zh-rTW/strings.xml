@@ -295,7 +295,7 @@
     <string name="selectAll">全选</string>
     <string name="selectUnselected">反选</string>
     <string name="onClickFunctionStatus">单击功能状态</string>
-    <string name="sortMethodStatus">保存排序方式状态</string>
+    <string name="sortMethodStatus">排序方式状态</string>
     <string name="oneKeyFreezeList">一键冻结列表</string>
     <string name="oneKeyUFList">一键解冻列表</string>
     <string name="freezeOnceQuitList">离开冻结列表</string>
