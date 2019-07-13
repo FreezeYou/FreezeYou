@@ -21,7 +21,7 @@ import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class BackupImportChooserActivity extends Activity {
 
-    HashMap<String, String> keyToStringIdValuePair = new HashMap<>();
+    private final HashMap<String, String> keyToStringIdValuePair = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,14 +118,10 @@ public class BackupImportChooserActivity extends Activity {
                 final ListView mainListView = findViewById(R.id.bica_main_listView);
                 BackupImportChooserActivitySwitchSimpleAdapter adapter =
                         (BackupImportChooserActivitySwitchSimpleAdapter) mainListView.getAdapter();
-                if (BackupUtils.importContents(
+                BackupUtils.importContents(
                         getApplicationContext(),
-                        BackupImportChooserActivity.this,
-                        adapter.getFinalList())) {
-                    ToastUtils.showToast(BackupImportChooserActivity.this, R.string.success);
-                } else {
-                    ToastUtils.showToast(BackupImportChooserActivity.this, R.string.failed);
-                }
+                        BackupImportChooserActivity.this, adapter.getFinalList());
+                ToastUtils.showToast(BackupImportChooserActivity.this, R.string.finish);
                 finish();
             }
         });
@@ -379,6 +375,11 @@ public class BackupImportChooserActivity extends Activity {
             keyValuePair.put("title",
                     String.format(scheduledTaskDashLineLabel,
                             oneUserTimeScheduledTaskJSONObject.optString("label", defaultLabel)));
+            try {
+                oneUserTimeScheduledTaskJSONObject.put("i", Integer.toString(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             keyValuePair.put("spKey", Integer.toString(i));
             keyValuePair.put("category", "userTimeScheduledTasks");
             list.add(keyValuePair);
@@ -403,6 +404,11 @@ public class BackupImportChooserActivity extends Activity {
             keyValuePair.put("title",
                     String.format(scheduledTaskDashLineLabel,
                             oneUserTriggerScheduledTaskJSONObject.optString("label", defaultLabel)));
+            try {
+                oneUserTriggerScheduledTaskJSONObject.put("i", Integer.toString(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             keyValuePair.put("spKey", Integer.toString(i));
             keyValuePair.put("category", "userTriggerScheduledTasks");
             list.add(keyValuePair);

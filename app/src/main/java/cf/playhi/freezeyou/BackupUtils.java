@@ -58,7 +58,7 @@ final class BackupUtils {
         SettingsUtils.syncAndCheckSharedPreference(context, activity, sp, key, ap);
     }
 
-    static boolean importUserTimeTasksJSONArray(Context context, JSONObject jsonObject) {
+    private static boolean importUserTimeTasksJSONArray(Context context, JSONObject jsonObject) {
         JSONArray userTimeScheduledTasksJSONArray =
                 jsonObject.optJSONArray("userTimeScheduledTasks");
         if (userTimeScheduledTasksJSONArray == null) {
@@ -77,6 +77,9 @@ final class BackupUtils {
                 oneUserTimeScheduledTaskJSONObject = userTimeScheduledTasksJSONArray.optJSONObject(i);
                 if (oneUserTimeScheduledTaskJSONObject == null) {
                     isCompletelySuccess = false;
+                    continue;
+                }
+                if (oneUserTimeScheduledTaskJSONObject.optBoolean("doNotImport", false)) {
                     continue;
                 }
                 db.execSQL(
@@ -99,7 +102,7 @@ final class BackupUtils {
         return isCompletelySuccess;
     }
 
-    static boolean importUserTriggerTasksJSONArray(Context context, JSONObject jsonObject) {
+    private static boolean importUserTriggerTasksJSONArray(Context context, JSONObject jsonObject) {
         JSONArray userTriggerScheduledTasksJSONArray =
                 jsonObject.optJSONArray("userTriggerScheduledTasks");
         if (userTriggerScheduledTasksJSONArray == null) {
@@ -118,6 +121,9 @@ final class BackupUtils {
                 oneUserTriggerScheduledTaskJSONObject = userTriggerScheduledTasksJSONArray.optJSONObject(i);
                 if (oneUserTriggerScheduledTaskJSONObject == null) {
                     isCompletelySuccess = false;
+                    continue;
+                }
+                if (oneUserTriggerScheduledTaskJSONObject.optBoolean("doNotImport", false)) {
                     continue;
                 }
                 db.execSQL(
@@ -139,7 +145,7 @@ final class BackupUtils {
         return isCompletelySuccess;
     }
 
-    static boolean importOneKeyLists(Context context, JSONObject jsonObject, AppPreferences appPreferences) {
+    private static boolean importOneKeyLists(Context context, JSONObject jsonObject, AppPreferences appPreferences) {
         JSONArray array = jsonObject.optJSONArray("oneKeyList");
         if (array == null) {
             return false;
@@ -155,7 +161,7 @@ final class BackupUtils {
         return true;
     }
 
-    static void importOneKeyListsFromProcessedJSONObject(
+    private static void importOneKeyListsFromProcessedJSONObject(
             Context context, JSONObject oneKeyListJSONObject, AppPreferences appPreferences) {
         Iterator<String> it = oneKeyListJSONObject.keys();
         String s;
@@ -184,7 +190,7 @@ final class BackupUtils {
     }
 
 
-    static boolean importIntSharedPreferences(
+    private static boolean importIntSharedPreferences(
             Context context, Activity activity, JSONObject jsonObject,
             SharedPreferences defSP, AppPreferences appPreferences) {
         // Int 开始
@@ -203,7 +209,7 @@ final class BackupUtils {
         return true;
     }
 
-    static void importIntSharedPreferencesFromProcessedJSONObject(
+    private static void importIntSharedPreferencesFromProcessedJSONObject(
             Context context, Activity activity, JSONObject generalSettingsIntJSONObject,
             SharedPreferences defSP, AppPreferences appPreferences) {
         Iterator<String> it = generalSettingsIntJSONObject.keys();
@@ -222,7 +228,7 @@ final class BackupUtils {
         }
     }
 
-    static boolean importStringSharedPreferences(
+    private static boolean importStringSharedPreferences(
             Context context, Activity activity, JSONObject jsonObject,
             SharedPreferences defSP, AppPreferences appPreferences) {
         // String 开始
@@ -240,7 +246,7 @@ final class BackupUtils {
         return true;
     }
 
-    static void importStringSharedPreferencesFromProcessedJSONObject(
+    private static void importStringSharedPreferencesFromProcessedJSONObject(
             Context context, Activity activity, JSONObject generalSettingsStringJSONObject,
             SharedPreferences defSP, AppPreferences appPreferences) {
         Iterator<String> it = generalSettingsStringJSONObject.keys();
@@ -262,7 +268,7 @@ final class BackupUtils {
         }
     }
 
-    static boolean importBooleanSharedPreferences(
+    private static boolean importBooleanSharedPreferences(
             Context context, Activity activity, JSONObject jsonObject,
             SharedPreferences defSP, AppPreferences appPreferences) {
         // boolean 开始
@@ -281,7 +287,7 @@ final class BackupUtils {
         return true;
     }
 
-    static void importBooleanSharedPreferencesFromProcessedJSONObject(
+    private static void importBooleanSharedPreferencesFromProcessedJSONObject(
             Context context, Activity activity, JSONObject generalSettingsBooleanJSONObject,
             SharedPreferences defSP, AppPreferences appPreferences) {
         Iterator<String> it = generalSettingsBooleanJSONObject.keys();
@@ -322,7 +328,7 @@ final class BackupUtils {
     }
 
 
-    static boolean importContents(Context context, Activity activity, JSONObject jsonObject) {
+    static void importContents(Context context, Activity activity, JSONObject jsonObject) {
         final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(context);
         final AppPreferences appPreferences = new AppPreferences(context);
 
@@ -360,7 +366,6 @@ final class BackupUtils {
             }
         }
 
-        return true;
     }
 
 }

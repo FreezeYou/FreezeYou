@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou;
 
 import android.content.Context;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +17,10 @@ import java.util.HashMap;
 
 class BackupImportChooserActivitySwitchSimpleAdapter extends SimpleAdapter {
 
-    private Context mContext;
-    private ArrayList<HashMap<String, String>> mData;
-    private ArrayList<HashMap<String, String>> needExcludeData = new ArrayList<>();
-    private ArrayList<Integer> isDisabledList = new ArrayList<>();
+    private final Context mContext;
+    private final ArrayList<HashMap<String, String>> mData;
+    private final ArrayList<HashMap<String, String>> needExcludeData = new ArrayList<>();
+    private final ArrayList<Integer> isDisabledList = new ArrayList<>();
     private JSONObject mJsonObject = null;
 
     /**
@@ -58,12 +57,6 @@ class BackupImportChooserActivitySwitchSimpleAdapter extends SimpleAdapter {
         s.setText(mData.get(position).get("title"));
         String category = mData.get(position).get("category");
         s.setChecked(!isDisabledList.contains(position));
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            if ("userTimeScheduledTasks".equals(category) || "userTriggerScheduledTasks".equals(category)) {
-                s.setChecked(true);
-                s.setEnabled(false);
-            }
-        }
         if ("Failed!".equals(category)) {
             s.setChecked(true);
             s.setEnabled(false);
@@ -113,9 +106,15 @@ class BackupImportChooserActivitySwitchSimpleAdapter extends SimpleAdapter {
                     break;
                 case "userTimeScheduledTasks":
                 case "userTriggerScheduledTasks":
-                    // 4.4以下的就不管了吧[托腮]，就不给选了，直接看一眼导入得了0_0
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        array.remove(Integer.parseInt(spKey));
+                    for (int j = 0; j < array.length(); ++j) {
+                        JSONObject jsonObject = array.optJSONObject(j);
+                        if (jsonObject == null || !spKey.equals(jsonObject.optString("i", "-1")))
+                            continue;
+                        try {
+                            jsonObject.put("doNotImport", true);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 default:
