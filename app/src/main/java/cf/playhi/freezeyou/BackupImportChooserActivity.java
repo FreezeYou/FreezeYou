@@ -159,6 +159,7 @@ public class BackupImportChooserActivity extends Activity {
         keyToStringIdValuePair.put("tryDelApkAfterInstalled", getString(R.string.tryDelApkAfterInstalled));
         keyToStringIdValuePair.put("useForegroundService", getString(R.string.useForegroundService));
         keyToStringIdValuePair.put("debugModeEnabled", getString(R.string.debugMode));
+        keyToStringIdValuePair.put("notAllowInstallWhenIsObsd", getString(R.string.notAllowWhenIsObsd));
         // boolean 结束
         // Int 开始
         keyToStringIdValuePair.put("onClickFunctionStatus", getString(R.string.onClickFunctionStatus));

@@ -199,6 +199,10 @@
             android:defaultValue="false"
             android:key="tryDelApkAfterInstalled"
             android:title="@string/tryDelApkAfterInstalled" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="notAllowInstallWhenIsObsd"
+            android:title="@string/notAllowWhenIsObsd" />
         <Preference
             android:key="manageIpaAutoAllow"
             android:title="@string/manageIpaAutoAllow" />

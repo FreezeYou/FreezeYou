@@ -97,6 +97,7 @@ final class SettingsUtils {
                 break;
             case "notificationBarFreezeImmediately":
             case "showInRecents":
+            case "notAllowInstallWhenIsObsd":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, true));
                 break;
             case "organizationName":
@@ -124,7 +125,7 @@ final class SettingsUtils {
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 }
                 break;
-//            case "languagePref":
+            //            case "languagePref":
 //                checkLanguage(context);
 //                showToast(activity,R.string.willTakeEffectsNextLaunch);
 //                break;

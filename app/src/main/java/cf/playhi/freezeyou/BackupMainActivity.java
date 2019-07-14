@@ -215,6 +215,10 @@ public class BackupMainActivity extends Activity {
                     "debugModeEnabled",
                     convertSharedPreference(appPreferences, "debugModeEnabled", false)
             );
+            generalSettingsBooleanJSONObject.put(
+                    "notAllowInstallWhenIsObsd",
+                    convertSharedPreference(appPreferences, "notAllowInstallWhenIsObsd", true)
+            );
             generalSettingsBooleanJSONArray.put(generalSettingsBooleanJSONObject);
             finalOutputJsonObject.put("generalSettings_boolean", generalSettingsBooleanJSONArray);
             // boolean 结束

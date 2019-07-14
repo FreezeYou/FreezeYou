@@ -330,7 +330,9 @@ public class InstallPackagesActivity extends Activity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (installPackagesAlertDialog.isObsd()) {
+                        if (new AppPreferences(getApplicationContext())
+                                .getBoolean("notAllowInstallWhenIsObsd", true)
+                                && installPackagesAlertDialog.isObsd()) {
                             AlertDialogUtils.buildAlertDialog(
                                     InstallPackagesActivity.this,
                                     android.R.drawable.ic_dialog_alert,

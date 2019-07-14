@@ -302,6 +302,7 @@
     <string name="parseFailed">解析失败</string>
     <string name="nothing">无</string>
     <string name="share">分享</string>
+    <string name="notAllowWhenIsObsd">不允许遮罩层覆盖</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>

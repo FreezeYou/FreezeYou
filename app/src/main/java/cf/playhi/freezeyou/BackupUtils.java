@@ -318,6 +318,7 @@ final class BackupUtils {
                 case "tryDelApkAfterInstalled":
                 case "useForegroundService":
                 case "debugModeEnabled":
+                case "notAllowInstallWhenIsObsd":
                     importBooleanSharedPreference(
                             context, activity, generalSettingsBooleanJSONObject, defSP, appPreferences, s);
                     break;
