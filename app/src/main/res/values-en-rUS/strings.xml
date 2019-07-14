@@ -304,7 +304,7 @@
     <string name="parseFailed">Parse failed</string>
     <string name="nothing">None</string>
     <string name="share">Share</string>
-    <string name="notAllowWhenIsObsd">不允许遮罩层覆盖</string>
+    <string name="notAllowWhenIsObsd">Don\'t allow window being obscured</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
