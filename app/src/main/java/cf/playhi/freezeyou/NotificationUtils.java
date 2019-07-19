@@ -78,7 +78,6 @@ final class NotificationUtils {
         }
     }
 
-    @SuppressLint("ApplySharedPref")
     static void deleteNotification(Context context, String pkgName) {
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

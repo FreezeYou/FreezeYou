@@ -33,7 +33,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -935,19 +934,10 @@ public class Main extends Activity {
                 new MainAppListSimpleAdapter(
                         Main.this,
                         (ArrayList<Map<String, Object>>) AppList.clone(),
+                        selectedPackages,
                         R.layout.app_list_1,
                         new String[]{"Img", "Name", "PackageName", "isFrozen"},
                         new int[]{R.id.img, R.id.name, R.id.pkgName, R.id.isFrozen});//isFrozen、isAutoList传图像资源id
-
-        adapter.setViewBinder(new MainAppListSimpleAdapter.ViewBinder() {
-            public boolean setViewValue(View view, Object data, String textRepresentation) {
-                if (view instanceof ImageView && data instanceof Drawable) {
-                    ((ImageView) view).setImageDrawable((Drawable) data);
-                    return true;
-                } else
-                    return false;
-            }
-        });
 
         search_editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -997,6 +987,7 @@ public class Main extends Activity {
                     selectedPackages.remove(pkgName);
                     actionMode.setTitle(Integer.toString(selectedPackages.size()));
                 }
+                adapter.notifyDataSetChanged();
             }
 
             @Override
