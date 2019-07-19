@@ -88,7 +88,7 @@ final class NotificationUtils {
         }
     }
 
-    static boolean deleteNotifying(Context context, String pkgName) {
+    private static boolean deleteNotifying(Context context, String pkgName) {
         AppPreferences defaultSharedPreferences = new AppPreferences(context);
         String notifying = defaultSharedPreferences.getString("notifying", "");
         return notifying == null || !notifying.contains(pkgName + ",") || defaultSharedPreferences.put("notifying", notifying.replace(pkgName + ",", ""));

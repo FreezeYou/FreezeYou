@@ -6,7 +6,7 @@ import android.content.Intent;
 
 import java.io.File;
 
-import static cf.playhi.freezeyou.NotificationUtils.deleteNotifying;
+import static cf.playhi.freezeyou.NotificationUtils.deleteNotification;
 import static cf.playhi.freezeyou.OneKeyListUtils.removeFromOneKeyList;
 
 public class UninstallReceiver extends BroadcastReceiver {
@@ -38,7 +38,7 @@ public class UninstallReceiver extends BroadcastReceiver {
                     context.getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE)
                             .edit().remove(pkgName).apply();
                     //清理可能存在的通知栏提示重新显示数据
-                    deleteNotifying(context, pkgName);
+                    deleteNotification(context, pkgName);
                 }
             }
         }
