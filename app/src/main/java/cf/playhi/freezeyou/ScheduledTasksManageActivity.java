@@ -34,8 +34,6 @@ public class ScheduledTasksManageActivity extends Activity {
 
     private final ArrayList<Integer> integerArrayList = new ArrayList<>();
     private final ArrayList<Integer> selectedTasksPositions = new ArrayList<>();
-    private int themeDotResId;
-    private int themeSecondDotResId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +91,6 @@ public class ScheduledTasksManageActivity extends Activity {
     }
 
     private void generateTasksList() {
-        themeDotResId = getThemeDot(ScheduledTasksManageActivity.this);
-        themeSecondDotResId = getThemeSecondDot(ScheduledTasksManageActivity.this);
         final ListView tasksListView = findViewById(R.id.stma_tasksListview);
         final ArrayList<Map<String, Object>> tasksData = new ArrayList<>();
 
@@ -102,8 +98,9 @@ public class ScheduledTasksManageActivity extends Activity {
         generateTriggerTaskList(integerArrayList, tasksData);
 
         ScheduledTasksManageSimpleAdapter adapter =
-                new ScheduledTasksManageSimpleAdapter(this, tasksData, R.layout.stma_item, new String[]{"label",
-                        "time", "enabled"}, new int[]{R.id.stma_label, R.id.stma_time, R.id.stma_status});
+                new ScheduledTasksManageSimpleAdapter(this, tasksData, integerArrayList,
+                        R.layout.stma_item, new String[]{"label", "time", "enabled"},
+                        new int[]{R.id.stma_label, R.id.stma_time, R.id.stma_switch});
 
         tasksListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
@@ -187,25 +184,12 @@ public class ScheduledTasksManageActivity extends Activity {
                 final String label = (String) map.get("label");
                 final String s = ((String) map.get("time"));
                 final boolean isTimeTask = ((s != null) && s.contains(":"));
-//                if (Build.VERSION.SDK_INT >= 21) {
-//                    startActivityForResult(
-//                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
-//                                    .putExtra("label", label)
-//                                    .putExtra("time", isTimeTask)
-//                                    .putExtra("id", integerArrayList.get(i)),
-//                            isTimeTask ? 1 : 2,
-//                            ActivityOptions
-//                                    .makeSceneTransitionAnimation(
-//                                            ScheduledTasksManageActivity.this, view, "add")
-//                                    .toBundle());
-//                } else {
                 startActivityForResult(
                         new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
                                 .putExtra("label", label)
                                 .putExtra("time", isTimeTask)
                                 .putExtra("id", integerArrayList.get(i)),
                         isTimeTask ? 1 : 2);
-//                }
             }
         });
         tasksListView.setAdapter(adapter);
@@ -234,48 +218,24 @@ public class ScheduledTasksManageActivity extends Activity {
         addTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (Build.VERSION.SDK_INT >= 21)
-//                    startActivityForResult(
-//                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
-//                                    .putExtra("label", getString(R.string.add))
-//                                    .putExtra("time", true),
-//                            1,
-//                            ActivityOptions
-//                                    .makeSceneTransitionAnimation(
-//                                            ScheduledTasksManageActivity.this, addTimeButton, "add")
-//                                    .toBundle());
-//                else {
                 changeFloatButtonsStatus(false);
                 startActivityForResult(
                         new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
                                 .putExtra("label", getString(R.string.add))
                                 .putExtra("time", true),
                         1);
-//                }
             }
         });
 
         addTriggerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (Build.VERSION.SDK_INT >= 21) {
-//                    startActivityForResult(
-//                            new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
-//                                    .putExtra("label", getString(R.string.add))
-//                                    .putExtra("time", false),
-//                            2,
-//                            ActivityOptions
-//                                    .makeSceneTransitionAnimation(
-//                                            ScheduledTasksManageActivity.this, addTriggerButton, "add")
-//                                    .toBundle());
-//                } else {
                 changeFloatButtonsStatus(false);
                 startActivityForResult(
                         new Intent(ScheduledTasksManageActivity.this, ScheduledTasksAddActivity.class)
                                 .putExtra("label", getString(R.string.add))
                                 .putExtra("time", false),
                         2);
-//                }
             }
         });
     }
@@ -331,7 +291,7 @@ public class ScheduledTasksManageActivity extends Activity {
                 keyValuePair.put("label", label);
                 keyValuePair.put("time", time);
                 keyValuePair.put("isTimeTask", true);
-                keyValuePair.put("enabled", enabled == 1 ? themeDotResId : themeSecondDotResId);
+                keyValuePair.put("enabled", enabled == 1);
                 tasksData.add(keyValuePair);
                 integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
                 cursor.moveToNext();
@@ -360,7 +320,7 @@ public class ScheduledTasksManageActivity extends Activity {
                         Arrays.asList(getResources().getStringArray(R.array.triggers))
                                 .get(indexOf == -1 ? 0 : indexOf));
                 keyValuePair.put("isTimeTask", false);
-                keyValuePair.put("enabled", enabled == 1 ? themeDotResId : themeSecondDotResId);
+                keyValuePair.put("enabled", enabled == 1);
                 tasksData.add(keyValuePair);
                 integerArrayList.add(cursor.getInt(cursor.getColumnIndex("_id")));
                 cursor.moveToNext();

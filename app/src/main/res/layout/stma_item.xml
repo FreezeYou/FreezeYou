@@ -1,38 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/applist_selector"
-    android:orientation="horizontal">
+    android:padding="10dp">
 
-    <LinearLayout
+
+    <TextView
+        android:id="@+id/stma_label"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@id/stma_switch"
+        android:layout_toLeftOf="@id/stma_switch"
+        android:singleLine="true"
+        android:textSize="22sp" />
 
-        <TextView
-            android:id="@+id/stma_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textSize="32sp" />
+    <TextView
+        android:id="@+id/stma_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/stma_label"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toStartOf="@id/stma_switch"
+        android:layout_toLeftOf="@id/stma_switch"
+        android:singleLine="true"
+        android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/stma_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/stma_status"
+    <Switch
+        android:id="@+id/stma_switch"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:contentDescription="@string/enable"
-        android:padding="10dp"
-        android:src="@drawable/shapedotwhite" />
-</LinearLayout>
+        android:layout_alignBottom="@id/stma_time"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:focusable="false"/>
+
+</RelativeLayout>
