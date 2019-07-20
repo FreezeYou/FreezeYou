@@ -2,13 +2,10 @@ package cf.playhi.freezeyou;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
