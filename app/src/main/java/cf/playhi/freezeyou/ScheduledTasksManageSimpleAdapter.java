@@ -71,8 +71,8 @@ class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
                                 " WHERE _id = " + mIdIndexArrayList.get(position) + ";"
                 );
                 db.close();
-                if (timeS != null && timeS.contains(":") && !isChecked) {
-                    TasksUtils.cancelTheTask(mContext, mIdIndexArrayList.get(position));
+                if (timeS != null && timeS.contains(":") ) {
+                    TasksUtils.checkTimeTasks(mContext);
                 }
                 notifyDataSetChanged();
             }
