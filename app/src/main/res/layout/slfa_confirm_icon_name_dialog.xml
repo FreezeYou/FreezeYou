@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="18dp">
+
+    <ImageButton
+        android:id="@+id/slfa_confirm_icon_name_dialog_imageButton"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_margin="2dp"
+        android:contentDescription="@string/icon"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_launcher_new_round" />
+
+    <EditText
+        android:id="@+id/slfa_confirm_icon_name_dialog_editText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:layout_weight="1"
+        android:inputType="textPersonName"
+        android:text="@string/folder" />
+
+</LinearLayout>
