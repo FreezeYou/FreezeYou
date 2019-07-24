@@ -181,7 +181,9 @@ public class FUFLauncherShortcutCreator extends Activity {
                             final String pkgName = (String) map.get("PackageName");
                             if (isSlfMode) {
                                 SharedPreferences sp = getSharedPreferences(getIntent().getStringExtra("slf_n"), MODE_PRIVATE);
-                                sp.edit().putString("pkgS", sp.getString("pkgS", "") + pkgName + ",").apply();
+                                if (!OneKeyListUtils.existsInOneKeyList(sp.getString("pkgS", ""), pkgName)) {
+                                    sp.edit().putString("pkgS", sp.getString("pkgS", "") + pkgName + ",").apply();
+                                }
                                 setResult(RESULT_OK);
                             } else {// if (returnPkgName)s
                                 setResult(RESULT_OK, new Intent()

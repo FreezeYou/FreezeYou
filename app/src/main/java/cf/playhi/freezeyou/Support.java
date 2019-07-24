@@ -484,6 +484,14 @@ class Support {
     }
 
     static void showChooseActionPopupMenu(final Context context, View view, final String pkgName, final String name) {
+        showChooseActionPopupMenu(context, view, pkgName, name, false, null);
+    }
+
+    static void showChooseActionPopupMenu(final Context context, View view, final String pkgName, final String name, boolean canRemoveItem, final SharedPreferences folderPkgListSp) {
+        generateChooseActionPopupMenu(context, view, pkgName, name, canRemoveItem, folderPkgListSp).show();
+    }
+
+    private static PopupMenu generateChooseActionPopupMenu(final Context context, View view, final String pkgName, final String name, final boolean canRemoveItem, final SharedPreferences folderPkgListSp) {
         PopupMenu popup = new PopupMenu(context, view);
         popup.inflate(R.menu.main_single_choose_action_menu);
 
@@ -508,6 +516,10 @@ class Support {
             popup.getMenu().findItem(R.id.main_sca_menu_disableAEnable).setTitle(R.string.UfSlashRun);
         } else {
             popup.getMenu().findItem(R.id.main_sca_menu_disableAEnable).setTitle(R.string.freezeSlashRun);
+        }
+
+        if (!canRemoveItem) {
+            popup.getMenu().removeItem(R.id.main_sca_menu_removeFromTheList);
         }
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -554,21 +566,16 @@ class Support {
                                 Freeze.class,
                                 "FreezeYou! " + pkgName,
                                 context);
-//                        context.startActivity(
-//                                new Intent(
-//                                        context, LauncherShortcutConfirmAndGenerateActivity.class)
-//                                        .putExtra("pkgName", pkgName)
-//                                        .putExtra("name", name)
-//                                        .putExtra("id", "FreezeYou! " + pkgName)
-//                                        .putExtra("class", new SerializableClass().setStoredClass(Freeze.class)));
-//                        createShortCut(
-//                                name,
-//                                pkgName,
-//                                getApplicationIcon(context, pkgName, getApplicationInfoFromPkgName(pkgName, context), false),
-//                                Freeze.class,
-//                                "FreezeYou! " + pkgName,
-//                                context
-//                        );
+                        break;
+                    case R.id.main_sca_menu_removeFromTheList:
+                        if (folderPkgListSp != null) {
+                            String folderPkgs = folderPkgListSp.getString("pkgS", "");
+                            if (OneKeyListUtils.existsInOneKeyList(folderPkgs, pkgName)) {
+                                folderPkgListSp.edit()
+                                        .putString("pkgS", folderPkgs.replace(pkgName + ",", ""))
+                                        .apply();
+                            }
+                        }
                         break;
                     default:
                         break;
@@ -576,7 +583,7 @@ class Support {
                 return true;
             }
         });
-        popup.show();
+        return popup;
     }
 
     private static void checkAndShowAppStillNotifyingToast(Context context, String pkgName) {
@@ -662,7 +669,7 @@ class Support {
 
     }
 
-    static void resetTimes(Context context,String dbName) {
+    static void resetTimes(Context context, String dbName) {
         SQLiteDatabase db = context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null);
 
         if (db == null) {

@@ -28,4 +28,7 @@
     <item
         android:id="@+id/main_sca_menu_appDetail"
         android:title="@string/appDetail" />
+    <item
+        android:id="@+id/main_sca_menu_removeFromTheList"
+        android:title="@string/remove" />
 </menu>

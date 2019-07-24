@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import static android.view.Window.FEATURE_NO_TITLE;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
@@ -31,7 +33,7 @@ import static cf.playhi.freezeyou.ApplicationIconUtils.getGrayBitmap;
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
-public class ShortcutLauncherFolderActivity extends Activity {
+public class ShortcutLauncherFolderActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private AlertDialog dialog;
 
@@ -39,6 +41,14 @@ public class ShortcutLauncherFolderActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this, Intent.ACTION_CREATE_SHORTCUT.equals(getIntent().getAction()));
         super.onCreate(savedInstanceState);
+
+        final String uuid = getIntent().getStringExtra("UUID");
+        if (uuid == null) {
+            return;
+        }
+        final SharedPreferences uuidSp = getSharedPreferences(uuid, MODE_PRIVATE);
+        uuidSp.registerOnSharedPreferenceChangeListener(this);
+
         if (Intent.ACTION_CREATE_SHORTCUT.equals(getIntent().getAction())) {
             doCreateShortCut();
         } else {
@@ -59,6 +69,17 @@ public class ShortcutLauncherFolderActivity extends Activity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        final String uuid = getIntent().getStringExtra("UUID");
+        if (uuid == null) {
+            return;
+        }
+        final SharedPreferences uuidSp = getSharedPreferences(uuid, MODE_PRIVATE);
+        uuidSp.unregisterOnSharedPreferenceChangeListener(this);
+        super.onDestroy();
     }
 
     private void doCreateShortCut() {
@@ -131,44 +152,21 @@ public class ShortcutLauncherFolderActivity extends Activity {
 //            if (Build.VERSION.SDK_INT>=16)
 //                slf_apps_gridView.setVerticalSpacing(slf_apps_gridView.getRequestedColumnWidth()/slf_apps_gridView.getNumColumns());
 
-        final ArrayList<HashMap<String, Object>> folderItems = new ArrayList<>();
+        final ArrayList<Map<String, Object>> folderItems = new ArrayList<>();
 
 //            final List<ApplicationInfo> applicationInfo = getPackageManager().getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
 //            int size = applicationInfo == null ? 0 : applicationInfo.size();
 //            String pkgName;
-        SharedPreferences sharedPreferences = getSharedPreferences(uuid, MODE_PRIVATE);
-        slf_folderName_textView.setText(sharedPreferences.getString("folderName", getString(R.string.folder)));
-        String s = sharedPreferences.getString("pkgS", "");
-        String[] pkgS = s == null ? new String[]{} : s.split(",");
-        for (String aPkg : pkgS) {
-            if (!"".equals(aPkg)) {
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("Icon",
-                        Support.realGetFrozenStatus(this, aPkg, null)
-                                ?
-                                new BitmapDrawable(getGrayBitmap(getBitmapFromDrawable(getApplicationIcon(this, aPkg, ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkg, this), false))))
-                                :
-                                getApplicationIcon(this, aPkg, ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkg, this), false)
-                );
-                map.put("Label", getApplicationLabel(this, null, null, aPkg));
-                map.put("Package", aPkg);
+        final SharedPreferences uuidSp = getSharedPreferences(uuid, MODE_PRIVATE);
+        slf_folderName_textView.setText(uuidSp.getString("folderName", getString(R.string.folder)));
+        generateFolderItems(folderItems, uuidSp);
+        ReplaceableSimpleAdapter replaceableSimpleAdapter =
+                new ReplaceableSimpleAdapter(
+                        this, (ArrayList<Map<String, Object>>) folderItems.clone(),
+                        R.layout.shortcut_launcher_folder_item, new String[]{"Icon", "Label"},
+                        new int[]{R.id.slfi_imageView, R.id.slfi_textView});
 
-                folderItems.add(map);
-            }
-        }
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("Icon", getResources().getDrawable(R.drawable.grid_add));
-        map.put("Label", getString(R.string.add));
-        map.put("Package", "freezeyou@add");
-
-        folderItems.add(map);
-
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, folderItems,
-                R.layout.shortcut_launcher_folder_item, new String[]{"Icon", "Label"},
-                new int[]{R.id.slfi_imageView, R.id.slfi_textView});
-
-        simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+        replaceableSimpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
             public boolean setViewValue(View view, Object data,
                                         String textRepresentation) {
                 if (view instanceof ImageView && data instanceof Drawable) {
@@ -180,12 +178,14 @@ public class ShortcutLauncherFolderActivity extends Activity {
             }
         });
 
-        slf_apps_gridView.setAdapter(simpleAdapter);
+        slf_apps_gridView.setAdapter(replaceableSimpleAdapter);
 
         slf_apps_gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String pkg = (String) folderItems.get(position).get("Package");
+                String pkg =
+                        (String) ((ReplaceableSimpleAdapter) slf_apps_gridView.getAdapter())
+                                .getStoredArrayList().get(position).get("Package");
                 if ("freezeyou@add".equals(pkg)) {
                     startActivityForResult(
                             new Intent(
@@ -206,11 +206,15 @@ public class ShortcutLauncherFolderActivity extends Activity {
         slf_apps_gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                HashMap<String, Object> hm = folderItems.get(position);
+                Map<String, Object> hm =
+                        ((ReplaceableSimpleAdapter) slf_apps_gridView.getAdapter())
+                                .getStoredArrayList().get(position);
                 String pkgName = (String) hm.get("Package");
                 if (!"freezeyou@add".equals(pkgName)) {
                     String name = (String) hm.get("Label");
-                    Support.showChooseActionPopupMenu(ShortcutLauncherFolderActivity.this, view, pkgName, name);
+                    Support.showChooseActionPopupMenu(
+                            ShortcutLauncherFolderActivity.this, view, pkgName,
+                            name, true, uuidSp);
                 }
                 return true;
             }
@@ -248,5 +252,54 @@ public class ShortcutLauncherFolderActivity extends Activity {
             }
         });
 
+    }
+
+    private void generateFolderItems(ArrayList<Map<String, Object>> folderItems, SharedPreferences UUIDSharedPreferences) {
+        String s = UUIDSharedPreferences.getString("pkgS", "");
+        String[] pkgS = s == null ? new String[]{} : s.split(",");
+        for (String aPkg : pkgS) {
+            if (!"".equals(aPkg)) {
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("Icon",
+                        Support.realGetFrozenStatus(this, aPkg, null)
+                                ?
+                                new BitmapDrawable(getGrayBitmap(getBitmapFromDrawable(getApplicationIcon(this, aPkg, ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkg, this), false))))
+                                :
+                                getApplicationIcon(this, aPkg, ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkg, this), false)
+                );
+                map.put("Label", getApplicationLabel(this, null, null, aPkg));
+                map.put("Package", aPkg);
+
+                folderItems.add(map);
+            }
+        }
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("Icon", getResources().getDrawable(R.drawable.grid_add));
+        map.put("Label", getString(R.string.add));
+        map.put("Package", "freezeyou@add");
+
+        folderItems.add(map);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        if ("pkgS".equals(key)) {
+            final GridView slf_apps_gridView = findViewById(R.id.slf_apps_gridView);
+            if (slf_apps_gridView != null) {
+                Adapter adapter = slf_apps_gridView.getAdapter();
+                if (adapter instanceof ReplaceableSimpleAdapter) {
+                    final ArrayList<Map<String, Object>> folderItems = new ArrayList<>();
+                    generateFolderItems(folderItems, sharedPreferences);
+                    ((ReplaceableSimpleAdapter) adapter).replaceAllInFormerArrayList(folderItems);
+                }
+            }
+        } else if ("folderName".equals(key)) {
+            final TextView slf_folderName_textView = findViewById(R.id.slf_folderName_textView);
+            if (slf_folderName_textView != null) {
+                slf_folderName_textView.setText(sharedPreferences.getString("folderName", getString(R.string.folder)));
+            }
+        }
     }
 }
