@@ -232,9 +232,9 @@ public class InstallPackagesService extends Service {
                 while ((bytesRead = in1.read(buffer)) >= 0) {
                     outputStream.write(buffer, 0, bytesRead);
                 }
+                in1.close();
                 session.fsync(outputStream);
                 outputStream.close();
-                in1.close();
                 session.commit(
                         PendingIntent.getBroadcast(this, sessionId,
                                 new Intent(
@@ -255,7 +255,6 @@ public class InstallPackagesService extends Service {
                     outputStream.writeBytes("exit\n");
                     outputStream.flush();
                     process.waitFor();
-                    destroyProcess(outputStream, process);
 
                     // Delete Temp File
                     InstallPackagesUtils.deleteTempFile(this, apkFilePath, false);
@@ -263,6 +262,8 @@ public class InstallPackagesService extends Service {
                     InputStream pi = process.getInputStream();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(pi));
                     result = bufferedReader.readLine();
+
+                    destroyProcess(outputStream, process);
                 } finally {
                     if (result != null && result.toLowerCase().contains("success")) {
                         InstallPackagesUtils

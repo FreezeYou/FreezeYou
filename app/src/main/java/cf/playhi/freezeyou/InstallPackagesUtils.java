@@ -28,6 +28,8 @@ final class InstallPackagesUtils {
         // 小图标
         builder.setSmallIcon(R.drawable.ic_notification);
 
+        builder.setProgress(0, 0, false);
+
         if (install) {
 
             // 提示标题

@@ -43,11 +43,10 @@ public class ShortcutLauncherFolderActivity extends Activity implements SharedPr
         super.onCreate(savedInstanceState);
 
         final String uuid = getIntent().getStringExtra("UUID");
-        if (uuid == null) {
-            return;
+        if (uuid != null) {
+            final SharedPreferences uuidSp = getSharedPreferences(uuid, MODE_PRIVATE);
+            uuidSp.registerOnSharedPreferenceChangeListener(this);
         }
-        final SharedPreferences uuidSp = getSharedPreferences(uuid, MODE_PRIVATE);
-        uuidSp.registerOnSharedPreferenceChangeListener(this);
 
         if (Intent.ACTION_CREATE_SHORTCUT.equals(getIntent().getAction())) {
             doCreateShortCut();
