@@ -73,11 +73,10 @@ public class ShortcutLauncherFolderActivity extends Activity implements SharedPr
     @Override
     protected void onDestroy() {
         final String uuid = getIntent().getStringExtra("UUID");
-        if (uuid == null) {
-            return;
+        if (uuid != null) {
+            final SharedPreferences uuidSp = getSharedPreferences(uuid, MODE_PRIVATE);
+            uuidSp.unregisterOnSharedPreferenceChangeListener(this);
         }
-        final SharedPreferences uuidSp = getSharedPreferences(uuid, MODE_PRIVATE);
-        uuidSp.unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();
     }
 

@@ -3,12 +3,10 @@ package cf.playhi.freezeyou;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -24,6 +22,25 @@ class MainAppListSimpleAdapter extends SimpleAdapter {
         mAppList = list;
         mContext = context;
         mIsCheckedPackageList = isCheckedPackageList;
+
+        setViewBinder(new MainAppListSimpleAdapter.ViewBinder() {
+            public boolean setViewValue(View view, Object data,
+                                        String textRepresentation) {
+                if (view instanceof ImageView) {
+                    if (data instanceof Drawable) {
+                        ((ImageView) view).setImageDrawable((Drawable) data);
+                        return true;
+                    } else if (data instanceof Bitmap) {
+                        ((ImageView) view).setImageBitmap((Bitmap) data);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        });
     }
 //
 //    public void clearArrayListData() {
@@ -67,28 +84,7 @@ class MainAppListSimpleAdapter extends SimpleAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view;
-        if (convertView == null) {
-            view = LayoutInflater.from(mContext).inflate(R.layout.app_list_1, null);
-        } else {
-            view = convertView;
-        }
-
-        ImageView imgImageView = view.findViewById(R.id.img);
-        TextView nameTextView = view.findViewById(R.id.name);
-        TextView pkgNameTextView = view.findViewById(R.id.pkgName);
-
-        Object imgObj = mAppList.get(position).get("Img");
-        if (imgObj instanceof Drawable) {
-            imgImageView.setImageDrawable((Drawable) imgObj);
-        } else if (imgObj instanceof Bitmap) {
-            imgImageView.setImageBitmap((Bitmap) imgObj);
-        } else if (imgObj instanceof Integer) {
-            imgImageView.setImageResource((Integer) imgObj);
-        }
-
-        nameTextView.setText((String) mAppList.get(position).get("Name"));
-        pkgNameTextView.setText((String) mAppList.get(position).get("PackageName"));
+        View view = super.getView(position, convertView, parent);
 
         if (mIsCheckedPackageList.contains((String) mAppList.get(position).get("PackageName"))) {
             view.setBackgroundResource(R.color.translucentGreyBackground);
@@ -98,4 +94,5 @@ class MainAppListSimpleAdapter extends SimpleAdapter {
 
         return view;
     }
+
 }
