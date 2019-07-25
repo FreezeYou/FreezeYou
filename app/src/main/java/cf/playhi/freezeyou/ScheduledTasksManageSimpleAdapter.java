@@ -2,7 +2,6 @@ package cf.playhi.freezeyou;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -18,6 +17,7 @@ class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
     private final Context mContext;
     private final ArrayList<Map<String, Object>> mTasksList;
     private final ArrayList<Integer> mIdIndexArrayList;
+    private final int mLabelTextColor;
 
     ScheduledTasksManageSimpleAdapter(
             Context context, ArrayList<Map<String, Object>> list,
@@ -27,6 +27,12 @@ class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
         mTasksList = list;
         mContext = context;
         mIdIndexArrayList = idIndexArrayList;
+
+        mLabelTextColor =
+                ThemeUtils.getThemeSecondDot(mContext) == R.drawable.shapedotblack ?
+                        mContext.getResources().getColor(android.R.color.white) :
+                        mContext.getResources().getColor(android.R.color.black);
+
     }
 
     boolean replaceAllInFormerArrayList(ArrayList<Map<String, Object>> list) {
@@ -38,25 +44,16 @@ class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View view;
-        if (convertView == null) {
-            view = LayoutInflater.from(mContext).inflate(R.layout.stma_item, null);
-        } else {
-            view = convertView;
-        }
+        View view = super.getView(position, convertView, parent);
 
         TextView label = view.findViewById(R.id.stma_label);
-        TextView time = view.findViewById(R.id.stma_time);
+        label.setTextColor(mLabelTextColor);
+
         Switch sc = view.findViewById(R.id.stma_switch);
-
-        label.setText((String) mTasksList.get(position).get("label"));
-        final String timeS = (String) mTasksList.get(position).get("time");
-        time.setText(timeS);
-        sc.setChecked((boolean) mTasksList.get(position).get("enabled"));
-
         sc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                final String timeS = (String) mTasksList.get(position).get("time");
                 mTasksList.get(position).put("enabled", isChecked);
                 SQLiteDatabase db =
                         mContext.openOrCreateDatabase(
@@ -71,7 +68,7 @@ class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
                                 " WHERE _id = " + mIdIndexArrayList.get(position) + ";"
                 );
                 db.close();
-                if (timeS != null && timeS.contains(":") ) {
+                if (timeS != null && timeS.contains(":")) {
                     TasksUtils.checkTimeTasks(mContext);
                 }
                 notifyDataSetChanged();

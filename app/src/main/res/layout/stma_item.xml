@@ -26,7 +26,6 @@
         android:layout_alignParentLeft="true"
         android:layout_toStartOf="@id/stma_switch"
         android:layout_toLeftOf="@id/stma_switch"
-        android:alpha="0.8"
         android:singleLine="true"
         android:textSize="14sp" />
 
