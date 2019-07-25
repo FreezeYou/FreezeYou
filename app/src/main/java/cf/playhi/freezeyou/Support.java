@@ -570,7 +570,7 @@ class Support {
                     case R.id.main_sca_menu_removeFromTheList:
                         if (folderPkgListSp != null) {
                             String folderPkgs = folderPkgListSp.getString("pkgS", "");
-                            if (OneKeyListUtils.existsInOneKeyList(folderPkgs, pkgName)) {
+                            if (existsInOneKeyList(folderPkgs, pkgName)) {
                                 folderPkgListSp.edit()
                                         .putString("pkgS", folderPkgs.replace(pkgName + ",", ""))
                                         .apply();

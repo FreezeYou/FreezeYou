@@ -13,14 +13,12 @@ import java.util.Map;
 
 class MainAppListSimpleAdapter extends SimpleAdapter {
 
-    private final Context mContext;
     private final ArrayList<Map<String, Object>> mAppList;
     private final ArrayList<String> mIsCheckedPackageList;
 
     MainAppListSimpleAdapter(Context context, ArrayList<Map<String, Object>> list, ArrayList<String> isCheckedPackageList, int resource, String[] from, int[] to) {
         super(context, list, resource, from, to);
         mAppList = list;
-        mContext = context;
         mIsCheckedPackageList = isCheckedPackageList;
 
         setViewBinder(new MainAppListSimpleAdapter.ViewBinder() {
