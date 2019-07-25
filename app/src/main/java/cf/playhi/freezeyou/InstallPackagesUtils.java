@@ -64,7 +64,7 @@ final class InstallPackagesUtils {
                             PendingIntent
                                     .getActivity(
                                             context,
-                                            beOperatedPackageName.hashCode(),
+                                            (beOperatedPackageName + "@InstallPackagesNotification").hashCode(),
                                             resultIntent,
                                             PendingIntent.FLAG_UPDATE_CURRENT);
                     builder.setContentIntent(resultPendingIntent);
@@ -80,7 +80,7 @@ final class InstallPackagesUtils {
                         PendingIntent
                                 .getActivity(
                                         context,
-                                        beOperatedPackageName.hashCode(),
+                                        (beOperatedPackageName + "@InstallPackagesNotification").hashCode(),
                                         new Intent(context, ShowSimpleDialogActivity.class)
                                                 .putExtra("title", title)
                                                 .putExtra("text", text),
@@ -89,7 +89,7 @@ final class InstallPackagesUtils {
             }
 
             notificationManager.notify(
-                    beOperatedPackageName.hashCode(), builder.getNotification()
+                    (beOperatedPackageName + "@InstallPackagesNotification").hashCode(), builder.getNotification()
             );
 
         } else {
@@ -104,7 +104,7 @@ final class InstallPackagesUtils {
                     PendingIntent
                             .getActivity(
                                     context,
-                                    beOperatedPackageName.hashCode(),
+                                    (beOperatedPackageName + "@InstallPackagesNotification").hashCode(),
                                     new Intent(context, ShowSimpleDialogActivity.class)
                                             .putExtra("title", title)
                                             .putExtra("text", text),
@@ -112,7 +112,7 @@ final class InstallPackagesUtils {
             builder.setContentIntent(resultPendingIntent);
 
             notificationManager.notify(
-                    beOperatedPackageName.hashCode(), builder.getNotification()
+                    (beOperatedPackageName + "@InstallPackagesNotification").hashCode(), builder.getNotification()
             );
 
         }

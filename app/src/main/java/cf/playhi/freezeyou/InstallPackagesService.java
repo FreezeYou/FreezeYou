@@ -117,8 +117,8 @@ public class InstallPackagesService extends Service {
     private void uninstall(Intent intent, Notification.Builder builder, NotificationManager notificationManager) {
 
         final Uri packageUri = intent.getParcelableExtra("packageUri");
-        String packageName = packageUri.getEncodedSchemeSpecificPart();
-        String willBeUninstalledName = getApplicationLabel(this, null, null, packageName);
+        String packageName = packageUri.getEncodedSchemeSpecificPart(); // 应用包名
+        String willBeUninstalledName = getApplicationLabel(this, null, null, packageName); // 应用名称
         try {
             if (packageName == null) {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -139,7 +139,7 @@ public class InstallPackagesService extends Service {
 
             builder.setContentTitle(getString(R.string.uninstalling) + " " + willBeUninstalledName);
             builder.setLargeIcon(getBitmapFromDrawable(willBeUninstalledIcon));
-            notificationManager.notify(packageName.hashCode(), builder.getNotification());
+            notificationManager.notify((packageName + "@InstallPackagesNotification").hashCode(), builder.getNotification());
 
             if (Build.VERSION.SDK_INT >= 21 && Support.isDeviceOwner(this)) {
                 getPackageManager().getPackageInstaller().uninstall(packageName,
@@ -215,7 +215,7 @@ public class InstallPackagesService extends Service {
             builder.setContentTitle(getString(R.string.installing) + " " + willBeInstalledName);
             builder.setProgress(100, 0, true);
             builder.setLargeIcon(getBitmapFromDrawable(willBeInstalledIcon));
-            notificationManager.notify(willBeInstalledPackageName.hashCode(), builder.getNotification());
+            notificationManager.notify((willBeInstalledPackageName + "@InstallPackagesNotification").hashCode(), builder.getNotification());
 
             if (Build.VERSION.SDK_INT >= 21 && Support.isDeviceOwner(this)) {
                 PackageInstaller packageInstaller = pm.getPackageInstaller();
