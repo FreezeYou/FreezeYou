@@ -30,6 +30,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -101,6 +102,7 @@ public class Main extends Activity {
     private BroadcastReceiver updateFrozenStatusBroadcastReceiver;
     private String currentFilter = "all";
     private int currentSortRule = SORT_BY_DEFAULT;
+    private boolean needProcessOnItemCheckedStateChanged = true;
 
     private boolean shortcutsCompleted = true;
     private int shortcutsCount;
@@ -977,17 +979,29 @@ public class Main extends Activity {
         app_listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
             public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
-                final String pkgName = ((HashMap<String, String>) app_listView.getItemAtPosition(i)).get("PackageName");
-                if (b) {
-                    if (!selectedPackages.contains(pkgName)) {
+                final String pkgName =
+                        (String) ((MainAppListSimpleAdapter) app_listView.getAdapter())
+                                .getStoredArrayList().get(i).get("PackageName");
+//                if (b) {
+//                    if (!selectedPackages.contains(pkgName)) {
+//                        selectedPackages.add(pkgName);
+//                    }
+//                } else {
+//                    selectedPackages.remove(pkgName);
+//                }
+                if (needProcessOnItemCheckedStateChanged) {
+                    if (selectedPackages.contains(pkgName)) {
+                        selectedPackages.remove(pkgName);
+                    } else {
                         selectedPackages.add(pkgName);
                     }
+                    needProcessOnItemCheckedStateChanged = false;
+                    app_listView.setItemChecked(i, true);
                     actionMode.setTitle(Integer.toString(selectedPackages.size()));
+                    adapter.notifyDataSetChanged();
                 } else {
-                    selectedPackages.remove(pkgName);
-                    actionMode.setTitle(Integer.toString(selectedPackages.size()));
+                    needProcessOnItemCheckedStateChanged = true;
                 }
-                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -1005,13 +1019,31 @@ public class Main extends Activity {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.list_menu_selectAll:
-                        for (int i = 0; i < app_listView.getAdapter().getCount(); i++) {
-                            app_listView.setItemChecked(i, true);
+                        Adapter adpt = app_listView.getAdapter();
+                        if (adpt instanceof MainAppListSimpleAdapter) {
+                            for (int i = 0; i < adpt.getCount(); i++) {
+                                String pkg = (String) ((MainAppListSimpleAdapter) adpt).getStoredArrayList().get(i).get("PackageName");
+                                if (!selectedPackages.contains(pkg)) {
+                                    selectedPackages.add(pkg);
+                                }
+                            }
+                            actionMode.setTitle(Integer.toString(selectedPackages.size()));
+                            ((MainAppListSimpleAdapter) adpt).notifyDataSetChanged();
                         }
                         return true;
                     case R.id.list_menu_selectUnselected:
-                        for (int i = 0; i < app_listView.getAdapter().getCount(); i++) {
-                            app_listView.setItemChecked(i, !app_listView.isItemChecked(i));
+                        Adapter adapt = app_listView.getAdapter();
+                        if (adapt instanceof MainAppListSimpleAdapter) {
+                            for (int i = 0; i < adapt.getCount(); i++) {
+                                String pkg = (String) ((MainAppListSimpleAdapter) adapt).getStoredArrayList().get(i).get("PackageName");
+                                if (selectedPackages.contains(pkg)) {
+                                    selectedPackages.remove(pkg);
+                                } else {
+                                    selectedPackages.add(pkg);
+                                }
+                            }
+                            actionMode.setTitle(Integer.toString(selectedPackages.size()));
+                            ((MainAppListSimpleAdapter) adapt).notifyDataSetChanged();
                         }
                         return true;
                     case R.id.list_menu_addToOneKeyFreezeList:
@@ -1090,7 +1122,9 @@ public class Main extends Activity {
         app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                HashMap<String, Object> map = (HashMap<String, Object>) app_listView.getItemAtPosition(i);
+                Map<String, Object> map =
+                        ((MainAppListSimpleAdapter) app_listView.getAdapter())
+                                .getStoredArrayList().get(i);
                 final String name = (String) map.get("Name");
                 final String pkgName = (String) map.get("PackageName");
                 if (!getString(R.string.notAvailable).equals(name)) {
@@ -1477,15 +1511,24 @@ public class Main extends Activity {
 
     private void updateFrozenStatus() {
         final ListView app_listView = findViewById(R.id.app_list);
-        MainAppListSimpleAdapter adapter = (MainAppListSimpleAdapter) app_listView.getAdapter();
-        if (adapter != null) {
+        Adapter adapter = app_listView.getAdapter();
+        if (adapter instanceof MainAppListSimpleAdapter) {
             PackageManager pm = getPackageManager();
             int count = adapter.getCount();
             for (int i = 0; i < count; i++) {
-                Map<String, Object> hm = (Map<String, Object>) adapter.getItem(i);
-                processFrozenStatus(hm, (String) hm.get("PackageName"), pm);
+                Map<String, Object> hm = ((MainAppListSimpleAdapter) adapter).getStoredArrayList().get(i);
+                String pkgName = (String) hm.get("PackageName");
+
+                //检查是否已卸载
+                if (ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this) == null) {
+                    hm.put("Name", getString(R.string.uninstalled));
+                    break;
+                }
+
+                //更新冻结状态
+                processFrozenStatus(hm, pkgName, pm);
             }
-            adapter.notifyDataSetChanged();
+            ((MainAppListSimpleAdapter) adapter).notifyDataSetChanged();
         }
     }
 

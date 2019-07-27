@@ -42,6 +42,10 @@ class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
         return b;
     }
 
+    ArrayList<Map<String, Object>> getStoredArrayList() {
+        return mTasksList;
+    }
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);

@@ -138,7 +138,9 @@ public class ScheduledTasksManageActivity extends Activity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         for (int aSelectedTaskPosition : selectedTasksPositions) {
-                                            boolean isTimeTask = (boolean) ((Map<String, Object>) tasksListView.getItemAtPosition(aSelectedTaskPosition)).get("isTimeTask");
+                                            boolean isTimeTask =
+                                                    (boolean) (((ScheduledTasksManageSimpleAdapter) tasksListView.getAdapter())
+                                                            .getStoredArrayList().get(aSelectedTaskPosition)).get("isTimeTask");
                                             int id = integerArrayList.get(aSelectedTaskPosition);
                                             SQLiteDatabase db = openOrCreateDatabase(isTimeTask ? "scheduledTasks" : "scheduledTriggerTasks", MODE_PRIVATE, null);
                                             if (isTimeTask) {
@@ -178,7 +180,9 @@ public class ScheduledTasksManageActivity extends Activity {
         tasksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Map<String, Object> map = (Map<String, Object>) tasksListView.getItemAtPosition(i);
+                Map<String, Object> map =
+                        ((ScheduledTasksManageSimpleAdapter) tasksListView.getAdapter())
+                                .getStoredArrayList().get(i);
                 final String label = (String) map.get("label");
                 final String s = ((String) map.get("time"));
                 final boolean isTimeTask = ((s != null) && s.contains(":"));
