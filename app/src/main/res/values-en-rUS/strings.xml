@@ -306,6 +306,7 @@
     <string name="share">Share</string>
     <string name="notAllowWhenIsObsd">Don\'t allow window being obscured</string>
     <string name="remove">Remove</string>
+    <string name="newFolder">新文件夹</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
