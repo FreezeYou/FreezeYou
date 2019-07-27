@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ShortcutManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -164,6 +165,32 @@ public class Main extends Activity {
         super.onDestroy();
         if (updateFrozenStatusBroadcastReceiver != null)
             unregisterReceiver(updateFrozenStatusBroadcastReceiver);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 80001:
+                if (resultCode == RESULT_OK && data != null) {
+                    String c_80001_title = data.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);
+                    LauncherShortcutUtils.requestCreateShortCut(
+                            c_80001_title,
+                            ((Intent) data.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT))
+                                    .setAction(Intent.ACTION_MAIN),
+                            null,
+                            "FreezeYou! FolderShortcut" + c_80001_title + new Date().getTime(),
+                            this,
+                            (Bitmap) data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON)
+                    );
+                }
+                break;
+            case 23001:
+                finish();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -366,6 +393,13 @@ public class Main extends Activity {
 //                        "FOQ",
 //                        this
 //                );
+                return true;
+            case R.id.menu_createNewFolderShortCut:
+                startActivityForResult(
+                        new Intent(this, ShortcutLauncherFolderActivity.class)
+                                .setAction(Intent.ACTION_CREATE_SHORTCUT),
+                        80001
+                );
                 return true;
             case R.id.menu_timedTasks:
                 startActivity(new Intent(this, ScheduledTasksManageActivity.class));
@@ -1720,13 +1754,6 @@ public class Main extends Activity {
         }
         cursor.close();
         return hashMap;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 23001)
-            finish();
     }
 
     @Override

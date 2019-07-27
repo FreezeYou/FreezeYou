@@ -105,13 +105,15 @@ public class ShortcutLauncherFolderActivity extends Activity implements SharedPr
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String name = editText.getText().toString();
+                String uuid = "Folder_" + name.hashCode() + "_" + new Date().getTime();
                 Intent intent = new Intent();
                 intent.putExtra(
                         Intent.EXTRA_SHORTCUT_INTENT,
                         new Intent(ShortcutLauncherFolderActivity.this, ShortcutLauncherFolderActivity.class)
-                                .putExtra("UUID", name + new Date().getTime()));
+                                .putExtra("UUID", uuid));
                 intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
                 intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(imageButton.getDrawable()));
+                OneKeyListUtils.addToOneKeyList(ShortcutLauncherFolderActivity.this, "FolderUUIDs", uuid);
                 setResult(RESULT_OK, intent);
                 finish();
             }
