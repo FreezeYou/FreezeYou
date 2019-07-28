@@ -5,9 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import net.grandcentrix.tray.AppPreferences;
+
+import java.io.File;
+import java.io.IOException;
 
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
@@ -21,10 +25,15 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         if (intent.getAction() != null) {
             switch (intent.getAction()) {
                 case Intent.ACTION_BOOT_COMPLETED:
+                    runBackgroundService(context);
+                    checkAndReNotifyNotifications(context);
+                    checkTasks(context);
+                    break;
                 case Intent.ACTION_MY_PACKAGE_REPLACED:
                     runBackgroundService(context);
                     checkAndReNotifyNotifications(context);
                     checkTasks(context);
+                    clearCrashLogs();
                     break;
                 default:
                     break;
@@ -94,5 +103,46 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
     private void checkTriggerTasks(Context context) {
         TasksUtils.checkTriggerTasks(context);
+    }
+
+    private void clearCrashLogs() {
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            String logPath =
+                    Environment.getExternalStorageDirectory()
+                            .getAbsolutePath()
+                            + File.separator
+                            + File.separator
+                            + "FreezeYou"
+                            + File.separator
+                            + "Log";
+            try {
+                FileUtils.deleteAllFiles(new File(logPath), false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String logPath2 =
+                Environment.getDataDirectory().getPath()
+                        + File.separator
+                        + "data"
+                        + File.separator
+                        + "cf.playhi.freezeyou"
+                        + File.separator
+                        + "log";
+        try {
+            FileUtils.deleteAllFiles(new File(logPath2), false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        File crashCheck =
+                new File(logPath2
+                        + File.separator
+                        + "NeedUpload.log");
+        if (crashCheck.exists()) {
+            crashCheck.delete();
+        }
     }
 }

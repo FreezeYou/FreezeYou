@@ -17,10 +17,10 @@ import android.provider.Settings;
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
-import java.io.IOException;
 
 import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
+import static cf.playhi.freezeyou.FileUtils.deleteAllFiles;
 import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
@@ -233,31 +233,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             }
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
-    }
-
-    private void deleteAllFiles(File file, boolean deleteSelfFolder) throws IOException {
-        if (file == null) {
-            return;
-        }
-
-        if (file.exists()) {
-            if (file.isFile()) {
-                if (!file.delete())
-                    throw new IOException(file.getAbsolutePath() + " delete failed");
-            } else if (file.isDirectory()) {
-                File[] files = file.listFiles();
-                if (deleteSelfFolder && files == null) {
-                    if (!file.delete())
-                        throw new IOException(file.getAbsolutePath() + " delete failed");
-                } else {
-                    for (File f : files) {
-                        deleteAllFiles(f, true);
-                    }
-                    if (deleteSelfFolder && !file.delete())
-                        throw new IOException(file.getAbsolutePath() + " delete failed");
-                }
-            }
-        }
     }
 
     private void askIfResetTimes(final String dbName) {
