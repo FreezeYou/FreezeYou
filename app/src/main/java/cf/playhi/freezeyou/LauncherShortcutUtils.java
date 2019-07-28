@@ -128,7 +128,7 @@ final class LauncherShortcutUtils {
 
     static void requestCreateShortCut(String title, Intent intent, Drawable icon, String id, Context context, Bitmap bm) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            requestCreateShortCutOldApi(title, intent, icon, context, null);
+            requestCreateShortCutOldApi(title, intent, icon, context, bm);
         } else {
             ShortcutManager mShortcutManager =
                     context.getSystemService(ShortcutManager.class);
@@ -160,10 +160,10 @@ final class LauncherShortcutUtils {
                             successCallback.getIntentSender());
                     showToast(context, R.string.requested);
                 } else {
-                    requestCreateShortCutOldApi(title, intent, icon, context, null);
+                    requestCreateShortCutOldApi(title, intent, icon, context, bm);
                 }
             } else {
-                requestCreateShortCutOldApi(title, intent, icon, context, null);
+                requestCreateShortCutOldApi(title, intent, icon, context, bm);
             }
         }
     }
