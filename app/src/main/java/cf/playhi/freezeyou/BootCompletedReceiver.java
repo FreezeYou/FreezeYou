@@ -33,7 +33,13 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                     runBackgroundService(context);
                     checkAndReNotifyNotifications(context);
                     checkTasks(context);
-                    clearCrashLogs();
+
+                    final SharedPreferences sharedPreferences =
+                            context.getSharedPreferences("Ver", Context.MODE_PRIVATE);
+                    if (sharedPreferences.getInt("Ver", 0) < VersionUtils.getVersionCode(context)) {
+                        clearCrashLogs();
+                    }
+
                     break;
                 default:
                     break;
