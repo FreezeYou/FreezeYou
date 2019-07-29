@@ -306,6 +306,7 @@
     <string name="share">分享</string>
     <string name="notAllowWhenIsObsd">不允许遮罩层覆盖</string>
     <string name="remove">移除</string>
+    <string name="newFolder">新文件夹</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>显示全部</item>
