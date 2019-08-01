@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -17,7 +16,6 @@ import java.util.HashMap;
 
 class BackupImportChooserActivitySwitchSimpleAdapter extends SimpleAdapter {
 
-    private final Context mContext;
     private final ArrayList<HashMap<String, String>> mData;
     private final ArrayList<HashMap<String, String>> needExcludeData = new ArrayList<>();
     private final ArrayList<Integer> isDisabledList = new ArrayList<>();
@@ -39,7 +37,6 @@ class BackupImportChooserActivitySwitchSimpleAdapter extends SimpleAdapter {
      */
     BackupImportChooserActivitySwitchSimpleAdapter(Context context, JSONObject jsonObject, ArrayList<HashMap<String, String>> data, int resource, String[] from, int[] to) {
         super(context, data, resource, from, to);
-        mContext = context;
         mData = data;
         if (jsonObject != null) {
             try {
@@ -52,31 +49,36 @@ class BackupImportChooserActivitySwitchSimpleAdapter extends SimpleAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.bica_list_item, null);
+        View view = super.getView(position, convertView, parent);
         Switch s = view.findViewById(R.id.bica_list_item_switch);
-        s.setText(mData.get(position).get("title"));
-        String category = mData.get(position).get("category");
-        s.setChecked(!isDisabledList.contains(position));
-        if ("Failed!".equals(category)) {
-            s.setChecked(true);
-            s.setEnabled(false);
-        }
-        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    isDisabledList.remove((Integer) position);
-                    needExcludeData.remove(mData.get(position));
-                } else {
-                    if (!needExcludeData.contains(mData.get(position))) {
-                        needExcludeData.add(mData.get(position));
-                    }
-                    if (!isDisabledList.contains(position)) {
-                        isDisabledList.add(position);
+
+        if (s != null) {
+
+            s.setOnCheckedChangeListener(null);
+
+            String category = mData.get(position).get("category");
+            s.setChecked(!isDisabledList.contains(position));
+            if ("Failed!".equals(category)) {
+                s.setChecked(true);
+                s.setEnabled(false);
+            }
+            s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        isDisabledList.remove((Integer) position);
+                        needExcludeData.remove(mData.get(position));
+                    } else {
+                        if (!needExcludeData.contains(mData.get(position))) {
+                            needExcludeData.add(mData.get(position));
+                        }
+                        if (!isDisabledList.contains(position)) {
+                            isDisabledList.add(position);
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         return view;
     }
