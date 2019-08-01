@@ -44,7 +44,8 @@ public class MainActivityAppListFragment extends Fragment {
             if (mAppListAdapter != null)
                 mAppListGridView.setAdapter(mAppListAdapter);
 
-            mAppListGridView.setColumnWidth((int) (getResources().getDimension(android.R.dimen.app_icon_size) * 1.8));
+            mAppListGridView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
+            mAppListGridView.setColumnWidth((int) (getResources().getDimension(android.R.dimen.app_icon_size) * 1.6));
 
         } else {
             view = inflater.inflate(R.layout.main_app_list_fragment, container, false);

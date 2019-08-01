@@ -972,21 +972,6 @@ public class Main extends Activity {
             }
         }
 
-        if (mMainActivityAppListFragment == null) {
-            mMainActivityAppListFragment = new MainActivityAppListFragment();
-            if ("grid".equals(PreferenceManager.getDefaultSharedPreferences(Main.this).getString("mainActivityPattern", "default"))) {
-                mMainActivityAppListFragment.setUseGridMode(true);
-            } else {
-                mMainActivityAppListFragment.setUseGridMode(false);
-            }
-        }
-
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.main_appList_fragmentContainer_frameLayout, mMainActivityAppListFragment);
-        fragmentTransaction.commit();
-
-
         final MainAppListSimpleAdapter adapter =
                 mMainActivityAppListFragment.setAppListAdapter(
                         Main.this,
@@ -1398,6 +1383,50 @@ public class Main extends Activity {
             filter.addAction("cf.playhi.freezeyou.action.packageStatusChanged");
             this.registerReceiver(updateFrozenStatusBroadcastReceiver, filter);
         }
+
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
+        if (sharedPref.getBoolean("saveOnClickFunctionStatus", false)) {
+            appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", APPListViewOnClickMode_chooseAction);
+        }
+        if (sharedPref.getBoolean("saveSortMethodStatus", false)) {
+            currentSortRule = sharedPref.getInt("sortMethodStatus", SORT_BY_DEFAULT);
+        }
+        if (!sharedPref.getBoolean("noCaution", false)) {
+            buildAlertDialog(Main.this, R.mipmap.ic_launcher_new_round, R.string.cautionContent, R.string.caution)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int ii) {
+                        }
+                    })
+                    .setNeutralButton(R.string.hToUse, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            requestOpenWebSite(Main.this, "https://zidon.net/");
+                        }
+                    })
+                    .setNegativeButton(R.string.nCaution, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sharedPref.edit().putBoolean("noCaution", true).apply();
+                        }
+                    })
+                    .create().show();
+        }
+
+        if (mMainActivityAppListFragment == null) {
+            mMainActivityAppListFragment = new MainActivityAppListFragment();
+            if ("grid".equals(sharedPref.getString("mainActivityPattern", "default"))) {
+                mMainActivityAppListFragment.setUseGridMode(true);
+            } else {
+                mMainActivityAppListFragment.setUseGridMode(false);
+            }
+        }
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.main_appList_fragmentContainer_frameLayout, mMainActivityAppListFragment);
+        fragmentTransaction.commit();
+
         Thread initThread;
         initThread = new Thread(new Runnable() {
             @Override
@@ -1439,34 +1468,6 @@ public class Main extends Activity {
         });
         initThread.start();
         checkLongTimeNotUpdated();
-        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
-        if (sharedPref.getBoolean("saveOnClickFunctionStatus", false)) {
-            appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", APPListViewOnClickMode_chooseAction);
-        }
-        if (sharedPref.getBoolean("saveSortMethodStatus", false)) {
-            currentSortRule = sharedPref.getInt("sortMethodStatus", SORT_BY_DEFAULT);
-        }
-        if (!sharedPref.getBoolean("noCaution", false)) {
-            buildAlertDialog(Main.this, R.mipmap.ic_launcher_new_round, R.string.cautionContent, R.string.caution)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int ii) {
-                        }
-                    })
-                    .setNeutralButton(R.string.hToUse, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            requestOpenWebSite(Main.this, "https://freezeyou.playhi.net/");
-                        }
-                    })
-                    .setNegativeButton(R.string.nCaution, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            sharedPref.edit().putBoolean("noCaution", true).apply();
-                        }
-                    })
-                    .create().show();
-        }
     }
 
     /**

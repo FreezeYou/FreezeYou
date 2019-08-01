@@ -13,12 +13,14 @@
         android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher_new_round" />
 
-    <TextView
+    <cf.playhi.freezeyou.view.IsFocusedAlwaysTrueTextView
         android:id="@+id/slfi_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/slfi_imageView"
+        android:layout_below="@id/slfi_imageView"
         android:layout_centerHorizontal="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
         android:text="@string/label"
         android:textSize="12sp" />
