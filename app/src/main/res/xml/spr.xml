@@ -15,12 +15,12 @@
             android:defaultValue="false"
             android:key="noCaution"
             android:title="@string/nSCaution" />
-        <!--<ListPreference-->
-        <!--android:defaultValue="default"-->
-        <!--android:entries="@array/mainActivityPatternSelection"-->
-        <!--android:entryValues="@array/mainActivityPatternSelectionValues"-->
-        <!--android:key="mainActivityPattern"-->
-        <!--android:title="@string/mainActivityPattern" />-->
+        <ListPreference
+            android:defaultValue="default"
+            android:entries="@array/mainActivityPatternSelection"
+            android:entryValues="@array/mainActivityPatternSelectionValues"
+            android:key="mainActivityPattern"
+            android:title="@string/mainActivityPattern" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="saveOnClickFunctionStatus"

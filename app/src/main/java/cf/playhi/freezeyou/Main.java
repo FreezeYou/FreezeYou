@@ -3,6 +3,8 @@ package cf.playhi.freezeyou;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +17,7 @@ import android.content.pm.ShortcutManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -35,7 +38,6 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -56,6 +58,8 @@ import java.util.Map;
 
 import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.ApplicationIconUtils.getGrayBitmap;
 import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
@@ -107,6 +111,8 @@ public class Main extends Activity {
 
     private boolean shortcutsCompleted = true;
     private int shortcutsCount;
+
+    private MainActivityAppListFragment mMainActivityAppListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -624,7 +630,7 @@ public class Main extends Activity {
     private void generateList(String filter, int sortRule) {
         currentFilter = filter;
         currentSortRule = sortRule;
-        final ListView app_listView = findViewById(R.id.app_list);
+        final FrameLayout appListFragmentContainer = findViewById(R.id.main_appList_fragmentContainer_frameLayout);
         final ProgressBar progressBar = findViewById(R.id.progressBar);
         final TextView textView = findViewById(R.id.textView);
         final TextView main_loading_progress_textView = findViewById(R.id.main_loading_progress_textView);
@@ -637,7 +643,7 @@ public class Main extends Activity {
                 linearLayout.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 main_loading_progress_textView.setVisibility(View.VISIBLE);
-                app_listView.setVisibility(View.GONE);
+                appListFragmentContainer.setVisibility(View.GONE);
                 main_loading_progress_textView.setText(R.string.loadingPkgList);
             }
         });
@@ -966,14 +972,28 @@ public class Main extends Activity {
             }
         }
 
+        if (mMainActivityAppListFragment == null) {
+            mMainActivityAppListFragment = new MainActivityAppListFragment();
+            if ("grid".equals(PreferenceManager.getDefaultSharedPreferences(Main.this).getString("mainActivityPattern", "default"))) {
+                mMainActivityAppListFragment.setUseGridMode(true);
+            } else {
+                mMainActivityAppListFragment.setUseGridMode(false);
+            }
+        }
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.main_appList_fragmentContainer_frameLayout, mMainActivityAppListFragment);
+        fragmentTransaction.commit();
+
+
         final MainAppListSimpleAdapter adapter =
-                new MainAppListSimpleAdapter(
+                mMainActivityAppListFragment.setAppListAdapter(
                         Main.this,
                         (ArrayList<Map<String, Object>>) AppList.clone(),
-                        selectedPackages,
-                        R.layout.app_list_1,
-                        new String[]{"Img", "Name", "PackageName", "isFrozen"},
-                        new int[]{R.id.img, R.id.name, R.id.pkgName, R.id.isFrozen});//isFrozen、isAutoList传图像资源id
+                        selectedPackages
+                );
+
 
         search_editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -1004,17 +1024,15 @@ public class Main extends Activity {
                 textView.setVisibility(View.GONE);
                 main_loading_progress_textView.setVisibility(View.GONE);
                 linearLayout.setVisibility(View.GONE);
-                app_listView.setAdapter(adapter);
-                app_listView.setTextFilterEnabled(true);
-                app_listView.setVisibility(View.VISIBLE);
+                appListFragmentContainer.setVisibility(View.VISIBLE);
             }
         });
 
-        app_listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+        mMainActivityAppListFragment.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
             public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
                 final String pkgName =
-                        (String) ((MainAppListSimpleAdapter) app_listView.getAdapter())
+                        (String) ((MainAppListSimpleAdapter) mMainActivityAppListFragment.getAppListAdapter())
                                 .getStoredArrayList().get(i).get("PackageName");
 //                if (b) {
 //                    if (!selectedPackages.contains(pkgName)) {
@@ -1030,7 +1048,7 @@ public class Main extends Activity {
                         selectedPackages.add(pkgName);
                     }
                     needProcessOnItemCheckedStateChanged = false;
-                    app_listView.setItemChecked(i, true);
+                    mMainActivityAppListFragment.setItemChecked(i, true);
                     actionMode.setTitle(Integer.toString(selectedPackages.size()));
                     adapter.notifyDataSetChanged();
                 } else {
@@ -1053,7 +1071,7 @@ public class Main extends Activity {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.list_menu_selectAll:
-                        Adapter adpt = app_listView.getAdapter();
+                        Adapter adpt = mMainActivityAppListFragment.getAppListAdapter();
                         if (adpt instanceof MainAppListSimpleAdapter) {
                             for (int i = 0; i < adpt.getCount(); i++) {
                                 String pkg = (String) ((MainAppListSimpleAdapter) adpt).getStoredArrayList().get(i).get("PackageName");
@@ -1066,7 +1084,7 @@ public class Main extends Activity {
                         }
                         return true;
                     case R.id.list_menu_selectUnselected:
-                        Adapter adapt = app_listView.getAdapter();
+                        Adapter adapt = mMainActivityAppListFragment.getAppListAdapter();
                         if (adapt instanceof MainAppListSimpleAdapter) {
                             for (int i = 0; i < adapt.getCount(); i++) {
                                 String pkg = (String) ((MainAppListSimpleAdapter) adapt).getStoredArrayList().get(i).get("PackageName");
@@ -1153,11 +1171,11 @@ public class Main extends Activity {
             }
         });
 
-        app_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mMainActivityAppListFragment.setOnAppListItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Map<String, Object> map =
-                        ((MainAppListSimpleAdapter) app_listView.getAdapter())
+                        ((MainAppListSimpleAdapter) mMainActivityAppListFragment.getAppListAdapter())
                                 .getStoredArrayList().get(i);
                 final String name = (String) map.get("Name");
                 final String pkgName = (String) map.get("PackageName");
@@ -1369,10 +1387,6 @@ public class Main extends Activity {
     }
 
     private void go() {
-//        if ("grid".equals(PreferenceManager.getDefaultSharedPreferences(Main.this).getString("mainActivityPattern", "default"))) {
-//            startActivityForResult(new Intent(this, MainGridActivity.class),23001);
-//        } else {
-//        }
         if (updateFrozenStatusBroadcastReceiver == null) {
             updateFrozenStatusBroadcastReceiver = new BroadcastReceiver() {
                 @Override
@@ -1470,7 +1484,28 @@ public class Main extends Activity {
     private Map<String, Object> processAppStatus(String name, String packageName, ApplicationInfo applicationInfo, PackageManager packageManager, boolean saveIconCache) {
         if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
             Map<String, Object> keyValuePair = new HashMap<>();
-            keyValuePair.put("Img", getApplicationIcon(Main.this, packageName, applicationInfo, false, saveIconCache));
+            keyValuePair.put(
+                    "Img",
+                    Support.realGetFrozenStatus(this, packageName, packageManager)
+                            ?
+                            new BitmapDrawable(
+                                    getGrayBitmap(
+                                            getBitmapFromDrawable(getApplicationIcon(
+                                                    this, packageName,
+                                                    applicationInfo,
+                                                    false)
+                                            )
+                                    )
+                            )
+                            :
+                            getApplicationIcon(
+                                    Main.this,
+                                    packageName,
+                                    applicationInfo,
+                                    false,
+                                    saveIconCache
+                            )
+            );
             keyValuePair.put("Name", name);
             processFrozenStatus(keyValuePair, packageName, packageManager);
             keyValuePair.put("PackageName", packageName);
@@ -1482,19 +1517,32 @@ public class Main extends Activity {
     private void oneKeyListGenerate(String[] source, List<Map<String, Object>> AppList) {
         String name;
         Drawable icon;
-        for (String aPkgNameList : source) {
-            name = getApplicationLabel(getApplicationContext(), null, null, aPkgNameList);
-            if (!("android".equals(aPkgNameList) || "cf.playhi.freezeyou".equals(aPkgNameList) || "".equals(aPkgNameList))) {
+        for (String aPkg : source) {
+            name = getApplicationLabel(getApplicationContext(), null, null, aPkg);
+            if (!("android".equals(aPkg) || "cf.playhi.freezeyou".equals(aPkg) || "".equals(aPkg))) {
                 Map<String, Object> keyValuePair = new HashMap<>();
-                icon = getApplicationIcon(
-                        Main.this,
-                        aPkgNameList,
-                        ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkgNameList, Main.this),
-                        true);
+                icon = Support.realGetFrozenStatus(this, aPkg, null)
+                        ?
+                        new BitmapDrawable(
+                                getGrayBitmap(
+                                        getBitmapFromDrawable(getApplicationIcon(
+                                                this, aPkg,
+                                                ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkg, this),
+                                                false)
+                                        )
+                                )
+                        )
+                        :
+                        getApplicationIcon(
+                                Main.this,
+                                aPkg,
+                                ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkg, Main.this),
+                                true
+                        );
                 keyValuePair.put("Img", icon);
                 keyValuePair.put("Name", name);
-                processFrozenStatus(keyValuePair, aPkgNameList, null);
-                keyValuePair.put("PackageName", aPkgNameList);
+                processFrozenStatus(keyValuePair, aPkg, null);
+                keyValuePair.put("PackageName", aPkg);
                 AppList.add(keyValuePair);
             }
         }
@@ -1544,8 +1592,12 @@ public class Main extends Activity {
     }
 
     private void updateFrozenStatus() {
-        final ListView app_listView = findViewById(R.id.app_list);
-        Adapter adapter = app_listView.getAdapter();
+
+        if (mMainActivityAppListFragment == null) {
+            return;
+        }
+
+        Adapter adapter = mMainActivityAppListFragment.getAppListAdapter();
         if (adapter instanceof MainAppListSimpleAdapter) {
             PackageManager pm = getPackageManager();
             int count = adapter.getCount();
