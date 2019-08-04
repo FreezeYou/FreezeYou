@@ -183,6 +183,9 @@ public class FUFLauncherShortcutCreator extends Activity {
                                 SharedPreferences sp = getSharedPreferences(getIntent().getStringExtra("slf_n"), MODE_PRIVATE);
                                 if (!OneKeyListUtils.existsInOneKeyList(sp.getString("pkgS", ""), pkgName)) {
                                     sp.edit().putString("pkgS", sp.getString("pkgS", "") + pkgName + ",").apply();
+                                    ToastUtils.showToast(FUFLauncherShortcutCreator.this, R.string.added);
+                                } else {
+                                    ToastUtils.showToast(FUFLauncherShortcutCreator.this, R.string.alreadyExist);
                                 }
                                 setResult(RESULT_OK);
                             } else {// if (returnPkgName)s
@@ -190,23 +193,8 @@ public class FUFLauncherShortcutCreator extends Activity {
                                         .putExtra("pkgName", pkgName)
                                         .putExtra("name", name)
                                         .putExtra("id", "FreezeYou! " + pkgName));
-//                    } else {
-//
-//                        <!--桌面快捷方式（类小部件）入口已迁移至 LauncherShortcutConfirmAndGenerateActivity.java -->
-//
-//                        Intent shortcutIntent = new Intent(FUFLauncherShortcutCreator.this, Freeze.class);
-//                        shortcutIntent.putExtra("pkgName", pkgName);
-//                        Intent intent = new Intent();
-//                        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-//                        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
-//                        try {
-//                            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getPackageManager().getApplicationIcon(pkgName)));
-//                        } catch (Exception e) {
-//                            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(getApplicationIcon(applicationContext, pkgName, null, false)));
-//                        }
-//                        setResult(RESULT_OK, intent);
+                                finish();
                             }
-                            finish();
                         }
                     });
                 }

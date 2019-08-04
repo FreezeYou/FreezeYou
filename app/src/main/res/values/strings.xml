@@ -305,6 +305,7 @@
     <string name="notAllowWhenIsObsd">不允许遮罩层覆盖</string>
     <string name="remove">移除</string>
     <string name="newFolder">新文件夹</string>
+    <string name="alreadyExist">已存在</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
