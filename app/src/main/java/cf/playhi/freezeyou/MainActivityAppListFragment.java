@@ -108,17 +108,21 @@ public class MainActivityAppListFragment extends Fragment {
     }
 
     public MainAppListSimpleAdapter setAppListAdapter(Context context, ArrayList<Map<String, Object>> appList, ArrayList<String> selectedPackages) {
-        mAppListAdapter = new MainAppListSimpleAdapter(
-                context,
-                appList,
-                selectedPackages,
-                mUseGridMode ?
-                        R.layout.shortcut_launcher_folder_item :
-                        R.layout.app_list_1,
-                new String[]{"Img", "Name", "PackageName", "isFrozen"},
-                mUseGridMode ?
-                        new int[]{R.id.slfi_imageView, R.id.slfi_textView} :
-                        new int[]{R.id.img, R.id.name, R.id.pkgName, R.id.isFrozen});
+        if (mAppListAdapter instanceof MainAppListSimpleAdapter) {
+            ((MainAppListSimpleAdapter) mAppListAdapter).replaceAllInFormerArrayList(appList);
+        } else {
+            mAppListAdapter = new MainAppListSimpleAdapter(
+                    context,
+                    appList,
+                    selectedPackages,
+                    mUseGridMode ?
+                            R.layout.shortcut_launcher_folder_item :
+                            R.layout.app_list_1,
+                    new String[]{"Img", "Name", "PackageName", "isFrozen"},
+                    mUseGridMode ?
+                            new int[]{R.id.slfi_imageView, R.id.slfi_textView} :
+                            new int[]{R.id.img, R.id.name, R.id.pkgName, R.id.isFrozen});
+        }
 
         if (mUseGridMode) {
             if (mAppListGridView != null) {
@@ -129,6 +133,7 @@ public class MainActivityAppListFragment extends Fragment {
                 mAppListListView.setAdapter(mAppListAdapter);
             }
         }
+
         return (MainAppListSimpleAdapter) mAppListAdapter;
     }
 

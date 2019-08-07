@@ -688,7 +688,7 @@ public class Main extends Activity {
                             packageManager,
                             saveIconCache
                     );
-                    if ((keyValuePair != null) && (R.drawable.shapedotwhite != (int) keyValuePair.get("isFrozen"))) {
+                    if ((keyValuePair != null) && (customThemeDisabledDot == (int) keyValuePair.get("isFrozen"))) {
                         AppList.add(keyValuePair);
                     }
                 }
@@ -704,7 +704,7 @@ public class Main extends Activity {
                             packageManager,
                             saveIconCache
                     );
-                    if (keyValuePair != null && R.drawable.shapedotwhite == (int) keyValuePair.get("isFrozen")) {
+                    if (keyValuePair != null && customThemeEnabledDot == (int) keyValuePair.get("isFrozen")) {
                         AppList.add(keyValuePair);
                     }
                 }
@@ -1019,13 +1019,7 @@ public class Main extends Activity {
                 final String pkgName =
                         (String) ((MainAppListSimpleAdapter) mMainActivityAppListFragment.getAppListAdapter())
                                 .getStoredArrayList().get(i).get("PackageName");
-//                if (b) {
-//                    if (!selectedPackages.contains(pkgName)) {
-//                        selectedPackages.add(pkgName);
-//                    }
-//                } else {
-//                    selectedPackages.remove(pkgName);
-//                }
+
                 if (needProcessOnItemCheckedStateChanged) {
                     if (selectedPackages.contains(pkgName)) {
                         selectedPackages.remove(pkgName);
