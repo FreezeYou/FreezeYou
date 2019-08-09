@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import static cf.playhi.freezeyou.DebugModeUtils.isDebugModeEnabled;
-import static cf.playhi.freezeyou.Support.isDeviceOwner;
-import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
-import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
+import static cf.playhi.freezeyou.utils.Support.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.Support.oneKeyActionMRoot;
+import static cf.playhi.freezeyou.utils.Support.oneKeyActionRoot;
 
 public class EnableApplications extends Activity {
     @Override

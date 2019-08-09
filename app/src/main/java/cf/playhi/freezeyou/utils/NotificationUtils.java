@@ -1,4 +1,4 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -12,14 +12,17 @@ import android.os.Build;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import cf.playhi.freezeyou.FUFService;
+import cf.playhi.freezeyou.Freeze;
+import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.receiver.NotificationDeletedReceiver;
 
-import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
+import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 
-final class NotificationUtils {
+public final class NotificationUtils {
 
     @SuppressLint("ApplySharedPref")
-    static void createNotification(Context context, String pkgName, int iconResId, Bitmap bitmap) {
+    public static void createNotification(Context context, String pkgName, int iconResId, Bitmap bitmap) {
 
         AppPreferences preferenceManager = new AppPreferences(context);
         boolean notificationBarFreezeImmediately = preferenceManager.getBoolean("notificationBarFreezeImmediately", true);
@@ -78,7 +81,7 @@ final class NotificationUtils {
         }
     }
 
-    static void deleteNotification(Context context, String pkgName) {
+    public static void deleteNotification(Context context, String pkgName) {
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (mNotificationManager != null) {

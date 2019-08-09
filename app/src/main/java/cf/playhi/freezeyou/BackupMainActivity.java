@@ -20,6 +20,8 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
+import cf.playhi.freezeyou.utils.MoreUtils;
+
 import static cf.playhi.freezeyou.BackupUtils.convertSharedPreference;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;

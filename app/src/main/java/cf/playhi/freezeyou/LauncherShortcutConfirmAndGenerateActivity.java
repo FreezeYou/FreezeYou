@@ -20,10 +20,13 @@ import android.widget.ImageButton;
 
 import java.util.Date;
 
-import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+import cf.playhi.freezeyou.utils.MoreUtils;
+
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
 

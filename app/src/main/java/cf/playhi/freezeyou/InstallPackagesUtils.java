@@ -5,14 +5,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+
+import cf.playhi.freezeyou.utils.ApplicationIconUtils;
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 
 final class InstallPackagesUtils {
 
@@ -129,24 +126,6 @@ final class InstallPackagesUtils {
             if (file.exists()) {
                 file.delete();
             }
-        }
-    }
-
-    static void copyFile(InputStream in, String apkFilePath) throws IOException {
-        if (in == null) {
-            throw new IOException("InputStream is null");
-        }
-        if (Build.VERSION.SDK_INT < 26) {
-            FileOutputStream out = new FileOutputStream(apkFilePath);
-            byte[] buffer = new byte[1024 * 1024];
-            int bytesRead;
-            while ((bytesRead = in.read(buffer)) >= 0) {
-                out.write(buffer, 0, bytesRead);
-            }
-            out.close();
-            in.close();
-        } else {
-            Files.copy(in, new File(apkFilePath).toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
     }
 

@@ -12,6 +12,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Map;
 
+import cf.playhi.freezeyou.utils.TasksUtils;
+
 class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
 
     private final Context mContext;

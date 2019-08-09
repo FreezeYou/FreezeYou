@@ -7,7 +7,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 
-import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
+import cf.playhi.freezeyou.utils.AlertDialogUtils;
+
+import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 
 final class VersionUtils {
 

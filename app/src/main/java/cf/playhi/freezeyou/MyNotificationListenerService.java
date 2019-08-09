@@ -34,7 +34,7 @@ public class MyNotificationListenerService extends NotificationListenerService {
         return super.onBind(intent);
     }
 
-    static StatusBarNotification[] getStatusBarNotifications(){
+    public static StatusBarNotification[] getStatusBarNotifications(){
         return statusBarNotifications;
     }
 }

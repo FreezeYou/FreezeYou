@@ -11,10 +11,10 @@ import android.os.IBinder;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static cf.playhi.freezeyou.DevicePolicyManagerUtils.doLockScreen;
-import static cf.playhi.freezeyou.Support.isDeviceOwner;
-import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
-import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.doLockScreen;
+import static cf.playhi.freezeyou.utils.Support.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.Support.oneKeyActionMRoot;
+import static cf.playhi.freezeyou.utils.Support.oneKeyActionRoot;
 
 public class OneKeyFreezeService extends Service {
 

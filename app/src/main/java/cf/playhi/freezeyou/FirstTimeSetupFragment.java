@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
+import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
 

@@ -12,11 +12,14 @@ import android.provider.Settings;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static cf.playhi.freezeyou.AccessibilityUtils.isAccessibilitySettingsOn;
-import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
-import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
-import static cf.playhi.freezeyou.DevicePolicyManagerUtils.openDevicePolicyManager;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import cf.playhi.freezeyou.utils.ServiceUtils;
+import cf.playhi.freezeyou.utils.Support;
+
+import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
+import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.openDevicePolicyManager;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 final class SettingsUtils {
     static void syncAndCheckSharedPreference(Context context, Activity activity,

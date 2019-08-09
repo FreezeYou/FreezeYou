@@ -1,15 +1,15 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 import android.content.Context;
 import android.widget.Toast;
 
-final class ToastUtils {
+public final class ToastUtils {
 
-    static void showToast(Context context, int id) {
+    public static void showToast(Context context, int id) {
         Toast.makeText(context, id, Toast.LENGTH_LONG).show();
     }
 
-    static void showToast(Context context, String string) {
+    public static void showToast(Context context, String string) {
         if (string != null)
             Toast.makeText(context, string, Toast.LENGTH_LONG).show();
     }

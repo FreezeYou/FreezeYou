@@ -5,10 +5,14 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 
+import cf.playhi.freezeyou.utils.AlertDialogUtils;
+import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
+import cf.playhi.freezeyou.utils.Support;
+
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.ThemeUtils.processAddTranslucent;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class Uninstall extends Activity {
     @Override

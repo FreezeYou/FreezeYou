@@ -1,12 +1,12 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-final class ServiceUtils {
+public final class ServiceUtils {
 
-    static void startService(Context context, Intent intent) {
+    public static void startService(Context context, Intent intent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent);
         } else {

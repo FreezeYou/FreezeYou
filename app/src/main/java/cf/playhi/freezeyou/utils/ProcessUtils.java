@@ -1,11 +1,11 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 
 import java.io.DataOutputStream;
 
-final class ProcessUtils {
+public final class ProcessUtils {
 
-    static void destroyProcess(DataOutputStream dataOutputStream, Process process1) {
+    public static void destroyProcess(DataOutputStream dataOutputStream, Process process1) {
         try {
             if (dataOutputStream != null) {
                 dataOutputStream.close();
@@ -18,7 +18,7 @@ final class ProcessUtils {
         }
     }
 
-    static int fAURoot(String pkgName, Boolean enable) throws Exception {
+    public static int fAURoot(String pkgName, Boolean enable) throws Exception {
         Process process = Runtime.getRuntime().exec("su");
         DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
         if (enable) {

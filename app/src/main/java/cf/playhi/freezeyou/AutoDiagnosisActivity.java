@@ -30,10 +30,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static cf.playhi.freezeyou.AccessibilityUtils.isAccessibilitySettingsOn;
+import cf.playhi.freezeyou.utils.AccessibilityUtils;
+import cf.playhi.freezeyou.utils.ApplicationLabelUtils;
+import cf.playhi.freezeyou.utils.ProcessUtils;
+import cf.playhi.freezeyou.utils.Support;
+
+import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 
 public class AutoDiagnosisActivity extends Activity {

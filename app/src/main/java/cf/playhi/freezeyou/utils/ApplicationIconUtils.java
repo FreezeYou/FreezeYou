@@ -1,4 +1,4 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -16,7 +16,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
-final class ApplicationIconUtils {
+import cf.playhi.freezeyou.R;
+
+public final class ApplicationIconUtils {
 
     /**
      * Drawable转Bitmap
@@ -25,7 +27,7 @@ final class ApplicationIconUtils {
      * @param drawable drawable
      * @return Bitmap
      */
-    static Bitmap getBitmapFromDrawable(Drawable drawable) {
+    public static Bitmap getBitmapFromDrawable(Drawable drawable) {
         if (drawable == null) {
             return Bitmap.createBitmap(144, 144, Bitmap.Config.ARGB_8888);
         } else {
@@ -41,11 +43,11 @@ final class ApplicationIconUtils {
         }
     }
 
-    static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo, boolean resize) {
+    public static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo, boolean resize) {
         return getApplicationIcon(context, pkgName, applicationInfo, resize, false);
     }
 
-    static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo, boolean resize, boolean saveIconCache) {
+    public static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo, boolean resize, boolean saveIconCache) {
         Drawable drawable = null;
         String path = context.getCacheDir() + "/icon/" + pkgName + ".png";
         if (new File(path).exists()) {
@@ -120,7 +122,7 @@ final class ApplicationIconUtils {
      * @param bm 原始图片
      * @return 灰度化图片
      */
-    static Bitmap getGrayBitmap(Bitmap bm) {
+    public static Bitmap getGrayBitmap(Bitmap bm) {
         Bitmap bitmap = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(), Bitmap.Config.ARGB_8888);
         //创建画布
         Canvas canvas = new Canvas(bitmap);

@@ -1,13 +1,13 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
-final class ApplicationInfoUtils {
+public final class ApplicationInfoUtils {
 
-    static ApplicationInfo getApplicationInfoFromPkgName(String pkgName, Context context) {
+    public static ApplicationInfo getApplicationInfoFromPkgName(String pkgName, Context context) {
         ApplicationInfo applicationInfo = null;
         try {
             applicationInfo = context.getPackageManager().getApplicationInfo(pkgName, GET_UNINSTALLED_PACKAGES);

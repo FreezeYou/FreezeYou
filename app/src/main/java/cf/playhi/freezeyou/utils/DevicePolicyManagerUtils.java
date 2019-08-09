@@ -1,4 +1,4 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
@@ -8,16 +8,19 @@ import android.os.PowerManager;
 
 import java.io.DataOutputStream;
 
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import cf.playhi.freezeyou.DeviceAdminReceiver;
+import cf.playhi.freezeyou.R;
 
-final class DevicePolicyManagerUtils {
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
-    static DevicePolicyManager getDevicePolicyManager(Context context) {
+public final class DevicePolicyManagerUtils {
+
+    public static DevicePolicyManager getDevicePolicyManager(Context context) {
         return (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
     }
 
-    static void openDevicePolicyManager(Context context) {
-        showToast(context, R.string.needActiveAccessibilityService);
+    public static void openDevicePolicyManager(Context context) {
+        ToastUtils.showToast(context, R.string.needActiveAccessibilityService);
         ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
         Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
         intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
@@ -29,7 +32,7 @@ final class DevicePolicyManagerUtils {
      *
      * @param context Context
      */
-    static void doLockScreen(Context context) {
+    public static void doLockScreen(Context context) {
         //先走ROOT，有权限的话就可以不影响SmartLock之类的了
         try {
             Process process = Runtime.getRuntime().exec("su");

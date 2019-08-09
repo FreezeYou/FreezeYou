@@ -10,7 +10,11 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.util.Arrays;
 
-import static cf.playhi.freezeyou.TasksUtils.cancelAllUnexecutedDelayTasks;
+import cf.playhi.freezeyou.utils.OneKeyListUtils;
+import cf.playhi.freezeyou.utils.Support;
+import cf.playhi.freezeyou.utils.TasksUtils;
+
+import static cf.playhi.freezeyou.utils.TasksUtils.cancelAllUnexecutedDelayTasks;
 
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
     @SuppressLint("SwitchIntDef")

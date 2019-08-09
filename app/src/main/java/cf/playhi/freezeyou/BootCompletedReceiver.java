@@ -13,11 +13,16 @@ import net.grandcentrix.tray.AppPreferences;
 import java.io.File;
 import java.io.IOException;
 
-import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.NotificationUtils.createNotification;
-import static cf.playhi.freezeyou.Support.checkMRootFrozen;
-import static cf.playhi.freezeyou.Support.checkRootFrozen;
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+import cf.playhi.freezeyou.utils.FileUtils;
+import cf.playhi.freezeyou.utils.ServiceUtils;
+import cf.playhi.freezeyou.utils.TasksUtils;
+
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.utils.NotificationUtils.createNotification;
+import static cf.playhi.freezeyou.utils.Support.checkMRootFrozen;
+import static cf.playhi.freezeyou.utils.Support.checkRootFrozen;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
     @Override

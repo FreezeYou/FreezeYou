@@ -28,11 +28,15 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
-import static cf.playhi.freezeyou.ProcessUtils.destroyProcess;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+import cf.playhi.freezeyou.utils.FileUtils;
+import cf.playhi.freezeyou.utils.Support;
+
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
+import static cf.playhi.freezeyou.utils.ProcessUtils.destroyProcess;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 //Install and uninstall
 public class InstallPackagesService extends Service {
@@ -201,7 +205,7 @@ public class InstallPackagesService extends Service {
                 String apkFileName = "package" + new Date().getTime() + "F.apk";
                 apkFilePath = getExternalCacheDir() + File.separator + "ZDF-" + apkFileName;
 
-                InstallPackagesUtils.copyFile(in, apkFilePath);
+                FileUtils.copyFile(in, apkFilePath);
             }
 
             PackageManager pm = getPackageManager();

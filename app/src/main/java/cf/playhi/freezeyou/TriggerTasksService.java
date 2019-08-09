@@ -16,8 +16,10 @@ import android.os.IBinder;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import cf.playhi.freezeyou.utils.TasksUtils;
+
 import static android.content.Context.MODE_PRIVATE;
-import static cf.playhi.freezeyou.TasksUtils.cancelAllUnexecutedDelayTasks;
+import static cf.playhi.freezeyou.utils.TasksUtils.cancelAllUnexecutedDelayTasks;
 
 public class TriggerTasksService extends Service {
 

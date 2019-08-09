@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
-import static cf.playhi.freezeyou.DevicePolicyManagerUtils.doLockScreen;
+import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.doLockScreen;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class AskLockScreenActivity extends Activity {

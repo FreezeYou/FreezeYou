@@ -7,6 +7,8 @@ import android.content.IntentFilter;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import cf.playhi.freezeyou.utils.ServiceUtils;
+
 class ScreenLockListener {
 
     private final Context mContext;

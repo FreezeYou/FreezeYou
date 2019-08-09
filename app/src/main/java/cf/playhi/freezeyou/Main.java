@@ -56,22 +56,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getGrayBitmap;
-import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
+import cf.playhi.freezeyou.utils.AccessibilityUtils;
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+import cf.playhi.freezeyou.utils.ServiceUtils;
+import cf.playhi.freezeyou.utils.Support;
+
+import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getGrayBitmap;
+import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
-import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
-import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
-import static cf.playhi.freezeyou.OneKeyListUtils.addToOneKeyList;
-import static cf.playhi.freezeyou.OneKeyListUtils.removeFromOneKeyList;
-import static cf.playhi.freezeyou.Support.realGetFrozenStatus;
+import static cf.playhi.freezeyou.utils.MoreUtils.copyToClipboard;
+import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
+import static cf.playhi.freezeyou.utils.OneKeyListUtils.addToOneKeyList;
+import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList;
+import static cf.playhi.freezeyou.utils.Support.realGetFrozenStatus;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
 

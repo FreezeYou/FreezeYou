@@ -12,12 +12,12 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
-import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
-final class LauncherShortcutUtils {
+public final class LauncherShortcutUtils {
 
-    static void checkSettingsAndRequestCreateShortcut(String title, String pkgName, Drawable icon, Class<?> cls, String id, Context context) {
+    public static void checkSettingsAndRequestCreateShortcut(String title, String pkgName, Drawable icon, Class<?> cls, String id, Context context) {
         if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("allowEditWhenCreateShortcut", true)) {
             context.startActivity(
                     new Intent(

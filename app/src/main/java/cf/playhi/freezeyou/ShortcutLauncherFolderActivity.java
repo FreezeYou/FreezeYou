@@ -26,11 +26,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+import cf.playhi.freezeyou.utils.OneKeyListUtils;
+import cf.playhi.freezeyou.utils.Support;
+import cf.playhi.freezeyou.utils.ToastUtils;
+
 import static android.view.Window.FEATURE_NO_TITLE;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getGrayBitmap;
-import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getGrayBitmap;
+import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class ShortcutLauncherFolderActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {

@@ -9,12 +9,12 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
-import static cf.playhi.freezeyou.Support.checkMRootFrozen;
-import static cf.playhi.freezeyou.Support.isDeviceOwner;
-import static cf.playhi.freezeyou.Support.oneKeyActionMRoot;
-import static cf.playhi.freezeyou.Support.oneKeyActionRoot;
-import static cf.playhi.freezeyou.Support.processMRootAction;
-import static cf.playhi.freezeyou.Support.processRootAction;
+import static cf.playhi.freezeyou.utils.Support.checkMRootFrozen;
+import static cf.playhi.freezeyou.utils.Support.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.Support.oneKeyActionMRoot;
+import static cf.playhi.freezeyou.utils.Support.oneKeyActionRoot;
+import static cf.playhi.freezeyou.utils.Support.processMRootAction;
+import static cf.playhi.freezeyou.utils.Support.processRootAction;
 
 public class FUFService extends Service {
 

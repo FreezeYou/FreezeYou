@@ -12,11 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import static cf.playhi.freezeyou.MoreUtils.joinQQGroup;
-import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
+import static cf.playhi.freezeyou.utils.MoreUtils.joinQQGroup;
+import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
 import static cf.playhi.freezeyou.VersionUtils.getVersionName;
@@ -137,7 +137,7 @@ public class AboutActivity extends Activity {
                         );
                     }
                 });
-                builder.setNeutralButton(R.string.okay,null);
+                builder.setNeutralButton(R.string.okay, null);
                 builder.create().show();
             }
         });

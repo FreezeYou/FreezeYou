@@ -1,16 +1,18 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
+import cf.playhi.freezeyou.R;
+
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
-final class ApplicationLabelUtils {
+public final class ApplicationLabelUtils {
 
-    static String getApplicationLabel(Context context, PackageManager packageManager, ApplicationInfo applicationInfo, String pkgName) {
+    public static String getApplicationLabel(Context context, PackageManager packageManager, ApplicationInfo applicationInfo, String pkgName) {
 
         if (pkgName == null) {
             return "";

@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
-import static cf.playhi.freezeyou.Support.checkAndStartApp;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+
+import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
+import static cf.playhi.freezeyou.utils.Support.checkAndStartApp;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class AskRunActivity extends Activity {

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import cf.playhi.freezeyou.utils.ServiceUtils;
+
 public class OneKeyFreeze extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

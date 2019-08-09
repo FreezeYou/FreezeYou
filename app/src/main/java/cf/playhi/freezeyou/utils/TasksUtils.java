@@ -1,4 +1,4 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -27,13 +27,21 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-import static cf.playhi.freezeyou.ProcessUtils.destroyProcess;
-import static cf.playhi.freezeyou.ServiceUtils.startService;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import cf.playhi.freezeyou.FUFService;
+import cf.playhi.freezeyou.OneKeyFreezeService;
+import cf.playhi.freezeyou.OneKeyUFService;
+import cf.playhi.freezeyou.R;
+import cf.playhi.freezeyou.ShowSimpleDialogActivity;
+import cf.playhi.freezeyou.TasksNeedExecuteReceiver;
+import cf.playhi.freezeyou.TriggerTasksService;
 
-final class TasksUtils {
+import static cf.playhi.freezeyou.utils.ProcessUtils.destroyProcess;
+import static cf.playhi.freezeyou.utils.ServiceUtils.startService;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
-    static void publishTask(Context context, int id, int hour, int minute, String repeat, String task) {
+public final class TasksUtils {
+
+    public static void publishTask(Context context, int id, int hour, int minute, String repeat, String task) {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TasksNeedExecuteReceiver.class)
                 .putExtra("id", id)
@@ -97,7 +105,7 @@ final class TasksUtils {
                 setTask(alarmMgr, systemTime + timeInterval, alarmIntent);
             }
         } else {
-            showToast(context, R.string.requestFailedPlsRetry);
+            ToastUtils.showToast(context, R.string.requestFailedPlsRetry);
         }
     }
 
@@ -125,7 +133,7 @@ final class TasksUtils {
         return last - first;
     }
 
-    static void runTask(String task, Context context, String taskTrigger) {
+    public static void runTask(String task, Context context, String taskTrigger) {
         String[] sTasks = task.split(";");
         for (String asTasks : sTasks) {
             int length = asTasks.length();
@@ -334,7 +342,7 @@ final class TasksUtils {
 
     }
 
-    static void onUFApplications(Context context, String pkgNameString) {
+    public static void onUFApplications(Context context, String pkgNameString) {
 
         Support.addUFreezeTimes(context, pkgNameString);
 
@@ -364,7 +372,7 @@ final class TasksUtils {
         db.close();
     }
 
-    static void onFApplications(Context context, String pkgNameString) {
+    public static void onFApplications(Context context, String pkgNameString) {
 
         Support.addFreezeTimes(context, pkgNameString);
 
@@ -427,7 +435,7 @@ final class TasksUtils {
         }
     }
 
-    static void cancelAllUnexecutedDelayTasks(Context context, String typeNeedsCheckTaskTrigger) {
+    public static void cancelAllUnexecutedDelayTasks(Context context, String typeNeedsCheckTaskTrigger) {
         if (typeNeedsCheckTaskTrigger != null) {
             AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(context, TasksNeedExecuteReceiver.class);
@@ -448,7 +456,7 @@ final class TasksUtils {
         }
     }
 
-    static void cancelTheTask(Context context, int id) {
+    public static void cancelTheTask(Context context, int id) {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TasksNeedExecuteReceiver.class)
                 .putExtra("id", id);
@@ -458,7 +466,7 @@ final class TasksUtils {
         }
     }
 
-    static void checkTimeTasks(Context context) {
+    public static void checkTimeTasks(Context context) {
         SQLiteDatabase db = context.openOrCreateDatabase("scheduledTasks", Context.MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
@@ -484,7 +492,7 @@ final class TasksUtils {
         db.close();
     }
 
-    static void checkTriggerTasks(Context context) {
+    public static void checkTriggerTasks(Context context) {
         //事件触发器
         final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null);
         db.execSQL(

@@ -23,9 +23,14 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
-import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
+import cf.playhi.freezeyou.utils.AlertDialogUtils;
+import cf.playhi.freezeyou.utils.FileUtils;
+import cf.playhi.freezeyou.utils.MoreUtils;
+import cf.playhi.freezeyou.utils.ServiceUtils;
+
+import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 /**
  * Install and uninstall
@@ -176,7 +181,7 @@ public class InstallPackagesActivity extends Activity {
                                 finish();
                                 return;
                             }
-                            InstallPackagesUtils.copyFile(in, apkFilePath);
+                            FileUtils.copyFile(in, apkFilePath);
                         }
 
                         //Check AutoAllow

@@ -1,4 +1,4 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -10,11 +10,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import cf.playhi.freezeyou.R;
 
-final class MoreUtils {
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
-    static void requestOpenWebSite(Context context, String url) {
+public final class MoreUtils {
+
+    public static void requestOpenWebSite(Context context, String url) {
         Uri webPage = Uri.parse(url);
         Intent about = new Intent(Intent.ACTION_VIEW, webPage);
         if (about.resolveActivity(context.getPackageManager()) != null) {
@@ -31,7 +33,7 @@ final class MoreUtils {
         }
     }
 
-    static void copyToClipboard(Context context, String data) {
+    public static void copyToClipboard(Context context, String data) {
         ClipboardManager copy = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(data, data);
         if (copy != null) {
@@ -42,7 +44,7 @@ final class MoreUtils {
         }
     }
 
-    static CharSequence getClipboardItemText(Context context) {
+    public static CharSequence getClipboardItemText(Context context) {
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         if (!cm.hasPrimaryClip()) {
             return "";
@@ -54,7 +56,7 @@ final class MoreUtils {
         return clip.getItemAt(0).getText();
     }
 
-    static void joinQQGroup(Context context) {
+    public static void joinQQGroup(Context context) {
         Intent intent = new Intent();
         intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D92NGzlhmCK_UFrL_oEAV7Fe6QrvFR5y_"));
         try {
@@ -64,15 +66,15 @@ final class MoreUtils {
         }
     }
 
-    static ArrayList<String> convertToList(String origin, String s) {
+    public static ArrayList<String> convertToList(String origin, String s) {
         return origin == null ? new ArrayList<String>() : new ArrayList<>(Arrays.asList(origin.split(s)));
     }
 
-    static ArrayList<String> convertToList(String[] origin) {
+    public static ArrayList<String> convertToList(String[] origin) {
         return origin == null ? new ArrayList<String>() : new ArrayList<>(Arrays.asList(origin));
     }
 
-    static String listToString(List<String> l, String s) {
+    public static String listToString(List<String> l, String s) {
 
         if (l == null)
             return "";

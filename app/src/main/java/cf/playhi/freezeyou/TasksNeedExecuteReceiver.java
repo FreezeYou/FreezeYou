@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 
+import cf.playhi.freezeyou.utils.TasksUtils;
+
 public class TasksNeedExecuteReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {

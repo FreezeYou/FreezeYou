@@ -1,4 +1,4 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -26,26 +26,34 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.io.DataOutputStream;
 
-import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
-import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
-import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
-import static cf.playhi.freezeyou.NotificationUtils.createNotification;
-import static cf.playhi.freezeyou.NotificationUtils.deleteNotification;
-import static cf.playhi.freezeyou.OneKeyListUtils.addToOneKeyList;
-import static cf.playhi.freezeyou.OneKeyListUtils.existsInOneKeyList;
-import static cf.playhi.freezeyou.OneKeyListUtils.removeFromOneKeyList;
-import static cf.playhi.freezeyou.ProcessUtils.destroyProcess;
-import static cf.playhi.freezeyou.ProcessUtils.fAURoot;
-import static cf.playhi.freezeyou.ServiceUtils.startService;
-import static cf.playhi.freezeyou.TasksUtils.onFApplications;
-import static cf.playhi.freezeyou.TasksUtils.onUFApplications;
-import static cf.playhi.freezeyou.TasksUtils.runTask;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import cf.playhi.freezeyou.AskRunActivity;
+import cf.playhi.freezeyou.DeviceAdminReceiver;
+import cf.playhi.freezeyou.FUFService;
+import cf.playhi.freezeyou.Freeze;
+import cf.playhi.freezeyou.MainApplication;
+import cf.playhi.freezeyou.MyNotificationListenerService;
+import cf.playhi.freezeyou.R;
 
-class Support {
+import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
+import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
+import static cf.playhi.freezeyou.utils.MoreUtils.copyToClipboard;
+import static cf.playhi.freezeyou.utils.NotificationUtils.createNotification;
+import static cf.playhi.freezeyou.utils.NotificationUtils.deleteNotification;
+import static cf.playhi.freezeyou.utils.OneKeyListUtils.addToOneKeyList;
+import static cf.playhi.freezeyou.utils.OneKeyListUtils.existsInOneKeyList;
+import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList;
+import static cf.playhi.freezeyou.utils.ProcessUtils.destroyProcess;
+import static cf.playhi.freezeyou.utils.ProcessUtils.fAURoot;
+import static cf.playhi.freezeyou.utils.ServiceUtils.startService;
+import static cf.playhi.freezeyou.utils.TasksUtils.onFApplications;
+import static cf.playhi.freezeyou.utils.TasksUtils.onUFApplications;
+import static cf.playhi.freezeyou.utils.TasksUtils.runTask;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
+
+public final class Support {
 
     private static void makeDialog(final String title, final String message, final Context context, final ApplicationInfo applicationInfo, final String pkgName, final String target, final String tasks, final boolean enabled, final Activity activity, final boolean finish) {
         AlertDialog.Builder builder =
@@ -86,11 +94,11 @@ class Support {
         builder.create().show();
     }
 
-    static boolean isDeviceOwner(Context context) {
+    public static boolean isDeviceOwner(Context context) {
         return Build.VERSION.SDK_INT >= 18 && getDevicePolicyManager(context).isDeviceOwnerApp(context.getPackageName());
     }
 
-    static boolean checkMRootFrozen(Context context, String pkgName) {
+    public static boolean checkMRootFrozen(Context context, String pkgName) {
         try {
             return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isDeviceOwner(context) && getDevicePolicyManager(context).isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
         } catch (Exception e) {
@@ -98,7 +106,7 @@ class Support {
         }
     }
 
-    static boolean checkRootFrozen(Context context, String pkgName, PackageManager packageManager) {
+    public static boolean checkRootFrozen(Context context, String pkgName, PackageManager packageManager) {
         int tmp;
         try {
             tmp = packageManager == null ? context.getPackageManager().getApplicationEnabledSetting(pkgName) : packageManager.getApplicationEnabledSetting(pkgName);
@@ -108,7 +116,7 @@ class Support {
         return ((tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) || (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED));
     }
 
-    static void askRun(final Context context, final String pkgName, String target, String tasks, final boolean runImmediately, Activity activity, boolean finish) {
+    public static void askRun(final Context context, final String pkgName, String target, String tasks, final boolean runImmediately, Activity activity, boolean finish) {
         if (runImmediately || (new AppPreferences(context).getBoolean("openImmediately", false))) {
             checkAndStartApp(context, pkgName, target, tasks, activity, finish);
         } else {
@@ -122,7 +130,7 @@ class Support {
         }
     }
 
-    static void shortcutMakeDialog(Context context, String title, String message, final Activity activity, final ApplicationInfo applicationInfo, final String pkgName, String target, String tasks, int ot, boolean auto, boolean finish) {
+    public static void shortcutMakeDialog(Context context, String title, String message, final Activity activity, final ApplicationInfo applicationInfo, final String pkgName, String target, String tasks, int ot, boolean auto, boolean finish) {
         if (new AppPreferences(context).getBoolean("openAndUFImmediately", false) && auto) {
             if (ot == 2) {
                 checkAndStartApp(context, pkgName, target, tasks, activity, finish);
@@ -140,7 +148,8 @@ class Support {
         }
     }
 
-    static void processRootAction(final String pkgName, String target, String tasks, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+    public static boolean processRootAction(final String pkgName, String target, String tasks, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+        boolean returnValue = false;
         String currentPackage = " ";
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
@@ -170,6 +179,7 @@ class Support {
                             }
                             deleteNotification(context, pkgName);
                         }
+                        returnValue = true;
                     } else {
                         showToast(context, R.string.mayUnrootedOrOtherEx);
                     }
@@ -183,10 +193,12 @@ class Support {
                 sendStatusChangedBroadcast(context);
             }
         }
+        return returnValue;
     }
 
     @TargetApi(21)
-    static void processMRootAction(Context context, String pkgName, String target, String tasks, boolean hidden, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+    public static boolean processMRootAction(Context context, String pkgName, String target, String tasks, boolean hidden, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+        boolean returnValue = false;
         String currentPackage = " ";
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
@@ -216,14 +228,16 @@ class Support {
                         askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
                     }
                 }
+                returnValue = true;
             } else {
                 sendStatusChangedBroadcast(context);
                 showToast(context, R.string.failed);
             }
         }
+        return returnValue;
     }
 
-    static void checkAndStartApp(Context context, String pkgName, String target, String tasks, Activity activity, boolean finish) {
+    public static void checkAndStartApp(Context context, String pkgName, String target, String tasks, Activity activity, boolean finish) {
         if (target != null) {
             if (!context.getString(R.string.onlyUnfreeze).equals(target)) {
                 try {
@@ -254,7 +268,7 @@ class Support {
         checkAndDoActivityFinish(activity, finish);
     }
 
-    static void checkFrozenStatusAndStartApp(Context context, String pkgName, String target, String tasks) {
+    public static void checkFrozenStatusAndStartApp(Context context, String pkgName, String target, String tasks) {
         if (realGetFrozenStatus(context, pkgName, null)) {
             processUnfreezeAction(context, pkgName, target, tasks, true, true, null, false);
         } else {
@@ -262,7 +276,7 @@ class Support {
         }
     }
 
-    static void processUnfreezeAction(Context context, String pkgName, String target, String tasks, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+    public static void processUnfreezeAction(Context context, String pkgName, String target, String tasks, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
         startService(context, new Intent(context, FUFService.class)
                 .putExtra("askRun", askRun)
                 .putExtra("pkgName", pkgName)
@@ -274,7 +288,7 @@ class Support {
         checkAndDoActivityFinish(activity, finish);
     }
 
-    static void processFreezeAction(Context context, String pkgName, String target, String tasks, boolean askRun, Activity activity, boolean finish) {
+    public static void processFreezeAction(Context context, String pkgName, String target, String tasks, boolean askRun, Activity activity, boolean finish) {
         startService(context, new Intent(context, FUFService.class)
                 .putExtra("askRun", askRun)
                 .putExtra("pkgName", pkgName)
@@ -285,7 +299,7 @@ class Support {
         checkAndDoActivityFinish(activity, finish);
     }
 
-    static void oneKeyActionRoot(Context context, boolean freeze, String[] pkgNameList) {
+    public static void oneKeyActionRoot(Context context, boolean freeze, String[] pkgNameList) {
         if (pkgNameList != null) {
             String currentPackage = " ";
             if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
@@ -370,7 +384,7 @@ class Support {
     }
 
     @TargetApi(21)
-    static void oneKeyActionMRoot(Context context, boolean freeze, String[] pkgNameList) {
+    public static void oneKeyActionMRoot(Context context, boolean freeze, String[] pkgNameList) {
         if (pkgNameList != null) {
             String currentPackage = " ";
             if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
@@ -428,11 +442,11 @@ class Support {
      * @param packageName 应用包名
      * @return true 则已冻结
      */
-    static boolean realGetFrozenStatus(Context context, String packageName, PackageManager pm) {
+    public static boolean realGetFrozenStatus(Context context, String packageName, PackageManager pm) {
         return (checkRootFrozen(context, packageName, pm) || checkMRootFrozen(context, packageName));
     }
 
-    static void checkAndSetOrganizationName(Context context, String name) {
+    public static void checkAndSetOrganizationName(Context context, String name) {
         if (Build.VERSION.SDK_INT >= 24 && isDeviceOwner(context))
             getDevicePolicyManager(context).setOrganizationName(DeviceAdminReceiver.getComponentName(context), name);
     }
@@ -461,7 +475,7 @@ class Support {
     }
 
 
-    static void checkAddOrRemove(Context context, String pkgNames, String pkgName, String oneKeyName) {
+    public static void checkAddOrRemove(Context context, String pkgNames, String pkgName, String oneKeyName) {
         if (existsInOneKeyList(pkgNames, pkgName)) {
             showToast(context,
                     removeFromOneKeyList(context,
@@ -483,11 +497,11 @@ class Support {
         }
     }
 
-    static void showChooseActionPopupMenu(final Context context, View view, final String pkgName, final String name) {
+    public static void showChooseActionPopupMenu(final Context context, View view, final String pkgName, final String name) {
         showChooseActionPopupMenu(context, view, pkgName, name, false, null);
     }
 
-    static void showChooseActionPopupMenu(final Context context, View view, final String pkgName, final String name, boolean canRemoveItem, final SharedPreferences folderPkgListSp) {
+    public static void showChooseActionPopupMenu(final Context context, View view, final String pkgName, final String name, boolean canRemoveItem, final SharedPreferences folderPkgListSp) {
         generateChooseActionPopupMenu(context, view, pkgName, name, canRemoveItem, folderPkgListSp).show();
     }
 
@@ -620,19 +634,19 @@ class Support {
             );
     }
 
-    static void addFreezeTimes(Context context, String pkgNameString) {
+    public static void addFreezeTimes(Context context, String pkgNameString) {
         SQLiteDatabase db = context.openOrCreateDatabase("ApplicationsFreezeTimes", Context.MODE_PRIVATE, null);
         addTimes(db, pkgNameString);
         db.close();
     }
 
-    static void addUFreezeTimes(Context context, String pkgNameString) {
+    public static void addUFreezeTimes(Context context, String pkgNameString) {
         SQLiteDatabase db = context.openOrCreateDatabase("ApplicationsUFreezeTimes", Context.MODE_PRIVATE, null);
         addTimes(db, pkgNameString);
         db.close();
     }
 
-    static void addUseTimes(Context context, String pkgNameString) {
+    public static void addUseTimes(Context context, String pkgNameString) {
         SQLiteDatabase db = context.openOrCreateDatabase("ApplicationsUseTimes", Context.MODE_PRIVATE, null);
         addTimes(db, pkgNameString);
         db.close();
@@ -669,7 +683,7 @@ class Support {
 
     }
 
-    static void resetTimes(Context context, String dbName) {
+    public static void resetTimes(Context context, String dbName) {
         SQLiteDatabase db = context.openOrCreateDatabase(dbName, Context.MODE_PRIVATE, null);
 
         if (db == null) {

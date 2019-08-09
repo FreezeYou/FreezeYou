@@ -12,18 +12,20 @@ import android.util.Log;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.ApplicationIconUtils.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.DebugModeUtils.isDebugModeEnabled;
-import static cf.playhi.freezeyou.Support.checkMRootFrozen;
-import static cf.playhi.freezeyou.Support.checkRootFrozen;
-import static cf.playhi.freezeyou.Support.processFreezeAction;
-import static cf.playhi.freezeyou.Support.processUnfreezeAction;
-import static cf.playhi.freezeyou.Support.realGetFrozenStatus;
-import static cf.playhi.freezeyou.Support.shortcutMakeDialog;
+import static cf.playhi.freezeyou.utils.Support.checkMRootFrozen;
+import static cf.playhi.freezeyou.utils.Support.checkRootFrozen;
+import static cf.playhi.freezeyou.utils.Support.processFreezeAction;
+import static cf.playhi.freezeyou.utils.Support.processUnfreezeAction;
+import static cf.playhi.freezeyou.utils.Support.realGetFrozenStatus;
+import static cf.playhi.freezeyou.utils.Support.shortcutMakeDialog;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class Freeze extends Activity {
     @Override

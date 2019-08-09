@@ -8,6 +8,9 @@ import android.preference.PreferenceManager;
 
 import java.io.File;
 
+import cf.playhi.freezeyou.utils.ApplicationIconUtils;
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+
 public class PackageReplacedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {

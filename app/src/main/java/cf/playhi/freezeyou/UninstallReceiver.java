@@ -6,8 +6,10 @@ import android.content.Intent;
 
 import java.io.File;
 
-import static cf.playhi.freezeyou.NotificationUtils.deleteNotification;
-import static cf.playhi.freezeyou.OneKeyListUtils.removeFromOneKeyList;
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+
+import static cf.playhi.freezeyou.utils.NotificationUtils.deleteNotification;
+import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList;
 
 public class UninstallReceiver extends BroadcastReceiver {
     @Override

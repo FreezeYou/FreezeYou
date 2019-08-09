@@ -9,8 +9,8 @@ import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cf.playhi.freezeyou.Support.checkMRootFrozen;
-import static cf.playhi.freezeyou.Support.checkRootFrozen;
+import static cf.playhi.freezeyou.utils.Support.checkMRootFrozen;
+import static cf.playhi.freezeyou.utils.Support.checkRootFrozen;
 
 public class GetDisabledApplications extends Activity {
     @Override

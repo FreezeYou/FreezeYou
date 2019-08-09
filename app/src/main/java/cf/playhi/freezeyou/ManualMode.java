@@ -10,11 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import static cf.playhi.freezeyou.Support.isDeviceOwner;
-import static cf.playhi.freezeyou.Support.processRootAction;
+import static cf.playhi.freezeyou.utils.Support.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.Support.processRootAction;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
-import static cf.playhi.freezeyou.DevicePolicyManagerUtils.getDevicePolicyManager;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
 
 public class ManualMode extends Activity {
     @Override

@@ -7,6 +7,12 @@
             android:title="@string/hToUse" />
         <ListPreference
             android:defaultValue="default"
+            android:entries="@array/mainActivityPatternSelection"
+            android:entryValues="@array/mainActivityPatternSelectionValues"
+            android:key="mainActivityPattern"
+            android:title="@string/mainActivityPattern" />
+        <ListPreference
+            android:defaultValue="default"
             android:entries="@array/uiStyleSelection"
             android:entryValues="@array/uiStyleSelectionValues"
             android:key="uiStyleSelection"

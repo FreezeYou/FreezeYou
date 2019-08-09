@@ -7,9 +7,12 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
+import cf.playhi.freezeyou.utils.AccessibilityUtils;
+import cf.playhi.freezeyou.utils.MoreUtils;
+
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class STAATriggerFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 

@@ -15,7 +15,12 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.util.List;
 
-import static cf.playhi.freezeyou.ApplicationLabelUtils.getApplicationLabel;
+import cf.playhi.freezeyou.utils.AlertDialogUtils;
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+import cf.playhi.freezeyou.utils.MoreUtils;
+import cf.playhi.freezeyou.utils.Support;
+
+import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 
 public class UriFreezeActivity extends Activity {
 

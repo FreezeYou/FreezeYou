@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import cf.playhi.freezeyou.utils.AlertDialogUtils;
+
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 public class ShowSimpleDialogActivity extends Activity {

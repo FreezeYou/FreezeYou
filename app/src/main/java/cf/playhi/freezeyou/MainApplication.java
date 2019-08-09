@@ -12,6 +12,10 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
 
+import cf.playhi.freezeyou.utils.OneKeyListUtils;
+import cf.playhi.freezeyou.utils.ServiceUtils;
+import cf.playhi.freezeyou.utils.Support;
+
 public class MainApplication extends Application {
 
     private static String mCurrentPackage = " ";
@@ -86,12 +90,12 @@ public class MainApplication extends Application {
         }
     }
 
-    static void setCurrentPackage(String pkgName) {
+    public static void setCurrentPackage(String pkgName) {
         if (pkgName != null)
             mCurrentPackage = pkgName;
     }
 
-    static String getCurrentPackage() {
+    public static String getCurrentPackage() {
         return mCurrentPackage;
     }
 

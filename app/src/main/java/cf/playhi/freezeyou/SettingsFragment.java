@@ -18,13 +18,16 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
 
-import static cf.playhi.freezeyou.AccessibilityUtils.openAccessibilitySettings;
-import static cf.playhi.freezeyou.AlertDialogUtils.buildAlertDialog;
-import static cf.playhi.freezeyou.FileUtils.deleteAllFiles;
-import static cf.playhi.freezeyou.MoreUtils.requestOpenWebSite;
+import cf.playhi.freezeyou.utils.OneKeyListUtils;
+import cf.playhi.freezeyou.utils.Support;
+
+import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
+import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
+import static cf.playhi.freezeyou.utils.FileUtils.deleteAllFiles;
+import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.VersionUtils.getVersionName;
 

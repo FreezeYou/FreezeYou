@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.service.quicksettings.TileService;
 
+import cf.playhi.freezeyou.utils.ServiceUtils;
+
 @TargetApi(Build.VERSION_CODES.N)
 public class OneKeyFreezeQSTileService extends TileService {
     @Override

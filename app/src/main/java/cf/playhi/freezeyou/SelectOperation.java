@@ -17,12 +17,15 @@ import android.widget.TextView;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static cf.playhi.freezeyou.ApplicationIconUtils.getApplicationIcon;
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+import cf.playhi.freezeyou.utils.Support;
+
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
-import static cf.playhi.freezeyou.MoreUtils.copyToClipboard;
-import static cf.playhi.freezeyou.OneKeyListUtils.existsInOneKeyList;
-import static cf.playhi.freezeyou.Support.realGetFrozenStatus;
-import static cf.playhi.freezeyou.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.MoreUtils.copyToClipboard;
+import static cf.playhi.freezeyou.utils.OneKeyListUtils.existsInOneKeyList;
+import static cf.playhi.freezeyou.utils.Support.realGetFrozenStatus;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class SelectOperation extends Activity {
     @Override

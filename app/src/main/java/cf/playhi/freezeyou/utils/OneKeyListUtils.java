@@ -1,4 +1,4 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 import android.content.Context;
 
@@ -6,30 +6,30 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.util.Arrays;
 
-final class OneKeyListUtils {
+public final class OneKeyListUtils {
 
-    static boolean addToOneKeyList(Context context, String key, String pkgName) {
+    public static boolean addToOneKeyList(Context context, String key, String pkgName) {
         final AppPreferences sharedPreferences = new AppPreferences(context);
         final String pkgNames = sharedPreferences.getString(key, "");
         return existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(key, pkgNames + pkgName + ",");
     }
 
-    static boolean removeFromOneKeyList(Context context, String key, String pkgName) {
+    public static boolean removeFromOneKeyList(Context context, String key, String pkgName) {
         final AppPreferences sharedPreferences = new AppPreferences(context);
         final String pkgNames = sharedPreferences.getString(key, "");
         return !existsInOneKeyList(pkgNames, pkgName) || sharedPreferences.put(key, pkgNames.replace(pkgName + ",", ""));
     }
 
-    static boolean existsInOneKeyList(String pkgNames, String pkgName) {
+    public static boolean existsInOneKeyList(String pkgNames, String pkgName) {
         return pkgNames != null && Arrays.asList(pkgNames.split(",")).contains(pkgName);
     }
 
-    static boolean existsInOneKeyList(Context context, String onekeyName, String pkgName) {
+    public static boolean existsInOneKeyList(Context context, String onekeyName, String pkgName) {
         final String pkgNames = new AppPreferences(context).getString(onekeyName, "");
         return pkgNames != null && Arrays.asList(pkgNames.split(",")).contains(pkgName);
     }
 
-    static boolean removeUninstalledFromOneKeyList(Context context, String oneKeyName) {
+    public static boolean removeUninstalledFromOneKeyList(Context context, String oneKeyName) {
         String s = new AppPreferences(context).getString(oneKeyName, "");
 
         if (s == null) {

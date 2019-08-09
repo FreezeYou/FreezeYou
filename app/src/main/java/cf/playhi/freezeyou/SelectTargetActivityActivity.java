@@ -17,6 +17,9 @@ import android.widget.SimpleAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cf.playhi.freezeyou.utils.ApplicationIconUtils;
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+
 public class SelectTargetActivityActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
