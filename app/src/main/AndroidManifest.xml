@@ -21,25 +21,25 @@
     <permission
         android:name="cf.playhi.freezeyou.permission.GET_DISABLED_APPLICATIONS"
         android:description="@string/getDisabledApplications"
-        android:icon="@mipmap/ic_launcher_new_round"
+        android:icon="@drawable/ic_notification"
         android:label="@string/getDisabledApplications"
         android:protectionLevel="normal" />
     <permission
         android:name="cf.playhi.freezeyou.permission.ENABLE_APPLICATIONS"
         android:description="@string/enableApplications"
-        android:icon="@mipmap/ic_launcher_new_round"
+        android:icon="@drawable/ic_notification"
         android:label="@string/enableApplications"
         android:protectionLevel="dangerous" />
     <permission
         android:name="cf.playhi.freezeyou.permission.DISABLE_APPLICATIONS"
         android:description="@string/disableApplications"
-        android:icon="@mipmap/ic_launcher_new_round"
+        android:icon="@drawable/ic_notification"
         android:label="@string/disableApplications"
         android:protectionLevel="dangerous" />
     <permission
         android:name="cf.playhi.freezeyou.permission.QUERY_STATUS"
         android:description="@string/queryStatus"
-        android:icon="@mipmap/ic_launcher_new_round"
+        android:icon="@drawable/ic_notification"
         android:label="@string/queryStatus"
         android:protectionLevel="normal" />
 

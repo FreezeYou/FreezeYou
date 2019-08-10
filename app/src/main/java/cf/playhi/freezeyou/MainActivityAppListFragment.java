@@ -126,11 +126,21 @@ public class MainActivityAppListFragment extends Fragment {
 
         if (mUseGridMode) {
             if (mAppListGridView != null) {
-                mAppListGridView.setAdapter(mAppListAdapter);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAppListGridView.setAdapter(mAppListAdapter);
+                    }
+                });
             }
         } else {
             if (mAppListListView != null) {
-                mAppListListView.setAdapter(mAppListAdapter);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAppListListView.setAdapter(mAppListAdapter);
+                    }
+                });
             }
         }
 
