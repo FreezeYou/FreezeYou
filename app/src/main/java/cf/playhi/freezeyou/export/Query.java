@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import java.io.DataOutputStream;
 
+import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.Support;
 
 public class Query extends ContentProvider {
@@ -68,16 +69,20 @@ public class Query extends ContentProvider {
                     } else if (queryPkg == null) {
                         bundle.putInt("status", -2);
                     } else {
-                        boolean dpmFrozen = Support.checkMRootFrozen(context, queryPkg);
-                        boolean rootFrozen = Support.checkRootFrozen(context, queryPkg, null);
-                        if (dpmFrozen && rootFrozen) {
-                            bundle.putInt("status", 3);
-                        } else if (dpmFrozen) {
-                            bundle.putInt("status", 2);
-                        } else if (rootFrozen) {
-                            bundle.putInt("status", 1);
+                        if (ApplicationInfoUtils.getApplicationInfoFromPkgName(queryPkg, context) == null) {
+                            bundle.putInt("status", 998);
                         } else {
-                            bundle.putInt("status", 0);
+                            boolean dpmFrozen = Support.checkMRootFrozen(context, queryPkg);
+                            boolean rootFrozen = Support.checkRootFrozen(context, queryPkg, null);
+                            if (dpmFrozen && rootFrozen) {
+                                bundle.putInt("status", 3);
+                            } else if (dpmFrozen) {
+                                bundle.putInt("status", 2);
+                            } else if (rootFrozen) {
+                                bundle.putInt("status", 1);
+                            } else {
+                                bundle.putInt("status", 0);
+                            }
                         }
                     }
                     return bundle;
