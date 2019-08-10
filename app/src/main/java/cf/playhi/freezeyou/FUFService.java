@@ -9,12 +9,15 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
+import net.grandcentrix.tray.AppPreferences;
+
 import static cf.playhi.freezeyou.utils.Support.checkMRootFrozen;
 import static cf.playhi.freezeyou.utils.Support.isDeviceOwner;
 import static cf.playhi.freezeyou.utils.Support.oneKeyActionMRoot;
 import static cf.playhi.freezeyou.utils.Support.oneKeyActionRoot;
 import static cf.playhi.freezeyou.utils.Support.processMRootAction;
 import static cf.playhi.freezeyou.utils.Support.processRootAction;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class FUFService extends Service {
 
@@ -30,15 +33,39 @@ public class FUFService extends Service {
             boolean runImmediately = intent.getBooleanExtra("runImmediately", false);
             if (freeze) {
                 if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
-                    processMRootAction(context, pkgName, target, tasks, true, askRun, false, null, false);
+                    if (processMRootAction(context, pkgName, target, tasks, true, askRun, false, null, false)) {
+                        if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                            showToast(context, R.string.freezeCompleted);
+                        }
+                    } else {
+                        showToast(context, R.string.failed);
+                    }
                 } else {
-                    processRootAction(pkgName, target, tasks, context, false, askRun, false, null, false);
+                    if (processRootAction(pkgName, target, tasks, context, false, askRun, false, null, false)) {
+                        if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                            showToast(context, R.string.executed);
+                        }
+                    } else {
+                        showToast(context, R.string.failed);
+                    }
                 }
             } else {
                 if (checkMRootFrozen(context, pkgName)) {
-                    processMRootAction(context, pkgName, target, tasks, false, askRun, runImmediately, null, false);
+                    if (processMRootAction(context, pkgName, target, tasks, false, askRun, runImmediately, null, false)) {
+                        if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                            showToast(context, R.string.UFCompleted);
+                        }
+                    } else {
+                        showToast(context, R.string.failed);
+                    }
                 } else {
-                    processRootAction(pkgName, target, tasks, context, true, askRun, runImmediately, null, false);
+                    if (processRootAction(pkgName, target, tasks, context, true, askRun, runImmediately, null, false)) {
+                        if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                            showToast(context, R.string.executed);
+                        }
+                    } else {
+                        showToast(context, R.string.failed);
+                    }
                 }
             }
         } else {

@@ -165,18 +165,12 @@ public final class Support {
                     if (exitValue == 0) {
                         if (enable) {
                             onUFApplications(context, pkgName);
-                            if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
-                                showToast(context, R.string.executed);
-                            }
                             createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context), false)));
                             if (askRun) {
                                 askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
                             }
                         } else {
                             onFApplications(context, pkgName);
-                            if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
-                                showToast(context, R.string.executed);
-                            }
                             deleteNotification(context, pkgName);
                         }
                         returnValue = true;
@@ -185,9 +179,13 @@ public final class Support {
                     }
                 } catch (final Exception e) {
                     e.printStackTrace();
-                    showToast(context, context.getString(R.string.exception) + e.getMessage());
-                    if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
-                        showToast(context, R.string.mayUnrooted);
+                    try {
+                        showToast(context, context.getString(R.string.exception) + e.getMessage());
+                        if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
+                            showToast(context, R.string.mayUnrooted);
+                        }
+                    } catch (Exception e0) {
+                        e0.printStackTrace();
                     }
                 }
                 sendStatusChangedBroadcast(context);
@@ -213,16 +211,10 @@ public final class Support {
                 if (hidden) {
                     onFApplications(context, pkgName);
                     sendStatusChangedBroadcast(context);
-                    if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
-                        showToast(context, R.string.freezeCompleted);
-                    }
                     deleteNotification(context, pkgName);
                 } else {
                     onUFApplications(context, pkgName);
                     sendStatusChangedBroadcast(context);
-                    if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
-                        showToast(context, R.string.UFCompleted);
-                    }
                     createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context), false)));
                     if (askRun) {
                         askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
@@ -231,7 +223,6 @@ public final class Support {
                 returnValue = true;
             } else {
                 sendStatusChangedBroadcast(context);
-                showToast(context, R.string.failed);
             }
         }
         return returnValue;

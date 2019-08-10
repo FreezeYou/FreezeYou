@@ -5,9 +5,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import cf.playhi.freezeyou.utils.Support;
+
+import static cf.playhi.freezeyou.utils.Support.isDeviceOwner;
 
 public class Freeze extends ContentProvider {
 
@@ -58,13 +61,17 @@ public class Freeze extends ContentProvider {
                     } else if (pkgName == null) {
                         bundle.putInt("result", -2);
                     } else {
-                        if (Support.checkMRootFrozen(context, pkgName)) {
-                            if (Support.processMRootAction(context, pkgName, null, null, true, false, false, null, false)) {
-                                bundle.putInt("result", 0);
+                        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
+                            if (Support.checkMRootFrozen(context, pkgName)) {
+                                bundle.putInt("result", 999);
                             } else {
-                                bundle.putInt("result", -3);
+                                if (Support.processMRootAction(context, pkgName, null, null, true, false, false, null, false)) {
+                                    bundle.putInt("result", 0);
+                                } else {
+                                    bundle.putInt("result", -3);
+                                }
                             }
-                        } else if (Support.checkRootFrozen(context, pkgName, null)) {
+                        } else if (!Support.checkRootFrozen(context, pkgName, null)) {
                             if (Support.processRootAction(pkgName, null, null, context, false, false, false, null, false)) {
                                 bundle.putInt("result", 0);
                             } else {
@@ -82,13 +89,13 @@ public class Freeze extends ContentProvider {
                         bundle.putInt("result", -2);
                     } else {
                         if (Support.checkMRootFrozen(context, pkgName)) {
+                            bundle.putInt("result", 999);
+                        } else {
                             if (Support.processMRootAction(context, pkgName, null, null, true, false, false, null, false)) {
                                 bundle.putInt("result", 0);
                             } else {
                                 bundle.putInt("result", -3);
                             }
-                        } else {
-                            bundle.putInt("result", 999);
                         }
                     }
                     return bundle;
@@ -99,13 +106,13 @@ public class Freeze extends ContentProvider {
                         bundle.putInt("result", -2);
                     } else {
                         if (Support.checkRootFrozen(context, pkgName, null)) {
+                            bundle.putInt("result", 999);
+                        } else {
                             if (Support.processRootAction(pkgName, null, null, context, false, false, false, null, false)) {
                                 bundle.putInt("result", 0);
                             } else {
                                 bundle.putInt("result", -4);
                             }
-                        } else {
-                            bundle.putInt("result", 999);
                         }
                     }
                     bundle.putInt("result", 0);
