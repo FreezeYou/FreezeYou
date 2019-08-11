@@ -9,9 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
-import cf.playhi.freezeyou.utils.Support;
+import cf.playhi.freezeyou.utils.FUFUtils;
 
-import static cf.playhi.freezeyou.utils.Support.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
 
 public class Freeze extends ContentProvider {
 
@@ -66,17 +66,17 @@ public class Freeze extends ContentProvider {
                             bundle.putInt("result", 998);
                         } else {
                             if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
-                                if (Support.checkMRootFrozen(context, pkgName)) {
+                                if (FUFUtils.checkMRootFrozen(context, pkgName)) {
                                     bundle.putInt("result", 999);
                                 } else {
-                                    if (Support.processMRootAction(context, pkgName, null, null, true, false, false, null, false)) {
+                                    if (FUFUtils.processMRootAction(context, pkgName, null, null, true, false, false, null, false)) {
                                         bundle.putInt("result", 0);
                                     } else {
                                         bundle.putInt("result", -3);
                                     }
                                 }
-                            } else if (!Support.checkRootFrozen(context, pkgName, null)) {
-                                if (Support.processRootAction(pkgName, null, null, context, false, false, false, null, false)) {
+                            } else if (!FUFUtils.checkRootFrozen(context, pkgName, null)) {
+                                if (FUFUtils.processRootAction(pkgName, null, null, context, false, false, false, null, false)) {
                                     bundle.putInt("result", 0);
                                 } else {
                                     bundle.putInt("result", -4);
@@ -96,10 +96,10 @@ public class Freeze extends ContentProvider {
                         if (ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context) == null) {
                             bundle.putInt("result", 998);
                         } else {
-                            if (Support.checkMRootFrozen(context, pkgName)) {
+                            if (FUFUtils.checkMRootFrozen(context, pkgName)) {
                                 bundle.putInt("result", 999);
                             } else {
-                                if (Support.processMRootAction(context, pkgName, null, null, true, false, false, null, false)) {
+                                if (FUFUtils.processMRootAction(context, pkgName, null, null, true, false, false, null, false)) {
                                     bundle.putInt("result", 0);
                                 } else {
                                     bundle.putInt("result", -3);
@@ -117,10 +117,10 @@ public class Freeze extends ContentProvider {
                         if (ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context) == null) {
                             bundle.putInt("result", 998);
                         } else {
-                            if (Support.checkRootFrozen(context, pkgName, null)) {
+                            if (FUFUtils.checkRootFrozen(context, pkgName, null)) {
                                 bundle.putInt("result", 999);
                             } else {
-                                if (Support.processRootAction(pkgName, null, null, context, false, false, false, null, false)) {
+                                if (FUFUtils.processRootAction(pkgName, null, null, context, false, false, false, null, false)) {
                                     bundle.putInt("result", 0);
                                 } else {
                                     bundle.putInt("result", -4);

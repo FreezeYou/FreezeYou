@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import cf.playhi.freezeyou.utils.AlertDialogUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
-import cf.playhi.freezeyou.utils.Support;
 
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.ThemeUtils.processAddTranslucent;
@@ -24,7 +23,7 @@ public class Uninstall extends Activity {
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (Support.isDeviceOwner(getApplicationContext())) {
+                        if (DevicePolicyManagerUtils.isDeviceOwner(getApplicationContext())) {
                             try {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     DevicePolicyManagerUtils.getDevicePolicyManager(getApplicationContext()).clearDeviceOwnerApp("cf.playhi.freezeyou");

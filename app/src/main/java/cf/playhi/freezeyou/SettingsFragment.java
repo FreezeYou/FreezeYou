@@ -18,8 +18,9 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
 
+import cf.playhi.freezeyou.utils.DataStatisticsUtils;
+import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
-import cf.playhi.freezeyou.utils.Support;
 
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
@@ -44,7 +45,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         if (getVersionName(getActivity()).contains("g")) {
             ((PreferenceScreen) findPreference("more")).removePreference(findPreference("donate"));
         }
-        if (Support.isDeviceOwner(getActivity())) {
+        if (DevicePolicyManagerUtils.isDeviceOwner(getActivity())) {
             ((PreferenceScreen) findPreference("dangerZone")).removePreference(findPreference("clearAllUserData"));
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -243,7 +244,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Support.resetTimes(getActivity(), dbName);
+                        DataStatisticsUtils.resetTimes(getActivity(), dbName);
                     }
                 })
                 .setNegativeButton(R.string.no, null)

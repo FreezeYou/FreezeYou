@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.FileUtils;
-import cf.playhi.freezeyou.utils.Support;
 
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
@@ -145,7 +145,7 @@ public class InstallPackagesService extends Service {
             builder.setLargeIcon(getBitmapFromDrawable(willBeUninstalledIcon));
             notificationManager.notify((packageName + "@InstallPackagesNotification").hashCode(), builder.getNotification());
 
-            if (Build.VERSION.SDK_INT >= 21 && Support.isDeviceOwner(this)) {
+            if (Build.VERSION.SDK_INT >= 21 && DevicePolicyManagerUtils.isDeviceOwner(this)) {
                 getPackageManager().getPackageInstaller().uninstall(packageName,
                         PendingIntent.getBroadcast(this, packageName.hashCode(),
                                 new Intent(
@@ -221,7 +221,7 @@ public class InstallPackagesService extends Service {
             builder.setLargeIcon(getBitmapFromDrawable(willBeInstalledIcon));
             notificationManager.notify((willBeInstalledPackageName + "@InstallPackagesNotification").hashCode(), builder.getNotification());
 
-            if (Build.VERSION.SDK_INT >= 21 && Support.isDeviceOwner(this)) {
+            if (Build.VERSION.SDK_INT >= 21 && DevicePolicyManagerUtils.isDeviceOwner(this)) {
                 PackageInstaller packageInstaller = pm.getPackageInstaller();
                 PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(
                         PackageInstaller.SessionParams.MODE_FULL_INSTALL);

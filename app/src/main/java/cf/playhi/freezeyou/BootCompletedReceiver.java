@@ -21,8 +21,8 @@ import cf.playhi.freezeyou.utils.TasksUtils;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.NotificationUtils.createNotification;
-import static cf.playhi.freezeyou.utils.Support.checkMRootFrozen;
-import static cf.playhi.freezeyou.utils.Support.checkRootFrozen;
+import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;
+import static cf.playhi.freezeyou.utils.FUFUtils.checkRootFrozen;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
     @Override

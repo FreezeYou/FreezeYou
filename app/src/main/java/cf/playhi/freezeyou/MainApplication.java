@@ -12,9 +12,9 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
 
+import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
-import cf.playhi.freezeyou.utils.Support;
 
 public class MainApplication extends Application {
 
@@ -78,7 +78,7 @@ public class MainApplication extends Application {
 
             File organizationName = new File(getFilesDir().getAbsolutePath() + File.separator + "organizationName.lock");
             if (!organizationName.exists()) {
-                Support.checkAndSetOrganizationName(this, getString(R.string.app_name));
+                DevicePolicyManagerUtils.checkAndSetOrganizationName(this, getString(R.string.app_name));
                 organizationName.createNewFile();
             }
 

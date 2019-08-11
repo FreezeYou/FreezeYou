@@ -344,7 +344,7 @@ public final class TasksUtils {
 
     public static void onUFApplications(Context context, String pkgNameString) {
 
-        Support.addUFreezeTimes(context, pkgNameString);
+        DataStatisticsUtils.addUFreezeTimes(context, pkgNameString);
 
         final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null);
         db.execSQL(
@@ -374,7 +374,7 @@ public final class TasksUtils {
 
     public static void onFApplications(Context context, String pkgNameString) {
 
-        Support.addFreezeTimes(context, pkgNameString);
+        DataStatisticsUtils.addFreezeTimes(context, pkgNameString);
 
         final SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null);
         db.execSQL(

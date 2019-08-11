@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import static cf.playhi.freezeyou.DebugModeUtils.isDebugModeEnabled;
-import static cf.playhi.freezeyou.utils.Support.isDeviceOwner;
-import static cf.playhi.freezeyou.utils.Support.oneKeyActionMRoot;
-import static cf.playhi.freezeyou.utils.Support.oneKeyActionRoot;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionMRoot;
+import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionRoot;
 
 public class DisableApplications extends Activity {
     @Override

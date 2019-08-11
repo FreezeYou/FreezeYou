@@ -58,6 +58,7 @@ import java.util.Map;
 
 import cf.playhi.freezeyou.utils.AccessibilityUtils;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.Support;
 
@@ -72,7 +73,7 @@ import static cf.playhi.freezeyou.utils.MoreUtils.copyToClipboard;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.addToOneKeyList;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList;
-import static cf.playhi.freezeyou.utils.Support.realGetFrozenStatus;
+import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
@@ -1180,14 +1181,14 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
                             if (realGetFrozenStatus(Main.this, pkgName, null)) {
-                                Support.processUnfreezeAction(Main.this, pkgName, null, null, false, false, null, false);
+                                FUFUtils.processUnfreezeAction(Main.this, pkgName, null, null, false, false, null, false);
                             } else {
-                                Support.processFreezeAction(Main.this, pkgName, null, null, false, null, false);
+                                FUFUtils.processFreezeAction(Main.this, pkgName, null, null, false, null, false);
                             }
                             break;
                         case APPListViewOnClickMode_freezeImmediately:
                             if (!realGetFrozenStatus(Main.this, pkgName, null)) {
-                                Support.processFreezeAction(Main.this, pkgName, null, null, false, null, false);
+                                FUFUtils.processFreezeAction(Main.this, pkgName, null, null, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
                                     showToast(Main.this, R.string.freezeCompleted);
@@ -1196,7 +1197,7 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_UFImmediately:
                             if (realGetFrozenStatus(Main.this, pkgName, null)) {
-                                Support.processUnfreezeAction(Main.this, pkgName, null, null, false, false, null, false);
+                                FUFUtils.processUnfreezeAction(Main.this, pkgName, null, null, false, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
                                     showToast(Main.this, R.string.UFCompleted);
@@ -1205,19 +1206,19 @@ public class Main extends Activity {
                             break;
                         case APPListViewOnClickMode_UFAndRun:
                             if (realGetFrozenStatus(Main.this, pkgName, null)) {
-                                Support.processUnfreezeAction(Main.this, pkgName, null, null, true, false, null, false);
+                                FUFUtils.processUnfreezeAction(Main.this, pkgName, null, null, true, false, null, false);
                             } else {
                                 if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
                                     showToast(Main.this, R.string.UFCompleted);
                                 }
-                                Support.askRun(Main.this, pkgName, null, null, false, null, false);
+                                FUFUtils.askRun(Main.this, pkgName, null, null, false, null, false);
                             }
                             break;
                         case APPListViewOnClickMode_autoUFOrFreezeAndRun:
                             if (realGetFrozenStatus(Main.this, pkgName, null)) {
-                                Support.processUnfreezeAction(Main.this, pkgName, null, null, true, false, null, false);
+                                FUFUtils.processUnfreezeAction(Main.this, pkgName, null, null, true, false, null, false);
                             } else {
-                                Support.processFreezeAction(Main.this, pkgName, null, null, false, null, false);
+                                FUFUtils.processFreezeAction(Main.this, pkgName, null, null, false, null, false);
                             }
                             break;
                         case APPListViewOnClickMode_addToOFList:
@@ -1486,7 +1487,7 @@ public class Main extends Activity {
             Map<String, Object> keyValuePair = new HashMap<>();
             keyValuePair.put(
                     "Img",
-                    Support.realGetFrozenStatus(this, packageName, packageManager)
+                    FUFUtils.realGetFrozenStatus(this, packageName, packageManager)
                             ?
                             new BitmapDrawable(
                                     getGrayBitmap(
@@ -1521,7 +1522,7 @@ public class Main extends Activity {
             name = getApplicationLabel(getApplicationContext(), null, null, aPkg);
             if (!("android".equals(aPkg) || "cf.playhi.freezeyou".equals(aPkg) || "".equals(aPkg))) {
                 Map<String, Object> keyValuePair = new HashMap<>();
-                icon = Support.realGetFrozenStatus(this, aPkg, null)
+                icon = FUFUtils.realGetFrozenStatus(this, aPkg, null)
                         ?
                         new BitmapDrawable(
                                 getGrayBitmap(

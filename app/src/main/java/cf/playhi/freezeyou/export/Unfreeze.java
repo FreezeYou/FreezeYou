@@ -8,7 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
-import cf.playhi.freezeyou.utils.Support;
+import cf.playhi.freezeyou.utils.FUFUtils;
 
 public class Unfreeze extends ContentProvider {
 
@@ -62,14 +62,14 @@ public class Unfreeze extends ContentProvider {
                         if (ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context) == null) {
                             bundle.putInt("result", 998);
                         } else {
-                            if (Support.checkMRootFrozen(context, pkgName)) {
-                                if (Support.processMRootAction(context, pkgName, null, null, false, false, false, null, false)) {
+                            if (FUFUtils.checkMRootFrozen(context, pkgName)) {
+                                if (FUFUtils.processMRootAction(context, pkgName, null, null, false, false, false, null, false)) {
                                     bundle.putInt("result", 0);
                                 } else {
                                     bundle.putInt("result", -3);
                                 }
-                            } else if (Support.checkRootFrozen(context, pkgName, null)) {
-                                if (Support.processRootAction(pkgName, null, null, context, true, false, false, null, false)) {
+                            } else if (FUFUtils.checkRootFrozen(context, pkgName, null)) {
+                                if (FUFUtils.processRootAction(pkgName, null, null, context, true, false, false, null, false)) {
                                     bundle.putInt("result", 0);
                                 } else {
                                     bundle.putInt("result", -4);
@@ -89,8 +89,8 @@ public class Unfreeze extends ContentProvider {
                         if (ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context) == null) {
                             bundle.putInt("result", 998);
                         } else {
-                            if (Support.checkMRootFrozen(context, pkgName)) {
-                                if (Support.processMRootAction(context, pkgName, null, null, false, false, false, null, false)) {
+                            if (FUFUtils.checkMRootFrozen(context, pkgName)) {
+                                if (FUFUtils.processMRootAction(context, pkgName, null, null, false, false, false, null, false)) {
                                     bundle.putInt("result", 0);
                                 } else {
                                     bundle.putInt("result", -3);
@@ -110,8 +110,8 @@ public class Unfreeze extends ContentProvider {
                         if (ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context) == null) {
                             bundle.putInt("result", 998);
                         } else {
-                            if (Support.checkRootFrozen(context, pkgName, null)) {
-                                if (Support.processRootAction(pkgName, null, null, context, true, false, false, null, false)) {
+                            if (FUFUtils.checkRootFrozen(context, pkgName, null)) {
+                                if (FUFUtils.processRootAction(pkgName, null, null, context, true, false, false, null, false)) {
                                     bundle.putInt("result", 0);
                                 } else {
                                     bundle.putInt("result", -4);

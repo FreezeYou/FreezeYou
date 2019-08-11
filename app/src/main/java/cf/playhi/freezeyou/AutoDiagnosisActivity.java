@@ -32,8 +32,8 @@ import java.util.Map;
 
 import cf.playhi.freezeyou.utils.AccessibilityUtils;
 import cf.playhi.freezeyou.utils.ApplicationLabelUtils;
+import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.ProcessUtils;
-import cf.playhi.freezeyou.utils.Support;
 
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
@@ -281,7 +281,7 @@ public class AutoDiagnosisActivity extends Activity {
     }
 
     private void checkIsDeviceOwner(List<Map<String, Object>> problemsList) {
-        if (!Support.isDeviceOwner(this)) {
+        if (!DevicePolicyManagerUtils.isDeviceOwner(this)) {
             problemsList.add(generateHashMap(getString(R.string.noMRootPermission), getString(R.string.someFuncMayRestrict), "-3", R.drawable.ic_attention));
         } else {
             problemsList.add(generateHashMap(getString(R.string.noMRootPermission), getString(R.string.someFuncMayRestrict), "-3", R.drawable.ic_done));

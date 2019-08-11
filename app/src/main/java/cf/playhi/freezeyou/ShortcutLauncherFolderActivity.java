@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
 import cf.playhi.freezeyou.utils.Support;
 import cf.playhi.freezeyou.utils.ToastUtils;
@@ -199,7 +200,7 @@ public class ShortcutLauncherFolderActivity extends Activity implements SharedPr
                                     .putExtra("slf_n", uuid),
                             7001);
                 } else {
-                    Support.checkFrozenStatusAndStartApp(
+                    FUFUtils.checkFrozenStatusAndStartApp(
                             ShortcutLauncherFolderActivity.this,
                             pkg,
                             null,
@@ -266,7 +267,7 @@ public class ShortcutLauncherFolderActivity extends Activity implements SharedPr
             if (!"".equals(aPkg)) {
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("Icon",
-                        Support.realGetFrozenStatus(this, aPkg, null)
+                        FUFUtils.realGetFrozenStatus(this, aPkg, null)
                                 ?
                                 new BitmapDrawable(getGrayBitmap(getBitmapFromDrawable(getApplicationIcon(this, aPkg, ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkg, this), false))))
                                 :

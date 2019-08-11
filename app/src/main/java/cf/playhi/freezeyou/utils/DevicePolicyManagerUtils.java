@@ -4,6 +4,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.PowerManager;
 
 import java.io.DataOutputStream;
@@ -62,4 +63,12 @@ public final class DevicePolicyManagerUtils {
         }
     }
 
+    public static boolean isDeviceOwner(Context context) {
+        return Build.VERSION.SDK_INT >= 18 && getDevicePolicyManager(context).isDeviceOwnerApp(context.getPackageName());
+    }
+
+    public static void checkAndSetOrganizationName(Context context, String name) {
+        if (Build.VERSION.SDK_INT >= 24 && isDeviceOwner(context))
+            getDevicePolicyManager(context).setOrganizationName(DeviceAdminReceiver.getComponentName(context), name);
+    }
 }

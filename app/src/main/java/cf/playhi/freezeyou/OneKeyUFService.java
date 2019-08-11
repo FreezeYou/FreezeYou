@@ -11,9 +11,9 @@ import android.os.IBinder;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static cf.playhi.freezeyou.utils.Support.isDeviceOwner;
-import static cf.playhi.freezeyou.utils.Support.oneKeyActionMRoot;
-import static cf.playhi.freezeyou.utils.Support.oneKeyActionRoot;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionMRoot;
+import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionRoot;
 
 public class OneKeyUFService extends Service {
     @Override

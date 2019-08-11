@@ -7,7 +7,7 @@ import android.os.Bundle;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
-import static cf.playhi.freezeyou.utils.Support.checkAndStartApp;
+import static cf.playhi.freezeyou.utils.FUFUtils.checkAndStartApp;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 

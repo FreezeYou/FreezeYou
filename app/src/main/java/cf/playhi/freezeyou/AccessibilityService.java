@@ -10,8 +10,9 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.util.Arrays;
 
+import cf.playhi.freezeyou.utils.DataStatisticsUtils;
+import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
-import cf.playhi.freezeyou.utils.Support;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
 import static cf.playhi.freezeyou.utils.TasksUtils.cancelAllUnexecutedDelayTasks;
@@ -42,7 +43,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             if (!pkgNameString.equals(previousPkg)
                                     && new AppPreferences(getApplicationContext()).getBoolean("freezeOnceQuit", false)
                                     && OneKeyListUtils.existsInOneKeyList(getApplicationContext(), getString(R.string.sFreezeOnceQuit), previousPkg)) {
-                                Support.processFreezeAction(getApplicationContext(), previousPkg, null, null, false, null, false);
+                                FUFUtils.processFreezeAction(getApplicationContext(), previousPkg, null, null, false, null, false);
                             }
 
                             onLeaveApplications(previousPkg, pkgNameString);//检测+执行
@@ -136,6 +137,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     }
 
     private void addUpUseTimes(String currentPackage) {
-        Support.addUseTimes(getApplicationContext(),currentPackage);
+        DataStatisticsUtils.addUseTimes(getApplicationContext(),currentPackage);
     }
 }

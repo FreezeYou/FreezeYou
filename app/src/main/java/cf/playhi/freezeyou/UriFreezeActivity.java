@@ -17,8 +17,8 @@ import java.util.List;
 
 import cf.playhi.freezeyou.utils.AlertDialogUtils;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.MoreUtils;
-import cf.playhi.freezeyou.utils.Support;
 
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 
@@ -87,7 +87,7 @@ public class UriFreezeActivity extends Activity {
     private void checkAndCreateUserCheckDialog(final Intent intent, final String pkgName, final int mode) {
 
         final boolean suitableForAutoAllow = mode != MODE_FUF;
-        final boolean isFrozen = Support.realGetFrozenStatus(this, pkgName, getPackageManager());
+        final boolean isFrozen = FUFUtils.realGetFrozenStatus(this, pkgName, getPackageManager());
 
         ObsdAlertDialog obsdAlertDialog = new ObsdAlertDialog(this);
 
@@ -225,7 +225,7 @@ public class UriFreezeActivity extends Activity {
                                 doSuitableForAutoAllowAllow(mode, pkgName, isFrozen);
                             } else {
                                 if (isFrozen) {
-                                    Support.processUnfreezeAction(
+                                    FUFUtils.processUnfreezeAction(
                                             UriFreezeActivity.this,
                                             pkgName,
                                             null,
@@ -236,7 +236,7 @@ public class UriFreezeActivity extends Activity {
                                             true
                                     );
                                 } else {
-                                    Support.checkAndStartApp(
+                                    FUFUtils.checkAndStartApp(
                                             UriFreezeActivity.this,
                                             pkgName,
                                             null,
@@ -260,7 +260,7 @@ public class UriFreezeActivity extends Activity {
                         if (suitableForAutoAllow) {
                             finish();
                         } else {
-                            Support.processFreezeAction(
+                            FUFUtils.processFreezeAction(
                                     UriFreezeActivity.this,
                                     pkgName,
                                     null,
@@ -298,7 +298,7 @@ public class UriFreezeActivity extends Activity {
         switch (mode) {
             case MODE_FREEZE:
                 if (!isFrozen)
-                    Support.processFreezeAction(
+                    FUFUtils.processFreezeAction(
                             UriFreezeActivity.this,
                             pkgName,
                             null,
@@ -312,7 +312,7 @@ public class UriFreezeActivity extends Activity {
                 break;
             case MODE_UNFREEZE:
                 if (isFrozen)
-                    Support.processUnfreezeAction(
+                    FUFUtils.processUnfreezeAction(
                             UriFreezeActivity.this,
                             pkgName,
                             null,
@@ -327,7 +327,7 @@ public class UriFreezeActivity extends Activity {
                 break;
             case MODE_UNFREEZEANDRUN:
                 if (isFrozen)
-                    Support.processUnfreezeAction(
+                    FUFUtils.processUnfreezeAction(
                             UriFreezeActivity.this,
                             pkgName,
                             null,
@@ -338,7 +338,7 @@ public class UriFreezeActivity extends Activity {
                             true
                     );
                 else
-                    Support.checkAndStartApp(
+                    FUFUtils.checkAndStartApp(
                             this,
                             pkgName,
                             null,

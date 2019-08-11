@@ -11,12 +11,12 @@ import android.os.IBinder;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static cf.playhi.freezeyou.utils.Support.checkMRootFrozen;
-import static cf.playhi.freezeyou.utils.Support.isDeviceOwner;
-import static cf.playhi.freezeyou.utils.Support.oneKeyActionMRoot;
-import static cf.playhi.freezeyou.utils.Support.oneKeyActionRoot;
-import static cf.playhi.freezeyou.utils.Support.processMRootAction;
-import static cf.playhi.freezeyou.utils.Support.processRootAction;
+import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionMRoot;
+import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionRoot;
+import static cf.playhi.freezeyou.utils.FUFUtils.processMRootAction;
+import static cf.playhi.freezeyou.utils.FUFUtils.processRootAction;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class FUFService extends Service {

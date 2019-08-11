@@ -12,8 +12,8 @@ import android.provider.Settings;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
-import cf.playhi.freezeyou.utils.Support;
 
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
@@ -104,7 +104,7 @@ final class SettingsUtils {
                 appPreferences.put(s, sharedPreferences.getBoolean(s, true));
                 break;
             case "organizationName":
-                Support.checkAndSetOrganizationName(context, sharedPreferences.getString(s, null));
+                DevicePolicyManagerUtils.checkAndSetOrganizationName(context, sharedPreferences.getString(s, null));
                 break;
             case "avoidFreezeNotifyingApplications":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));

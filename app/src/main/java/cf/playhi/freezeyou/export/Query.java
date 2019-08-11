@@ -10,7 +10,8 @@ import android.os.Bundle;
 import java.io.DataOutputStream;
 
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
-import cf.playhi.freezeyou.utils.Support;
+import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
+import cf.playhi.freezeyou.utils.FUFUtils;
 
 public class Query extends ContentProvider {
 
@@ -55,7 +56,7 @@ public class Query extends ContentProvider {
             String queryPkg = extras.getString("packageName");
             switch (method) {
                 case QUERY_MODE:
-                    if (context != null && Support.isDeviceOwner(getContext())) {
+                    if (context != null && DevicePolicyManagerUtils.isDeviceOwner(getContext())) {
                         bundle.putString("currentMode", "dpm");
                     } else if (checkRootPermission()) {
                         bundle.putString("currentMode", "root");
@@ -72,8 +73,8 @@ public class Query extends ContentProvider {
                         if (ApplicationInfoUtils.getApplicationInfoFromPkgName(queryPkg, context) == null) {
                             bundle.putInt("status", 998);
                         } else {
-                            boolean dpmFrozen = Support.checkMRootFrozen(context, queryPkg);
-                            boolean rootFrozen = Support.checkRootFrozen(context, queryPkg, null);
+                            boolean dpmFrozen = FUFUtils.checkMRootFrozen(context, queryPkg);
+                            boolean rootFrozen = FUFUtils.checkRootFrozen(context, queryPkg, null);
                             if (dpmFrozen && rootFrozen) {
                                 bundle.putInt("status", 3);
                             } else if (dpmFrozen) {
