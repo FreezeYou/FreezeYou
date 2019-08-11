@@ -22,7 +22,7 @@ import cf.playhi.freezeyou.R;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.utils.MoreUtils.copyToClipboard;
+import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.addToOneKeyList;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.existsInOneKeyList;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList;
@@ -167,7 +167,7 @@ public final class Support {
                         }
                         break;
                     case R.id.main_sca_menu_copyPkgName:
-                        copyToClipboard(context, pkgName);
+                        showToast(context, copyToClipboard(context, pkgName) ? R.string.success : R.string.failed);
                         break;
                     case R.id.main_sca_menu_disableAEnable:
                         if (!(context.getString(R.string.notAvailable).equals(name))) {

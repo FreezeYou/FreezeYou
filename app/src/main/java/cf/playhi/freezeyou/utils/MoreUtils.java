@@ -1,7 +1,5 @@
 package cf.playhi.freezeyou.utils;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -29,31 +27,8 @@ public final class MoreUtils {
             }
         } else {
             showToast(context, context.getString(R.string.plsVisit) + " " + url);
-            copyToClipboard(context, url);
+            ClipboardUtils.copyToClipboard(context, url);
         }
-    }
-
-    public static void copyToClipboard(Context context, String data) {
-        ClipboardManager copy = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText(data, data);
-        if (copy != null) {
-            copy.setPrimaryClip(clip);
-            showToast(context, R.string.success);
-        } else {
-            showToast(context, R.string.failed);
-        }
-    }
-
-    public static CharSequence getClipboardItemText(Context context) {
-        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        if (!cm.hasPrimaryClip()) {
-            return "";
-        }
-        ClipData clip = cm.getPrimaryClip();
-        if (clip == null || clip.getItemCount() <= 0) {
-            return "";
-        }
-        return clip.getItemAt(0).getText();
     }
 
     public static void joinQQGroup(Context context) {

@@ -22,7 +22,7 @@ import cf.playhi.freezeyou.utils.Support;
 
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
-import static cf.playhi.freezeyou.utils.MoreUtils.copyToClipboard;
+import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.existsInOneKeyList;
 import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
@@ -124,7 +124,11 @@ public class SelectOperation extends Activity {
                         finish();
                         break;
                     case 5:
-                        copyToClipboard(SelectOperation.this, pkgName);
+                        if (copyToClipboard(SelectOperation.this, pkgName)) {
+                            showToast(SelectOperation.this, R.string.success);
+                        } else {
+                            showToast(SelectOperation.this, R.string.failed);
+                        }
                         finish();
                         break;
                     case 6:

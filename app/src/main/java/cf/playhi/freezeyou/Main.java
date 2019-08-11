@@ -69,7 +69,7 @@ import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getGrayBitmap;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
-import static cf.playhi.freezeyou.utils.MoreUtils.copyToClipboard;
+import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.addToOneKeyList;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList;
@@ -1143,7 +1143,11 @@ public class Main extends Activity {
                         for (int i = 0; i < size; i++) {
                             formattedPackages.append(selectedPackages.get(i)).append(",");
                         }
-                        copyToClipboard(Main.this, formattedPackages.toString());
+                        if (copyToClipboard(Main.this, formattedPackages.toString())) {
+                            showToast(Main.this, R.string.success);
+                        } else {
+                            showToast(Main.this, R.string.failed);
+                        }
                         return true;
                     default:
                         return false;

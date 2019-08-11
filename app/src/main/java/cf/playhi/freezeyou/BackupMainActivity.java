@@ -20,7 +20,8 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
-import cf.playhi.freezeyou.utils.MoreUtils;
+import cf.playhi.freezeyou.utils.ClipboardUtils;
+import cf.playhi.freezeyou.utils.ToastUtils;
 
 import static cf.playhi.freezeyou.BackupUtils.convertSharedPreference;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
@@ -90,7 +91,11 @@ public class BackupMainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 EditText editText = findViewById(R.id.bma_main_inputAndoutput_editText);
-                MoreUtils.copyToClipboard(getApplicationContext(), editText.getText().toString());
+                if (ClipboardUtils.copyToClipboard(getApplicationContext(), editText.getText().toString())) {
+                    ToastUtils.showToast(BackupMainActivity.this, R.string.success);
+                } else {
+                    ToastUtils.showToast(BackupMainActivity.this, R.string.failed);
+                }
             }
         });
 
@@ -98,7 +103,7 @@ public class BackupMainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 EditText editText = findViewById(R.id.bma_main_inputAndoutput_editText);
-                editText.setText(MoreUtils.getClipboardItemText(getApplicationContext()));
+                editText.setText(ClipboardUtils.getClipboardItemText(getApplicationContext()));
             }
         });
 
