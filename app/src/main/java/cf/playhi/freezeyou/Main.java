@@ -1491,7 +1491,7 @@ public class Main extends Activity {
             Map<String, Object> keyValuePair = new HashMap<>();
             keyValuePair.put(
                     "Img",
-                    FUFUtils.realGetFrozenStatus(this, packageName, packageManager)
+                    realGetFrozenStatus(this, packageName, packageManager)
                             ?
                             new BitmapDrawable(
                                     getGrayBitmap(
@@ -1526,7 +1526,7 @@ public class Main extends Activity {
             name = getApplicationLabel(getApplicationContext(), null, null, aPkg);
             if (!("android".equals(aPkg) || "cf.playhi.freezeyou".equals(aPkg) || "".equals(aPkg))) {
                 Map<String, Object> keyValuePair = new HashMap<>();
-                icon = FUFUtils.realGetFrozenStatus(this, aPkg, null)
+                icon = realGetFrozenStatus(this, aPkg, null)
                         ?
                         new BitmapDrawable(
                                 getGrayBitmap(

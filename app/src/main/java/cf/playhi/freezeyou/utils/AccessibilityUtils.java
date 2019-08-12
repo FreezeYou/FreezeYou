@@ -19,7 +19,7 @@ public final class AccessibilityUtils {
             context.startActivity(accessibilityIntent);
         } catch (Exception e) {
             e.printStackTrace();
-            ToastUtils.showToast(context, R.string.failed);
+            showToast(context, R.string.failed);
         }
     }
 

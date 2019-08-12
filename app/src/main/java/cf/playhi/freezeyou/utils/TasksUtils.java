@@ -105,7 +105,7 @@ public final class TasksUtils {
                 setTask(alarmMgr, systemTime + timeInterval, alarmIntent);
             }
         } else {
-            ToastUtils.showToast(context, R.string.requestFailedPlsRetry);
+            showToast(context, R.string.requestFailedPlsRetry);
         }
     }
 
