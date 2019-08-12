@@ -1495,10 +1495,12 @@ public class Main extends Activity {
                             ?
                             new BitmapDrawable(
                                     getGrayBitmap(
-                                            getBitmapFromDrawable(getApplicationIcon(
-                                                    this, packageName,
-                                                    applicationInfo,
-                                                    false)
+                                            getBitmapFromDrawable(
+                                                    getApplicationIcon(
+                                                            this, packageName,
+                                                            applicationInfo,
+                                                            false,
+                                                            saveIconCache)
                                             )
                                     )
                             )
@@ -1609,15 +1611,44 @@ public class Main extends Activity {
             for (int i = 0; i < count; i++) {
                 Map<String, Object> hm = ((MainAppListSimpleAdapter) adapter).getStoredArrayList().get(i);
                 String pkgName = (String) hm.get("PackageName");
+                ApplicationInfo applicationInfo = ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this);
 
                 //检查是否已卸载
-                if (ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this) == null) {
+                if (applicationInfo == null) {
                     hm.put("Name", getString(R.string.uninstalled));
                     break;
                 }
 
-                //更新冻结状态
-                processFrozenStatus(hm, pkgName, pm);
+                //更新冻结状态信息
+                if ((int) hm.get("isFrozen") != getFrozenStatus(pkgName, pm)) {
+
+                    //更新冻结状态点
+                    processFrozenStatus(hm, pkgName, pm);
+
+                    //更新图标
+                    hm.put("Img",
+                            realGetFrozenStatus(this, pkgName, pm)
+                                    ?
+                                    new BitmapDrawable(
+                                            getGrayBitmap(
+                                                    getBitmapFromDrawable(
+                                                            getApplicationIcon(
+                                                                    this,
+                                                                    pkgName,
+                                                                    applicationInfo,
+                                                                    false)
+                                                    )
+                                            )
+                                    )
+                                    :
+                                    getApplicationIcon(
+                                            Main.this,
+                                            pkgName,
+                                            applicationInfo,
+                                            true
+                                    )
+                    );
+                }
             }
             ((MainAppListSimpleAdapter) adapter).notifyDataSetChanged();
         }
