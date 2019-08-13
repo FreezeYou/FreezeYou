@@ -144,7 +144,7 @@ public class Main extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!shortcutsCompleted) {
+        if (!shortcutsCompleted && shortcutsCount > 0) {
             String pkgName;
             shortcutsCount = shortcutsCount - 1;
             pkgName = selectedPackages.get(shortcutsCount);
@@ -1114,21 +1114,22 @@ public class Main extends Activity {
                             ShortcutManager mShortcutManager =
                                     Main.this.getSystemService(ShortcutManager.class);
                             if (mShortcutManager != null && mShortcutManager.isRequestPinShortcutSupported()) {
-                                String pkgName;
                                 shortcutsCount = selectedPackages.size() - 1;
-                                pkgName = selectedPackages.get(shortcutsCount);
-                                createShortCut(
-                                        getApplicationLabel(Main.this, null, null, pkgName),
-                                        pkgName,
-                                        getApplicationIcon(
-                                                Main.this,
-                                                pkgName,
-                                                ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, Main.this),
-                                                false),
-                                        Freeze.class,
-                                        "FreezeYou! " + pkgName,
-                                        Main.this
-                                );
+                                if (shortcutsCount >= 0) {
+                                    String pkgName = selectedPackages.get(shortcutsCount);
+                                    createShortCut(
+                                            getApplicationLabel(Main.this, null, null, pkgName),
+                                            pkgName,
+                                            getApplicationIcon(
+                                                    Main.this,
+                                                    pkgName,
+                                                    ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, Main.this),
+                                                    false),
+                                            Freeze.class,
+                                            "FreezeYou! " + pkgName,
+                                            Main.this
+                                    );
+                                }
                                 shortcutsCompleted = (shortcutsCount <= 0);
                             } else {
                                 createFUFShortcutsBatch();
