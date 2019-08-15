@@ -118,6 +118,8 @@ public class Main extends Activity {
     private boolean shortcutsCompleted = true;
     private int shortcutsCount;
 
+    private boolean isGridMode = false;
+
     private MainActivityAppListFragment mMainActivityAppListFragment;
 
     @Override
@@ -1418,9 +1420,10 @@ public class Main extends Activity {
                     .create().show();
         }
 
+        isGridMode = "grid".equals(sharedPref.getString("mainActivityPattern", "default"));
         if (mMainActivityAppListFragment == null) {
             mMainActivityAppListFragment = new MainActivityAppListFragment();
-            if ("grid".equals(sharedPref.getString("mainActivityPattern", "default"))) {
+            if (isGridMode) {
                 mMainActivityAppListFragment.setUseGridMode(true);
             } else {
                 mMainActivityAppListFragment.setUseGridMode(false);
@@ -1492,7 +1495,7 @@ public class Main extends Activity {
             Map<String, Object> keyValuePair = new HashMap<>();
             keyValuePair.put(
                     "Img",
-                    realGetFrozenStatus(this, packageName, packageManager)
+                    isGridMode && realGetFrozenStatus(this, packageName, packageManager)
                             ?
                             new BitmapDrawable(
                                     getGrayBitmap(
@@ -1513,6 +1516,7 @@ public class Main extends Activity {
                                     false,
                                     saveIconCache
                             )
+
             );
             keyValuePair.put("Name", name);
             processFrozenStatus(keyValuePair, packageName, packageManager);
@@ -1529,7 +1533,7 @@ public class Main extends Activity {
             name = getApplicationLabel(getApplicationContext(), null, null, aPkg);
             if (!("android".equals(aPkg) || "cf.playhi.freezeyou".equals(aPkg) || "".equals(aPkg))) {
                 Map<String, Object> keyValuePair = new HashMap<>();
-                icon = realGetFrozenStatus(this, aPkg, null)
+                icon = isGridMode && realGetFrozenStatus(this, aPkg, null)
                         ?
                         new BitmapDrawable(
                                 getGrayBitmap(
@@ -1627,28 +1631,30 @@ public class Main extends Activity {
                     processFrozenStatus(hm, pkgName, pm);
 
                     //更新图标
-                    hm.put("Img",
-                            realGetFrozenStatus(this, pkgName, pm)
-                                    ?
-                                    new BitmapDrawable(
-                                            getGrayBitmap(
-                                                    getBitmapFromDrawable(
-                                                            getApplicationIcon(
-                                                                    this,
-                                                                    pkgName,
-                                                                    applicationInfo,
-                                                                    false)
-                                                    )
-                                            )
-                                    )
-                                    :
-                                    getApplicationIcon(
-                                            Main.this,
-                                            pkgName,
-                                            applicationInfo,
-                                            true
-                                    )
-                    );
+                    if (isGridMode) {
+                        hm.put("Img",
+                                realGetFrozenStatus(this, pkgName, pm)
+                                        ?
+                                        new BitmapDrawable(
+                                                getGrayBitmap(
+                                                        getBitmapFromDrawable(
+                                                                getApplicationIcon(
+                                                                        this,
+                                                                        pkgName,
+                                                                        applicationInfo,
+                                                                        false)
+                                                        )
+                                                )
+                                        )
+                                        :
+                                        getApplicationIcon(
+                                                Main.this,
+                                                pkgName,
+                                                applicationInfo,
+                                                true
+                                        )
+                        );
+                    }
                 }
             }
             ((MainAppListSimpleAdapter) adapter).notifyDataSetChanged();
