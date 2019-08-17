@@ -309,6 +309,7 @@
     <string name="newFolder">New Folder</string>
     <string name="alreadyExist">Already exists</string>
     <string name="queryStatus">Query Status</string>
+    <string name="newClassification">新建分类</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string-array name="launchModeSelection">
         <item>Show All</item>
