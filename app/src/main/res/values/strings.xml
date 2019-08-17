@@ -307,6 +307,7 @@
     <string name="newFolder">新文件夹</string>
     <string name="alreadyExist">已存在</string>
     <string name="queryStatus">查询状态</string>
+    <string name="newClassification">新建分类</string>
     <!--<string name="displayLanguage">显示语言</string>-->
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
