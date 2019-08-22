@@ -21,7 +21,7 @@ public final class DevicePolicyManagerUtils {
     }
 
     public static void openDevicePolicyManager(Context context) {
-        ToastUtils.showToast(context, R.string.needActiveAccessibilityService);
+        showToast(context, R.string.needActiveAccessibilityService);
         ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
         Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
         intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
