@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Base64;
@@ -16,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.AlertDialogUtils;
 import cf.playhi.freezeyou.utils.ApplicationLabelUtils;
 import cf.playhi.freezeyou.utils.MoreUtils;
@@ -25,7 +25,7 @@ import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
 // Important!
 // Also used to deal with ipa_autoAllow
-public class UriAutoAllowManageActivity extends Activity {
+public class UriAutoAllowManageActivity extends FreezeYouBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);

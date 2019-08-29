@@ -1,14 +1,15 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+
+import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.doLockScreen;
-import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
-public class AskLockScreenActivity extends Activity {
+public class AskLockScreenActivity extends FreezeYouBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this, true);

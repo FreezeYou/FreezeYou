@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -9,10 +8,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
-public class ShowLogcatActivity extends Activity {
+public class ShowLogcatActivity extends FreezeYouBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

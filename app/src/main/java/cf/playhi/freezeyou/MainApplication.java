@@ -15,6 +15,7 @@ import java.io.File;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
+import cf.playhi.freezeyou.utils.Support;
 
 public class MainApplication extends Application {
 
@@ -25,7 +26,7 @@ public class MainApplication extends Application {
         super.onCreate();
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(this);
-//        checkLanguage(getApplicationContext());
+        Support.checkLanguage(getApplicationContext());
         try {
 
             File checkFile = new File(getFilesDir().getAbsolutePath() + File.separator + "20180808");

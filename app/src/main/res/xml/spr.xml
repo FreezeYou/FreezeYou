@@ -65,6 +65,12 @@
             android:key="organizationName"
             android:summary="@string/onlyMROOTModeUse"
             android:title="@string/organizationName" />
+        <ListPreference
+            android:defaultValue="default"
+            android:entries="@array/displayLanguageOptionsSelection"
+            android:entryValues="@array/displayLanguageOptionsSelectionValues"
+            android:key="languagePref"
+            android:title="@string/displayLanguage" />
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/notificationBar">

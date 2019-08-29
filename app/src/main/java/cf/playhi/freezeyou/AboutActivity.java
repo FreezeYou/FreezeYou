@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+
 import static cf.playhi.freezeyou.utils.MoreUtils.joinQQGroup;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
@@ -21,7 +23,7 @@ import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
 import static cf.playhi.freezeyou.VersionUtils.getVersionName;
 
-public class AboutActivity extends Activity {
+public class AboutActivity extends FreezeYouBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);

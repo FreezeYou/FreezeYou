@@ -14,6 +14,7 @@ import net.grandcentrix.tray.AppPreferences;
 
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
+import cf.playhi.freezeyou.utils.Support;
 
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
@@ -128,10 +129,10 @@ final class SettingsUtils {
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 }
                 break;
-            //            case "languagePref":
-//                checkLanguage(context);
-//                showToast(activity,R.string.willTakeEffectsNextLaunch);
-//                break;
+            case "languagePref":
+                Support.checkLanguage(activity);
+                showToast(activity, R.string.willTakeEffectsNextLaunch);
+                break;
             default:
                 break;
         }

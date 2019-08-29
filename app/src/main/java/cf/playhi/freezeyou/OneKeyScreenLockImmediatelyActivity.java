@@ -1,12 +1,12 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 
-public class OneKeyScreenLockImmediatelyActivity extends Activity {
+public class OneKeyScreenLockImmediatelyActivity extends FreezeYouBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

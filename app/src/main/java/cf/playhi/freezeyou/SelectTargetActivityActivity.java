@@ -17,10 +17,11 @@ import android.widget.SimpleAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.ApplicationIconUtils;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 
-public class SelectTargetActivityActivity extends Activity {
+public class SelectTargetActivityActivity extends FreezeYouBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ThemeUtils.processSetTheme(this);

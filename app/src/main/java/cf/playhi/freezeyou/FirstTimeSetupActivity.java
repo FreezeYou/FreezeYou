@@ -1,14 +1,15 @@
 package cf.playhi.freezeyou;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
-public class FirstTimeSetupActivity extends Activity {
+public class FirstTimeSetupActivity extends FreezeYouBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);

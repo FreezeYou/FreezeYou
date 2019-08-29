@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.AlertDialogUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
@@ -31,7 +32,7 @@ import static cf.playhi.freezeyou.ThemeUtils.getThemeFabDotBackground;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
-public class ScheduledTasksManageActivity extends Activity {
+public class ScheduledTasksManageActivity extends FreezeYouBaseActivity {
 
     private final ArrayList<Integer> integerArrayList = new ArrayList<>();
     private final ArrayList<Integer> selectedTasksPositions = new ArrayList<>();

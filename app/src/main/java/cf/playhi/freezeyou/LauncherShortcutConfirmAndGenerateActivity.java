@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -20,15 +19,16 @@ import android.widget.ImageButton;
 
 import java.util.Date;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.MoreUtils;
 
+import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
-public class LauncherShortcutConfirmAndGenerateActivity extends Activity {
+public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseActivity {
 
     private boolean requestFromLauncher;
     private Class<?> targetSelfCls;

@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -20,6 +19,7 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.ClipboardUtils;
 import cf.playhi.freezeyou.utils.ToastUtils;
 
@@ -27,7 +27,7 @@ import static cf.playhi.freezeyou.BackupUtils.convertSharedPreference;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
-public class BackupMainActivity extends Activity {
+public class BackupMainActivity extends FreezeYouBaseActivity {
 
 //    Camera mCamera = null; 先把文本方式稳定下来，再做 QRCode
 

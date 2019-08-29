@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,18 +24,19 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.AccessibilityUtils;
 import cf.playhi.freezeyou.utils.AlertDialogUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
-import static cf.playhi.freezeyou.utils.TasksUtils.publishTask;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeFabDotBackground;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
+import static cf.playhi.freezeyou.utils.TasksUtils.publishTask;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
-public class ScheduledTasksAddActivity extends Activity {
+public class ScheduledTasksAddActivity extends FreezeYouBaseActivity {
 
     private boolean isTimeTask;
     private int id;

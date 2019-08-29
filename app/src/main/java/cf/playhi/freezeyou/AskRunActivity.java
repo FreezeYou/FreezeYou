@@ -1,17 +1,17 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 
-import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
-import static cf.playhi.freezeyou.utils.FUFUtils.checkAndStartApp;
-import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
+import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.utils.FUFUtils.checkAndStartApp;
 
-public class AskRunActivity extends Activity {
+public class AskRunActivity extends FreezeYouBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this, true);

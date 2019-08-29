@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.AlertDialogUtils;
 import cf.playhi.freezeyou.utils.FileUtils;
 import cf.playhi.freezeyou.utils.MoreUtils;
@@ -35,7 +36,7 @@ import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 /**
  * Install and uninstall
  */
-public class InstallPackagesActivity extends Activity {
+public class InstallPackagesActivity extends FreezeYouBaseActivity {
     private static final String ILLEGALPKGNAME = "Fy^&IllegalPN*@!128`+=：:,.[";
 
     @Override

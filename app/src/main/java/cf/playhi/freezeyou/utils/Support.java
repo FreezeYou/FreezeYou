@@ -7,14 +7,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 
 import net.grandcentrix.tray.AppPreferences;
+
+import java.util.Locale;
 
 import cf.playhi.freezeyou.Freeze;
 import cf.playhi.freezeyou.R;
@@ -206,31 +212,38 @@ public final class Support {
         return popup;
     }
 
-//    static void checkLanguage(Context context) {
-//        Resources resources = context.getResources();
-//        DisplayMetrics dm = resources.getDisplayMetrics();
-//        Configuration config = resources.getConfiguration();
-//        String s = PreferenceManager.getDefaultSharedPreferences(context).getString("languagePref", "Default");
-//        if (s == null) {
-//            s = "Default";
-//        }
-//        switch (s) {
-//            case "Default":
-//                config.locale = Locale.getDefault();
-//                break;
-//            case "tc":
-//                config.locale = Locale.TRADITIONAL_CHINESE;
-//                break;
-//            case "sc":
-//                config.locale = Locale.SIMPLIFIED_CHINESE;
-//                break;
-//            case "en":
-//                config.locale = Locale.ENGLISH;
-//                break;
-//            default:
-//                config.locale = Locale.getDefault();
-//                break;
-//        }
-//        resources.updateConfiguration(config, dm);
-//    }
+    public static void checkLanguage(Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        Configuration config = resources.getConfiguration();
+
+        config.locale = getLocal(context);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            config.setLayoutDirection(config.locale);
+        }
+
+        resources.updateConfiguration(config, dm);
+    }
+
+    private static Locale getLocal(Context context) {
+        String s = PreferenceManager.getDefaultSharedPreferences(context).getString("languagePref", "Default");
+
+        if (s == null) {
+            s = "Default";
+        }
+
+        switch (s) {
+            case "tc":
+                return Locale.TRADITIONAL_CHINESE;
+            case "sc":
+                return Locale.SIMPLIFIED_CHINESE;
+            case "en":
+                return Locale.ENGLISH;
+            case "Default":
+            default:
+                return Locale.getDefault();
+        }
+    }
+
 }

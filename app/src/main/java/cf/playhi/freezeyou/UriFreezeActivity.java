@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,6 +14,7 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.util.List;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.AlertDialogUtils;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
@@ -22,7 +22,7 @@ import cf.playhi.freezeyou.utils.MoreUtils;
 
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 
-public class UriFreezeActivity extends Activity {
+public class UriFreezeActivity extends FreezeYouBaseActivity {
 
     private static final int MODE_FREEZE = 11;
     private static final int MODE_UNFREEZE = 21;

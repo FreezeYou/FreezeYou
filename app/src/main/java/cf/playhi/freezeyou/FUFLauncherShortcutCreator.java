@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
 import cf.playhi.freezeyou.utils.ToastUtils;
 
@@ -39,7 +40,7 @@ import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
-public class FUFLauncherShortcutCreator extends Activity {
+public class FUFLauncherShortcutCreator extends FreezeYouBaseActivity {
 
     private int customThemeDisabledDot = R.drawable.shapedotblue;
     private int customThemeEnabledDot = R.drawable.shapedotblack;

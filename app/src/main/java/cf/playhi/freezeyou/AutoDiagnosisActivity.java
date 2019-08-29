@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.AccessibilityUtils;
 import cf.playhi.freezeyou.utils.ApplicationLabelUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
@@ -41,7 +42,7 @@ import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 
-public class AutoDiagnosisActivity extends Activity {
+public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

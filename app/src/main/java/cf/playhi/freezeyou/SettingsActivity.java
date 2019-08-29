@@ -1,16 +1,17 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends FreezeYouBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);

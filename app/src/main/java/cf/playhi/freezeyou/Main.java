@@ -56,6 +56,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.AccessibilityUtils;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
@@ -81,7 +82,7 @@ import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
 
-public class Main extends Activity {
+public class Main extends FreezeYouBaseActivity {
 
     private final static int APPListViewOnClickMode_chooseAction = 0;
     private final static int APPListViewOnClickMode_autoUFOrFreeze = 1;
