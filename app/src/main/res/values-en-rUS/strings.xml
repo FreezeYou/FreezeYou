@@ -311,7 +311,7 @@
     <string name="queryStatus">Query Status</string>
     <string name="newClassification">New category</string>
     <string name="userDefined">User Customize</string>
-    <string name="displayLanguage">显示语言</string>
+    <string name="displayLanguage">Display Language</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
