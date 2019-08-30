@@ -4,6 +4,20 @@
     <item android:title="@string/viewMode">
         <menu>
             <item
+                android:id="@+id/menu_vM_userDefined"
+                android:title="@string/userDefined">
+                <menu>
+                    <group
+                        android:checkableBehavior="none"
+                        android:id="@+id/menu_vM_userDefined_menuGroup">
+                        <item
+                            android:id="@+id/menu_vM_userDefined_newClassification"
+                            android:title="@string/newClassification"
+                            android:orderInCategory="0"/>
+                    </group>
+                </menu>
+            </item>
+            <item
                 android:id="@+id/menu_vM_onlyFrozen"
                 android:title="@string/onlyFrozen" />
             <item

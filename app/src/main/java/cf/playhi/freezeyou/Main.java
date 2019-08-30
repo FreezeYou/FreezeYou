@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -32,6 +31,7 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Adapter;
@@ -63,24 +63,24 @@ import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.Support;
 
+import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
+import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
+import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
+import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
+import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
+import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getGrayBitmap;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
-import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
-import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;
+import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.addToOneKeyList;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList;
-import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
-import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
-import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
-import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
-import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
-import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
 
 public class Main extends FreezeYouBaseActivity {
 
@@ -213,8 +213,41 @@ public class Main extends FreezeYouBaseActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         String cTheme = ThemeUtils.getUiTheme(this);
-        if ("white".equals(cTheme) || "default".equals(cTheme))
+        if ("white".equals(cTheme) || "default".equals(cTheme)) {
             menu.findItem(R.id.menu_timedTasks).setIcon(R.drawable.ic_action_add_light);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        SubMenu vmUserDefinedSubMenu = menu.findItem(R.id.menu_vM_userDefined).getSubMenu();
+        vmUserDefinedSubMenu.clear(); // 清空先前产生的数据
+
+        vmUserDefinedSubMenu.add(
+                R.id.menu_vM_userDefined_menuGroup,
+                R.id.menu_vM_userDefined_newClassification,
+                0,
+                R.string.newClassification
+        ); // 加入“新建分类”
+
+        // 添加用户定义的自定义分类
+        SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
+        vmUserDefinedDb.execSQL(
+                "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+        );
+        Cursor cursor = vmUserDefinedDb.query("categories", new String[]{"label", "_id"}, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                int id = cursor.getInt(cursor.getColumnIndex("_id"));
+                String title = cursor.getString(cursor.getColumnIndex("label"));
+                vmUserDefinedSubMenu.add(R.id.menu_vM_userDefined_menuGroup, id, id, title);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        vmUserDefinedDb.close();
+
         return true;
     }
 
@@ -491,6 +524,18 @@ public class Main extends FreezeYouBaseActivity {
                         generateList("FOQ");
                     }
                 }).start();
+                return true;
+            case R.id.menu_vM_userDefined_newClassification:
+//                SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
+//                vmUserDefinedDb.execSQL(
+//                        "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+//                );
+//                vmUserDefinedDb.execSQL(
+//                        "replace into categories(_id,label,packages) VALUES ( "
+//                                + null + ",'"
+//                                + "Label" + "','" + "com.android.bluetooth" + "')"
+//                );
+//                vmUserDefinedDb.close();
                 return true;
             case R.id.menu_update:
                 checkUpdate(Main.this);
