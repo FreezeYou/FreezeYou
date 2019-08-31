@@ -200,9 +200,6 @@ public class Main extends FreezeYouBaseActivity {
                     );
                 }
                 break;
-            case 23001:
-                finish();
-                break;
             default:
                 break;
         }
