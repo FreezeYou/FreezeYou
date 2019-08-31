@@ -312,6 +312,7 @@
     <string name="newClassification">新建分类</string>
     <string name="userDefined">用户自定</string>
     <string name="displayLanguage">显示语言</string>
+    <string name="emptyNotAllowed">不可为空</string>
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
         <item>僅已凍結</item>
