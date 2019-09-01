@@ -312,7 +312,7 @@
     <string name="newClassification">New category</string>
     <string name="userDefined">User Customize</string>
     <string name="displayLanguage">Display Language</string>
-    <string name="emptyNotAllowed">不可为空</string>
+    <string name="emptyNotAllowed">Empty is not allowed</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
