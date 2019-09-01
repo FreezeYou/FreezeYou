@@ -219,7 +219,9 @@ public class ShortcutLauncherFolderActivity extends FreezeYouBaseActivity implem
                 if (!"freezeyou@add".equals(pkgName)) {
                     String name = (String) hm.get("Label");
                     Support.showChooseActionPopupMenu(
-                            ShortcutLauncherFolderActivity.this, view, pkgName,
+                            ShortcutLauncherFolderActivity.this,
+                            ShortcutLauncherFolderActivity.this,
+                            view, pkgName,
                             name, true, uuidSp);
                 }
                 return true;

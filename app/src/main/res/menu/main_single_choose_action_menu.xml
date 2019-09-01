@@ -11,6 +11,20 @@
     <item android:title="@string/addToRemoveFrom">
         <menu>
             <item
+                android:id="@+id/main_sca_userDefined"
+                android:title="@string/userDefined">
+                <menu>
+                    <group
+                        android:id="@+id/main_sca_menu_userDefined_menuGroup"
+                        android:checkableBehavior="none" >
+                        <item
+                            android:id="@+id/main_sca_menu_userDefined_newClassification"
+                            android:title="@string/newClassification"
+                            android:orderInCategory="0"/>
+                    </group>
+                </menu>
+            </item>
+            <item
                 android:id="@+id/main_sca_menu_addToOneKeyList"
                 android:title="@string/addToOneKeyList" />
             <item

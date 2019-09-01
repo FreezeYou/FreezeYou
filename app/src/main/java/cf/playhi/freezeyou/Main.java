@@ -1154,7 +1154,7 @@ public class Main extends FreezeYouBaseActivity {
                                 );
                                 overridePendingTransition(R.anim.pullup, R.anim.pulldown);
                             } else {
-                                Support.showChooseActionPopupMenu(Main.this, view, pkgName, name);
+                                Support.showChooseActionPopupMenu(Main.this, Main.this, view, pkgName, name);
                             }
                             break;
                         case APPListViewOnClickMode_autoUFOrFreeze:
