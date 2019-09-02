@@ -308,11 +308,11 @@
     <string name="remove">移除</string>
     <string name="newFolder">新增檔案夾</string>
     <string name="alreadyExist">已存在</string>
-    <string name="queryStatus">查询状态</string>
-    <string name="newClassification">新建分类</string>
-    <string name="userDefined">用户自定</string>
-    <string name="displayLanguage">显示语言</string>
-    <string name="emptyNotAllowed">不可为空</string>
+    <string name="queryStatus">查詢狀態</string>
+    <string name="newClassification">新增類別</string>
+    <string name="userDefined">使用者自定</string>
+    <string name="displayLanguage">顯示語言</string>
+    <string name="emptyNotAllowed">不可空白</string>
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
         <item>僅已凍結</item>
