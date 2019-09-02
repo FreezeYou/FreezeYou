@@ -25,6 +25,7 @@ import android.widget.PopupMenu;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 import cf.playhi.freezeyou.Freeze;
@@ -103,8 +104,8 @@ public final class Support {
                     addToOneKeyList(context,
                             oneKeyName,
                             pkgName) ? R.string.added : R.string.addFailed);
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             if (context.getString(R.string.sFreezeOnceQuit).equals(oneKeyName)) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                 if (!preferences.getBoolean("freezeOnceQuit", false)) {
                     preferences.edit().putBoolean("freezeOnceQuit", true).apply();
                     new AppPreferences(context).put("freezeOnceQuit", true);
@@ -134,15 +135,19 @@ public final class Support {
                 0,
                 R.string.newClassification
         ); // 加入“新建分类”
+
+        final HashMap<Integer, String> userDefinedCategoriesHashMap = new HashMap<>();
+
         SQLiteDatabase vmUserDefinedDb = context.openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
         vmUserDefinedDb.execSQL(
                 "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
         );
-        Cursor cursor = vmUserDefinedDb.query("categories", new String[]{"label", "_id"}, null, null, null, null, null);
+        Cursor cursor = vmUserDefinedDb.query("categories", new String[]{"label", "_id", "packages"}, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 int id = cursor.getInt(cursor.getColumnIndex("_id"));
                 String title = cursor.getString(cursor.getColumnIndex("label"));
+                userDefinedCategoriesHashMap.put(id, cursor.getString(cursor.getColumnIndex("packages")));
                 vmUserDefinedSubMenu.add(R.id.main_sca_menu_userDefined_menuGroup, id, id, new String(Base64.decode(title, Base64.DEFAULT)));
                 cursor.moveToNext();
             }
@@ -228,6 +233,29 @@ public final class Support {
                                 vmUserDefinedNameAlertDialog.show();
                                 break;
                             default:
+                                int itemId = item.getItemId();
+                                if (userDefinedCategoriesHashMap.containsKey(itemId)) {
+                                    SQLiteDatabase vmUserDefinedDb = context.openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
+                                    vmUserDefinedDb.execSQL(
+                                            "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+                                    );
+                                    String pkgs = userDefinedCategoriesHashMap.get(itemId);
+                                    if (pkgs != null) {
+                                        if (existsInOneKeyList(pkgs, pkgName)) {
+                                            pkgs = pkgs + pkgName + ",";
+                                        } else {
+                                            pkgs = pkgs.replace(pkgName + ",", "");
+                                        }
+                                        vmUserDefinedDb.execSQL(
+                                                "UPDATE categories SET packages = '"
+                                                        + pkgs
+                                                        + "' WHERE _id = "
+                                                        + itemId
+                                                        + ";"
+                                        );
+                                    }
+                                    vmUserDefinedDb.close();
+                                }
                                 break;
                         }
                     default:
