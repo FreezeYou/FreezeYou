@@ -234,6 +234,7 @@ public final class Support {
                                 break;
                             default:
                                 int itemId = item.getItemId();
+                                //TODO: Test
                                 if (userDefinedCategoriesHashMap.containsKey(itemId)) {
                                     SQLiteDatabase vmUserDefinedDb = context.openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
                                     vmUserDefinedDb.execSQL(
