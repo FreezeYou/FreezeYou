@@ -302,6 +302,25 @@ public class Main extends FreezeYouBaseActivity {
                         vmUserDefinedNameAlertDialog.show();
                         return true;
                     default:
+                        String title = item.getTitle().toString();
+                        SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
+                        vmUserDefinedDb.execSQL(
+                                "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+                        );
+                        Cursor cursor =
+                                vmUserDefinedDb.query(
+                                        "categories",
+                                        new String[]{"packages"},
+                                        "label = '" + Base64.encodeToString(title.getBytes(), Base64.DEFAULT) + "'",
+                                        null, null, null, null
+                                );
+                        if (cursor.moveToFirst()) {
+                            generateList(cursor.getString(cursor.getColumnIndex("packages")));
+                        } else {
+                            showToast(this, R.string.failed);
+                        }
+                        cursor.close();
+                        vmUserDefinedDb.close();
                         return true;
                 }
             default:
@@ -606,6 +625,10 @@ public class Main extends FreezeYouBaseActivity {
         generateList(filter, currentSortRule);
     }
 
+    /**
+     * @param filter   筛选规则 或 所有需要显示的软件包包名（以“,”分割）
+     * @param sortRule 排序规则
+     */
     private void generateList(String filter, int sortRule) {
         currentFilter = filter;
         currentSortRule = sortRule;
@@ -744,6 +767,8 @@ public class Main extends FreezeYouBaseActivity {
                 checkAndAddNotAvailablePair(AppList);
                 break;
             default:
+                oneKeyListCheckAndGenerate(filter, AppList);
+                checkAndAddNotAvailablePair(AppList);
                 break;
         }
 

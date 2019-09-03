@@ -234,28 +234,30 @@ public final class Support {
                                 break;
                             default:
                                 int itemId = item.getItemId();
-                                //TODO: Test
                                 if (userDefinedCategoriesHashMap.containsKey(itemId)) {
                                     SQLiteDatabase vmUserDefinedDb = context.openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
                                     vmUserDefinedDb.execSQL(
                                             "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
                                     );
                                     String pkgs = userDefinedCategoriesHashMap.get(itemId);
-                                    if (pkgs != null) {
-                                        if (existsInOneKeyList(pkgs, pkgName)) {
-                                            pkgs = pkgs + pkgName + ",";
-                                        } else {
-                                            pkgs = pkgs.replace(pkgName + ",", "");
-                                        }
-                                        vmUserDefinedDb.execSQL(
-                                                "UPDATE categories SET packages = '"
-                                                        + pkgs
-                                                        + "' WHERE _id = "
-                                                        + itemId
-                                                        + ";"
-                                        );
+                                    if (pkgs == null) {
+                                        pkgs = "";
                                     }
+                                    boolean existed = existsInOneKeyList(pkgs, pkgName);
+                                    if (existed) {
+                                        pkgs = pkgs.replace(pkgName + ",", "");
+                                    } else {
+                                        pkgs = pkgs + pkgName + ",";
+                                    }
+                                    vmUserDefinedDb.execSQL(
+                                            "UPDATE categories SET packages = '"
+                                                    + pkgs
+                                                    + "' WHERE _id = "
+                                                    + itemId
+                                                    + ";"
+                                    );
                                     vmUserDefinedDb.close();
+                                    showToast(activity, existed ? R.string.removed : R.string.added);
                                 }
                                 break;
                         }
