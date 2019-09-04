@@ -313,6 +313,7 @@
     <string name="userDefined">User Customize</string>
     <string name="displayLanguage">Display Language</string>
     <string name="emptyNotAllowed">Empty is not allowed</string>
+    <string name="myCustomization">我的自选</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
