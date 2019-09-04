@@ -313,6 +313,7 @@
     <string name="userDefined">用户自定</string>
     <string name="displayLanguage">显示语言</string>
     <string name="emptyNotAllowed">不可为空</string>
+    <string name="myCustomization">我的自选</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
