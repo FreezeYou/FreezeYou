@@ -5,7 +5,7 @@
         <menu>
             <item
                 android:id="@+id/menu_vM_userDefined"
-                android:title="@string/userDefined">
+                android:title="@string/myCustomization">
                 <menu>
                     <group
                         android:checkableBehavior="none"

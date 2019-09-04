@@ -12,7 +12,7 @@
         <menu>
             <item
                 android:id="@+id/main_sca_userDefined"
-                android:title="@string/userDefined">
+                android:title="@string/myCustomization">
                 <menu>
                     <group
                         android:id="@+id/main_sca_menu_userDefined_menuGroup"

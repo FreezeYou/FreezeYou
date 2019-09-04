@@ -311,6 +311,7 @@
     <string name="userDefined">用户自定</string>
     <string name="displayLanguage">显示语言</string>
     <string name="emptyNotAllowed">不可为空</string>
+    <string name="myCustomization">我的自选</string>
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>
