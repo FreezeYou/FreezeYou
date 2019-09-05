@@ -314,6 +314,7 @@
     <string name="displayLanguage">Display Language</string>
     <string name="emptyNotAllowed">Empty is not allowed</string>
     <string name="myCustomization">My customization</string>
+    <string name="manageMyCustomization">管理我的自选</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
