@@ -304,6 +304,11 @@
             android:label="@string/manageQuickFUFNoti"
             android:theme="@style/AppTheme.Default" />
         <activity
+            android:name=".UserDefinedListsManageActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:label="@string/manageMyCustomization"
+            android:theme="@style/AppTheme.Default" />
+        <activity
             android:name=".UriAutoAllowManageActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/manageUriAutoAllow"
