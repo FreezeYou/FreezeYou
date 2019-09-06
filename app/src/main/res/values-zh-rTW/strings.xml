@@ -314,6 +314,7 @@
     <string name="displayLanguage">顯示語言</string>
     <string name="emptyNotAllowed">不可空白</string>
     <string name="myCustomization">我的自选</string>
+    <string name="manageMyCustomization">管理我的自选</string>
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
         <item>僅已凍結</item>
