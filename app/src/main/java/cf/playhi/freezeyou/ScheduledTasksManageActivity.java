@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -44,17 +43,6 @@ public class ScheduledTasksManageActivity extends FreezeYouBaseActivity {
         setContentView(R.layout.stma_main);
         processActionBar(getActionBar());
         init();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override

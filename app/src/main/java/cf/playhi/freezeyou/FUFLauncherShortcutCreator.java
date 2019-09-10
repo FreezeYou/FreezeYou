@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -32,29 +30,18 @@ import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
 import cf.playhi.freezeyou.utils.ToastUtils;
 
-import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
-import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
+import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
 
 public class FUFLauncherShortcutCreator extends FreezeYouBaseActivity {
 
     private int customThemeDisabledDot = R.drawable.shapedotblue;
     private int customThemeEnabledDot = R.drawable.shapedotblack;
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -77,17 +76,6 @@ public class ManualMode extends FreezeYouBaseActivity {
                         false);
             }
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void processMRootOperation(String pkgName, Context context, boolean hidden) {

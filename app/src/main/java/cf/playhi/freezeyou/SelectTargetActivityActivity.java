@@ -1,13 +1,11 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -29,17 +27,6 @@ public class SelectTargetActivityActivity extends FreezeYouBaseActivity {
         ThemeUtils.processActionBar(getActionBar());
         setContentView(R.layout.staa_main);
         init();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void init() {

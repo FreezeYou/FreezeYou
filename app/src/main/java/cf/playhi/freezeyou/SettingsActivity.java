@@ -2,7 +2,6 @@ package cf.playhi.freezeyou;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -21,17 +20,6 @@ public class SettingsActivity extends FreezeYouBaseActivity {
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
         processActionBar(getActionBar());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override

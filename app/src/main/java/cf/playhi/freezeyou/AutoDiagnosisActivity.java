@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -36,11 +34,11 @@ import cf.playhi.freezeyou.utils.ApplicationLabelUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.ProcessUtils;
 
-import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
 
@@ -69,17 +67,6 @@ public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
                 go();
             }
         }).start();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void go() {
