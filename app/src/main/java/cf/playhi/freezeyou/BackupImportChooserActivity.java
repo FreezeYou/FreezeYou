@@ -2,6 +2,7 @@ package cf.playhi.freezeyou;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -193,6 +194,11 @@ public class BackupImportChooserActivity extends FreezeYouBaseActivity {
                     generateUserTriggerScheduledTasksList(jsonObject, list);
                     break;
                 // 计划任务 - 触发器 结束
+                // 用户自定分类（我的列表） 开始
+                case "userDefinedCategories":
+                    generateUserDefinedCategoriesList(jsonObject, list);
+                    break;
+                // 用户自定分类（我的列表） 结束
                 default:
                     break;
             }
@@ -402,6 +408,43 @@ public class BackupImportChooserActivity extends FreezeYouBaseActivity {
             }
             keyValuePair.put("spKey", Integer.toString(i));
             keyValuePair.put("category", "userTriggerScheduledTasks");
+            list.add(keyValuePair);
+        }
+    }
+
+    private void generateUserDefinedCategoriesList(JSONObject jsonObject, ArrayList<HashMap<String, String>> list) {
+        JSONArray array = jsonObject.optJSONArray("userDefinedCategories");
+        if (array == null) {
+            return;
+        }
+
+        JSONObject oneUserDefinedCategoriesJSONObject;
+        String myCustomizationDashLineLabel = getString(R.string.myCustomizationDashLineLabel);
+        String defaultLabel = "";
+        for (int i = 0; i < array.length(); ++i) {
+            oneUserDefinedCategoriesJSONObject = array.optJSONObject(i);
+            if (oneUserDefinedCategoriesJSONObject == null) {
+                continue;
+            }
+            HashMap<String, String> keyValuePair = new HashMap<>();
+            keyValuePair.put("title",
+                    String.format(myCustomizationDashLineLabel,
+                            new String(
+                                    Base64.decode(
+                                            oneUserDefinedCategoriesJSONObject.optString(
+                                                    "label", defaultLabel),
+                                            Base64.DEFAULT
+                                    )
+                            )
+                    )
+            );
+            try {
+                oneUserDefinedCategoriesJSONObject.put("i", Integer.toString(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            keyValuePair.put("spKey", Integer.toString(i));
+            keyValuePair.put("category", "userDefinedCategories");
             list.add(keyValuePair);
         }
     }

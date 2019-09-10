@@ -16,6 +16,8 @@ import java.util.Iterator;
 
 import cf.playhi.freezeyou.utils.TasksUtils;
 
+import static android.content.Context.MODE_PRIVATE;
+
 //导入导出整体结构复杂度高，处理流程复杂度高，待有可用的优化方案时需要进行优化（提示：后续导出时可修改导出时的 version，用以导入时区分方案）
 final class BackupUtils {
 
@@ -67,7 +69,7 @@ final class BackupUtils {
             return false;
         }
 
-        SQLiteDatabase db = context.openOrCreateDatabase("scheduledTasks", Context.MODE_PRIVATE, null);
+        SQLiteDatabase db = context.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
         );
@@ -111,7 +113,7 @@ final class BackupUtils {
             return false;
         }
 
-        SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null);
+        SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
         db.execSQL(
                 "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
         );
@@ -143,6 +145,47 @@ final class BackupUtils {
 
         db.close();
         TasksUtils.checkTriggerTasks(context);
+
+        return isCompletelySuccess;
+    }
+
+    private static boolean importUserDefinedCategoriesJSONArray(Context context, JSONObject jsonObject) {
+        JSONArray userDefinedCategoriesJSONArray =
+                jsonObject.optJSONArray("userDefinedCategories");
+        if (userDefinedCategoriesJSONArray == null) {
+            return false;
+        }
+
+        SQLiteDatabase db = context.openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+        );
+
+        JSONObject oneUserDefinedCategoriesJSONObject;
+        boolean isCompletelySuccess = true;
+        for (int i = 0; i < userDefinedCategoriesJSONArray.length(); ++i) {
+//            try {
+                oneUserDefinedCategoriesJSONObject = userDefinedCategoriesJSONArray.optJSONObject(i);
+                if (oneUserDefinedCategoriesJSONObject == null) {
+                    isCompletelySuccess = false;
+                    continue;
+                }
+                if (oneUserDefinedCategoriesJSONObject.optBoolean("doNotImport", false)) {
+                    continue;
+                }
+                // TODO: 处理 label 重复情况
+//                db.execSQL(
+//                        "replace into categories(_id,label,packages) VALUES ( "
+//                                + null + ",'"
+//                                + oneUserDefinedCategoriesJSONObject.getString("label") + "','"
+//                                + oneUserDefinedCategoriesJSONObject.getString("packages") + "')"
+//                );
+//            } catch (JSONException e) {
+//                isCompletelySuccess = false;
+//            }
+        }
+
+        db.close();
 
         return isCompletelySuccess;
     }
@@ -364,6 +407,11 @@ final class BackupUtils {
                     importUserTriggerTasksJSONArray(activity, jsonObject);
                     break;
                 // 计划任务 - 触发器 结束
+                // 用户自定分类（我的列表） 开始
+                case "userDefinedCategories":
+                    importUserDefinedCategoriesJSONArray(activity, jsonObject);
+                    break;
+                // 用户自定分类（我的列表） 结束
                 default:
                     break;
             }

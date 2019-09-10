@@ -289,6 +289,10 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
             finalOutputJsonObject.put("userTriggerScheduledTasks", generateUserTriggerTasksJSONArray());
             // 计划任务 - 触发器 结束
 
+            // 用户自定分类（我的列表） 开始
+            finalOutputJsonObject.put("userDefinedCategories", generateUserDefinedCategoriesJSONArray());
+            // 用户自定分类（我的列表） 结束
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -360,6 +364,35 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
         cursor.close();
         db.close();
         return userTriggerScheduledTasksJSONArray;
+    }
+
+    private JSONArray generateUserDefinedCategoriesJSONArray() throws JSONException {
+        JSONArray userDefinedCategoriesJSONArray = new JSONArray();
+        SQLiteDatabase db = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+        );
+        Cursor cursor =
+                db.query(
+                        "categories", new String[]{"label", "packages"},
+                        null, null, null,
+                        null, null
+                );
+        if (cursor.moveToFirst()) {
+            boolean ifContinue = true;
+            while (ifContinue) {
+                JSONObject oneUserDefinedCategoriesJSONObject = new JSONObject();
+                oneUserDefinedCategoriesJSONObject.put("label",
+                        cursor.getString(cursor.getColumnIndex("label")));
+                oneUserDefinedCategoriesJSONObject.put("packages",
+                        cursor.getString(cursor.getColumnIndex("packages")));
+                userDefinedCategoriesJSONArray.put(oneUserDefinedCategoriesJSONObject);
+                ifContinue = cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return userDefinedCategoriesJSONArray;
     }
 
 //    先把文本方式稳定下来，再决定是否做 QRCode
