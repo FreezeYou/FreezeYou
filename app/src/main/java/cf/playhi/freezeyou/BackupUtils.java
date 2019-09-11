@@ -3,6 +3,7 @@ package cf.playhi.freezeyou;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 
@@ -12,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import cf.playhi.freezeyou.utils.TasksUtils;
@@ -161,10 +163,20 @@ final class BackupUtils {
                 "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
         );
 
+        ArrayList<String> existedLabels = new ArrayList<>();
+        Cursor cursor = db.query("categories", new String[]{"label"}, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                existedLabels.add(cursor.getString(cursor.getColumnIndex("label")));
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+
         JSONObject oneUserDefinedCategoriesJSONObject;
         boolean isCompletelySuccess = true;
         for (int i = 0; i < userDefinedCategoriesJSONArray.length(); ++i) {
-//            try {
+            try {
                 oneUserDefinedCategoriesJSONObject = userDefinedCategoriesJSONArray.optJSONObject(i);
                 if (oneUserDefinedCategoriesJSONObject == null) {
                     isCompletelySuccess = false;
@@ -173,16 +185,24 @@ final class BackupUtils {
                 if (oneUserDefinedCategoriesJSONObject.optBoolean("doNotImport", false)) {
                     continue;
                 }
-                // TODO: 处理 label 重复情况
-//                db.execSQL(
-//                        "replace into categories(_id,label,packages) VALUES ( "
-//                                + null + ",'"
-//                                + oneUserDefinedCategoriesJSONObject.getString("label") + "','"
-//                                + oneUserDefinedCategoriesJSONObject.getString("packages") + "')"
-//                );
-//            } catch (JSONException e) {
-//                isCompletelySuccess = false;
-//            }
+                String label = oneUserDefinedCategoriesJSONObject.getString("label");
+                if (existedLabels.contains(label)) {
+                    db.execSQL(
+                            "update categories set packages = '"
+                                    + oneUserDefinedCategoriesJSONObject.getString("packages")
+                                    + "' where label = '" + label + "';"
+                    );
+                } else {
+                    db.execSQL(
+                            "insert into categories(_id,label,packages) VALUES ( "
+                                    + null + ",'"
+                                    + label + "','"
+                                    + oneUserDefinedCategoriesJSONObject.getString("packages") + "');"
+                    );
+                }
+            } catch (JSONException e) {
+                isCompletelySuccess = false;
+            }
         }
 
         db.close();
