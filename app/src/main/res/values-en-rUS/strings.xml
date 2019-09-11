@@ -315,6 +315,7 @@
     <string name="emptyNotAllowed">Empty is not allowed</string>
     <string name="myCustomization">My customization</string>
     <string name="manageMyCustomization">Manage my customization</string>
+    <string name="myCustomizationDashLineLabel">My Customization - %1$s</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
