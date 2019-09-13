@@ -74,21 +74,28 @@
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/notificationBar">
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="notificationBarFreezeImmediately"
-            android:summary="@string/effectNextCreate"
-            android:title="@string/notificationBarFreezeImmediately" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="notificationBarDisableSlideOut"
-            android:summary="@string/effectNextCreate"
-            android:title="@string/disableSlideOut" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="notificationBarDisableClickDisappear"
-            android:summary="@string/effectNextCreate"
-            android:title="@string/disableClickDisappear" />
+        <PreferenceScreen android:title="@string/freezeAUF">
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="notificationBarFreezeImmediately"
+                android:summary="@string/effectNextCreate"
+                android:title="@string/notificationBarFreezeImmediately" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="notificationBarDisableSlideOut"
+                android:summary="@string/effectNextCreate"
+                android:title="@string/disableSlideOut" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="notificationBarDisableClickDisappear"
+                android:summary="@string/effectNextCreate"
+                android:title="@string/disableClickDisappear" />
+            <Preference android:title="@string/manageQuickFUFNoti">
+                <intent
+                    android:targetClass="cf.playhi.freezeyou.FUFNotificationsManageActivity"
+                    android:targetPackage="cf.playhi.freezeyou" />
+            </Preference>
+        </PreferenceScreen>
         <Preference android:title="@string/manageQuickFUFNoti">
             <intent
                 android:targetClass="cf.playhi.freezeyou.FUFNotificationsManageActivity"
