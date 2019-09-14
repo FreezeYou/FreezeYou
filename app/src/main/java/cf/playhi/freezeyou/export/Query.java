@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou.export;
 
+import android.content.ComponentName;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,6 +18,7 @@ public class Query extends ContentProvider {
 
     private static final String QUERY_MODE = "QUERY_MODE";
     private static final String QUERY_FREEZE_STATUS = "QUERY_FREEZE_STATUS";
+    private static final String QUERY_IF_CAN_INSTALL_APPLICATIONS_STATUS = "QUERY_IF_CAN_INSTALL_APPLICATIONS_STATUS";
 
     @Override
     public boolean onCreate() {
@@ -85,6 +87,37 @@ public class Query extends ContentProvider {
                                 bundle.putInt("status", 0);
                             }
                         }
+                    }
+                    return bundle;
+                case QUERY_IF_CAN_INSTALL_APPLICATIONS_STATUS:
+                    if (context == null) {
+                        bundle.putBooleanArray("status", new boolean[]{false, false, false, false}); // 可用状态、installActivityEnabled、hasRootPerm、hasDpmPerm
+                    } else {
+                        boolean installActivityEnabled, hasRootPerm, hasDpmPerm;
+                        switch (context.getPackageManager().getComponentEnabledSetting(
+                                new ComponentName(context, "cf.playhi.freezeyou.InstallPackagesActivity"))) {
+                            case android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DEFAULT:
+                            case android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED:
+                                installActivityEnabled = true;
+                                break;
+                            case android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED:
+                            case android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED:
+                            case android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER:
+                            default:
+                                installActivityEnabled = false;
+                                break;
+                        }
+                        hasDpmPerm = DevicePolicyManagerUtils.isDeviceOwner(context);
+                        hasRootPerm = checkRootPermission();
+                        bundle.putBooleanArray(
+                                "status",
+                                new boolean[]{
+                                        installActivityEnabled && (hasDpmPerm || hasRootPerm),
+                                        installActivityEnabled,
+                                        hasRootPerm,
+                                        hasDpmPerm
+                                }
+                        );
                     }
                     return bundle;
                 default:
