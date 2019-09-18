@@ -162,7 +162,7 @@ public final class TasksUtils {
                             startService(
                                     context,
                                     new Intent(context, FUFService.class)
-                                            .putExtra("packages", tasks)
+                                            .putExtra("packages", decodeUserListsInPackageNames(context, tasks))
                                             .putExtra("freeze", true)
                             );
                         break;
@@ -201,7 +201,7 @@ public final class TasksUtils {
                             startService(
                                     context,
                                     new Intent(context, FUFService.class)
-                                            .putExtra("packages", tasks)
+                                            .putExtra("packages", decodeUserListsInPackageNames(context, tasks))
                                             .putExtra("freeze", false)
                             );
                         break;
@@ -212,17 +212,14 @@ public final class TasksUtils {
         }
     }
 
-    public static String decodeUserListsInPackageNames(Context context, String pkgNames) {
-
-        if (!pkgNames.contains("@")) {
-            return pkgNames;
-        }
-
-        String[] pkgs = pkgNames.split(",");
+    public static String[] decodeUserListsInPackageNames(Context context, String[] pkgs) {
         StringBuilder result = new StringBuilder();
         SQLiteDatabase userDefinedDb = context.openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
         for (String pkg : pkgs) {
             if (pkg.startsWith("@")) {
+                if ("".equals(pkg.trim())) {
+                    continue;
+                }
                 try {
                     String labelBase64 =
                             Base64.encodeToString(
@@ -253,11 +250,11 @@ public final class TasksUtils {
             } else {
                 result.append(pkg);
             }
-            if (result.charAt(result.length()) != ',') {
+            if (result.length() != 0 && result.charAt(result.length() - 1) != ',') {
                 result.append(",");
             }
         }
-        return result.toString();
+        return result.toString().split(",");
     }
 
     private static void showNotification(Context context, String title, String text) {
