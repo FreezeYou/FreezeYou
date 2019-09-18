@@ -18,7 +18,6 @@ import java.util.HashMap;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.ClipboardUtils;
-import cf.playhi.freezeyou.utils.MoreUtils;
 import cf.playhi.freezeyou.utils.ToastUtils;
 
 public class UserDefinedListsManageActivity extends FreezeYouBaseActivity {
