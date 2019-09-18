@@ -12,10 +12,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.utils.ClipboardUtils;
+import cf.playhi.freezeyou.utils.MoreUtils;
+import cf.playhi.freezeyou.utils.ToastUtils;
 
 public class UserDefinedListsManageActivity extends FreezeYouBaseActivity {
     @Override
@@ -79,16 +83,34 @@ public class UserDefinedListsManageActivity extends FreezeYouBaseActivity {
                 final Object itemDataHashMap = simpleAdapter.getItem(position);
                 if (itemDataHashMap instanceof HashMap) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(UserDefinedListsManageActivity.this);
-                    builder.setTitle(R.string.askIfDel);
-                    builder.setMessage((String) ((HashMap) itemDataHashMap).get("title"));
-                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            deleteUserDefinedListById((int) ((HashMap) itemDataHashMap).get("id"));
-                        }
-                    });
-                    builder.setNegativeButton(R.string.no, null);
-                    builder.show();
+                    String title = ((String) ((HashMap) itemDataHashMap).get("title"));
+                    if (title != null) {
+                        final String titleBase64 = Base64.encodeToString(title.getBytes(), Base64.DEFAULT);
+                        builder.setTitle(title);
+                        builder.setMessage(
+                                ((HashMap) itemDataHashMap).get("packages")
+                                        + File.separator
+                                        + titleBase64
+                        );
+                        builder.setPositiveButton(android.R.string.copy, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (ClipboardUtils.copyToClipboard(getApplicationContext(), titleBase64)) {
+                                    ToastUtils.showToast(getApplicationContext(), R.string.success);
+                                } else {
+                                    ToastUtils.showToast(getApplicationContext(), R.string.failed);
+                                }
+                            }
+                        });
+                        builder.setNegativeButton(R.string.cancel, null);
+                        builder.setNeutralButton(R.string.delete, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteUserDefinedListById((int) ((HashMap) itemDataHashMap).get("id"));
+                            }
+                        });
+                        builder.show();
+                    }
                 }
             }
         });

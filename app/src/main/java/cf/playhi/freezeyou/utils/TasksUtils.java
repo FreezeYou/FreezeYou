@@ -17,6 +17,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
+import android.util.Base64;
 import android.util.Log;
 
 import net.grandcentrix.tray.AppPreferences;
@@ -211,6 +212,54 @@ public final class TasksUtils {
         }
     }
 
+    public static String decodeUserListsInPackageNames(Context context, String pkgNames) {
+
+        if (!pkgNames.contains("@")) {
+            return pkgNames;
+        }
+
+        String[] pkgs = pkgNames.split(",");
+        StringBuilder result = new StringBuilder();
+        SQLiteDatabase userDefinedDb = context.openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
+        for (String pkg : pkgs) {
+            if (pkg.startsWith("@")) {
+                try {
+                    String labelBase64 =
+                            Base64.encodeToString(
+                                    Base64.decode(pkg.substring(1), Base64.DEFAULT),
+                                    Base64.DEFAULT
+                            );
+
+                    userDefinedDb.execSQL(
+                            "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+                    );
+                    Cursor cursor =
+                            userDefinedDb.query(
+                                    "categories",
+                                    new String[]{"packages"},
+                                    "label = '" + labelBase64 + "'",
+                                    null, null,
+                                    null, null
+                            );
+
+                    if (cursor.moveToFirst()) {
+                        result.append(cursor.getString(cursor.getColumnIndex("packages")));
+                    }
+                    cursor.close();
+                    userDefinedDb.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                result.append(pkg);
+            }
+            if (result.charAt(result.length()) != ',') {
+                result.append(",");
+            }
+        }
+        return result.toString();
+    }
+
     private static void showNotification(Context context, String title, String text) {
 
         NotificationManager notificationManager =
@@ -306,7 +355,7 @@ public final class TasksUtils {
             switch (splitTask[i]) {
                 case "-d":
                     if (splitTaskLength >= i + 1) {
-                        long delayAtSeconds = Long.valueOf(splitTask[i + 1]);
+                        long delayAtSeconds = Long.parseLong(splitTask[i + 1]);
                         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                         Intent intent = new Intent(context, TasksNeedExecuteReceiver.class)
                                 .putExtra("id", -6)
