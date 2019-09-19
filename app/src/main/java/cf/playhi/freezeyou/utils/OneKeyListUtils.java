@@ -1,6 +1,9 @@
 package cf.playhi.freezeyou.utils;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Base64;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -51,4 +54,48 @@ public final class OneKeyListUtils {
         return true;
     }
 
+    public static String[] decodeUserListsInPackageNames(Context context, String[] pkgs) {
+        StringBuilder result = new StringBuilder();
+        SQLiteDatabase userDefinedDb = context.openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
+        for (String pkg : pkgs) {
+            if ("".equals(pkg.trim())) {
+                continue;
+            }
+            if (pkg.startsWith("@")) {
+                try {
+                    String labelBase64 =
+                            Base64.encodeToString(
+                                    Base64.decode(pkg.substring(1), Base64.DEFAULT),
+                                    Base64.DEFAULT
+                            );
+
+                    userDefinedDb.execSQL(
+                            "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+                    );
+                    Cursor cursor =
+                            userDefinedDb.query(
+                                    "categories",
+                                    new String[]{"packages"},
+                                    "label = '" + labelBase64 + "'",
+                                    null, null,
+                                    null, null
+                            );
+
+                    if (cursor.moveToFirst()) {
+                        result.append(cursor.getString(cursor.getColumnIndex("packages")));
+                    }
+                    cursor.close();
+                    userDefinedDb.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                result.append(pkg);
+            }
+            if (result.length() != 0 && result.charAt(result.length() - 1) != ',') {
+                result.append(",");
+            }
+        }
+        return result.toString().split(",");
+    }
 }

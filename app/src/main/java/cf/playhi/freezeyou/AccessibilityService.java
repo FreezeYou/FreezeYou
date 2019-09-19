@@ -83,7 +83,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     }
                     String tg = cursor.getString(cursor.getColumnIndex("tg"));
                     int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                    if (enabled == 1 && "onApplicationsForeground".equals(tg) && ("".equals(tgExtra) || Arrays.asList(TasksUtils.decodeUserListsInPackageNames(this, tgExtra.split(","))).contains(pkgNameString))) {
+                    if (enabled == 1 && "onApplicationsForeground".equals(tg) && ("".equals(tgExtra) || Arrays.asList(OneKeyListUtils.decodeUserListsInPackageNames(this, tgExtra.split(","))).contains(pkgNameString))) {
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
                             TasksUtils.runTask(
@@ -118,7 +118,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     if (tgExtra == null) {
                         tgExtra = "";
                     }
-                    if (enabled == 1 && "onLeaveApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(TasksUtils.decodeUserListsInPackageNames(this, tgExtra.split(","))).contains(previousPkg))) {
+                    if (enabled == 1 && "onLeaveApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(OneKeyListUtils.decodeUserListsInPackageNames(this, tgExtra.split(","))).contains(previousPkg))) {
                         String task = cursor.getString(cursor.getColumnIndex("task"));
                         if (task != null && !"".equals(task)) {
                             TasksUtils.runTask(

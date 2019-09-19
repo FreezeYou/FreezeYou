@@ -8,7 +8,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 118
-        versionName '9.1.20190903-t119-h-20190919-1'
+        versionName '9.1.20190903-t119-h-20190919-2'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
