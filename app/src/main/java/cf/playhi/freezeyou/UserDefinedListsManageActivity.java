@@ -6,9 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.utils.AlertDialogUtils;
 import cf.playhi.freezeyou.utils.ClipboardUtils;
 import cf.playhi.freezeyou.utils.ToastUtils;
 
@@ -81,34 +84,42 @@ public class UserDefinedListsManageActivity extends FreezeYouBaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Object itemDataHashMap = simpleAdapter.getItem(position);
                 if (itemDataHashMap instanceof HashMap) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(UserDefinedListsManageActivity.this);
-                    String title = ((String) ((HashMap) itemDataHashMap).get("title"));
+                    final String title = ((String) ((HashMap) itemDataHashMap).get("title"));
                     if (title != null) {
-                        final String titleBase64 = Base64.encodeToString(title.getBytes(), Base64.DEFAULT);
-                        builder.setTitle(title);
-                        builder.setMessage(
-                                ((HashMap) itemDataHashMap).get("packages")
-                                        + File.separator
-                                        + titleBase64
-                        );
-                        builder.setPositiveButton(android.R.string.copy, new DialogInterface.OnClickListener() {
+                        PopupMenu popup = new PopupMenu(UserDefinedListsManageActivity.this, view);
+                        popup.inflate(R.menu.udlmna_single_choose_action);
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (ClipboardUtils.copyToClipboard(getApplicationContext(), titleBase64)) {
-                                    ToastUtils.showToast(getApplicationContext(), R.string.success);
-                                } else {
-                                    ToastUtils.showToast(getApplicationContext(), R.string.failed);
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.udlmna_sca_menu_copyId:
+                                        if (ClipboardUtils.copyToClipboard(getApplicationContext(),
+                                                Base64.encodeToString(title.getBytes(), Base64.DEFAULT))) {
+                                            ToastUtils.showToast(getApplicationContext(), R.string.success);
+                                        } else {
+                                            ToastUtils.showToast(getApplicationContext(), R.string.failed);
+                                        }
+                                        break;
+                                    case R.id.udlmna_sca_menu_delete:
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(UserDefinedListsManageActivity.this);
+                                        builder.setTitle(R.string.plsConfirm);
+                                        builder.setMessage(R.string.askIfDel);
+                                        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                deleteUserDefinedListById((int) ((HashMap) itemDataHashMap).get("id"));
+                                            }
+                                        });
+                                        builder.setNegativeButton(R.string.no, null);
+                                        builder.show();
+                                        break;
+                                    default:
+                                        break;
                                 }
+                                return true;
                             }
                         });
-                        builder.setNegativeButton(R.string.cancel, null);
-                        builder.setNeutralButton(R.string.delete, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                deleteUserDefinedListById((int) ((HashMap) itemDataHashMap).get("id"));
-                            }
-                        });
-                        builder.show();
+                        popup.show();
                     }
                 }
             }
