@@ -14,12 +14,10 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
-import cf.playhi.freezeyou.utils.AlertDialogUtils;
 import cf.playhi.freezeyou.utils.ClipboardUtils;
 import cf.playhi.freezeyou.utils.ToastUtils;
 
