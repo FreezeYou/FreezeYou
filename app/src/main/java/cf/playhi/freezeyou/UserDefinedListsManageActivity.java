@@ -2,6 +2,7 @@ package cf.playhi.freezeyou;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -13,6 +14,10 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,45 +89,77 @@ public class UserDefinedListsManageActivity extends FreezeYouBaseActivity {
                 if (itemDataHashMap instanceof HashMap) {
                     final String title = ((String) ((HashMap) itemDataHashMap).get("title"));
                     if (title != null) {
-                        PopupMenu popup = new PopupMenu(UserDefinedListsManageActivity.this, view);
-                        popup.inflate(R.menu.udlmna_single_choose_action);
-                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                switch (item.getItemId()) {
-                                    case R.id.udlmna_sca_menu_copyId:
-                                        if (ClipboardUtils.copyToClipboard(getApplicationContext(),
-                                                Base64.encodeToString(title.getBytes(), Base64.DEFAULT))) {
-                                            ToastUtils.showToast(getApplicationContext(), R.string.success);
-                                        } else {
-                                            ToastUtils.showToast(getApplicationContext(), R.string.failed);
-                                        }
-                                        break;
-                                    case R.id.udlmna_sca_menu_delete:
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(UserDefinedListsManageActivity.this);
-                                        builder.setTitle(R.string.plsConfirm);
-                                        builder.setMessage(R.string.askIfDel);
-                                        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                deleteUserDefinedListById((int) ((HashMap) itemDataHashMap).get("id"));
-                                            }
-                                        });
-                                        builder.setNegativeButton(R.string.no, null);
-                                        builder.show();
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                return true;
-                            }
-                        });
-                        popup.show();
+                        showListViewOnItemClickPopupMenu(view, title, (HashMap) itemDataHashMap);
                     }
                 }
             }
         });
         progressBar.setVisibility(View.GONE);
+    }
+
+    private void showListViewOnItemClickPopupMenu(View view, final String title, final HashMap itemDataHashMap) {
+        PopupMenu popup = new PopupMenu(UserDefinedListsManageActivity.this, view);
+        popup.inflate(R.menu.udlmna_single_choose_action);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.udlmna_sca_menu_copyId:
+                        if (ClipboardUtils.copyToClipboard(getApplicationContext(),
+                                Base64.encodeToString(title.getBytes(), Base64.DEFAULT))) {
+                            ToastUtils.showToast(getApplicationContext(), R.string.success);
+                        } else {
+                            ToastUtils.showToast(getApplicationContext(), R.string.failed);
+                        }
+                        break;
+                    case R.id.udlmna_sca_menu_share:
+                        try {
+                            JSONObject finalOutputJsonObject = new JSONObject();
+                            JSONArray userDefinedCategoriesJSONArray = new JSONArray();
+                            JSONObject oneUserDefinedCategoriesJSONObject = new JSONObject();
+                            oneUserDefinedCategoriesJSONObject.put(
+                                    "label",
+                                    Base64.encodeToString(title.getBytes(), Base64.DEFAULT)
+                            );
+                            oneUserDefinedCategoriesJSONObject.put(
+                                    "packages",
+                                    itemDataHashMap.get("packages")
+                            );
+                            userDefinedCategoriesJSONArray.put(oneUserDefinedCategoriesJSONObject);
+                            finalOutputJsonObject.put("userDefinedCategories", userDefinedCategoriesJSONArray);
+                            Intent shareIntent = new Intent();
+                            shareIntent.setAction(Intent.ACTION_SEND);
+                            shareIntent.setType("text/plain");
+                            shareIntent.putExtra(Intent.EXTRA_TEXT,
+                                    GZipUtils.gzipCompress(finalOutputJsonObject.toString()));
+                            shareIntent = Intent.createChooser(shareIntent, getString(R.string.share));
+                            startActivity(shareIntent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            ToastUtils.showToast(UserDefinedListsManageActivity.this, R.string.failed);
+                        }
+                        break;
+                    case R.id.udlmna_sca_menu_delete:
+                        AlertDialog.Builder builder =
+                                new AlertDialog.Builder(UserDefinedListsManageActivity.this);
+                        builder.setTitle(R.string.plsConfirm);
+                        builder.setMessage(R.string.askIfDel);
+                        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteUserDefinedListById((int) itemDataHashMap.get("id"));
+                            }
+                        });
+                        builder.setNegativeButton(R.string.no, null);
+                        builder.show();
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+        popup.show();
     }
 
     private void deleteUserDefinedListById(int id) {
