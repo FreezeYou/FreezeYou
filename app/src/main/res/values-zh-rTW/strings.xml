@@ -316,6 +316,7 @@
     <string name="myCustomization">我的自选</string>
     <string name="manageMyCustomization">管理我的自选</string>
     <string name="myCustomizationDashLineLabel">我的自选 - %1$s</string>
+    <string name="copyAlias">复制别名</string>
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
         <item>僅已凍結</item>
