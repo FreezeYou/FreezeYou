@@ -359,7 +359,7 @@ public final class TasksUtils {
                 }
                 String tg = cursor.getString(cursor.getColumnIndex("tg"));
                 int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                if (enabled == 1 && "onUFApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
+                if (enabled == 1 && "onUFApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(OneKeyListUtils.decodeUserListsInPackageNames(context, tgExtra.split(","))).contains(pkgNameString))) {
                     String task = cursor.getString(cursor.getColumnIndex("task"));
                     if (task != null && !"".equals(task)) {
                         runTask(task.replace("[cpkgn]", pkgNameString), context, null);
@@ -389,7 +389,7 @@ public final class TasksUtils {
                 if (tgExtra == null) {
                     tgExtra = "";
                 }
-                if (enabled == 1 && "onFApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(tgExtra.split(",")).contains(pkgNameString))) {
+                if (enabled == 1 && "onFApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(OneKeyListUtils.decodeUserListsInPackageNames(context, tgExtra.split(","))).contains(pkgNameString))) {
                     String task = cursor.getString(cursor.getColumnIndex("task"));
                     if (task != null && !"".equals(task)) {
                         runTask(task.replace("[cpkgn]", pkgNameString), context, null);
