@@ -211,7 +211,7 @@ public class Main extends FreezeYouBaseActivity {
         inflater.inflate(R.menu.menu, menu);
         String cTheme = ThemeUtils.getUiTheme(this);
         if ("white".equals(cTheme) || "default".equals(cTheme)) {
-            menu.findItem(R.id.menu_timedTasks).setIcon(R.drawable.ic_action_add_light);
+            menu.findItem(R.id.menu_timedTasks).setIcon(R.drawable.ic_action_alarm_light);
         }
         return true;
     }

@@ -179,7 +179,7 @@
     <item
         android:id="@+id/menu_timedTasks"
         android:contentDescription="@string/scheduledTasks"
-        android:icon="@drawable/ic_action_add"
+        android:icon="@drawable/ic_action_alarm"
         android:showAsAction="always"
         android:title="@string/scheduledTasks" />
 </menu>
