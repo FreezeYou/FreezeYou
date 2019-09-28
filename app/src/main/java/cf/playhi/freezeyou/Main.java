@@ -639,6 +639,9 @@ public class Main extends FreezeYouBaseActivity {
         final FrameLayout linearLayout = findViewById(R.id.layout2);
         final ArrayList<Map<String, Object>> AppList = new ArrayList<>();
         final EditText search_editText = findViewById(R.id.search_editText);
+
+        if (isFinishing()) return;
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -649,12 +652,14 @@ public class Main extends FreezeYouBaseActivity {
                 main_loading_progress_textView.setText(R.string.loadingPkgList);
             }
         });
+
         try {
             customThemeDisabledDot = getThemeDot(Main.this);
             customThemeEnabledDot = getThemeSecondDot(Main.this);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         ApplicationInfo applicationInfo1;
         Context applicationContext = getApplicationContext();
         PackageManager packageManager = applicationContext.getPackageManager();
@@ -771,6 +776,8 @@ public class Main extends FreezeYouBaseActivity {
                 checkAndAddNotAvailablePair(AppList);
                 break;
         }
+
+        if (isFinishing()) return;
 
         runOnUiThread(new Runnable() {
             @Override
@@ -1004,6 +1011,8 @@ public class Main extends FreezeYouBaseActivity {
 
             }
         });
+
+        if (isFinishing()) return;
 
         runOnUiThread(new Runnable() {
             @Override
@@ -1670,6 +1679,9 @@ public class Main extends FreezeYouBaseActivity {
                         editor.commit();
                     }
                     if ((new Date().getTime() - sharedPreferences.getLong("Time", 0)) > 1728000000) {
+
+                        if (isFinishing()) return;
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
