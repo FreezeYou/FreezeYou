@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -29,8 +28,8 @@ import cf.playhi.freezeyou.utils.FileUtils;
 import cf.playhi.freezeyou.utils.MoreUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 
-import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
+import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 /**
@@ -200,6 +199,8 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                             .putExtra("packageUri", packageUri)
                                             .putExtra("apkFilePath", apkFilePath));
 
+                            if (isFinishing()) return;
+
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -244,6 +245,9 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                         alertDialogMessage.append(nl);
                         alertDialogMessage.append(nl);
                         alertDialogMessage.append(getString(R.string.whetherAllow));
+
+                        if (isFinishing()) return;
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -256,6 +260,9 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                         });
                     } catch (Exception e) {
                         alertDialogMessage.append(getString(R.string.cannotInstall_colon)).append(e.getLocalizedMessage());
+
+                        if (isFinishing()) return;
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
