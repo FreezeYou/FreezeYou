@@ -230,15 +230,31 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                         alertDialogMessage.append(getString(R.string.pkgName_colon));
                         alertDialogMessage.append(packageInfo.packageName);
                         alertDialogMessage.append(nl);
-                        alertDialogMessage.append(getString(R.string.version_colon));
-                        alertDialogMessage.append(packageInfo.versionName);
+                        alertDialogMessage.append(
+                                String.format(
+                                        getString(R.string.version_colon_vN_longVC),
+                                        packageInfo.versionName,
+                                        Build.VERSION.SDK_INT < 28 ?
+                                                Integer.toString(packageInfo.versionCode) :
+                                                Long.toString(packageInfo.getLongVersionCode())
+                                )
+                        );
                         try {
-                            String installedVerName = getPackageManager().getPackageInfo(
-                                    packageInfo.packageName,
-                                    PackageManager.GET_UNINSTALLED_PACKAGES
-                            ).versionName;
+                            PackageInfo pi =
+                                    getPackageManager().getPackageInfo(
+                                            packageInfo.packageName,
+                                            PackageManager.GET_UNINSTALLED_PACKAGES
+                                    );
                             alertDialogMessage.append(nl);
-                            alertDialogMessage.append(String.format(getString(R.string.existed_colon), installedVerName));
+                            alertDialogMessage.append(
+                                    String.format(
+                                            getString(R.string.existed_colon_vN_longVC),
+                                            pi.versionName,
+                                            Build.VERSION.SDK_INT < 28 ?
+                                                    Integer.toString(pi.versionCode) :
+                                                    Long.toString(pi.getLongVersionCode())
+                                    )
+                            );
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
