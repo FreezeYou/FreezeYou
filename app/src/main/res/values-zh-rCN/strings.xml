@@ -317,6 +317,8 @@
     <string name="manageMyCustomization">管理我的自选</string>
     <string name="myCustomizationDashLineLabel">我的自选 - %1$s</string>
     <string name="copyAlias">复制别名</string>
+    <string name="version_colon_vN_longVC">版本：%1$s(%2$s)</string>
+    <string name="existed_colon_vN_longVC">现存：%1$s(%2$s)</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>

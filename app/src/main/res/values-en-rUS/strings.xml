@@ -317,6 +317,8 @@
     <string name="manageMyCustomization">Manage my customization</string>
     <string name="myCustomizationDashLineLabel">My Customization - %1$s</string>
     <string name="copyAlias">Copy Alias</string>
+    <string name="version_colon_vN_longVC">Version: %1$s (%2$s)</string>
+    <string name="existed_colon_vN_longVC">Existed: %1$s (%2$s)</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
