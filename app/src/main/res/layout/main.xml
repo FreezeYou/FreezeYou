@@ -59,6 +59,20 @@
     <FrameLayout
         android:id="@+id/main_appList_fragmentContainer_frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/main_moreSettings_button"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="25dp"
+            android:background="@drawable/shapedotblack"
+            android:contentDescription="@string/add"
+            android:elevation="6dp"
+            android:src="@drawable/ic_action_add"
+            android:stateListAnimator="@animator/fab_animator" />
+
+    </FrameLayout>
 
 </LinearLayout>
