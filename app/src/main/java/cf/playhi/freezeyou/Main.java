@@ -33,11 +33,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.AbsListView;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -66,6 +70,7 @@ import cf.playhi.freezeyou.utils.Support;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
+import static cf.playhi.freezeyou.ThemeUtils.getThemeFabDotBackground;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
@@ -218,407 +223,13 @@ public class Main extends FreezeYouBaseActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        try {
-            SubMenu vmUserDefinedSubMenu = menu.findItem(R.id.menu_vM_userDefined).getSubMenu();
-            vmUserDefinedSubMenu.clear(); // 清空先前产生的数据
-
-            vmUserDefinedSubMenu.add(
-                    R.id.menu_vM_userDefined_menuGroup,
-                    R.id.menu_vM_userDefined_newClassification,
-                    0,
-                    R.string.newClassification
-            ); // 加入“新建分类”
-
-            // 添加用户定义的自定义分类
-            SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
-            vmUserDefinedDb.execSQL(
-                    "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
-            );
-            Cursor cursor = vmUserDefinedDb.query("categories", new String[]{"label", "_id"}, null, null, null, null, null);
-            if (cursor.moveToFirst()) {
-                for (int i = 0; i < cursor.getCount(); i++) {
-                    int id = cursor.getInt(cursor.getColumnIndex("_id"));
-                    String title = cursor.getString(cursor.getColumnIndex("label"));
-                    vmUserDefinedSubMenu.add(R.id.menu_vM_userDefined_menuGroup, id, id, new String(Base64.decode(title, Base64.DEFAULT)));
-                    cursor.moveToNext();
-                }
-            }
-            cursor.close();
-            vmUserDefinedDb.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        onPrepareMainOptionsMenu(menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getGroupId()) {
-            case R.id.menu_vM_userDefined_menuGroup:
-                switch (item.getItemId()) {
-                    case R.id.menu_vM_userDefined_newClassification:
-                        final EditText vmUserDefinedNameAlertDialogEditText = new EditText(this);
-                        AlertDialog.Builder vmUserDefinedNameAlertDialog = new AlertDialog.Builder(this);
-                        vmUserDefinedNameAlertDialog.setTitle(R.string.label);
-                        vmUserDefinedNameAlertDialog.setView(vmUserDefinedNameAlertDialogEditText);
-                        vmUserDefinedNameAlertDialog.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String label = Base64.encodeToString(vmUserDefinedNameAlertDialogEditText.getText().toString().getBytes(), Base64.DEFAULT);
-                                if ("".equals(label)) {
-                                    showToast(Main.this, R.string.emptyNotAllowed);
-                                } else {
-                                    boolean alreadyExists = false;
-                                    SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
-                                    vmUserDefinedDb.execSQL(
-                                            "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
-                                    );
-                                    Cursor cursor = vmUserDefinedDb.query("categories", new String[]{"label"}, null, null, null, null, null);
-                                    if (cursor.moveToFirst()) {
-                                        for (int i = 0; i < cursor.getCount(); i++) {
-                                            if (label.equals(cursor.getString(cursor.getColumnIndex("label")))) {
-                                                alreadyExists = true;
-                                                break;
-                                            }
-                                            cursor.moveToNext();
-                                        }
-                                    }
-                                    cursor.close();
-                                    if (alreadyExists) {
-                                        showToast(Main.this, R.string.alreadyExist);
-                                    } else {
-                                        vmUserDefinedDb.execSQL(
-                                                "replace into categories(_id,label,packages) VALUES ( "
-                                                        + null + ",'"
-                                                        + label + "','')"
-                                        );
-                                    }
-                                    vmUserDefinedDb.close();
-                                }
-                            }
-                        });
-                        vmUserDefinedNameAlertDialog.setNegativeButton(R.string.cancel, null);
-                        vmUserDefinedNameAlertDialog.show();
-                        return true;
-                    default:
-                        String title = item.getTitle().toString();
-                        SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
-                        vmUserDefinedDb.execSQL(
-                                "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
-                        );
-                        Cursor cursor =
-                                vmUserDefinedDb.query(
-                                        "categories",
-                                        new String[]{"packages"},
-                                        "label = '" + Base64.encodeToString(title.getBytes(), Base64.DEFAULT) + "'",
-                                        null, null, null, null
-                                );
-                        if (cursor.moveToFirst()) {
-                            generateList(cursor.getString(cursor.getColumnIndex("packages")));
-                        } else {
-                            showToast(this, R.string.failed);
-                        }
-                        cursor.close();
-                        vmUserDefinedDb.close();
-                        return true;
-                }
-            default:
-                switch (item.getItemId()) {
-                    case R.id.menu_createOneKeyFreezeShortCut:
-                        checkSettingsAndRequestCreateShortcut(
-                                getString(R.string.oneKeyFreeze),
-                                "cf.playhi.freezeyou.extra.fuf",
-                                getResources().getDrawable(R.mipmap.ic_launcher_round),
-                                OneKeyFreeze.class,
-                                "OneKeyFreeze",
-                                this);
-                        return true;
-                    case R.id.menu_createOneKeyUFShortCut:
-                        checkSettingsAndRequestCreateShortcut(
-                                getString(R.string.oneKeyUF),
-                                "cf.playhi.freezeyou.extra.fuf",
-                                getResources().getDrawable(R.mipmap.ic_launcher_round),
-                                OneKeyUF.class,
-                                "OneKeyUF",
-                                this);
-                        return true;
-                    case R.id.menu_createOneKeyLockScreenShortCut:
-                        checkSettingsAndRequestCreateShortcut(
-                                getString(R.string.oneKeyLockScreen),
-                                "cf.playhi.freezeyou.extra.oklock",
-                                getResources().getDrawable(R.drawable.screenlock),
-                                OneKeyScreenLockImmediatelyActivity.class,
-                                "OneKeyLockScreen",
-                                this);
-                        return true;
-                    case R.id.menu_createOnlyFrozenShortCut:
-                        checkSettingsAndRequestCreateShortcut(
-                                getString(R.string.onlyFrozen),
-                                "OF",
-                                getResources().getDrawable(R.mipmap.ic_launcher_round),
-                                Main.class,
-                                "OF",
-                                this);
-                        return true;
-                    case R.id.menu_createOnlyUFShortCut:
-                        checkSettingsAndRequestCreateShortcut(
-                                getString(R.string.onlyUF),
-                                "UF",
-                                getResources().getDrawable(R.mipmap.ic_launcher_round),
-                                Main.class,
-                                "UF",
-                                this);
-                        return true;
-                    case R.id.menu_createOnlyOnekeyShortCut:
-                        checkSettingsAndRequestCreateShortcut(
-                                getString(R.string.onlyOnekey),
-                                "OO",
-                                getResources().getDrawable(R.mipmap.ic_launcher_round),
-                                Main.class,
-                                "OO",
-                                this);
-                        return true;
-                    case R.id.menu_createOnlyOnekeyUFShortCut:
-                        checkSettingsAndRequestCreateShortcut(
-                                getString(R.string.oneKeyUF),
-                                "OOU",
-                                getResources().getDrawable(R.mipmap.ic_launcher_round),
-                                Main.class,
-                                "OOU",
-                                this);
-                        return true;
-                    case R.id.menu_createFreezeOnceQuitShortCut:
-                        checkSettingsAndRequestCreateShortcut(
-                                getString(R.string.freezeOnceQuit),
-                                "FOQ",
-                                getResources().getDrawable(R.mipmap.ic_launcher_round),
-                                Main.class,
-                                "FOQ",
-                                this);
-                        return true;
-                    case R.id.menu_createNewFolderShortCut:
-                        startActivityForResult(
-                                new Intent(this, ShortcutLauncherFolderActivity.class)
-                                        .setAction(Intent.ACTION_CREATE_SHORTCUT),
-                                80001
-                        );
-                        return true;
-                    case R.id.menu_timedTasks:
-                        startActivity(new Intent(this, ScheduledTasksManageActivity.class));
-                        return true;
-                    case R.id.menu_about:
-                        startActivity(new Intent(this, AboutActivity.class));
-                        return true;
-                    case R.id.menu_oneKeyFreezeImmediately:
-                        startActivity(new Intent(this, OneKeyFreeze.class).putExtra("autoCheckAndLockScreen", false));
-                        return true;
-                    case R.id.menu_oneKeyUFImmediately:
-                        startActivity(new Intent(this, OneKeyUF.class));
-                        return true;
-                    case R.id.menu_vM_onlyFrozen:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList("OF");
-                            }
-                        }).start();
-                        return true;
-                    case R.id.menu_vM_onlyUF:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList("UF");
-                            }
-                        }).start();
-                        return true;
-                    case R.id.menu_vM_all:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList("all");
-                            }
-                        }).start();
-                        return true;
-                    case R.id.menu_vM_onlyOnekey:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList("OO");
-                            }
-                        }).start();
-                        return true;
-                    case R.id.menu_vM_onlyOnekeyUF:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList("OOU");
-                            }
-                        }).start();
-                        return true;
-                    case R.id.menu_vM_onlySA:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList("OS");
-                            }
-                        }).start();
-                        return true;
-                    case R.id.menu_vM_onlyUA:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList("OU");
-                            }
-                        }).start();
-                        return true;
-                    case R.id.menu_vM_freezeOnceQuit:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList("FOQ");
-                            }
-                        }).start();
-                        return true;
-                    case R.id.menu_update:
-                        checkUpdate(Main.this);
-                        return true;
-                    case R.id.menu_moreSettings:
-                        startActivity(new Intent(this, SettingsActivity.class));
-                        return true;
-                    case R.id.menu_faq:
-                        requestOpenWebSite(this, "https://freezeyou.playhi.net/faq.html");
-                        return true;
-                    case R.id.menu_onClickFunc_autoUFOrFreeze:
-                        appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreeze;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_onClickFunc_freezeImmediately:
-                        appListViewOnClickMode = APPListViewOnClickMode_freezeImmediately;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_onClickFunc_UFImmediately:
-                        appListViewOnClickMode = APPListViewOnClickMode_UFImmediately;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_onClickFunc_chooseAction:
-                        appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_onClickFunc_addToFOQList:
-                        appListViewOnClickMode = APPListViewOnClickMode_addToFOQList;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_onClickFunc_addToOFList:
-                        appListViewOnClickMode = APPListViewOnClickMode_addToOFList;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_onClickFunc_addToOUFList:
-                        appListViewOnClickMode = APPListViewOnClickMode_addToOUFList;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_onClickFunc_removeFromFOQList:
-                        appListViewOnClickMode = APPListViewOnClickMode_removeFromFOQList;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_onClickFunc_removeFromOFList:
-                        appListViewOnClickMode = APPListViewOnClickMode_removeFromOFList;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_onClickFunc_removeFromOUFList:
-                        appListViewOnClickMode = APPListViewOnClickMode_removeFromOUFList;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_onClickFunc_UFAndRun:
-                        appListViewOnClickMode = APPListViewOnClickMode_UFAndRun;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_onClickFunc_autoUFOrFreezeAndRun:
-                        appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreezeAndRun;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_onClickFunc_createFUFShortcut:
-                        appListViewOnClickMode = APPListViewOnClickMode_createFUFShortcut;
-                        saveOnClickFunctionStatus(appListViewOnClickMode);
-                        return true;
-                    case R.id.menu_sB_default:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList(currentFilter, SORT_BY_DEFAULT);
-                            }
-                        }).start();
-                        saveSortMethodStatus(SORT_BY_DEFAULT);
-                        return true;
-                    case R.id.menu_sB_no:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList(currentFilter, SORT_BY_NO);
-                            }
-                        }).start();
-                        saveSortMethodStatus(SORT_BY_NO);
-                        return true;
-                    case R.id.menu_sB_uf_ascending:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList(currentFilter, SORT_BY_UF_ASCENDING);
-                            }
-                        }).start();
-                        saveSortMethodStatus(SORT_BY_UF_ASCENDING);
-                        return true;
-                    case R.id.menu_sB_uf_descending:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList(currentFilter, SORT_BY_UF_DESCENDING);
-                            }
-                        }).start();
-                        saveSortMethodStatus(SORT_BY_UF_DESCENDING);
-                        return true;
-                    case R.id.menu_sB_ff_ascending:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList(currentFilter, SORT_BY_FF_ASCENDING);
-                            }
-                        }).start();
-                        saveSortMethodStatus(SORT_BY_FF_ASCENDING);
-                        return true;
-                    case R.id.menu_sB_ff_descending:
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList(currentFilter, SORT_BY_FF_DESCENDING);
-                            }
-                        }).start();
-                        saveSortMethodStatus(SORT_BY_FF_DESCENDING);
-                        return true;
-                    case R.id.menu_sB_us_ascending:
-                        AccessibilityUtils.checkAndRequestIfAccessibilitySettingsOff(this);
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList(currentFilter, SORT_BY_US_ASCENDING);
-                            }
-                        }).start();
-                        saveSortMethodStatus(SORT_BY_US_ASCENDING);
-                        return true;
-                    case R.id.menu_sB_us_descending:
-                        AccessibilityUtils.checkAndRequestIfAccessibilitySettingsOff(this);
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                generateList(currentFilter, SORT_BY_US_DESCENDING);
-                            }
-                        }).start();
-                        saveSortMethodStatus(SORT_BY_US_DESCENDING);
-                        return true;
-                    default:
-                        return super.onOptionsItemSelected(item);
-                }
-        }
+        return onMainOptionsItemSelected(item);
     }
 
     private void generateList(String filter) {
@@ -639,6 +250,46 @@ public class Main extends FreezeYouBaseActivity {
         final FrameLayout linearLayout = findViewById(R.id.layout2);
         final ArrayList<Map<String, Object>> AppList = new ArrayList<>();
         final EditText search_editText = findViewById(R.id.search_editText);
+        final ImageButton moreSettingsImageButton = findViewById(R.id.main_moreSettings_button);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            moreSettingsImageButton.setBackgroundResource(R.drawable.oval_ripple);
+        } else {
+            moreSettingsImageButton.setBackgroundResource(getThemeFabDotBackground(Main.this));
+        }
+
+        moreSettingsImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(Main.this, v);
+                popupMenu.inflate(R.menu.menu);
+                onPrepareMainOptionsMenu(popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        return onMainOptionsItemSelected(item);
+                    }
+                });
+                popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+                    @Override
+                    public void onDismiss(PopupMenu menu) {
+                        RotateAnimation animation =
+                                new RotateAnimation(45, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                        animation.setDuration(300);
+                        animation.setRepeatMode(RotateAnimation.REVERSE);
+                        animation.setFillAfter(true);
+                        moreSettingsImageButton.startAnimation(animation);
+                    }
+                });
+                RotateAnimation animation =
+                        new RotateAnimation(0, 45, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                animation.setDuration(300);
+                animation.setRepeatMode(RotateAnimation.REVERSE);
+                animation.setFillAfter(true);
+                moreSettingsImageButton.startAnimation(animation);
+                popupMenu.show();
+            }
+        });
 
         if (isFinishing()) return;
 
@@ -1842,6 +1493,408 @@ public class Main extends FreezeYouBaseActivity {
         }
         cursor.close();
         return hashMap;
+    }
+
+    private void onPrepareMainOptionsMenu(Menu menu) {
+        try {
+            SubMenu vmUserDefinedSubMenu = menu.findItem(R.id.menu_vM_userDefined).getSubMenu();
+            vmUserDefinedSubMenu.clear(); // 清空先前产生的数据
+
+            vmUserDefinedSubMenu.add(
+                    R.id.menu_vM_userDefined_menuGroup,
+                    R.id.menu_vM_userDefined_newClassification,
+                    0,
+                    R.string.newClassification
+            ); // 加入“新建分类”
+
+            // 添加用户定义的自定义分类
+            SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
+            vmUserDefinedDb.execSQL(
+                    "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+            );
+            Cursor cursor = vmUserDefinedDb.query("categories", new String[]{"label", "_id"}, null, null, null, null, null);
+            if (cursor.moveToFirst()) {
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    int id = cursor.getInt(cursor.getColumnIndex("_id"));
+                    String title = cursor.getString(cursor.getColumnIndex("label"));
+                    vmUserDefinedSubMenu.add(R.id.menu_vM_userDefined_menuGroup, id, id, new String(Base64.decode(title, Base64.DEFAULT)));
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            vmUserDefinedDb.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean onMainOptionsItemSelected(MenuItem item) {
+
+        switch (item.getGroupId()) {
+            case R.id.menu_vM_userDefined_menuGroup:
+                switch (item.getItemId()) {
+                    case R.id.menu_vM_userDefined_newClassification:
+                        final EditText vmUserDefinedNameAlertDialogEditText = new EditText(this);
+                        AlertDialog.Builder vmUserDefinedNameAlertDialog = new AlertDialog.Builder(this);
+                        vmUserDefinedNameAlertDialog.setTitle(R.string.label);
+                        vmUserDefinedNameAlertDialog.setView(vmUserDefinedNameAlertDialogEditText);
+                        vmUserDefinedNameAlertDialog.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String label = Base64.encodeToString(vmUserDefinedNameAlertDialogEditText.getText().toString().getBytes(), Base64.DEFAULT);
+                                if ("".equals(label)) {
+                                    showToast(Main.this, R.string.emptyNotAllowed);
+                                } else {
+                                    boolean alreadyExists = false;
+                                    SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
+                                    vmUserDefinedDb.execSQL(
+                                            "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+                                    );
+                                    Cursor cursor = vmUserDefinedDb.query("categories", new String[]{"label"}, null, null, null, null, null);
+                                    if (cursor.moveToFirst()) {
+                                        for (int i = 0; i < cursor.getCount(); i++) {
+                                            if (label.equals(cursor.getString(cursor.getColumnIndex("label")))) {
+                                                alreadyExists = true;
+                                                break;
+                                            }
+                                            cursor.moveToNext();
+                                        }
+                                    }
+                                    cursor.close();
+                                    if (alreadyExists) {
+                                        showToast(Main.this, R.string.alreadyExist);
+                                    } else {
+                                        vmUserDefinedDb.execSQL(
+                                                "replace into categories(_id,label,packages) VALUES ( "
+                                                        + null + ",'"
+                                                        + label + "','')"
+                                        );
+                                    }
+                                    vmUserDefinedDb.close();
+                                }
+                            }
+                        });
+                        vmUserDefinedNameAlertDialog.setNegativeButton(R.string.cancel, null);
+                        vmUserDefinedNameAlertDialog.show();
+                        return true;
+                    default:
+                        String title = item.getTitle().toString();
+                        SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
+                        vmUserDefinedDb.execSQL(
+                                "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+                        );
+                        Cursor cursor =
+                                vmUserDefinedDb.query(
+                                        "categories",
+                                        new String[]{"packages"},
+                                        "label = '" + Base64.encodeToString(title.getBytes(), Base64.DEFAULT) + "'",
+                                        null, null, null, null
+                                );
+                        if (cursor.moveToFirst()) {
+                            generateList(cursor.getString(cursor.getColumnIndex("packages")));
+                        } else {
+                            showToast(this, R.string.failed);
+                        }
+                        cursor.close();
+                        vmUserDefinedDb.close();
+                        return true;
+                }
+            default:
+                switch (item.getItemId()) {
+                    case R.id.menu_createOneKeyFreezeShortCut:
+                        checkSettingsAndRequestCreateShortcut(
+                                getString(R.string.oneKeyFreeze),
+                                "cf.playhi.freezeyou.extra.fuf",
+                                getResources().getDrawable(R.mipmap.ic_launcher_round),
+                                OneKeyFreeze.class,
+                                "OneKeyFreeze",
+                                this);
+                        return true;
+                    case R.id.menu_createOneKeyUFShortCut:
+                        checkSettingsAndRequestCreateShortcut(
+                                getString(R.string.oneKeyUF),
+                                "cf.playhi.freezeyou.extra.fuf",
+                                getResources().getDrawable(R.mipmap.ic_launcher_round),
+                                OneKeyUF.class,
+                                "OneKeyUF",
+                                this);
+                        return true;
+                    case R.id.menu_createOneKeyLockScreenShortCut:
+                        checkSettingsAndRequestCreateShortcut(
+                                getString(R.string.oneKeyLockScreen),
+                                "cf.playhi.freezeyou.extra.oklock",
+                                getResources().getDrawable(R.drawable.screenlock),
+                                OneKeyScreenLockImmediatelyActivity.class,
+                                "OneKeyLockScreen",
+                                this);
+                        return true;
+                    case R.id.menu_createOnlyFrozenShortCut:
+                        checkSettingsAndRequestCreateShortcut(
+                                getString(R.string.onlyFrozen),
+                                "OF",
+                                getResources().getDrawable(R.mipmap.ic_launcher_round),
+                                Main.class,
+                                "OF",
+                                this);
+                        return true;
+                    case R.id.menu_createOnlyUFShortCut:
+                        checkSettingsAndRequestCreateShortcut(
+                                getString(R.string.onlyUF),
+                                "UF",
+                                getResources().getDrawable(R.mipmap.ic_launcher_round),
+                                Main.class,
+                                "UF",
+                                this);
+                        return true;
+                    case R.id.menu_createOnlyOnekeyShortCut:
+                        checkSettingsAndRequestCreateShortcut(
+                                getString(R.string.onlyOnekey),
+                                "OO",
+                                getResources().getDrawable(R.mipmap.ic_launcher_round),
+                                Main.class,
+                                "OO",
+                                this);
+                        return true;
+                    case R.id.menu_createOnlyOnekeyUFShortCut:
+                        checkSettingsAndRequestCreateShortcut(
+                                getString(R.string.oneKeyUF),
+                                "OOU",
+                                getResources().getDrawable(R.mipmap.ic_launcher_round),
+                                Main.class,
+                                "OOU",
+                                this);
+                        return true;
+                    case R.id.menu_createFreezeOnceQuitShortCut:
+                        checkSettingsAndRequestCreateShortcut(
+                                getString(R.string.freezeOnceQuit),
+                                "FOQ",
+                                getResources().getDrawable(R.mipmap.ic_launcher_round),
+                                Main.class,
+                                "FOQ",
+                                this);
+                        return true;
+                    case R.id.menu_createNewFolderShortCut:
+                        startActivityForResult(
+                                new Intent(this, ShortcutLauncherFolderActivity.class)
+                                        .setAction(Intent.ACTION_CREATE_SHORTCUT),
+                                80001
+                        );
+                        return true;
+                    case R.id.menu_timedTasks:
+                        startActivity(new Intent(this, ScheduledTasksManageActivity.class));
+                        return true;
+                    case R.id.menu_about:
+                        startActivity(new Intent(this, AboutActivity.class));
+                        return true;
+                    case R.id.menu_oneKeyFreezeImmediately:
+                        startActivity(new Intent(this, OneKeyFreeze.class).putExtra("autoCheckAndLockScreen", false));
+                        return true;
+                    case R.id.menu_oneKeyUFImmediately:
+                        startActivity(new Intent(this, OneKeyUF.class));
+                        return true;
+                    case R.id.menu_vM_onlyFrozen:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList("OF");
+                            }
+                        }).start();
+                        return true;
+                    case R.id.menu_vM_onlyUF:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList("UF");
+                            }
+                        }).start();
+                        return true;
+                    case R.id.menu_vM_all:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList("all");
+                            }
+                        }).start();
+                        return true;
+                    case R.id.menu_vM_onlyOnekey:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList("OO");
+                            }
+                        }).start();
+                        return true;
+                    case R.id.menu_vM_onlyOnekeyUF:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList("OOU");
+                            }
+                        }).start();
+                        return true;
+                    case R.id.menu_vM_onlySA:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList("OS");
+                            }
+                        }).start();
+                        return true;
+                    case R.id.menu_vM_onlyUA:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList("OU");
+                            }
+                        }).start();
+                        return true;
+                    case R.id.menu_vM_freezeOnceQuit:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList("FOQ");
+                            }
+                        }).start();
+                        return true;
+                    case R.id.menu_update:
+                        checkUpdate(Main.this);
+                        return true;
+                    case R.id.menu_moreSettings:
+                        startActivity(new Intent(this, SettingsActivity.class));
+                        return true;
+                    case R.id.menu_faq:
+                        requestOpenWebSite(this, "https://freezeyou.playhi.net/faq.html");
+                        return true;
+                    case R.id.menu_onClickFunc_autoUFOrFreeze:
+                        appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreeze;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_onClickFunc_freezeImmediately:
+                        appListViewOnClickMode = APPListViewOnClickMode_freezeImmediately;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_onClickFunc_UFImmediately:
+                        appListViewOnClickMode = APPListViewOnClickMode_UFImmediately;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_onClickFunc_chooseAction:
+                        appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_onClickFunc_addToFOQList:
+                        appListViewOnClickMode = APPListViewOnClickMode_addToFOQList;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_onClickFunc_addToOFList:
+                        appListViewOnClickMode = APPListViewOnClickMode_addToOFList;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_onClickFunc_addToOUFList:
+                        appListViewOnClickMode = APPListViewOnClickMode_addToOUFList;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_onClickFunc_removeFromFOQList:
+                        appListViewOnClickMode = APPListViewOnClickMode_removeFromFOQList;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_onClickFunc_removeFromOFList:
+                        appListViewOnClickMode = APPListViewOnClickMode_removeFromOFList;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_onClickFunc_removeFromOUFList:
+                        appListViewOnClickMode = APPListViewOnClickMode_removeFromOUFList;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_onClickFunc_UFAndRun:
+                        appListViewOnClickMode = APPListViewOnClickMode_UFAndRun;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_onClickFunc_autoUFOrFreezeAndRun:
+                        appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreezeAndRun;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_onClickFunc_createFUFShortcut:
+                        appListViewOnClickMode = APPListViewOnClickMode_createFUFShortcut;
+                        saveOnClickFunctionStatus(appListViewOnClickMode);
+                        return true;
+                    case R.id.menu_sB_default:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList(currentFilter, SORT_BY_DEFAULT);
+                            }
+                        }).start();
+                        saveSortMethodStatus(SORT_BY_DEFAULT);
+                        return true;
+                    case R.id.menu_sB_no:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList(currentFilter, SORT_BY_NO);
+                            }
+                        }).start();
+                        saveSortMethodStatus(SORT_BY_NO);
+                        return true;
+                    case R.id.menu_sB_uf_ascending:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList(currentFilter, SORT_BY_UF_ASCENDING);
+                            }
+                        }).start();
+                        saveSortMethodStatus(SORT_BY_UF_ASCENDING);
+                        return true;
+                    case R.id.menu_sB_uf_descending:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList(currentFilter, SORT_BY_UF_DESCENDING);
+                            }
+                        }).start();
+                        saveSortMethodStatus(SORT_BY_UF_DESCENDING);
+                        return true;
+                    case R.id.menu_sB_ff_ascending:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList(currentFilter, SORT_BY_FF_ASCENDING);
+                            }
+                        }).start();
+                        saveSortMethodStatus(SORT_BY_FF_ASCENDING);
+                        return true;
+                    case R.id.menu_sB_ff_descending:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList(currentFilter, SORT_BY_FF_DESCENDING);
+                            }
+                        }).start();
+                        saveSortMethodStatus(SORT_BY_FF_DESCENDING);
+                        return true;
+                    case R.id.menu_sB_us_ascending:
+                        AccessibilityUtils.checkAndRequestIfAccessibilitySettingsOff(this);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList(currentFilter, SORT_BY_US_ASCENDING);
+                            }
+                        }).start();
+                        saveSortMethodStatus(SORT_BY_US_ASCENDING);
+                        return true;
+                    case R.id.menu_sB_us_descending:
+                        AccessibilityUtils.checkAndRequestIfAccessibilitySettingsOff(this);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList(currentFilter, SORT_BY_US_DESCENDING);
+                            }
+                        }).start();
+                        saveSortMethodStatus(SORT_BY_US_DESCENDING);
+                        return true;
+                    default:
+                        return super.onOptionsItemSelected(item);
+                }
+        }
     }
 
     @Override
