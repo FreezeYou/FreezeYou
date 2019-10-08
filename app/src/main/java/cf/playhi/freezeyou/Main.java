@@ -252,12 +252,6 @@ public class Main extends FreezeYouBaseActivity {
         final EditText search_editText = findViewById(R.id.search_editText);
         final ImageButton moreSettingsImageButton = findViewById(R.id.main_moreSettings_button);
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            moreSettingsImageButton.setBackgroundResource(R.drawable.oval_ripple);
-        } else {
-            moreSettingsImageButton.setBackgroundResource(getThemeFabDotBackground(Main.this));
-        }
-
         moreSettingsImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,6 +290,13 @@ public class Main extends FreezeYouBaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
+                if (Build.VERSION.SDK_INT >= 21) {
+                    moreSettingsImageButton.setBackgroundResource(R.drawable.oval_ripple);
+                } else {
+                    moreSettingsImageButton.setBackgroundResource(getThemeFabDotBackground(Main.this));
+                }
+
                 linearLayout.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 main_loading_progress_textView.setVisibility(View.VISIBLE);
