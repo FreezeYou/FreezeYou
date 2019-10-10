@@ -224,11 +224,19 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                         alertDialogMessage.append(nl);
                         alertDialogMessage.append(getString(R.string.installPackage_colon));
                         alertDialogMessage.append(nl);
-                        alertDialogMessage.append(getString(R.string.application_colon));
-                        alertDialogMessage.append(pm.getApplicationLabel(packageInfo.applicationInfo));
+                        alertDialogMessage.append(
+                                String.format(
+                                        getString(R.string.application_colon_app),
+                                        pm.getApplicationLabel(packageInfo.applicationInfo)
+                                )
+                        );
                         alertDialogMessage.append(nl);
-                        alertDialogMessage.append(getString(R.string.pkgName_colon));
-                        alertDialogMessage.append(packageInfo.packageName);
+                        alertDialogMessage.append(
+                                String.format(
+                                        getString(R.string.pkgName_colon_pkgName),
+                                        packageInfo.packageName
+                                )
+                        );
                         alertDialogMessage.append(nl);
                         alertDialogMessage.append(
                                 String.format(

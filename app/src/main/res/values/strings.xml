@@ -317,6 +317,8 @@
     <string name="copyAlias">复制别名</string>
     <string name="version_colon_vN_longVC">版本：%1$s(%2$s)</string>
     <string name="existed_colon_vN_longVC">现存：%1$s(%2$s)</string>
+    <string name="application_colon_app">应用：%1$s</string>
+    <string name="pkgName_colon_pkgName">包名：%1$s</string>
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>
