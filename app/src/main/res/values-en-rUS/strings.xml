@@ -319,6 +319,8 @@
     <string name="copyAlias">Copy Alias</string>
     <string name="version_colon_vN_longVC">Version: %1$s (%2$s)</string>
     <string name="existed_colon_vN_longVC">Existed: %1$s (%2$s)</string>
+    <string name="application_colon_app">Application: %1$s</string>
+    <string name="pkgName_colon_pkgName">Package Name: %1$s</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
