@@ -161,6 +161,10 @@ public class BackupImportChooserActivity extends FreezeYouBaseActivity {
         keyToStringIdValuePair.put("okuf", getString(R.string.oneKeyUFList));
         keyToStringIdValuePair.put("foq", getString(R.string.freezeOnceQuitList));
         // 一键冻结、一键解冻、离开冻结列表 结束
+        // 安装应用请求、URI 请求白名单 开始
+        keyToStringIdValuePair.put("uriAutoAllowPkgs_allows", getString(R.string.uriAutoAllowList));
+        keyToStringIdValuePair.put("installPkgs_autoAllowPkgs_allows", getString(R.string.ipaAutoAllowList));
+        // 安装应用请求、URI 请求白名单 结束
     }
 
     private void generateList(JSONObject jsonObject, ArrayList<HashMap<String, String>> list) {
@@ -199,6 +203,16 @@ public class BackupImportChooserActivity extends FreezeYouBaseActivity {
                     generateUserDefinedCategoriesList(jsonObject, list);
                     break;
                 // 用户自定分类（我的列表） 结束
+                // URI 请求白名单 开始
+                case "uriAutoAllowPkgs_allows":
+                    generateUriAutoAllowPkgsList(jsonObject, list);
+                    break;
+                // URI 请求白名单 结束
+                // 安装应用请求白名单 开始
+                case "installPkgs_autoAllowPkgs_allows":
+                    generateInstallPkgsAutoAllowPkgsList(jsonObject, list);
+                    break;
+                // 安装应用请求白名单 结束
                 default:
                     break;
             }
@@ -447,6 +461,52 @@ public class BackupImportChooserActivity extends FreezeYouBaseActivity {
             keyValuePair.put("category", "userDefinedCategories");
             list.add(keyValuePair);
         }
+    }
+
+    private void generateUriAutoAllowPkgsList(JSONObject jsonObject, ArrayList<HashMap<String, String>> list) {
+        JSONArray array = jsonObject.optJSONArray("uriAutoAllowPkgs_allows");
+        if (array == null) {
+            return;
+        }
+
+        JSONObject jObj = array.optJSONObject(0);
+        if (jObj == null) {
+            return;
+        }
+
+        HashMap<String, String> keyValuePair = new HashMap<>();
+        keyValuePair.put(
+                "title",
+                keyToStringIdValuePair.containsKey("uriAutoAllowPkgs_allows") ?
+                        keyToStringIdValuePair.get("uriAutoAllowPkgs_allows") :
+                        "uriAutoAllowPkgs_allows"
+        );
+        keyValuePair.put("spKey", "uriAutoAllowPkgs_allows");
+        keyValuePair.put("category", "uriAutoAllowPkgs_allows");
+        list.add(keyValuePair);
+    }
+
+    private void generateInstallPkgsAutoAllowPkgsList(JSONObject jsonObject, ArrayList<HashMap<String, String>> list) {
+        JSONArray array = jsonObject.optJSONArray("installPkgs_autoAllowPkgs_allows");
+        if (array == null) {
+            return;
+        }
+
+        JSONObject jObj = array.optJSONObject(0);
+        if (jObj == null) {
+            return;
+        }
+
+        HashMap<String, String> keyValuePair = new HashMap<>();
+        keyValuePair.put(
+                "title",
+                keyToStringIdValuePair.containsKey("installPkgs_autoAllowPkgs_allows") ?
+                        keyToStringIdValuePair.get("installPkgs_autoAllowPkgs_allows") :
+                        "installPkgs_autoAllowPkgs_allows"
+        );
+        keyValuePair.put("spKey", "installPkgs_autoAllowPkgs_allows");
+        keyValuePair.put("category", "installPkgs_autoAllowPkgs_allows");
+        list.add(keyValuePair);
     }
 
 }

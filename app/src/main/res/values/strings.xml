@@ -320,6 +320,8 @@
     <string name="application_colon_app">应用：%1$s</string>
     <string name="pkgName_colon_pkgName">包名：%1$s</string>
     <string name="cannotInstall_colon_msg">无法安装：%1$s</string>
+    <string name="uriAutoAllowList">URI 请求白名单</string>
+    <string name="ipaAutoAllowList">安装应用请求白名单</string>
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>

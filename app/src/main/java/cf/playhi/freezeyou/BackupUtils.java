@@ -393,6 +393,29 @@ final class BackupUtils {
         }
     }
 
+    private static boolean importUriAutoAllowPkgsJSONArray(JSONObject jsonObject, AppPreferences ap) {
+        JSONArray array = jsonObject.optJSONArray("uriAutoAllowPkgs_allows");
+        if (array == null) {
+            return false;
+        }
+        JSONObject jObj = array.optJSONObject(0);
+        if (jObj == null) {
+            return false;
+        }
+        return ap.put("uriAutoAllowPkgs_allows", jObj.optString("lists"));
+    }
+
+    private static boolean importInstallPkgsAutoAllowPkgsJSONArray(JSONObject jsonObject, AppPreferences ap) {
+        JSONArray array = jsonObject.optJSONArray("installPkgs_autoAllowPkgs_allows");
+        if (array == null) {
+            return false;
+        }
+        JSONObject jObj = array.optJSONObject(0);
+        if (jObj == null) {
+            return false;
+        }
+        return ap.put("installPkgs_autoAllowPkgs_allows", jObj.optString("lists"));
+    }
 
     static void importContents(Context context, Activity activity, JSONObject jsonObject) {
         final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(context);
@@ -432,6 +455,16 @@ final class BackupUtils {
                     importUserDefinedCategoriesJSONArray(activity, jsonObject);
                     break;
                 // 用户自定分类（我的列表） 结束
+                // URI 请求白名单 开始
+                case "uriAutoAllowPkgs_allows":
+                    importUriAutoAllowPkgsJSONArray(jsonObject, appPreferences);
+                    break;
+                // URI 请求白名单 结束
+                // 安装应用请求白名单 开始
+                case "installPkgs_autoAllowPkgs_allows":
+                    importInstallPkgsAutoAllowPkgsJSONArray(jsonObject, appPreferences);
+                    break;
+                // 安装应用请求白名单 结束
                 default:
                     break;
             }

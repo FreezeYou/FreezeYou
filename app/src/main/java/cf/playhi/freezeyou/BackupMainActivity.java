@@ -281,6 +281,11 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
             finalOutputJsonObject.put("oneKeyList", oneKeyListJSONArray);
             // 一键冻结、一键解冻、离开冻结列表 结束
 
+            // 安装应用请求、URI 请求白名单 开始
+            finalOutputJsonObject.put("uriAutoAllowPkgs_allows", generateUriAutoAllowPkgsJSONArray());
+            finalOutputJsonObject.put("installPkgs_autoAllowPkgs_allows", generateInstallPkgsAutoAllowPkgsJSONArray());
+            // 安装应用请求、URI 请求白名单 结束
+
             // 计划任务 - 时间 开始
             finalOutputJsonObject.put("userTimeScheduledTasks", generateUserTimeTasksJSONArray());
             // 计划任务 - 时间 结束
@@ -392,6 +397,30 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
         }
         cursor.close();
         db.close();
+        return userDefinedCategoriesJSONArray;
+    }
+
+    private JSONArray generateUriAutoAllowPkgsJSONArray() throws JSONException {
+        JSONArray userDefinedCategoriesJSONArray = new JSONArray();
+        JSONObject oneUserDefinedCategoriesJSONObject = new JSONObject();
+        AppPreferences ap = new AppPreferences(this);
+        oneUserDefinedCategoriesJSONObject.put(
+                "lists",
+                convertSharedPreference(ap, "uriAutoAllowPkgs_allows", "")
+        );
+        userDefinedCategoriesJSONArray.put(oneUserDefinedCategoriesJSONObject);
+        return userDefinedCategoriesJSONArray;
+    }
+
+    private JSONArray generateInstallPkgsAutoAllowPkgsJSONArray() throws JSONException {
+        JSONArray userDefinedCategoriesJSONArray = new JSONArray();
+        JSONObject oneUserDefinedCategoriesJSONObject = new JSONObject();
+        AppPreferences ap = new AppPreferences(this);
+        oneUserDefinedCategoriesJSONObject.put(
+                "lists",
+                convertSharedPreference(ap, "installPkgs_autoAllowPkgs_allows", "")
+        );
+        userDefinedCategoriesJSONArray.put(oneUserDefinedCategoriesJSONObject);
         return userDefinedCategoriesJSONArray;
     }
 
