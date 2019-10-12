@@ -321,6 +321,7 @@
     <string name="existed_colon_vN_longVC">现存：%1$s(%2$s)</string>
     <string name="application_colon_app">应用：%1$s</string>
     <string name="pkgName_colon_pkgName">包名：%1$s</string>
+    <string name="cannotInstall_colon_msg">无法安装：%1$s</string>
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
         <item>僅已凍結</item>
