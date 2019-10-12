@@ -283,7 +283,12 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                             }
                         });
                     } catch (Exception e) {
-                        alertDialogMessage.append(getString(R.string.cannotInstall_colon)).append(e.getLocalizedMessage());
+                        alertDialogMessage.append(
+                                String.format(
+                                        getString(R.string.cannotInstall_colon_msg),
+                                        e.getLocalizedMessage()
+                                )
+                        );
 
                         if (isFinishing()) return;
 
@@ -316,11 +321,19 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
             alertDialogMessage.append(nl);
             alertDialogMessage.append(getString(R.string.uninstallPackage_colon));
             alertDialogMessage.append(nl);
-            alertDialogMessage.append(getString(R.string.application_colon));
-            alertDialogMessage.append(getApplicationLabel(this, null, null, packageName));
+            alertDialogMessage.append(
+                    String.format(
+                            getString(R.string.application_colon_app),
+                            getApplicationLabel(this, null, null, packageName)
+                    )
+            );
             alertDialogMessage.append(nl);
-            alertDialogMessage.append(getString(R.string.pkgName_colon));
-            alertDialogMessage.append(packageName);
+            alertDialogMessage.append(
+                    String.format(
+                            getString(R.string.pkgName_colon_pkgName),
+                            packageName
+                    )
+            );
             alertDialogMessage.append(nl);
             alertDialogMessage.append(getString(R.string.whetherAllow));
             showInstallDialog(
