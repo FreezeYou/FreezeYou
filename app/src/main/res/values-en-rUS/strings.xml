@@ -322,6 +322,8 @@
     <string name="application_colon_app">Application: %1$s</string>
     <string name="pkgName_colon_pkgName">Package Name: %1$s</string>
     <string name="cannotInstall_colon_msg">Cannot install: %1$s</string>
+    <string name="uriAutoAllowList">URI Request Whitelist</string>
+    <string name="ipaAutoAllowList">Request Install Applications Whitelist</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
