@@ -634,189 +634,190 @@ public class Main extends FreezeYouBaseActivity {
                     break;
             }
         }
-
-        final MainAppListSimpleAdapter adapter =
-                mMainActivityAppListFragment.setAppListAdapter(
-                        Main.this,
-                        (ArrayList<Map<String, Object>>) AppList.clone(),
-                        selectedPackages
-                );
-
-
-        search_editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (TextUtils.isEmpty(charSequence)) {
-                    adapter.replaceAllInFormerArrayList(AppList);
-                } else {
-                    adapter.replaceAllInFormerArrayList(processListFilter(charSequence, AppList));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
         if (isFinishing()) return;
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
+                final MainAppListSimpleAdapter adapter =
+                        mMainActivityAppListFragment.setAppListAdapter(
+                                Main.this,
+                                (ArrayList<Map<String, Object>>) AppList.clone(),
+                                selectedPackages
+                        );
+
+
+                search_editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        if (TextUtils.isEmpty(charSequence)) {
+                            adapter.replaceAllInFormerArrayList(AppList);
+                        } else {
+                            adapter.replaceAllInFormerArrayList(processListFilter(charSequence, AppList));
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
+
                 main_loading_progress_textView.setText(R.string.finish);
                 progressBar.setVisibility(View.GONE);
                 textView.setVisibility(View.GONE);
                 main_loading_progress_textView.setVisibility(View.GONE);
                 linearLayout.setVisibility(View.GONE);
                 appListFragmentContainer.setVisibility(View.VISIBLE);
-            }
-        });
 
-        mMainActivityAppListFragment.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-            @Override
-            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
-                final String pkgName =
-                        (String) ((MainAppListSimpleAdapter) mMainActivityAppListFragment.getAppListAdapter())
-                                .getStoredArrayList().get(i).get("PackageName");
+                mMainActivityAppListFragment.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                    @Override
+                    public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                        final String pkgName =
+                                (String) ((MainAppListSimpleAdapter) mMainActivityAppListFragment.getAppListAdapter())
+                                        .getStoredArrayList().get(i).get("PackageName");
 
-                if (needProcessOnItemCheckedStateChanged) {
-                    if (selectedPackages.contains(pkgName)) {
-                        selectedPackages.remove(pkgName);
-                    } else {
-                        selectedPackages.add(pkgName);
-                    }
-                    needProcessOnItemCheckedStateChanged = false;
-                    mMainActivityAppListFragment.setItemChecked(i, true);
-                    actionMode.setTitle(Integer.toString(selectedPackages.size()));
-                    adapter.notifyDataSetChanged();
-                } else {
-                    needProcessOnItemCheckedStateChanged = true;
-                }
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-                Main.this.getMenuInflater().inflate(R.menu.multichoicemenu, menu);
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.list_menu_selectAll:
-                        Adapter adpt = mMainActivityAppListFragment.getAppListAdapter();
-                        if (adpt instanceof MainAppListSimpleAdapter) {
-                            for (int i = 0; i < adpt.getCount(); i++) {
-                                String pkg = (String) ((MainAppListSimpleAdapter) adpt).getStoredArrayList().get(i).get("PackageName");
-                                if (!selectedPackages.contains(pkg)) {
-                                    selectedPackages.add(pkg);
-                                }
-                            }
-                            actionMode.setTitle(Integer.toString(selectedPackages.size()));
-                            ((MainAppListSimpleAdapter) adpt).notifyDataSetChanged();
-                        }
-                        return true;
-                    case R.id.list_menu_selectUnselected:
-                        Adapter adapt = mMainActivityAppListFragment.getAppListAdapter();
-                        if (adapt instanceof MainAppListSimpleAdapter) {
-                            for (int i = 0; i < adapt.getCount(); i++) {
-                                String pkg = (String) ((MainAppListSimpleAdapter) adapt).getStoredArrayList().get(i).get("PackageName");
-                                if (selectedPackages.contains(pkg)) {
-                                    selectedPackages.remove(pkg);
-                                } else {
-                                    selectedPackages.add(pkg);
-                                }
-                            }
-                            actionMode.setTitle(Integer.toString(selectedPackages.size()));
-                            ((MainAppListSimpleAdapter) adapt).notifyDataSetChanged();
-                        }
-                        return true;
-                    case R.id.list_menu_addToOneKeyFreezeList:
-                        processAddToOneKeyList(getString(R.string.sAutoFreezeApplicationList));
-                        return true;
-                    case R.id.list_menu_addToOneKeyUFList:
-                        processAddToOneKeyList(getString(R.string.sOneKeyUFApplicationList));
-                        return true;
-                    case R.id.list_menu_addToFreezeOnceQuit:
-                        processAddToOneKeyList(getString(R.string.sFreezeOnceQuit));
-                        return true;
-                    case R.id.list_menu_removeFromOneKeyFreezeList:
-                        processRemoveFromOneKeyList(getString(R.string.sAutoFreezeApplicationList));
-                        return true;
-                    case R.id.list_menu_removeFromOneKeyUFList:
-                        processRemoveFromOneKeyList(getString(R.string.sOneKeyUFApplicationList));
-                        return true;
-                    case R.id.list_menu_removeFromFreezeOnceQuit:
-                        processRemoveFromOneKeyList(getString(R.string.sFreezeOnceQuit));
-                        return true;
-                    case R.id.list_menu_freezeImmediately:
-                        processDisableAndEnableImmediately(true);
-                        actionMode.finish();
-                        return true;
-                    case R.id.list_menu_UFImmediately:
-                        processDisableAndEnableImmediately(false);
-                        actionMode.finish();
-                        return true;
-                    case R.id.list_menu_createDisEnableShortCut:
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            ShortcutManager mShortcutManager =
-                                    Main.this.getSystemService(ShortcutManager.class);
-                            if (mShortcutManager != null && mShortcutManager.isRequestPinShortcutSupported()) {
-                                shortcutsCount = selectedPackages.size() - 1;
-                                if (shortcutsCount >= 0) {
-                                    String pkgName = selectedPackages.get(shortcutsCount);
-                                    createShortCut(
-                                            getApplicationLabel(Main.this, null, null, pkgName),
-                                            pkgName,
-                                            getApplicationIcon(
-                                                    Main.this,
-                                                    pkgName,
-                                                    ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, Main.this),
-                                                    false),
-                                            Freeze.class,
-                                            "FreezeYou! " + pkgName,
-                                            Main.this
-                                    );
-                                }
-                                shortcutsCompleted = (shortcutsCount <= 0);
+                        if (needProcessOnItemCheckedStateChanged) {
+                            if (selectedPackages.contains(pkgName)) {
+                                selectedPackages.remove(pkgName);
                             } else {
-                                createFUFShortcutsBatch();
+                                selectedPackages.add(pkgName);
                             }
+                            needProcessOnItemCheckedStateChanged = false;
+                            mMainActivityAppListFragment.setItemChecked(i, true);
+                            actionMode.setTitle(Integer.toString(selectedPackages.size()));
+                            adapter.notifyDataSetChanged();
                         } else {
-                            createFUFShortcutsBatch();
+                            needProcessOnItemCheckedStateChanged = true;
                         }
-                        return true;
-                    case R.id.list_menu_copyAfterBeingFormatted:
-                        StringBuilder formattedPackages = new StringBuilder();
-                        int size = selectedPackages.size();
-                        for (int i = 0; i < size; i++) {
-                            formattedPackages.append(selectedPackages.get(i)).append(",");
-                        }
-                        if (copyToClipboard(Main.this, formattedPackages.toString())) {
-                            showToast(Main.this, R.string.success);
-                        } else {
-                            showToast(Main.this, R.string.failed);
-                        }
-                        return true;
-                    default:
-                        return false;
-                }
-            }
+                    }
 
-            @Override
-            public void onDestroyActionMode(ActionMode actionMode) {
-                selectedPackages.clear();
+                    @Override
+                    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                        Main.this.getMenuInflater().inflate(R.menu.multichoicemenu, menu);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case R.id.list_menu_selectAll:
+                                Adapter adpt = mMainActivityAppListFragment.getAppListAdapter();
+                                if (adpt instanceof MainAppListSimpleAdapter) {
+                                    for (int i = 0; i < adpt.getCount(); i++) {
+                                        String pkg = (String) ((MainAppListSimpleAdapter) adpt).getStoredArrayList().get(i).get("PackageName");
+                                        if (!selectedPackages.contains(pkg)) {
+                                            selectedPackages.add(pkg);
+                                        }
+                                    }
+                                    actionMode.setTitle(Integer.toString(selectedPackages.size()));
+                                    ((MainAppListSimpleAdapter) adpt).notifyDataSetChanged();
+                                }
+                                return true;
+                            case R.id.list_menu_selectUnselected:
+                                Adapter adapt = mMainActivityAppListFragment.getAppListAdapter();
+                                if (adapt instanceof MainAppListSimpleAdapter) {
+                                    for (int i = 0; i < adapt.getCount(); i++) {
+                                        String pkg = (String) ((MainAppListSimpleAdapter) adapt).getStoredArrayList().get(i).get("PackageName");
+                                        if (selectedPackages.contains(pkg)) {
+                                            selectedPackages.remove(pkg);
+                                        } else {
+                                            selectedPackages.add(pkg);
+                                        }
+                                    }
+                                    actionMode.setTitle(Integer.toString(selectedPackages.size()));
+                                    ((MainAppListSimpleAdapter) adapt).notifyDataSetChanged();
+                                }
+                                return true;
+                            case R.id.list_menu_addToOneKeyFreezeList:
+                                processAddToOneKeyList(getString(R.string.sAutoFreezeApplicationList));
+                                return true;
+                            case R.id.list_menu_addToOneKeyUFList:
+                                processAddToOneKeyList(getString(R.string.sOneKeyUFApplicationList));
+                                return true;
+                            case R.id.list_menu_addToFreezeOnceQuit:
+                                processAddToOneKeyList(getString(R.string.sFreezeOnceQuit));
+                                return true;
+                            case R.id.list_menu_removeFromOneKeyFreezeList:
+                                processRemoveFromOneKeyList(getString(R.string.sAutoFreezeApplicationList));
+                                return true;
+                            case R.id.list_menu_removeFromOneKeyUFList:
+                                processRemoveFromOneKeyList(getString(R.string.sOneKeyUFApplicationList));
+                                return true;
+                            case R.id.list_menu_removeFromFreezeOnceQuit:
+                                processRemoveFromOneKeyList(getString(R.string.sFreezeOnceQuit));
+                                return true;
+                            case R.id.list_menu_freezeImmediately:
+                                processDisableAndEnableImmediately(true);
+                                actionMode.finish();
+                                return true;
+                            case R.id.list_menu_UFImmediately:
+                                processDisableAndEnableImmediately(false);
+                                actionMode.finish();
+                                return true;
+                            case R.id.list_menu_createDisEnableShortCut:
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    ShortcutManager mShortcutManager =
+                                            Main.this.getSystemService(ShortcutManager.class);
+                                    if (mShortcutManager != null && mShortcutManager.isRequestPinShortcutSupported()) {
+                                        shortcutsCount = selectedPackages.size() - 1;
+                                        if (shortcutsCount >= 0) {
+                                            String pkgName = selectedPackages.get(shortcutsCount);
+                                            createShortCut(
+                                                    getApplicationLabel(Main.this, null, null, pkgName),
+                                                    pkgName,
+                                                    getApplicationIcon(
+                                                            Main.this,
+                                                            pkgName,
+                                                            ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, Main.this),
+                                                            false),
+                                                    Freeze.class,
+                                                    "FreezeYou! " + pkgName,
+                                                    Main.this
+                                            );
+                                        }
+                                        shortcutsCompleted = (shortcutsCount <= 0);
+                                    } else {
+                                        createFUFShortcutsBatch();
+                                    }
+                                } else {
+                                    createFUFShortcutsBatch();
+                                }
+                                return true;
+                            case R.id.list_menu_copyAfterBeingFormatted:
+                                StringBuilder formattedPackages = new StringBuilder();
+                                int size = selectedPackages.size();
+                                for (int i = 0; i < size; i++) {
+                                    formattedPackages.append(selectedPackages.get(i)).append(",");
+                                }
+                                if (copyToClipboard(Main.this, formattedPackages.toString())) {
+                                    showToast(Main.this, R.string.success);
+                                } else {
+                                    showToast(Main.this, R.string.failed);
+                                }
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+
+                    @Override
+                    public void onDestroyActionMode(ActionMode actionMode) {
+                        selectedPackages.clear();
+                    }
+                });
+
             }
         });
 
