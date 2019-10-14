@@ -1,6 +1,7 @@
 package cf.playhi.freezeyou;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -89,7 +90,7 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
-                    AlertDialogUtils
+                    AlertDialog.Builder b = AlertDialogUtils
                             .buildAlertDialog(
                                     this,
                                     android.R.drawable.ic_dialog_alert,
@@ -115,8 +116,10 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     finish();
                                 }
-                            })
-                            .create().show();
+                            });
+                    if (!isFinishing()) {
+                        b.show();
+                    }
                 } else {
                     apkFilePath = packageUri.getPath();
                     checkAutoAndPrepareInstallDialog(install, packageUri, apkFilePath);
@@ -167,6 +170,9 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
 
     private void prepareInstallDialog(final boolean install, final Uri packageUri, final String apkFilePath, final String fromPkgLabel, final String fromPkgName) {
         final StringBuilder alertDialogMessage = new StringBuilder();
+
+        if (isFinishing()) return;
+
         final ProgressDialog progressDialog =
                 ProgressDialog.show(this, getString(R.string.plsWait), getString(R.string.loading___));
         final String nl = System.getProperty("line.separator");
@@ -457,6 +463,7 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
             progressDialog.cancel();
         }
 
+        if (isFinishing()) return;
         installPackagesAlertDialog.show();
         Window w = installPackagesAlertDialog.getWindow();
         if (w != null) {
