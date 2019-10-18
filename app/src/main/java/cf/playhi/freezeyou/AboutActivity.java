@@ -15,6 +15,7 @@ import android.widget.TextView;
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 
 import static cf.playhi.freezeyou.utils.MoreUtils.joinQQGroup;
+import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenDonateWebSite;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
@@ -95,7 +96,11 @@ public class AboutActivity extends FreezeYouBaseActivity {
                         checkUpdate(activity);
                         break;
                     case 7:
-                        requestOpenWebSite(activity, googleVersion ? "https://freezeyou.playhi.net/ThirdPartyOpenSourceLicenses.html" : "https://freezeyou.playhi.net/sponsorship.html");
+                        if (googleVersion) {
+                            requestOpenWebSite(activity, "https://freezeyou.playhi.net/ThirdPartyOpenSourceLicenses.html");
+                        } else {
+                            requestOpenDonateWebSite(activity);
+                        }
                         break;
                     case 8:
                         if (googleVersion) {

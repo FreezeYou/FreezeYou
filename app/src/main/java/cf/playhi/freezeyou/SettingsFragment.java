@@ -25,6 +25,7 @@ import cf.playhi.freezeyou.utils.OneKeyListUtils;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.FileUtils.deleteAllFiles;
+import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenDonateWebSite;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
@@ -108,7 +109,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     requestOpenWebSite(getActivity(), "https://crwd.in/freezeyou");
                     break;
                 case "donate":
-                    requestOpenWebSite(getActivity(), "https://freezeyou.playhi.net/sponsorship.html");
+                    requestOpenDonateWebSite(getActivity());
                     break;
                 case "thanksList":
                     requestOpenWebSite(getActivity(), "https://freezeyou.playhi.net/thanks.html");

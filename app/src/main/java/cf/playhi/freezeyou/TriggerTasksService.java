@@ -93,7 +93,7 @@ class TriggerScreenLockListener {
         mScreenLockReceiver = new ScreenLockBroadcastReceiver();
     }
 
-    private class ScreenLockBroadcastReceiver extends BroadcastReceiver {
+    private static class ScreenLockBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -105,32 +105,10 @@ class TriggerScreenLockListener {
             if (action != null && cursor.moveToFirst()) {
                 switch (action) {
                     case Intent.ACTION_SCREEN_OFF:
-                        cancelAllUnexecutedDelayTasks(context, "onScreenOn");
-                        for (int i = 0; i < cursor.getCount(); i++) {
-                            String tg = cursor.getString(cursor.getColumnIndex("tg"));
-                            int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                            if (enabled == 1 && "onScreenOff".equals(tg)) {
-                                String task = cursor.getString(cursor.getColumnIndex("task"));
-                                if (task != null && !"".equals(task)) {
-                                    TasksUtils.runTask(task, context, "onScreenOff");
-                                }
-                            }
-                            cursor.moveToNext();
-                        }
+                        onActionScreenOnOff(context, cursor, false);
                         break;
                     case Intent.ACTION_SCREEN_ON:
-                        cancelAllUnexecutedDelayTasks(context, "onScreenOff");
-                        for (int i = 0; i < cursor.getCount(); i++) {
-                            String tg = cursor.getString(cursor.getColumnIndex("tg"));
-                            int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                            if (enabled == 1 && "onScreenOn".equals(tg)) {
-                                String task = cursor.getString(cursor.getColumnIndex("task"));
-                                if (task != null && !"".equals(task)) {
-                                    TasksUtils.runTask(task, context, "onScreenOn");
-                                }
-                            }
-                            cursor.moveToNext();
-                        }
+                        onActionScreenOnOff(context, cursor, true);
                         break;
                     default:
                         break;
@@ -138,6 +116,21 @@ class TriggerScreenLockListener {
             }
             cursor.close();
             db.close();
+        }
+
+        private static void onActionScreenOnOff(Context context, Cursor cursor, boolean screenOn) {
+            cancelAllUnexecutedDelayTasks(context, screenOn ? "onScreenOff" : "onScreenOn");
+            for (int i = 0; i < cursor.getCount(); i++) {
+                String tg = cursor.getString(cursor.getColumnIndex("tg"));
+                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                if (enabled == 1 && (screenOn ? "onScreenOn" : "onScreenOff").equals(tg)) {
+                    String task = cursor.getString(cursor.getColumnIndex("task"));
+                    if (task != null && !"".equals(task)) {
+                        TasksUtils.runTask(task, context, screenOn ? "onScreenOn" : "onScreenOff");
+                    }
+                }
+                cursor.moveToNext();
+            }
         }
     }
 
@@ -151,5 +144,6 @@ class TriggerScreenLockListener {
     void unregisterListener() {
         mContext.unregisterReceiver(mScreenLockReceiver);
     }
+
 
 }
