@@ -228,6 +228,7 @@
         <activity
             android:name=".InstallPackagesActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:enabled="false"
             android:excludeFromRecents="true"
             android:label="@string/installAndUninstall"
             android:process=":installAndUninstall"
@@ -565,22 +566,22 @@
         </service>
 
         <provider
-            android:permission="cf.playhi.freezeyou.permission.QUERY_STATUS"
             android:name="cf.playhi.freezeyou.export.Query"
             android:authorities="cf.playhi.freezeyou.export.QUERY"
             android:exported="true"
+            android:permission="cf.playhi.freezeyou.permission.QUERY_STATUS"
             android:process=":backgroundService" />
         <provider
-            android:permission="cf.playhi.freezeyou.permission.ENABLE_APPLICATIONS"
             android:name="cf.playhi.freezeyou.export.Unfreeze"
             android:authorities="cf.playhi.freezeyou.export.UNFREEZE"
             android:exported="true"
+            android:permission="cf.playhi.freezeyou.permission.ENABLE_APPLICATIONS"
             android:process=":backgroundService" />
         <provider
-            android:permission="cf.playhi.freezeyou.permission.DISABLE_APPLICATIONS"
             android:name="cf.playhi.freezeyou.export.Freeze"
             android:authorities="cf.playhi.freezeyou.export.FREEZE"
             android:exported="true"
+            android:permission="cf.playhi.freezeyou.permission.DISABLE_APPLICATIONS"
             android:process=":backgroundService" />
 
     </application>
