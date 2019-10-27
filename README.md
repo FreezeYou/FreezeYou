@@ -9,8 +9,7 @@
 
 * 通过禁用（需要时启用）一些糟糕的但又有需要使用的软件，来提升设备运行速度以及续航时间。
 ## 下载 Download
-* [酷安(CoolApk)：https://www.coolapk.com/apk/165728](https://www.coolapk.com/apk/165728)
-* [Github: https://github.com/Playhi/FreezeYou/releases](https://github.com/Playhi/FreezeYou/releases)
+* [转至下载](https://freezeyou.playhi.net/download.html)
 ## 其它 Others
 * 欢迎转载，也感谢各位的转载，但转载时如非必要，请您不要修改应用程序或重打包（修改以及重打包都很可能会导致用户后续更新出现麻烦），请直接使用 [Release](https://github.com/Playhi/FreezeYou/releases) 中包含的 安装包(APK)文件 即可。
 * 开放能力：[开放能力](https://wiki.playhi.net/index.php?title=%E5%BC%80%E6%94%BE%E8%83%BD%E5%8A%9B_-_FreezeYou)
