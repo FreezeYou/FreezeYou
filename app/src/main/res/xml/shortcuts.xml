@@ -51,7 +51,7 @@
     </shortcut>
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_action_alarm_light"
+        android:icon="@drawable/ic_shortcut_access_alarm"
         android:shortcutDisabledMessage="@string/scheduledTasks"
         android:shortcutId="scheduledTasks"
         android:shortcutLongLabel="@string/scheduledTasks"
