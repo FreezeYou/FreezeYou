@@ -324,6 +324,12 @@
     <string name="cannotInstall_colon_msg">无法安装：%1$s</string>
     <string name="uriAutoAllowList">URI 请求白名单</string>
     <string name="ipaAutoAllowList">安装应用请求白名单</string>
+    <string name="installing_app">正在安装 %1$s</string>
+    <string name="uninstalling_app">正在卸载 %1$s</string>
+    <string name="app_installFinished">%1$s 安装完成</string>
+    <string name="app_installFailed">%1$s 安装失败</string>
+    <string name="app_uninstallFinished">%1$s 卸载完成</string>
+    <string name="app_uninstallFailed">%1$s 卸载失败</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
