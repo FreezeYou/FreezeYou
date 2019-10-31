@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
-        android:shortcutId="main"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher_new_round"
-        android:shortcutShortLabel="@string/app_name"
+        android:shortcutDisabledMessage="@string/app_name"
+        android:shortcutId="main"
         android:shortcutLongLabel="@string/app_name"
-        android:shortcutDisabledMessage="@string/app_name">
+        android:shortcutShortLabel="@string/app_name">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="cf.playhi.freezeyou"
-            android:targetClass="cf.playhi.freezeyou.Main" />
+            android:targetClass="cf.playhi.freezeyou.Main"
+            android:targetPackage="cf.playhi.freezeyou" />
         <!-- If your shortcut is associated with multiple intents, include them
              here. The last intent in the list determines what the user sees when
              they launch this shortcut. -->
@@ -18,32 +18,48 @@
     </shortcut>
     <!-- Specify more shortcuts here. -->
     <shortcut
-        android:shortcutId="onekeyFreeze"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher_new_round"
-        android:shortcutShortLabel="@string/oneKeyFreeze"
+        android:shortcutDisabledMessage="@string/oneKeyFreeze"
+        android:shortcutId="onekeyFreeze"
         android:shortcutLongLabel="@string/oneKeyFreeze"
-        android:shortcutDisabledMessage="@string/oneKeyFreeze">
+        android:shortcutShortLabel="@string/oneKeyFreeze">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="cf.playhi.freezeyou"
-            android:targetClass="cf.playhi.freezeyou.OneKeyFreeze" />
+            android:targetClass="cf.playhi.freezeyou.OneKeyFreeze"
+            android:targetPackage="cf.playhi.freezeyou" />
         <!-- If your shortcut is associated with multiple intents, include them
              here. The last intent in the list determines what the user sees when
              they launch this shortcut. -->
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
     <shortcut
-        android:shortcutId="onekeyUF"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher_new_round"
-        android:shortcutShortLabel="@string/oneKeyUF"
+        android:shortcutDisabledMessage="@string/oneKeyUF"
+        android:shortcutId="onekeyUF"
         android:shortcutLongLabel="@string/oneKeyUF"
-        android:shortcutDisabledMessage="@string/oneKeyUF">
+        android:shortcutShortLabel="@string/oneKeyUF">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="cf.playhi.freezeyou"
-            android:targetClass="cf.playhi.freezeyou.OneKeyUF" />
+            android:targetClass="cf.playhi.freezeyou.OneKeyUF"
+            android:targetPackage="cf.playhi.freezeyou" />
+        <!-- If your shortcut is associated with multiple intents, include them
+             here. The last intent in the list determines what the user sees when
+             they launch this shortcut. -->
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_action_alarm_light"
+        android:shortcutDisabledMessage="@string/scheduledTasks"
+        android:shortcutId="scheduledTasks"
+        android:shortcutLongLabel="@string/scheduledTasks"
+        android:shortcutShortLabel="@string/scheduledTasks">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="cf.playhi.freezeyou.ScheduledTasksManageActivity"
+            android:targetPackage="cf.playhi.freezeyou" />
         <!-- If your shortcut is associated with multiple intents, include them
              here. The last intent in the list determines what the user sees when
              they launch this shortcut. -->
