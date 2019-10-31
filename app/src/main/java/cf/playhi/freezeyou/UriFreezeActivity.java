@@ -146,14 +146,21 @@ public class UriFreezeActivity extends FreezeYouBaseActivity {
         String nl = System.getProperty("line.separator");
         message.append(getString(R.string.target_colon));
         message.append(nl);
-        message.append(getString(R.string.application_colon));
         message.append(
-                getApplicationLabel(
-                        this, null,
-                        null, pkgName));
+                String.format(
+                        getString(R.string.application_colon_app),
+                        getApplicationLabel(
+                                this, null,
+                                null, pkgName)
+                )
+        );
         message.append(nl);
-        message.append(getString(R.string.pkgName_colon));
-        message.append(pkgName);
+        message.append(
+                String.format(
+                        getString(R.string.pkgName_colon_pkgName),
+                        pkgName
+                )
+        );
         message.append(nl);
         message.append(nl);
         message.append(getString(R.string.execute_colon));

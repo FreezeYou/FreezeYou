@@ -141,7 +141,7 @@ public class InstallPackagesService extends Service {
                             ApplicationInfoUtils.getApplicationInfoFromPkgName(packageName, this),
                             false);
 
-            builder.setContentTitle(getString(R.string.uninstalling) + " " + willBeUninstalledName);
+            builder.setContentTitle(String.format(getString(R.string.uninstalling_app), willBeUninstalledName));
             builder.setLargeIcon(getBitmapFromDrawable(willBeUninstalledIcon));
             notificationManager.notify((packageName + "@InstallPackagesNotification").hashCode(), builder.getNotification());
 
@@ -169,7 +169,9 @@ public class InstallPackagesService extends Service {
                                 this, notificationManager, builder,
                                 false,
                                 packageName,
-                                willBeUninstalledName + " " + getString(R.string.uninstallFinished),
+                                String.format(
+                                        getString(R.string.app_uninstallFinished),
+                                        willBeUninstalledName),
                                 null,
                                 true);
             }
@@ -197,6 +199,7 @@ public class InstallPackagesService extends Service {
             String apkFilePath = intent.getStringExtra("apkFilePath");
             if (apkFilePath == null || "".equals(apkFilePath) || !new File(apkFilePath).exists()) {
                 Uri packageUri = intent.getParcelableExtra("packageUri");
+                if (packageUri == null) return;
                 InputStream in = getContentResolver().openInputStream(packageUri);
                 if (in == null) {
                     return;
@@ -210,13 +213,14 @@ public class InstallPackagesService extends Service {
 
             PackageManager pm = getPackageManager();
             PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePath, 0);
+            if (packageInfo == null) return;
             String willBeInstalledPackageName = packageInfo.packageName;
             packageInfo.applicationInfo.sourceDir = apkFilePath;
             packageInfo.applicationInfo.publicSourceDir = apkFilePath;
             String willBeInstalledName = pm.getApplicationLabel(packageInfo.applicationInfo).toString();
             Drawable willBeInstalledIcon = pm.getApplicationIcon(packageInfo.applicationInfo);
 
-            builder.setContentTitle(getString(R.string.installing) + " " + willBeInstalledName);
+            builder.setContentTitle(String.format(getString(R.string.installing_app), willBeInstalledName));
             builder.setProgress(100, 0, true);
             builder.setLargeIcon(getBitmapFromDrawable(willBeInstalledIcon));
             notificationManager.notify((willBeInstalledPackageName + "@InstallPackagesNotification").hashCode(), builder.getNotification());
@@ -275,7 +279,9 @@ public class InstallPackagesService extends Service {
                                         this, notificationManager, builder,
                                         true,
                                         willBeInstalledPackageName,
-                                        willBeInstalledName + " " + getString(R.string.installFinished),
+                                        String.format(
+                                                getString(R.string.app_installFinished),
+                                                willBeInstalledName),
                                         null,
                                         true);
                         if (PreferenceManager.getDefaultSharedPreferences(this)
@@ -287,7 +293,9 @@ public class InstallPackagesService extends Service {
                                         this, notificationManager, builder,
                                         true,
                                         willBeInstalledPackageName,
-                                        willBeInstalledName + " " + getString(R.string.installFailed),
+                                        String.format(
+                                                getString(R.string.app_installFailed),
+                                                willBeInstalledName),
                                         String.format(getString(R.string.reason_colon), result),
                                         false);
                     }

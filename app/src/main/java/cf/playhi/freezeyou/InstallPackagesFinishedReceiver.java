@@ -49,7 +49,7 @@ public class InstallPackagesFinishedReceiver extends BroadcastReceiver {
                                 context, notificationManager, builder,
                                 true,
                                 pkgName,
-                                name + " " + context.getString(R.string.installFinished),
+                                String.format(context.getString(R.string.app_installFinished), name),
                                 null,
                                 true);
 
@@ -63,7 +63,7 @@ public class InstallPackagesFinishedReceiver extends BroadcastReceiver {
                                 context, notificationManager, builder,
                                 true,
                                 pkgName,
-                                name + " " + context.getString(R.string.installFailed),
+                                String.format(context.getString(R.string.app_installFailed), name),
                                 message,
                                 false);
             }
@@ -74,7 +74,7 @@ public class InstallPackagesFinishedReceiver extends BroadcastReceiver {
                                 context, notificationManager, builder,
                                 true,
                                 pkgName,
-                                name + " " + context.getString(R.string.uninstallFinished),
+                                String.format(context.getString(R.string.app_uninstallFinished), name),
                                 null,
                                 true);
             } else {
@@ -83,7 +83,7 @@ public class InstallPackagesFinishedReceiver extends BroadcastReceiver {
                                 context, notificationManager, builder,
                                 true,
                                 pkgName,
-                                name + " " + context.getString(R.string.uninstallFailed),
+                                String.format(context.getString(R.string.app_uninstallFailed), name),
                                 message,
                                 false);
             }
