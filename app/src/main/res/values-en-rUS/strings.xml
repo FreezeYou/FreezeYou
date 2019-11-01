@@ -324,6 +324,12 @@
     <string name="cannotInstall_colon_msg">Cannot install: %1$s</string>
     <string name="uriAutoAllowList">URI Request Whitelist</string>
     <string name="ipaAutoAllowList">Request Install Applications Whitelist</string>
+    <string name="installing_app">Installing %1$s</string>
+    <string name="uninstalling_app">Uninstalling %1$s</string>
+    <string name="app_installFinished">%1$s has been installed</string>
+    <string name="app_installFailed">%1$s installation failed</string>
+    <string name="app_uninstallFinished">%1$s 卸载完成</string>
+    <string name="app_uninstallFailed">%1$s 卸载失败</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
