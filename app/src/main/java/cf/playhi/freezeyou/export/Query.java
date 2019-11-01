@@ -96,10 +96,10 @@ public class Query extends ContentProvider {
                         boolean installActivityEnabled, hasRootPerm, hasDpmPerm;
                         switch (context.getPackageManager().getComponentEnabledSetting(
                                 new ComponentName(context, "cf.playhi.freezeyou.InstallPackagesActivity"))) {
-                            case android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DEFAULT:
                             case android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED:
                                 installActivityEnabled = true;
                                 break;
+                            case android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DEFAULT:
                             case android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED:
                             case android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED:
                             case android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER:
