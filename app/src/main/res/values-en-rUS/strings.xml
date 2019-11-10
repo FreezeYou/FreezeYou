@@ -330,6 +330,7 @@
     <string name="app_installFailed">%1$s installation failed</string>
     <string name="app_uninstallFinished">%1$s 卸载完成</string>
     <string name="app_uninstallFailed">%1$s 卸载失败</string>
+    <string name="commandExecutionTool">命令执行工具</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
