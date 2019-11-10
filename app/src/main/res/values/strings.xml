@@ -328,6 +328,7 @@
     <string name="app_installFailed">%1$s 安装失败</string>
     <string name="app_uninstallFinished">%1$s 卸载完成</string>
     <string name="app_uninstallFailed">%1$s 卸载失败</string>
+    <string name="commandExecutionTool">命令执行工具</string>
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>

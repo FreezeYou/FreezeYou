@@ -417,6 +417,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".CommandExecutorActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:label="@string/commandExecutionTool"
+            android:theme="@style/AppTheme.Default" />
 
 
         <receiver

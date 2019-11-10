@@ -317,6 +317,11 @@
                 android:targetClass="cf.playhi.freezeyou.ShowLogcatActivity"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
+        <Preference android:title="@string/commandExecutionTool">
+            <intent
+                android:targetClass="cf.playhi.freezeyou.CommandExecutorActivity"
+                android:targetPackage="cf.playhi.freezeyou" />
+        </Preference>
     </PreferenceScreen>
 
     <PreferenceScreen
