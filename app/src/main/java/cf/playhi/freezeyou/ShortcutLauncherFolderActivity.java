@@ -30,7 +30,6 @@ import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
 import cf.playhi.freezeyou.utils.Support;
-import cf.playhi.freezeyou.utils.ToastUtils;
 
 import static android.view.Window.FEATURE_NO_TITLE;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
@@ -38,6 +37,7 @@ import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getGrayBitmap;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class ShortcutLauncherFolderActivity extends FreezeYouBaseActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -58,6 +58,31 @@ public class ShortcutLauncherFolderActivity extends FreezeYouBaseActivity implem
             doCreateShortCut();
         } else {
             doShowFolder();
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        String uuid = getIntent().getStringExtra("UUID");
+        if (uuid != null) {
+            final SharedPreferences uuidSp = getSharedPreferences(uuid, MODE_PRIVATE);
+            uuidSp.unregisterOnSharedPreferenceChangeListener(this);
+        }
+
+        setIntent(intent);
+
+        uuid = getIntent().getStringExtra("UUID");
+        if (uuid != null) {
+            final SharedPreferences uuidSp = getSharedPreferences(uuid, MODE_PRIVATE);
+            uuidSp.registerOnSharedPreferenceChangeListener(this);
+        }
+
+        if (Intent.ACTION_CREATE_SHORTCUT.equals(getIntent().getAction())) {
+            doCreateShortCut();
+        } else {
+            doShowFolderContent();
         }
     }
 
@@ -145,9 +170,13 @@ public class ShortcutLauncherFolderActivity extends FreezeYouBaseActivity implem
     private void doShowFolder() {
         requestWindowFeature(FEATURE_NO_TITLE);
         setContentView(R.layout.shortcut_launcher_folder);
+        doShowFolderContent();
+    }
+
+    private void doShowFolderContent(){
         final String uuid = getIntent().getStringExtra("UUID");
         if (uuid == null) {
-            ToastUtils.showToast(this, R.string.failed);
+            showToast(this, R.string.failed);
             finish();
             return;
         }

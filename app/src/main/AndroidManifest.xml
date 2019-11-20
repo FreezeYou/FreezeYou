@@ -411,6 +411,7 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:label="@string/folder"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Default.Dialog">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
