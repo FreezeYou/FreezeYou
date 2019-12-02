@@ -1331,7 +1331,7 @@ public class Main extends FreezeYouBaseActivity {
                         editor.putLong("Time", new Date().getTime());
                         editor.commit();
                     }
-                    if ((new Date().getTime() - sharedPreferences.getLong("Time", 0)) > 1728000000) {
+                    if ((new Date().getTime() - sharedPreferences.getLong("Time", 0L)) > 2592000000L) {
 
                         if (isFinishing()) return;
 
