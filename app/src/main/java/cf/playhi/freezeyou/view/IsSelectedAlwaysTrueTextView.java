@@ -6,26 +6,26 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-public class IsFocusedAlwaysTrueTextView extends TextView {
-    public IsFocusedAlwaysTrueTextView(Context context) {
+public class IsSelectedAlwaysTrueTextView extends TextView {
+    public IsSelectedAlwaysTrueTextView(Context context) {
         super(context);
     }
 
-    public IsFocusedAlwaysTrueTextView(Context context, AttributeSet attrs) {
+    public IsSelectedAlwaysTrueTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public IsFocusedAlwaysTrueTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public IsSelectedAlwaysTrueTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public IsFocusedAlwaysTrueTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public IsSelectedAlwaysTrueTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override
-    public boolean isFocused() {
+    public boolean isSelected() {
         return true;
     }
 }

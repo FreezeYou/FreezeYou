@@ -13,14 +13,16 @@
         android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher_new_round" />
 
-    <!--<TextView-->
-        <!--android:id="@+id/mgmi_textView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/mgmi_imageView"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:singleLine="true"-->
-        <!--android:text="@string/label"-->
-        <!--android:textSize="12sp" />-->
+    <cf.playhi.freezeyou.view.IsSelectedAlwaysTrueTextView
+        android:id="@+id/mgmi_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mgmi_imageView"
+        android:layout_centerHorizontal="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="@string/label"
+        android:textSize="12sp" />
 
 </RelativeLayout>

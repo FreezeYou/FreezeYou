@@ -13,7 +13,7 @@
         android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher_new_round" />
 
-    <cf.playhi.freezeyou.view.IsFocusedAlwaysTrueTextView
+    <cf.playhi.freezeyou.view.IsSelectedAlwaysTrueTextView
         android:id="@+id/slfi_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

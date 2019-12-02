@@ -116,11 +116,11 @@ public class MainActivityAppListFragment extends Fragment {
                     appList,
                     selectedPackages,
                     mUseGridMode ?
-                            R.layout.shortcut_launcher_folder_item :
+                            R.layout.main_grid_main_item :
                             R.layout.app_list_1,
                     new String[]{"Img", "Name", "PackageName", "isFrozen"},
                     mUseGridMode ?
-                            new int[]{R.id.slfi_imageView, R.id.slfi_textView} :
+                            new int[]{R.id.mgmi_imageView, R.id.mgmi_textView} :
                             new int[]{R.id.img, R.id.name, R.id.pkgName, R.id.isFrozen});
         }
 
