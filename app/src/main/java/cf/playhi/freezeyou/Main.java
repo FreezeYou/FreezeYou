@@ -708,32 +708,41 @@ public class Main extends FreezeYouBaseActivity {
                     @Override
                     public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
                         try {
-                            SubMenu vmUserDefinedSubMenu = menu.findItem(R.id.list_menu_groupItem_addToUserDefined).getSubMenu();
-                            vmUserDefinedSubMenu.clear(); // 清空先前产生的数据
+                            SubMenu addToUserDefinedSubMenu = menu.findItem(R.id.list_menu_groupItem_addToUserDefined).getSubMenu();
+                            SubMenu removeFromUserDefinedSubMenu = menu.findItem(R.id.list_menu_groupItem_removeFromUserDefined).getSubMenu();
+                            addToUserDefinedSubMenu.clear(); // 清空先前产生的数据
+                            removeFromUserDefinedSubMenu.clear();
 
-                            vmUserDefinedSubMenu.add(
+                            addToUserDefinedSubMenu.add(
                                     R.id.list_menu_groupItem_addToUserDefined_menuGroup,
                                     R.id.list_menu_groupItem_addToUserDefined_newClassification,
                                     0,
                                     R.string.newClassification
                             ); // 加入“新建分类”
+                            removeFromUserDefinedSubMenu.add(
+                                    R.id.list_menu_groupItem_removeFromUserDefined_menuGroup,
+                                    R.id.list_menu_groupItem_removeFromUserDefined_newClassification,
+                                    0,
+                                    R.string.newClassification
+                            ); // 加入“新建分类”
 
                             // 添加用户定义的自定义分类
-                            SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
-                            vmUserDefinedDb.execSQL(
+                            SQLiteDatabase userDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
+                            userDefinedDb.execSQL(
                                     "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
                             );
-                            Cursor cursor = vmUserDefinedDb.query("categories", new String[]{"label", "_id"}, null, null, null, null, null);
+                            Cursor cursor = userDefinedDb.query("categories", new String[]{"label", "_id"}, null, null, null, null, null);
                             if (cursor.moveToFirst()) {
                                 for (int i = 0; i < cursor.getCount(); i++) {
                                     int id = cursor.getInt(cursor.getColumnIndex("_id"));
                                     String title = cursor.getString(cursor.getColumnIndex("label"));
-                                    vmUserDefinedSubMenu.add(R.id.list_menu_groupItem_addToUserDefined_menuGroup, id, id, new String(Base64.decode(title, Base64.DEFAULT)));
+                                    addToUserDefinedSubMenu.add(R.id.list_menu_groupItem_addToUserDefined_menuGroup, id, id, new String(Base64.decode(title, Base64.DEFAULT)));
+                                    removeFromUserDefinedSubMenu.add(R.id.list_menu_groupItem_removeFromUserDefined_menuGroup, id, id, new String(Base64.decode(title, Base64.DEFAULT)));
                                     cursor.moveToNext();
                                 }
                             }
                             cursor.close();
-                            vmUserDefinedDb.close();
+                            userDefinedDb.close();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -744,20 +753,25 @@ public class Main extends FreezeYouBaseActivity {
                     public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                         switch (menuItem.getGroupId()) {
                             case R.id.list_menu_groupItem_addToUserDefined_menuGroup:
+                            case R.id.list_menu_groupItem_removeFromUserDefined_menuGroup:
                                 switch (menuItem.getItemId()) {
                                     case R.id.list_menu_groupItem_addToUserDefined_newClassification:
+                                    case R.id.list_menu_groupItem_removeFromUserDefined_newClassification:
                                         showAddNewUserDefinedClassificationDialog();
                                         return true;
                                     default:
+                                        boolean isInRemoveMode =
+                                                menuItem.getGroupId()
+                                                        == R.id.list_menu_groupItem_removeFromUserDefined_menuGroup;
                                         String title = menuItem.getTitle().toString();
                                         List<String> existsPkgsList = new ArrayList<>();
-                                        StringBuilder existsPkgs = new StringBuilder();
-                                        SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
-                                        vmUserDefinedDb.execSQL(
+                                        String existsPkgs = "";
+                                        SQLiteDatabase userDefinedDb = openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
+                                        userDefinedDb.execSQL(
                                                 "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
                                         );
                                         Cursor cursor =
-                                                vmUserDefinedDb.query(
+                                                userDefinedDb.query(
                                                         "categories",
                                                         new String[]{"packages"},
                                                         "label = '" + Base64.encodeToString(title.getBytes(), Base64.DEFAULT) + "'",
@@ -765,20 +779,35 @@ public class Main extends FreezeYouBaseActivity {
                                                 );
 
                                         if (cursor.moveToFirst()) {
-                                            existsPkgs = new StringBuilder(cursor.getString(
-                                                    cursor.getColumnIndex("packages")
-                                            ));
+                                            existsPkgs =
+                                                    cursor.getString(
+                                                            cursor.getColumnIndex("packages")
+                                                    );
                                             existsPkgsList =
-                                                    Arrays.asList(existsPkgs.toString().split(","));
+                                                    Arrays.asList(existsPkgs.split(","));
                                         }
 
                                         int size = selectedPackages.size();
-                                        for (int i = 0; i < size; i++) {
-                                            if (!existsPkgsList.contains(selectedPackages.get(i))) {
-                                                existsPkgs.append(selectedPackages.get(i)).append(",");
+                                        if (isInRemoveMode) {
+                                            for (int i = 0; i < size; i++) {
+                                                if (existsPkgsList.contains(selectedPackages.get(i))) {
+                                                    existsPkgs =
+                                                            existsPkgs.replace(
+                                                                    selectedPackages.get(i) + ",",
+                                                                    ""
+                                                            );
+                                                }
                                             }
+                                        } else {
+                                            StringBuilder existsPkgsBuilder = new StringBuilder(existsPkgs);
+                                            for (int i = 0; i < size; i++) {
+                                                if (!existsPkgsList.contains(selectedPackages.get(i))) {
+                                                    existsPkgsBuilder.append(selectedPackages.get(i)).append(",");
+                                                }
+                                            }
+                                            existsPkgs = existsPkgsBuilder.toString();
                                         }
-                                        vmUserDefinedDb.execSQL(
+                                        userDefinedDb.execSQL(
                                                 "UPDATE categories SET packages = '"
                                                         + existsPkgs
                                                         + "' WHERE label = '"
@@ -786,8 +815,8 @@ public class Main extends FreezeYouBaseActivity {
                                                         + "';"
                                         );
                                         cursor.close();
-                                        vmUserDefinedDb.close();
-                                        showToast(Main.this, R.string.added);
+                                        userDefinedDb.close();
+                                        showToast(Main.this, isInRemoveMode ? R.string.removed : R.string.added);
                                         return true;
                                 }
                             default:
