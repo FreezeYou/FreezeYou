@@ -1,51 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:showAsAction="never"
         android:id="@+id/list_menu_selectAll"
-        android:title="@string/selectAll"/>
-    <item
         android:showAsAction="never"
+        android:title="@string/selectAll" />
+    <item
         android:id="@+id/list_menu_selectUnselected"
-        android:title="@string/selectUnselected"/>
-    <item
         android:showAsAction="never"
+        android:title="@string/selectUnselected" />
+    <item
         android:id="@+id/list_menu_freezeImmediately"
-        android:title="@string/freezeImmediately"/>
-    <item
         android:showAsAction="never"
+        android:title="@string/freezeImmediately" />
+    <item
         android:id="@+id/list_menu_UFImmediately"
-        android:title="@string/UFImmediately"/>
-    <item
         android:showAsAction="never"
+        android:title="@string/UFImmediately" />
+    <item
         android:id="@+id/list_menu_addToOneKeyFreezeList"
-        android:title="@string/addToOneKeyList"/>
-    <item
         android:showAsAction="never"
+        android:title="@string/addToOneKeyList" />
+    <item
         android:id="@+id/list_menu_addToOneKeyUFList"
-        android:title="@string/addToOneKeyUFList"/>
-    <item
         android:showAsAction="never"
+        android:title="@string/addToOneKeyUFList" />
+    <item
         android:id="@+id/list_menu_addToFreezeOnceQuit"
-        android:title="@string/addToFreezeOnceQuit"/>
-    <item
         android:showAsAction="never"
+        android:title="@string/addToFreezeOnceQuit" />
+    <item
         android:id="@+id/list_menu_removeFromOneKeyFreezeList"
-        android:title="@string/removeFromOneKeyList"/>
-    <item
         android:showAsAction="never"
+        android:title="@string/removeFromOneKeyList" />
+    <item
         android:id="@+id/list_menu_removeFromOneKeyUFList"
-        android:title="@string/removeFromOneKeyUFList"/>
-    <item
         android:showAsAction="never"
+        android:title="@string/removeFromOneKeyUFList" />
+    <item
         android:id="@+id/list_menu_removeFromFreezeOnceQuit"
-        android:title="@string/removeFromFreezeOnceQuit"/>
-    <item
         android:showAsAction="never"
+        android:title="@string/removeFromFreezeOnceQuit" />
+    <item
+        android:id="@+id/list_menu_groupItem_addToUserDefined"
+        android:showAsAction="never"
+        android:title="@string/addToMyCustomization">
+        <menu>
+            <group
+                android:id="@+id/list_menu_groupItem_addToUserDefined_menuGroup"
+                android:checkableBehavior="none">
+                <item
+                    android:id="@+id/list_menu_groupItem_addToUserDefined_newClassification"
+                    android:orderInCategory="0"
+                    android:title="@string/newClassification" />
+            </group>
+        </menu>
+    </item>
+    <item
         android:id="@+id/list_menu_createDisEnableShortCut"
-        android:title="@string/createDisEnableShortCut"/>
-    <item
         android:showAsAction="never"
+        android:title="@string/createDisEnableShortCut" />
+    <item
         android:id="@+id/list_menu_copyAfterBeingFormatted"
-        android:title="@string/copyAfterBeingFormatted"/>
+        android:showAsAction="never"
+        android:title="@string/copyAfterBeingFormatted" />
 </menu>

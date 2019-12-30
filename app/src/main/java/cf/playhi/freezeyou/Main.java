@@ -53,6 +53,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -706,109 +707,189 @@ public class Main extends FreezeYouBaseActivity {
 
                     @Override
                     public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                        try {
+                            SubMenu vmUserDefinedSubMenu = menu.findItem(R.id.list_menu_groupItem_addToUserDefined).getSubMenu();
+                            vmUserDefinedSubMenu.clear(); // 清空先前产生的数据
+
+                            vmUserDefinedSubMenu.add(
+                                    R.id.list_menu_groupItem_addToUserDefined_menuGroup,
+                                    R.id.list_menu_groupItem_addToUserDefined_newClassification,
+                                    0,
+                                    R.string.newClassification
+                            ); // 加入“新建分类”
+
+                            // 添加用户定义的自定义分类
+                            SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
+                            vmUserDefinedDb.execSQL(
+                                    "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+                            );
+                            Cursor cursor = vmUserDefinedDb.query("categories", new String[]{"label", "_id"}, null, null, null, null, null);
+                            if (cursor.moveToFirst()) {
+                                for (int i = 0; i < cursor.getCount(); i++) {
+                                    int id = cursor.getInt(cursor.getColumnIndex("_id"));
+                                    String title = cursor.getString(cursor.getColumnIndex("label"));
+                                    vmUserDefinedSubMenu.add(R.id.list_menu_groupItem_addToUserDefined_menuGroup, id, id, new String(Base64.decode(title, Base64.DEFAULT)));
+                                    cursor.moveToNext();
+                                }
+                            }
+                            cursor.close();
+                            vmUserDefinedDb.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         return false;
                     }
 
                     @Override
                     public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.list_menu_selectAll:
-                                Adapter adpt = mMainActivityAppListFragment.getAppListAdapter();
-                                if (adpt instanceof MainAppListSimpleAdapter) {
-                                    for (int i = 0; i < adpt.getCount(); i++) {
-                                        String pkg = (String) ((MainAppListSimpleAdapter) adpt).getStoredArrayList().get(i).get("PackageName");
-                                        if (!selectedPackages.contains(pkg)) {
-                                            selectedPackages.add(pkg);
+                        switch (menuItem.getGroupId()) {
+                            case R.id.list_menu_groupItem_addToUserDefined_menuGroup:
+                                switch (menuItem.getItemId()) {
+                                    case R.id.list_menu_groupItem_addToUserDefined_newClassification:
+                                        showAddNewUserDefinedClassificationDialog();
+                                        return true;
+                                    default:
+                                        String title = menuItem.getTitle().toString();
+                                        List<String> existsPkgsList = new ArrayList<>();
+                                        StringBuilder existsPkgs = new StringBuilder();
+                                        SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
+                                        vmUserDefinedDb.execSQL(
+                                                "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+                                        );
+                                        Cursor cursor =
+                                                vmUserDefinedDb.query(
+                                                        "categories",
+                                                        new String[]{"packages"},
+                                                        "label = '" + Base64.encodeToString(title.getBytes(), Base64.DEFAULT) + "'",
+                                                        null, null, null, null
+                                                );
+
+                                        if (cursor.moveToFirst()) {
+                                            existsPkgs = new StringBuilder(cursor.getString(
+                                                    cursor.getColumnIndex("packages")
+                                            ));
+                                            existsPkgsList =
+                                                    Arrays.asList(existsPkgs.toString().split(","));
                                         }
-                                    }
-                                    actionMode.setTitle(Integer.toString(selectedPackages.size()));
-                                    ((MainAppListSimpleAdapter) adpt).notifyDataSetChanged();
-                                }
-                                return true;
-                            case R.id.list_menu_selectUnselected:
-                                Adapter adapt = mMainActivityAppListFragment.getAppListAdapter();
-                                if (adapt instanceof MainAppListSimpleAdapter) {
-                                    for (int i = 0; i < adapt.getCount(); i++) {
-                                        String pkg = (String) ((MainAppListSimpleAdapter) adapt).getStoredArrayList().get(i).get("PackageName");
-                                        if (selectedPackages.contains(pkg)) {
-                                            selectedPackages.remove(pkg);
-                                        } else {
-                                            selectedPackages.add(pkg);
+
+                                        int size = selectedPackages.size();
+                                        for (int i = 0; i < size; i++) {
+                                            if (!existsPkgsList.contains(selectedPackages.get(i))) {
+                                                existsPkgs.append(selectedPackages.get(i)).append(",");
+                                            }
                                         }
-                                    }
-                                    actionMode.setTitle(Integer.toString(selectedPackages.size()));
-                                    ((MainAppListSimpleAdapter) adapt).notifyDataSetChanged();
+                                        vmUserDefinedDb.execSQL(
+                                                "UPDATE categories SET packages = '"
+                                                        + existsPkgs
+                                                        + "' WHERE label = '"
+                                                        + Base64.encodeToString(title.getBytes(), Base64.DEFAULT)
+                                                        + "';"
+                                        );
+                                        cursor.close();
+                                        vmUserDefinedDb.close();
+                                        showToast(Main.this, R.string.added);
+                                        return true;
                                 }
-                                return true;
-                            case R.id.list_menu_addToOneKeyFreezeList:
-                                processAddToOneKeyList(getString(R.string.sAutoFreezeApplicationList));
-                                return true;
-                            case R.id.list_menu_addToOneKeyUFList:
-                                processAddToOneKeyList(getString(R.string.sOneKeyUFApplicationList));
-                                return true;
-                            case R.id.list_menu_addToFreezeOnceQuit:
-                                processAddToOneKeyList(getString(R.string.sFreezeOnceQuit));
-                                return true;
-                            case R.id.list_menu_removeFromOneKeyFreezeList:
-                                processRemoveFromOneKeyList(getString(R.string.sAutoFreezeApplicationList));
-                                return true;
-                            case R.id.list_menu_removeFromOneKeyUFList:
-                                processRemoveFromOneKeyList(getString(R.string.sOneKeyUFApplicationList));
-                                return true;
-                            case R.id.list_menu_removeFromFreezeOnceQuit:
-                                processRemoveFromOneKeyList(getString(R.string.sFreezeOnceQuit));
-                                return true;
-                            case R.id.list_menu_freezeImmediately:
-                                processDisableAndEnableImmediately(true);
-                                actionMode.finish();
-                                return true;
-                            case R.id.list_menu_UFImmediately:
-                                processDisableAndEnableImmediately(false);
-                                actionMode.finish();
-                                return true;
-                            case R.id.list_menu_createDisEnableShortCut:
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    ShortcutManager mShortcutManager =
-                                            Main.this.getSystemService(ShortcutManager.class);
-                                    if (mShortcutManager != null && mShortcutManager.isRequestPinShortcutSupported()) {
-                                        shortcutsCount = selectedPackages.size() - 1;
-                                        if (shortcutsCount >= 0) {
-                                            String pkgName = selectedPackages.get(shortcutsCount);
-                                            createShortCut(
-                                                    getApplicationLabel(Main.this, null, null, pkgName),
-                                                    pkgName,
-                                                    getApplicationIcon(
-                                                            Main.this,
-                                                            pkgName,
-                                                            ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, Main.this),
-                                                            false),
-                                                    Freeze.class,
-                                                    "FreezeYou! " + pkgName,
-                                                    Main.this
-                                            );
-                                        }
-                                        shortcutsCompleted = (shortcutsCount <= 0);
-                                    } else {
-                                        createFUFShortcutsBatch();
-                                    }
-                                } else {
-                                    createFUFShortcutsBatch();
-                                }
-                                return true;
-                            case R.id.list_menu_copyAfterBeingFormatted:
-                                StringBuilder formattedPackages = new StringBuilder();
-                                int size = selectedPackages.size();
-                                for (int i = 0; i < size; i++) {
-                                    formattedPackages.append(selectedPackages.get(i)).append(",");
-                                }
-                                if (copyToClipboard(Main.this, formattedPackages.toString())) {
-                                    showToast(Main.this, R.string.success);
-                                } else {
-                                    showToast(Main.this, R.string.failed);
-                                }
-                                return true;
                             default:
-                                return false;
+                                switch (menuItem.getItemId()) {
+                                    case R.id.list_menu_selectAll:
+                                        Adapter adpt = mMainActivityAppListFragment.getAppListAdapter();
+                                        if (adpt instanceof MainAppListSimpleAdapter) {
+                                            for (int i = 0; i < adpt.getCount(); i++) {
+                                                String pkg = (String) ((MainAppListSimpleAdapter) adpt).getStoredArrayList().get(i).get("PackageName");
+                                                if (!selectedPackages.contains(pkg)) {
+                                                    selectedPackages.add(pkg);
+                                                }
+                                            }
+                                            actionMode.setTitle(Integer.toString(selectedPackages.size()));
+                                            ((MainAppListSimpleAdapter) adpt).notifyDataSetChanged();
+                                        }
+                                        return true;
+                                    case R.id.list_menu_selectUnselected:
+                                        Adapter adapt = mMainActivityAppListFragment.getAppListAdapter();
+                                        if (adapt instanceof MainAppListSimpleAdapter) {
+                                            for (int i = 0; i < adapt.getCount(); i++) {
+                                                String pkg = (String) ((MainAppListSimpleAdapter) adapt).getStoredArrayList().get(i).get("PackageName");
+                                                if (selectedPackages.contains(pkg)) {
+                                                    selectedPackages.remove(pkg);
+                                                } else {
+                                                    selectedPackages.add(pkg);
+                                                }
+                                            }
+                                            actionMode.setTitle(Integer.toString(selectedPackages.size()));
+                                            ((MainAppListSimpleAdapter) adapt).notifyDataSetChanged();
+                                        }
+                                        return true;
+                                    case R.id.list_menu_addToOneKeyFreezeList:
+                                        processAddToOneKeyList(getString(R.string.sAutoFreezeApplicationList));
+                                        return true;
+                                    case R.id.list_menu_addToOneKeyUFList:
+                                        processAddToOneKeyList(getString(R.string.sOneKeyUFApplicationList));
+                                        return true;
+                                    case R.id.list_menu_addToFreezeOnceQuit:
+                                        processAddToOneKeyList(getString(R.string.sFreezeOnceQuit));
+                                        return true;
+                                    case R.id.list_menu_removeFromOneKeyFreezeList:
+                                        processRemoveFromOneKeyList(getString(R.string.sAutoFreezeApplicationList));
+                                        return true;
+                                    case R.id.list_menu_removeFromOneKeyUFList:
+                                        processRemoveFromOneKeyList(getString(R.string.sOneKeyUFApplicationList));
+                                        return true;
+                                    case R.id.list_menu_removeFromFreezeOnceQuit:
+                                        processRemoveFromOneKeyList(getString(R.string.sFreezeOnceQuit));
+                                        return true;
+                                    case R.id.list_menu_freezeImmediately:
+                                        processDisableAndEnableImmediately(true);
+                                        actionMode.finish();
+                                        return true;
+                                    case R.id.list_menu_UFImmediately:
+                                        processDisableAndEnableImmediately(false);
+                                        actionMode.finish();
+                                        return true;
+                                    case R.id.list_menu_createDisEnableShortCut:
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            ShortcutManager mShortcutManager =
+                                                    Main.this.getSystemService(ShortcutManager.class);
+                                            if (mShortcutManager != null && mShortcutManager.isRequestPinShortcutSupported()) {
+                                                shortcutsCount = selectedPackages.size() - 1;
+                                                if (shortcutsCount >= 0) {
+                                                    String pkgName = selectedPackages.get(shortcutsCount);
+                                                    createShortCut(
+                                                            getApplicationLabel(Main.this, null, null, pkgName),
+                                                            pkgName,
+                                                            getApplicationIcon(
+                                                                    Main.this,
+                                                                    pkgName,
+                                                                    ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, Main.this),
+                                                                    false),
+                                                            Freeze.class,
+                                                            "FreezeYou! " + pkgName,
+                                                            Main.this
+                                                    );
+                                                }
+                                                shortcutsCompleted = (shortcutsCount <= 0);
+                                            } else {
+                                                createFUFShortcutsBatch();
+                                            }
+                                        } else {
+                                            createFUFShortcutsBatch();
+                                        }
+                                        return true;
+                                    case R.id.list_menu_copyAfterBeingFormatted:
+                                        StringBuilder formattedPackages = new StringBuilder();
+                                        int size = selectedPackages.size();
+                                        for (int i = 0; i < size; i++) {
+                                            formattedPackages.append(selectedPackages.get(i)).append(",");
+                                        }
+                                        if (copyToClipboard(Main.this, formattedPackages.toString())) {
+                                            showToast(Main.this, R.string.success);
+                                        } else {
+                                            showToast(Main.this, R.string.failed);
+                                        }
+                                        return true;
+                                    default:
+                                        return false;
+                                }
                         }
                     }
 
@@ -1536,48 +1617,7 @@ public class Main extends FreezeYouBaseActivity {
             case R.id.menu_vM_userDefined_menuGroup:
                 switch (item.getItemId()) {
                     case R.id.menu_vM_userDefined_newClassification:
-                        final EditText vmUserDefinedNameAlertDialogEditText = new EditText(this);
-                        AlertDialog.Builder vmUserDefinedNameAlertDialog = new AlertDialog.Builder(this);
-                        vmUserDefinedNameAlertDialog.setTitle(R.string.label);
-                        vmUserDefinedNameAlertDialog.setView(vmUserDefinedNameAlertDialogEditText);
-                        vmUserDefinedNameAlertDialog.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String label = Base64.encodeToString(vmUserDefinedNameAlertDialogEditText.getText().toString().getBytes(), Base64.DEFAULT);
-                                if ("".equals(label)) {
-                                    showToast(Main.this, R.string.emptyNotAllowed);
-                                } else {
-                                    boolean alreadyExists = false;
-                                    SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
-                                    vmUserDefinedDb.execSQL(
-                                            "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
-                                    );
-                                    Cursor cursor = vmUserDefinedDb.query("categories", new String[]{"label"}, null, null, null, null, null);
-                                    if (cursor.moveToFirst()) {
-                                        for (int i = 0; i < cursor.getCount(); i++) {
-                                            if (label.equals(cursor.getString(cursor.getColumnIndex("label")))) {
-                                                alreadyExists = true;
-                                                break;
-                                            }
-                                            cursor.moveToNext();
-                                        }
-                                    }
-                                    cursor.close();
-                                    if (alreadyExists) {
-                                        showToast(Main.this, R.string.alreadyExist);
-                                    } else {
-                                        vmUserDefinedDb.execSQL(
-                                                "replace into categories(_id,label,packages) VALUES ( "
-                                                        + null + ",'"
-                                                        + label + "','')"
-                                        );
-                                    }
-                                    vmUserDefinedDb.close();
-                                }
-                            }
-                        });
-                        vmUserDefinedNameAlertDialog.setNegativeButton(R.string.cancel, null);
-                        vmUserDefinedNameAlertDialog.show();
+                        showAddNewUserDefinedClassificationDialog();
                         return true;
                     default:
                         String title = item.getTitle().toString();
@@ -1897,6 +1937,51 @@ public class Main extends FreezeYouBaseActivity {
                         return super.onOptionsItemSelected(item);
                 }
         }
+    }
+
+    private void showAddNewUserDefinedClassificationDialog() {
+        final EditText vmUserDefinedNameAlertDialogEditText = new EditText(this);
+        AlertDialog.Builder vmUserDefinedNameAlertDialog = new AlertDialog.Builder(this);
+        vmUserDefinedNameAlertDialog.setTitle(R.string.label);
+        vmUserDefinedNameAlertDialog.setView(vmUserDefinedNameAlertDialogEditText);
+        vmUserDefinedNameAlertDialog.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String label = Base64.encodeToString(vmUserDefinedNameAlertDialogEditText.getText().toString().getBytes(), Base64.DEFAULT);
+                if ("".equals(label)) {
+                    showToast(Main.this, R.string.emptyNotAllowed);
+                } else {
+                    boolean alreadyExists = false;
+                    SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
+                    vmUserDefinedDb.execSQL(
+                            "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+                    );
+                    Cursor cursor = vmUserDefinedDb.query("categories", new String[]{"label"}, null, null, null, null, null);
+                    if (cursor.moveToFirst()) {
+                        for (int i = 0; i < cursor.getCount(); i++) {
+                            if (label.equals(cursor.getString(cursor.getColumnIndex("label")))) {
+                                alreadyExists = true;
+                                break;
+                            }
+                            cursor.moveToNext();
+                        }
+                    }
+                    cursor.close();
+                    if (alreadyExists) {
+                        showToast(Main.this, R.string.alreadyExist);
+                    } else {
+                        vmUserDefinedDb.execSQL(
+                                "replace into categories(_id,label,packages) VALUES ( "
+                                        + null + ",'"
+                                        + label + "','')"
+                        );
+                    }
+                    vmUserDefinedDb.close();
+                }
+            }
+        });
+        vmUserDefinedNameAlertDialog.setNegativeButton(R.string.cancel, null);
+        vmUserDefinedNameAlertDialog.show();
     }
 
     @Override
