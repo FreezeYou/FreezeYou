@@ -331,6 +331,8 @@
     <string name="app_uninstallFinished">%1$s 卸载完成</string>
     <string name="app_uninstallFailed">%1$s 卸载失败</string>
     <string name="commandExecutionTool">命令执行工具</string>
+    <string name="addToMyCustomization">加入我的自选</string>
+    <string name="removeFromMyCustomization">移出我的自选</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
