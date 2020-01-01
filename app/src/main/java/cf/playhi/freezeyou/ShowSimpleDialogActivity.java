@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.AlertDialogUtils;
+import cf.playhi.freezeyou.utils.ClipboardUtils;
+import cf.playhi.freezeyou.utils.ToastUtils;
 
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 
@@ -24,13 +26,24 @@ public class ShowSimpleDialogActivity extends FreezeYouBaseActivity {
             finish();
             return;
         }
-        String title = intent.getStringExtra("title");
-        String text = intent.getStringExtra("text");
+        final String title = intent.getStringExtra("title");
+        final String text = intent.getStringExtra("text");
         AlertDialogUtils
                 .buildAlertDialog(this, null, text, title)
                 .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNeutralButton(android.R.string.copy, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (ClipboardUtils.copyToClipboard(ShowSimpleDialogActivity.this, text)) {
+                            ToastUtils.showToast(ShowSimpleDialogActivity.this, R.string.success);
+                        } else {
+                            ToastUtils.showToast(ShowSimpleDialogActivity.this, R.string.failed);
+                        }
                         finish();
                     }
                 })

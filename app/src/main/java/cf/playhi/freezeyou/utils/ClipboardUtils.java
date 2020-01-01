@@ -19,7 +19,7 @@ public final class ClipboardUtils {
 
     public static CharSequence getClipboardItemText(Context context) {
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        if (!cm.hasPrimaryClip()) {
+        if (cm == null || !cm.hasPrimaryClip()) {
             return "";
         }
         ClipData clip = cm.getPrimaryClip();
