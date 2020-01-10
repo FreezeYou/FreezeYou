@@ -2,8 +2,10 @@ package cf.playhi.freezeyou;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcelable;
 import android.os.PowerManager;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -147,7 +149,11 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     private void checkAndInstallWaitingForLeavingToInstallApplication(String previousPkg) {
         final Intent intent = MainApplication.getWaitingForLeavingToInstallApplicationIntent();
         if (intent == null) return; //无待处理
-        if (previousPkg.equals(intent.getStringExtra("packageName"))) {
+        final Parcelable packageInfoParcelable = intent.getParcelableExtra("packageInfo");
+        final PackageInfo packageInfo =
+                packageInfoParcelable instanceof PackageInfo
+                        ? (PackageInfo) packageInfoParcelable : null;
+        if (packageInfo != null && previousPkg.equals(packageInfo.packageName)) {
             ServiceUtils.startService(AccessibilityService.this, intent);
             MainApplication.setWaitingForLeavingToInstallApplicationIntent(null);
         }

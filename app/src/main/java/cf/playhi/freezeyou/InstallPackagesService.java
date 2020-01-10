@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 
 import java.io.BufferedReader;
@@ -51,11 +52,18 @@ public class InstallPackagesService extends Service {
 
         final Intent i = new Intent(intent);
         i.putExtra("requestTime", new Date().getTime());
-        final String pkgName = i.getStringExtra("packageName");
+        final Parcelable packageInfoParcelable = i.getParcelableExtra("packageInfo");
+        final PackageInfo packageInfo =
+                packageInfoParcelable instanceof PackageInfo
+                        ? (PackageInfo) packageInfoParcelable : null;
         if (i.getBooleanExtra("waitForLeaving", false)
-                && pkgName != null
-                && pkgName.equals(MainApplication.getCurrentPackage())) {
+                && packageInfo != null
+                && packageInfo.packageName != null
+                && packageInfo.packageName.equals(MainApplication.getCurrentPackage())) {
             MainApplication.setWaitingForLeavingToInstallApplicationIntent(i);
+            InstallPackagesUtils.
+                    postWaitingForLeavingToInstallApplicationNotification(this, packageInfo);
+            if (!processing) stopSelf();
         } else {
             if (processing) {
                 intentArrayList.add(i);
@@ -117,12 +125,8 @@ public class InstallPackagesService extends Service {
 
         //移除已完成的
         intentArrayList.remove(intent);
-        if (intentArrayList.isEmpty()) {
-            processing = false;
-            stopSelf();
-        } else {
-            installAndUninstall(intentArrayList.get(0));
-        }
+
+        checkIfAllTaskDoneAndStopSelf();
     }
 
     private void uninstall(Intent intent, Notification.Builder builder, NotificationManager notificationManager) {
@@ -328,4 +332,14 @@ public class InstallPackagesService extends Service {
         }
 
     }
+
+    private void checkIfAllTaskDoneAndStopSelf() {
+        if (intentArrayList.isEmpty()) {
+            processing = false;
+            stopSelf();
+        } else {
+            installAndUninstall(intentArrayList.get(0));
+        }
+    }
+
 }

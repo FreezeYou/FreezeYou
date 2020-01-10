@@ -518,7 +518,7 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                                     .putExtra("install", install == 1)
                                                     .putExtra("packageUri", packageUri)
                                                     .putExtra("apkFilePath", apkFilePath)
-                                                    .putExtra("packageName", processedPackageInfo.packageName)
+                                                    .putExtra("packageInfo", processedPackageInfo)
                                                     .putExtra("waitForLeaving", true));
                                 }
                                 finish();

@@ -5,6 +5,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 
 import java.io.File;
 
@@ -127,6 +130,39 @@ final class InstallPackagesUtils {
                 file.delete();
             }
         }
+    }
+
+    static void postWaitingForLeavingToInstallApplicationNotification(Context context, PackageInfo packageInfo) {
+
+        Notification.Builder builder = Build.VERSION.SDK_INT >= 26 ?
+                new Notification.Builder(context, "InstallPackages") :
+                new Notification.Builder(context);
+        builder.setSmallIcon(R.drawable.ic_notification);
+
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (notificationManager == null) return;
+
+        PackageManager pm = context.getPackageManager();
+
+        builder.setContentTitle(
+                String.format(
+                        context.getString(R.string.waitingToInstall_app),
+                        pm.getApplicationLabel(packageInfo.applicationInfo).toString()
+                )
+        );
+        builder.setProgress(100, 0, true);
+        builder.setLargeIcon(
+                ApplicationIconUtils.getBitmapFromDrawable(
+                        pm.getApplicationIcon(packageInfo.applicationInfo)
+                )
+        );
+        notificationManager.notify(
+                (packageInfo.packageName + "@InstallPackagesNotification").hashCode(),
+                builder.getNotification()
+        );
+
     }
 
 }
