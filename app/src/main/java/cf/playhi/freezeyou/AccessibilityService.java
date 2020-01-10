@@ -1,6 +1,7 @@
 package cf.playhi.freezeyou;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.PowerManager;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 import cf.playhi.freezeyou.utils.DataStatisticsUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
+import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
 import static cf.playhi.freezeyou.utils.TasksUtils.cancelAllUnexecutedDelayTasks;
@@ -103,6 +105,8 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     private void onLeaveApplications(String previousPkg, String pkgNameString) {
 
+        checkAndInstallWaitingForLeavingToInstallApplication(previousPkg);
+
         if (!pkgNameString.equals(previousPkg) && !"cf.playhi.freezeyou".equals(previousPkg)) {
             cancelAllUnexecutedDelayTasks(this, "OLA_" + pkgNameString);//撤销全部属于被打开应用的未执行的离开应用时
             final SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
@@ -138,5 +142,14 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     private void addUpUseTimes(String currentPackage) {
         DataStatisticsUtils.addUseTimes(getApplicationContext(), currentPackage);
+    }
+
+    private void checkAndInstallWaitingForLeavingToInstallApplication(String previousPkg) {
+        final Intent intent = MainApplication.getWaitingForLeavingToInstallApplicationIntent();
+        if (intent == null) return; //无待处理
+        if (previousPkg.equals(intent.getStringExtra("packageName"))) {
+            ServiceUtils.startService(AccessibilityService.this, intent);
+            MainApplication.setWaitingForLeavingToInstallApplicationIntent(null);
+        }
     }
 }

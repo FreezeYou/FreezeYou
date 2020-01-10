@@ -51,15 +51,22 @@ public class InstallPackagesService extends Service {
 
         final Intent i = new Intent(intent);
         i.putExtra("requestTime", new Date().getTime());
-        if (processing) {
-            intentArrayList.add(i);
+        final String pkgName = i.getStringExtra("packageName");
+        if (i.getBooleanExtra("waitForLeaving", false)
+                && pkgName != null
+                && pkgName.equals(MainApplication.getCurrentPackage())) {
+            MainApplication.setWaitingForLeavingToInstallApplicationIntent(i);
         } else {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    installAndUninstall(i);
-                }
-            }).start();
+            if (processing) {
+                intentArrayList.add(i);
+            } else {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        installAndUninstall(i);
+                    }
+                }).start();
+            }
         }
         return super.onStartCommand(i, flags, startId);
     }

@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.utils.AccessibilityUtils;
 import cf.playhi.freezeyou.utils.AlertDialogUtils;
 import cf.playhi.freezeyou.utils.FileUtils;
 import cf.playhi.freezeyou.utils.MoreUtils;
@@ -218,7 +219,7 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                         }
 
                         PackageManager pm = getPackageManager();
-                        PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePath, 0);
+                        final PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePath, 0);
                         packageInfo.applicationInfo.sourceDir = apkFilePath;
                         packageInfo.applicationInfo.publicSourceDir = apkFilePath;
                         alertDialogMessage.append(getString(R.string.requestFromPackage_colon));
@@ -284,7 +285,7 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                 showInstallDialog(
                                         progressDialog, 1,
                                         alertDialogMessage, apkFilePath,
-                                        packageUri, fromPkgLabel, fromPkgName
+                                        packageUri, fromPkgLabel, fromPkgName, packageInfo
                                 );
                             }
                         });
@@ -304,7 +305,7 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                 showInstallDialog(
                                         progressDialog, 2,
                                         alertDialogMessage, apkFilePath,
-                                        packageUri, fromPkgLabel, fromPkgName
+                                        packageUri, fromPkgLabel, fromPkgName, null
                                 );
                             }
                         });
@@ -345,13 +346,13 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
             showInstallDialog(
                     progressDialog, 0,
                     alertDialogMessage, apkFilePath,
-                    packageUri, fromPkgLabel, fromPkgName
+                    packageUri, fromPkgLabel, fromPkgName, null
             );
         }
     }
 
     //install: 0-uninstall, 1-install, 2-failed.
-    private void showInstallDialog(final ProgressDialog progressDialog, final int install, final CharSequence alertDialogMessage, final String apkFilePath, final Uri packageUri, final String fromPkgLabel, final String fromPkgName) {
+    private void showInstallDialog(final ProgressDialog progressDialog, final int install, final CharSequence alertDialogMessage, final String apkFilePath, final Uri packageUri, final String fromPkgLabel, final String fromPkgName, final PackageInfo processedPackageInfo) {
         final ObsdAlertDialog installPackagesAlertDialog = new ObsdAlertDialog(this);
         if (install == 1) {
             //Init CheckBox
@@ -397,7 +398,7 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                     .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            showInstallDialog(progressDialog, install, alertDialogMessage, apkFilePath, packageUri, fromPkgLabel, fromPkgName);
+                                            showInstallDialog(progressDialog, install, alertDialogMessage, apkFilePath, packageUri, fromPkgLabel, fromPkgName, processedPackageInfo);
                                         }
                                     })
                                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -435,7 +436,8 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                             } else {
                                 ServiceUtils.startService(
                                         InstallPackagesActivity.this,
-                                        new Intent(InstallPackagesActivity.this, InstallPackagesService.class)
+                                        new Intent(InstallPackagesActivity.this,
+                                                InstallPackagesService.class)
                                                 .putExtra("install", install == 1)
                                                 .putExtra("packageUri", packageUri)
                                                 .putExtra("apkFilePath", apkFilePath));
@@ -451,6 +453,79 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                 finish();
             }
         });
+        if (AccessibilityUtils.isAccessibilitySettingsOn(this) && processedPackageInfo != null) {
+            installPackagesAlertDialog.setButton(
+                    DialogInterface.BUTTON_NEUTRAL,
+                    getString(R.string.installWhenNotUsing),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (new AppPreferences(getApplicationContext())
+                                    .getBoolean("notAllowInstallWhenIsObsd", true)
+                                    && installPackagesAlertDialog.isObsd()) {
+                                AlertDialogUtils.buildAlertDialog(
+                                        InstallPackagesActivity.this,
+                                        android.R.drawable.ic_dialog_alert,
+                                        R.string.alert_isObsd,
+                                        R.string.dangerous)
+                                        .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                showInstallDialog(
+                                                        progressDialog, install,
+                                                        alertDialogMessage, apkFilePath,
+                                                        packageUri, fromPkgLabel,
+                                                        fromPkgName, processedPackageInfo);
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                if (install != 0) clearTempFile(apkFilePath);
+                                                finish();
+                                            }
+                                        })
+                                        .create().show();
+                            } else {
+                                if (install == 1) {
+                                    CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.ipa_dialog_checkBox);
+                                    if (checkBox != null && checkBox.isChecked()) {
+                                        AppPreferences sp = new AppPreferences(InstallPackagesActivity.this);
+                                        String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
+                                        List<String> originData_list = MoreUtils.convertToList(originData, ",");
+                                        if (!ILLEGALPKGNAME.equals(fromPkgLabel)
+                                                &&
+                                                (originData == null ||
+                                                        !MoreUtils.convertToList(originData, ",").contains(
+                                                                Base64.encodeToString(
+                                                                        fromPkgName.getBytes(), Base64.DEFAULT)))) {
+                                            originData_list.add(
+                                                    Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT));
+                                            sp.put(
+                                                    "installPkgs_autoAllowPkgs_allows",
+                                                    MoreUtils.listToString(originData_list, ",")
+                                            );
+                                        }
+                                    }
+                                }
+                                if (install == 2) {
+                                    clearTempFile(apkFilePath);
+                                } else {
+                                    ServiceUtils.startService(
+                                            InstallPackagesActivity.this,
+                                            new Intent(InstallPackagesActivity.this,
+                                                    InstallPackagesService.class)
+                                                    .putExtra("install", install == 1)
+                                                    .putExtra("packageUri", packageUri)
+                                                    .putExtra("apkFilePath", apkFilePath)
+                                                    .putExtra("packageName", processedPackageInfo.packageName)
+                                                    .putExtra("waitForLeaving", true));
+                                }
+                                finish();
+                            }
+                        }
+                    });
+        }
         installPackagesAlertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {

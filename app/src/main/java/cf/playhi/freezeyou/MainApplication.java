@@ -20,6 +20,7 @@ import cf.playhi.freezeyou.utils.Support;
 public class MainApplication extends Application {
 
     private static String mCurrentPackage = " ";
+    private static Intent mWaitingForLeavingToInstallApplicationIntent = null;
 
     @Override
     public void onCreate() {
@@ -98,6 +99,20 @@ public class MainApplication extends Application {
 
     public static String getCurrentPackage() {
         return mCurrentPackage;
+    }
+
+    /**
+     * @param intent 可空，使用后尽快置空
+     */
+    public static void setWaitingForLeavingToInstallApplicationIntent(Intent intent) {
+        mWaitingForLeavingToInstallApplicationIntent = intent;
+    }
+
+    /**
+     * @return Intent ，可能为 null （无等待处理内容）
+     */
+    public static Intent getWaitingForLeavingToInstallApplicationIntent() {
+        return mWaitingForLeavingToInstallApplicationIntent;
     }
 
     private void updateConfig() {
