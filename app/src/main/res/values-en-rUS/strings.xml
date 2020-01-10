@@ -333,6 +333,8 @@
     <string name="commandExecutionTool">Command execution tool</string>
     <string name="addToMyCustomization">Add to my customization</string>
     <string name="removeFromMyCustomization">Remove from my customization</string>
+    <string name="waitingToInstall_app">正在等待离开 %1$s 后安装</string>
+    <string name="installWhenNotUsing">非前台时安装</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
