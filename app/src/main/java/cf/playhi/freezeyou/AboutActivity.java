@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,15 +13,15 @@ import android.widget.TextView;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 
-import static cf.playhi.freezeyou.utils.MoreUtils.joinQQGroup;
-import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenDonateWebSite;
-import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
 import static cf.playhi.freezeyou.VersionUtils.getVersionName;
+import static cf.playhi.freezeyou.utils.MoreUtils.joinQQGroup;
+import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenDonateWebSite;
+import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class AboutActivity extends FreezeYouBaseActivity {
     @Override
@@ -47,7 +46,7 @@ public class AboutActivity extends FreezeYouBaseActivity {
                                 getResources().getString(R.string.helpTranslate),
                                 getResources().getString(R.string.thanksList),
                                 getResources().getString(R.string.visitWebsite),
-                                getResources().getString(R.string.addQQGroup),
+                                getResources().getString(R.string.contactUs),
                                 getResources().getString(R.string.update),
                                 getResources().getString(R.string.thirdPartyOpenSourceLicenses),
                                 "V" + getVersionName(getApplicationContext()) + "(" + getVersionCode(getApplicationContext()) + ")"
@@ -59,7 +58,7 @@ public class AboutActivity extends FreezeYouBaseActivity {
                                 getResources().getString(R.string.helpTranslate),
                                 getResources().getString(R.string.thanksList),
                                 getResources().getString(R.string.visitWebsite),
-                                getResources().getString(R.string.addQQGroup),
+                                getResources().getString(R.string.contactUs),
                                 getResources().getString(R.string.update),
                                 getResources().getString(R.string.donate),
                                 getResources().getString(R.string.thirdPartyOpenSourceLicenses),
@@ -90,7 +89,23 @@ public class AboutActivity extends FreezeYouBaseActivity {
                         requestOpenWebSite(activity, "https://freezeyou.playhi.net");
                         break;
                     case 5:
-                        joinQQGroup(activity);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        builder.setMessage(
+                                String.format(getString(R.string.email_colon), "contactUs@zidon.net")
+                                        + System.getProperty("line.separator")
+                                        + String.format(getString(R.string.qqGroup_colon), "704086494")
+                                        + System.getProperty("line.separator")
+                                        + String.format(getString(R.string.wechatMp_colon), "zidon_net")
+                        );
+                        builder.setTitle(R.string.contactUs);
+                        builder.setPositiveButton(R.string.okay, null);
+                        builder.setNeutralButton(R.string.addQQGroup, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                joinQQGroup(activity);
+                            }
+                        });
+                        builder.show();
                         break;
                     case 6:
                         checkUpdate(activity);
