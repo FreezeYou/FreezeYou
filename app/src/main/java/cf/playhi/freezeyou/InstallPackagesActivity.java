@@ -380,6 +380,10 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                 break;
         }
 
+        final boolean preDefinedTryToAvoidUpdateWhenUsing =
+                new AppPreferences(this)
+                        .getBoolean("tryToAvoidUpdateWhenUsing", false);
+
         installPackagesAlertDialog.setMessage(alertDialogMessage);
         installPackagesAlertDialog.setButton(
                 DialogInterface.BUTTON_POSITIVE,
@@ -440,7 +444,9 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                                 InstallPackagesService.class)
                                                 .putExtra("install", install == 1)
                                                 .putExtra("packageUri", packageUri)
-                                                .putExtra("apkFilePath", apkFilePath));
+                                                .putExtra("apkFilePath", apkFilePath)
+                                                .putExtra("packageInfo", processedPackageInfo)
+                                                .putExtra("waitForLeaving", preDefinedTryToAvoidUpdateWhenUsing));
                             }
                             finish();
                         }
@@ -453,7 +459,9 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                 finish();
             }
         });
-        if (AccessibilityUtils.isAccessibilitySettingsOn(this) && processedPackageInfo != null) {
+        if (!preDefinedTryToAvoidUpdateWhenUsing
+                && processedPackageInfo != null
+                && AccessibilityUtils.isAccessibilitySettingsOn(this)) {
             installPackagesAlertDialog.setButton(
                     DialogInterface.BUTTON_NEUTRAL,
                     getString(R.string.installWhenNotUsing),

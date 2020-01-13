@@ -171,6 +171,10 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
                     convertSharedPreference(appPreferences, "avoidFreezeForegroundApplications", false)
             );
             generalSettingsBooleanJSONObject.put(
+                    "tryToAvoidUpdateWhenUsing",
+                    convertSharedPreference(appPreferences, "tryToAvoidUpdateWhenUsing", false)
+            );
+            generalSettingsBooleanJSONObject.put(
                     "avoidFreezeNotifyingApplications",
                     convertSharedPreference(appPreferences, "avoidFreezeNotifyingApplications", false)
             );

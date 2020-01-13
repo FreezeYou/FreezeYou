@@ -83,6 +83,7 @@ final class SettingsUtils {
                 break;
             case "freezeOnceQuit":
             case "avoidFreezeForegroundApplications":
+            case "tryToAvoidUpdateWhenUsing":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));
                 if (sharedPreferences.getBoolean(s, false) && !isAccessibilitySettingsOn(context)) {
                     showToast(activity, R.string.needActiveAccessibilityService);
@@ -113,7 +114,7 @@ final class SettingsUtils {
                     String enabledNotificationListeners = Settings.Secure.getString(context.getContentResolver(), "enabled_notification_listeners");
                     if (enabledNotificationListeners != null && !enabledNotificationListeners.contains("cf." + "playhi." + "freezeyou")) {
                         try {
-                            context.startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                            activity.startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
                         } catch (Exception e) {
                             showToast(activity, R.string.failed);
                         }

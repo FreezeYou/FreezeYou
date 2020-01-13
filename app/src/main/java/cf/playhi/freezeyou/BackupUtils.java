@@ -373,6 +373,7 @@ final class BackupUtils {
                 case "onekeyFreezeWhenLockScreen":
                 case "freezeOnceQuit":
                 case "avoidFreezeForegroundApplications":
+                case "tryToAvoidUpdateWhenUsing":
                 case "avoidFreezeNotifyingApplications":
                 case "openImmediately":
                 case "openAndUFImmediately":

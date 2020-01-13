@@ -140,6 +140,7 @@ public class BackupImportChooserActivity extends FreezeYouBaseActivity {
         keyToStringIdValuePair.put("onekeyFreezeWhenLockScreen", getString(R.string.freezeAfterScreenLock));
         keyToStringIdValuePair.put("freezeOnceQuit", getString(R.string.freezeOnceQuit));
         keyToStringIdValuePair.put("avoidFreezeForegroundApplications", getString(R.string.avoidFreezeForegroundApplications));
+        keyToStringIdValuePair.put("tryToAvoidUpdateWhenUsing", getString(R.string.tryToAvoidUpdateWhenUsing));
         keyToStringIdValuePair.put("avoidFreezeNotifyingApplications", getString(R.string.avoidFreezeNotifyingApplications));
         keyToStringIdValuePair.put("openImmediately", getString(R.string.openImmediately));
         keyToStringIdValuePair.put("openAndUFImmediately", getString(R.string.openAndUFImmediately));
@@ -247,6 +248,7 @@ public class BackupImportChooserActivity extends FreezeYouBaseActivity {
                 case "onekeyFreezeWhenLockScreen":
                 case "freezeOnceQuit":
                 case "avoidFreezeForegroundApplications":
+                case "tryToAvoidUpdateWhenUsing":
                 case "avoidFreezeNotifyingApplications":
                 case "openImmediately":
                 case "openAndUFImmediately":
