@@ -333,6 +333,12 @@
     <string name="commandExecutionTool">Command execution tool</string>
     <string name="addToMyCustomization">Add to my customization</string>
     <string name="removeFromMyCustomization">Remove from my customization</string>
+    <string name="waitingToInstall_app">Waiting to install after leaving %1$s</string>
+    <string name="installWhenNotUsing">InstallWhenNotUsing</string>
+    <string name="contactUs">Contact Us</string>
+    <string name="email_colon">Email: %1$s </string>
+    <string name="qqGroup_colon">QQ Group: %1$s </string>
+    <string name="wechatMp_colon">WeChat Official Account: %1$s </string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>

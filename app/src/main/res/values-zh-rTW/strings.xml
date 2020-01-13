@@ -333,6 +333,12 @@
     <string name="commandExecutionTool">命令執行工具</string>
     <string name="addToMyCustomization">加入我的自选</string>
     <string name="removeFromMyCustomization">移出我的自选</string>
+    <string name="waitingToInstall_app">正在等待离开 %1$s 后安装</string>
+    <string name="installWhenNotUsing">非前台时安装</string>
+    <string name="contactUs">联系我们</string>
+    <string name="email_colon">邮箱：%1$s </string>
+    <string name="qqGroup_colon">QQ群：%1$s </string>
+    <string name="wechatMp_colon">微信公众号：%1$s </string>
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
         <item>僅已凍結</item>
