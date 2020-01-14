@@ -191,6 +191,11 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                             FileUtils.copyFile(in, apkFilePath);
                         }
 
+                        PackageManager pm = getPackageManager();
+                        final PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePath, 0);
+                        packageInfo.applicationInfo.sourceDir = apkFilePath;
+                        packageInfo.applicationInfo.publicSourceDir = apkFilePath;
+
                         //Check AutoAllow
                         AppPreferences sp = new AppPreferences(InstallPackagesActivity.this);
                         String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
@@ -204,7 +209,13 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                     new Intent(InstallPackagesActivity.this, InstallPackagesService.class)
                                             .putExtra("install", true)
                                             .putExtra("packageUri", packageUri)
-                                            .putExtra("apkFilePath", apkFilePath));
+                                            .putExtra("apkFilePath", apkFilePath)
+                                            .putExtra("packageInfo", packageInfo)
+                                            .putExtra("waitForLeaving",
+                                                    new AppPreferences(InstallPackagesActivity.this)
+                                                            .getBoolean("tryToAvoidUpdateWhenUsing", false)
+                                            )
+                            );
 
                             if (isFinishing()) return;
 
@@ -218,10 +229,6 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                             });
                         }
 
-                        PackageManager pm = getPackageManager();
-                        final PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePath, 0);
-                        packageInfo.applicationInfo.sourceDir = apkFilePath;
-                        packageInfo.applicationInfo.publicSourceDir = apkFilePath;
                         alertDialogMessage.append(getString(R.string.requestFromPackage_colon));
                         alertDialogMessage.append(nl);
                         alertDialogMessage.append(
