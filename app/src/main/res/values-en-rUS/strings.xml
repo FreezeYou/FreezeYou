@@ -339,6 +339,7 @@
     <string name="email_colon">Email: %1$s </string>
     <string name="qqGroup_colon">QQ Group: %1$s </string>
     <string name="wechatMp_colon">WeChat Official Account: %1$s </string>
+    <string name="tryToAvoidUpdateWhenUsing">Try to avoid update when using</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
