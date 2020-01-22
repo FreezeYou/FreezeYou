@@ -19,12 +19,16 @@ public final class ProcessUtils {
     }
 
     public static int fAURoot(String pkgName, Boolean enable) throws Exception {
+        return fAURoot(pkgName, enable, false);
+    }
+
+    public static int fAURoot(String pkgName, Boolean enable, Boolean hideMode) throws Exception {
         Process process = Runtime.getRuntime().exec("su");
         DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
         if (enable) {
-            outputStream.writeBytes("pm enable " + pkgName + "\n");
+            outputStream.writeBytes("pm " + (hideMode ? "unhide" : "enable ") + pkgName + "\n");
         } else {
-            outputStream.writeBytes("pm disable " + pkgName + "\n");
+            outputStream.writeBytes("pm " + (hideMode ? "hide" : "disable ") + pkgName + "\n");
         }
         outputStream.writeBytes("exit\n");
         outputStream.flush();
