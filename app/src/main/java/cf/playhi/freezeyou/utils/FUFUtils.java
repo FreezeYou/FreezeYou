@@ -19,9 +19,15 @@ import cf.playhi.freezeyou.FUFService;
 import cf.playhi.freezeyou.MainApplication;
 import cf.playhi.freezeyou.MyNotificationListenerService;
 import cf.playhi.freezeyou.R;
+import cf.playhi.freezeyou.fuf.FUFSinglePackage;
 
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_FREEZE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_UNFREEZE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ERROR_SUCCESS;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
 import static cf.playhi.freezeyou.utils.NotificationUtils.createNotification;
 import static cf.playhi.freezeyou.utils.NotificationUtils.deleteNotification;
@@ -57,53 +63,77 @@ public final class FUFUtils {
 
     public static boolean processRootAction(final String pkgName, String target, String tasks, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
         boolean returnValue = false;
-        String currentPackage = " ";
-        if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
-            currentPackage = MainApplication.getCurrentPackage();
-        }
-        if ((!"cf.playhi.freezeyou".equals(pkgName))) {
-            if (isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, pkgName)) {
-                checkAndShowAppStillNotifyingToast(context, pkgName);
-            } else if (pkgName.equals(currentPackage)) {
-                checkAndShowAppIsForegroundApplicationToast(context, pkgName);
-            } else {
-                try {
-                    final int exitValue = fAURoot(pkgName, enable);
-                    if (exitValue == 0) {
-                        if (enable) {
-                            onUFApplications(context, pkgName);
-                            createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context), false)));
-                            if (askRun) {
-                                askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
-                            }
-                        } else {
-                            onFApplications(context, pkgName);
-                            deleteNotification(context, pkgName);
-                        }
-                        returnValue = true;
-                    } else {
-                        showToast(context, R.string.mayUnrootedOrOtherEx);
-                    }
-                } catch (final Exception e) {
-                    e.printStackTrace();
-                    try {
-                        showToast(context, context.getString(R.string.exception) + e.getMessage());
-                        if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
-                            showToast(context, R.string.mayUnrooted);
-                        }
-                    } catch (Exception e0) {
-                        e0.printStackTrace();
-                    }
+
+        int result =
+                checkAndExecuteAction(
+                        context, pkgName,
+                        API_FREEZEYOU_ROOT_DISABLE_ENABLE,
+                        enable ?
+                                ACTION_MODE_UNFREEZE :
+                                ACTION_MODE_FREEZE
+                );
+
+        if (result == ERROR_NO_ERROR_SUCCESS) {
+            sendStatusChangedBroadcast(context);
+            if (enable) {
+                onUFApplications(context, pkgName);
+                createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, getApplicationInfoFromPkgName(pkgName, context), false)));
+                if (askRun) {
+                    askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
                 }
-                sendStatusChangedBroadcast(context);
+            } else {
+                onFApplications(context, pkgName);
+                deleteNotification(context, pkgName);
             }
+            returnValue = true;
+        } else {
+            showToast(context, R.string.mayUnrootedOrOtherEx);
         }
+
+//        showToast(context, R.string.mayUnrooted);
+
         return returnValue;
     }
 
     @TargetApi(21)
     public static boolean processMRootAction(Context context, String pkgName, String target, String tasks, boolean hidden, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
         boolean returnValue = false;
+        int result =
+                checkAndExecuteAction(
+                        context, pkgName,
+                        FUFSinglePackage.API_FREEZEYOU_MROOT,
+                        hidden ?
+                                ACTION_MODE_FREEZE :
+                                ACTION_MODE_UNFREEZE
+                );
+        if (result == ERROR_NO_ERROR_SUCCESS) {
+            sendStatusChangedBroadcast(context);
+            if (hidden) {
+                onFApplications(context, pkgName);
+                deleteNotification(context, pkgName);
+            } else {
+                onUFApplications(context, pkgName);
+                createNotification(
+                        context, pkgName, R.drawable.ic_notification,
+                        getBitmapFromDrawable(
+                                getApplicationIcon(
+                                        context, pkgName,
+                                        getApplicationInfoFromPkgName(pkgName, context),
+                                        false
+                                )
+                        )
+                );
+                if (askRun) {
+                    askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
+                }
+            }
+            returnValue = true;
+        }
+        return returnValue;
+    }
+
+    public static int checkAndExecuteAction(Context context, String pkgName, int apiMode, int actionMode) {
+        int returnValue = 999;
         String currentPackage = " ";
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
@@ -113,23 +143,12 @@ public final class FUFUtils {
                 checkAndShowAppStillNotifyingToast(context, pkgName);
             } else if (pkgName.equals(currentPackage)) {
                 checkAndShowAppIsForegroundApplicationToast(context, pkgName);
-            } else if (getDevicePolicyManager(context).setApplicationHidden(
-                    DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
-                if (hidden) {
-                    onFApplications(context, pkgName);
-                    sendStatusChangedBroadcast(context);
-                    deleteNotification(context, pkgName);
-                } else {
-                    onUFApplications(context, pkgName);
-                    sendStatusChangedBroadcast(context);
-                    createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context), false)));
-                    if (askRun) {
-                        askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
-                    }
-                }
-                returnValue = true;
             } else {
-                sendStatusChangedBroadcast(context);
+                FUFSinglePackage fufSinglePackage = new FUFSinglePackage(context);
+                fufSinglePackage.setSinglePackageName(pkgName);
+                fufSinglePackage.setAPIMode(apiMode);
+                fufSinglePackage.setActionMode(actionMode);
+                returnValue = fufSinglePackage.commit();
             }
         }
         return returnValue;
@@ -228,7 +247,7 @@ public final class FUFUtils {
                     } else {
                         for (String aPkgNameList : pkgNameList) {
                             onUFApplications(context, aPkgNameList);
-                            createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkgNameList, context), false)));
+                            createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, getApplicationInfoFromPkgName(aPkgNameList, context), false)));
                         }
                     }
                     if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
@@ -280,7 +299,7 @@ public final class FUFUtils {
                             if (getDevicePolicyManager(context).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(context), aPkgNameList, false)) {
                                 onUFApplications(context, aPkgNameList);
-                                createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkgNameList, context), false)));
+                                createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, getApplicationInfoFromPkgName(aPkgNameList, context), false)));
                             } else {
                                 showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
                             }
