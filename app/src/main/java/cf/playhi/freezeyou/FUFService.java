@@ -11,8 +11,8 @@ import android.os.IBinder;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;
 import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionMRoot;
 import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionRoot;
 import static cf.playhi.freezeyou.utils.FUFUtils.processMRootAction;
