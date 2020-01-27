@@ -135,7 +135,7 @@ final class SettingsUtils {
                 showToast(activity, R.string.willTakeEffectsNextLaunch);
                 break;
             case "selectFUFMode":
-                appPreferences.put(s, sharedPreferences.getInt(s, 0));
+                appPreferences.put(s, Integer.parseInt(sharedPreferences.getString(s, "0")));
                 break;
             default:
                 break;
