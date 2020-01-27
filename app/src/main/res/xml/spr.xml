@@ -137,6 +137,12 @@
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/freezeAUF">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/selectFUFModeSelection"
+            android:entryValues="@array/selectFUFModeSelectionValues"
+            android:key="selectFUFMode"
+            android:title="@string/selectFUFMode" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="avoidFreezeForegroundApplications"
@@ -321,11 +327,11 @@
                 android:targetClass="cf.playhi.freezeyou.ShowLogcatActivity"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
-<!--        <Preference android:title="@string/commandExecutionTool">-->
-<!--            <intent-->
-<!--                android:targetClass="cf.playhi.freezeyou.CommandExecutorActivity"-->
-<!--                android:targetPackage="cf.playhi.freezeyou" />-->
-<!--        </Preference>-->
+        <!--        <Preference android:title="@string/commandExecutionTool">-->
+        <!--            <intent-->
+        <!--                android:targetClass="cf.playhi.freezeyou.CommandExecutorActivity"-->
+        <!--                android:targetPackage="cf.playhi.freezeyou" />-->
+        <!--        </Preference>-->
     </PreferenceScreen>
 
     <PreferenceScreen

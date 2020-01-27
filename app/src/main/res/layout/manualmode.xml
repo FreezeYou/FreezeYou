@@ -14,43 +14,71 @@
         android:inputType="text"
         android:singleLine="true" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="5dp">
 
-        <Button
-            android:id="@+id/disable_MRoot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/disable_MRoot" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
-            android:id="@+id/disable_Root"
+            android:id="@+id/disable_MRoot_DPM"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/disable_MRoot"
-            android:layout_toEndOf="@+id/disable_MRoot"
-            android:text="@string/disable_Root" />
+            android:layout_weight="1"
+            android:text="@string/disable_MRoot_DPM" />
 
         <Button
-            android:id="@+id/enable_Root"
+            android:id="@+id/enable_MRoot_DPM"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/disable_Root"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/enable_MRoot"
-            android:layout_toEndOf="@+id/enable_MRoot"
-            android:text="@string/enable_Root" />
+            android:layout_weight="1"
+            android:text="@string/enable_MRoot_DPM" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
-            android:id="@+id/enable_MRoot"
+            android:id="@+id/disable_Root_disable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/disable_MRoot"
-            android:text="@string/enable_MRoot" />
-    </RelativeLayout>
+            android:layout_weight="1"
+            android:text="@string/disable_Root_disable" />
+
+        <Button
+            android:id="@+id/enable_Root_enable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/enable_Root_enable" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/disable_Root_hide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/disable_Root_hide" />
+
+        <Button
+            android:id="@+id/enable_Root_unhide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/enable_Root_unhide" />
+    </LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>

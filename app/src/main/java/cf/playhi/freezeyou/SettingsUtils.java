@@ -134,6 +134,9 @@ final class SettingsUtils {
                 Support.checkLanguage(activity);
                 showToast(activity, R.string.willTakeEffectsNextLaunch);
                 break;
+            case "selectFUFMode":
+                appPreferences.put(s, sharedPreferences.getInt(s, 0));
+                break;
             default:
                 break;
         }

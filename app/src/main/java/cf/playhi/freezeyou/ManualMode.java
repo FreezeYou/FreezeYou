@@ -11,8 +11,10 @@ import android.widget.EditText;
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.FUFUtils.processAction;
 import static cf.playhi.freezeyou.utils.FUFUtils.processRootAction;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
@@ -29,24 +31,60 @@ public class ManualMode extends FreezeYouBaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         final EditText packageNameEditText = findViewById(R.id.packageNameEditText);
-        Button disable_MRoot = findViewById(R.id.disable_MRoot);
-        Button disable_Root = findViewById(R.id.disable_Root);
-        Button enable_MRoot = findViewById(R.id.enable_MRoot);
-        Button enable_Root = findViewById(R.id.enable_Root);
+        Button disableMRootDPM = findViewById(R.id.disable_MRoot_DPM);
+        Button disableRootDisable = findViewById(R.id.disable_Root_disable);
+        Button disableRootHide = findViewById(R.id.disable_Root_hide);
+        Button enableMRootDPM = findViewById(R.id.enable_MRoot_DPM);
+        Button enableRootEnable = findViewById(R.id.enable_Root_enable);
+        Button enableRootUnhide = findViewById(R.id.enable_Root_unhide);
         final Context context = getApplicationContext();
-        disable_MRoot.setOnClickListener(new View.OnClickListener() {
+        disableMRootDPM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 processMRootOperation(packageNameEditText.getText().toString(), context, true);
             }
         });
-        enable_MRoot.setOnClickListener(new View.OnClickListener() {
+        enableMRootDPM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 processMRootOperation(packageNameEditText.getText().toString(), context, false);
             }
         });
-        disable_Root.setOnClickListener(new View.OnClickListener() {
+        disableRootHide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                processAction(
+                        packageNameEditText.getText().toString(),
+                        null,
+                        null,
+                        context,
+                        false,
+                        false,
+                        false,
+                        null,
+                        false,
+                        API_FREEZEYOU_ROOT_UNHIDE_HIDE
+                );
+            }
+        });
+        enableRootUnhide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                processAction(
+                        packageNameEditText.getText().toString(),
+                        null,
+                        null,
+                        context,
+                        true,
+                        false,
+                        false,
+                        null,
+                        false,
+                        API_FREEZEYOU_ROOT_UNHIDE_HIDE
+                );
+            }
+        });
+        disableRootDisable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 processRootAction(
@@ -61,7 +99,7 @@ public class ManualMode extends FreezeYouBaseActivity {
                         false);
             }
         });
-        enable_Root.setOnClickListener(new View.OnClickListener() {
+        enableRootEnable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 processRootAction(
