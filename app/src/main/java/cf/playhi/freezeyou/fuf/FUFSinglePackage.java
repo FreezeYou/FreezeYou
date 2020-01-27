@@ -28,20 +28,21 @@ public class FUFSinglePackage {
     public static final int ERROR_NO_ROOT_PERMISSION = -4;
     public static final int ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM = -5;
     public static final int ERROR_NOT_DEVICE_POLICY_MANAGER = -6;
+    public static final int ERROR_NO_SUCH_API_MODE = -7;
 
     /**
      * 使用 FreezeYou 的 自动（免ROOT(DPM)/ROOT(DISABLE)） 模式
-     * 推荐直接使用 {@link #API_FREEZEYOU_MROOT}
+     * 推荐直接使用 {@link #API_FREEZEYOU_MROOT_DPM}
      * 与 {@link #API_FREEZEYOU_ROOT_DISABLE_ENABLE}
      * 与 {@link #API_FREEZEYOU_ROOT_UNHIDE_HIDE}
      */
     @Deprecated
-    public static final int API_FREEZEYOU_AUTO = 0;
+    public static final int API_FREEZEYOU_LEGACY_AUTO = 0;
 
     /**
      * 使用 FreezeYou 的 免ROOT(DPM) 模式
      */
-    public static final int API_FREEZEYOU_MROOT = 1;
+    public static final int API_FREEZEYOU_MROOT_DPM = 1;
 
     /**
      * 使用 FreezeYou 的 ROOT(DISABLE) 模式
@@ -70,12 +71,12 @@ public class FUFSinglePackage {
     }
 
     public int commit() {
-        int returnCode = ERROR_OTHER;
+        int returnCode;
         switch (this.mAPIMode) {
-            case API_FREEZEYOU_AUTO:
+            case API_FREEZEYOU_LEGACY_AUTO:
                 returnCode = pureExecuteAPIAutoAction();
                 break;
-            case API_FREEZEYOU_MROOT:
+            case API_FREEZEYOU_MROOT_DPM:
                 returnCode = pureExecuteAPIDPMAction();
                 break;
             case API_FREEZEYOU_ROOT_DISABLE_ENABLE:
@@ -85,6 +86,7 @@ public class FUFSinglePackage {
                 returnCode = pureExecuteAPIRootAction(true);
                 break;
             default:
+                returnCode = ERROR_NO_SUCH_API_MODE;
                 break;
         }
         return returnCode;

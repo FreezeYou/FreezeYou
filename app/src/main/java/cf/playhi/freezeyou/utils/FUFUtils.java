@@ -23,7 +23,9 @@ import cf.playhi.freezeyou.fuf.FUFSinglePackage;
 
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_FREEZE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_UNFREEZE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ERROR_SUCCESS;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
@@ -32,7 +34,6 @@ import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicy
 import static cf.playhi.freezeyou.utils.NotificationUtils.createNotification;
 import static cf.playhi.freezeyou.utils.NotificationUtils.deleteNotification;
 import static cf.playhi.freezeyou.utils.ProcessUtils.destroyProcess;
-import static cf.playhi.freezeyou.utils.ProcessUtils.fAURoot;
 import static cf.playhi.freezeyou.utils.ServiceUtils.startService;
 import static cf.playhi.freezeyou.utils.TasksUtils.onFApplications;
 import static cf.playhi.freezeyou.utils.TasksUtils.onUFApplications;
@@ -61,13 +62,23 @@ public final class FUFUtils {
         }
     }
 
-    public static boolean processRootAction(final String pkgName, String target, String tasks, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+    public static boolean processAction(final String pkgName, String target, String tasks, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+        return
+                processAction(
+                        pkgName, target, tasks,
+                        context, enable, askRun, runImmediately,
+                        activity, finish,
+                        new AppPreferences(context).getInt("selectFUFMode", 0)
+                );
+    }
+
+    public static boolean processAction(final String pkgName, String target, String tasks, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish, int apiMode) {
         boolean returnValue = false;
 
         int result =
                 checkAndExecuteAction(
                         context, pkgName,
-                        API_FREEZEYOU_ROOT_DISABLE_ENABLE,
+                        apiMode,
                         enable ?
                                 ACTION_MODE_UNFREEZE :
                                 ACTION_MODE_FREEZE
@@ -87,49 +98,32 @@ public final class FUFUtils {
             }
             returnValue = true;
         } else {
-            showToast(context, R.string.mayUnrootedOrOtherEx);
+            if (apiMode == API_FREEZEYOU_ROOT_DISABLE_ENABLE || apiMode == API_FREEZEYOU_ROOT_UNHIDE_HIDE) {
+                showToast(context, R.string.mayUnrootedOrOtherEx);
+            }
         }
-
-//        showToast(context, R.string.mayUnrooted);
-
         return returnValue;
+    }
+
+    public static boolean processRootAction(final String pkgName, String target, String tasks, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+        return
+                processAction(
+                        pkgName, target, tasks,
+                        context, enable, askRun,
+                        runImmediately, activity, finish,
+                        API_FREEZEYOU_ROOT_DISABLE_ENABLE
+                );
     }
 
     @TargetApi(21)
     public static boolean processMRootAction(Context context, String pkgName, String target, String tasks, boolean hidden, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
-        boolean returnValue = false;
-        int result =
-                checkAndExecuteAction(
-                        context, pkgName,
-                        FUFSinglePackage.API_FREEZEYOU_MROOT,
-                        hidden ?
-                                ACTION_MODE_FREEZE :
-                                ACTION_MODE_UNFREEZE
+        return
+                processAction(
+                        pkgName, target, tasks,
+                        context, !hidden, askRun,
+                        runImmediately, activity, finish,
+                        API_FREEZEYOU_MROOT_DPM
                 );
-        if (result == ERROR_NO_ERROR_SUCCESS) {
-            sendStatusChangedBroadcast(context);
-            if (hidden) {
-                onFApplications(context, pkgName);
-                deleteNotification(context, pkgName);
-            } else {
-                onUFApplications(context, pkgName);
-                createNotification(
-                        context, pkgName, R.drawable.ic_notification,
-                        getBitmapFromDrawable(
-                                getApplicationIcon(
-                                        context, pkgName,
-                                        getApplicationInfoFromPkgName(pkgName, context),
-                                        false
-                                )
-                        )
-                );
-                if (askRun) {
-                    askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
-                }
-            }
-            returnValue = true;
-        }
-        return returnValue;
     }
 
     public static int checkAndExecuteAction(Context context, String pkgName, int apiMode, int actionMode) {
