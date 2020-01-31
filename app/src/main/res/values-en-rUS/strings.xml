@@ -409,6 +409,6 @@
         <item>No-root (DPM Mode)</item>
         <item>ROOT(Hide Mode)</item>
         <item>ROOT(Disable Mode)</item>
-        <item>遗留的（自动DPM或DISABLE模式）</item>
+        <item>Legacy(Auto DPM or Disable Mode)</item>
     </string-array>
 </resources>
