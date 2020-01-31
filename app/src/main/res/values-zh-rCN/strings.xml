@@ -340,6 +340,13 @@
     <string name="qqGroup_colon">QQ群：%1$s </string>
     <string name="wechatMp_colon">微信公众号：%1$s </string>
     <string name="tryToAvoidUpdateWhenUsing">尝试避免正在使用时更新</string>
+    <string name="selectFUFMode">选择冻结解冻模式</string>
+    <string name="enable_Root_unhide">解冻 - ROOT(Unhide)</string>
+    <string name="disable_Root_hide">冻结 - ROOT(Hide)</string>
+    <string name="enable_Root_enable">解冻 - ROOT(Enable)</string>
+    <string name="disable_Root_disable">冻结 - ROOT(Disable)</string>
+    <string name="enable_MRoot_DPM">解冻 - 免ROOT(DPM)</string>
+    <string name="disable_MRoot_DPM">冻结 - 免ROOT(DPM)</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
@@ -397,5 +404,11 @@
         <item>冻结降序</item>
         <item>使用升序</item>
         <item>使用降序</item>
+    </string-array>
+    <string-array name="selectFUFModeSelection">
+        <item>免ROOT（DPM模式）</item>
+        <item>ROOT（HIDE模式）</item>
+        <item>ROOT（DISABLE模式）</item>
+        <item>遗留的（自动DPM或DISABLE模式）</item>
     </string-array>
 </resources>
