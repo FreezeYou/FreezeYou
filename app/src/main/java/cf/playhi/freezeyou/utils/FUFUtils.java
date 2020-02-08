@@ -431,4 +431,27 @@ public final class FUFUtils {
             checkAndStartApp(context, pkgName, target, tasks, null, false);
         }
     }
+
+    public static boolean checkRootPermission() {
+        boolean hasPermission = true;
+        int value = -1;
+        try {
+            Process process = Runtime.getRuntime().exec("su");
+            DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
+            outputStream.writeBytes("exit\n");
+            outputStream.flush();
+            value = process.waitFor();
+            try {
+                outputStream.close();
+                process.destroy();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
+                hasPermission = false;
+            }
+        }
+        return hasPermission && value == 0;
+    }
 }

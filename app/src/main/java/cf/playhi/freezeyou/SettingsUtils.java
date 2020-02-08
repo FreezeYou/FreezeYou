@@ -16,10 +16,16 @@ import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.Support;
 
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.openDevicePolicyManager;
+import static cf.playhi.freezeyou.utils.FUFUtils.checkRootPermission;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 final class SettingsUtils {
@@ -136,6 +142,26 @@ final class SettingsUtils {
                 break;
             case "selectFUFMode":
                 appPreferences.put(s, Integer.parseInt(sharedPreferences.getString(s, "0")));
+                switch (appPreferences.getInt("selectFUFMode", 0)) {
+                    case API_FREEZEYOU_MROOT_DPM:
+                        if (!isDeviceOwner(context)) {
+                            showToast(context, R.string.noMRootPermission);
+                        }
+                        break;
+                    case API_FREEZEYOU_ROOT_DISABLE_ENABLE:
+                    case API_FREEZEYOU_ROOT_UNHIDE_HIDE:
+                        if (!checkRootPermission()) {
+                            showToast(context, R.string.noRootPermission);
+                        }
+                        break;
+                    case API_FREEZEYOU_LEGACY_AUTO:
+                        if (!(checkRootPermission() || isDeviceOwner(context))) {
+                            showToast(context, R.string.insufficientPermission);
+                        }
+                        break;
+                    default:
+                        break;
+                }
                 break;
             default:
                 break;

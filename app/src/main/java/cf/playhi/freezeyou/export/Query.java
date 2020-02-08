@@ -8,8 +8,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
-import java.io.DataOutputStream;
-
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
@@ -60,7 +58,7 @@ public class Query extends ContentProvider {
                 case QUERY_MODE:
                     if (context != null && DevicePolicyManagerUtils.isDeviceOwner(getContext())) {
                         bundle.putString("currentMode", "dpm");
-                    } else if (checkRootPermission()) {
+                    } else if (FUFUtils.checkRootPermission()) {
                         bundle.putString("currentMode", "root");
                     } else {
                         bundle.putString("currentMode", "unavailable");
@@ -108,7 +106,7 @@ public class Query extends ContentProvider {
                                 break;
                         }
                         hasDpmPerm = DevicePolicyManagerUtils.isDeviceOwner(context);
-                        hasRootPerm = checkRootPermission();
+                        hasRootPerm = FUFUtils.checkRootPermission();
                         bundle.putBooleanArray(
                                 "status",
                                 new boolean[]{
@@ -125,29 +123,6 @@ public class Query extends ContentProvider {
             }
         }
         return bundle;
-    }
-
-    private boolean checkRootPermission() {
-        boolean hasPermission = true;
-        int value = -1;
-        try {
-            Process process = Runtime.getRuntime().exec("su");
-            DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
-            outputStream.writeBytes("exit\n");
-            outputStream.flush();
-            value = process.waitFor();
-            try {
-                outputStream.close();
-                process.destroy();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-            if (e.getMessage().toLowerCase().contains("permission denied") || e.getMessage().toLowerCase().contains("not found")) {
-                hasPermission = false;
-            }
-        }
-        return hasPermission && value == 0;
     }
 
 }
