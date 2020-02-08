@@ -340,6 +340,13 @@
     <string name="qqGroup_colon">QQ Group: %1$s </string>
     <string name="wechatMp_colon">WeChat Official Account: %1$s </string>
     <string name="tryToAvoidUpdateWhenUsing">Try to avoid update when using</string>
+    <string name="selectFUFMode">Select freeze and unfreeze mode</string>
+    <string name="enable_Root_unhide">Unfreeze - ROOT(Unhide)</string>
+    <string name="disable_Root_hide">Freeze - ROOT(Hide)</string>
+    <string name="enable_Root_enable">Unfreeze - ROOT(Enable)</string>
+    <string name="disable_Root_disable">Freeze - ROOT(Disable)</string>
+    <string name="enable_MRoot_DPM">Unfreeze - No-root(DPM)</string>
+    <string name="disable_MRoot_DPM">Freeze - No-root(DPM)</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
@@ -397,5 +404,11 @@
         <item>Freeze ↓</item>
         <item>Using frequency ↑</item>
         <item>Using frequency ↓</item>
+    </string-array>
+    <string-array name="selectFUFModeSelection">
+        <item>No-root (DPM Mode)</item>
+        <item>ROOT(Hide Mode)</item>
+        <item>ROOT(Disable Mode)</item>
+        <item>Legacy(Auto DPM or Disable Mode)</item>
     </string-array>
 </resources>
