@@ -222,7 +222,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     startActivity(new Intent(getActivity(), BackupMainActivity.class));
                     break;
                 case "howToUse":
-                    requestOpenWebSite(getActivity(), "https://zidon.net");
+                    requestOpenWebSite(getActivity(), "https://zidon.net/howToUse.html");
                     break;
                 case "resetFreezeTimes":
                     askIfResetTimes("ApplicationsFreezeTimes");
