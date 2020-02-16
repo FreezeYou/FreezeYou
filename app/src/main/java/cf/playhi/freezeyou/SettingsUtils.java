@@ -74,6 +74,7 @@ final class SettingsUtils {
                 }
                 break;
             case "uiStyleSelection":
+            case "allowFollowSystemAutoSwitchDarkMode":
                 showToast(activity, R.string.willTakeEffectsNextLaunch);
                 activity.recreate();
                 break;

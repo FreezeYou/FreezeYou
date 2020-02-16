@@ -3,6 +3,8 @@ package cf.playhi.freezeyou;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.view.Window;
@@ -51,6 +53,7 @@ final class ThemeUtils {
 
     /**
      * 主要用于各点的 getThemeDot 的另一（相对/相反）状态
+     *
      * @param context Context
      * @return 资源 Id
      */
@@ -115,7 +118,18 @@ final class ThemeUtils {
     }
 
     static String getUiTheme(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString("uiStyleSelection", "default");
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sp.getBoolean("allowFollowSystemAutoSwitchDarkMode", true)) {
+            return isSystemDarkModeEnabled(context) ? "black" :
+                    sp.getString("uiStyleSelection", "default");
+        } else {
+            return sp.getString("uiStyleSelection", "default");
+        }
+    }
+
+    private static boolean isSystemDarkModeEnabled(Context context) {
+        return (context.getResources().getConfiguration().uiMode &
+                Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
     }
 
     static void processAddTranslucent(Activity activity) {

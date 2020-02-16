@@ -54,6 +54,10 @@
             android:entryValues="@array/uiStyleSelectionValues"
             android:key="uiStyleSelection"
             android:title="@string/uiStyle" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="allowFollowSystemAutoSwitchDarkMode"
+            android:title="@string/allowFollowSystemAutoSwitchDarkMode" />
         <ListPreference
             android:defaultValue="all"
             android:entries="@array/launchModeSelection"
