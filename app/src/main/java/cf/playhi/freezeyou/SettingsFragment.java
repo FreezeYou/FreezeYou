@@ -54,7 +54,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             ((PreferenceScreen) findPreference("root")).removePreference(findPreference("backgroundService"));
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            ((PreferenceScreen) findPreference("root")).removePreference(findPreference("allowFollowSystemAutoSwitchDarkMode"));
+            ((PreferenceScreen) findPreference("common")).removePreference(findPreference("allowFollowSystemAutoSwitchDarkMode"));
         }
         initSummary(getPreferenceScreen());
     }

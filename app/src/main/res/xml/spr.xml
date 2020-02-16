@@ -6,7 +6,9 @@
         android:key="howToUse"
         android:title="@string/hToUse" />
 
-    <PreferenceScreen android:title="@string/common">
+    <PreferenceScreen
+        android:key="common"
+        android:title="@string/common">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="allowEditWhenCreateShortcut"
@@ -57,6 +59,7 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="allowFollowSystemAutoSwitchDarkMode"
+            android:summary="@string/willOverrideInterfaceStyle"
             android:title="@string/allowFollowSystemAutoSwitchDarkMode" />
         <ListPreference
             android:defaultValue="all"
