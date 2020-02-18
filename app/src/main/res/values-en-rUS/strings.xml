@@ -346,8 +346,8 @@
     <string name="disable_Root_disable">Freeze - ROOT(Disable)</string>
     <string name="enable_MRoot_DPM">Unfreeze - No-root(DPM)</string>
     <string name="disable_MRoot_DPM">Freeze - No-root(DPM)</string>
-    <string name="allowFollowSystemAutoSwitchDarkMode">允许跟随系统自动切换暗色模式</string>
-    <string name="willOverrideInterfaceStyle">会覆盖界面风格的设定</string>
+    <string name="allowFollowSystemAutoSwitchDarkMode">Allow follow the system auto switch dark mode</string>
+    <string name="willOverrideInterfaceStyle">Will override interface style</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
