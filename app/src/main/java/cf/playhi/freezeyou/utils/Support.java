@@ -2,6 +2,7 @@ package cf.playhi.freezeyou.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import cf.playhi.freezeyou.Freeze;
+import cf.playhi.freezeyou.InstallPackagesFinishedReceiver;
 import cf.playhi.freezeyou.R;
 
 import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
@@ -312,6 +314,42 @@ public final class Support {
                                                 .putString("pkgS", folderPkgs.replace(pkgName + ",", ""))
                                                 .apply();
                                     }
+                                }
+                                break;
+                            case R.id.main_sca_menu_uninstall:
+                                if (!(context.getString(R.string.notAvailable).equals(name))) {
+                                    AlertDialog.Builder adb = new AlertDialog.Builder(context);
+                                    adb.setTitle(R.string.plsConfirm);
+                                    adb.setMessage(
+                                            String.format(context.getString(R.string.application_colon_app), name) +
+                                                    System.getProperty("line.separator") +
+                                                    String.format(context.getString(R.string.pkgName_colon_pkgName), pkgName)
+                                    );
+                                    adb.setPositiveButton(R.string.uninstall, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (Build.VERSION.SDK_INT >= 21 && DevicePolicyManagerUtils.isDeviceOwner(context)) {
+                                                context.getPackageManager().getPackageInstaller().uninstall(pkgName,
+                                                        PendingIntent.getBroadcast(context, pkgName.hashCode(),
+                                                                new Intent(
+                                                                        context,
+                                                                        InstallPackagesFinishedReceiver.class)
+                                                                        .putExtra("name", name)
+                                                                        .putExtra("pkgName", pkgName)
+                                                                        .putExtra("install", false), PendingIntent.FLAG_UPDATE_CURRENT)
+                                                                .getIntentSender());
+                                            } else {
+                                                activity.startActivity(
+                                                        new Intent(
+                                                                Intent.ACTION_DELETE,
+                                                                Uri.parse("package:" + pkgName)
+                                                        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                );
+                                            }
+                                        }
+                                    });
+                                    adb.setNegativeButton(R.string.cancel, null);
+                                    adb.show();
                                 }
                                 break;
                             default:
