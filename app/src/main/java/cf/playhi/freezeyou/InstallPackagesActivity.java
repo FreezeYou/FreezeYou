@@ -11,10 +11,14 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
+
+import androidx.core.content.FileProvider;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -26,6 +30,8 @@ import java.util.List;
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.AccessibilityUtils;
 import cf.playhi.freezeyou.utils.AlertDialogUtils;
+import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
+import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.FileUtils;
 import cf.playhi.freezeyou.utils.MoreUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
@@ -444,18 +450,75 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                             }
                             if (install == 2) {
                                 clearTempFile(apkFilePath);
+                                finish();
                             } else {
-                                ServiceUtils.startService(
-                                        InstallPackagesActivity.this,
-                                        new Intent(InstallPackagesActivity.this,
-                                                InstallPackagesService.class)
-                                                .putExtra("install", install == 1)
-                                                .putExtra("packageUri", packageUri)
-                                                .putExtra("apkFilePath", apkFilePath)
-                                                .putExtra("packageInfo", processedPackageInfo)
-                                                .putExtra("waitForLeaving", preDefinedTryToAvoidUpdateWhenUsing));
+                                if (DevicePolicyManagerUtils
+                                        .isDeviceOwner(InstallPackagesActivity.this) ||
+                                        FUFUtils.checkRootPermission()) {
+                                    ServiceUtils.startService(
+                                            InstallPackagesActivity.this,
+                                            new Intent(InstallPackagesActivity.this,
+                                                    InstallPackagesService.class)
+                                                    .putExtra("install", install == 1)
+                                                    .putExtra("packageUri", packageUri)
+                                                    .putExtra("apkFilePath", apkFilePath)
+                                                    .putExtra("packageInfo", processedPackageInfo)
+                                                    .putExtra("waitForLeaving", preDefinedTryToAvoidUpdateWhenUsing));
+                                    finish();
+                                } else {
+                                    AlertDialog.Builder adbd = new AlertDialog.Builder(InstallPackagesActivity.this);
+                                    adbd.setMessage(R.string.perimisioonCheckFailed_ifContinue);
+                                    adbd.setTitle(R.string.notice);
+                                    adbd.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            ServiceUtils.startService(
+                                                    InstallPackagesActivity.this,
+                                                    new Intent(InstallPackagesActivity.this,
+                                                            InstallPackagesService.class)
+                                                            .putExtra("install", install == 1)
+                                                            .putExtra("packageUri", packageUri)
+                                                            .putExtra("apkFilePath", apkFilePath)
+                                                            .putExtra("packageInfo", processedPackageInfo)
+                                                            .putExtra("waitForLeaving", preDefinedTryToAvoidUpdateWhenUsing));
+                                            finish();
+                                        }
+                                    });
+                                    adbd.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            finish();
+                                        }
+                                    });
+                                    adbd.setNeutralButton(R.string.jumpToSysInstaller, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (install == 0) {
+                                                InstallPackagesActivity.this.startActivity(
+                                                        new Intent(
+                                                                Intent.ACTION_DELETE,
+                                                                Uri.parse("package:" + packageUri.getEncodedSchemeSpecificPart())
+                                                        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                );
+                                            } else {
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                    if (getPackageManager().canRequestPackageInstalls()) {
+                                                        requestSysInstallPkg(apkFilePath);
+                                                    } else {
+                                                        Uri packageUri = Uri.parse("package:cf.playhi.freezeyou");
+                                                        Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri);
+                                                        startActivity(intent);
+                                                    }
+                                                } else {
+                                                    requestSysInstallPkg(apkFilePath);
+                                                }
+                                            }
+                                            finish();
+                                        }
+                                    });
+                                    adbd.show();
+                                }
                             }
-                            finish();
                         }
                     }
                 });
@@ -561,6 +624,25 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
             if (v != null) {
                 v.setMinimumHeight(0);
             }
+        }
+    }
+
+    private void requestSysInstallPkg(String filePath) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        File file = new File(filePath);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Uri uri = FileProvider.getUriForFile(this, "cf.playhi.freezeyou.fileprovider", file);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        } else {
+            Uri uri = Uri.fromFile(file);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        }
+        Intent chooser = Intent.createChooser(intent, getString(R.string.plsSelect));
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(chooser);
         }
     }
 

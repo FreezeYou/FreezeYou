@@ -347,6 +347,8 @@
     <string name="disable_MRoot_DPM">冻结 - 免ROOT(DPM)</string>
     <string name="allowFollowSystemAutoSwitchDarkMode">允许跟随系统自动切换暗色模式</string>
     <string name="willOverrideInterfaceStyle">会覆盖界面风格的设定</string>
+    <string name="perimisioonCheckFailed_ifContinue">权限检查未通过，是否继续？</string>
+    <string name="jumpToSysInstaller">转至系统安装器</string>
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>
