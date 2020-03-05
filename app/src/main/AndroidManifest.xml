@@ -244,18 +244,6 @@
                 <data android:mimeType="application/vnd.android.package-archive" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.INSTALL_PACKAGE" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="file" />
-                <data android:scheme="package" />
-                <data android:scheme="content" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.content.pm.action.CONFIRM_PERMISSIONS" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.intent.action.DELETE" />
                 <action android:name="android.intent.action.UNINSTALL_PACKAGE" />
 
@@ -589,6 +577,15 @@
             android:exported="true"
             android:permission="cf.playhi.freezeyou.permission.DISABLE_APPLICATIONS"
             android:process=":backgroundService" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="cf.playhi.freezeyou.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 

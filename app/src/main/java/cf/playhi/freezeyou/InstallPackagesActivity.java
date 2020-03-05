@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
@@ -466,57 +465,9 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                                     .putExtra("waitForLeaving", preDefinedTryToAvoidUpdateWhenUsing));
                                     finish();
                                 } else {
-                                    AlertDialog.Builder adbd = new AlertDialog.Builder(InstallPackagesActivity.this);
-                                    adbd.setMessage(R.string.perimisioonCheckFailed_ifContinue);
-                                    adbd.setTitle(R.string.notice);
-                                    adbd.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            ServiceUtils.startService(
-                                                    InstallPackagesActivity.this,
-                                                    new Intent(InstallPackagesActivity.this,
-                                                            InstallPackagesService.class)
-                                                            .putExtra("install", install == 1)
-                                                            .putExtra("packageUri", packageUri)
-                                                            .putExtra("apkFilePath", apkFilePath)
-                                                            .putExtra("packageInfo", processedPackageInfo)
-                                                            .putExtra("waitForLeaving", preDefinedTryToAvoidUpdateWhenUsing));
-                                            finish();
-                                        }
-                                    });
-                                    adbd.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            finish();
-                                        }
-                                    });
-                                    adbd.setNeutralButton(R.string.jumpToSysInstaller, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (install == 0) {
-                                                InstallPackagesActivity.this.startActivity(
-                                                        new Intent(
-                                                                Intent.ACTION_DELETE,
-                                                                Uri.parse("package:" + packageUri.getEncodedSchemeSpecificPart())
-                                                        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                                );
-                                            } else {
-                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                                    if (getPackageManager().canRequestPackageInstalls()) {
-                                                        requestSysInstallPkg(apkFilePath);
-                                                    } else {
-                                                        Uri packageUri = Uri.parse("package:cf.playhi.freezeyou");
-                                                        Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri);
-                                                        startActivity(intent);
-                                                    }
-                                                } else {
-                                                    requestSysInstallPkg(apkFilePath);
-                                                }
-                                            }
-                                            finish();
-                                        }
-                                    });
-                                    adbd.show();
+                                    showInstallPermissionCheckFailedDialog(
+                                            install, apkFilePath, packageUri,
+                                            processedPackageInfo, preDefinedTryToAvoidUpdateWhenUsing);
                                 }
                             }
                         }
@@ -625,6 +576,66 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                 v.setMinimumHeight(0);
             }
         }
+    }
+
+    private void showInstallPermissionCheckFailedDialog(final int install, final String apkFilePath,
+                                                        final Uri packageUri,
+                                                        final PackageInfo processedPackageInfo,
+                                                        final boolean preDefinedTryToAvoidUpdateWhenUsing) {
+        AlertDialog.Builder adbd = new AlertDialog.Builder(InstallPackagesActivity.this);
+        adbd.setMessage(R.string.installPerimisionCheckFailed_ifContinue);
+        adbd.setTitle(R.string.notice);
+        adbd.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ServiceUtils.startService(
+                        InstallPackagesActivity.this,
+                        new Intent(InstallPackagesActivity.this,
+                                InstallPackagesService.class)
+                                .putExtra("install", install == 1)
+                                .putExtra("packageUri", packageUri)
+                                .putExtra("apkFilePath", apkFilePath)
+                                .putExtra("packageInfo", processedPackageInfo)
+                                .putExtra("waitForLeaving", preDefinedTryToAvoidUpdateWhenUsing));
+                finish();
+            }
+        });
+        adbd.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        adbd.setNeutralButton(R.string.jumpToSysInstaller, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (install == 0) {
+                    InstallPackagesActivity.this.startActivity(
+                            new Intent(
+                                    Intent.ACTION_DELETE,
+                                    Uri.parse("package:" + packageUri.getEncodedSchemeSpecificPart())
+                            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    );
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (getPackageManager().canRequestPackageInstalls()) {
+                            requestSysInstallPkg(apkFilePath);
+                        } else {
+                            showInstallPermissionCheckFailedDialog(
+                                    install, apkFilePath, packageUri,
+                                    processedPackageInfo, preDefinedTryToAvoidUpdateWhenUsing);
+                            Uri packageUri = Uri.parse("package:cf.playhi.freezeyou");
+                            Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri);
+                            startActivity(intent);
+                        }
+                    } else {
+                        requestSysInstallPkg(apkFilePath);
+                    }
+                }
+                finish();
+            }
+        });
+        adbd.show();
     }
 
     private void requestSysInstallPkg(String filePath) {
