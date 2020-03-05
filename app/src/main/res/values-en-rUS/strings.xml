@@ -348,6 +348,8 @@
     <string name="disable_MRoot_DPM">Freeze - No-root(DPM)</string>
     <string name="allowFollowSystemAutoSwitchDarkMode">Allow follow the system auto switch dark mode</string>
     <string name="willOverrideInterfaceStyle">Will override interface style</string>
+    <string name="installPerimisionCheckFailed_ifContinue">Install permission check failed, continue?</string>
+    <string name="jumpToSysInstaller">Go to system installer</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
