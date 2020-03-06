@@ -21,7 +21,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -1044,15 +1043,7 @@ public class Main extends FreezeYouBaseActivity {
     }
 
     private void manageCrashLog() throws Exception {
-        File crashCheck = new File(Environment.getDataDirectory().getPath()
-                + File.separator
-                + "data"
-                + File.separator
-                + "cf.playhi.freezeyou"
-                + File.separator
-                + "log"
-                + File.separator
-                + "NeedUpload.log");
+        File crashCheck = new File(getCacheDir() +File.separator +"log"+ File.separator + "NeedUpload.log");
         if (crashCheck.exists()) {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(crashCheck));
             String filePath = bufferedReader.readLine();

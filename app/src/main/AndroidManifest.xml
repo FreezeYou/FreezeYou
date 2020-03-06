@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /><!-- 部分奇怪的设备需要这个权限才能开关WIFI -->
     <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" /><!-- 开关移动数据，需 pri app -->
 
     <permission
@@ -581,7 +582,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="cf.playhi.freezeyou.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true" >
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />

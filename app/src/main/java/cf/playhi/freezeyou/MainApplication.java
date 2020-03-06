@@ -25,7 +25,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        CrashHandler crashHandler = CrashHandler.getInstance();
+        CrashHandler crashHandler = new CrashHandler();
         crashHandler.init(this);
         Support.checkLanguage(getApplicationContext());
         try {
