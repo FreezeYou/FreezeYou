@@ -616,10 +616,12 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                     Uri.parse("package:" + packageUri.getEncodedSchemeSpecificPart())
                             ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     );
+                    finish();
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         if (getPackageManager().canRequestPackageInstalls()) {
                             requestSysInstallPkg(apkFilePath);
+                            finish();
                         } else {
                             showInstallPermissionCheckFailedDialog(
                                     install, apkFilePath, packageUri,
@@ -630,8 +632,14 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                         }
                     } else {
                         requestSysInstallPkg(apkFilePath);
+                        finish();
                     }
                 }
+            }
+        });
+        adbd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
                 finish();
             }
         });
