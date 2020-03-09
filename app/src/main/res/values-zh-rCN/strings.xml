@@ -413,5 +413,6 @@
         <item>ROOT（HIDE模式）</item>
         <item>ROOT（DISABLE模式）</item>
         <item>遗留的（自动DPM或DISABLE模式）</item>
+        <item>Island（Delegation API）</item>
     </string-array>
 </resources>
