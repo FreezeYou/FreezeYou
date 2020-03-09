@@ -20,6 +20,7 @@ import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_ISLAND_DELEGATION_PACKAGE_ACCESS;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
@@ -157,6 +158,13 @@ final class SettingsUtils {
                         break;
                     case API_FREEZEYOU_LEGACY_AUTO:
                         if (!(checkRootPermission() || isDeviceOwner(context))) {
+                            showToast(context, R.string.insufficientPermission);
+                        }
+                        break;
+                    case API_ISLAND_DELEGATION_PACKAGE_ACCESS:
+                        if (Build.VERSION.SDK_INT < 21) {
+                            showToast(context, R.string.sysVerLow);
+                        } else if (!Support.checkAndRequestIslandPermission(context)) {
                             showToast(context, R.string.insufficientPermission);
                         }
                         break;
