@@ -9,3 +9,5 @@
 .externalNativeBuild
 /app/release
 /app/debug
+/.idea/caches
+/.idea
