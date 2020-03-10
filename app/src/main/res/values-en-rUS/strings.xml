@@ -413,6 +413,6 @@
         <item>ROOT(Hide Mode)</item>
         <item>ROOT(Disable Mode)</item>
         <item>Legacy(Auto DPM or Disable Mode)</item>
-        <item>Island（Delegation API）</item>
+        <item>Island(Delegation API)</item>
     </string-array>
 </resources>
