@@ -32,15 +32,13 @@ final class ThemeUtils {
                 case "yellow":
                     resId = R.drawable.shapedotyellow;
                     break;
-                case "white":
-                    resId = R.drawable.shapedotblack;
-                    break;
                 case "red":
                     resId = R.drawable.shapedotred;
                     break;
                 case "black":
                     resId = R.drawable.shapedotwhite;
                     break;
+                case "white":
                 default:
                     resId = R.drawable.shapedotblack;//resId = R.drawable.shapedotblue;
                     break;
