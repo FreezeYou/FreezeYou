@@ -349,6 +349,7 @@
     <string name="willOverrideInterfaceStyle">会覆盖界面风格的设定</string>
     <string name="installPerimisionCheckFailed_ifContinue">安装权限检查未通过，是否继续？</string>
     <string name="jumpToSysInstaller">转至系统安装器</string>
+    <string name="displayListDivider">显示列表的分割线</string>
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>

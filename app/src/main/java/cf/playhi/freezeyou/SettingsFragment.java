@@ -13,6 +13,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
+import android.widget.ListView;
+
+import androidx.annotation.Nullable;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -22,16 +25,16 @@ import cf.playhi.freezeyou.utils.DataStatisticsUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
 
+import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
+import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
+import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.VersionUtils.getVersionName;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.FileUtils.deleteAllFiles;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenDonateWebSite;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
-import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
-import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
-import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
-import static cf.playhi.freezeyou.VersionUtils.getVersionName;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -57,6 +60,19 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 //            ((PreferenceScreen) findPreference("common")).removePreference(findPreference("allowFollowSystemAutoSwitchDarkMode"));
 //        }
         initSummary(getPreferenceScreen());
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if (!sp.getBoolean("displayListDivider", false)) {
+            ListView lv = getActivity().findViewById(android.R.id.list);
+            if (lv != null) {
+                lv.setDivider(getResources().getDrawable(R.color.realTranslucent));
+                lv.setDividerHeight(2);
+            }
+        }
     }
 
     @Override

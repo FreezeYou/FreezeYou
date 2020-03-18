@@ -1043,7 +1043,7 @@ public class Main extends FreezeYouBaseActivity {
     }
 
     private void manageCrashLog() throws Exception {
-        File crashCheck = new File(getCacheDir() +File.separator +"log"+ File.separator + "NeedUpload.log");
+        File crashCheck = new File(getCacheDir() + File.separator + "log" + File.separator + "NeedUpload.log");
         if (crashCheck.exists()) {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(crashCheck));
             String filePath = bufferedReader.readLine();
@@ -1172,6 +1172,10 @@ public class Main extends FreezeYouBaseActivity {
             } else {
                 mMainActivityAppListFragment.setUseGridMode(false);
             }
+            mMainActivityAppListFragment.setShowListViewDivider(
+                    sharedPref.getBoolean("displayListDivider", false)
+            );
+
         }
 
         FragmentManager fragmentManager = getFragmentManager();

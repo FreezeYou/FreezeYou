@@ -61,6 +61,10 @@
             android:key="allowFollowSystemAutoSwitchDarkMode"
             android:summary="@string/willOverrideInterfaceStyle"
             android:title="@string/allowFollowSystemAutoSwitchDarkMode" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="displayListDivider"
+            android:title="@string/displayListDivider" />
         <ListPreference
             android:defaultValue="all"
             android:entries="@array/launchModeSelection"
