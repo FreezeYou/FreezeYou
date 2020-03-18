@@ -52,6 +52,13 @@
 
         </FrameLayout>
 
+        <!--    <ListView-->
+        <!--        android:id="@+id/app_list"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent"-->
+        <!--        android:choiceMode="multipleChoiceModal"-->
+        <!--        android:fastScrollEnabled="true" />-->
+
         <FrameLayout
             android:id="@+id/main_appList_fragmentContainer_frameLayout"
             android:layout_width="match_parent"
@@ -69,6 +76,8 @@
         android:layout_margin="25dp"
         android:background="@drawable/shapedotblack"
         android:contentDescription="@string/add"
-        android:src="@drawable/ic_action_add" />
+        android:elevation="6dp"
+        android:src="@drawable/ic_action_add"
+        android:stateListAnimator="@animator/fab_animator" />
 
 </FrameLayout>

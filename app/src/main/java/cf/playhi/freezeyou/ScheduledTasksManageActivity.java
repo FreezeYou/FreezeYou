@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -91,6 +92,12 @@ public class ScheduledTasksManageActivity extends FreezeYouBaseActivity {
                 new ScheduledTasksManageSimpleAdapter(this, tasksData, integerArrayList,
                         R.layout.stma_item, new String[]{"label", "time", "enabled"},
                         new int[]{R.id.stma_label, R.id.stma_time, R.id.stma_switch});
+
+        if (!PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean("displayListDivider", false)) {
+            tasksListView.setDivider(getResources().getDrawable(R.color.realTranslucent));
+            tasksListView.setDividerHeight(2);
+        }
 
         tasksListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override

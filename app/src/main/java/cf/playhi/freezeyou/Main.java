@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutManager;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -252,6 +253,8 @@ public class Main extends FreezeYouBaseActivity {
         final EditText search_editText = findViewById(R.id.search_editText);
         final ImageButton moreSettingsImageButton = findViewById(R.id.main_moreSettings_button);
 
+        final Context applicationContext = getApplicationContext();
+
         moreSettingsImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -293,6 +296,14 @@ public class Main extends FreezeYouBaseActivity {
 
                 if (Build.VERSION.SDK_INT >= 21) {
                     moreSettingsImageButton.setBackgroundResource(R.drawable.oval_ripple);
+                    if (!PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                            .getBoolean("displayListDivider", false)) {
+                        search_editText.setBackgroundTintList(
+                                ColorStateList.valueOf(
+                                        getResources().getColor(R.color.realTranslucent)
+                                )
+                        );
+                    }
                 } else {
                     moreSettingsImageButton.setBackgroundResource(getThemeFabDotBackground(Main.this));
                 }
@@ -313,7 +324,6 @@ public class Main extends FreezeYouBaseActivity {
         }
 
         ApplicationInfo applicationInfo1;
-        Context applicationContext = getApplicationContext();
         PackageManager packageManager = applicationContext.getPackageManager();
         List<ApplicationInfo> applicationInfo = packageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
         int size = applicationInfo == null ? 0 : applicationInfo.size();
