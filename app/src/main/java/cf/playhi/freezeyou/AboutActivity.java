@@ -94,8 +94,6 @@ public class AboutActivity extends FreezeYouBaseActivity {
                                 String.format(getString(R.string.email_colon), "contactUs@zidon.net")
                                         + System.getProperty("line.separator")
                                         + String.format(getString(R.string.qqGroup_colon), "704086494")
-                                        + System.getProperty("line.separator")
-                                        + String.format(getString(R.string.wechatMp_colon), "zidon_net")
                         );
                         builder.setTitle(R.string.contactUs);
                         builder.setPositiveButton(R.string.okay, null);
