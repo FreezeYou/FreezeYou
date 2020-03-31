@@ -62,7 +62,7 @@ public class FirstTimeSetupFragment extends PreferenceFragment implements Shared
         if (key != null) {
             switch (key) {
                 case "howToUse":
-                    requestOpenWebSite(getActivity(), "https://zidon.net/howToUse.html");
+                    requestOpenWebSite(getActivity(), "https://zidon.net/zh-CN/guide/how-to-use.html");
                     break;
                 default:
                     break;

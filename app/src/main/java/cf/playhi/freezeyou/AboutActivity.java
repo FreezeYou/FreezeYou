@@ -91,7 +91,7 @@ public class AboutActivity extends FreezeYouBaseActivity {
                     case 5:
                         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                         builder.setMessage(
-                                String.format(getString(R.string.email_colon), "contactUs@zidon.net")
+                                String.format(getString(R.string.email_colon), "contact@zidon.net")
                                         + System.getProperty("line.separator")
                                         + String.format(getString(R.string.qqGroup_colon), "704086494")
                         );
