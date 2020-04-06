@@ -132,6 +132,12 @@ public class AboutActivity extends FreezeYouBaseActivity {
         });
 
         aboutSlogan.setText(String.format("V %s", getVersionCode(activity)));
+        aboutSlogan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestOpenWebSite(activity, "https://zidon.net/zh-CN/changelog/");
+            }
+        });
 
         TextView about_appName = findViewById(R.id.about_appName);
         about_appName.setOnClickListener(new View.OnClickListener() {

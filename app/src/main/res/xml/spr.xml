@@ -6,9 +6,7 @@
         android:key="howToUse"
         android:title="@string/hToUse" />
 
-    <PreferenceScreen
-        android:key="common"
-        android:title="@string/common">
+    <PreferenceScreen android:title="@string/common">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="allowEditWhenCreateShortcut"
@@ -17,12 +15,6 @@
             android:defaultValue="false"
             android:key="noCaution"
             android:title="@string/nSCaution" />
-        <ListPreference
-            android:defaultValue="default"
-            android:entries="@array/mainActivityPatternSelection"
-            android:entryValues="@array/mainActivityPatternSelectionValues"
-            android:key="mainActivityPattern"
-            android:title="@string/mainActivityPattern" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="saveOnClickFunctionStatus"
@@ -45,27 +37,6 @@
             android:key="lesserToast"
             android:title="@string/lesserToast" />
         <ListPreference
-            android:defaultValue="1"
-            android:entries="@array/onClickFuncChooseActionStyles"
-            android:entryValues="@array/onClickFuncChooseActionStyles"
-            android:key="onClickFuncChooseActionStyle"
-            android:title="@string/onClickFuncChooseActionStyle" />
-        <ListPreference
-            android:defaultValue="default"
-            android:entries="@array/uiStyleSelection"
-            android:entryValues="@array/uiStyleSelectionValues"
-            android:key="uiStyleSelection"
-            android:title="@string/uiStyle" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="allowFollowSystemAutoSwitchDarkMode"
-            android:summary="@string/willOverrideInterfaceStyle"
-            android:title="@string/allowFollowSystemAutoSwitchDarkMode" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="displayListDivider"
-            android:title="@string/displayListDivider" />
-        <ListPreference
             android:defaultValue="all"
             android:entries="@array/launchModeSelection"
             android:entryValues="@array/launchModeSelectionValues"
@@ -82,6 +53,36 @@
             android:entryValues="@array/displayLanguageOptionsSelectionValues"
             android:key="languagePref"
             android:title="@string/displayLanguage" />
+    </PreferenceScreen>
+
+    <PreferenceScreen android:title="@string/appearance">
+        <ListPreference
+            android:defaultValue="default"
+            android:entries="@array/uiStyleSelection"
+            android:entryValues="@array/uiStyleSelectionValues"
+            android:key="uiStyleSelection"
+            android:title="@string/uiStyle" />
+        <ListPreference
+            android:defaultValue="default"
+            android:entries="@array/mainActivityPatternSelection"
+            android:entryValues="@array/mainActivityPatternSelectionValues"
+            android:key="mainActivityPattern"
+            android:title="@string/mainActivityPattern" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="allowFollowSystemAutoSwitchDarkMode"
+            android:summary="@string/willOverrideInterfaceStyle"
+            android:title="@string/allowFollowSystemAutoSwitchDarkMode" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="displayListDivider"
+            android:title="@string/displayListDivider" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/onClickFuncChooseActionStyles"
+            android:entryValues="@array/onClickFuncChooseActionStyles"
+            android:key="onClickFuncChooseActionStyle"
+            android:title="@string/onClickFuncChooseActionStyle" />
     </PreferenceScreen>
 
     <PreferenceScreen android:title="@string/notificationBar">

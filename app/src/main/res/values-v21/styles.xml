@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.Translucent.NoTitleBar" parent="android:Theme.DeviceDefault.NoActionBar">
+    <style name="AppTheme.Translucent.NoTitleBar" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowBackground">@color/translucentBackground</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowTranslucentStatus">true</item>
@@ -10,12 +10,17 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="AppTheme.Default.Light" parent="android:Theme.DeviceDefault.Light.DarkActionBar">
+    <style name="AppTheme.Default" parent="android:Theme.DeviceDefault">
         <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="AppTheme.Default.Light.LightActionBar" parent="android:Theme.DeviceDefault.Light">
+    <style name="AppTheme.Default.Light" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="AppTheme.Default.Light.LightActionBar" parent="android:Theme.Material.Light">
         <item name="android:actionOverflowButtonStyle">@style/OverflowStyle.LightBackground</item>
         <item name="android:windowContentTransitions">true</item>
     </style>

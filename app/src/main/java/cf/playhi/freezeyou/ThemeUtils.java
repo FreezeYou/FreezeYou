@@ -177,12 +177,10 @@ final class ThemeUtils {
                     case "black":
                         context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog : R.style.AppTheme_Default);
                         break;
-                    case "white":
-                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_White : R.style.AppTheme_Default_White);
-                        break;
                     case "red":
                         context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Red : R.style.AppTheme_Default_Red);
                         break;
+                    case "white":
                     default:
                         context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_White : R.style.AppTheme_Default_White);
 //                        if (Build.VERSION.SDK_INT >= 21) {
