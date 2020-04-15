@@ -351,6 +351,7 @@
     <string name="installPerimisionCheckFailed_ifContinue">Install permission check failed, continue?</string>
     <string name="jumpToSysInstaller">Go to system installer</string>
     <string name="displayListDivider">Display list divider</string>
+    <string name="appearance">Appearance</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
