@@ -73,7 +73,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
                 finish();
                 return true;
             case R.id.lscaga_menu_help:
-                MoreUtils.requestOpenWebSite(this, "https://wiki.playhi.net/index.php?title=%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1_-_FreezeYou");
+                MoreUtils.requestOpenWebSite(this, "https://zidon.net/zh-CN/guide/schedules.html");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

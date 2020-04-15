@@ -134,7 +134,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     openAccessibilitySettings(getActivity());
                     break;
                 case "faq":
-                    requestOpenWebSite(getActivity(), "https://freezeyou.playhi.net/faq.html");
+                    requestOpenWebSite(getActivity(), "https://zidon.net/zh-CN/faq/");
                     break;
                 case "uninstall":
                     Intent uninstall =

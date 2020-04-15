@@ -74,10 +74,10 @@ public class AboutActivity extends FreezeYouBaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/");
+                        requestOpenWebSite(activity, "https://zidon.net/zh-CN/guide/how-to-use.html");
                         break;
                     case 1:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/faq.html");
+                        requestOpenWebSite(activity, "https://zidon.net/zh-CN/faq/");
                         break;
                     case 2:
                         requestOpenWebSite(activity, "https://crwd.in/freezeyou");
@@ -86,7 +86,7 @@ public class AboutActivity extends FreezeYouBaseActivity {
                         requestOpenWebSite(activity, "https://freezeyou.playhi.net/thanks.html");
                         break;
                     case 4:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.net");
+                        requestOpenWebSite(activity, "https://zidon.net");
                         break;
                     case 5:
                         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
