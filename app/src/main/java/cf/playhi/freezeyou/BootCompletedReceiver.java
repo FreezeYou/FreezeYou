@@ -27,34 +27,49 @@ import static cf.playhi.freezeyou.utils.FUFUtils.checkRootFrozen;
 public class BootCompletedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction() != null) {
-            switch (intent.getAction()) {
-                case Intent.ACTION_BOOT_COMPLETED:
-                    runBackgroundService(context);
-                    checkAndReNotifyNotifications(context);
-                    checkTasks(context);
-                    break;
-                case Intent.ACTION_MY_PACKAGE_REPLACED:
-                    runBackgroundService(context);
-                    checkAndReNotifyNotifications(context);
-                    checkTasks(context);
 
-                    final SharedPreferences sharedPreferences =
-                            context.getSharedPreferences("Ver", Context.MODE_PRIVATE);
-                    if (sharedPreferences.getInt("Ver", 0) < VersionUtils.getVersionCode(context)) {
-                        clearCrashLogs();
-                    }
+        if (intent == null || intent.getAction() == null) {
+            return;
+        }
 
-                    break;
-                default:
-                    break;
-            }
+        switch (intent.getAction()) {
+            case Intent.ACTION_BOOT_COMPLETED:
+                runBackgroundService(context);
+                checkAndReNotifyNotifications(context);
+                checkTasks(context);
+                cleanExternalCache(context);
+                break;
+            case Intent.ACTION_MY_PACKAGE_REPLACED:
+                runBackgroundService(context);
+                checkAndReNotifyNotifications(context);
+                checkTasks(context);
+                cleanExternalCache(context);
+
+                final SharedPreferences sharedPreferences =
+                        context.getSharedPreferences("Ver", Context.MODE_PRIVATE);
+                if (sharedPreferences.getInt("Ver", 0) < VersionUtils.getVersionCode(context)) {
+                    clearCrashLogs();
+                }
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void cleanExternalCache(Context context) {
+        try {
+            FileUtils.deleteAllFiles(context.getExternalCacheDir(), false);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     private void runBackgroundService(Context context) {
-        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("onekeyFreezeWhenLockScreen", false)) {
-            ServiceUtils.startService(context, new Intent(context, ScreenLockOneKeyFreezeService.class));
+        if (PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean("onekeyFreezeWhenLockScreen", false)) {
+            ServiceUtils.startService(context,
+                    new Intent(context, ScreenLockOneKeyFreezeService.class));
         }
     }
 
@@ -66,7 +81,16 @@ public class BootCompletedReceiver extends BroadcastReceiver {
             PackageManager pm = context.getPackageManager();
             for (String aPkgName : strings) {
                 if (!checkFrozenStatus(context, aPkgName, pm)) {
-                    createNotification(context, aPkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgName, ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkgName, context), false)));
+                    createNotification(context, aPkgName,
+                            R.drawable.ic_notification,
+                            getBitmapFromDrawable(
+                                    getApplicationIcon(
+                                            context, aPkgName,
+                                            ApplicationInfoUtils.
+                                                    getApplicationInfoFromPkgName(aPkgName, context),
+                                            false)
+                            )
+                    );
                 }
             }
         }
