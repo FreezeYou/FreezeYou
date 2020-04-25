@@ -47,8 +47,8 @@ public class STAAFragment extends PreferenceFragment implements SharedPreference
                         int hour;
                         int minutes;
                         try {
-                            hour = Integer.valueOf(sHour);
-                            minutes = Integer.valueOf(sMin);
+                            hour = Integer.parseInt(sHour);
+                            minutes = Integer.parseInt(sMin);
                         } catch (Exception e) {
                             showToast(getActivity(),
                                     getString(R.string.minutesShouldBetween)

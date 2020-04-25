@@ -88,10 +88,6 @@ final class InstallPackagesUtils {
                 builder.setContentIntent(resultPendingIntent);
             }
 
-            notificationManager.notify(
-                    (beOperatedPackageName + "@InstallPackagesNotification").hashCode(), builder.getNotification()
-            );
-
         } else {
 
             if (text != null)
@@ -111,11 +107,12 @@ final class InstallPackagesUtils {
                                     PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(resultPendingIntent);
 
-            notificationManager.notify(
-                    (beOperatedPackageName + "@InstallPackagesNotification").hashCode(), builder.getNotification()
-            );
-
         }
+
+        notificationManager.notify(
+                (beOperatedPackageName + "@InstallPackagesNotification").hashCode(), builder.getNotification()
+        );
+
     }
 
     /**

@@ -194,25 +194,15 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
         if (pkgName != null) {
             switch (pkgName) {
                 case "cf.playhi.freezeyou.extra.fuf":
+                case "OF":
+                case "UF":
+                case "OO":
+                case "OOU":
+                case "FOQ":
                     finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
                 case "cf.playhi.freezeyou.extra.oklock":
                     finalDrawable = getResources().getDrawable(R.drawable.screenlock);
-                    break;
-                case "OF":
-                    finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
-                    break;
-                case "UF":
-                    finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
-                    break;
-                case "OO":
-                    finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
-                    break;
-                case "OOU":
-                    finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
-                    break;
-                case "FOQ":
-                    finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
                 default:
                     finalDrawable = getString(R.string.plsSelect).equals(pkgName)

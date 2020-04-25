@@ -62,12 +62,10 @@ public class UriFreezeActivity extends FreezeYouBaseActivity {
                         case "unfreeze":
                             checkAndCreateUserCheckDialog(intent, pkgName, MODE_UNFREEZE);
                             break;
-                        case "fuf":
-                            checkAndCreateUserCheckDialog(intent, pkgName, MODE_FUF);
-                            break;
                         case "unfreezeandrun"://unFreezeAndRun
                             checkAndCreateUserCheckDialog(intent, pkgName, MODE_UNFREEZEANDRUN);
                             break;
+                        case "fuf":
                         default://按照 fuf 方案执行
                             checkAndCreateUserCheckDialog(intent, pkgName, MODE_FUF);
                             break;

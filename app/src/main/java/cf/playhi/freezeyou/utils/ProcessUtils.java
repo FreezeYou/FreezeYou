@@ -18,10 +18,6 @@ public final class ProcessUtils {
         }
     }
 
-    public static int fAURoot(String pkgName, Boolean enable) throws Exception {
-        return fAURoot(pkgName, enable, false);
-    }
-
     public static int fAURoot(String pkgName, Boolean enable, Boolean hideMode) throws Exception {
         Process process = Runtime.getRuntime().exec("su");
         DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());

@@ -37,7 +37,6 @@ public class BootCompletedReceiver extends BroadcastReceiver {
                 runBackgroundService(context);
                 checkAndReNotifyNotifications(context);
                 checkTasks(context);
-                cleanExternalCache(context);
                 break;
             case Intent.ACTION_MY_PACKAGE_REPLACED:
                 runBackgroundService(context);

@@ -106,11 +106,10 @@ public class ScheduledTasksManageActivity extends FreezeYouBaseActivity {
                     if (!selectedTasksPositions.contains(position)) {
                         selectedTasksPositions.add(position);
                     }
-                    mode.setTitle(Integer.toString(selectedTasksPositions.size()));
                 } else {
                     selectedTasksPositions.remove(Integer.valueOf(position));
-                    mode.setTitle(Integer.toString(selectedTasksPositions.size()));
                 }
+                mode.setTitle(Integer.toString(selectedTasksPositions.size()));
             }
 
             @Override

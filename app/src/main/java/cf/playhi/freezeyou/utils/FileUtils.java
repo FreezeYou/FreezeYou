@@ -22,15 +22,15 @@ public final class FileUtils {
                     throw new IOException(file.getAbsolutePath() + " delete failed");
             } else if (file.isDirectory()) {
                 File[] files = file.listFiles();
-                if (deleteSelfFolder && files == null) {
-                    if (!file.delete())
-                        throw new IOException(file.getAbsolutePath() + " delete failed");
-                } else {
+                if (files != null) {
                     for (File f : files) {
                         deleteAllFiles(f, true);
                     }
-                    if (deleteSelfFolder && !file.delete())
+                }
+                if (deleteSelfFolder) {
+                    if (!file.delete()) {
                         throw new IOException(file.getAbsolutePath() + " delete failed");
+                    }
                 }
             }
         }

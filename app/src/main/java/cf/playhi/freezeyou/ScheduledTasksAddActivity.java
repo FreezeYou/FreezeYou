@@ -87,10 +87,8 @@ public class ScheduledTasksAddActivity extends FreezeYouBaseActivity {
                                     }
                                     db.execSQL("DELETE FROM tasks WHERE _id = " + id);
                                     db.close();
-                                    finish();
-                                } else {
-                                    finish();
                                 }
+                                finish();
                             }
                         })
                         .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -250,8 +248,8 @@ public class ScheduledTasksAddActivity extends FreezeYouBaseActivity {
         int hour;
         int minutes;
         try {
-            hour = Integer.valueOf(time.substring(0, indexOfColon));
-            minutes = Integer.valueOf(time.substring(indexOfColon + 1));
+            hour = Integer.parseInt(time.substring(0, indexOfColon));
+            minutes = Integer.parseInt(time.substring(indexOfColon + 1));
         } catch (Exception e) {
             showToast(this,
                     getString(R.string.minutesShouldBetween)
