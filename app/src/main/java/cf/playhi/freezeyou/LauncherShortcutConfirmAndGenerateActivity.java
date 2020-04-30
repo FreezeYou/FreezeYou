@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import java.io.File;
 import java.util.Date;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
@@ -145,7 +146,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
 
         processDisplayNameEditText(name, lscaga_displayName_editText);
 
-        processSelectedTargetEditText(lscaga_target_editText);
+        processSelectedTargetEditText(pkgName, lscaga_target_editText);
 
         processChangeIconImageButton(pkgName, lscaga_icon_imageButton);
 
@@ -167,12 +168,24 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
         lscaga_displayName_editText.setText(name);
     }
 
-    private void processSelectedTargetEditText(EditText lscaga_target_editText) {
+    private void processSelectedTargetEditText(final String pkgName, EditText lscaga_target_editText) {
         lscaga_target_editText.setText(R.string.launch);
+        lscaga_target_editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startSelectTargetActivityForResult(pkgName);
+            }
+        });
     }
 
     private void processSelectedPackageEditText(String pkgName, EditText lscaga_package_editText) {
         lscaga_package_editText.setText(pkgName);
+        lscaga_package_editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startSelectPackageActivityForResult();
+            }
+        });
     }
 
     private void processTaskEditText(EditText lscaga_task_editText) {
@@ -234,10 +247,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
         lscaga_package_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(
-                        new Intent(LauncherShortcutConfirmAndGenerateActivity.this, FUFLauncherShortcutCreator.class)
-                                .putExtra("returnPkgName", true),
-                        11);
+                startSelectPackageActivityForResult();
             }
         });
     }
@@ -246,21 +256,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
         lscaga_target_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    ActivityInfo[] activityInfoS = getPackageManager().getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES).activities;
-                    startActivityForResult(
-                            new Intent(
-                                    LauncherShortcutConfirmAndGenerateActivity.this,
-                                    SelectTargetActivityActivity.class)
-                                    .putExtra("pkgName", pkgName),
-                            8);
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                    showToast(LauncherShortcutConfirmAndGenerateActivity.this, R.string.packageNotFound);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showToast(LauncherShortcutConfirmAndGenerateActivity.this, R.string.failed);
-                }
+                startSelectTargetActivityForResult(pkgName);
             }
         });
     }
@@ -331,6 +327,34 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
                 );
             }
         });
+    }
+
+    private void startSelectPackageActivityForResult() {
+        startActivityForResult(
+                new Intent(LauncherShortcutConfirmAndGenerateActivity.this, FUFLauncherShortcutCreator.class)
+                        .putExtra("returnPkgName", true),
+                11);
+    }
+
+    private void startSelectTargetActivityForResult(final String pkgName) {
+        try {
+            ActivityInfo[] activityInfoS =
+                    getPackageManager().getPackageInfo(
+                            pkgName, PackageManager.GET_ACTIVITIES).activities;
+            startActivityForResult(
+                    new Intent(
+                            LauncherShortcutConfirmAndGenerateActivity.this,
+                            SelectTargetActivityActivity.class)
+                            .putExtra("pkgName", pkgName),
+                    8);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            showToast(LauncherShortcutConfirmAndGenerateActivity.this, R.string.packageNotFound);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showToast(LauncherShortcutConfirmAndGenerateActivity.this,
+                    R.string.failed + File.separator + e.getLocalizedMessage());
+        }
     }
 
 }

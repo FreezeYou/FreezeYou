@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:enabled="false"
+                    android:focusable="false"
                     android:hint="@string/application"
                     android:inputType="none"
                     android:text="@string/plsSelect" />
@@ -108,7 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:enabled="false"
+                    android:focusable="false"
                     android:hint="@string/target"
                     android:inputType="none"
                     android:text="@string/target" />
