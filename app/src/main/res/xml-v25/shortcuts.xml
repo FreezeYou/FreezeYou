@@ -2,7 +2,7 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
         android:enabled="true"
-        android:icon="@mipmap/ic_launcher_new_round"
+        android:icon="@drawable/ic_shortcut_logo"
         android:shortcutDisabledMessage="@string/app_name"
         android:shortcutId="main"
         android:shortcutLongLabel="@string/app_name"
@@ -19,7 +19,7 @@
     <!-- Specify more shortcuts here. -->
     <shortcut
         android:enabled="true"
-        android:icon="@mipmap/ic_launcher_new_round"
+        android:icon="@drawable/ic_shortcut_logo"
         android:shortcutDisabledMessage="@string/oneKeyFreeze"
         android:shortcutId="onekeyFreeze"
         android:shortcutLongLabel="@string/oneKeyFreeze"
@@ -35,7 +35,7 @@
     </shortcut>
     <shortcut
         android:enabled="true"
-        android:icon="@mipmap/ic_launcher_new_round"
+        android:icon="@drawable/ic_shortcut_logo"
         android:shortcutDisabledMessage="@string/oneKeyUF"
         android:shortcutId="onekeyUF"
         android:shortcutLongLabel="@string/oneKeyUF"
