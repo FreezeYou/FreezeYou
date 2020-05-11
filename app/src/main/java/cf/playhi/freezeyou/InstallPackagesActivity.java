@@ -424,6 +424,12 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                             finish();
                                         }
                                     })
+                                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                        @Override
+                                        public void onCancel(DialogInterface dialog) {
+                                            showInstallDialog(progressDialog, install, alertDialogMessage, apkFilePath, packageUri, fromPkgLabel, fromPkgName, processedPackageInfo);
+                                        }
+                                    })
                                     .create().show();
                         } else {
                             if (install == 1) {
