@@ -111,6 +111,7 @@ final class SettingsUtils {
             case "notificationBarFreezeImmediately":
             case "showInRecents":
             case "notAllowInstallWhenIsObsd":
+            case "createQuickFUFNotiAfterUnfrozen":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, true));
                 break;
             case "organizationName":

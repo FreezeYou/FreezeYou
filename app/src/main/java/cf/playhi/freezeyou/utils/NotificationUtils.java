@@ -22,7 +22,7 @@ import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabe
 public final class NotificationUtils {
 
     @SuppressLint("ApplySharedPref")
-    public static void createNotification(Context context, String pkgName, int iconResId, Bitmap bitmap) {
+    public static void createFUFQuickNotification(Context context, String pkgName, int iconResId, Bitmap bitmap) {
 
         AppPreferences preferenceManager = new AppPreferences(context);
         boolean notificationBarFreezeImmediately = preferenceManager.getBoolean("notificationBarFreezeImmediately", true);

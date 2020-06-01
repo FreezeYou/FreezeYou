@@ -13,14 +13,11 @@ import net.grandcentrix.tray.AppPreferences;
 import java.io.File;
 import java.io.IOException;
 
-import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.FileUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
-import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
-import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
-import static cf.playhi.freezeyou.utils.NotificationUtils.createNotification;
+import static cf.playhi.freezeyou.utils.FUFUtils.checkAndCreateFUFQuickNotification;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkRootFrozen;
 
@@ -80,16 +77,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
             PackageManager pm = context.getPackageManager();
             for (String aPkgName : strings) {
                 if (!checkFrozenStatus(context, aPkgName, pm)) {
-                    createNotification(context, aPkgName,
-                            R.drawable.ic_notification,
-                            getBitmapFromDrawable(
-                                    getApplicationIcon(
-                                            context, aPkgName,
-                                            ApplicationInfoUtils.
-                                                    getApplicationInfoFromPkgName(aPkgName, context),
-                                            false)
-                            )
-                    );
+                    checkAndCreateFUFQuickNotification(context, aPkgName);
                 }
             }
         }
@@ -100,22 +88,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
             PackageManager pm = context.getPackageManager();
             for (String aPkgName : oldNotifyings) {
                 if (!checkFrozenStatus(context, aPkgName, pm)) {
-                    createNotification(
-                            context,
-                            aPkgName,
-                            R.drawable.ic_notification,
-                            getBitmapFromDrawable(
-                                    getApplicationIcon(
-                                            context,
-                                            aPkgName,
-                                            ApplicationInfoUtils
-                                                    .getApplicationInfoFromPkgName(
-                                                            aPkgName,
-                                                            context
-                                                    ),
-                                            false)
-                            )
-                    );
+                    checkAndCreateFUFQuickNotification(context, aPkgName);
                 }
             }
             sharedPreferences.edit().putString("notifying", "").apply();

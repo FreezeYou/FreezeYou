@@ -1177,11 +1177,7 @@ public class Main extends FreezeYouBaseActivity {
         isGridMode = "grid".equals(sharedPref.getString("mainActivityPattern", "default"));
         if (mMainActivityAppListFragment == null) {
             mMainActivityAppListFragment = new MainActivityAppListFragment();
-            if (isGridMode) {
-                mMainActivityAppListFragment.setUseGridMode(true);
-            } else {
-                mMainActivityAppListFragment.setUseGridMode(false);
-            }
+            mMainActivityAppListFragment.setUseGridMode(isGridMode);
             mMainActivityAppListFragment.setShowListViewDivider(
                     sharedPref.getBoolean("displayListDivider", false)
             );

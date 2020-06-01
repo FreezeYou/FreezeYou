@@ -89,6 +89,11 @@
         <PreferenceScreen android:title="@string/freezeAUF">
             <CheckBoxPreference
                 android:defaultValue="true"
+                android:key="createQuickFUFNotiAfterUnfrozen"
+                android:summary="@string/effectNextCreate"
+                android:title="@string/createQuickFUFNotiAfterUnfrozen" />
+            <CheckBoxPreference
+                android:defaultValue="true"
                 android:key="notificationBarFreezeImmediately"
                 android:summary="@string/effectNextCreate"
                 android:title="@string/notificationBarFreezeImmediately" />

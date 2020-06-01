@@ -31,7 +31,7 @@ import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
-import static cf.playhi.freezeyou.utils.NotificationUtils.createNotification;
+import static cf.playhi.freezeyou.utils.NotificationUtils.createFUFQuickNotification;
 import static cf.playhi.freezeyou.utils.NotificationUtils.deleteNotification;
 import static cf.playhi.freezeyou.utils.ProcessUtils.destroyProcess;
 import static cf.playhi.freezeyou.utils.ServiceUtils.startService;
@@ -88,7 +88,7 @@ public final class FUFUtils {
             sendStatusChangedBroadcast(context);
             if (enable) {
                 onUFApplications(context, pkgName);
-                createNotification(context, pkgName, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, pkgName, getApplicationInfoFromPkgName(pkgName, context), false)));
+                checkAndCreateFUFQuickNotification(context, pkgName);
                 if (askRun) {
                     askRun(context, pkgName, target, tasks, runImmediately, activity, finish);
                 }
@@ -241,7 +241,7 @@ public final class FUFUtils {
                     } else {
                         for (String aPkgNameList : pkgNameList) {
                             onUFApplications(context, aPkgNameList);
-                            createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, getApplicationInfoFromPkgName(aPkgNameList, context), false)));
+                            checkAndCreateFUFQuickNotification(context, aPkgNameList);
                         }
                     }
                     if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
@@ -293,7 +293,7 @@ public final class FUFUtils {
                             if (getDevicePolicyManager(context).setApplicationHidden(
                                     DeviceAdminReceiver.getComponentName(context), aPkgNameList, false)) {
                                 onUFApplications(context, aPkgNameList);
-                                createNotification(context, aPkgNameList, R.drawable.ic_notification, getBitmapFromDrawable(getApplicationIcon(context, aPkgNameList, getApplicationInfoFromPkgName(aPkgNameList, context), false)));
+                                checkAndCreateFUFQuickNotification(context, aPkgNameList);
                             } else {
                                 showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
                             }
@@ -454,4 +454,22 @@ public final class FUFUtils {
         }
         return hasPermission && value == 0;
     }
+
+    public static void checkAndCreateFUFQuickNotification(Context context, String pkgName) {
+        if (new AppPreferences(context)
+                .getBoolean("createQuickFUFNotiAfterUnfrozen", true)) {
+            createFUFQuickNotification(
+                    context, pkgName, R.drawable.ic_notification,
+                    getBitmapFromDrawable(
+                            getApplicationIcon(
+                                    context,
+                                    pkgName,
+                                    getApplicationInfoFromPkgName(pkgName, context),
+                                    false
+                            )
+                    )
+            );
+        }
+    }
+
 }
