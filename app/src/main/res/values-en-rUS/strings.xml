@@ -352,6 +352,7 @@
     <string name="jumpToSysInstaller">Go to system installer</string>
     <string name="displayListDivider">Display list divider</string>
     <string name="appearance">Appearance</string>
+    <string name="createQuickFUFNotiAfterUnfrozen">Create quick freeze notification after unfrozen</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>

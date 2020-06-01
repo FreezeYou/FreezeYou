@@ -352,6 +352,7 @@
     <string name="jumpToSysInstaller">转至系统安装器</string>
     <string name="displayListDivider">显示列表的分割线</string>
     <string name="appearance">外观</string>
+    <string name="createQuickFUFNotiAfterUnfrozen">解冻后创建相应的快捷通知</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
