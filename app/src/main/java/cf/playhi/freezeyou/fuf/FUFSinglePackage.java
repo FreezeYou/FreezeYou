@@ -7,7 +7,6 @@ import cf.playhi.freezeyou.DeviceAdminReceiver;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.ProcessUtils;
-import cf.playhi.freezeyou.utils.Support;
 
 public class FUFSinglePackage {
 
@@ -56,11 +55,6 @@ public class FUFSinglePackage {
      */
     public static final int API_FREEZEYOU_ROOT_UNHIDE_HIDE = 3;
 
-    /**
-     * 使用 Island (DELEGATION_PACKAGE_ACCESS)
-     */
-    public static final int API_ISLAND_DELEGATION_PACKAGE_ACCESS = 4;
-
     public FUFSinglePackage(Context context) {
         this.mContext = context;
     }
@@ -91,9 +85,6 @@ public class FUFSinglePackage {
                 break;
             case API_FREEZEYOU_ROOT_UNHIDE_HIDE:
                 returnCode = pureExecuteAPIRootAction(true);
-                break;
-            case API_ISLAND_DELEGATION_PACKAGE_ACCESS:
-                returnCode = pureExecuteAPIDelegationAction();
                 break;
             default:
                 returnCode = ERROR_NO_SUCH_API_MODE;
@@ -184,31 +175,6 @@ public class FUFSinglePackage {
                 }
             }
         }
-        return returnValue;
-    }
-
-    private int pureExecuteAPIDelegationAction() {
-        if (mSinglePackageName == null)
-            return ERROR_SINGLE_PACKAGE_NAME_IS_NULL;
-
-        if (Build.VERSION.SDK_INT < 21)
-            return ERROR_DEVICE_ANDROID_VERSION_TOO_LOW;
-
-        if (!Support.checkAndRequestIslandPermission(mContext))
-            return ERROR_NO_ISLAND_DELEGATION_PERMISSION;
-
-        int returnValue = ERROR_OTHER;
-        boolean hidden = mActionMode == ACTION_MODE_FREEZE;
-
-        if ((!"cf.playhi.freezeyou".equals(mSinglePackageName))) {
-            if (DevicePolicyManagerUtils.getDevicePolicyManager(mContext).setApplicationHidden(
-                    DeviceAdminReceiver.getComponentName(mContext), mSinglePackageName, hidden)) {
-                returnValue = ERROR_NO_ERROR_SUCCESS;
-            } else {
-                returnValue = ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM;
-            }
-        }
-
         return returnValue;
     }
 

@@ -6,7 +6,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.RestrictionsManager;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -16,7 +15,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
-import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Base64;
@@ -27,11 +25,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 
-import androidx.annotation.RequiresApi;
-
 import net.grandcentrix.tray.AppPreferences;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -388,27 +383,6 @@ public final class Support {
             default:
                 return Locale.getDefault();
         }
-    }
-
-    // 修改自 https://island.oasisfeng.com/api
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    static public boolean checkAndRequestIslandPermission(Context context) {
-        final String TYPE_DELEGATION = "com.oasisfeng.island.delegation";
-        final String DELEGATION_APP_OPS = "-island-delegation-app-ops";
-        final String DELEGATION_PACKAGE_ACCESS = "delegation-package-access";
-
-        final RestrictionsManager rm = (RestrictionsManager) context.getSystemService(Context.RESTRICTIONS_SERVICE);
-        if (rm != null && rm.hasRestrictionsProvider()) { // Otherwise, current user is not managed by Island or the version of Island is too low.
-            final String[] delegations = rm.getApplicationRestrictions().getStringArray(TYPE_DELEGATION);
-            if (delegations == null || !Arrays.asList(delegations).contains(DELEGATION_PACKAGE_ACCESS)) {
-                final PersistableBundle request = new PersistableBundle();
-                request.putString(RestrictionsManager.REQUEST_KEY_DATA, DELEGATION_PACKAGE_ACCESS);
-                rm.requestPermission(TYPE_DELEGATION, "cf.playhi.freezeyou.android.app-ops", request);
-            } else {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

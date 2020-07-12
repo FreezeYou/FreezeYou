@@ -53,10 +53,6 @@
         android:manageSpaceActivity=".SettingsActivity"
         android:supportsRtl="true">
 
-        <meta-data
-            android:name="com.oasisfeng.island.delegation"
-            android:value="delegation-package-access,-island-delegation-app-ops" /> <!--Island-->
-
         <activity
             android:name=".Main"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
