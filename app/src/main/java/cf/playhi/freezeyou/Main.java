@@ -176,7 +176,7 @@ public class Main extends FreezeYouBaseActivity {
         if (sharedPref.getBoolean("saveOnClickFunctionStatus", false)) {
             appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", APPListViewOnClickMode_chooseAction);
         }
-        if (sharedPref.getBoolean("saveSortMethodStatus", false)) {
+        if (sharedPref.getBoolean("saveSortMethodStatus", true)) {
             currentSortRule = sharedPref.getInt("sortMethodStatus", SORT_BY_DEFAULT);
         }
     }
@@ -1149,7 +1149,7 @@ public class Main extends FreezeYouBaseActivity {
         if (sharedPref.getBoolean("saveOnClickFunctionStatus", false)) {
             appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", APPListViewOnClickMode_chooseAction);
         }
-        if (sharedPref.getBoolean("saveSortMethodStatus", false)) {
+        if (sharedPref.getBoolean("saveSortMethodStatus", true)) {
             currentSortRule = sharedPref.getInt("sortMethodStatus", SORT_BY_DEFAULT);
         }
         if (!sharedPref.getBoolean("noCaution", false)) {
@@ -1424,7 +1424,7 @@ public class Main extends FreezeYouBaseActivity {
 
     private void saveSortMethodStatus(int status) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if (sharedPreferences.getBoolean("saveSortMethodStatus", false)) {
+        if (sharedPreferences.getBoolean("saveSortMethodStatus", true)) {
             sharedPreferences.edit().putInt("sortMethodStatus", status).apply();
         }
     }

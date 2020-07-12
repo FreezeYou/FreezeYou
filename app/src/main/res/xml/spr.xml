@@ -20,7 +20,7 @@
             android:key="saveOnClickFunctionStatus"
             android:title="@string/saveOnClickFunctionStatus" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="saveSortMethodStatus"
             android:title="@string/saveSortMethodStatus" />
         <CheckBoxPreference

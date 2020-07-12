@@ -132,7 +132,7 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
             );
             generalSettingsBooleanJSONObject.put(
                     "saveSortMethodStatus",
-                    convertSharedPreference(defSP, "saveSortMethodStatus", false)
+                    convertSharedPreference(defSP, "saveSortMethodStatus", true)
             );
             generalSettingsBooleanJSONObject.put(
                     "cacheApplicationsIcons",
