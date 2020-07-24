@@ -416,5 +416,8 @@
         <item>ROOT（HIDE模式）</item>
         <item>ROOT（DISABLE模式）</item>
         <item>遺留的（自動DPM或DISABLE模式）</item>
+        <item>系统应用（DISABLE模式）</item>
+        <item>系统应用（DISABLE_USER模式）</item>
+        <item>系统应用（DISABLE_UNTIL_USED模式）</item>
     </string-array>
 </resources>
