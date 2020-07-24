@@ -1,6 +1,7 @@
 package cf.playhi.freezeyou.fuf;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
 
 import cf.playhi.freezeyou.DeviceAdminReceiver;
@@ -10,7 +11,7 @@ import cf.playhi.freezeyou.utils.ProcessUtils;
 
 public class FUFSinglePackage {
 
-    private Context mContext;
+    private final Context mContext;
 
     private String mSinglePackageName;
 
@@ -21,6 +22,7 @@ public class FUFSinglePackage {
     public static final int ACTION_MODE_FREEZE = 0;
     public static final int ACTION_MODE_UNFREEZE = 1;
 
+    public static final int ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT = 1;
     public static final int ERROR_NO_ERROR_SUCCESS = 0;
     public static final int ERROR_OTHER = -1;
     public static final int ERROR_SINGLE_PACKAGE_NAME_IS_NULL = -2;
@@ -29,7 +31,6 @@ public class FUFSinglePackage {
     public static final int ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM = -5;
     public static final int ERROR_NOT_DEVICE_POLICY_MANAGER = -6;
     public static final int ERROR_NO_SUCH_API_MODE = -7;
-    public static final int ERROR_NO_ISLAND_DELEGATION_PERMISSION = -8;
 
     /**
      * 使用 FreezeYou 的 自动（免ROOT(DPM)/ROOT(DISABLE)） 模式
@@ -54,6 +55,21 @@ public class FUFSinglePackage {
      * 使用 FreezeYou 的 ROOT(UNHIDE) 模式
      */
     public static final int API_FREEZEYOU_ROOT_UNHIDE_HIDE = 3;
+
+    /**
+     * 使用 FreezeYou 的 System App (DISABLE_UNTIL_USED) 模式
+     */
+    public static final int API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED = 4;
+
+    /**
+     * 使用 FreezeYou 的 System App (DISABLE_USER) 模式
+     */
+    public static final int API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER = 5;
+
+    /**
+     * 使用 FreezeYou 的 System App (DISABLE) 模式
+     */
+    public static final int API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE = 6;
 
     public FUFSinglePackage(Context context) {
         this.mContext = context;
@@ -85,6 +101,15 @@ public class FUFSinglePackage {
                 break;
             case API_FREEZEYOU_ROOT_UNHIDE_HIDE:
                 returnCode = pureExecuteAPIRootAction(true);
+                break;
+            case API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE:
+                returnCode = pureExecuteAPISystemAppDisabledAction();
+                break;
+            case API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED:
+                returnCode = pureExecuteAPISystemAppDisabledUntilUsedAction();
+                break;
+            case API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER:
+                returnCode = pureExecuteAPISystemAppDisabledUserAction();
                 break;
             default:
                 returnCode = ERROR_NO_SUCH_API_MODE;
@@ -175,6 +200,72 @@ public class FUFSinglePackage {
                 }
             }
         }
+        return returnValue;
+    }
+
+    private int pureExecuteAPISystemAppDisabledUntilUsedAction() {
+        if (mSinglePackageName == null)
+            return ERROR_SINGLE_PACKAGE_NAME_IS_NULL;
+
+        if (Build.VERSION.SDK_INT < 18)
+            return ERROR_DEVICE_ANDROID_VERSION_TOO_LOW;
+
+        int returnValue = ERROR_OTHER;
+        boolean freeze = mActionMode == ACTION_MODE_FREEZE;
+
+        if ((!"cf.playhi.freezeyou".equals(mSinglePackageName))) {
+            mContext.getPackageManager().setApplicationEnabledSetting(
+                    mSinglePackageName,
+                    freeze ?
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED :
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    0
+            );
+            returnValue = ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT;
+        }
+
+        return returnValue;
+    }
+
+    private int pureExecuteAPISystemAppDisabledUserAction() {
+        if (mSinglePackageName == null)
+            return ERROR_SINGLE_PACKAGE_NAME_IS_NULL;
+
+        int returnValue = ERROR_OTHER;
+        boolean freeze = mActionMode == ACTION_MODE_FREEZE;
+
+        if ((!"cf.playhi.freezeyou".equals(mSinglePackageName))) {
+            mContext.getPackageManager().setApplicationEnabledSetting(
+                    mSinglePackageName,
+                    freeze ?
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER :
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    0
+            );
+            returnValue = ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT;
+        }
+
+        return returnValue;
+    }
+
+    private int pureExecuteAPISystemAppDisabledAction() {
+        if (mSinglePackageName == null)
+            return ERROR_SINGLE_PACKAGE_NAME_IS_NULL;
+
+        int returnValue = ERROR_OTHER;
+        boolean freeze = mActionMode == ACTION_MODE_FREEZE;
+
+        if ((!"cf.playhi.freezeyou".equals(mSinglePackageName))) {
+            mContext.getPackageManager().setApplicationEnabledSetting(
+                    mSinglePackageName,
+                    freeze ?
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED :
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    0
+            );
+            returnValue = ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT;
+        }
+
         return returnValue;
     }
 

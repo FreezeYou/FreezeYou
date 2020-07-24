@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
@@ -26,6 +27,7 @@ import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_UNFREEZE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ERROR_SUCCESS;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
@@ -84,7 +86,7 @@ public final class FUFUtils {
                                 ACTION_MODE_FREEZE
                 );
 
-        if (result == ERROR_NO_ERROR_SUCCESS) {
+        if (result == ERROR_NO_ERROR_SUCCESS || result == ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT) {
             sendStatusChangedBroadcast(context);
             if (enable) {
                 onUFApplications(context, pkgName);
@@ -413,7 +415,14 @@ public final class FUFUtils {
         } catch (Exception e) {
             tmp = -1;
         }
-        return ((tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) || (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED));
+        return (
+                (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) ||
+                        (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) ||
+                        (
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 &&
+                                        (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED)
+                        )
+        );
     }
 
     /**
@@ -470,6 +479,10 @@ public final class FUFUtils {
                     )
             );
         }
+    }
+
+    public static boolean isSystemApp(Context context) {
+        return (context.getApplicationInfo().flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM;
     }
 
 }

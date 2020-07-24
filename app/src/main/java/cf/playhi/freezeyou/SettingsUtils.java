@@ -20,12 +20,16 @@ import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.openDevicePolicyManager;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkRootPermission;
+import static cf.playhi.freezeyou.utils.FUFUtils.isSystemApp;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 final class SettingsUtils {
@@ -158,6 +162,13 @@ final class SettingsUtils {
                         break;
                     case API_FREEZEYOU_LEGACY_AUTO:
                         if (!(checkRootPermission() || isDeviceOwner(context))) {
+                            showToast(context, R.string.insufficientPermission);
+                        }
+                        break;
+                    case API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED:
+                    case API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER:
+                    case API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE:
+                        if (!(isSystemApp(context))) {
                             showToast(context, R.string.insufficientPermission);
                         }
                         break;
