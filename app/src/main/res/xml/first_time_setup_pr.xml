@@ -38,6 +38,15 @@
             android:title="@string/lesserToast" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/freezeAUF">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/selectFUFModeSelection"
+            android:entryValues="@array/selectFUFModeSelectionValues"
+            android:key="selectFUFMode"
+            android:title="@string/selectFUFMode" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/notificationBar">
         <CheckBoxPreference
             android:defaultValue="true"

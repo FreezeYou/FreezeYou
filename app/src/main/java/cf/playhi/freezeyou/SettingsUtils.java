@@ -178,6 +178,7 @@ final class SettingsUtils {
                 }
                 break;
             case "displayListDivider":
+            case "mainActivityPattern":
                 showToast(activity, R.string.willTakeEffectsNextLaunch);
                 break;
             default:
