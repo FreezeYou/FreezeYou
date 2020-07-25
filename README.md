@@ -1,4 +1,4 @@
-# FreezeYou  [![GitHub license](https://img.shields.io/github/license/FreezeYou/FreezeYou.svg)](https://github.com/FreezeYou/FreezeYou/blob/master/LICENSE) [![Maintainability](https://api.codeclimate.com/v1/badges/727a63c38deeadb0c468/maintainability)](https://codeclimate.com/github/Playhi/FreezeYou/maintainability) [![Build Status](https://travis-ci.org/FreezeYou/FreezeYou.svg?branch=master)](https://travis-ci.org/FreezeYou/FreezeYou) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/freezeyou/localized.svg)](https://crowdin.com/project/freezeyou) [![GitHub release](https://img.shields.io/github/v/release/FreezeYou/FreezeYou.svg)](https://github.com/FreezeYou/FreezeYou/releases)
+# FreezeYou  [![GitHub license](https://img.shields.io/github/license/FreezeYou/FreezeYou.svg)](https://github.com/FreezeYou/FreezeYou/blob/master/LICENSE) [![Maintainability](https://api.codeclimate.com/v1/badges/727a63c38deeadb0c468/maintainability)](https://codeclimate.com/github/Playhi/FreezeYou/maintainability) [![Build Status](https://travis-ci.org/FreezeYou/FreezeYou.svg?branch=master)](https://travis-ci.org/FreezeYou/FreezeYou) <!--[![Crowdin](https://d322cqt584bo4o.cloudfront.net/freezeyou/localized.svg)](https://crowdin.com/project/freezeyou) -->[![GitHub release](https://img.shields.io/github/v/release/FreezeYou/FreezeYou.svg)](https://github.com/FreezeYou/FreezeYou/releases)
 ###### _Github Readme 由于部分地区难以访问将不会经常更新了，欢迎移步_ [官方主页 - FreezeYou](https://www.freezeyou.net/) | [官方主页 - 自冻](https://zidon.net/) | [官方主页 - 旧版](https://freezeyou.playhi.net/)
 ## 介绍 Introduction
 * 冻结，轻量级的应用程序（免ROOT方法请点[这里](https://zidon.net/zh-CN/guide/enable-mroot.html)或[这里](https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8)或[这里](https://freezeyou.playhi.net/MRootUse.html)）
@@ -18,6 +18,6 @@
 * 直接访问 [Crowdin(https://crwd.in/freezeyou)](https://crwd.in/freezeyou) 参与翻译即可，感谢您的贡献！👍
 -->
 ## OEM合作 OEM cooperation
-* 邮箱：<contact@zidon.net>
+* 邮箱：<contact@zidon.net> 或 <hiplayhi@playhi.net> 或 <qt_playhi@163.com>
 ## 联系我们 Contact Us
-* 邮箱：<contact@zidon.net>
+* 邮箱：<contact@zidon.net> 或 <hiplayhi@playhi.net> 或 <qt_playhi@163.com>
