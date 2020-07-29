@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/list_menu_selectAll"
-        android:showAsAction="never"
+        android:showAsAction="ifRoom"
         android:title="@string/selectAll" />
     <item
         android:id="@+id/list_menu_selectUnselected"
-        android:showAsAction="never"
+        android:showAsAction="ifRoom"
         android:title="@string/selectUnselected" />
     <item
         android:id="@+id/list_menu_freezeImmediately"
