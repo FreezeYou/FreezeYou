@@ -134,10 +134,11 @@ public final class FUFUtils {
         if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
             currentPackage = MainApplication.getCurrentPackage();
         }
+        if (currentPackage == null) currentPackage = " ";
         if ((!"cf.playhi.freezeyou".equals(pkgName))) {
             if (isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, pkgName)) {
                 checkAndShowAppStillNotifyingToast(context, pkgName);
-            } else if (pkgName.equals(currentPackage)) {
+            } else if (currentPackage.equals(pkgName)) {
                 checkAndShowAppIsForegroundApplicationToast(context, pkgName);
             } else {
                 FUFSinglePackage fufSinglePackage = new FUFSinglePackage(context);
@@ -187,6 +188,7 @@ public final class FUFUtils {
             if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
                 currentPackage = MainApplication.getCurrentPackage();
             }
+            if (currentPackage == null) currentPackage = " ";
             Process process = null;
             DataOutputStream outputStream = null;
             try {
@@ -272,6 +274,7 @@ public final class FUFUtils {
             if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
                 currentPackage = MainApplication.getCurrentPackage();
             }
+            if (currentPackage == null) currentPackage = " ";
             for (String aPkgNameList : pkgNameList) {
                 try {
                     if (freeze) {
