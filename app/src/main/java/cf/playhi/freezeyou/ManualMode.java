@@ -1,131 +1,70 @@
 package cf.playhi.freezeyou;
 
-import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.fuf.FUFSinglePackage;
 
+import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
-import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
-import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
-import static cf.playhi.freezeyou.utils.FUFUtils.processAction;
-import static cf.playhi.freezeyou.utils.FUFUtils.processRootAction;
-import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class ManualMode extends FreezeYouBaseActivity {
+
+    static int selectedMode = -1;
+    static int selectedModeCheckedPosition = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manualmode);
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayShowHomeEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        final EditText packageNameEditText = findViewById(R.id.packageNameEditText);
-        Button disableMRootDPM = findViewById(R.id.disable_MRoot_DPM);
-        Button disableRootDisable = findViewById(R.id.disable_Root_disable);
-        Button disableRootHide = findViewById(R.id.disable_Root_hide);
-        Button enableMRootDPM = findViewById(R.id.enable_MRoot_DPM);
-        Button enableRootEnable = findViewById(R.id.enable_Root_enable);
-        Button enableRootUnhide = findViewById(R.id.enable_Root_unhide);
+        processActionBar(getActionBar());
+
+        final EditText packageNameEditText = findViewById(R.id.manualMode_packageNameEditText);
+        final Button selectFUFModeButton = findViewById(R.id.manualMode_selectFUFMode_button);
+        final Button disableButton = findViewById(R.id.manualMode_disable_button);
+        final Button enableButton = findViewById(R.id.manualMode_enable_button);
         final Context context = getApplicationContext();
-        disableMRootDPM.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                processMRootOperation(packageNameEditText.getText().toString(), context, true);
-            }
-        });
-        enableMRootDPM.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                processMRootOperation(packageNameEditText.getText().toString(), context, false);
-            }
-        });
-        disableRootHide.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                processAction(
-                        packageNameEditText.getText().toString(),
-                        null,
-                        null,
-                        context,
-                        false,
-                        false,
-                        false,
-                        null,
-                        false,
-                        API_FREEZEYOU_ROOT_UNHIDE_HIDE
-                );
-            }
-        });
-        enableRootUnhide.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                processAction(
-                        packageNameEditText.getText().toString(),
-                        null,
-                        null,
-                        context,
-                        true,
-                        false,
-                        false,
-                        null,
-                        false,
-                        API_FREEZEYOU_ROOT_UNHIDE_HIDE
-                );
-            }
-        });
-        disableRootDisable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                processRootAction(
-                        packageNameEditText.getText().toString(),
-                        null,
-                        null,
-                        context,
-                        false,
-                        false,
-                        false,
-                        null,
-                        false);
-            }
-        });
-        enableRootEnable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                processRootAction(
-                        packageNameEditText.getText().toString(),
-                        null,
-                        null,
-                        context,
-                        true,
-                        false,
-                        false,
-                        null,
-                        false);
-            }
-        });
+
+        String[][] modeSelections = {
+                getResources().getStringArray(R.array.selectFUFModeSelection),
+                getResources().getStringArray(R.array.selectFUFModeSelectionValues)
+        };
+
+        selectFUFModeButton.setOnClickListener(view ->
+                new AlertDialog.Builder(ManualMode.this)
+                        .setTitle(R.string.selectFUFMode)
+                        .setSingleChoiceItems(
+                                modeSelections[0],
+                                selectedModeCheckedPosition,
+                                (dialog, which) -> {
+                                    selectedModeCheckedPosition = which;
+                                    selectedMode = Integer.parseInt(modeSelections[1][which]);
+                                    selectFUFModeButton.setText(modeSelections[0][which]);
+                                    dialog.dismiss();
+                                }
+                        )
+                        .setNegativeButton(R.string.cancel, null)
+                        .show()
+        );
+        disableButton.setOnClickListener(view ->
+                processFUFOperation(packageNameEditText.getText().toString(), context, true)
+        );
+        enableButton.setOnClickListener(view ->
+                processFUFOperation(packageNameEditText.getText().toString(), context, false)
+        );
     }
 
-    private void processMRootOperation(String pkgName, Context context, boolean hidden) {
-        if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
-            if (getDevicePolicyManager(context).setApplicationHidden(
-                    DeviceAdminReceiver.getComponentName(context), pkgName, hidden)) {
-                showToast(context, R.string.success);
-            } else {
-                showToast(context, R.string.failed);
-            }
-        } else {
-            showToast(context, R.string.failed);
-        }
+    private void processFUFOperation(String pkgName, Context context, boolean freeze) {
+        FUFSinglePackage fufSinglePackage = new FUFSinglePackage(context);
+        fufSinglePackage.setActionMode(
+                freeze ? FUFSinglePackage.ACTION_MODE_FREEZE : FUFSinglePackage.ACTION_MODE_UNFREEZE);
+        fufSinglePackage.setAPIMode(selectedMode);
+        fufSinglePackage.setSinglePackageName(pkgName);
+        fufSinglePackage.commit();
     }
 }
