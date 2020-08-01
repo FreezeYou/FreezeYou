@@ -25,10 +25,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="requested">Requested</string>
-    <string name="requestFailed">Failed to create request:</string>
+    <string name="requestFailed">Failed to create request: </string>
     <string name="createOneKeyFreezeShortcut">Onekey Freeze</string>
     <string name="executed">Executed</string>
-    <string name="exception">Exception:</string>
+    <string name="exception">Exception: </string>
     <string name="launch">Run</string>
     <string name="mayUnrooted">No root permission or no-root mode has not been enabled</string>
     <string name="mayUnrootedOrOtherEx">Permissions may not be granted, targets have been uninstalled, or other exceptions have occurred</string>
@@ -79,9 +79,9 @@
     <string name="createDisEnableShortCut">Create a freeze and unfreeze shortcut</string>
     <string name="iconAEntry">Icons and Entrances</string>
     <string name="dialEntry">Use the dial pad to enter</string>
-    <string name="dialEntry_Ex">*#* #373393968 #*#* (*#* #FreezeYou #*#*) (Most Android devices support)</string>
+    <string name="dialEntry_Ex">*#*#373393968#*#* (*#*#FreezeYou#*#*) (Most Android devices support)</string>
     <string name="ciFinishedToast">Submitted, please wait for the launcher to refresh or restart the launcher.</string>
-    <string name="ifUploadCrashLog">Detected an exception Log that has occurred but has not been committed, do you want to upload this log?</string>
+    <string name="ifUploadCrashLog">Detected an exception log that has occurred but has not been committed, do you want to upload this log?</string>
     <string name="search">Search</string>
     <string name="launchMode">Startup Mode</string>
     <string name="freezeImmediately">Freeze Immediately</string>
@@ -91,7 +91,7 @@
     <string name="onClickFunction">Click Function</string>
     <string name="chooseAction">Choose Action</string>
     <string name="autoUFOrFreeze">Automatic Freeze and Unfreeze</string>
-    <string name="UFAndRun">Unfreeze And Run</string>
+    <string name="UFAndRun">Unfreeze and Run</string>
     <string name="autoUFOrFreezeAndRun">Automatic Freeze or Unfreeze and Run</string>
     <string name="freezeCompleted">Frozen</string>
     <string name="UFCompleted">Unfrozen</string>
@@ -128,13 +128,13 @@
     <string name="freezeOnceQuit">Leave Freeze</string>
     <string name="needActiveAccessibilityService">Need to enable Accessibility Service</string>
     <string name="invalidArguments">Invalid parameters</string>
-    <string name="exceptionHC">An exception has occurred but the operation will continue:</string>
+    <string name="exceptionHC">An exception has occurred but the operation will continue: </string>
     <string name="plsConfirm">Please Confirm</string>
     <string name="removeNoRootCaution">Do you really want to release the no-root mode permission? \nTo avoid causing unnecessary trouble, please unfreeze all frozen applications before releasing!</string>
     <string name="noRootNotActivated">Oops! The no-root mode has not been enabled now!</string>
     <string name="faq">FAQ</string>
     <string name="executeImmediately">Execute</string>
-    <string name="oneKeyLockScreen">LockScreen</string>
+    <string name="oneKeyLockScreen">Lock Screen</string>
     <string name="mustContainColon">Must include : to distinguish hours and minutes</string>
     <string name="scheduledTasks">Scheduled tasks</string>
     <string name="add">Add</string>
@@ -221,14 +221,14 @@
     <string name="insufficientPermission">Insufficient permissions</string>
     <string name="onlyUnfreeze">Only Unfreeze</string>
     <string name="unknown">Unknown</string>
-    <string name="installPackage_colon">Install Package:</string>
-    <string name="requestFromPackage_colon">From Package:</string>
-    <string name="application_colon">Application:</string>
-    <string name="pkgName_colon">Package Name:</string>
-    <string name="version_colon">Version:</string>
+    <string name="installPackage_colon">Install Package: </string>
+    <string name="requestFromPackage_colon">From Package: </string>
+    <string name="application_colon">Application: </string>
+    <string name="pkgName_colon">Package Name: </string>
+    <string name="version_colon">Version: </string>
     <string name="whetherAllow">Allow?</string>
-    <string name="cannotInstall_colon">Cannot install:</string>
-    <string name="uninstallPackage_colon">Uninstall Package:</string>
+    <string name="cannotInstall_colon">Cannot install: </string>
+    <string name="uninstallPackage_colon">Uninstall Package: </string>
     <string name="install">Install</string>
     <string name="installing">Installing</string>
     <string name="uninstalling">Uninstalling</string>
@@ -253,10 +253,10 @@
     <string name="enableInstallPkgFunc">Enable install packages function</string>
     <string name="allow">Allow</string>
     <string name="reject">Reject</string>
-    <string name="execute_colon">Execute:</string>
-    <string name="target_colon">Target:</string>
+    <string name="execute_colon">Execute: </string>
+    <string name="target_colon">Target: </string>
     <string name="alwaysAllow_name">Always allow %1$s</string>
-    <string name="existed_colon">Existed:%1$s</string>
+    <string name="existed_colon">Existed: %1$s</string>
     <string name="manageUriAutoAllow">Manage URI Request Whitelist</string>
     <string name="manageIpaAutoAllow">Manage Request Install Applications Whitelist</string>
     <string name="delAllCache">Clear all Caches</string>
@@ -396,7 +396,7 @@
     <string-array name="triggers">
         <item>On Screen On</item>
         <item>On Screen Off</item>
-        <item>When Applications Open</item>
+        <item>When Open Applications</item>
         <item>When Leave Applications</item>
         <item>When Unfreeze Applications</item>
         <item>When Freeze Applications</item>
@@ -413,9 +413,9 @@
     </string-array>
     <string-array name="selectFUFModeSelection">
         <item>No-root (DPM Mode)</item>
-        <item>ROOT(Hide Mode)</item>
-        <item>ROOT(Disable Mode)</item>
-        <item>Legacy(Auto DPM or Disable Mode)</item>
+        <item>ROOT (Hide Mode)</item>
+        <item>ROOT (Disable Mode)</item>
+        <item>Legacy (Auto DPM or Disable Mode)</item>
         <item>系统应用（DISABLE模式）</item>
         <item>系统应用（DISABLE_USER模式）</item>
         <item>系统应用（DISABLE_UNTIL_USED模式）</item>
