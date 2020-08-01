@@ -31,6 +31,7 @@ public class FUFSinglePackage {
     public static final int ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM = -5;
     public static final int ERROR_NOT_DEVICE_POLICY_MANAGER = -6;
     public static final int ERROR_NO_SUCH_API_MODE = -7;
+    public static final int ERROR_NOT_SYSTEM_APP = -8;
 
     /**
      * 使用 FreezeYou 的 自动（免ROOT(DPM)/ROOT(DISABLE)） 模式
@@ -140,11 +141,11 @@ public class FUFSinglePackage {
         if (mSinglePackageName == null)
             return ERROR_SINGLE_PACKAGE_NAME_IS_NULL;
 
-        if (!DevicePolicyManagerUtils.isDeviceOwner(mContext))
-            return ERROR_NOT_DEVICE_POLICY_MANAGER;
-
         if (Build.VERSION.SDK_INT < 21)
             return ERROR_DEVICE_ANDROID_VERSION_TOO_LOW;
+
+        if (!DevicePolicyManagerUtils.isDeviceOwner(mContext))
+            return ERROR_NOT_DEVICE_POLICY_MANAGER;
 
         int returnValue = ERROR_OTHER;
         boolean hidden = mActionMode == ACTION_MODE_FREEZE;
@@ -210,6 +211,9 @@ public class FUFSinglePackage {
         if (Build.VERSION.SDK_INT < 18)
             return ERROR_DEVICE_ANDROID_VERSION_TOO_LOW;
 
+        if (!FUFUtils.isSystemApp(mContext))
+            return ERROR_NOT_SYSTEM_APP;
+
         int returnValue = ERROR_OTHER;
         boolean freeze = mActionMode == ACTION_MODE_FREEZE;
 
@@ -231,6 +235,9 @@ public class FUFSinglePackage {
         if (mSinglePackageName == null)
             return ERROR_SINGLE_PACKAGE_NAME_IS_NULL;
 
+        if (!FUFUtils.isSystemApp(mContext))
+            return ERROR_NOT_SYSTEM_APP;
+
         int returnValue = ERROR_OTHER;
         boolean freeze = mActionMode == ACTION_MODE_FREEZE;
 
@@ -251,6 +258,9 @@ public class FUFSinglePackage {
     private int pureExecuteAPISystemAppDisabledAction() {
         if (mSinglePackageName == null)
             return ERROR_SINGLE_PACKAGE_NAME_IS_NULL;
+
+        if (!FUFUtils.isSystemApp(mContext))
+            return ERROR_NOT_SYSTEM_APP;
 
         int returnValue = ERROR_OTHER;
         boolean freeze = mActionMode == ACTION_MODE_FREEZE;

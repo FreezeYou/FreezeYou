@@ -353,6 +353,14 @@
     <string name="displayListDivider">显示列表的分割线</string>
     <string name="appearance">外观</string>
     <string name="createQuickFUFNotiAfterUnfrozen">解冻后创建相应的快捷通知</string>
+    <string name="executionResult_colon_message">执行结果：%1$s</string>
+    <string name="unknownResult_probablySuccess">结果未知（可能成功）</string>
+    <string name="unknownError">未知错误</string>
+    <string name="packageNameIsNull">包名为空</string>
+    <string name="isNotDevicePolicyManager">无 DPM 权限</string>
+    <string name="noSuchApiMode">无该 API 模式</string>
+    <string name="executeFailedFromSystem">系统内部错误</string>
+    <string name="isNotSystemApp">非系统应用</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>

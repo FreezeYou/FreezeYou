@@ -3,11 +3,14 @@ package cf.playhi.freezeyou;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.fuf.FUFSinglePackage;
+import cf.playhi.freezeyou.utils.FUFUtils;
 
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
@@ -34,6 +37,29 @@ public class ManualMode extends FreezeYouBaseActivity {
                 getResources().getStringArray(R.array.selectFUFModeSelection),
                 getResources().getStringArray(R.array.selectFUFModeSelectionValues)
         };
+
+        packageNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 0) {
+                    disableButton.setEnabled(false);
+                    enableButton.setEnabled(false);
+                } else {
+                    disableButton.setEnabled(true);
+                    enableButton.setEnabled(true);
+                }
+            }
+        });
 
         selectFUFModeButton.setOnClickListener(view ->
                 new AlertDialog.Builder(ManualMode.this)
@@ -65,6 +91,7 @@ public class ManualMode extends FreezeYouBaseActivity {
                 freeze ? FUFSinglePackage.ACTION_MODE_FREEZE : FUFSinglePackage.ACTION_MODE_UNFREEZE);
         fufSinglePackage.setAPIMode(selectedMode);
         fufSinglePackage.setSinglePackageName(pkgName);
-        fufSinglePackage.commit();
+        FUFUtils.preProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                context, fufSinglePackage.commit(), true);
     }
 }

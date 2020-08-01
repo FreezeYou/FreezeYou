@@ -27,8 +27,16 @@ import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_UNFREEZE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_DEVICE_ANDROID_VERSION_TOO_LOW;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NOT_DEVICE_POLICY_MANAGER;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NOT_SYSTEM_APP;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ERROR_SUCCESS;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ROOT_PERMISSION;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_SUCH_API_MODE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_OTHER;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_SINGLE_PACKAGE_NAME_IS_NULL;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
@@ -40,6 +48,7 @@ import static cf.playhi.freezeyou.utils.ServiceUtils.startService;
 import static cf.playhi.freezeyou.utils.TasksUtils.onFApplications;
 import static cf.playhi.freezeyou.utils.TasksUtils.onUFApplications;
 import static cf.playhi.freezeyou.utils.TasksUtils.runTask;
+import static cf.playhi.freezeyou.utils.ToastUtils.showShortToast;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public final class FUFUtils {
@@ -486,6 +495,62 @@ public final class FUFUtils {
 
     public static boolean isSystemApp(Context context) {
         return (context.getApplicationInfo().flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM;
+    }
+
+    public static boolean preProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+            Context context, int resultCode, boolean showUnnecessaryToast) {
+        switch (resultCode) {
+            case ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT:
+                if (showUnnecessaryToast)
+                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                            context, context.getString(R.string.unknownResult_probablySuccess));
+                return true;
+            case ERROR_NO_ERROR_SUCCESS:
+                if (showUnnecessaryToast)
+                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                            context, context.getString(R.string.success));
+                return true;
+            case ERROR_SINGLE_PACKAGE_NAME_IS_NULL:
+                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                            context, context.getString(R.string.packageNameIsNull));
+                return false;
+            case ERROR_DEVICE_ANDROID_VERSION_TOO_LOW:
+                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                            context, context.getString(R.string.sysVerLow));
+                return false;
+            case ERROR_NO_ROOT_PERMISSION:
+                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                            context, context.getString(R.string.noRootPermission));
+                return false;
+            case ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM:
+                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                            context, context.getString(R.string.executeFailedFromSystem));
+                return false;
+            case ERROR_NOT_DEVICE_POLICY_MANAGER:
+                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                            context, context.getString(R.string.isNotDevicePolicyManager));
+                return false;
+            case ERROR_NO_SUCH_API_MODE:
+                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                            context, context.getString(R.string.noSuchApiMode));
+                return false;
+            case ERROR_NOT_SYSTEM_APP:
+                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                            context, context.getString(R.string.isNotSystemApp));
+                return false;
+            case ERROR_OTHER:
+            default:
+                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                            context, context.getString(R.string.unknownError));
+                return false;
+        }
+    }
+
+    private static void showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(Context context, String message) {
+        showShortToast(
+                context,
+                String.format(context.getString(R.string.executionResult_colon_message), message)
+        );
     }
 
 }

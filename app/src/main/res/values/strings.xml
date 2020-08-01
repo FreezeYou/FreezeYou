@@ -353,6 +353,14 @@
     <string name="displayListDivider">Display list divider</string>
     <string name="appearance">Appearance</string>
     <string name="createQuickFUFNotiAfterUnfrozen">Create quick freeze notification after unfrozen</string>
+    <string name="executionResult_colon_message">Execution result: %1$s</string>
+    <string name="unknownResult_probablySuccess">Unknown result (Probably success)</string>
+    <string name="unknownError">Unknown error</string>
+    <string name="packageNameIsNull">Package name is null</string>
+    <string name="isNotDevicePolicyManager">Is not device policy manager</string>
+    <string name="noSuchApiMode">No such api mode</string>
+    <string name="executeFailedFromSystem">Execute failed from system</string>
+    <string name="isNotSystemApp">Is not system app</string>
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>
@@ -493,9 +501,9 @@
         <item>ROOT (Hide Mode)</item>
         <item>ROOT (Disable Mode)</item>
         <item>Legacy (Auto DPM or Disable Mode)</item>
-        <item>系统应用（DISABLE模式）</item>
-        <item>系统应用（DISABLE_USER模式）</item>
-        <item>系统应用（DISABLE_UNTIL_USED模式）</item>
+        <item>System App (Disable Mode)</item>
+        <item>System App (Disable_User Mode)</item>
+        <item>System App (Disable_Until_Used Mode)</item>
     </string-array>
     <string-array name="selectFUFModeSelectionValues" translatable="false">
         <item>1</item>
