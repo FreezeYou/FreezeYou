@@ -361,6 +361,7 @@
     <string name="noSuchApiMode">无该 API 模式</string>
     <string name="executeFailedFromSystem">系统内部错误</string>
     <string name="isNotSystemApp">非系统应用</string>
+    <string name="telegramGroup_colon">电报群组：%1$s</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>

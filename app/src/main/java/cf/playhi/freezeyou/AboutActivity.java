@@ -2,11 +2,8 @@ package cf.playhi.freezeyou;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -69,103 +66,87 @@ public class AboutActivity extends FreezeYouBaseActivity {
 
         aboutListView.setAdapter(new ArrayAdapter<>(AboutActivity.this, android.R.layout.simple_list_item_1, aboutData));
 
-        aboutListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        requestOpenWebSite(activity, "https://zidon.net/zh-CN/guide/how-to-use.html");
-                        break;
-                    case 1:
-                        requestOpenWebSite(activity, "https://zidon.net/zh-CN/faq/");
-                        break;
-                    case 2:
-                        requestOpenWebSite(activity, "https://crwd.in/freezeyou");
-                        break;
-                    case 3:
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/thanks.html");
-                        break;
-                    case 4:
-                        requestOpenWebSite(activity, "https://zidon.net");
-                        break;
-                    case 5:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setMessage(
-                                String.format(getString(R.string.email_colon), "contact@zidon.net")
-                                        + System.getProperty("line.separator")
-                                        + String.format(getString(R.string.qqGroup_colon), "704086494")
-                        );
-                        builder.setTitle(R.string.contactUs);
-                        builder.setPositiveButton(R.string.okay, null);
-                        builder.setNeutralButton(R.string.addQQGroup, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                joinQQGroup(activity);
-                            }
-                        });
-                        builder.show();
-                        break;
-                    case 6:
-                        checkUpdate(activity);
-                        break;
-                    case 7:
-                        if (googleVersion) {
-                            requestOpenWebSite(activity, "https://freezeyou.playhi.net/ThirdPartyOpenSourceLicenses.html");
-                        } else {
-                            requestOpenDonateWebSite(activity);
-                        }
-                        break;
-                    case 8:
-                        if (googleVersion) {
-                            showToast(activity, "V" + getVersionName(activity) + "(" + getVersionCode(activity) + ")");
-                        } else {
-                            requestOpenWebSite(activity, "https://freezeyou.playhi.net/ThirdPartyOpenSourceLicenses.html");
-                        }
-                        break;
-                    case 9:
+        aboutListView.setOnItemClickListener((parent, view, position, id) -> {
+            switch (position) {
+                case 0:
+                    requestOpenWebSite(activity, "https://zidon.net/zh-CN/guide/how-to-use.html");
+                    break;
+                case 1:
+                    requestOpenWebSite(activity, "https://zidon.net/zh-CN/faq/");
+                    break;
+                case 2:
+                    requestOpenWebSite(activity, "https://crwd.in/freezeyou");
+                    break;
+                case 3:
+                    requestOpenWebSite(activity, "https://freezeyou.playhi.net/thanks.html");
+                    break;
+                case 4:
+                    requestOpenWebSite(activity, "https://zidon.net");
+                    break;
+                case 5:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setMessage(
+                            String.format(getString(R.string.email_colon), "contact@zidon.net")
+                                    + System.getProperty("line.separator")
+                                    + String.format(getString(R.string.telegramGroup_colon), "t.me/FreezeYou")
+                                    + System.getProperty("line.separator")
+                                    + String.format(getString(R.string.qqGroup_colon), "704086494")
+                    );
+                    builder.setTitle(R.string.contactUs);
+                    builder.setPositiveButton(R.string.okay, null);
+                    builder.setNeutralButton(
+                            R.string.addQQGroup, (dialog, which) -> joinQQGroup(activity)
+                    );
+                    builder.show();
+                    break;
+                case 6:
+                    checkUpdate(activity);
+                    break;
+                case 7:
+                    if (googleVersion) {
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/ThirdPartyOpenSourceLicenses.html");
+                    } else {
+                        requestOpenDonateWebSite(activity);
+                    }
+                    break;
+                case 8:
+                    if (googleVersion) {
                         showToast(activity, "V" + getVersionName(activity) + "(" + getVersionCode(activity) + ")");
-                        break;
-                    default:
-                        break;
-                }
+                    } else {
+                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/ThirdPartyOpenSourceLicenses.html");
+                    }
+                    break;
+                case 9:
+                    showToast(activity, "V" + getVersionName(activity) + "(" + getVersionCode(activity) + ")");
+                    break;
+                default:
+                    break;
             }
         });
 
         aboutSlogan.setText(String.format("V %s", getVersionCode(activity)));
-        aboutSlogan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestOpenWebSite(activity, "https://zidon.net/zh-CN/changelog/");
-            }
-        });
+        aboutSlogan.setOnClickListener(v ->
+                requestOpenWebSite(activity, "https://zidon.net/zh-CN/changelog/")
+        );
 
         TextView about_appName = findViewById(R.id.about_appName);
-        about_appName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)));
-                builder.setIcon(R.mipmap.ic_launcher_new_round);
-                builder.setMessage(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)));
-                builder.setNegativeButton(R.string.importConfig, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        startActivity(
-                                new Intent(getApplicationContext(), BackupMainActivity.class)
-                        );
-                    }
-                });
-                builder.setPositiveButton(R.string.quickSetup, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        startActivity(
-                                new Intent(getApplicationContext(), FirstTimeSetupActivity.class)
-                        );
-                    }
-                });
-                builder.setNeutralButton(R.string.okay, null);
-                builder.create().show();
-            }
+        about_appName.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)));
+            builder.setIcon(R.mipmap.ic_launcher_new_round);
+            builder.setMessage(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)));
+            builder.setNegativeButton(R.string.importConfig, (dialogInterface, i) ->
+                    startActivity(
+                            new Intent(getApplicationContext(), BackupMainActivity.class)
+                    )
+            );
+            builder.setPositiveButton(R.string.quickSetup, (dialogInterface, i) ->
+                    startActivity(
+                            new Intent(getApplicationContext(), FirstTimeSetupActivity.class)
+                    )
+            );
+            builder.setNeutralButton(R.string.okay, null);
+            builder.create().show();
         });
     }
 

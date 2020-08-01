@@ -361,6 +361,7 @@
     <string name="noSuchApiMode">No such api mode</string>
     <string name="executeFailedFromSystem">Execute failed from system</string>
     <string name="isNotSystemApp">Is not system app</string>
+    <string name="telegramGroup_colon">Telegram Group: %1$s</string>
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>
