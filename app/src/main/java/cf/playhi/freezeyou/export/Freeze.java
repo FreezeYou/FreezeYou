@@ -69,14 +69,19 @@ public class Freeze extends ContentProvider {
                                 if (FUFUtils.checkMRootFrozen(context, pkgName)) {
                                     bundle.putInt("result", 999);
                                 } else {
-                                    if (FUFUtils.processMRootAction(context, pkgName, null, null, true, false, false, null, false)) {
+                                    if (FUFUtils.processMRootAction(context, pkgName,
+                                            null, null, true,
+                                            false, false, null,
+                                            false, false)) {
                                         bundle.putInt("result", 0);
                                     } else {
                                         bundle.putInt("result", -3);
                                     }
                                 }
                             } else if (!FUFUtils.checkRootFrozen(context, pkgName, null)) {
-                                if (FUFUtils.processRootAction(pkgName, null, null, context, false, false, false, null, false)) {
+                                if (FUFUtils.processRootAction(pkgName, null, null,
+                                        context, false, false, false,
+                                        null, false, false)) {
                                     bundle.putInt("result", 0);
                                 } else {
                                     bundle.putInt("result", -4);
@@ -99,7 +104,10 @@ public class Freeze extends ContentProvider {
                             if (FUFUtils.checkMRootFrozen(context, pkgName)) {
                                 bundle.putInt("result", 999);
                             } else {
-                                if (FUFUtils.processMRootAction(context, pkgName, null, null, true, false, false, null, false)) {
+                                if (FUFUtils.processMRootAction(context, pkgName, null,
+                                        null, true, false,
+                                        false, null,
+                                        false, false)) {
                                     bundle.putInt("result", 0);
                                 } else {
                                     bundle.putInt("result", -3);
@@ -120,7 +128,9 @@ public class Freeze extends ContentProvider {
                             if (FUFUtils.checkRootFrozen(context, pkgName, null)) {
                                 bundle.putInt("result", 999);
                             } else {
-                                if (FUFUtils.processRootAction(pkgName, null, null, context, false, false, false, null, false)) {
+                                if (FUFUtils.processRootAction(pkgName, null, null,
+                                        context, false, false, false,
+                                        null, false, false)) {
                                     bundle.putInt("result", 0);
                                 } else {
                                     bundle.putInt("result", -4);

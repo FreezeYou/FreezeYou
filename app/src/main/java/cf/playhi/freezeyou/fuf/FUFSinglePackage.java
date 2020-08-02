@@ -76,16 +76,19 @@ public class FUFSinglePackage {
         this.mContext = context;
     }
 
-    public void setSinglePackageName(String singlePackageName) {
+    public FUFSinglePackage setSinglePackageName(String singlePackageName) {
         this.mSinglePackageName = singlePackageName;
+        return this;
     }
 
-    public void setActionMode(int actionMode) {
+    public FUFSinglePackage setActionMode(int actionMode) {
         this.mActionMode = actionMode;
+        return this;
     }
 
-    public void setAPIMode(int apiMode) {
+    public FUFSinglePackage setAPIMode(int apiMode) {
         this.mAPIMode = apiMode;
+        return this;
     }
 
     public int commit() {
@@ -165,6 +168,7 @@ public class FUFSinglePackage {
     private int pureExecuteAPIRootAction() {
         int returnValue = ERROR_OTHER;
         switch (this.mAPIMode) {
+            case API_FREEZEYOU_LEGACY_AUTO:
             case API_FREEZEYOU_ROOT_DISABLE_ENABLE:
                 returnValue = pureExecuteAPIRootAction(false);
                 break;

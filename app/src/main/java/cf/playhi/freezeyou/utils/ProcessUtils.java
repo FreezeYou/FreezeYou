@@ -22,9 +22,9 @@ public final class ProcessUtils {
         Process process = Runtime.getRuntime().exec("su");
         DataOutputStream outputStream = new DataOutputStream(process.getOutputStream());
         if (enable) {
-            outputStream.writeBytes("pm " + (hideMode ? "unhide" : "enable ") + pkgName + "\n");
+            outputStream.writeBytes("pm " + (hideMode ? "unhide " : "enable ") + pkgName + "\n");
         } else {
-            outputStream.writeBytes("pm " + (hideMode ? "hide" : "disable ") + pkgName + "\n");
+            outputStream.writeBytes("pm " + (hideMode ? "hide " : "disable ") + pkgName + "\n");
         }
         outputStream.writeBytes("exit\n");
         outputStream.flush();

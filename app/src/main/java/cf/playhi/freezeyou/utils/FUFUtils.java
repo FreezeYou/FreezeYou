@@ -24,6 +24,7 @@ import cf.playhi.freezeyou.fuf.FUFSinglePackage;
 
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_FREEZE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_UNFREEZE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
@@ -73,18 +74,34 @@ public final class FUFUtils {
         }
     }
 
-    public static boolean processAction(final String pkgName, String target, String tasks, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
-        return
-                processAction(
-                        pkgName, target, tasks,
-                        context, enable, askRun, runImmediately,
-                        activity, finish,
-                        new AppPreferences(context).getInt("selectFUFMode", 0)
-                );
+    public static boolean processAction(
+            final Context context, final String pkgName, int apiMode,
+            final boolean enable, boolean showUnnecessaryToast) {
+
+        return processAction(context, pkgName, apiMode, enable, showUnnecessaryToast,
+                false, null, null, false,
+                null, false);
     }
 
-    public static boolean processAction(final String pkgName, String target, String tasks, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish, int apiMode) {
-        boolean returnValue = false;
+    /**
+     * @param context              Context
+     * @param pkgName              PkgName
+     * @param apiMode              ApiMode
+     * @param enable               Enable
+     * @param showUnnecessaryToast ShowUnnecessaryToast
+     * @param askRun               AskRun
+     * @param target               Target, askRun 为 true 时使用
+     * @param tasks                Tasks, askRun 为 true 时使用
+     * @param runImmediately       RunImmediately, askRun 为 true 时使用
+     * @param activity             Activity, askRun 为 true 时使用
+     * @param finish               Finish, askRun 为 true 时使用
+     * @return boolean
+     */
+    public static boolean processAction(
+            final Context context, final String pkgName, int apiMode,
+            final boolean enable, boolean showUnnecessaryToast,
+            final boolean askRun, String target, String tasks,
+            boolean runImmediately, Activity activity, boolean finish) {
 
         int result =
                 checkAndExecuteAction(
@@ -95,7 +112,8 @@ public final class FUFUtils {
                                 ACTION_MODE_FREEZE
                 );
 
-        if (result == ERROR_NO_ERROR_SUCCESS || result == ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT) {
+        if (FUFUtils.preProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                context, result, showUnnecessaryToast)) {
             sendStatusChangedBroadcast(context);
             if (enable) {
                 onUFApplications(context, pkgName);
@@ -107,33 +125,32 @@ public final class FUFUtils {
                 onFApplications(context, pkgName);
                 deleteNotification(context, pkgName);
             }
-            returnValue = true;
-        } else {
-            if (apiMode == API_FREEZEYOU_ROOT_DISABLE_ENABLE || apiMode == API_FREEZEYOU_ROOT_UNHIDE_HIDE) {
-                showToast(context, R.string.mayUnrootedOrOtherEx);
-            }
+            return true;
         }
-        return returnValue;
+
+        return false;
     }
 
-    public static boolean processRootAction(final String pkgName, String target, String tasks, final Context context, final boolean enable, final boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+    public static boolean processRootAction(
+            final String pkgName, String target, String tasks, final Context context,
+            final boolean enable, final boolean askRun, boolean runImmediately, Activity activity,
+            boolean finish, boolean showUnnecessaryToast) {
         return
                 processAction(
-                        pkgName, target, tasks,
-                        context, enable, askRun,
-                        runImmediately, activity, finish,
-                        API_FREEZEYOU_ROOT_DISABLE_ENABLE
+                        context, pkgName, API_FREEZEYOU_ROOT_DISABLE_ENABLE, enable, showUnnecessaryToast, askRun, target, tasks,
+                        runImmediately, activity, finish
                 );
     }
 
     @TargetApi(21)
-    public static boolean processMRootAction(Context context, String pkgName, String target, String tasks, boolean hidden, boolean askRun, boolean runImmediately, Activity activity, boolean finish) {
+    public static boolean processMRootAction(
+            Context context, String pkgName, String target, String tasks, boolean hidden,
+            boolean askRun, boolean runImmediately, Activity activity,
+            boolean finish, boolean showUnnecessaryToast) {
         return
                 processAction(
-                        pkgName, target, tasks,
-                        context, !hidden, askRun,
-                        runImmediately, activity, finish,
-                        API_FREEZEYOU_MROOT_DPM
+                        context, pkgName, API_FREEZEYOU_MROOT_DPM, !hidden, showUnnecessaryToast, askRun, target, tasks,
+                        runImmediately, activity, finish
                 );
     }
 
@@ -150,11 +167,12 @@ public final class FUFUtils {
             } else if (currentPackage.equals(pkgName)) {
                 checkAndShowAppIsForegroundApplicationToast(context, pkgName);
             } else {
-                FUFSinglePackage fufSinglePackage = new FUFSinglePackage(context);
-                fufSinglePackage.setSinglePackageName(pkgName);
-                fufSinglePackage.setAPIMode(apiMode);
-                fufSinglePackage.setActionMode(actionMode);
-                returnValue = fufSinglePackage.commit();
+                returnValue =
+                        new FUFSinglePackage(context)
+                                .setSinglePackageName(pkgName)
+                                .setAPIMode(apiMode)
+                                .setActionMode(actionMode)
+                                .commit();
             }
         }
         return returnValue;
@@ -192,9 +210,16 @@ public final class FUFUtils {
     }
 
     public static void oneKeyActionRoot(Context context, boolean freeze, String[] pkgNameList) {
+        oneKeyActionRoot(context, freeze, pkgNameList, true);
+    }
+
+    public static void oneKeyActionRoot(
+            Context context, boolean freeze, String[] pkgNameList,
+            boolean disableModeTrueOrHideModeFalse) {
         if (pkgNameList != null) {
             String currentPackage = " ";
-            if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
+            if (new AppPreferences(context)
+                    .getBoolean("avoidFreezeForegroundApplications", false)) {
                 currentPackage = MainApplication.getCurrentPackage();
             }
             if (currentPackage == null) currentPackage = " ";
@@ -213,9 +238,11 @@ public final class FUFUtils {
                             } else {
                                 try {
                                     int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList);
-                                    if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER && tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
+                                    if (tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER &&
+                                            tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED &&
+                                            tmp != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED) {
                                         outputStream.writeBytes(
-                                                "pm disable " + aPkgNameList + "\n");
+                                                "pm " + (disableModeTrueOrHideModeFalse ? "disable " : "hide ") + aPkgNameList + "\n");
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -229,10 +256,15 @@ public final class FUFUtils {
                 } else {
                     for (String aPkgNameList : pkgNameList) {
                         try {
-                            int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList);
-                            if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER || tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                                outputStream.writeBytes(
-                                        "pm enable " + aPkgNameList + "\n");
+                            if (disableModeTrueOrHideModeFalse) {
+                                int tmp = context.getPackageManager().getApplicationEnabledSetting(aPkgNameList);
+                                if (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER ||
+                                        tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED ||
+                                        tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED) {
+                                    outputStream.writeBytes("pm enable " + aPkgNameList + "\n");
+                                }
+                            } else {
+                                outputStream.writeBytes("pm unhide " + aPkgNameList + "\n");
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -278,50 +310,40 @@ public final class FUFUtils {
 
     @TargetApi(21)
     public static void oneKeyActionMRoot(Context context, boolean freeze, String[] pkgNameList) {
-        if (pkgNameList != null) {
-            String currentPackage = " ";
-            if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
-                currentPackage = MainApplication.getCurrentPackage();
-            }
-            if (currentPackage == null) currentPackage = " ";
-            for (String aPkgNameList : pkgNameList) {
-                try {
-                    if (freeze) {
-                        if ((!"cf.playhi.freezeyou".equals(aPkgNameList)) && (!checkMRootFrozen(context, aPkgNameList))) {
-                            if (currentPackage.equals(aPkgNameList)) {
-                                checkAndShowAppIsForegroundApplicationToast(context, aPkgNameList);
-                            } else if (isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, aPkgNameList)) {
-                                checkAndShowAppStillNotifyingToast(context, aPkgNameList);
-                            } else {
-                                if (getDevicePolicyManager(context).setApplicationHidden(
-                                        DeviceAdminReceiver.getComponentName(context), aPkgNameList, true)) {
-                                    onFApplications(context, aPkgNameList);
-                                    deleteNotification(context, aPkgNameList);
-                                } else {
-                                    showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
+        oneKeyAction(context, freeze, pkgNameList, API_FREEZEYOU_MROOT_DPM);
+    }
+
+    public static void oneKeyAction(Context context, boolean freeze, String[] pkgNameList, int apiMode) {
+        switch (apiMode) {
+            // ROOT 模式的两个特殊处理，不然得 su 好几次
+            case API_FREEZEYOU_ROOT_DISABLE_ENABLE:
+                oneKeyActionRoot(context, freeze, pkgNameList, true);
+                break;
+            case API_FREEZEYOU_ROOT_UNHIDE_HIDE:
+                oneKeyActionRoot(context, freeze, pkgNameList, false);
+                break;
+            default:
+                if (pkgNameList != null) {
+                    for (String aPkgName : pkgNameList) {
+                        try {
+                            if ((!"cf.playhi.freezeyou".equals(aPkgName)) &&
+                                    (apiMode != API_FREEZEYOU_LEGACY_AUTO && apiMode != API_FREEZEYOU_MROOT_DPM) ||
+                                    !freeze || !checkMRootFrozen(context, aPkgName)) {
+                                if (!processAction(context, aPkgName, apiMode, !freeze, false)) {
+                                    showToast(context, aPkgName + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
                                 }
                             }
-                        }
-                    } else {
-                        if (checkMRootFrozen(context, aPkgNameList)) {
-                            if (getDevicePolicyManager(context).setApplicationHidden(
-                                    DeviceAdminReceiver.getComponentName(context), aPkgNameList, false)) {
-                                onUFApplications(context, aPkgNameList);
-                                checkAndCreateFUFQuickNotification(context, aPkgNameList);
-                            } else {
-                                showToast(context, aPkgNameList + " " + context.getString(R.string.failed) + " " + context.getString(R.string.mayUnrootedOrOtherEx));
-                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            showToast(context, context.getString(R.string.exceptionHC) + e.getLocalizedMessage());
                         }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showToast(context, context.getString(R.string.exceptionHC) + e.getLocalizedMessage());
+                    sendStatusChangedBroadcast(context);
+                    if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                        showToast(context, R.string.executed);
+                    }
                 }
-            }
-            sendStatusChangedBroadcast(context);
-            if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
-                showToast(context, R.string.executed);
-            }
+                break;
         }
     }
 
@@ -427,14 +449,8 @@ public final class FUFUtils {
         } catch (Exception e) {
             tmp = -1;
         }
-        return (
-                (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) ||
-                        (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) ||
-                        (
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 &&
-                                        (tmp == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED)
-                        )
-        );
+        return (tmp != PackageManager.COMPONENT_ENABLED_STATE_DEFAULT) &&
+                (tmp != PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
     }
 
     /**
@@ -511,37 +527,37 @@ public final class FUFUtils {
                             context, context.getString(R.string.success));
                 return true;
             case ERROR_SINGLE_PACKAGE_NAME_IS_NULL:
-                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-                            context, context.getString(R.string.packageNameIsNull));
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.packageNameIsNull));
                 return false;
             case ERROR_DEVICE_ANDROID_VERSION_TOO_LOW:
-                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-                            context, context.getString(R.string.sysVerLow));
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.sysVerLow));
                 return false;
             case ERROR_NO_ROOT_PERMISSION:
-                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-                            context, context.getString(R.string.noRootPermission));
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.noRootPermission));
                 return false;
             case ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM:
-                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-                            context, context.getString(R.string.executeFailedFromSystem));
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.executeFailedFromSystem));
                 return false;
             case ERROR_NOT_DEVICE_POLICY_MANAGER:
-                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-                            context, context.getString(R.string.isNotDevicePolicyManager));
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.isNotDevicePolicyManager));
                 return false;
             case ERROR_NO_SUCH_API_MODE:
-                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-                            context, context.getString(R.string.noSuchApiMode));
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.noSuchApiMode));
                 return false;
             case ERROR_NOT_SYSTEM_APP:
-                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-                            context, context.getString(R.string.isNotSystemApp));
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.isNotSystemApp));
                 return false;
             case ERROR_OTHER:
             default:
-                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-                            context, context.getString(R.string.unknownError));
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.unknownError));
                 return false;
         }
     }
