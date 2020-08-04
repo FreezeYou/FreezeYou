@@ -69,19 +69,22 @@ public class AboutActivity extends FreezeYouBaseActivity {
         aboutListView.setOnItemClickListener((parent, view, position, id) -> {
             switch (position) {
                 case 0:
-                    requestOpenWebSite(activity, "https://zidon.net/zh-CN/guide/how-to-use.html");
+                    requestOpenWebSite(activity, "https://www.zidon.net/zh-CN/guide/how-to-use.html");
                     break;
                 case 1:
-                    requestOpenWebSite(activity, "https://zidon.net/zh-CN/faq/");
+                    requestOpenWebSite(activity, "https://www.zidon.net/zh-CN/faq/");
                     break;
                 case 2:
-                    requestOpenWebSite(activity, "https://crwd.in/freezeyou");
+                    requestOpenWebSite(
+                            activity,
+                            "https://github.com/FreezeYou/FreezeYou/blob/master/README_Translation.md"
+                    );
                     break;
                 case 3:
                     requestOpenWebSite(activity, "https://freezeyou.playhi.net/thanks.html");
                     break;
                 case 4:
-                    requestOpenWebSite(activity, "https://zidon.net");
+                    requestOpenWebSite(activity, "https://www.zidon.net");
                     break;
                 case 5:
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -126,7 +129,7 @@ public class AboutActivity extends FreezeYouBaseActivity {
 
         aboutSlogan.setText(String.format("V %s", getVersionCode(activity)));
         aboutSlogan.setOnClickListener(v ->
-                requestOpenWebSite(activity, "https://zidon.net/zh-CN/changelog/")
+                requestOpenWebSite(activity, "https://www.zidon.net/zh-CN/changelog/")
         );
 
         TextView about_appName = findViewById(R.id.about_appName);

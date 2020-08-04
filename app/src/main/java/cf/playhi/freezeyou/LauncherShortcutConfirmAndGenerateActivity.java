@@ -74,7 +74,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
                 finish();
                 return true;
             case R.id.lscaga_menu_help:
-                MoreUtils.requestOpenWebSite(this, "https://zidon.net/zh-CN/guide/schedules.html");
+                MoreUtils.requestOpenWebSite(this, "https://www.zidon.net/zh-CN/guide/schedules.html");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

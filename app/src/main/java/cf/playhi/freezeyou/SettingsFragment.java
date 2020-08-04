@@ -122,7 +122,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     checkUpdate(getActivity());
                     break;
                 case "helpTranslate":
-                    requestOpenWebSite(getActivity(), "https://crwd.in/freezeyou");
+                    requestOpenWebSite(
+                            getActivity(),
+                            "https://github.com/FreezeYou/FreezeYou/blob/master/README_Translation.md"
+                    );
                     break;
                 case "donate":
                     requestOpenDonateWebSite(getActivity());
@@ -134,7 +137,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     openAccessibilitySettings(getActivity());
                     break;
                 case "faq":
-                    requestOpenWebSite(getActivity(), "https://zidon.net/zh-CN/faq/");
+                    requestOpenWebSite(getActivity(), "https://www.zidon.net/zh-CN/faq/");
                     break;
                 case "uninstall":
                     Intent uninstall =
@@ -238,7 +241,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     startActivity(new Intent(getActivity(), BackupMainActivity.class));
                     break;
                 case "howToUse":
-                    requestOpenWebSite(getActivity(), "https://zidon.net/zh-CN/guide/how-to-use.html");
+                    requestOpenWebSite(getActivity(), "https://www.zidon.net/zh-CN/guide/how-to-use.html");
                     break;
                 case "resetFreezeTimes":
                     askIfResetTimes("ApplicationsFreezeTimes");

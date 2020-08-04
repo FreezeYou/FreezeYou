@@ -1162,7 +1162,7 @@ public class Main extends FreezeYouBaseActivity {
                     .setNeutralButton(R.string.hToUse, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            requestOpenWebSite(Main.this, "https://zidon.net/");
+                            requestOpenWebSite(Main.this, "https://www.zidon.net/");
                         }
                     })
                     .setNegativeButton(R.string.nCaution, new DialogInterface.OnClickListener() {
@@ -1835,7 +1835,7 @@ public class Main extends FreezeYouBaseActivity {
                         startActivity(new Intent(this, SettingsActivity.class));
                         return true;
                     case R.id.menu_faq:
-                        requestOpenWebSite(this, "https://zidon.net/zh-CN/faq/");
+                        requestOpenWebSite(this, "https://www.zidon.net/zh-CN/faq/");
                         return true;
                     case R.id.menu_onClickFunc_autoUFOrFreeze:
                         appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreeze;
