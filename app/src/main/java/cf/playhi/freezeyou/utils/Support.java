@@ -373,12 +373,16 @@ public final class Support {
         }
 
         switch (s) {
-            case "tc":
-                return Locale.TRADITIONAL_CHINESE;
-            case "sc":
-                return Locale.SIMPLIFIED_CHINESE;
-            case "en":
-                return Locale.ENGLISH;
+            case "en-US":
+                return new Locale("en", "US");
+            case "ru":
+                return new Locale("ru");
+            case "ru-RU":
+                return new Locale("ru", "RU");
+            case "zh-CN":
+                return new Locale("zh", "CN");
+            case "zh-TW":
+                return new Locale("zh", "TW");
             case "Default":
             default:
                 return Locale.getDefault();
