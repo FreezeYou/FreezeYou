@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou.utils;
 
+import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,10 +23,12 @@ public final class DevicePolicyManagerUtils {
 
     public static void openDevicePolicyManager(Context context) {
         showToast(context, R.string.needActiveAccessibilityService);
-        ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
-        Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
-        context.startActivity(intent);
+        if (context instanceof Activity) {
+            ComponentName componentName = new ComponentName(context, DeviceAdminReceiver.class);
+            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
+            context.startActivity(intent);
+        }
     }
 
     /**

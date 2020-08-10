@@ -68,12 +68,12 @@ final class SettingsUtils {
                 showToast(activity, R.string.ciFinishedToast);
                 break;
             case "shortCutOneKeyFreezeAdditionalOptions":
+                appPreferences.put(s, sharedPreferences.getString(s, "nothing"));
                 if (!"nothing".equals(sharedPreferences.getString(s, "nothing"))) {
-                    appPreferences.put(s, sharedPreferences.getString(s, "nothing"));
                     DevicePolicyManager devicePolicyManager = getDevicePolicyManager(context);
                     if (devicePolicyManager != null && !devicePolicyManager.isAdminActive(
                             new ComponentName(context, DeviceAdminReceiver.class))) {
-                        openDevicePolicyManager(context);
+                        openDevicePolicyManager(activity);
                     }
                 }
                 break;
