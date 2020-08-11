@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.database.Cursor;
@@ -19,10 +18,17 @@ import cf.playhi.freezeyou.utils.OneKeyListUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
+import static cf.playhi.freezeyou.utils.Support.checkLanguage;
 import static cf.playhi.freezeyou.utils.TasksUtils.cancelAllUnexecutedDelayTasks;
 
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
-    @SuppressLint("SwitchIntDef")
+
+    @Override
+    public void onCreate() {
+        checkLanguage(this);
+        super.onCreate();
+    }
+
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
         int type = accessibilityEvent.getEventType();

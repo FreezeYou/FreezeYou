@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -29,6 +28,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseService;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.FileUtils;
@@ -40,7 +40,7 @@ import static cf.playhi.freezeyou.utils.ProcessUtils.destroyProcess;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 //Install and uninstall
-public class InstallPackagesService extends Service {
+public class InstallPackagesService extends FreezeYouBaseService {
 
     private final ArrayList<Intent> intentArrayList = new ArrayList<>();
     private boolean processing = false;

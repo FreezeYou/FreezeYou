@@ -12,6 +12,9 @@ public class OneKeyFreezeQSTileService extends TileService {
     @Override
     public void onClick() {
         super.onClick();
-        ServiceUtils.startService(this,new Intent(getApplicationContext(), OneKeyFreezeService.class));
+        ServiceUtils.startService(
+                this,
+                new Intent(getApplicationContext(), OneKeyFreezeService.class)
+        );
     }
 }

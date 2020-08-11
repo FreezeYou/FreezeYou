@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,12 +15,13 @@ import android.os.IBinder;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import cf.playhi.freezeyou.app.FreezeYouBaseService;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
 import static android.content.Context.MODE_PRIVATE;
 import static cf.playhi.freezeyou.utils.TasksUtils.cancelAllUnexecutedDelayTasks;
 
-public class TriggerTasksService extends Service {
+public class TriggerTasksService extends FreezeYouBaseService {
 
     private TriggerScreenLockListener triggerScreenLockListener;
 

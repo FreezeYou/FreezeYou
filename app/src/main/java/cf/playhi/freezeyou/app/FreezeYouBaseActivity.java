@@ -5,14 +5,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import cf.playhi.freezeyou.utils.Support;
+import static cf.playhi.freezeyou.utils.Support.checkLanguage;
 
 @SuppressLint("Registered")
 public class FreezeYouBaseActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Support.checkLanguage(this);
+        checkLanguage(this);
         super.onCreate(savedInstanceState);
     }
 

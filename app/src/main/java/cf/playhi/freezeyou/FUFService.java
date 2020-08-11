@@ -3,13 +3,14 @@ package cf.playhi.freezeyou;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
 import net.grandcentrix.tray.AppPreferences;
+
+import cf.playhi.freezeyou.app.FreezeYouBaseService;
 
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
@@ -19,7 +20,7 @@ import static cf.playhi.freezeyou.utils.FUFUtils.processAction;
 import static cf.playhi.freezeyou.utils.FUFUtils.processMRootAction;
 import static cf.playhi.freezeyou.utils.FUFUtils.processRootAction;
 
-public class FUFService extends Service {
+public class FUFService extends FreezeYouBaseService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
