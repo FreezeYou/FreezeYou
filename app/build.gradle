@@ -8,7 +8,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 29
         versionCode 134
-        versionName '10.8.20200804-t135-h-20200811-1'
+        versionName '10.8.20200804-t135-h-20200812-1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

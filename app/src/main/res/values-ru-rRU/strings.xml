@@ -73,7 +73,7 @@
     <string name="common">Общие настройки</string>
     <string name="configureAccessibilityService">Настройка службы специальных возможностей</string>
     <string name="contactUs">Связаться с нами</string>
-    <string name="copyAfterBeingFormatted">Копировать после форматирования</string>
+    <string name="copyAfterBeingFormatted">Копировать имена пакетов</string>
     <string name="copyAlias">Скопировать alias</string>
     <string name="copyPkgName">Скопировать имя пакета</string>
     <string name="createDisEnableShortCut">Создать ярлык заморозка/разморозка</string>
