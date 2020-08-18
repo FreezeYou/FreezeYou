@@ -79,7 +79,9 @@ public class STAAFragment extends PreferenceFragment implements SharedPreference
         if (key != null) {
             switch (key) {
                 case "stma_add_help":
-                    MoreUtils.requestOpenWebSite(getActivity(), "https://www.zidon.net/zh-CN/guide/schedules.html");
+                    MoreUtils.requestOpenWebSite(getActivity(),
+                            String.format("https://www.zidon.net/%1$s/guide/schedules.html",
+                                    getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)));
                     break;
                 default:
                     break;

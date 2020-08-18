@@ -1835,7 +1835,9 @@ public class Main extends FreezeYouBaseActivity {
                         startActivity(new Intent(this, SettingsActivity.class));
                         return true;
                     case R.id.menu_faq:
-                        requestOpenWebSite(this, "https://www.zidon.net/zh-CN/faq/");
+                        requestOpenWebSite(this,
+                                String.format("https://www.zidon.net/%1$s/faq/",
+                                        getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)));
                         return true;
                     case R.id.menu_onClickFunc_autoUFOrFreeze:
                         appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreeze;

@@ -69,10 +69,14 @@ public class AboutActivity extends FreezeYouBaseActivity {
         aboutListView.setOnItemClickListener((parent, view, position, id) -> {
             switch (position) {
                 case 0:
-                    requestOpenWebSite(activity, "https://www.zidon.net/zh-CN/guide/how-to-use.html");
+                    requestOpenWebSite(activity,
+                            String.format("https://www.zidon.net/%1$s/guide/how-to-use.html",
+                                    getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)));
                     break;
                 case 1:
-                    requestOpenWebSite(activity, "https://www.zidon.net/zh-CN/faq/");
+                    requestOpenWebSite(activity,
+                            String.format("https://www.zidon.net/%1$s/faq/",
+                                    getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)));
                     break;
                 case 2:
                     requestOpenWebSite(
@@ -129,7 +133,9 @@ public class AboutActivity extends FreezeYouBaseActivity {
 
         aboutSlogan.setText(String.format("V %s", getVersionCode(activity)));
         aboutSlogan.setOnClickListener(v ->
-                requestOpenWebSite(activity, "https://www.zidon.net/zh-CN/changelog/")
+                requestOpenWebSite(activity,
+                        String.format("https://www.zidon.net/%1$s/changelog/",
+                                getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)))
         );
 
         TextView about_appName = findViewById(R.id.about_appName);
