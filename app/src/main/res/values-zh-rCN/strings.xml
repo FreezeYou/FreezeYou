@@ -257,8 +257,8 @@
     <string name="target_colon">目标：</string>
     <string name="alwaysAllow_name">总是允许 %1$s</string>
     <string name="existed_colon">现存：%1$s</string>
-    <string name="manageUriAutoAllow">管理 URI 请求白名单</string>
-    <string name="manageIpaAutoAllow">管理安装应用请求白名单</string>
+    <string name="manageUriAutoAllow">管理 URI 请求自动允许名单</string>
+    <string name="manageIpaAutoAllow">管理安装应用请求自动允许名单</string>
     <string name="delAllCache">清除全部缓存</string>
     <string name="needStoragePermission">需要存储权限</string>
     <string name="okay">好的</string>
@@ -321,8 +321,8 @@
     <string name="application_colon_app">应用：%1$s</string>
     <string name="pkgName_colon_pkgName">包名：%1$s</string>
     <string name="cannotInstall_colon_msg">无法安装：%1$s</string>
-    <string name="uriAutoAllowList">URI 请求白名单</string>
-    <string name="ipaAutoAllowList">安装应用请求白名单</string>
+    <string name="uriAutoAllowList">URI 请求自动允许名单</string>
+    <string name="ipaAutoAllowList">安装应用请求自动允许名单</string>
     <string name="installing_app">正在安装 %1$s</string>
     <string name="uninstalling_app">正在卸载 %1$s</string>
     <string name="app_installFinished">%1$s 安装完成</string>

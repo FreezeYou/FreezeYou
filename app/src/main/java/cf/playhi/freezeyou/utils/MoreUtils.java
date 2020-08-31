@@ -3,7 +3,6 @@ package cf.playhi.freezeyou.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Base64;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,18 +60,6 @@ public final class MoreUtils {
             sb.append(s);
         }
         return sb.toString();
-    }
-
-    public static void requestOpenDonateWebSite(Context context) {
-        requestOpenWebSite(
-                context,
-                new String(
-                        Base64.decode(
-                                "aHR0cHM6Ly9mcmVlemV5b3UucGxheWhpLm5ldC9zcG9uc29yc2hpcC5odG1sP2Zyb209RnJlZXplWW91",
-                                Base64.DEFAULT
-                        )
-                )
-        );
     }
 
 }

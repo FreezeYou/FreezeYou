@@ -257,8 +257,8 @@
     <string name="target_colon">Target: </string>
     <string name="alwaysAllow_name">Always allow %1$s</string>
     <string name="existed_colon">Existed: %1$s</string>
-    <string name="manageUriAutoAllow">Manage URI Request Whitelist</string>
-    <string name="manageIpaAutoAllow">Manage Request Install Applications Whitelist</string>
+    <string name="manageUriAutoAllow">Manage URI Request Auto Allow List</string>
+    <string name="manageIpaAutoAllow">Manage Request Install Applications Auto Allow List</string>
     <string name="delAllCache">Clear all Caches</string>
     <string name="needStoragePermission">Storage Permission Required</string>
     <string name="okay">OK</string>
@@ -321,8 +321,8 @@
     <string name="application_colon_app">Application: %1$s</string>
     <string name="pkgName_colon_pkgName">Package Name: %1$s</string>
     <string name="cannotInstall_colon_msg">Cannot install: %1$s</string>
-    <string name="uriAutoAllowList">URI Request Whitelist</string>
-    <string name="ipaAutoAllowList">Request Install Applications Whitelist</string>
+    <string name="uriAutoAllowList">URI Request Auto Allow List</string>
+    <string name="ipaAutoAllowList">Request Install Applications Auto Allow List</string>
     <string name="installing_app">Installing %1$s</string>
     <string name="uninstalling_app">Uninstalling %1$s</string>
     <string name="app_installFinished">%1$s has been installed</string>

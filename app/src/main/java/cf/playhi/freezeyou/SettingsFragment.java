@@ -28,11 +28,9 @@ import cf.playhi.freezeyou.utils.OneKeyListUtils;
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
 import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
-import static cf.playhi.freezeyou.VersionUtils.getVersionName;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.FileUtils.deleteAllFiles;
-import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenDonateWebSite;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
@@ -46,9 +44,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.spr);//preferences
 
-        if (getVersionName(getActivity()).contains("g")) {
-            ((PreferenceScreen) findPreference("more")).removePreference(findPreference("donate"));
-        }
         if (DevicePolicyManagerUtils.isDeviceOwner(getActivity())) {
             ((PreferenceScreen) findPreference("dangerZone")).removePreference(findPreference("clearAllUserData"));
         }
@@ -126,9 +121,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                             getActivity(),
                             "https://github.com/FreezeYou/FreezeYou/blob/master/README_Translation.md"
                     );
-                    break;
-                case "donate":
-                    requestOpenDonateWebSite(getActivity());
                     break;
                 case "thanksList":
                     requestOpenWebSite(getActivity(), "https://freezeyou.playhi.net/thanks.html");
