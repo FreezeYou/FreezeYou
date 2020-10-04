@@ -12,10 +12,11 @@
             android:id="@+id/search_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:autofillHints="pkgLabel"
             android:hint="@string/search"
             android:inputType="text"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:singleLine="true" />
 
         <FrameLayout

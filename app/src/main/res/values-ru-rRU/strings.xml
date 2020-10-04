@@ -33,7 +33,7 @@
     <string name="appHasNotifi">%1$s  все еще уведомляет</string>
     <string name="appStore">Магазин приложений</string>
     <string name="app_installFailed">Ошибка установки %1$s</string>
-    <string name="app_installFinished">%1$ установлено</string>
+    <string name="app_installFinished">%1$s установлено</string>
     <string name="app_name">FreezeYou!</string>
     <string name="app_uninstallFailed">Сбой удаления  %1$s </string>
     <string name="app_uninstallFinished">Завершено удаление %1$s</string>
