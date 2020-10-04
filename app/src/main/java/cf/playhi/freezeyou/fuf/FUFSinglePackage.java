@@ -4,10 +4,11 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
-import cf.playhi.freezeyou.DeviceAdminReceiver;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.ProcessUtils;
+
+import static cf.playhi.freezeyou.DeviceAdminReceiver.getComponentName;
 
 public class FUFSinglePackage {
 
@@ -153,14 +154,21 @@ public class FUFSinglePackage {
         int returnValue = ERROR_OTHER;
         boolean hidden = mActionMode == ACTION_MODE_FREEZE;
 
-        if ((!"cf.playhi.freezeyou".equals(mSinglePackageName))) {
-            if (DevicePolicyManagerUtils.getDevicePolicyManager(mContext).setApplicationHidden(
-                    DeviceAdminReceiver.getComponentName(mContext), mSinglePackageName, hidden)) {
-                returnValue = ERROR_NO_ERROR_SUCCESS;
-            } else {
-                returnValue = ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM;
+        if (!hidden &&
+                !DevicePolicyManagerUtils.getDevicePolicyManager(mContext)
+                        .isApplicationHidden(getComponentName(mContext), mSinglePackageName)) {
+            returnValue = ERROR_NO_ERROR_SUCCESS;
+        } else {
+            if ((!"cf.playhi.freezeyou".equals(mSinglePackageName))) {
+                if (DevicePolicyManagerUtils.getDevicePolicyManager(mContext).setApplicationHidden(
+                        getComponentName(mContext), mSinglePackageName, hidden)) {
+                    returnValue = ERROR_NO_ERROR_SUCCESS;
+                } else {
+                    returnValue = ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM;
+                }
             }
         }
+
 
         return returnValue;
     }

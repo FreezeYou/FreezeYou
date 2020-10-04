@@ -153,7 +153,7 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:documentLaunchMode="always"
             android:label="@string/disableAEnable"
-            android:launchMode="standard"
+            android:launchMode="singleInstance"
             android:maxRecents="6"
             android:theme="@style/AppTheme.Default.Dialog"
             tools:ignore="UnusedAttribute">
@@ -167,6 +167,7 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:label="@string/oneKeyFreeze"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -182,6 +183,7 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:label="@string/oneKeyUF"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -202,6 +204,7 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:label="@string/disableAEnable"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Default.Dialog">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -235,6 +238,7 @@
             android:enabled="false"
             android:excludeFromRecents="true"
             android:label="@string/installAndUninstall"
+            android:launchMode="singleInstance"
             android:process=":installAndUninstall"
             android:theme="@style/AppTheme.Default.Dialog">
             <intent-filter>
@@ -351,33 +355,39 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:label="@string/askIfLockScreen"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Default.Dialog" />
         <activity
             android:name=".AskRunActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Default.Dialog" />
         <activity
             android:name=".ShowSimpleDialogActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Default.Dialog" />
         <activity
             android:name=".GetDisabledApplications"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:launchMode="singleInstance"
             android:permission="cf.playhi.freezeyou.permission.GET_DISABLED_APPLICATIONS"
             android:theme="@style/AppTheme.Translucent.NoTitleBar" />
         <activity
             android:name=".DisableApplications"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:launchMode="singleInstance"
             android:permission="cf.playhi.freezeyou.permission.DISABLE_APPLICATIONS"
             android:theme="@style/AppTheme.Translucent.NoTitleBar" />
         <activity
             android:name=".EnableApplications"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:launchMode="singleInstance"
             android:permission="cf.playhi.freezeyou.permission.ENABLE_APPLICATIONS"
             android:theme="@style/AppTheme.Translucent.NoTitleBar" />
         <activity
@@ -386,6 +396,7 @@
             android:excludeFromRecents="true"
             android:icon="@drawable/screenlock"
             android:label="@string/oneKeyLockScreen"
+            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

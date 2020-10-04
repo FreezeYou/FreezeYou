@@ -162,9 +162,10 @@ public final class FUFUtils {
         }
         if (currentPackage == null) currentPackage = " ";
         if ((!"cf.playhi.freezeyou".equals(pkgName))) {
-            if (isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, pkgName)) {
+            if (actionMode == ACTION_MODE_FREEZE &&
+                    isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, pkgName)) {
                 checkAndShowAppStillNotifyingToast(context, pkgName);
-            } else if (currentPackage.equals(pkgName)) {
+            } else if (actionMode == ACTION_MODE_FREEZE && currentPackage.equals(pkgName)) {
                 checkAndShowAppIsForegroundApplicationToast(context, pkgName);
             } else {
                 returnValue =
