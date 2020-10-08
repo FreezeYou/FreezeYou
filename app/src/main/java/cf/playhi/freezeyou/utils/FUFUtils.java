@@ -348,7 +348,7 @@ public final class FUFUtils {
         }
     }
 
-    private static void sendStatusChangedBroadcast(Context context) {
+    public static void sendStatusChangedBroadcast(Context context) {
         Intent intent = new Intent();
         intent.setAction("cf.playhi.freezeyou.action.packageStatusChanged");
         intent.setPackage("cf.playhi.freezeyou");

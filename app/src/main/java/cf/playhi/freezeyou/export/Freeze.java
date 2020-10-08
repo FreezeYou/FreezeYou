@@ -8,16 +8,26 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import cf.playhi.freezeyou.fuf.FUFSinglePackage;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
 
+import static cf.playhi.freezeyou.export.FUFMode.MODE_AUTO;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_DPM;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_LEGACY_AUTO;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_MROOT;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_ROOT;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_ROOT_DISABLE_ENABLE;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_ROOT_HIDE_UNHIDE;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_SYSTEM_APP_ENABLE_DISABLE;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_SYSTEM_APP_ENABLE_DISABLE_USER;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.FUFUtils.sendStatusChangedBroadcast;
+import static cf.playhi.freezeyou.utils.NotificationUtils.deleteNotification;
+import static cf.playhi.freezeyou.utils.TasksUtils.onFApplications;
 
 public class Freeze extends ContentProvider {
-
-    private static final String MODE_ROOT = "MODE_ROOT";
-    private static final String MODE_MROOT = "MODE_MROOT";
-    private static final String MODE_AUTO = "MODE_AUTO";
 
     @Override
     public boolean onCreate() {
@@ -140,11 +150,82 @@ public class Freeze extends ContentProvider {
                     }
                     bundle.putInt("result", 0);
                     return bundle;
+                case MODE_DPM:
+                    bundle.putInt(
+                            "result",
+                            doApiV2Action(
+                                    context, pkgName, FUFSinglePackage.API_FREEZEYOU_MROOT_DPM)
+                    );
+                    return bundle;
+                case MODE_ROOT_DISABLE_ENABLE:
+                    bundle.putInt(
+                            "result",
+                            doApiV2Action(
+                                    context, pkgName, FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE)
+                    );
+                    return bundle;
+                case MODE_ROOT_HIDE_UNHIDE:
+                    bundle.putInt(
+                            "result",
+                            doApiV2Action(
+                                    context, pkgName, FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE)
+                    );
+                    return bundle;
+                case MODE_LEGACY_AUTO:
+                    bundle.putInt(
+                            "result",
+                            doApiV2Action(
+                                    context, pkgName, FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO)
+                    );
+                    return bundle;
+                case MODE_SYSTEM_APP_ENABLE_DISABLE:
+                    bundle.putInt(
+                            "result",
+                            doApiV2Action(
+                                    context, pkgName, FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE)
+                    );
+                    return bundle;
+                case MODE_SYSTEM_APP_ENABLE_DISABLE_USER:
+                    bundle.putInt(
+                            "result",
+                            doApiV2Action(
+                                    context, pkgName,
+                                    FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER
+                            )
+                    );
+                    return bundle;
+                case MODE_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED:
+                    bundle.putInt(
+                            "result",
+                            doApiV2Action(
+                                    context, pkgName,
+                                    FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED
+                            )
+                    );
+                    return bundle;
                 default:
                     break;
             }
         }
         return bundle;
+    }
+
+    private int doApiV2Action(Context context, String pkgName, int apiMode) {
+        FUFSinglePackage fufSinglePackage = new FUFSinglePackage(context);
+        fufSinglePackage.setActionMode(FUFSinglePackage.ACTION_MODE_FREEZE);
+        fufSinglePackage.setAPIMode(apiMode);
+        fufSinglePackage.setSinglePackageName(pkgName);
+
+        int result = fufSinglePackage.commit();
+
+        if (FUFUtils.preProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                context, result, false)) {
+            sendStatusChangedBroadcast(context);
+            onFApplications(context, pkgName);
+            deleteNotification(context, pkgName);
+        }
+
+        return result;
     }
 
 }

@@ -8,15 +8,34 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
+import net.grandcentrix.tray.AppPreferences;
+
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
+
+import static cf.playhi.freezeyou.export.FUFMode.MODE_DPM;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_LEGACY_AUTO;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_ROOT_DISABLE_ENABLE;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_ROOT_HIDE_UNHIDE;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_SYSTEM_APP_ENABLE_DISABLE;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_SYSTEM_APP_ENABLE_DISABLE_USER;
+import static cf.playhi.freezeyou.export.FUFMode.MODE_UNKNOWN;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER;
 
 public class Query extends ContentProvider {
 
     private static final String QUERY_MODE = "QUERY_MODE";
     private static final String QUERY_FREEZE_STATUS = "QUERY_FREEZE_STATUS";
     private static final String QUERY_IF_CAN_INSTALL_APPLICATIONS_STATUS = "QUERY_IF_CAN_INSTALL_APPLICATIONS_STATUS";
+    private static final String QUERY_MODE_V2 = "QUERY_MODE_V2";
 
     @Override
     public boolean onCreate() {
@@ -62,6 +81,36 @@ public class Query extends ContentProvider {
                         bundle.putString("currentMode", "root");
                     } else {
                         bundle.putString("currentMode", "unavailable");
+                    }
+                    return bundle;
+                case QUERY_MODE_V2:
+                    if (context == null) return bundle;
+
+                    switch (new AppPreferences(context).getInt("selectFUFMode", 0)) {
+                        case API_FREEZEYOU_MROOT_DPM:
+                            bundle.putString("currentMode", MODE_DPM);
+                            break;
+                        case API_FREEZEYOU_ROOT_DISABLE_ENABLE:
+                            bundle.putString("currentMode", MODE_ROOT_DISABLE_ENABLE);
+                            break;
+                        case API_FREEZEYOU_ROOT_UNHIDE_HIDE:
+                            bundle.putString("currentMode", MODE_ROOT_HIDE_UNHIDE);
+                            break;
+                        case API_FREEZEYOU_LEGACY_AUTO:
+                            bundle.putString("currentMode", MODE_LEGACY_AUTO);
+                            break;
+                        case API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED:
+                            bundle.putString("currentMode", MODE_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED);
+                            break;
+                        case API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER:
+                            bundle.putString("currentMode", MODE_SYSTEM_APP_ENABLE_DISABLE_USER);
+                            break;
+                        case API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE:
+                            bundle.putString("currentMode", MODE_SYSTEM_APP_ENABLE_DISABLE);
+                            break;
+                        default:
+                            bundle.putString("currentMode", MODE_UNKNOWN);
+                            break;
                     }
                     return bundle;
                 case QUERY_FREEZE_STATUS:
