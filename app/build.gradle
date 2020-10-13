@@ -29,7 +29,7 @@ android {
 
 dependencies {
     implementation 'net.grandcentrix.tray:tray:0.12.0'
-    implementation 'androidx.core:core:1.3.1'
+    implementation 'androidx.core:core:1.3.2'
 //    implementation 'com.google.zxing:core:3.3.3' 先把文本方式稳定下来，再做 QRCode
     testImplementation 'junit:junit:4.13'
 }

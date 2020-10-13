@@ -13,7 +13,7 @@
     <string name="add">Добавить</string>
     <string name="addFailed">Не удалось добавить</string>
     <string name="addQQGroup">Присоединиться к QQ группе</string>
-    <string name="addToFreezeOnceQuit">Добавить в "Заморозка после выхода"</string>
+    <string name="addToFreezeOnceQuit">Добавить в Заморозка после выхода</string>
     <string name="addToMyCustomization">Добавить в \"Моя подборка\"</string>
     <string name="addToOneKeyList">Добавить в OneKEY заморозка</string>
     <string name="addToOneKeyUFList">Добавить в OneKEY заморозка</string>
@@ -21,21 +21,20 @@
     <string name="added">Добавлен</string>
     <string name="advance">Дополнительно</string>
     <string name="affect">Влияет на</string>
-    <string name="alertT1">Внимание!
-Не замораживайте важные для системы приложения. Это может привести к сбою системы!</string>
-    <string name="alert_isObsd">Окно затемнено, операция была отклонена. Пожалуйста, отключите экранные наложения  и повторите попытку.</string>
+    <string name="alertT1">Внимание! Не замораживайте важные для системы приложения. Это может привести к сбою системы!</string>
+    <string name="alert_isObsd">Окно затемнено, операция была отклонена. Пожалуйста, отключите экранные наложения и повторите попытку.</string>
     <string name="allow">Разрешить</string>
     <string name="allowEditWhCreateShortcut">Разрешить редактирование при создании ярлыков</string>
-    <string name="allowFollowSystemAutoSwitchDarkMode">Поддерживать переключение цветовой темы как в системе </string>
+    <string name="allowFollowSystemAutoSwitchDarkMode">Поддерживать переключение цветовой темы как в системе</string>
     <string name="alreadyExist">Уже существует</string>
     <string name="alwaysAllow_name">Всегда разрешать %1$s</string>
     <string name="appDetail">Сведения о приложении</string>
-    <string name="appHasNotifi">%1$s  все еще уведомляет</string>
-    <string name="appStore">Магазин приложений</string>
+    <string name="appHasNotifi">%1$s все еще уведомляет</string>
+    <string name="appStore">Play Маркет</string>
     <string name="app_installFailed">Ошибка установки %1$s</string>
     <string name="app_installFinished">%1$s установлено</string>
     <string name="app_name">FreezeYou!</string>
-    <string name="app_uninstallFailed">Сбой удаления  %1$s </string>
+    <string name="app_uninstallFailed">Сбой удаления %1$s</string>
     <string name="app_uninstallFinished">Завершено удаление %1$s</string>
     <string name="appearance">Внешний вид</string>
     <string name="application">Приложения</string>
@@ -58,15 +57,14 @@
     <string name="cannotInstall_colon">Не удается установить:</string>
     <string name="cannotInstall_colon_msg">Не удается установить: %1$s</string>
     <string name="caution">ВНИМАНИЕ</string>
-    <string name="cautionContent">Внимание! 
-Не замораживайте важные для системы приложения. Это может привести к сбою системы</string>
+    <string name="cautionContent">Внимание! Не замораживайте важные для системы приложения. Это может привести к сбою системы</string>
     <string name="chooseAction">Выбрать действие</string>
     <string name="chooseDetailAction">Пожалуйста, выберите действие</string>
     <string name="ciFinishedToast">Отправлено, пожалуйста, дождитесь обновления лаунчера, или перезапустите его.</string>
     <string name="clearAllUserData">Очистить все данные</string>
     <string name="clearIconCache">Очистить кэш иконок</string>
     <string name="clearNameCache">Очистить кэш имен приложений</string>
-    <string name="clearUninstalledPkgsInFOQList">Убрать удаленные приложения из "Заморозка после выхода"</string>
+    <string name="clearUninstalledPkgsInFOQList">Убрать удаленные приложения из Заморозка после выхода</string>
     <string name="clearUninstalledPkgsInOKFFList">Убрать удаленные приложения из OneKEY заморозка</string>
     <string name="clearUninstalledPkgsInOKUFList">Убрать удаленные приложения из OneKEY заморозка</string>
     <string name="commandExecutionTool">Инструмент выполнения команд</string>
@@ -114,7 +112,7 @@
     <string name="enableInstallPkgFunc">Включить функцию установки пакетов</string>
     <string name="enable_MRoot">Разморозка - без-ROOT</string>
     <string name="enable_MRoot_DPM">Разморозка - без-ROOT (DPM)</string>
-    <string name="enable_Root">Разморозка - ROOT </string>
+    <string name="enable_Root">Разморозка - ROOT</string>
     <string name="enable_Root_enable">Разморозка - ROOT (включить)</string>
     <string name="enable_Root_unhide">Разморозка - ROOT (показать)</string>
     <string name="errorInstallToast">Произошла ошибка при установке приложения: %1$s</string>
@@ -143,7 +141,7 @@
     <string name="freezeCompleted">Заморожено</string>
     <string name="freezeImmediately">Заморозка немедленно</string>
     <string name="freezeOnceQuit">Заморозка после выхода</string>
-    <string name="freezeOnceQuitList">Список "Заморозка после выхода"</string>
+    <string name="freezeOnceQuitList">Список Заморозка после выхода</string>
     <string name="freezeOrLaunch">Заморозка / Запуск</string>
     <string name="freezeSlashRun">Заморозка / Запуск</string>
     <string name="frozen">Замороженый</string>
@@ -201,8 +199,8 @@
     <string name="moreSettingsDashLineLabel">Дополнительные настройки %1$s</string>
     <string name="mustContainColon">Используйте двоеточие : для разделения часов и минут</string>
     <string name="myCustomization">Моя подборка</string>
-    <string name="myCustomizationDashLineLabel"> Моя подборка - %1$s</string>
-    <string name="nCaution">"Не напоминать"</string>
+    <string name="myCustomizationDashLineLabel">Моя подборка - %1$s</string>
+    <string name="nCaution">Не напоминать</string>
     <string name="nSCaution">Больше не показывать предупреждение при запуске</string>
     <string name="name">Название</string>
     <string name="needActiveAccessibilityService">Нужно включить службу поддержки специальных возможностей</string>
@@ -221,17 +219,17 @@
     <string name="noRootPermission">Разрешение ROOT не предоставлено</string>
     <string name="noSuchApiMode">Нет такого режима API</string>
     <string name="notAllowWhenIsObsd">Не позволять окну затемняться</string>
-    <string name="notAvailable">N/A </string>
+    <string name="notAvailable">N/A</string>
     <string name="notUpdatedForALongTime">Давно не обновлялось</string>
     <string name="notUpdatedForALongTimeMessage">Давно не обновлялось, хотите проверить наличие обновлений сейчас?</string>
     <string name="nothing">None</string>
-    <string name="notice">Совет</string>
+    <string name="notice">Подсказка</string>
     <string name="notificationBar">Уведомления</string>
     <string name="notificationBarFreezeImmediately">Заморозка сразу после нажатия на уведомление о заморозке/разморозке</string>
     <string name="okay">ОК</string>
-    <string name="onClickFuncChooseActionStyle">Стиль пункта "Действия при нажатии"</string>
+    <string name="onClickFuncChooseActionStyle">Стиль пункта Действия при нажатии</string>
     <string name="onClickFunction">Действия при нажатии</string>
-    <string name="onClickFunctionStatus">Состояние  "Действия при нажатии"</string>
+    <string name="onClickFunctionStatus">Состояние Действия при нажатии</string>
     <string name="oneKeyFreeze">OneKEY заморозка</string>
     <string name="oneKeyFreezeList">Список OneKEY заморозка</string>
     <string name="oneKeyLockScreen">Блокировка экрана</string>
@@ -271,7 +269,7 @@
     <string name="reject">Отклонено</string>
     <string name="remove">Удалить</string>
     <string name="removeFailed">Не удалось удалить</string>
-    <string name="removeFromFreezeOnceQuit">Удалить из "Заморозка после выхода"</string>
+    <string name="removeFromFreezeOnceQuit">Удалить из Заморозка после выхода</string>
     <string name="removeFromMyCustomization">Удалить из \"Моя подборка\"</string>
     <string name="removeFromOneKeyList">Удалить из OneKEY заморозка</string>
     <string name="removeFromOneKeyUFList">Удалить из OneKEY разморозка</string>
@@ -289,7 +287,7 @@
     <string name="restore">Восстановить</string>
     <string name="retry">Повтор</string>
     <string name="save">Сохранить</string>
-    <string name="saveOnClickFunctionStatus">Сохранить состояние "Действия при нажатии"</string>
+    <string name="saveOnClickFunctionStatus">Сохранить состояние Действия при нажатии</string>
     <string name="saveSortMethodStatus">Сохранить состояние метода сортировки</string>
     <string name="scheduledTaskDashLineLabel">Запланированное задание - %1$s</string>
     <string name="scheduledTasks">Запланированные задания</string>
@@ -301,7 +299,7 @@
     <string name="serviceLongerEx">Снизит вероятность сбоя фонового сервиса</string>
     <string name="share">Поделиться</string>
     <string name="shortCut">Ярлыки</string>
-    <string name="shortCutOneKeyFreezeAdditionalOptions">Дополнительные параметры ярлыка OneKEY заморозка </string>
+    <string name="shortCutOneKeyFreezeAdditionalOptions">Дополнительные параметры ярлыка OneKEY заморозка</string>
     <string name="shortcutAutoFUF">Ярлык автозаморозка или разморозка</string>
     <string name="shortcutAutoFUFEx">Заморозить незамороженые, разморозить замороженые</string>
     <string name="showInRecents">Показать в недавних</string>
@@ -371,7 +369,7 @@
         <item>Заморожено</item>
         <item>Разморожено</item>
         <item>Системные</item>
-        <item>Приложения пользователя </item>
+        <item>Приложения пользователя</item>
         <item>OneKEY заморозка</item>
         <item>OneKEY разморозка</item>
         <item>Заморозка при выходе</item>
