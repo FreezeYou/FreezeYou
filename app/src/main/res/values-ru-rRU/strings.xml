@@ -16,7 +16,7 @@
     <string name="addToFreezeOnceQuit">Добавить в Заморозка после выхода</string>
     <string name="addToMyCustomization">Добавить в \"Моя подборка\"</string>
     <string name="addToOneKeyList">Добавить в OneKEY заморозка</string>
-    <string name="addToOneKeyUFList">Добавить в OneKEY заморозка</string>
+    <string name="addToOneKeyUFList">Добавить в OneKEY разморозка</string>
     <string name="addToRemoveFrom">Добавить в / Удалить из</string>
     <string name="added">Добавлен</string>
     <string name="advance">Дополнительно</string>
@@ -86,7 +86,7 @@
     <string name="delete">Удалить</string>
     <string name="devicePolicyManagerNotFound">Диспетчер политики устройств не обнаружен</string>
     <string name="dialEntry">Используйте клавиатуру для ввода</string>
-    <string name="dialEntry_Ex">* # # 73393968 ## (* # #reezeYou ##) (большинство устройств Android поддерживают)</string>
+    <string name="dialEntry_Ex">*#*#73393968#*#* (*#*#FreezeYou#*#*) (большинство устройств Android поддерживают)</string>
     <string name="disableAEnable">Заморозка/Разморозка/ Запуск</string>
     <string name="disableApplications">Замороженые пакеты</string>
     <string name="disableClickDisappear">Не исчезать после нажатия</string>
@@ -273,7 +273,7 @@
     <string name="removeFromMyCustomization">Удалить из \"Моя подборка\"</string>
     <string name="removeFromOneKeyList">Удалить из OneKEY заморозка</string>
     <string name="removeFromOneKeyUFList">Удалить из OneKEY разморозка</string>
-    <string name="removeNoRootCaution">"Вы действительно хотите отменить разрешение для режима без-ROOT?
+    <string name="removeNoRootCaution">"Вы действительно хотите отменить разрешение для режима без-ROOT? 
 Чтобы избежать ненужных проблем, разморозьте все замороженные приложения перед отключением этого режима!"</string>
     <string name="removed">Удалено</string>
     <string name="repeat">Повтор</string>
@@ -410,7 +410,7 @@
         <item>Заморожено ↑</item>
         <item>Заморожено ↓</item>
         <item>Частота использования ↑</item>
-        <item>Частота использования ↓</item>s
+        <item>Частота использования ↓</item>
     </string-array>
     <string-array name="triggers">
         <item>При включении экрана</item>
