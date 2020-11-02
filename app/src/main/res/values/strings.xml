@@ -489,10 +489,12 @@
     <string-array name="displayLanguageOptionsSelection" translatable="false">
         <item>Default</item>
         <item>中文（中国大陆）</item>
-        <item>中文（中国台湾）</item>
+        <item>中文（中國臺灣）</item>
         <item>English (US)</item>
-        <item>Russian</item>
-        <item>Russian (Russia)</item>
+        <item>русский</item>
+        <item>русский (Россия)</item>
+        <item>Український</item>
+        <item>Український (Україна)</item>
     </string-array>
     <string-array name="displayLanguageOptionsSelectionValues" translatable="false">
         <item>Default</item>
@@ -501,6 +503,8 @@
         <item>en-US</item>
         <item>ru</item>
         <item>ru-RU</item>
+        <item>uk</item>
+        <item>uk-UA</item>
     </string-array>
     <string-array name="selectFUFModeSelection">
         <item>No-root (DPM Mode)</item>

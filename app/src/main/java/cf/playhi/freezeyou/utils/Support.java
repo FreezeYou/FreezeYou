@@ -379,6 +379,10 @@ public final class Support {
                 return new Locale("ru");
             case "ru-RU":
                 return new Locale("ru", "RU");
+            case "uk":
+                return new Locale("uk");
+            case "uk-UA":
+                return new Locale("uk", "UA");
             case "zh-CN":
                 return new Locale("zh", "CN");
             case "zh-TW":
