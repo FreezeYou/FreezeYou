@@ -14,8 +14,8 @@
     <string name="addQQGroup">Приєднатися до QQ групи</string>
     <string name="addToFreezeOnceQuit">Додати в Заморозка після виходу</string>
     <string name="addToMyCustomization">Додати в \"Моя підбірка\"</string>
-    <string name="addToOneKeyList">Додати в OneKEY заморозка</string>
-    <string name="addToOneKeyUFList">Додати в OneKEY розморозка</string>
+    <string name="addToOneKeyList">Додати в список OneKEY заморозка</string>
+    <string name="addToOneKeyUFList">Додати в список OneKEY розморозка</string>
     <string name="addToRemoveFrom">Додати в / Видалити з</string>
     <string name="added">Додано</string>
     <string name="advance">Додатково</string>
@@ -270,8 +270,8 @@
     <string name="removeFailed">Не вдалося видалити</string>
     <string name="removeFromFreezeOnceQuit">Видалити з Заморозка після виходу</string>
     <string name="removeFromMyCustomization">Видалити з \"Моя підбірка\"</string>
-    <string name="removeFromOneKeyList">Видалити з OneKEY заморозка</string>
-    <string name="removeFromOneKeyUFList">Видалити з OneKEY розморозка</string>
+    <string name="removeFromOneKeyList">Видалити з списку OneKEY заморозка</string>
+    <string name="removeFromOneKeyUFList">Видалити з списку OneKEY розморозка</string>
     <string name="removeNoRootCaution">"Ви дійсно хочете скасувати дозвіл для режиму без-ROOT?
 Щоб уникнути непотрібних проблем, необхідно розморозити всі заморожені додатки перед відключенням цього режиму! "</string>
     <string name="removed">Видалено</string>

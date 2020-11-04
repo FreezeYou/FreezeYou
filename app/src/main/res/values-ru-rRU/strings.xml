@@ -15,8 +15,8 @@
     <string name="addQQGroup">Присоединиться к QQ группе</string>
     <string name="addToFreezeOnceQuit">Добавить в Заморозка после выхода</string>
     <string name="addToMyCustomization">Добавить в \"Моя подборка\"</string>
-    <string name="addToOneKeyList">Добавить в OneKEY заморозка</string>
-    <string name="addToOneKeyUFList">Добавить в OneKEY разморозка</string>
+    <string name="addToOneKeyList">Добавить в список OneKEY заморозка</string>
+    <string name="addToOneKeyUFList">Добавить в список OneKEY разморозка</string>
     <string name="addToRemoveFrom">Добавить в / Удалить из</string>
     <string name="added">Добавлен</string>
     <string name="advance">Дополнительно</string>
@@ -271,8 +271,8 @@
     <string name="removeFailed">Не удалось удалить</string>
     <string name="removeFromFreezeOnceQuit">Удалить из Заморозка после выхода</string>
     <string name="removeFromMyCustomization">Удалить из \"Моя подборка\"</string>
-    <string name="removeFromOneKeyList">Удалить из OneKEY заморозка</string>
-    <string name="removeFromOneKeyUFList">Удалить из OneKEY разморозка</string>
+    <string name="removeFromOneKeyList">Удалить из списка OneKEY заморозка</string>
+    <string name="removeFromOneKeyUFList">Удалить из списка OneKEY разморозка</string>
     <string name="removeNoRootCaution">"Вы действительно хотите отменить разрешение для режима без-ROOT? 
 Чтобы избежать ненужных проблем, разморозьте все замороженные приложения перед отключением этого режима!"</string>
     <string name="removed">Удалено</string>

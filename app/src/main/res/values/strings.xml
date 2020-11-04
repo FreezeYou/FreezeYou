@@ -491,10 +491,10 @@
         <item>中文（中国大陆）</item>
         <item>中文（中國臺灣）</item>
         <item>English (US)</item>
-        <item>русский</item>
-        <item>русский (Россия)</item>
-        <item>Український</item>
-        <item>Український (Україна)</item>
+        <item>Русский</item>
+        <item>Русский (Россия)</item>
+        <item>Українська</item>
+        <item>Українська(Україна)</item>
     </string-array>
     <string-array name="displayLanguageOptionsSelectionValues" translatable="false">
         <item>Default</item>
