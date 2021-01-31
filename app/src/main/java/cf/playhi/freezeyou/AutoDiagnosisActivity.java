@@ -3,7 +3,6 @@ package cf.playhi.freezeyou;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -20,7 +19,6 @@ import net.grandcentrix.tray.AppPreferences;
 import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +32,10 @@ import cf.playhi.freezeyou.utils.ProcessUtils;
 
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.utils.VersionUtils.isOutdated;
 
 public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
 
@@ -237,11 +236,19 @@ public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
     }
 
     private void checkLongTimeNoUpdate(List<Map<String, Object>> problemsList) {
-        SharedPreferences sharedPreferences = getSharedPreferences("Ver", MODE_PRIVATE);
-        if ((new Date().getTime() - sharedPreferences.getLong("Time", 0)) > 1728000000)
-            problemsList.add(generateHashMap(getString(R.string.notUpdatedForALongTime), getString(R.string.someNewFuncMayPub), "-30", R.drawable.ic_attention));
-        else
-            problemsList.add(generateHashMap(getString(R.string.notUpdatedForALongTime), getString(R.string.someNewFuncMayPub), "-30", R.drawable.ic_done));
+        if (isOutdated(getApplicationContext())) {
+            problemsList.add(generateHashMap(
+                    getString(R.string.notUpdatedForALongTime),
+                    getString(R.string.someNewFuncMayPub),
+                    "-30",
+                    R.drawable.ic_attention));
+        } else {
+            problemsList.add(generateHashMap(
+                    getString(R.string.notUpdatedForALongTime),
+                    getString(R.string.someNewFuncMayPub),
+                    "-30",
+                    R.drawable.ic_done));
+        }
     }
 
     private void checkRootPermission(List<Map<String, Object>> problemsList) {

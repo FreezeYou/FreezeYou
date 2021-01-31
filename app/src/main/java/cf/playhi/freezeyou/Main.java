@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -74,8 +73,6 @@ import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeFabDotBackground;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
-import static cf.playhi.freezeyou.utils.VersionUtils.getVersionCode;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
@@ -87,6 +84,9 @@ import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.addToOneKeyList;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.utils.VersionUtils.getVersionCode;
+import static cf.playhi.freezeyou.utils.VersionUtils.isOutdated;
 
 public class Main extends FreezeYouBaseActivity {
 
@@ -1431,57 +1431,36 @@ public class Main extends FreezeYouBaseActivity {
     }
 
     private void checkLongTimeNotUpdated() {
-        new Thread(new Runnable() {
-            @SuppressLint("ApplySharedPref")
-            @Override
-            public void run() {
-                try {
-                    final SharedPreferences sharedPreferences = getSharedPreferences("Ver", MODE_PRIVATE);
-                    if (sharedPreferences.getInt("Ver", 0) < getVersionCode(getApplicationContext())) {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt("Ver", getVersionCode(getApplicationContext()));
-                        editor.putLong("Time", new Date().getTime());
-                        editor.commit();
-                    }
-                    if ((new Date().getTime() - sharedPreferences.getLong("Time", 0L)) > 2592000000L) {
-
-                        if (isFinishing()) return;
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                buildAlertDialog(
-                                        Main.this,
-                                        R.mipmap.ic_launcher_new_round,
-                                        R.string.notUpdatedForALongTimeMessage,
-                                        R.string.notice)
-                                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                checkUpdate(Main.this);
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                                            }
-                                        })
-                                        .setNeutralButton(R.string.later, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                                editor.putLong("Time", new Date().getTime());
-                                                editor.commit();
-                                            }
-                                        })
-                                        .create().show();
-                            }
-                        });
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+        new Thread(() -> {
+            try {
+                final SharedPreferences sharedPreferences = getSharedPreferences("Ver", MODE_PRIVATE);
+                if (sharedPreferences.getInt("Ver", 0) < getVersionCode(getApplicationContext())) {
+                    sharedPreferences.edit()
+                            .putInt("Ver", getVersionCode(getApplicationContext()))
+                            .putLong("Time", new Date().getTime())
+                            .apply();
                 }
+                if (isOutdated(sharedPreferences)) {
+
+                    if (isFinishing()) return;
+
+                    runOnUiThread(() -> buildAlertDialog(
+                            Main.this,
+                            R.mipmap.ic_launcher_new_round,
+                            R.string.notUpdatedForALongTimeMessage,
+                            R.string.notice)
+                            .setPositiveButton(R.string.yes, (dialogInterface, i) ->
+                                    checkUpdate(Main.this))
+                            .setNegativeButton(R.string.no, null)
+                            .setNeutralButton(R.string.later, (dialog, which) -> {
+                                sharedPreferences.edit()
+                                        .putLong("Time", new Date().getTime())
+                                        .apply();
+                            })
+                            .create().show());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
     }

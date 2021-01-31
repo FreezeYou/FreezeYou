@@ -2,9 +2,12 @@ package cf.playhi.freezeyou.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+
+import java.util.Date;
 
 import cf.playhi.freezeyou.R;
 
@@ -70,6 +73,21 @@ final public class VersionUtils {
                                     "https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(context));
                 })
                 .create().show();
+    }
+
+    /**
+     * @return Whether need to ask for checking update.
+     */
+    public static boolean isOutdated(Context context) {
+        return isOutdated(context.getSharedPreferences("Ver", Context.MODE_PRIVATE));
+    }
+
+    /**
+     * @param sp SharedPreferences, name Ver.
+     * @return Whether need to ask for checking update.
+     */
+    public static boolean isOutdated(SharedPreferences sp) {
+        return (new Date().getTime() - sp.getLong("Time", 0L)) > 2592000000L;
     }
 
 }
