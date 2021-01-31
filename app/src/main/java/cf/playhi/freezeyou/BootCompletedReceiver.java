@@ -16,6 +16,7 @@ import java.io.IOException;
 import cf.playhi.freezeyou.utils.FileUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
+import cf.playhi.freezeyou.utils.VersionUtils;
 
 import static cf.playhi.freezeyou.utils.FUFUtils.checkAndCreateFUFQuickNotification;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;

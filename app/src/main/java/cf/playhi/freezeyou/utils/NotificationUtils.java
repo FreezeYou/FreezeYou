@@ -1,6 +1,7 @@
 package cf.playhi.freezeyou.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,7 +9,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -18,6 +21,7 @@ import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.receiver.NotificationDeletedReceiver;
 
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public final class NotificationUtils {
 
@@ -94,6 +98,26 @@ public final class NotificationUtils {
         AppPreferences defaultSharedPreferences = new AppPreferences(context);
         String notifying = defaultSharedPreferences.getString("notifying", "");
         return notifying == null || !notifying.contains(pkgName + ",") || defaultSharedPreferences.put("notifying", notifying.replace(pkgName + ",", ""));
+    }
+
+    public static void startAppNotificationSettingsSystemActivity(Activity activity, String pkgName, int pkgUid) {
+        final Intent intent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            intent = new Intent("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("app_package", pkgName);
+            intent.putExtra("app_uid", pkgUid);
+            intent.putExtra("android.provider.extra.APP_PACKAGE", pkgName);
+        } else {
+            intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.parse("package:" + pkgName);
+            intent.setData(uri);
+        }
+        try {
+            activity.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showToast(activity, e.getLocalizedMessage());
+        }
     }
 
 }

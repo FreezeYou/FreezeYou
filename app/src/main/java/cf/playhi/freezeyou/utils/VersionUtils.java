@@ -1,19 +1,18 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou.utils;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 
-import cf.playhi.freezeyou.utils.AlertDialogUtils;
+import cf.playhi.freezeyou.R;
 
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 
-final class VersionUtils {
+final public class VersionUtils {
 
-    static int getVersionCode(Context context) {
+    public static int getVersionCode(Context context) {
         PackageManager packageManager = context.getPackageManager();
         String packageName = context.getPackageName();
         int flags = 0;
@@ -30,7 +29,7 @@ final class VersionUtils {
         return 0;
     }
 
-    static String getVersionName(Context context) {
+    public static String getVersionName(Context context) {
         PackageManager packageManager = context.getPackageManager();
         String packageName = context.getPackageName();
         int flags = 0;
@@ -47,7 +46,7 @@ final class VersionUtils {
         return "";
     }
 
-    static void checkUpdate(final Context context) {
+    public static void checkUpdate(final Context context) {
         //"https://play.google.com/store/apps/details?id=cf.playhi.freezeyou"
         //"https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(context)
         AlertDialogUtils.buildAlertDialog(
@@ -55,26 +54,20 @@ final class VersionUtils {
                 R.mipmap.ic_launcher_new_round,
                 R.string.plsSelect,
                 R.string.notice)
-                .setPositiveButton(R.string.appStore, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details/?id=cf.playhi.freezeyou"));
-                        String title = context.getString(R.string.plsSelect);
-                        Intent chooser = Intent.createChooser(intent, title);
-                        if (intent.resolveActivity(context.getPackageManager()) != null) {
-                            context.startActivity(chooser);
-                        }
+                .setPositiveButton(R.string.appStore, (dialogInterface, i) -> {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details/?id=cf.playhi.freezeyou"));
+                    String title = context.getString(R.string.plsSelect);
+                    Intent chooser = Intent.createChooser(intent, title);
+                    if (intent.resolveActivity(context.getPackageManager()) != null) {
+                        context.startActivity(chooser);
                     }
                 })
-                .setNeutralButton(R.string.visitWebsite, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        String s = getVersionName(context);
-                        requestOpenWebSite(context,
-                                s != null && s.contains("g") ?
-                                        "https://play.google.com/store/apps/details?id=cf.playhi.freezeyou" :
-                                        "https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(context));
-                    }
+                .setNeutralButton(R.string.visitWebsite, (dialog, i) -> {
+                    String s = getVersionName(context);
+                    requestOpenWebSite(context,
+                            s != null && s.contains("g") ?
+                                    "https://play.google.com/store/apps/details?id=cf.playhi.freezeyou" :
+                                    "https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(context));
                 })
                 .create().show();
     }

@@ -10,7 +10,7 @@ import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 
 import static cf.playhi.freezeyou.ThemeUtils.processAddTranslucent;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class Uninstall extends FreezeYouBaseActivity {

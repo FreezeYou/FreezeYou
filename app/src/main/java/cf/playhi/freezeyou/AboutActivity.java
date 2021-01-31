@@ -12,9 +12,9 @@ import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
-import static cf.playhi.freezeyou.VersionUtils.getVersionCode;
-import static cf.playhi.freezeyou.VersionUtils.getVersionName;
+import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.utils.VersionUtils.getVersionCode;
+import static cf.playhi.freezeyou.utils.VersionUtils.getVersionName;
 import static cf.playhi.freezeyou.utils.MoreUtils.joinQQGroup;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;

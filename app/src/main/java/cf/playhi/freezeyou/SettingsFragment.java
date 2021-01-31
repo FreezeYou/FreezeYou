@@ -2,7 +2,6 @@ package cf.playhi.freezeyou;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -12,7 +11,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.provider.Settings;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
@@ -23,11 +21,12 @@ import java.io.File;
 
 import cf.playhi.freezeyou.utils.DataStatisticsUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
+import cf.playhi.freezeyou.utils.NotificationUtils;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
 
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
-import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.FileUtils.deleteAllFiles;
@@ -143,41 +142,30 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     break;
                 case "deleteAllScheduledTasks":
                     buildAlertDialog(getActivity(), android.R.drawable.ic_dialog_alert, R.string.askIfDel, R.string.caution)
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    File file;
-                                    for (String name : new String[]{"scheduledTasks", "scheduledTriggerTasks"}) {
-                                        file = getActivity().getApplicationContext().getDatabasePath(name);
-                                        if (file.exists())
-                                            file.delete();
-                                    }
+                            .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                File file;
+                                for (String name : new String[]{"scheduledTasks", "scheduledTriggerTasks"}) {
+                                    file = getActivity().getApplicationContext().getDatabasePath(name);
+                                    if (file.exists())
+                                        file.delete();
                                 }
                             })
-                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            })
+                            .setNegativeButton(R.string.no, null)
                             .create().show();
                     break;
                 case "clearAllUserData":
                     buildAlertDialog(getActivity(), R.mipmap.ic_launcher_new_round, R.string.clearAllUserData, R.string.notice)
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ActivityManager activityManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-                                    if (activityManager != null && Build.VERSION.SDK_INT >= 19) {
-                                        try {
-                                            showToast(getActivity(), activityManager.clearApplicationUserData() ? R.string.success : R.string.failed);
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                            showToast(getActivity(), R.string.failed);
-                                        }
-                                    } else {
-                                        showToast(getActivity(), R.string.sysVerLow);
+                            .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                ActivityManager activityManager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+                                if (activityManager != null && Build.VERSION.SDK_INT >= 19) {
+                                    try {
+                                        showToast(getActivity(), activityManager.clearApplicationUserData() ? R.string.success : R.string.failed);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        showToast(getActivity(), R.string.failed);
                                     }
+                                } else {
+                                    showToast(getActivity(), R.string.sysVerLow);
                                 }
                             })
                             .setNegativeButton(R.string.no, null)
@@ -190,22 +178,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     );
                     break;
                 case "notificationBar_more":
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        startActivity(
-                                new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                                        .putExtra(
-                                                Settings.EXTRA_APP_PACKAGE,
-                                                getActivity().getPackageName()
-                                        )
-                        );
-                    } else {
-                        startActivity(
-                                new Intent(
-                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                        Uri.parse("package:" + getActivity().getPackageName())
-                                )
-                        );
-                    }
+                    NotificationUtils.startAppNotificationSettingsSystemActivity(
+                            getActivity(), getActivity().getPackageName(),
+                            getActivity().getApplicationInfo().uid
+                    );
                     break;
                 case "clearUninstalledPkgsInOKFFList":
                     if (OneKeyListUtils.removeUninstalledFromOneKeyList(getActivity(),
@@ -257,12 +233,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     private void askIfResetTimes(final String dbName) {
         buildAlertDialog(getActivity(), android.R.drawable.ic_dialog_alert, R.string.askIfDel, R.string.caution)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        DataStatisticsUtils.resetTimes(getActivity(), dbName);
-                    }
-                })
+                .setPositiveButton(R.string.yes, (dialog, which) ->
+                        DataStatisticsUtils.resetTimes(getActivity(), dbName))
                 .setNegativeButton(R.string.no, null)
                 .create().show();
     }

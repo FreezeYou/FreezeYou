@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -22,7 +20,6 @@ import net.grandcentrix.tray.AppPreferences;
 import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,11 +29,12 @@ import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.AccessibilityUtils;
 import cf.playhi.freezeyou.utils.ApplicationLabelUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
+import cf.playhi.freezeyou.utils.NotificationUtils;
 import cf.playhi.freezeyou.utils.ProcessUtils;
 
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
@@ -49,24 +47,14 @@ public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
         setContentView(R.layout.autodiagnosis);
         processActionBar(getActionBar());
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                go();
-            }
-        }).start();
+        new Thread(this::go).start();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                go();
-            }
-        }).start();
+        new Thread(this::go).start();
     }
 
     private void go() {
@@ -111,12 +99,9 @@ public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
         checkIfNoProblemFound(problemsList);
         setProgress(adg_progressBar, 98);
 
-        Collections.sort(problemsList, new Comparator<Map<String, Object>>() {
-            @Override
-            public int compare(Map<String, Object> t0, Map<String, Object> t1) {
-                int i = ((Integer) t0.get("status")).compareTo((Integer) t1.get("status"));
-                return i == 0 ? ((String) t0.get("id")).compareTo((String) t1.get("id")) : i;
-            }
+        Collections.sort(problemsList, (t0, t1) -> {
+            int i = ((Integer) t0.get("status")).compareTo((Integer) t1.get("status"));
+            return i == 0 ? ((String) t0.get("id")).compareTo((String) t1.get("id")) : i;
         });
 
         final SimpleAdapter adapter =
@@ -127,58 +112,44 @@ public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
                         new String[]{"title", "sTitle", "status", "id"},
                         new int[]{R.id.adgli_title_textView, R.id.adgli_subTitle_textView, R.id.adgli_status_imageView});
 
-        adg_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String s = (String) problemsList.get(position).get("id");
-                if (s == null)
-                    s = "";
-                switch (s) {
-                    case "-30":
-                        checkUpdate(AutoDiagnosisActivity.this);
-                        break;
-                    case "1":
-                        AccessibilityUtils.openAccessibilitySettings(AutoDiagnosisActivity.this);
-                        break;
-                    case "2":
-                        if (Build.VERSION.SDK_INT >= 21) {
-                            try {
-                                startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-                            } catch (Exception e) {
-                                showToast(AutoDiagnosisActivity.this, R.string.failed);
-                            }
-                        }
-                        break;
-                    case "4":
-                        if (Build.VERSION.SDK_INT >= 23) {
-                            Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-                            if (intent.resolveActivity(getPackageManager()) != null) {
-                                startActivity(intent);
-                            }
-                        }
-                        break;
-                    case "6":
-                        Intent intent;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            intent = new Intent("android.settings.APP_NOTIFICATION_SETTINGS");
-                            intent.putExtra("app_package", "cf.play" + "hi.freezeyou");
-                            intent.putExtra("app_uid", getApplicationInfo().uid);
-                            intent.putExtra("android.provider.extra.APP_PACKAGE", getPackageName());
-                        } else {
-                            intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            Uri uri = Uri.parse("package:cf.playhi.freezeyou");
-                            intent.setData(uri);
-                        }
+        adg_listView.setOnItemClickListener((parent, view, position, id) -> {
+            String s = (String) problemsList.get(position).get("id");
+            if (s == null)
+                s = "";
+            switch (s) {
+                case "-30":
+                    checkUpdate(AutoDiagnosisActivity.this);
+                    break;
+                case "1":
+                    AccessibilityUtils.openAccessibilitySettings(AutoDiagnosisActivity.this);
+                    break;
+                case "2":
+                    if (Build.VERSION.SDK_INT >= 21) {
                         try {
-                            startActivity(intent);
+                            startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
                         } catch (Exception e) {
-                            e.printStackTrace();
-                            showToast(getApplicationContext(), e.getLocalizedMessage());
+                            showToast(AutoDiagnosisActivity.this, R.string.failed);
                         }
-                        break;
-                    default:
-                        break;
-                }
+                    }
+                    break;
+                case "4":
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(intent);
+                        }
+                    }
+                    break;
+                case "6":
+                    NotificationUtils.
+                            startAppNotificationSettingsSystemActivity(
+                                    AutoDiagnosisActivity.this,
+                                    "cf.play" + "hi.freezeyou",
+                                    getApplicationInfo().uid
+                            );
+                    break;
+                default:
+                    break;
             }
         });
 
@@ -188,33 +159,22 @@ public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
     }
 
     private void disableIndeterminate(final ProgressBar progressBar) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setIndeterminate(false);
-            }
-        });
+        runOnUiThread(() -> progressBar.setIndeterminate(false));
     }
 
     private void done(final ProgressBar progressBar, final ListView listView, final SimpleAdapter adapter) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                listView.setAdapter(adapter);
-                progressBar.setVisibility(View.GONE);
-            }
+        runOnUiThread(() -> {
+            listView.setAdapter(adapter);
+            progressBar.setVisibility(View.GONE);
         });
     }
 
     private void setProgress(final ProgressBar progressBar, final int progress) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (Build.VERSION.SDK_INT >= 24) {
-                    progressBar.setProgress(progress, true);
-                } else {
-                    progressBar.setProgress(progress);
-                }
+        runOnUiThread(() -> {
+            if (Build.VERSION.SDK_INT >= 24) {
+                progressBar.setProgress(progress, true);
+            } else {
+                progressBar.setProgress(progress);
             }
         });
     }
