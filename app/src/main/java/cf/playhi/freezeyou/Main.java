@@ -246,7 +246,7 @@ public class Main extends FreezeYouBaseActivity {
         currentSortRule = sortRule;
         final FrameLayout appListFragmentContainer = findViewById(R.id.main_appList_fragmentContainer_frameLayout);
         final ProgressBar progressBar = findViewById(R.id.progressBar);
-        final TextView textView = findViewById(R.id.textView);
+        final TextView mainCautionTextView = findViewById(R.id.main_caution_textView);
         final TextView main_loading_progress_textView = findViewById(R.id.main_loading_progress_textView);
         final FrameLayout linearLayout = findViewById(R.id.layout2);
         final ArrayList<Map<String, Object>> AppList = new ArrayList<>();
@@ -290,29 +290,30 @@ public class Main extends FreezeYouBaseActivity {
 
         if (isFinishing()) return;
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        runOnUiThread(() -> {
 
-                if (Build.VERSION.SDK_INT >= 21) {
-                    moreSettingsImageButton.setBackgroundResource(R.drawable.oval_ripple);
-                    if (!PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                            .getBoolean("displayListDivider", false)) {
-                        search_editText.setBackgroundTintList(
-                                ColorStateList.valueOf(
-                                        getResources().getColor(R.color.realTranslucent)
-                                )
-                        );
-                    }
-                } else {
-                    moreSettingsImageButton.setBackgroundResource(getThemeFabDotBackground(Main.this));
+            if (Build.VERSION.SDK_INT >= 21) {
+                moreSettingsImageButton.setBackgroundResource(R.drawable.oval_ripple);
+                if (!PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                        .getBoolean("displayListDivider", false)) {
+                    search_editText.setBackgroundTintList(
+                            ColorStateList.valueOf(
+                                    getResources().getColor(R.color.realTranslucent)
+                            )
+                    );
                 }
+            } else {
+                moreSettingsImageButton.setBackgroundResource(getThemeFabDotBackground(Main.this));
+            }
 
-                linearLayout.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-                main_loading_progress_textView.setVisibility(View.VISIBLE);
-                appListFragmentContainer.setVisibility(View.GONE);
-                main_loading_progress_textView.setText(R.string.loadingPkgList);
+            linearLayout.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            main_loading_progress_textView.setVisibility(View.VISIBLE);
+            appListFragmentContainer.setVisibility(View.GONE);
+            main_loading_progress_textView.setText(R.string.loadingPkgList);
+            if (PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                    .getBoolean("noCaution", false)) {
+                mainCautionTextView.setVisibility(View.GONE);
             }
         });
 
@@ -681,7 +682,7 @@ public class Main extends FreezeYouBaseActivity {
 
                 main_loading_progress_textView.setText(R.string.finish);
                 progressBar.setVisibility(View.GONE);
-                textView.setVisibility(View.GONE);
+                mainCautionTextView.setVisibility(View.GONE);
                 main_loading_progress_textView.setVisibility(View.GONE);
                 linearLayout.setVisibility(View.GONE);
                 appListFragmentContainer.setVisibility(View.VISIBLE);
