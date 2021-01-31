@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,28 +50,28 @@ final public class VersionUtils {
         return "";
     }
 
-    public static void checkUpdate(final Context context) {
+    public static void checkUpdate(final Activity activity) {
         //"https://play.google.com/store/apps/details?id=cf.playhi.freezeyou"
         //"https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(context)
         AlertDialogUtils.buildAlertDialog(
-                context,
+                activity,
                 R.mipmap.ic_launcher_new_round,
                 R.string.plsSelect,
                 R.string.notice)
                 .setPositiveButton(R.string.appStore, (dialogInterface, i) -> {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details/?id=cf.playhi.freezeyou"));
-                    String title = context.getString(R.string.plsSelect);
+                    String title = activity.getString(R.string.plsSelect);
                     Intent chooser = Intent.createChooser(intent, title);
-                    if (intent.resolveActivity(context.getPackageManager()) != null) {
-                        context.startActivity(chooser);
+                    if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                        activity.startActivity(chooser);
                     }
                 })
                 .setNeutralButton(R.string.visitWebsite, (dialog, i) -> {
-                    String s = getVersionName(context);
-                    requestOpenWebSite(context,
+                    String s = getVersionName(activity);
+                    requestOpenWebSite(activity,
                             s != null && s.contains("g") ?
                                     "https://play.google.com/store/apps/details?id=cf.playhi.freezeyou" :
-                                    "https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(context));
+                                    "https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(activity));
                 })
                 .create().show();
     }
