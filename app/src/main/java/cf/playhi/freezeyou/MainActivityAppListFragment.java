@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -60,7 +61,7 @@ public class MainActivityAppListFragment extends Fragment {
                 mAppListListView.setMultiChoiceModeListener(mMultiChoiceModeListener);
             if (mAppListAdapter != null)
                 mAppListListView.setAdapter(mAppListAdapter);
-            if (!mShowListViewDivider){
+            if (!mShowListViewDivider) {
                 mAppListListView.setDivider(getResources().getDrawable(R.color.realTranslucent));
                 mAppListListView.setDividerHeight(2);
             }
@@ -111,7 +112,9 @@ public class MainActivityAppListFragment extends Fragment {
         }
     }
 
-    public MainAppListSimpleAdapter setAppListAdapter(Context context, ArrayList<Map<String, Object>> appList, ArrayList<String> selectedPackages) {
+    public MainAppListSimpleAdapter setAppListAdapter(
+            Context context, ArrayList<Map<String, Object>> appList,
+            ArrayList<String> selectedPackages) {
         if (mAppListAdapter instanceof MainAppListSimpleAdapter) {
             ((MainAppListSimpleAdapter) mAppListAdapter).replaceAllInFormerArrayList(appList);
         } else {
@@ -128,23 +131,16 @@ public class MainActivityAppListFragment extends Fragment {
                             new int[]{R.id.img, R.id.name, R.id.pkgName, R.id.isFrozen});
         }
 
-        if (mUseGridMode) {
-            if (mAppListGridView != null) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAppListGridView.setAdapter(mAppListAdapter);
-                    }
-                });
-            }
-        } else {
-            if (mAppListListView != null) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAppListListView.setAdapter(mAppListAdapter);
-                    }
-                });
+        Activity activity = getActivity();
+        if (activity != null) {
+            if (mUseGridMode) {
+                if (mAppListGridView != null) {
+                    activity.runOnUiThread(() -> mAppListGridView.setAdapter(mAppListAdapter));
+                }
+            } else {
+                if (mAppListListView != null) {
+                    activity.runOnUiThread(() -> mAppListListView.setAdapter(mAppListAdapter));
+                }
             }
         }
 

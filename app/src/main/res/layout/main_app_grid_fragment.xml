@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <GridView
         android:id="@+id/main_appList_gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fastScrollEnabled="true"
         android:gravity="center"
         android:numColumns="auto_fit"
         android:stretchMode="spacingWidthUniform"
-        android:fastScrollEnabled="true"
-        android:verticalSpacing="20dp" />
+        android:verticalSpacing="6dp" />
 
 </LinearLayout>

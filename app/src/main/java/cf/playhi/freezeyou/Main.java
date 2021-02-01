@@ -1175,7 +1175,14 @@ public class Main extends FreezeYouBaseActivity {
                     .create().show();
         }
 
-        isGridMode = "grid".equals(sharedPref.getString("mainActivityPattern", "default"));
+        String mainActivityPattern = sharedPref.getString("mainActivityPattern", "default");
+        if ("default".equals(mainActivityPattern)) {
+            isGridMode =
+                    getWindowManager().getDefaultDisplay().getWidth()
+                            > getWindowManager().getDefaultDisplay().getHeight() * 1.2;
+        } else {
+            isGridMode = "grid".equals(mainActivityPattern);
+        }
         if (mMainActivityAppListFragment == null) {
             mMainActivityAppListFragment = new MainActivityAppListFragment();
             mMainActivityAppListFragment.setUseGridMode(isGridMode);

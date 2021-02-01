@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou.utils;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -271,7 +272,15 @@ public final class TasksUtils {
     private static void startPackages(Context context, String[] packages) {
         PackageManager pm = context.getPackageManager();
         for (String aPackage : packages) {
-            context.startActivity(pm.getLaunchIntentForPackage(aPackage));
+            Intent launchIntent = pm.getLaunchIntentForPackage(aPackage);
+
+            if (launchIntent == null) continue;
+
+            if (context instanceof Activity) {
+                context.startActivity(launchIntent);
+            } else {
+                context.startActivity(launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
         }
     }
 
