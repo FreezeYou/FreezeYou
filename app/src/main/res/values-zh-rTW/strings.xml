@@ -352,6 +352,17 @@
     <string name="jumpToSysInstaller">转至系统安装器</string>
     <string name="displayListDivider">显示列表的分割线</string>
     <string name="appearance">外观</string>
+    <string name="createQuickFUFNotiAfterUnfrozen">解冻后创建相应的快捷通知</string>
+    <string name="executionResult_colon_message">Execution result: %1$s</string>
+    <string name="unknownResult_probablySuccess">Unknown result (Probably success)</string>
+    <string name="unknownError">Unknown error</string>
+    <string name="packageNameIsNull">Package name is null</string>
+    <string name="isNotDevicePolicyManager">Is not device policy manager</string>
+    <string name="noSuchApiMode">No such api mode</string>
+    <string name="executeFailedFromSystem">Execute failed from system</string>
+    <string name="isNotSystemApp">Is not system app</string>
+    <string name="telegramGroup_colon">Telegram Group: %1$s</string>
+    <string name="correspondingAndAvailableWebsiteUrlLanguageCode">en-US</string>
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
         <item>僅已凍結</item>
@@ -415,6 +426,8 @@
         <item>ROOT（HIDE模式）</item>
         <item>ROOT（DISABLE模式）</item>
         <item>遺留的（自動DPM或DISABLE模式）</item>
-        <item>Island（Delegation API）</item>
+        <item>系统应用（DISABLE模式）</item>
+        <item>系统应用（DISABLE_USER模式）</item>
+        <item>系统应用（DISABLE_UNTIL_USED模式）</item>
     </string-array>
 </resources>
