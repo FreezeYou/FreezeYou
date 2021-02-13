@@ -257,8 +257,8 @@
     <string name="target_colon">目标：</string>
     <string name="alwaysAllow_name">总是允许 %1$s</string>
     <string name="existed_colon">现存：%1$s</string>
-    <string name="manageUriAutoAllow">管理 URI 请求白名单</string>
-    <string name="manageIpaAutoAllow">管理安装应用请求白名单</string>
+    <string name="manageUriAutoAllow">管理 URI 请求自动允许名单</string>
+    <string name="manageIpaAutoAllow">管理安装应用请求自动允许名单</string>
     <string name="delAllCache">清除全部缓存</string>
     <string name="needStoragePermission">需要存储权限</string>
     <string name="okay">好的</string>
@@ -321,8 +321,8 @@
     <string name="application_colon_app">应用：%1$s</string>
     <string name="pkgName_colon_pkgName">包名：%1$s</string>
     <string name="cannotInstall_colon_msg">无法安装：%1$s</string>
-    <string name="uriAutoAllowList">URI 请求白名单</string>
-    <string name="ipaAutoAllowList">安装应用请求白名单</string>
+    <string name="uriAutoAllowList">URI 请求自动允许名单</string>
+    <string name="ipaAutoAllowList">安装应用请求自动允许名单</string>
     <string name="installing_app">正在安装 %1$s</string>
     <string name="uninstalling_app">正在卸载 %1$s</string>
     <string name="app_installFinished">%1$s 安装完成</string>
@@ -352,6 +352,17 @@
     <string name="jumpToSysInstaller">转至系统安装器</string>
     <string name="displayListDivider">显示列表的分割线</string>
     <string name="appearance">外观</string>
+    <string name="createQuickFUFNotiAfterUnfrozen">解冻后创建相应的快捷通知</string>
+    <string name="executionResult_colon_message">执行结果：%1$s</string>
+    <string name="unknownResult_probablySuccess">结果未知（可能成功）</string>
+    <string name="unknownError">未知错误</string>
+    <string name="packageNameIsNull">包名为空</string>
+    <string name="isNotDevicePolicyManager">无 DPM 权限</string>
+    <string name="noSuchApiMode">无该 API 模式</string>
+    <string name="executeFailedFromSystem">系统内部错误</string>
+    <string name="isNotSystemApp">非系统应用</string>
+    <string name="telegramGroup_colon">电报群组：%1$s</string>
+    <string name="correspondingAndAvailableWebsiteUrlLanguageCode">zh-CN</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
@@ -415,6 +426,8 @@
         <item>ROOT（HIDE模式）</item>
         <item>ROOT（DISABLE模式）</item>
         <item>遗留的（自动DPM或DISABLE模式）</item>
-        <item>炼妖壶（Delegation API）</item>
+        <item>系统应用（DISABLE模式）</item>
+        <item>系统应用（DISABLE_USER模式）</item>
+        <item>系统应用（DISABLE_UNTIL_USED模式）</item>
     </string-array>
 </resources>
