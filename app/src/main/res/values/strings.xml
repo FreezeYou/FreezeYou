@@ -1,368 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FreezeYou!</string>
-    <string name="oneKeyFreeze">一键冻结</string>
-    <string name="oneKeyUF">一键解冻</string>
-    <string name="alertT1">注意！\n不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n请谨慎操作！</string>
-    <string name="cancel">取消</string>
-    <string name="chooseDetailAction">请选择具体操作</string>
-    <string name="added">已添加</string>
-    <string name="notice">提示</string>
-    <string name="freeze">冻结</string>
-    <string name="more">更多</string>
-    <string name="appDetail">应用详情</string>
-    <string name="removeFromOneKeyList">移出一键冻结列表</string>
-    <string name="removeFromOneKeyUFList">移出一键解冻列表</string>
-    <string name="removeFromFreezeOnceQuit">移出离开冻结列表</string>
-    <string name="removed">已移出</string>
-    <string name="removeFailed">移除失败</string>
-    <string name="addToOneKeyList">加入一键冻结列表</string>
-    <string name="addToOneKeyUFList">加入一键解冻列表</string>
-    <string name="addToFreezeOnceQuit">加入离开冻结列表</string>
-    <string name="addFailed">添加失败</string>
-    <string name="caution">警告</string>
-    <string name="cautionContent">不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n\n长按可以多选\n右侧点为是否已冻结\n主题以及桌面三个图标等可以在“更多设置”中自行选择</string>
-    <string name="yes">是</string>
-    <string name="no">否</string>
-    <string name="requested">已发出创建请求</string>
-    <string name="requestFailed">请求创建失败：</string>
-    <string name="createOneKeyFreezeShortcut">一键冻结</string>
-    <string name="executed">执行完成</string>
-    <string name="exception">异常：</string>
-    <string name="launch">启动</string>
-    <string name="mayUnrooted">可能尚未ROOT或免ROOT模式未启用成功</string>
-    <string name="mayUnrootedOrOtherEx">可能没有授予权限、目标已卸载或发生了其它异常</string>
-    <string name="unfreeze">解冻</string>
-    <string name="unfreezedAndAskLaunch">已要求解冻，立即尝试启动？</string>
-    <string name="unrootedOrCannotFindTheLaunchIntent">解冻成功但未找到程序入口，或权限不足导致解冻失败</string>
-    <string name="frozen">已冻结</string>
-    <string name="OneKeyFreezeImmediately">一键冻结</string>
-    <string name="about">关于软件</string>
-    <string name="plsVisit">请访问</string>
-    <string name="viewMode">查看模式</string>
-    <string name="onlyFrozen">仅已冻结</string>
-    <string name="onlyUF">仅未冻结</string>
-    <string name="shortCut">快捷方式</string>
-    <string name="notAvailable">暂无</string>
-    <string name="displayAll">显示全部</string>
-    <string name="onlyOnekey">一键冻结</string>
-    <string name="uninstalled">已卸载</string>
-    <string name="onlySA">系统预装</string>
-    <string name="onlyUA">用户应用</string>
-    <string name="moreSettings">更多设置</string>
-    <string name="visitWebsite">访问官网</string>
-    <string name="addQQGroup">加入QQ群</string>
-    <string name="dangerZone">危险区</string>
-    <string name="disableMRootMode">解除免ROOT</string>
-    <string name="disableMRootModeEx">如果启用免ROOT模式成功，需要解除后才能正常卸载本应用程序。</string>
-    <string name="update">检查更新</string>
-    <string name="common">常规</string>
-    <string name="openImmediately">立即打开</string>
-    <string name="openImmediatelyEx">解冻后直接打开应用程序，不再询问</string>
-    <string name="hToUse">如何使用</string>
-    <string name="openAndUFImmediately">快捷方式立即解冻并启动</string>
-    <string name="openAndUFImmediatelyEx">损失快捷方式冻结的便利（可利用 一键冻结）</string>
-    <string name="quickView">快捷查看</string>
-    <string name="nCaution">不再提醒</string>
-    <string name="nSCaution">启动时不再显示警示</string>
-    <string name="advance">高级</string>
-    <string name="manualMode">手动模式</string>
-    <string name="packageName">应用程序包名</string>
-    <string name="disable_MRoot">冻结 - 免ROOT</string>
-    <string name="disable_Root">冻结 - ROOT</string>
-    <string name="enable_MRoot">解冻 - 免ROOT</string>
-    <string name="enable_Root">解冻 - ROOT</string>
-    <string name="failed">失败</string>
-    <string name="success">成功</string>
-    <string name="disableAEnable">冻结/解冻/启动</string>
-    <string name="copyPkgName">复制包名</string>
-    <string name="createDisEnableShortCut">创建冻结解冻快捷方式</string>
-    <string name="iconAEntry">图标与入口</string>
-    <string name="dialEntry">拨号盘进入</string>
-    <string name="dialEntry_Ex">*#*#373393968#*#*(*#*#FreezeYou#*#*)(大部分安卓设备支持)</string>
-    <string name="ciFinishedToast">已提交，请等待桌面刷新或重启桌面。</string>
-    <string name="ifUploadCrashLog">检测到存在发生过但并未提交的异常日志，是否上传日志？</string>
-    <string name="search">搜索</string>
-    <string name="launchMode">启动模式</string>
-    <string name="freezeImmediately">立即冻结</string>
-    <string name="UFImmediately">立即解冻</string>
-    <string name="plsRemoveUninstalledApplications">[提示]可以将已卸载的应用程序移出列表</string>
-    <string name="notificationBarFreezeImmediately">点击通知栏快捷操作立即冻结</string>
-    <string name="onClickFunction">单击功能</string>
-    <string name="chooseAction">选择操作</string>
-    <string name="autoUFOrFreeze">自动冻解</string>
-    <string name="UFAndRun">解冻启动</string>
-    <string name="autoUFOrFreezeAndRun">冻解启动</string>
-    <string name="freezeCompleted">已冻结</string>
-    <string name="UFCompleted">已解冻</string>
-    <string name="shortCutOneKeyFreezeAdditionalOptions">快捷方式一键冻结后追加</string>
-    <string name="askIfLockScreen">是否立即锁屏？</string>
-    <string name="devicePolicyManagerNotFound">未找到可用的设备管理器</string>
-    <string name="activated">已激活</string>
-    <string name="disableConfirmation">确定取消？</string>
-    <string name="disabled">已停用</string>
-    <string name="notUpdatedForALongTimeMessage">已经很久没有更新过了，是否立即检查更新？</string>
-    <string name="uiStyle">界面风格</string>
-    <string name="willTakeEffectsNextLaunch">将会在下次启动应用时生效</string>
-    <string name="freezeAUF">冻结与解冻</string>
-    <string name="notificationBar">通知栏</string>
-    <string name="disableSlideOut">禁止滑动移除</string>
-    <string name="disableClickDisappear">禁止点击消失</string>
-    <string name="effectNextCreate">下次创建时生效</string>
-    <string name="helpTranslate">协助翻译</string>
-    <string name="thanksList">感谢名单</string>
-    <string name="automation">自动化</string>
-    <string name="freezeAfterScreenLock">锁屏后一键冻结</string>
-    <string name="backgroundService">后台服务</string>
-    <string name="useForegroundService">使用前台服务(安卓8.0及以上强制开启)</string>
-    <string name="serviceLongerEx">减小后台功能失效的概率</string>
-    <string name="getDisabledApplications">获得已冻结的应用程序列表</string>
-    <string name="enableApplications">解冻应用</string>
-    <string name="disableApplications">冻结应用</string>
-    <string name="clearIconCache">清除图标缓存</string>
-    <string name="clearNameCache">清除应用程序名称缓存</string>
-    <string name="refreshCache">刷新缓存</string>
-    <string name="saveOnClickFunctionStatus">保存单击功能状态</string>
-    <string name="accessibility_service_description">侦听前台应用切换变化。\n用于避免自动冻结时前台应用被冻结以及应用不在前台时自动冻结等功能。</string>
-    <string name="configureAccessibilityService">设置无障碍服务</string>
-    <string name="freezeOnceQuit">离开冻结</string>
-    <string name="needActiveAccessibilityService">需要启用无障碍服务</string>
-    <string name="invalidArguments">参数错误</string>
-    <string name="exceptionHC">发生了点异常，操作仍将继续:</string>
-    <string name="plsConfirm">请确认</string>
-    <string name="removeNoRootCaution">真的要解除免ROOT吗？\n!为避免造成不必要的麻烦，解除前请先解冻所有已冻结的程序！</string>
-    <string name="noRootNotActivated">现在还没有成功启用免ROOT呢！</string>
-    <string name="faq">疑难解答</string>
-    <string name="executeImmediately">立即执行</string>
-    <string name="oneKeyLockScreen">一键锁屏</string>
-    <string name="mustContainColon">必须包含 : 以区分小时与时间</string>
-    <string name="scheduledTasks">计划任务</string>
-    <string name="add">添加</string>
-    <string name="save">保存</string>
-    <string name="time">时间</string>
-    <string name="enable">启用</string>
-    <string name="repeat">重复</string>
-    <string name="task">任务</string>
-    <string name="help">帮助</string>
-    <string name="label">标签</string>
-    <string name="hourShouldBetween">小时需要在0至23之间</string>
-    <string name="minutesShouldBetween">分钟需要在0至59之间</string>
-    <string name="requestFailedPlsRetry">请求失败，请重试</string>
-    <string name="donate">赞助支持</string>
-    <string name="uninstall">卸载</string>
-    <string name="triggers">触发器</string>
-    <string name="triggers_extra_parameters">触发器附加参数</string>
-    <string name="delete">删除</string>
-    <string name="copyAfterBeingFormatted">格式化后复制</string>
-    <string name="showInRecents">显示在最近任务列表</string>
-    <string name="mayHaveNoEffectsL">在 Android 4.4 及以下系统无效</string>
-    <string name="lesserToast">更少的 Toast 提示</string>
-    <string name="avoidFreezeForegroundApplications">避免冻结前台应用程序</string>
-    <string name="suggestUseTasksInstead">建议使用 计划任务 替代</string>
-    <string name="thirdPartyOpenSourceLicenses">第三方开放源代码许可</string>
-    <string name="delAllScheduledTasks">删除全部计划任务</string>
-    <string name="askIfDel">确认删除？</string>
-    <string name="folder">文件夹</string>
-    <string name="later">延后</string>
-    <string name="onlyMROOTModeUse">仅免ROOT模式使用</string>
-    <string name="organizationName">组织名称</string>
-    <string name="avoidFreezeNotifyingApplications">避免冻结有通知的应用程序</string>
-    <string name="needL">需要 Android 5.0 及以上</string>
-    <string name="autoDiagnosis">自检诊断</string>
-    <string name="sysVerLow">系统版本偏低</string>
-    <string name="someFuncUn">部分功能无法使用</string>
-    <string name="ACBSNotEnabled">无障碍服务未启用</string>
-    <string name="affect">影响</string>
-    <string name="etc">等</string>
-    <string name="mayCannotNotify">可能无法发送通知栏消息</string>
-    <string name="noNotifyPermission">未授予发送通知栏消息</string>
-    <string name="noNotificationListenerPermission">未授予通知使用权</string>
-    <string name="noProblemsFound">未发现问题</string>
-    <string name="everySeemsAllRight">似乎一切正常</string>
-    <string name="noMRootPermission">免 ROOT 权限未授予</string>
-    <string name="someFuncMayRestrict">部分功能可能受到限制</string>
-    <string name="noRootPermission">无 ROOT 权限</string>
-    <string name="noIgnoringBO">未忽略电池优化</string>
-    <string name="someFuncMayBeAff">部分功能可能受到影响</string>
-    <string name="notUpdatedForALongTime">长时间未更新</string>
-    <string name="someNewFuncMayPub">一些新功能可能已发布</string>
-    <string name="inPowerSaveMode">省电模式已开启</string>
-    <string name="manageQuickFUFNoti">管理冻结解冻快捷通知</string>
-    <string name="addToRemoveFrom">加入/移出</string>
-    <string name="onClickFuncChooseActionStyle">单击功能选择操作风格</string>
-    <string name="shortcutAutoFUF">快捷方式自动冻解</string>
-    <string name="shortcutAutoFUFEx">已冻结则解冻，已解冻则冻结</string>
-    <string name="regenerateSomeCache">重建一些缓存</string>
-    <string name="updateSomeData">更新一些数据</string>
-    <string name="backupAndRestore">备份与还原</string>
-    <string name="backup">备份</string>
-    <string name="restore">还原</string>
-    <string name="status">状态</string>
-    <string name="debugMode">调试模式</string>
-    <string name="showLogcat">查看日志</string>
-    <string name="freezeOrLaunch">冻结/启动</string>
-    <string name="askIfSave">是否保存？</string>
-    <string name="mainActivityPattern">首页格局</string>
-    <string name="workWithShortcutAutoFUF">启用"快捷方式自动冻解"时生效</string>
-    <string name="needCfmWhenFreeze">冻结时额外弹窗确认</string>
-    <string name="openImmediatelyAfterUF">解冻后立即启动</string>
-    <string name="createLauncherShortcut">创建桌面快捷方式</string>
-    <string name="name">名称</string>
-    <string name="icon">图标</string>
-    <string name="target">目标</string>
-    <string name="generate">生成</string>
-    <string name="plsSelect">请选择</string>
-    <string name="application">应用</string>
-    <string name="allowEditWhCreateShortcut">创建快捷方式时允许编辑</string>
-    <string name="clearAllUserData">清除全部数据</string>
-    <string name="packageNotFound">未找到该应用程序</string>
-    <string name="id">ID</string>
-    <string name="simulate">模拟</string>
-    <string name="insufficientPermission">权限不足</string>
-    <string name="onlyUnfreeze">仅解冻</string>
-    <string name="unknown">未知</string>
-    <string name="installPackage_colon">安装应用：</string>
-    <string name="requestFromPackage_colon">来源应用：</string>
-    <string name="application_colon">应用：</string>
-    <string name="pkgName_colon">包名：</string>
-    <string name="version_colon">版本：</string>
-    <string name="whetherAllow">是否允许？</string>
-    <string name="cannotInstall_colon">无法安装：</string>
-    <string name="uninstallPackage_colon">卸载应用：</string>
-    <string name="install">安装</string>
-    <string name="installing">正在安装</string>
-    <string name="uninstalling">正在卸载</string>
-    <string name="installFinished">安装完成</string>
-    <string name="installFailed">安装失败</string>
-    <string name="uninstallFinished">卸载完成</string>
-    <string name="uninstallFailed">卸载失败</string>
-    <string name="installAndUninstall">安装与卸载</string>
-    <string name="errorUninstallToast">卸载应用时发生错误： %1$s </string>
-    <string name="errorInstallToast">安装应用时发生错误： %1$s </string>
-    <string name="invalidUriToast">无效的Uri:  %1$s </string>
-    <string name="reason_colon">原因： %1$s </string>
-    <string name="plsWait">请稍候</string>
-    <string name="loading___">正在加载...</string>
-    <string name="freezeSlashRun">冻结/启动</string>
-    <string name="UfSlashRun">解冻/启动</string>
-    <string name="isForegroundApplication">%1$s 为前台应用程序</string>
-    <string name="appHasNotifi">%1$s 在通知栏有通知</string>
-    <string name="dangerous">危险</string>
-    <string name="alert_isObsd">存在遮罩层，操作已被拦截，请移除后重试</string>
-    <string name="retry">重试</string>
-    <string name="enableInstallPkgFunc">启用安装应用能力</string>
-    <string name="allow">允许</string>
-    <string name="reject">拒绝</string>
-    <string name="execute_colon">执行：</string>
-    <string name="target_colon">目标：</string>
-    <string name="alwaysAllow_name">总是允许 %1$s</string>
-    <string name="existed_colon">现存：%1$s</string>
-    <string name="manageUriAutoAllow">管理 URI 请求白名单</string>
-    <string name="manageIpaAutoAllow">管理安装应用请求白名单</string>
-    <string name="delAllCache">清除全部缓存</string>
-    <string name="needStoragePermission">需要存储权限</string>
-    <string name="okay">好的</string>
-    <string name="scheduledTasksUserNotification">计划任务 - 用户通知</string>
-    <string name="manageSpace">管理空间</string>
-    <string name="cacheApplicationsIcons">缓存应用程序图标</string>
-    <string name="tryDelApkAfterInstalled">安装完成后尝试删除安装包</string>
-    <string name="sortBy">排序方式</string>
-    <string name="sortBy_default">默认排序</string>
-    <string name="sortBy_no">不作处理</string>
-    <string name="uf_ascending">解冻升序</string>
-    <string name="uf_descending">解冻降序</string>
-    <string name="ff_ascending">冻结升序</string>
-    <string name="ff_descending">冻结降序</string>
-    <string name="us_ascending">使用升序</string>
-    <string name="us_descending">使用降序</string>
-    <string name="clearUninstalledPkgsInOKUFList">清除一键解冻列表中已卸载的应用</string>
-    <string name="clearUninstalledPkgsInOKFFList">清除一键冻结列表中已卸载的应用</string>
-    <string name="clearUninstalledPkgsInFOQList">清除离开冻结列表中已卸载的应用</string>
-    <string name="impt">导入</string>
-    <string name="expt">导出</string>
-    <string name="appStore">应用市场</string>
-    <string name="finish">完成</string>
-    <string name="welcomeToUseAppName">欢迎使用 %1$s</string>
-    <string name="quickSetup">快速设置</string>
-    <string name="importConfig">导入配置</string>
-    <string name="loadingPkgList">载入应用列表</string>
-    <string name="sorting">正在排序</string>
-    <string name="saveSortMethodStatus">保存排序方式状态</string>
-    <string name="resetFreezeTimes">重置冻结次数计数</string>
-    <string name="resetUFTimes">重置解冻次数计数</string>
-    <string name="resetUseTimes">重置使用次数计数</string>
-    <string name="selectAll">全选</string>
-    <string name="selectUnselected">反选</string>
-    <string name="onClickFunctionStatus">单击功能状态</string>
-    <string name="sortMethodStatus">排序方式状态</string>
-    <string name="oneKeyFreezeList">一键冻结列表</string>
-    <string name="oneKeyUFList">一键解冻列表</string>
-    <string name="freezeOnceQuitList">离开冻结列表</string>
-    <string name="scheduledTaskDashLineLabel">计划任务 - %1$s</string>
-    <string name="moreSettingsDashLineLabel">更多设置 - %1$s</string>
-    <string name="parseFailed">解析失败</string>
-    <string name="nothing">无</string>
-    <string name="share">分享</string>
-    <string name="notAllowWhenIsObsd">不允许遮罩层覆盖</string>
-    <string name="remove">移除</string>
-    <string name="newFolder">新文件夹</string>
-    <string name="alreadyExist">已存在</string>
-    <string name="queryStatus">查询状态</string>
-    <string name="newClassification">新建分类</string>
-    <string name="userDefined">用户自定</string>
-    <string name="displayLanguage">显示语言</string>
-    <string name="emptyNotAllowed">不可为空</string>
-    <string name="myCustomization">我的自选</string>
-    <string name="manageMyCustomization">管理我的自选</string>
-    <string name="myCustomizationDashLineLabel">我的自选 - %1$s</string>
-    <string name="copyAlias">复制别名</string>
-    <string name="version_colon_vN_longVC">版本：%1$s(%2$s)</string>
-    <string name="existed_colon_vN_longVC">现存：%1$s(%2$s)</string>
-    <string name="application_colon_app">应用：%1$s</string>
-    <string name="pkgName_colon_pkgName">包名：%1$s</string>
-    <string name="cannotInstall_colon_msg">无法安装：%1$s</string>
-    <string name="uriAutoAllowList">URI 请求白名单</string>
-    <string name="ipaAutoAllowList">安装应用请求白名单</string>
-    <string name="installing_app">正在安装 %1$s</string>
-    <string name="uninstalling_app">正在卸载 %1$s</string>
-    <string name="app_installFinished">%1$s 安装完成</string>
-    <string name="app_installFailed">%1$s 安装失败</string>
-    <string name="app_uninstallFinished">%1$s 卸载完成</string>
-    <string name="app_uninstallFailed">%1$s 卸载失败</string>
-    <string name="commandExecutionTool">命令执行工具</string>
-    <string name="addToMyCustomization">加入我的自选</string>
-    <string name="removeFromMyCustomization">移出我的自选</string>
-    <string name="waitingToInstall_app">正在等待离开 %1$s 后安装</string>
-    <string name="installWhenNotUsing">非前台时安装</string>
-    <string name="contactUs">联系我们</string>
-    <string name="email_colon">邮箱：%1$s </string>
-    <string name="qqGroup_colon">QQ群：%1$s </string>
-    <string name="wechatMp_colon">微信公众号：%1$s </string>
-    <string name="tryToAvoidUpdateWhenUsing">尝试避免正在使用时更新</string>
-    <string name="selectFUFMode">选择冻结解冻模式</string>
-    <string name="enable_Root_unhide">解冻 - ROOT(Unhide)</string>
-    <string name="disable_Root_hide">冻结 - ROOT(Hide)</string>
-    <string name="enable_Root_enable">解冻 - ROOT(Enable)</string>
-    <string name="disable_Root_disable">冻结 - ROOT(Disable)</string>
-    <string name="enable_MRoot_DPM">解冻 - 免ROOT(DPM)</string>
-    <string name="disable_MRoot_DPM">冻结 - 免ROOT(DPM)</string>
-    <string name="allowFollowSystemAutoSwitchDarkMode">允许跟随系统自动切换暗色模式</string>
-    <string name="willOverrideInterfaceStyle">会覆盖界面风格的设定</string>
-    <string name="installPerimisionCheckFailed_ifContinue">安装权限检查未通过，是否继续？</string>
-    <string name="jumpToSysInstaller">转至系统安装器</string>
-    <string name="displayListDivider">显示列表的分割线</string>
-    <string name="appearance">外观</string>
+    <string name="oneKeyFreeze">Onekey Freeze</string>
+    <string name="oneKeyUF">Onekey Unfreeze</string>
+    <string name="alertT1">Attention! \nDo not freeze the application which is very important to the system, that may cause the system to crash!</string>
+    <string name="cancel">Cancel</string>
+    <string name="chooseDetailAction">Please choose an action</string>
+    <string name="added">Added</string>
+    <string name="notice">Tips</string>
+    <string name="freeze">Freeze</string>
+    <string name="more">More</string>
+    <string name="appDetail">Application Details</string>
+    <string name="removeFromOneKeyList">Remove from the Onekey Freeze list</string>
+    <string name="removeFromOneKeyUFList">Remove from the Onekey Unfreeze list</string>
+    <string name="removeFromFreezeOnceQuit">Remove from the Freeze Once Quit list</string>
+    <string name="removed">Removed</string>
+    <string name="removeFailed">Failed to remove</string>
+    <string name="addToOneKeyList">Add to the Onekey Freeze list</string>
+    <string name="addToOneKeyUFList">Add to the Onekey Unfreeze list</string>
+    <string name="addToFreezeOnceQuit">Add to the Freeze Once Quit list</string>
+    <string name="addFailed">Failed to add</string>
+    <string name="caution">CAUTION</string>
+    <string name="cautionContent">Attention! \nDo not freeze the application which is very important to the system, that may cause the system to crash!</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="requested">Requested</string>
+    <string name="requestFailed">Failed to create request: </string>
+    <string name="createOneKeyFreezeShortcut">Onekey Freeze</string>
+    <string name="executed">Executed</string>
+    <string name="exception">Exception: </string>
+    <string name="launch">Run</string>
+    <string name="mayUnrooted">No root permission or no-root mode has not been enabled</string>
+    <string name="mayUnrootedOrOtherEx">Permissions may not be granted, targets have been uninstalled, or other exceptions have occurred</string>
+    <string name="unfreeze">Unfreeze</string>
+    <string name="unfreezedAndAskLaunch">Requested unfreeze, try running now?</string>
+    <string name="unrootedOrCannotFindTheLaunchIntent">Unfreeze succeeded but unable to find the entrance of this application, or unfreeze failed due to the insufficient permission.</string>
+    <string name="frozen">Frozen</string>
+    <string name="OneKeyFreezeImmediately">Onekey Freeze</string>
+    <string name="about">About</string>
+    <string name="plsVisit">Please visit</string>
+    <string name="viewMode">View Mode</string>
+    <string name="onlyFrozen">Frozen only</string>
+    <string name="onlyUF">Unfrozen only</string>
+    <string name="shortCut">Shortcuts</string>
+    <string name="notAvailable">N/A</string>
+    <string name="displayAll">Show All</string>
+    <string name="onlyOnekey">Onekey Freeze</string>
+    <string name="uninstalled">Uninstalled</string>
+    <string name="onlySA">System pre-installed</string>
+    <string name="onlyUA">User Application</string>
+    <string name="moreSettings">Settings</string>
+    <string name="visitWebsite">Visit Website</string>
+    <string name="addQQGroup">Join QQ Group</string>
+    <string name="dangerZone">Danger Zone</string>
+    <string name="disableMRootMode">Release no-root mode permission</string>
+    <string name="disableMRootModeEx">If you enable the no-root mode success, you need to release it before uninstalling the application.</string>
+    <string name="update">Update</string>
+    <string name="common">General</string>
+    <string name="openImmediately">Open Immediately</string>
+    <string name="openImmediatelyEx">Open the application immediately after being unfrozen</string>
+    <string name="hToUse">How to use</string>
+    <string name="openAndUFImmediately">Unfreeze immediately then run when clicking the shortcut</string>
+    <string name="openAndUFImmediatelyEx">Cannot use the shortcut to freeze the application any more.</string>
+    <string name="quickView">Quick View</string>
+    <string name="nCaution">Don\'t remind</string>
+    <string name="nSCaution">No longer show the warning at startup</string>
+    <string name="advance">Advanced</string>
+    <string name="manualMode">Manual Mode</string>
+    <string name="packageName">Package Name</string>
+    <string name="disable_MRoot">Freeze - NO-ROOT</string>
+    <string name="disable_Root">Freeze - ROOT</string>
+    <string name="enable_MRoot">Unfreeze - NO-ROOT</string>
+    <string name="enable_Root">Unfreeze - ROOT</string>
+    <string name="failed">Failed</string>
+    <string name="success">Success</string>
+    <string name="disableAEnable">Freeze/Unfreeze/Run</string>
+    <string name="copyPkgName">Copy Package Name</string>
+    <string name="createDisEnableShortCut">Create a freeze and unfreeze shortcut</string>
+    <string name="iconAEntry">Icons and Entrances</string>
+    <string name="dialEntry">Use the dial pad to enter</string>
+    <string name="dialEntry_Ex">*#*#373393968#*#* (*#*#FreezeYou#*#*) (Most Android devices support)</string>
+    <string name="ciFinishedToast">Submitted, please wait for the launcher to refresh or restart the launcher.</string>
+    <string name="ifUploadCrashLog">Detected an exception log that has occurred but has not been committed, do you want to upload this log?</string>
+    <string name="search">Search</string>
+    <string name="launchMode">Startup Mode</string>
+    <string name="freezeImmediately">Freeze Immediately</string>
+    <string name="UFImmediately">Unfreeze Immediately</string>
+    <string name="plsRemoveUninstalledApplications">[Hint] You can remove the uninstalled application(s) out of the list</string>
+    <string name="notificationBarFreezeImmediately">Freeze immediately after clicking the freeze unfreeze notification</string>
+    <string name="onClickFunction">Click Function</string>
+    <string name="chooseAction">Choose Action</string>
+    <string name="autoUFOrFreeze">Automatic Freeze and Unfreeze</string>
+    <string name="UFAndRun">Unfreeze and Run</string>
+    <string name="autoUFOrFreezeAndRun">Automatic Freeze or Unfreeze and Run</string>
+    <string name="freezeCompleted">Frozen</string>
+    <string name="UFCompleted">Unfrozen</string>
+    <string name="shortCutOneKeyFreezeAdditionalOptions">Shortcut OneKey Freeze Additional Options</string>
+    <string name="askIfLockScreen">Do you want to lock the screen now?</string>
+    <string name="devicePolicyManagerNotFound">No available Device Manager found</string>
+    <string name="activated">Activated</string>
+    <string name="disableConfirmation">Confirm cancellation?</string>
+    <string name="disabled">Disabled</string>
+    <string name="notUpdatedForALongTimeMessage">Has not been updated for a long time, do you want to check for update now?</string>
+    <string name="uiStyle">Interface Style</string>
+    <string name="willTakeEffectsNextLaunch">Will take effect the next time the application is launched</string>
+    <string name="freezeAUF">Freeze and Unfreeze</string>
+    <string name="notificationBar">Notification</string>
+    <string name="disableSlideOut">Do not disappear when slide out</string>
+    <string name="disableClickDisappear">Do not disappear after clicked</string>
+    <string name="effectNextCreate">Take effects the next time created</string>
+    <string name="helpTranslate">Help Translate</string>
+    <string name="thanksList">Thanks List</string>
+    <string name="automation">Automation</string>
+    <string name="freezeAfterScreenLock">Onekey freeze after screen locked</string>
+    <string name="backgroundService">Background Services</string>
+    <string name="useForegroundService">Use the foreground service</string>
+    <string name="serviceLongerEx">Reduce the probability of failure of the background function</string>
+    <string name="getDisabledApplications">Get a list of frozen applications</string>
+    <string name="enableApplications">Unfreeze Packages</string>
+    <string name="disableApplications">Freeze Packages</string>
+    <string name="clearIconCache">Clear Icon Cache</string>
+    <string name="clearNameCache">Clear Name Cache of Applications</string>
+    <string name="refreshCache">Refresh Cache</string>
+    <string name="saveOnClickFunctionStatus">Save Click Function Status</string>
+    <string name="accessibility_service_description">Listen to the foreground application changes. \nUsed to active the functions to avoid freezing foreground applications when automatic freezing, automatically freeze applications when they are not the foreground applications, etc.</string>
+    <string name="configureAccessibilityService">Configure Accessibility Service</string>
+    <string name="freezeOnceQuit">Leave Freeze</string>
+    <string name="needActiveAccessibilityService">Need to enable Accessibility Service</string>
+    <string name="invalidArguments">Invalid parameters</string>
+    <string name="exceptionHC">An exception has occurred but the operation will continue: </string>
+    <string name="plsConfirm">Please Confirm</string>
+    <string name="removeNoRootCaution">Do you really want to release the no-root mode permission? \nTo avoid causing unnecessary trouble, please unfreeze all frozen applications before releasing!</string>
+    <string name="noRootNotActivated">Oops! The no-root mode has not been enabled now!</string>
+    <string name="faq">FAQ</string>
+    <string name="executeImmediately">Execute</string>
+    <string name="oneKeyLockScreen">Lock Screen</string>
+    <string name="mustContainColon">Must include : to distinguish hours and minutes</string>
+    <string name="scheduledTasks">Scheduled tasks</string>
+    <string name="add">Add</string>
+    <string name="save">Save</string>
+    <string name="time">Time</string>
+    <string name="enable">Enable</string>
+    <string name="repeat">Repeat</string>
+    <string name="task">Task</string>
+    <string name="help">Help</string>
+    <string name="label">Label</string>
+    <string name="hourShouldBetween">The hour needs to be between 0 and 23</string>
+    <string name="minutesShouldBetween">Minutes need to be between 0 and 59</string>
+    <string name="requestFailedPlsRetry">Request failed, please try again</string>
+    <string name="donate">Donate</string>
+    <string name="uninstall">Uninstall</string>
+    <string name="triggers">Triggers</string>
+    <string name="triggers_extra_parameters">Additional parameters</string>
+    <string name="delete">Delete</string>
+    <string name="copyAfterBeingFormatted">Copy After Being Formatted</string>
+    <string name="showInRecents">Show in recents</string>
+    <string name="mayHaveNoEffectsL">May have no effects on Android 4.4 and below</string>
+    <string name="lesserToast">Fewer Toast Tips</string>
+    <string name="avoidFreezeForegroundApplications">Avoid Freezing Foreground Applications</string>
+    <string name="suggestUseTasksInstead">Recommend to use scheduled tasks instead</string>
+    <string name="thirdPartyOpenSourceLicenses">Third-party Open Source Licenses</string>
+    <string name="delAllScheduledTasks">Delete All Scheduled Tasks</string>
+    <string name="askIfDel">Are you sure to delete?</string>
+    <string name="folder">Folder</string>
+    <string name="later">Later</string>
+    <string name="onlyMROOTModeUse">Only used in No-Root mode</string>
+    <string name="organizationName">Organization Name</string>
+    <string name="avoidFreezeNotifyingApplications">Avoid freezing notifying applications</string>
+    <string name="needL">Requires Android 5.0 and newer</string>
+    <string name="autoDiagnosis">Diagnosis</string>
+    <string name="sysVerLow">Low system version</string>
+    <string name="someFuncUn">Some features may not available</string>
+    <string name="ACBSNotEnabled">Accessibility service not enabled</string>
+    <string name="affect">Affects</string>
+    <string name="etc">etc.</string>
+    <string name="mayCannotNotify">May can not send notifications</string>
+    <string name="noNotifyPermission">Sending notification permission not granted</string>
+    <string name="noNotificationListenerPermission">Notification listener permission not granted</string>
+    <string name="noProblemsFound">No problems found</string>
+    <string name="everySeemsAllRight">Seems everything is all right</string>
+    <string name="noMRootPermission">No-root permission not granted</string>
+    <string name="someFuncMayRestrict">Some features may be restricted</string>
+    <string name="noRootPermission">Root permission not granted</string>
+    <string name="noIgnoringBO">Battery optimization not ignored</string>
+    <string name="someFuncMayBeAff">Some features may be affected</string>
+    <string name="notUpdatedForALongTime">Not updated for a long time</string>
+    <string name="someNewFuncMayPub">Some new features may have been released</string>
+    <string name="inPowerSaveMode">Power save mode is on</string>
+    <string name="manageQuickFUFNoti">Manage quick freeze notifications</string>
+    <string name="addToRemoveFrom">Add to/Remove from</string>
+    <string name="onClickFuncChooseActionStyle">The style of on click choose action</string>
+    <string name="shortcutAutoFUF">Shortcut auto freeze or unfreeze</string>
+    <string name="shortcutAutoFUFEx">Frozen unfreeze, unfrozen freeze</string>
+    <string name="regenerateSomeCache">Regenerate some caches</string>
+    <string name="updateSomeData">Update some data</string>
+    <string name="backupAndRestore">Backup and restore</string>
+    <string name="backup">Backup</string>
+    <string name="restore">Restore</string>
+    <string name="status">Status</string>
+    <string name="debugMode">Debug Mode</string>
+    <string name="showLogcat">View Logs</string>
+    <string name="freezeOrLaunch">Freeze/Run</string>
+    <string name="askIfSave">Save?</string>
+    <string name="mainActivityPattern">Home pattern</string>
+    <string name="workWithShortcutAutoFUF">Effective when \"Shortcut auto freeze or unfreeze\" is enabled</string>
+    <string name="needCfmWhenFreeze">Extra confirmation when freeze</string>
+    <string name="openImmediatelyAfterUF">Run immediately after unfreezing</string>
+    <string name="createLauncherShortcut">Create Launcher Shortcut</string>
+    <string name="name">Name</string>
+    <string name="icon">Icon</string>
+    <string name="target">Target</string>
+    <string name="generate">Generate</string>
+    <string name="plsSelect">Please select</string>
+    <string name="application">Application</string>
+    <string name="allowEditWhCreateShortcut">Allow editing when creating shortcuts</string>
+    <string name="clearAllUserData">Clear all data</string>
+    <string name="packageNotFound">The application was not found</string>
+    <string name="id">Id</string>
+    <string name="simulate">Simulate</string>
+    <string name="insufficientPermission">Insufficient permissions</string>
+    <string name="onlyUnfreeze">Only Unfreeze</string>
+    <string name="unknown">Unknown</string>
+    <string name="installPackage_colon">Install Package: </string>
+    <string name="requestFromPackage_colon">From Package: </string>
+    <string name="application_colon">Application: </string>
+    <string name="pkgName_colon">Package Name: </string>
+    <string name="version_colon">Version: </string>
+    <string name="whetherAllow">Allow?</string>
+    <string name="cannotInstall_colon">Cannot install: </string>
+    <string name="uninstallPackage_colon">Uninstall Package: </string>
+    <string name="install">Install</string>
+    <string name="installing">Installing</string>
+    <string name="uninstalling">Uninstalling</string>
+    <string name="installFinished">Installation Completed</string>
+    <string name="installFailed">Installation Failed</string>
+    <string name="uninstallFinished">Uninstallation Completed</string>
+    <string name="uninstallFailed">Uninstallation Failed</string>
+    <string name="installAndUninstall">Install and Uninstall</string>
+    <string name="errorUninstallToast">An error occurred while uninstalling the app: %1$s </string>
+    <string name="errorInstallToast">An error occurred while installing the app: %1$s </string>
+    <string name="invalidUriToast">Invalid URI: %1$s </string>
+    <string name="reason_colon">Reason: %1$s </string>
+    <string name="plsWait">Please wait</string>
+    <string name="loading___">Loading...</string>
+    <string name="freezeSlashRun">Freeze/Run</string>
+    <string name="UfSlashRun">Unfreeze/Run</string>
+    <string name="isForegroundApplication">%1$s is foreground application</string>
+    <string name="appHasNotifi">%1$s is still notifying</string>
+    <string name="dangerous">Dangerous</string>
+    <string name="alert_isObsd">The window is obscured, the operation has been rejected, please remove the mask layer and retry</string>
+    <string name="retry">Retry</string>
+    <string name="enableInstallPkgFunc">Enable install packages function</string>
+    <string name="allow">Allow</string>
+    <string name="reject">Reject</string>
+    <string name="execute_colon">Execute: </string>
+    <string name="target_colon">Target: </string>
+    <string name="alwaysAllow_name">Always allow %1$s</string>
+    <string name="existed_colon">Existed: %1$s</string>
+    <string name="manageUriAutoAllow">Manage URI Request Auto Allow List</string>
+    <string name="manageIpaAutoAllow">Manage Request Install Applications Auto Allow List</string>
+    <string name="delAllCache">Clear all Caches</string>
+    <string name="needStoragePermission">Storage Permission Required</string>
+    <string name="okay">OK</string>
+    <string name="scheduledTasksUserNotification">Scheduled Tasks - User notifications</string>
+    <string name="manageSpace">Manage space</string>
+    <string name="cacheApplicationsIcons">Cache Applications Icons</string>
+    <string name="tryDelApkAfterInstalled">Try to delete the APK after installed</string>
+    <string name="sortBy">Sort by</string>
+    <string name="sortBy_default">Default</string>
+    <string name="sortBy_no">No sort</string>
+    <string name="uf_ascending">Unfreeze ↑</string>
+    <string name="uf_descending">Unfreeze ↓</string>
+    <string name="ff_ascending">Freeze ↑</string>
+    <string name="ff_descending">Freeze ↓</string>
+    <string name="us_ascending">Using frequency ↑</string>
+    <string name="us_descending">Using frequency ↓</string>
+    <string name="clearUninstalledPkgsInOKUFList">Remove uninstalled applications from the Onekey Unfreeze list</string>
+    <string name="clearUninstalledPkgsInOKFFList">Remove uninstalled applications from the Onekey Freeze list</string>
+    <string name="clearUninstalledPkgsInFOQList">Remove uninstalled applications from the Freeze Once Quit list</string>
+    <string name="impt">Import</string>
+    <string name="expt">Export</string>
+    <string name="appStore">App Store</string>
+    <string name="finish">Done</string>
+    <string name="welcomeToUseAppName">Welcome to %1$s</string>
+    <string name="quickSetup">Quick Setup</string>
+    <string name="importConfig">Import Config</string>
+    <string name="loadingPkgList">Loading applications list</string>
+    <string name="sorting">Sorting</string>
+    <string name="saveSortMethodStatus">Save sort method status</string>
+    <string name="resetFreezeTimes">Reset freeze times counter</string>
+    <string name="resetUFTimes">Reset unfreeze times counter</string>
+    <string name="resetUseTimes">Reset usage counter</string>
+    <string name="selectAll">Select all</string>
+    <string name="selectUnselected">Inverse selection</string>
+    <string name="onClickFunctionStatus">On click function status</string>
+    <string name="sortMethodStatus">Sort method status</string>
+    <string name="oneKeyFreezeList">Onekey freeze list</string>
+    <string name="oneKeyUFList">Onekey unfreeze list</string>
+    <string name="freezeOnceQuitList">Freeze once quit list</string>
+    <string name="scheduledTaskDashLineLabel">Scheduled Task - %1$s</string>
+    <string name="moreSettingsDashLineLabel">More Settings - %1$s</string>
+    <string name="parseFailed">Parse failed</string>
+    <string name="nothing">None</string>
+    <string name="share">Share</string>
+    <string name="notAllowWhenIsObsd">Don\'t allow window being obscured</string>
+    <string name="remove">Remove</string>
+    <string name="newFolder">New Folder</string>
+    <string name="alreadyExist">Already exists</string>
+    <string name="queryStatus">Query Status</string>
+    <string name="newClassification">New category</string>
+    <string name="userDefined">User Customize</string>
+    <string name="displayLanguage">Display Language</string>
+    <string name="emptyNotAllowed">Empty is not allowed</string>
+    <string name="myCustomization">My customization</string>
+    <string name="manageMyCustomization">Manage my customization</string>
+    <string name="myCustomizationDashLineLabel">My Customization - %1$s</string>
+    <string name="copyAlias">Copy Alias</string>
+    <string name="version_colon_vN_longVC">Version: %1$s (%2$s)</string>
+    <string name="existed_colon_vN_longVC">Existed: %1$s (%2$s)</string>
+    <string name="application_colon_app">Application: %1$s</string>
+    <string name="pkgName_colon_pkgName">Package Name: %1$s</string>
+    <string name="cannotInstall_colon_msg">Cannot install: %1$s</string>
+    <string name="uriAutoAllowList">URI Request Auto Allow List</string>
+    <string name="ipaAutoAllowList">Request Install Applications Auto Allow List</string>
+    <string name="installing_app">Installing %1$s</string>
+    <string name="uninstalling_app">Uninstalling %1$s</string>
+    <string name="app_installFinished">%1$s has been installed</string>
+    <string name="app_installFailed">%1$s installation failed</string>
+    <string name="app_uninstallFinished">%1$s uninstall finished</string>
+    <string name="app_uninstallFailed">%1$s uninstall failed</string>
+    <string name="commandExecutionTool">Command execution tool</string>
+    <string name="addToMyCustomization">Add to my customization</string>
+    <string name="removeFromMyCustomization">Remove from my customization</string>
+    <string name="waitingToInstall_app">Waiting to install after leaving %1$s</string>
+    <string name="installWhenNotUsing">InstallWhenNotUsing</string>
+    <string name="contactUs">Contact Us</string>
+    <string name="email_colon">Email: %1$s </string>
+    <string name="qqGroup_colon">QQ Group: %1$s </string>
+    <string name="wechatMp_colon">WeChat Official Account: %1$s </string>
+    <string name="tryToAvoidUpdateWhenUsing">Try to avoid update when using</string>
+    <string name="selectFUFMode">Select freeze and unfreeze mode</string>
+    <string name="enable_Root_unhide">Unfreeze - ROOT(Unhide)</string>
+    <string name="disable_Root_hide">Freeze - ROOT(Hide)</string>
+    <string name="enable_Root_enable">Unfreeze - ROOT(Enable)</string>
+    <string name="disable_Root_disable">Freeze - ROOT(Disable)</string>
+    <string name="enable_MRoot_DPM">Unfreeze - No-root(DPM)</string>
+    <string name="disable_MRoot_DPM">Freeze - No-root(DPM)</string>
+    <string name="allowFollowSystemAutoSwitchDarkMode">Allow follow the system auto switch dark mode</string>
+    <string name="willOverrideInterfaceStyle">Will override interface style</string>
+    <string name="installPerimisionCheckFailed_ifContinue">Install permission check failed, continue?</string>
+    <string name="jumpToSysInstaller">Go to system installer</string>
+    <string name="displayListDivider">Display list divider</string>
+    <string name="appearance">Appearance</string>
+    <string name="createQuickFUFNotiAfterUnfrozen">Create quick freeze notification after unfrozen</string>
+    <string name="executionResult_colon_message">Execution result: %1$s</string>
+    <string name="unknownResult_probablySuccess">Unknown result (Probably success)</string>
+    <string name="unknownError">Unknown error</string>
+    <string name="packageNameIsNull">Package name is null</string>
+    <string name="isNotDevicePolicyManager">Is not device policy manager</string>
+    <string name="noSuchApiMode">No such api mode</string>
+    <string name="executeFailedFromSystem">Execute failed from system</string>
+    <string name="isNotSystemApp">Is not system app</string>
+    <string name="telegramGroup_colon">Telegram Group: %1$s</string>
+    <string name="correspondingAndAvailableWebsiteUrlLanguageCode">en-US</string>
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>
     <string-array name="launchModeSelection">
-        <item>显示全部</item>
-        <item>仅已冻结</item>
-        <item>仅未冻结</item>
-        <item>系统预装</item>
-        <item>用户应用</item>
-        <item>一键冻结</item>
-        <item>一键解冻</item>
-        <item>离开冻结</item>
+        <item>Show All</item>
+        <item>Frozen only</item>
+        <item>Unfrozen only</item>
+        <item>System pre-installed</item>
+        <item>User Application</item>
+        <item>Onekey Freeze</item>
+        <item>Onekey Unfreeze</item>
+        <item>Leave Freeze</item>
     </string-array>
     <string-array name="launchModeSelectionValues" translatable="false">
         <item>all</item>
@@ -375,9 +387,9 @@
         <item>FOQ</item>
     </string-array>
     <string-array name="shortCutOneKeyFreezeAdditionalOptionsSelection">
-        <item>无</item>
-        <item>询问锁屏</item>
-        <item>立即锁屏</item>
+        <item>None</item>
+        <item>Ask if Lock Screen</item>
+        <item>Lock Screen Immediately</item>
     </string-array>
     <string-array name="shortCutOneKeyFreezeAdditionalOptionsSelectionValues" translatable="false">
         <item>nothing</item>
@@ -385,9 +397,9 @@
         <item>lockScreenImmediately</item>
     </string-array>
     <string-array name="mainActivityPatternSelection">
-        <item>默认</item>
-        <item>列表</item>
-        <item>网格</item>
+        <item>Default</item>
+        <item>List</item>
+        <item>Grid</item>
     </string-array>
     <string-array name="mainActivityPatternSelectionValues" translatable="false">
         <item>default</item>
@@ -395,15 +407,15 @@
         <item>grid</item>
     </string-array>
     <string-array name="uiStyleSelection">
-        <item>默认</item>
-        <item>暗色</item>
-        <item>蓝色</item>
-        <item>粉红</item>
-        <item>绿色</item>
-        <item>黄色</item>
-        <item>橙色</item>
-        <item>白色</item>
-        <item>红色</item>
+        <item>Default</item>
+        <item>Dark</item>
+        <item>Blue</item>
+        <item>Pink</item>
+        <item>Green</item>
+        <item>Yellow</item>
+        <item>Orange</item>
+        <item>White</item>
+        <item>Red</item>
     </string-array>
     <string-array name="uiStyleSelectionValues" translatable="false">
         <item>default</item>
@@ -417,13 +429,13 @@
         <item>red</item>
     </string-array>
     <string-array name="sevenDays">
-        <item>周一</item>
-        <item>周二</item>
-        <item>周三</item>
-        <item>周四</item>
-        <item>周五</item>
-        <item>周六</item>
-        <item>周日</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
     </string-array>
     <string-array name="sevenDaysValues" translatable="false">
         <item>2</item>
@@ -435,12 +447,12 @@
         <item>1</item>
     </string-array>
     <string-array name="triggers">
-        <item>打开屏幕时</item>
-        <item>关闭屏幕时</item>
-        <item>打开应用时</item>
-        <item>离开应用时</item>
-        <item>解冻应用时</item>
-        <item>冻结应用时</item>
+        <item>On Screen On</item>
+        <item>On Screen Off</item>
+        <item>When Open Applications</item>
+        <item>When Leave Applications</item>
+        <item>When Unfreeze Applications</item>
+        <item>When Freeze Applications</item>
     </string-array>
     <string-array name="triggersValues" translatable="false">
         <item>onScreenOn</item>
@@ -455,14 +467,14 @@
         <item>2</item>
     </string-array>
     <string-array name="sortBySelection">
-        <item>默认排序</item>
-        <item>不作处理</item>
-        <item>解冻升序</item>
-        <item>解冻降序</item>
-        <item>冻结升序</item>
-        <item>冻结降序</item>
-        <item>使用升序</item>
-        <item>使用降序</item>
+        <item>Default</item>
+        <item>No sort</item>
+        <item>Unfreeze ↑</item>
+        <item>Unfreeze ↓</item>
+        <item>Freeze ↑</item>
+        <item>Freeze ↓</item>
+        <item>Using frequency ↑</item>
+        <item>Using frequency ↓</item>
     </string-array>
     <string-array name="sortBySelectionValues" translatable="false">
         <item>default</item>
@@ -476,28 +488,40 @@
     </string-array>
     <string-array name="displayLanguageOptionsSelection" translatable="false">
         <item>Default</item>
-        <item>简体中文</item>
-        <item>繁體中文</item>
-        <item>English</item>
+        <item>中文（中国大陆）</item>
+        <item>中文（中國臺灣）</item>
+        <item>English (US)</item>
+        <item>Русский</item>
+        <item>Русский (Россия)</item>
+        <item>Українська</item>
+        <item>Українська(Україна)</item>
     </string-array>
     <string-array name="displayLanguageOptionsSelectionValues" translatable="false">
         <item>Default</item>
-        <item>sc</item>
-        <item>tc</item>
-        <item>en</item>
+        <item>zh-CN</item>
+        <item>zh-TW</item>
+        <item>en-US</item>
+        <item>ru</item>
+        <item>ru-RU</item>
+        <item>uk</item>
+        <item>uk-UA</item>
     </string-array>
     <string-array name="selectFUFModeSelection">
-        <item>免ROOT（DPM模式）</item>
-        <item>ROOT（HIDE模式）</item>
-        <item>ROOT（DISABLE模式）</item>
-        <item>遗留的（自动DPM或DISABLE模式）</item>
-        <item>Island（Delegation API）</item>
+        <item>No-root (DPM Mode)</item>
+        <item>ROOT (Hide Mode)</item>
+        <item>ROOT (Disable Mode)</item>
+        <item>Legacy (Auto DPM or Disable Mode)</item>
+        <item>System App (Disable Mode)</item>
+        <item>System App (Disable_User Mode)</item>
+        <item>System App (Disable_Until_Used Mode)</item>
     </string-array>
     <string-array name="selectFUFModeSelectionValues" translatable="false">
         <item>1</item>
         <item>3</item>
         <item>2</item>
         <item>0</item>
+        <item>6</item>
+        <item>5</item>
         <item>4</item>
     </string-array>
 </resources>
