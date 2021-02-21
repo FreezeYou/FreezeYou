@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.Translucent.NoTitleBar" parent="android:Theme.Material.NoActionBar">
+    <style name="AppTheme.Translucent.NoTitleBar" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/translucentBackground</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowTranslucentStatus">true</item>
@@ -10,17 +10,17 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="AppTheme.Default" parent="android:Theme.DeviceDefault">
+    <style name="AppTheme.Default" parent="Theme.AppCompat">
         <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="AppTheme.Default.Light" parent="android:Theme.Material.Light.DarkActionBar">
+    <style name="AppTheme.Default.Light" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="AppTheme.Default.Light.LightActionBar" parent="android:Theme.Material.Light">
+    <style name="AppTheme.Default.Light.LightActionBar" parent="Theme.AppCompat.Light">
         <item name="android:actionOverflowButtonStyle">@style/OverflowStyle.LightBackground</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
@@ -55,6 +55,8 @@
         <item name="android:colorAccent">#ffbf00</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.Yellow</item>
         <item name="android:navigationBarColor">#f7a500</item>
+        <item name="colorPrimaryDark">#f7a500</item>
+        <item name="colorPrimary">#ffbf00</item>
     </style>
 
     <style name="AppTheme.Default.Orange" parent="AppTheme.Default.Light">
@@ -81,37 +83,37 @@
         <item name="android:navigationBarColor">#eeeeee</item>
     </style>
 
-    <style name="AlertDialog.Red" parent="android:Theme.Material.Light.Dialog.Alert">
+    <style name="AlertDialog.Red" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:colorPrimary">#9b0000</item>
         <item name="android:colorAccent">#d50000</item>
     </style>
 
-    <style name="AlertDialog.Orange" parent="android:Theme.Material.Light.Dialog.Alert">
+    <style name="AlertDialog.Orange" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:colorPrimary">#c43e00</item>
         <item name="android:colorAccent">#ff6f00</item>
     </style>
 
-    <style name="AlertDialog.Yellow" parent="android:Theme.Material.Light.Dialog.Alert">
+    <style name="AlertDialog.Yellow" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:colorPrimary">#f7a500</item>
         <item name="android:colorAccent">#ffbf00</item>
     </style>
 
-    <style name="AlertDialog.Pink" parent="android:Theme.Material.Light.Dialog.Alert">
+    <style name="AlertDialog.Pink" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:colorPrimary">#ec407a</item>
         <item name="android:colorAccent">#ff4081</item>
     </style>
 
-    <style name="AlertDialog.Blue" parent="android:Theme.Material.Light.Dialog.Alert">
+    <style name="AlertDialog.Blue" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:colorPrimary">#026FDE</item>
         <item name="android:colorAccent">#0383e9</item>
     </style>
 
-    <style name="AlertDialog.Green" parent="android:Theme.Material.Light.Dialog.Alert">
+    <style name="AlertDialog.Green" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:colorPrimary">#009624</item>
         <item name="android:colorAccent">#00c853</item>
     </style>
 
-    <style name="AlertDialog.White" parent="android:Theme.Material.Light.Dialog.Alert">
+    <style name="AlertDialog.White" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:colorPrimary">#424242</item>
         <item name="android:colorAccent">#eeeeee</item>
     </style>
@@ -204,11 +206,11 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="OverflowStyle" parent="android:Widget.Material.ActionButton.Overflow">
+    <style name="OverflowStyle" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_action_more</item>
     </style>
 
-    <style name="OverflowStyle.LightBackground" parent="android:Widget.Material.ActionButton.Overflow">
+    <style name="OverflowStyle.LightBackground" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_action_more_light</item>
     </style>
 </resources>

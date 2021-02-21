@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.Translucent.NoTitleBar" parent="android:Theme.DeviceDefault.NoActionBar">
+    <style name="AppTheme.Translucent.NoTitleBar" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/realTranslucent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
-    <style name="AppTheme.Default" parent="android:Theme.DeviceDefault">
+    <style name="AppTheme.Default" parent="Theme.AppCompat">
         <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
     </style>
 
-    <style name="AppTheme.Default.Light" parent="android:Theme.DeviceDefault.Light">
+    <style name="AppTheme.Default.Light" parent="Theme.AppCompat.Light">
         <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
     </style>
 
-    <style name="AppTheme.Default.Light.White" parent="android:Theme.DeviceDefault.Light">
+    <style name="AppTheme.Default.Light.White" parent="Theme.AppCompat.Light">
         <item name="android:actionOverflowButtonStyle">@style/OverflowStyle.LightBackground</item>
     </style>
 
@@ -24,6 +24,8 @@
 
     <style name="AppTheme.Default.Yellow" parent="AppTheme.Default.Light">
         <item name="android:actionBarStyle">@style/ActionBarStyle.Yellow</item>
+        <item name="colorPrimaryDark">#f7a500</item>
+        <item name="colorPrimary">#ffbf00</item>
     </style>
 
     <style name="AppTheme.Default.Orange" parent="AppTheme.Default.Light">
@@ -102,7 +104,7 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
-    <style name="ActionBarStyle.Light.NoLogo" parent="android:Widget.Holo.Light.ActionBar">
+    <style name="ActionBarStyle.Light.NoLogo" parent="Widget.AppCompat.Light.ActionBar">
         <item name="android:displayOptions">showTitle</item>
     </style>
 
@@ -151,11 +153,11 @@
         <item name="android:textColor">#212121</item>
     </style>
 
-    <style name="OverflowStyle" parent="android:Widget.ActionButton.Overflow">
+    <style name="OverflowStyle" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_action_more</item>
     </style>
 
-    <style name="OverflowStyle.LightBackground" parent="android:Widget.ActionButton.Overflow">
+    <style name="OverflowStyle.LightBackground" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_action_more_light</item>
     </style>
 </resources>

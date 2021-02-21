@@ -38,7 +38,7 @@ public class Freeze extends FreezeYouBaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        finish();
+        if (!isLocked()) finish();
     }
 
     private void init() {
@@ -71,6 +71,9 @@ public class Freeze extends FreezeYouBaseActivity {
                 pkgName = intent.getStringExtra("pkgName");
                 auto = intent.getBooleanExtra("auto", true);
             }
+
+            setUnlockLogoPkgName(pkgName);
+
             if (pkgName == null) {
                 showToast(getApplicationContext(), R.string.invalidArguments);
                 Freeze.this.finish();
