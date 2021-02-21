@@ -19,7 +19,7 @@ public class ShowLogcatActivity extends FreezeYouBaseActivity {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.showlogcat_activity);
-        processActionBar(getActionBar());
+        processActionBar(getSupportActionBar());
 
         EditText editText = findViewById(R.id.sla_log_editText);
 

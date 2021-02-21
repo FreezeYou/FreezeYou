@@ -25,7 +25,7 @@ public class AboutActivity extends FreezeYouBaseActivity {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about);
-        processActionBar(getActionBar());
+        processActionBar(getSupportActionBar());
 
         final Activity activity = AboutActivity.this;
 

@@ -47,7 +47,7 @@ public class FUFLauncherShortcutCreator extends FreezeYouBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
-        processActionBar(getActionBar());
+        processActionBar(getSupportActionBar());
 
         final Intent intent = getIntent();
         String slf_n = intent.getStringExtra("slf_n");

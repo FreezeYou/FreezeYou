@@ -1,9 +1,10 @@
 package cf.playhi.freezeyou;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.ActionBar;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 
@@ -16,7 +17,7 @@ public class FirstTimeSetupActivity extends FreezeYouBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_time_setup_main);
 
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
             actionBar.hide();
 

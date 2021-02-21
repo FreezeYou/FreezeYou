@@ -19,7 +19,7 @@ public class SettingsActivity extends FreezeYouBaseActivity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
-        processActionBar(getActionBar());
+        processActionBar(getSupportActionBar());
     }
 
     @Override

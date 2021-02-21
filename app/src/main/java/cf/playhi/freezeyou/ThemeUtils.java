@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,6 +8,8 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.view.Window;
 import android.view.WindowManager;
+
+import androidx.appcompat.app.ActionBar;
 
 final class ThemeUtils {
 

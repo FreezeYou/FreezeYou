@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.ActionBar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,7 +49,7 @@ public class ScheduledTasksAddActivity extends FreezeYouBaseActivity {
         setContentView(R.layout.stma_add);
         id = getIntent().getIntExtra("id", -5);
         isTimeTask = getIntent().getBooleanExtra("time", true);
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         processActionBar(actionBar);
         if (actionBar != null) {
             actionBar.setTitle(getIntent().getStringExtra("label"));

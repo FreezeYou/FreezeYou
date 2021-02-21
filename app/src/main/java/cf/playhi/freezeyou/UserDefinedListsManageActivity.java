@@ -32,7 +32,7 @@ public class UserDefinedListsManageActivity extends FreezeYouBaseActivity {
         ThemeUtils.processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.udlma_main);
-        ThemeUtils.processActionBar(getActionBar());
+        ThemeUtils.processActionBar(getSupportActionBar());
 
         loadUserDefinedLists();
     }
