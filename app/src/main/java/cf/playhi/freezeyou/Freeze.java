@@ -7,17 +7,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import net.grandcentrix.tray.AppPreferences;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
-import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 
-import static cf.playhi.freezeyou.DebugModeUtils.isDebugModeEnabled;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkRootFrozen;
@@ -28,11 +26,21 @@ import static cf.playhi.freezeyou.utils.Support.shortcutMakeDialog;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class Freeze extends FreezeYouBaseActivity {
+    private Intent mStartedIntent;
+    private String mPkgName;
+    private boolean mAutoRun;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this, true);
         super.onCreate(savedInstanceState);
-        init();
+        loadStartedIntentAndPkgName();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isLocked()) go();
     }
 
     @Override
@@ -41,62 +49,54 @@ public class Freeze extends FreezeYouBaseActivity {
         if (!isLocked()) finish();
     }
 
-    private void init() {
-        Intent intent = getIntent();
-        if (intent != null) {
+    private void loadStartedIntentAndPkgName() {
+        mStartedIntent = getIntent();
 
-            if (isDebugModeEnabled(this)) {
-                Log.e("DebugModeLogcat", "Intent toString: " + intent.toString());
-                Log.e("DebugModeLogcat", "Intent getDataString: " + intent.getDataString());
-                Log.e("DebugModeLogcat", "Intent getStringExtra_pkgName: " + intent.getStringExtra("pkgName"));
-                Log.e("DebugModeLogcat", "Intent getStringExtra_target: " + intent.getStringExtra("target"));
-                Log.e("DebugModeLogcat", "Intent getStringExtra_tasks: " + intent.getStringExtra("tasks"));
-                Log.e("DebugModeLogcat", "Intent getBooleanExtra_auto: " + intent.getBooleanExtra("auto", true));
-                Log.e("DebugModeLogcat", "Intent getAction: " + intent.getAction());
-                Log.e("DebugModeLogcat", "Intent getPackage: " + intent.getPackage());
-                Log.e("DebugModeLogcat", "Intent getScheme: " + intent.getScheme());
-                Log.e("DebugModeLogcat", "Intent getType: " + intent.getType());
-            }
+        if ("freezeyou".equals(mStartedIntent.getScheme())) {
+            Uri dataUri = mStartedIntent.getData();
+            mPkgName = (dataUri == null) ? null : dataUri.getQueryParameter("pkgName");
+            mAutoRun = false;
+        } else {
+            mPkgName = mStartedIntent.getStringExtra("pkgName");
+            mAutoRun = mStartedIntent.getBooleanExtra("auto", true);
+        }
 
+        setUnlockLogoPkgName(mPkgName);
+    }
 
-            String target = getIntent().getStringExtra("target");
-            String tasks = getIntent().getStringExtra("tasks");
-            String pkgName;
-            boolean auto;
-            if ("freezeyou".equals(intent.getScheme())) {
-                Uri dataUri = intent.getData();
-                pkgName = (dataUri == null) ? null : dataUri.getQueryParameter("pkgName");
-                auto = false;
-            } else {
-                pkgName = intent.getStringExtra("pkgName");
-                auto = intent.getBooleanExtra("auto", true);
-            }
+    private void go() {
+        if (mStartedIntent != null) {
+            String target = mStartedIntent.getStringExtra("target");
+            String tasks = mStartedIntent.getStringExtra("tasks");
 
-            setUnlockLogoPkgName(pkgName);
-
-            if (pkgName == null) {
+            if (mPkgName == null) {
                 showToast(getApplicationContext(), R.string.invalidArguments);
                 Freeze.this.finish();
-            } else if ("".equals(pkgName)) {
+            } else if ("".equals(mPkgName)) {
                 showToast(getApplicationContext(), R.string.invalidArguments);
                 Freeze.this.finish();
             }
 
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            if (auto && sp.getBoolean("shortcutAutoFUF", false)) {
-                if (realGetFrozenStatus(this, pkgName, getPackageManager())) {
-                    processUnfreezeAction(this, pkgName, target, tasks, true, sp.getBoolean("openImmediatelyAfterUnfreezeUseShortcutAutoFUF", true), this, true);
+            if (mAutoRun && sp.getBoolean("shortcutAutoFUF", false)) {
+                if (realGetFrozenStatus(this, mPkgName, getPackageManager())) {
+                    processUnfreezeAction(
+                            this, mPkgName, target, tasks, true,
+                            sp.getBoolean("openImmediatelyAfterUnfreezeUseShortcutAutoFUF", true),
+                            this, true);
                 } else {
                     if (sp.getBoolean("needConfirmWhenFreezeUseShortcutAutoFUF", false)) {
-                        processDialog(pkgName, target, tasks, false, 2);
+                        processDialog(mPkgName, target, tasks, false, 2);
                     } else {
-                        processFreezeAction(this, pkgName, target, tasks, true, this, true);
+                        processFreezeAction(this, mPkgName, target, tasks,
+                                true, this, true);
                     }
                 }
-            } else if ((!checkRootFrozen(Freeze.this, pkgName, null)) && (!checkMRootFrozen(Freeze.this, pkgName))) {
-                processDialog(pkgName, target, tasks, auto, 2);
+            } else if ((!checkRootFrozen(Freeze.this, mPkgName, null))
+                    && (!checkMRootFrozen(Freeze.this, mPkgName))) {
+                processDialog(mPkgName, target, tasks, mAutoRun, 2);
             } else {
-                processDialog(pkgName, target, tasks, auto, 1);
+                processDialog(mPkgName, target, tasks, mAutoRun, 1);
             }
             if (Build.VERSION.SDK_INT >= 21) {
                 setTaskDescription(
@@ -105,18 +105,17 @@ public class Freeze extends FreezeYouBaseActivity {
                                         this,
                                         null,
                                         null,
-                                        pkgName)
+                                        mPkgName)
                                         + " - "
                                         + getString(R.string.app_name),
                                 getBitmapFromDrawable(
                                         getApplicationIcon(
                                                 this,
-                                                pkgName,
-                                                ApplicationInfoUtils
-                                                        .getApplicationInfoFromPkgName(
-                                                                pkgName,
-                                                                this
-                                                        ),
+                                                mPkgName,
+                                                getApplicationInfoFromPkgName(
+                                                        mPkgName,
+                                                        this
+                                                ),
                                                 false)
                                 )
                         )
@@ -131,7 +130,7 @@ public class Freeze extends FreezeYouBaseActivity {
                 getApplicationLabel(Freeze.this, null, null, pkgName),
                 getString(R.string.chooseDetailAction),
                 Freeze.this,
-                ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this),
+                getApplicationInfoFromPkgName(pkgName, this),
                 pkgName,
                 target,
                 tasks,
@@ -142,7 +141,8 @@ public class Freeze extends FreezeYouBaseActivity {
 
     @Override
     public void finish() {
-        if (Build.VERSION.SDK_INT >= 21 && !(new AppPreferences(this).getBoolean("showInRecents", true))) {
+        if (Build.VERSION.SDK_INT >= 21
+                && !(new AppPreferences(this).getBoolean("showInRecents", true))) {
             finishAndRemoveTask();
         }
         super.finish();

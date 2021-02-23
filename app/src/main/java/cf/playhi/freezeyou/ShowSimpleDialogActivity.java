@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -30,30 +29,22 @@ public class ShowSimpleDialogActivity extends FreezeYouBaseActivity {
         final String text = intent.getStringExtra("text");
         AlertDialogUtils
                 .buildAlertDialog(this, null, text, title)
-                .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                .setPositiveButton(R.string.okay, (dialog, which) -> finish())
+                .setNeutralButton(android.R.string.copy, (dialog, which) -> {
+                    if (ClipboardUtils.copyToClipboard(ShowSimpleDialogActivity.this, text)) {
+                        ToastUtils.showToast(ShowSimpleDialogActivity.this, R.string.success);
+                    } else {
+                        ToastUtils.showToast(ShowSimpleDialogActivity.this, R.string.failed);
                     }
+                    finish();
                 })
-                .setNeutralButton(android.R.string.copy, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (ClipboardUtils.copyToClipboard(ShowSimpleDialogActivity.this, text)) {
-                            ToastUtils.showToast(ShowSimpleDialogActivity.this, R.string.success);
-                        } else {
-                            ToastUtils.showToast(ShowSimpleDialogActivity.this, R.string.failed);
-                        }
-                        finish();
-                    }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        finish();
-                    }
-                })
+                .setOnCancelListener(dialog -> finish())
                 .create()
                 .show();
+    }
+
+    @Override
+    protected boolean activityNeedCheckAppLock() {
+        return false;
     }
 }

@@ -31,6 +31,8 @@
         <item name="android:colorAccent">#0300EF</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.Blue</item>
         <item name="android:navigationBarColor">#026FDE</item>
+        <item name="colorPrimaryDark">#026FDE</item>
+        <item name="colorPrimary">#0383E9</item>
     </style>
 
     <style name="AppTheme.Default.Pink" parent="AppTheme.Default.Light">
@@ -39,6 +41,8 @@
         <item name="android:colorAccent">#FF4081</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.Pink</item>
         <item name="android:navigationBarColor">#FF1744</item>
+        <item name="colorPrimaryDark">#ec407a</item>
+        <item name="colorPrimary">#FF4081</item>
     </style>
 
     <style name="AppTheme.Default.Green" parent="AppTheme.Default.Light">
@@ -47,6 +51,8 @@
         <item name="android:colorAccent">#00aa00</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.Green</item>
         <item name="android:navigationBarColor">#009624</item>
+        <item name="colorPrimaryDark">#009624</item>
+        <item name="colorPrimary">#00c853</item>
     </style>
 
     <style name="AppTheme.Default.Yellow" parent="AppTheme.Default.Light">
@@ -65,6 +71,8 @@
         <item name="android:colorAccent">#ff5500</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.Orange</item>
         <item name="android:navigationBarColor">#c43e00</item>
+        <item name="colorPrimaryDark">#c43e00</item>
+        <item name="colorPrimary">#ff6f00</item>
     </style>
 
     <style name="AppTheme.Default.Red" parent="AppTheme.Default.Light">
@@ -73,6 +81,8 @@
         <item name="android:colorAccent">#d50000</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.Red</item>
         <item name="android:navigationBarColor">#9b0000</item>
+        <item name="colorPrimaryDark">#9b0000</item>
+        <item name="colorPrimary">#d50000</item>
     </style>
 
     <style name="AppTheme.Default.White" parent="AppTheme.Default.Light.LightActionBar">
@@ -81,6 +91,8 @@
         <item name="android:colorAccent">#424242</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.White</item>
         <item name="android:navigationBarColor">#eeeeee</item>
+        <item name="colorPrimaryDark">#eeeeee</item>
+        <item name="colorPrimary">#fafafa</item>
     </style>
 
     <style name="AlertDialog.Red" parent="Theme.AppCompat.Light.Dialog.Alert">

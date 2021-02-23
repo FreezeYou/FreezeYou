@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,11 +24,11 @@ import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTI
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
 
 public class AppLockActivity extends FreezeYouBaseActivity {
-    private Executor executor;
-    private BiometricPrompt biometricPrompt;
-    private BiometricPrompt.PromptInfo promptInfo;
+    private BiometricPrompt mBiometricPrompt;
+    private BiometricPrompt.PromptInfo mPromptInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,29 +39,41 @@ public class AppLockActivity extends FreezeYouBaseActivity {
         if (actionBar != null) actionBar.hide();
 
         initBiometricPromptPart();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         Button unlockButton = findViewById(R.id.app_lock_main_unlock_button);
         ImageView logoImageView = findViewById(R.id.app_lock_main_logo_imageView);
-        unlockButton.setOnClickListener(v -> biometricPrompt.authenticate(promptInfo));
-        logoImageView.setOnClickListener(v -> biometricPrompt.authenticate(promptInfo));
+        unlockButton.setOnClickListener(v -> mBiometricPrompt.authenticate(mPromptInfo));
+        logoImageView.setOnClickListener(v -> mBiometricPrompt.authenticate(mPromptInfo));
         String logoPkgName = getIntent().getStringExtra("unlockLogoPkgName");
         if (logoPkgName != null) {
             logoImageView.setImageBitmap(
                     getBitmapFromDrawable(
                             getApplicationIcon(
                                     getApplicationContext(), logoPkgName,
-                                    null, false
+                                    getApplicationInfoFromPkgName(logoPkgName, getApplicationContext()),
+                                    false
                             )
                     )
             );
         }
 
-        biometricPrompt.authenticate(promptInfo);
+        mBiometricPrompt.authenticate(mPromptInfo);
     }
 
     private void initBiometricPromptPart() {
-        executor = ContextCompat.getMainExecutor(this);
-        biometricPrompt = new BiometricPrompt(AppLockActivity.this, executor,
+        Executor executor = ContextCompat.getMainExecutor(this);
+        mBiometricPrompt = new BiometricPrompt(AppLockActivity.this, executor,
                 new BiometricPrompt.AuthenticationCallback() {
                     @Override
                     public void onAuthenticationError(
@@ -68,10 +81,7 @@ public class AppLockActivity extends FreezeYouBaseActivity {
                         super.onAuthenticationError(errorCode, errString);
                         Toast.makeText(getApplicationContext(),
                                 "Authentication error: " + errString, Toast.LENGTH_SHORT).show();
-                        new AppPreferences(AppLockActivity.this)
-                                .put("lockTime", new Date().getTime());
-                        setResult(-2);
-                        finish();
+                        setResult(RESULT_CANCELED);
                     }
 
                     @Override
@@ -89,10 +99,11 @@ public class AppLockActivity extends FreezeYouBaseActivity {
                         super.onAuthenticationFailed();
                         Toast.makeText(getApplicationContext(), "Authentication failed",
                                 Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_CANCELED);
                     }
                 });
 
-        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+        mPromptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle("身份验证")
                 .setSubtitle("验证以继续")
                 .setAllowedAuthenticators(BIOMETRIC_STRONG | BIOMETRIC_WEAK | DEVICE_CREDENTIAL)
