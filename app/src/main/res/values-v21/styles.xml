@@ -11,218 +11,233 @@
     </style>
 
     <style name="AppTheme.Default" parent="Theme.AppCompat">
-        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
-        <item name="android:windowContentTransitions">true</item>
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorPrimary">#212121</item>
+        <item name="colorAccent">#1976d2</item>
+        <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
     </style>
 
     <style name="AppTheme.Default.Light" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>
-        <item name="android:windowContentTransitions">true</item>
+        <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
     </style>
 
-    <style name="AppTheme.Default.Light.LightActionBar" parent="Theme.AppCompat.Light">
-        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle.LightBackground</item>
-        <item name="android:windowContentTransitions">true</item>
+    <style name="AppTheme.Default.Light.White" parent="Theme.AppCompat.Light">
+        <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
     </style>
 
-    <style name="AppTheme.Default.Blue" parent="AppTheme.Default.Light">
-        <item name="android:colorPrimary">#0383E9</item>
-        <item name="android:colorPrimaryDark">#026FDE</item>
-        <item name="android:colorAccent">#0300EF</item>
-        <item name="android:alertDialogTheme">@style/AlertDialog.Blue</item>
-        <item name="android:navigationBarColor">#026FDE</item>
-        <item name="colorPrimaryDark">#026FDE</item>
-        <item name="colorPrimary">#0383E9</item>
-    </style>
+    <!--    <style name="AppTheme.Default" parent="Theme.AppCompat">-->
+    <!--        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>-->
+    <!--        <item name="android:windowContentTransitions">true</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Pink" parent="AppTheme.Default.Light">
-        <item name="android:colorPrimary">#FF4081</item>
-        <item name="android:colorPrimaryDark">#ec407a</item>
-        <item name="android:colorAccent">#FF4081</item>
-        <item name="android:alertDialogTheme">@style/AlertDialog.Pink</item>
-        <item name="android:navigationBarColor">#FF1744</item>
-        <item name="colorPrimaryDark">#ec407a</item>
-        <item name="colorPrimary">#FF4081</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Light" parent="Theme.AppCompat.Light.DarkActionBar">-->
+    <!--        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>-->
+    <!--        <item name="android:windowContentTransitions">true</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Green" parent="AppTheme.Default.Light">
-        <item name="android:colorPrimary">#00c853</item>
-        <item name="android:colorPrimaryDark">#009624</item>
-        <item name="android:colorAccent">#00aa00</item>
-        <item name="android:alertDialogTheme">@style/AlertDialog.Green</item>
-        <item name="android:navigationBarColor">#009624</item>
-        <item name="colorPrimaryDark">#009624</item>
-        <item name="colorPrimary">#00c853</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Light.LightActionBar" parent="Theme.AppCompat.Light">-->
+    <!--        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle.LightBackground</item>-->
+    <!--        <item name="android:windowContentTransitions">true</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Yellow" parent="AppTheme.Default.Light">
-        <item name="android:colorPrimary">#ffbf00</item>
-        <item name="android:colorPrimaryDark">#f7a500</item>
-        <item name="android:colorAccent">#ffbf00</item>
-        <item name="android:alertDialogTheme">@style/AlertDialog.Yellow</item>
-        <item name="android:navigationBarColor">#f7a500</item>
-        <item name="colorPrimaryDark">#f7a500</item>
-        <item name="colorPrimary">#ffbf00</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Blue" parent="AppTheme.Default.Light">-->
+    <!--        <item name="android:colorPrimary">#0383E9</item>-->
+    <!--        <item name="android:colorPrimaryDark">#026FDE</item>-->
+    <!--        <item name="android:colorAccent">#0300EF</item>-->
+    <!--        <item name="android:alertDialogTheme">@style/AlertDialog.Blue</item>-->
+    <!--        <item name="android:navigationBarColor">#026FDE</item>-->
+    <!--        <item name="colorPrimaryDark">#026FDE</item>-->
+    <!--        <item name="colorPrimary">#0383E9</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Orange" parent="AppTheme.Default.Light">
-        <item name="android:colorPrimary">#ff6f00</item>
-        <item name="android:colorPrimaryDark">#c43e00</item>
-        <item name="android:colorAccent">#ff5500</item>
-        <item name="android:alertDialogTheme">@style/AlertDialog.Orange</item>
-        <item name="android:navigationBarColor">#c43e00</item>
-        <item name="colorPrimaryDark">#c43e00</item>
-        <item name="colorPrimary">#ff6f00</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Pink" parent="AppTheme.Default.Light">-->
+    <!--        <item name="android:colorPrimary">#FF4081</item>-->
+    <!--        <item name="android:colorPrimaryDark">#ec407a</item>-->
+    <!--        <item name="android:colorAccent">#FF4081</item>-->
+    <!--        <item name="android:alertDialogTheme">@style/AlertDialog.Pink</item>-->
+    <!--        <item name="android:navigationBarColor">#FF1744</item>-->
+    <!--        <item name="colorPrimaryDark">#ec407a</item>-->
+    <!--        <item name="colorPrimary">#FF4081</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Red" parent="AppTheme.Default.Light">
-        <item name="android:colorPrimary">#d50000</item>
-        <item name="android:colorPrimaryDark">#9b0000</item>
-        <item name="android:colorAccent">#d50000</item>
-        <item name="android:alertDialogTheme">@style/AlertDialog.Red</item>
-        <item name="android:navigationBarColor">#9b0000</item>
-        <item name="colorPrimaryDark">#9b0000</item>
-        <item name="colorPrimary">#d50000</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Green" parent="AppTheme.Default.Light">-->
+    <!--        <item name="android:colorPrimary">#00c853</item>-->
+    <!--        <item name="android:colorPrimaryDark">#009624</item>-->
+    <!--        <item name="android:colorAccent">#00aa00</item>-->
+    <!--        <item name="android:alertDialogTheme">@style/AlertDialog.Green</item>-->
+    <!--        <item name="android:navigationBarColor">#009624</item>-->
+    <!--        <item name="colorPrimaryDark">#009624</item>-->
+    <!--        <item name="colorPrimary">#00c853</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.White" parent="AppTheme.Default.Light.LightActionBar">
-        <item name="android:colorPrimary">#fafafa</item>
-        <item name="android:colorPrimaryDark">#eeeeee</item>
-        <item name="android:colorAccent">#424242</item>
-        <item name="android:alertDialogTheme">@style/AlertDialog.White</item>
-        <item name="android:navigationBarColor">#eeeeee</item>
-        <item name="colorPrimaryDark">#eeeeee</item>
-        <item name="colorPrimary">#fafafa</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Yellow" parent="AppTheme.Default.Light">-->
+    <!--        <item name="android:colorPrimary">#ffbf00</item>-->
+    <!--        <item name="android:colorPrimaryDark">#f7a500</item>-->
+    <!--        <item name="android:colorAccent">#ffbf00</item>-->
+    <!--        <item name="android:alertDialogTheme">@style/AlertDialog.Yellow</item>-->
+    <!--        <item name="android:navigationBarColor">#f7a500</item>-->
+    <!--        <item name="colorPrimaryDark">#f7a500</item>-->
+    <!--        <item name="colorPrimary">#ffbf00</item>-->
+    <!--    </style>-->
 
-    <style name="AlertDialog.Red" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:colorPrimary">#9b0000</item>
-        <item name="android:colorAccent">#d50000</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Orange" parent="AppTheme.Default.Light">-->
+    <!--        <item name="android:colorPrimary">#ff6f00</item>-->
+    <!--        <item name="android:colorPrimaryDark">#c43e00</item>-->
+    <!--        <item name="android:colorAccent">#ff5500</item>-->
+    <!--        <item name="android:alertDialogTheme">@style/AlertDialog.Orange</item>-->
+    <!--        <item name="android:navigationBarColor">#c43e00</item>-->
+    <!--        <item name="colorPrimaryDark">#c43e00</item>-->
+    <!--        <item name="colorPrimary">#ff6f00</item>-->
+    <!--    </style>-->
 
-    <style name="AlertDialog.Orange" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:colorPrimary">#c43e00</item>
-        <item name="android:colorAccent">#ff6f00</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Red" parent="AppTheme.Default.Light">-->
+    <!--        <item name="android:colorPrimary">#d50000</item>-->
+    <!--        <item name="android:colorPrimaryDark">#9b0000</item>-->
+    <!--        <item name="android:colorAccent">#d50000</item>-->
+    <!--        <item name="android:alertDialogTheme">@style/AlertDialog.Red</item>-->
+    <!--        <item name="android:navigationBarColor">#9b0000</item>-->
+    <!--        <item name="colorPrimaryDark">#9b0000</item>-->
+    <!--        <item name="colorPrimary">#d50000</item>-->
+    <!--    </style>-->
 
-    <style name="AlertDialog.Yellow" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:colorPrimary">#f7a500</item>
-        <item name="android:colorAccent">#ffbf00</item>
-    </style>
+    <!--    <style name="AppTheme.Default.White" parent="AppTheme.Default.Light.LightActionBar">-->
+    <!--        <item name="android:colorPrimary">#fafafa</item>-->
+    <!--        <item name="android:colorPrimaryDark">#eeeeee</item>-->
+    <!--        <item name="android:colorAccent">#424242</item>-->
+    <!--        <item name="android:alertDialogTheme">@style/AlertDialog.White</item>-->
+    <!--        <item name="android:navigationBarColor">#eeeeee</item>-->
+    <!--        <item name="colorPrimaryDark">#eeeeee</item>-->
+    <!--        <item name="colorPrimary">#fafafa</item>-->
+    <!--    </style>-->
 
-    <style name="AlertDialog.Pink" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:colorPrimary">#ec407a</item>
-        <item name="android:colorAccent">#ff4081</item>
-    </style>
+    <!--    <style name="AlertDialog.Red" parent="Theme.AppCompat.Light.Dialog.Alert">-->
+    <!--        <item name="android:colorPrimary">#9b0000</item>-->
+    <!--        <item name="android:colorAccent">#d50000</item>-->
+    <!--    </style>-->
 
-    <style name="AlertDialog.Blue" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:colorPrimary">#026FDE</item>
-        <item name="android:colorAccent">#0383e9</item>
-    </style>
+    <!--    <style name="AlertDialog.Orange" parent="Theme.AppCompat.Light.Dialog.Alert">-->
+    <!--        <item name="android:colorPrimary">#c43e00</item>-->
+    <!--        <item name="android:colorAccent">#ff6f00</item>-->
+    <!--    </style>-->
 
-    <style name="AlertDialog.Green" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:colorPrimary">#009624</item>
-        <item name="android:colorAccent">#00c853</item>
-    </style>
+    <!--    <style name="AlertDialog.Yellow" parent="Theme.AppCompat.Light.Dialog.Alert">-->
+    <!--        <item name="android:colorPrimary">#f7a500</item>-->
+    <!--        <item name="android:colorAccent">#ffbf00</item>-->
+    <!--    </style>-->
 
-    <style name="AlertDialog.White" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:colorPrimary">#424242</item>
-        <item name="android:colorAccent">#eeeeee</item>
-    </style>
+    <!--    <style name="AlertDialog.Pink" parent="Theme.AppCompat.Light.Dialog.Alert">-->
+    <!--        <item name="android:colorPrimary">#ec407a</item>-->
+    <!--        <item name="android:colorAccent">#ff4081</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Dialog" parent="AppTheme.Default">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowBackground">@color/realTranslucent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowContentTransitions">true</item>
-    </style>
+    <!--    <style name="AlertDialog.Blue" parent="Theme.AppCompat.Light.Dialog.Alert">-->
+    <!--        <item name="android:colorPrimary">#026FDE</item>-->
+    <!--        <item name="android:colorAccent">#0383e9</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Dialog.Blue" parent="AppTheme.Default.Blue">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowBackground">@color/realTranslucent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowContentTransitions">true</item>
-    </style>
+    <!--    <style name="AlertDialog.Green" parent="Theme.AppCompat.Light.Dialog.Alert">-->
+    <!--        <item name="android:colorPrimary">#009624</item>-->
+    <!--        <item name="android:colorAccent">#00c853</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Dialog.Yellow" parent="AppTheme.Default.Yellow">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowBackground">@color/realTranslucent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowContentTransitions">true</item>
-    </style>
+    <!--    <style name="AlertDialog.White" parent="Theme.AppCompat.Light.Dialog.Alert">-->
+    <!--        <item name="android:colorPrimary">#424242</item>-->
+    <!--        <item name="android:colorAccent">#eeeeee</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Dialog.Orange" parent="AppTheme.Default.Orange">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowBackground">@color/realTranslucent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowContentTransitions">true</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Dialog" parent="AppTheme.Default">-->
+    <!--        <item name="android:windowNoTitle">true</item>-->
+    <!--        <item name="android:windowIsFloating">true</item>-->
+    <!--        <item name="android:windowBackground">@color/realTranslucent</item>-->
+    <!--        <item name="android:windowIsTranslucent">true</item>-->
+    <!--        <item name="android:windowTranslucentStatus">true</item>-->
+    <!--        <item name="android:windowTranslucentNavigation">true</item>-->
+    <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+    <!--        <item name="android:windowContentTransitions">true</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Dialog.Green" parent="AppTheme.Default.Green">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowBackground">@color/realTranslucent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowContentTransitions">true</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Dialog.Blue" parent="AppTheme.Default.Blue">-->
+    <!--        <item name="android:windowNoTitle">true</item>-->
+    <!--        <item name="android:windowIsFloating">true</item>-->
+    <!--        <item name="android:windowBackground">@color/realTranslucent</item>-->
+    <!--        <item name="android:windowIsTranslucent">true</item>-->
+    <!--        <item name="android:windowTranslucentStatus">true</item>-->
+    <!--        <item name="android:windowTranslucentNavigation">true</item>-->
+    <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+    <!--        <item name="android:windowContentTransitions">true</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Dialog.Pink" parent="AppTheme.Default.Pink">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowBackground">@color/realTranslucent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowContentTransitions">true</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Dialog.Yellow" parent="AppTheme.Default.Yellow">-->
+    <!--        <item name="android:windowNoTitle">true</item>-->
+    <!--        <item name="android:windowIsFloating">true</item>-->
+    <!--        <item name="android:windowBackground">@color/realTranslucent</item>-->
+    <!--        <item name="android:windowIsTranslucent">true</item>-->
+    <!--        <item name="android:windowTranslucentStatus">true</item>-->
+    <!--        <item name="android:windowTranslucentNavigation">true</item>-->
+    <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+    <!--        <item name="android:windowContentTransitions">true</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Dialog.Red" parent="AppTheme.Default.Red">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowBackground">@color/realTranslucent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowContentTransitions">true</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Dialog.Orange" parent="AppTheme.Default.Orange">-->
+    <!--        <item name="android:windowNoTitle">true</item>-->
+    <!--        <item name="android:windowIsFloating">true</item>-->
+    <!--        <item name="android:windowBackground">@color/realTranslucent</item>-->
+    <!--        <item name="android:windowIsTranslucent">true</item>-->
+    <!--        <item name="android:windowTranslucentStatus">true</item>-->
+    <!--        <item name="android:windowTranslucentNavigation">true</item>-->
+    <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+    <!--        <item name="android:windowContentTransitions">true</item>-->
+    <!--    </style>-->
 
-    <style name="AppTheme.Default.Dialog.White" parent="AppTheme.Default.White">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowBackground">@color/realTranslucent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowContentTransitions">true</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Dialog.Green" parent="AppTheme.Default.Green">-->
+    <!--        <item name="android:windowNoTitle">true</item>-->
+    <!--        <item name="android:windowIsFloating">true</item>-->
+    <!--        <item name="android:windowBackground">@color/realTranslucent</item>-->
+    <!--        <item name="android:windowIsTranslucent">true</item>-->
+    <!--        <item name="android:windowTranslucentStatus">true</item>-->
+    <!--        <item name="android:windowTranslucentNavigation">true</item>-->
+    <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+    <!--        <item name="android:windowContentTransitions">true</item>-->
+    <!--    </style>-->
 
-    <style name="OverflowStyle" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_action_more</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Dialog.Pink" parent="AppTheme.Default.Pink">-->
+    <!--        <item name="android:windowNoTitle">true</item>-->
+    <!--        <item name="android:windowIsFloating">true</item>-->
+    <!--        <item name="android:windowBackground">@color/realTranslucent</item>-->
+    <!--        <item name="android:windowIsTranslucent">true</item>-->
+    <!--        <item name="android:windowTranslucentStatus">true</item>-->
+    <!--        <item name="android:windowTranslucentNavigation">true</item>-->
+    <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+    <!--        <item name="android:windowContentTransitions">true</item>-->
+    <!--    </style>-->
 
-    <style name="OverflowStyle.LightBackground" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_action_more_light</item>
-    </style>
+    <!--    <style name="AppTheme.Default.Dialog.Red" parent="AppTheme.Default.Red">-->
+    <!--        <item name="android:windowNoTitle">true</item>-->
+    <!--        <item name="android:windowIsFloating">true</item>-->
+    <!--        <item name="android:windowBackground">@color/realTranslucent</item>-->
+    <!--        <item name="android:windowIsTranslucent">true</item>-->
+    <!--        <item name="android:windowTranslucentStatus">true</item>-->
+    <!--        <item name="android:windowTranslucentNavigation">true</item>-->
+    <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+    <!--        <item name="android:windowContentTransitions">true</item>-->
+    <!--    </style>-->
+
+    <!--    <style name="AppTheme.Default.Dialog.White" parent="AppTheme.Default.White">-->
+    <!--        <item name="android:windowNoTitle">true</item>-->
+    <!--        <item name="android:windowIsFloating">true</item>-->
+    <!--        <item name="android:windowBackground">@color/realTranslucent</item>-->
+    <!--        <item name="android:windowIsTranslucent">true</item>-->
+    <!--        <item name="android:windowTranslucentStatus">true</item>-->
+    <!--        <item name="android:windowTranslucentNavigation">true</item>-->
+    <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+    <!--        <item name="android:windowContentTransitions">true</item>-->
+    <!--    </style>-->
+
+    <!--    <style name="OverflowStyle" parent="Widget.AppCompat.ActionButton.Overflow">-->
+    <!--        <item name="android:src">@drawable/ic_action_more</item>-->
+    <!--    </style>-->
+
+    <!--    <style name="OverflowStyle.LightBackground" parent="Widget.AppCompat.ActionButton.Overflow">-->
+    <!--        <item name="android:src">@drawable/ic_action_more_light</item>-->
+    <!--    </style>-->
 </resources>

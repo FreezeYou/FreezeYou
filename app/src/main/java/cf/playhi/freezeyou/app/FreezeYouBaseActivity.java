@@ -24,6 +24,7 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
     private static final int APP_LOCK_ACTIVITY_REQUEST_CODE = 65533;
 
     private String mUnlockLogoPkgName;
+    private boolean mHadBeenUnlocked = false;
 
     @Override
     @CallSuper
@@ -36,12 +37,26 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
     @CallSuper
     protected void onResume() {
         super.onResume();
-        if (activityNeedCheckAppLock() && isBiometricPromptPartAvailable() && isLocked()) {
-            startActivityForResult(
-                    new Intent(this, AppLockActivity.class)
-                            .putExtra("unlockLogoPkgName", mUnlockLogoPkgName),
-                    APP_LOCK_ACTIVITY_REQUEST_CODE
-            );
+        if (activityNeedCheckAppLock() && isBiometricPromptPartAvailable()) {
+            if (isLocked()) {
+                mHadBeenUnlocked = false;
+                startActivityForResult(
+                        new Intent(this, AppLockActivity.class)
+                                .putExtra("unlockLogoPkgName", mUnlockLogoPkgName),
+                        APP_LOCK_ACTIVITY_REQUEST_CODE
+                );
+            } else {
+                mHadBeenUnlocked = true;
+            }
+        }
+    }
+
+    @Override
+    @CallSuper
+    protected void onPause() {
+        super.onPause();
+        if (mHadBeenUnlocked) {
+            resetLockWaitTime(new AppPreferences(this));
         }
     }
 
@@ -77,9 +92,13 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
         if (appPreferences.getLong("lockTime", 0) < currentTime - 2000) {
             return true;
         } else {
-            appPreferences.put("lockTime", new Date().getTime());
+            resetLockWaitTime(appPreferences);
             return false;
         }
+    }
+
+    protected boolean resetLockWaitTime(AppPreferences appPreferences) {
+        return appPreferences.put("lockTime", new Date().getTime());
     }
 
     protected void setUnlockLogoPkgName(String pkgName) {

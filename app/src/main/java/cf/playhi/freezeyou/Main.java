@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
@@ -44,6 +43,8 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.BufferedReader;
@@ -72,6 +73,7 @@ import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeFabDotBackground;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
+import static cf.playhi.freezeyou.ThemeUtils.getUiTheme;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
@@ -142,6 +144,7 @@ public class Main extends FreezeYouBaseActivity {
         }
 //        throw new RuntimeException("自定义异常：仅于异常上报测试中使用");//发版前务必注释
     }
+
 
 //    @Override
 //    protected void onNewIntent(Intent intent) {
@@ -215,9 +218,10 @@ public class Main extends FreezeYouBaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        String cTheme = ThemeUtils.getUiTheme(this);
+        String cTheme = getUiTheme(this);
         if ("white".equals(cTheme) || "default".equals(cTheme)) {
             menu.findItem(R.id.menu_timedTasks).setIcon(R.drawable.ic_action_alarm_light);
+            menu.findItem(R.id.menu_more).setIcon(R.drawable.ic_action_more_light);
         }
         return true;
     }
@@ -230,6 +234,7 @@ public class Main extends FreezeYouBaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
         return onMainOptionsItemSelected(item);
     }
 
@@ -1512,37 +1517,21 @@ public class Main extends FreezeYouBaseActivity {
         builder.setIcon(R.mipmap.ic_launcher_new_round);
         builder.setTitle(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)));
         builder.setMessage(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)));
-        builder.setPositiveButton(R.string.quickSetup, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                startActivity(
-                        new Intent(getApplicationContext(), FirstTimeSetupActivity.class)
-                );
-                go();
-            }
+        builder.setPositiveButton(R.string.quickSetup, (dialogInterface, i) -> {
+            startActivity(
+                    new Intent(getApplicationContext(), FirstTimeSetupActivity.class)
+            );
+            go();
         });
-        builder.setNegativeButton(R.string.importConfig, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                startActivity(
-                        new Intent(getApplicationContext(), BackupMainActivity.class)
-                );
-                go();
-            }
+        builder.setNegativeButton(R.string.importConfig, (dialogInterface, i) -> {
+            startActivity(
+                    new Intent(getApplicationContext(), BackupMainActivity.class)
+            );
+            go();
         });
-        builder.setNeutralButton(R.string.okay, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                go();
-            }
-        });
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                go();
-            }
-        });
-        builder.create().show();
+        builder.setNeutralButton(R.string.okay, (dialogInterface, i) -> go());
+        builder.setOnCancelListener(dialogInterface -> go());
+        builder.show();
     }
 
     private HashMap<String, Integer> getUFreezeTimesMap() {

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/menu_staa_share"
         android:contentDescription="@string/share"
         android:icon="@drawable/ic_action_share"
-        android:showAsAction="ifRoom"
-        android:title="@string/share" />
+        android:title="@string/share"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_staa_delete"
         android:contentDescription="@string/delete"
         android:icon="@drawable/ic_action_delete"
-        android:showAsAction="ifRoom"
-        android:title="@string/delete" />
+        android:title="@string/delete"
+        app:showAsAction="ifRoom" />
 
 </menu>
