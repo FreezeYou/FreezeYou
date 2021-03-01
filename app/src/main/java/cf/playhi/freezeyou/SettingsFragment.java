@@ -7,82 +7,75 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
-import android.widget.ListView;
 
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceScreen;
 
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
 
-import cf.playhi.freezeyou.utils.DataStatisticsUtils;
-import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
-import cf.playhi.freezeyou.utils.NotificationUtils;
-import cf.playhi.freezeyou.utils.OneKeyListUtils;
-
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
-import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
+import static cf.playhi.freezeyou.SettingsUtils.syncAndCheckSharedPreference;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
+import static cf.playhi.freezeyou.utils.DataStatisticsUtils.resetTimes;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
 import static cf.playhi.freezeyou.utils.FileUtils.deleteAllFiles;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
+import static cf.playhi.freezeyou.utils.NotificationUtils.startAppNotificationSettingsSystemActivity;
+import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeUninstalledFromOneKeyList;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
+import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
 
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        setDividerHeight(sp.getBoolean("displayListDivider", false) ? 1 : -1);
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.spr);//preferences
 
-        if (DevicePolicyManagerUtils.isDeviceOwner(getActivity())) {
-            ((PreferenceScreen) findPreference("dangerZone")).removePreference(findPreference("clearAllUserData"));
+        if (isDeviceOwner(getActivity())) {
+            ((PreferenceScreen) findPreference("dangerZone"))
+                    .removePreference(findPreference("clearAllUserData"));
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ((PreferenceScreen) findPreference("backgroundService")).removeAll();
-            ((PreferenceScreen) findPreference("root")).removePreference(findPreference("backgroundService"));
+            ((PreferenceScreen) findPreference("root"))
+                    .removePreference(findPreference("backgroundService"));
         }
         initSummary(getPreferenceScreen());
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (!sp.getBoolean("displayListDivider", false)) {
-            ListView lv = getActivity().findViewById(android.R.id.list);
-            if (lv != null) {
-                lv.setDivider(getResources().getDrawable(R.color.realTranslucent));
-                lv.setDividerHeight(2);
-            }
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
+        PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         final AppPreferences appPreferences = new AppPreferences(getActivity());
-        SettingsUtils.syncAndCheckSharedPreference(
+        syncAndCheckSharedPreference(
                 getActivity().getApplicationContext(),
                 getActivity(), sharedPreferences, s, appPreferences);
         updatePrefSummary(findPreference(s));
     }
 
     @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+    public boolean onPreferenceTreeClick(androidx.preference.Preference preference) {
         String key = preference.getKey();
         if (key != null) {
             switch (key) {
@@ -178,13 +171,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     );
                     break;
                 case "notificationBar_more":
-                    NotificationUtils.startAppNotificationSettingsSystemActivity(
+                    startAppNotificationSettingsSystemActivity(
                             getActivity(), getActivity().getPackageName(),
                             getActivity().getApplicationInfo().uid
                     );
                     break;
                 case "clearUninstalledPkgsInOKFFList":
-                    if (OneKeyListUtils.removeUninstalledFromOneKeyList(getActivity(),
+                    if (removeUninstalledFromOneKeyList(getActivity(),
                             getString(R.string.sAutoFreezeApplicationList))) {
                         showToast(getActivity(), R.string.success);
                     } else {
@@ -192,7 +185,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     }
                     break;
                 case "clearUninstalledPkgsInOKUFList":
-                    if (OneKeyListUtils.removeUninstalledFromOneKeyList(getActivity(),
+                    if (removeUninstalledFromOneKeyList(getActivity(),
                             getString(R.string.sOneKeyUFApplicationList))) {
                         showToast(getActivity(), R.string.success);
                     } else {
@@ -200,7 +193,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     }
                     break;
                 case "clearUninstalledPkgsInFOQList":
-                    if (OneKeyListUtils.removeUninstalledFromOneKeyList(getActivity(),
+                    if (removeUninstalledFromOneKeyList(getActivity(),
                             getString(R.string.sFreezeOnceQuit))) {
                         showToast(getActivity(), R.string.success);
                     } else {
@@ -228,13 +221,12 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     break;
             }
         }
-        return super.onPreferenceTreeClick(preferenceScreen, preference);
+        return super.onPreferenceTreeClick(preference);
     }
 
     private void askIfResetTimes(final String dbName) {
         buildAlertDialog(getActivity(), android.R.drawable.ic_dialog_alert, R.string.askIfDel, R.string.caution)
-                .setPositiveButton(R.string.yes, (dialog, which) ->
-                        DataStatisticsUtils.resetTimes(getActivity(), dbName))
+                .setPositiveButton(R.string.yes, (dialog, which) -> resetTimes(getActivity(), dbName))
                 .setNegativeButton(R.string.no, null)
                 .create().show();
     }

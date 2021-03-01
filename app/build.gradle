@@ -8,7 +8,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 29
         versionCode 141
-        versionName '10.15.141.20210202-t142-h-20210226-1'
+        versionName '10.15.141.20210202-t142-h-20210301-1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -28,8 +28,8 @@ android {
 }
 
 dependencies {
-    implementation 'net.grandcentrix.tray:tray:0.12.0'
-    implementation 'androidx.core:core:1.3.2'
+    implementation "net.grandcentrix.tray:tray:0.12.0"
+    implementation "androidx.core:core:1.3.2"
 
     def appcompat_version = "1.3.0-beta01"
 
@@ -37,7 +37,9 @@ dependencies {
     // For loading and tinting drawables on older versions of the platform
     implementation "androidx.appcompat:appcompat-resources:$appcompat_version"
 
-    implementation 'androidx.biometric:biometric:1.2.0-alpha02'
+    implementation "androidx.biometric:biometric:1.2.0-alpha02"
+    implementation "androidx.preference:preference:1.1.1"
+    implementation "androidx.annotation:annotation:1.1.0"
 //    implementation 'com.google.zxing:core:3.3.3' 先把文本方式稳定下来，再做 QRCode
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation "junit:junit:4.13.2"
 }

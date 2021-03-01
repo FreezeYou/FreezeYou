@@ -362,6 +362,7 @@
     <string name="executeFailedFromSystem">系统内部错误</string>
     <string name="isNotSystemApp">非系统应用</string>
     <string name="telegramGroup_colon">电报群组：%1$s</string>
+    <string name="unlock">解锁</string>
     <string name="correspondingAndAvailableWebsiteUrlLanguageCode">zh-CN</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>

@@ -12,6 +12,16 @@
         android:padding="100dp"
         android:src="@mipmap/ic_launcher_new_round" />
 
+    <ImageButton
+        android:id="@+id/app_lock_main_fingerprint_imageButton"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_above="@id/app_lock_main_unlock_button"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitCenter"
+        android:src="?android:attr/fingerprintAuthDrawable" />
+
     <Button
         android:id="@+id/app_lock_main_unlock_button"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"

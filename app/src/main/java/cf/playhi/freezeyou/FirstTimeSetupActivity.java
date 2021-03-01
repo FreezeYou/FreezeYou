@@ -26,7 +26,7 @@ public class FirstTimeSetupActivity extends FreezeYouBaseActivity {
 
     private void init() {
 
-        getFragmentManager()
+        getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.first_time_setup_main_frameLayout, new FirstTimeSetupFragment())
                 .commit();

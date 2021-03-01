@@ -164,7 +164,7 @@ public class ScheduledTasksAddActivity extends FreezeYouBaseActivity {
 
         prepareData(id);
 
-        getFragmentManager()
+        getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.staa_sp, isTimeTask ? new STAAFragment() : new STAATriggerFragment())
                 .commit();

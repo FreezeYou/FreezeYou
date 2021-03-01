@@ -1,8 +1,10 @@
 package cf.playhi.freezeyou;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -55,6 +57,10 @@ public class AppLockActivity extends FreezeYouBaseActivity {
         ImageView logoImageView = findViewById(R.id.app_lock_main_logo_imageView);
         unlockButton.setOnClickListener(v -> mBiometricPrompt.authenticate(mPromptInfo));
         logoImageView.setOnClickListener(v -> mBiometricPrompt.authenticate(mPromptInfo));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ImageButton fingerprintImageButton = findViewById(R.id.app_lock_main_fingerprint_imageButton);
+            fingerprintImageButton.setOnClickListener(v -> mBiometricPrompt.authenticate(mPromptInfo));
+        }
         String logoPkgName = getIntent().getStringExtra("unlockLogoPkgName");
         if (logoPkgName != null) {
             logoImageView.setImageBitmap(
@@ -69,6 +75,12 @@ public class AppLockActivity extends FreezeYouBaseActivity {
         }
 
         mBiometricPrompt.authenticate(mPromptInfo);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mBiometricPrompt.cancelAuthentication();
     }
 
     private void initBiometricPromptPart() {
