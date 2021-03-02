@@ -8,10 +8,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-import androidx.preference.PreferenceScreen;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -23,7 +21,6 @@ import static cf.playhi.freezeyou.SettingsUtils.syncAndCheckSharedPreference;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.DataStatisticsUtils.resetTimes;
-import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
 import static cf.playhi.freezeyou.utils.FileUtils.deleteAllFiles;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.utils.NotificationUtils.startAppNotificationSettingsSystemActivity;
@@ -34,27 +31,20 @@ import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        setDividerHeight(sp.getBoolean("displayListDivider", false) ? 1 : -1);
-    }
-
-    @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
         // Load the preferences from an XML resource
-        addPreferencesFromResource(R.xml.spr);//preferences
+        setPreferencesFromResource(R.xml.spr, rootKey);//preferences
 
-        if (isDeviceOwner(getActivity())) {
-            ((PreferenceScreen) findPreference("dangerZone"))
-                    .removePreference(findPreference("clearAllUserData"));
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ((PreferenceScreen) findPreference("backgroundService")).removeAll();
-            ((PreferenceScreen) findPreference("root"))
-                    .removePreference(findPreference("backgroundService"));
-        }
+//        if (isDeviceOwner(getActivity())) {
+//            ((PreferenceScreen) findPreference("dangerZone"))
+//                    .removePreference(findPreference("clearAllUserData"));
+//        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            ((PreferenceScreen) findPreference("backgroundService")).removeAll();
+//            ((PreferenceScreen) findPreference("root"))
+//                    .removePreference(findPreference("backgroundService"));
+//        }
         initSummary(getPreferenceScreen());
     }
 
