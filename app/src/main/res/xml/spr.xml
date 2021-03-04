@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:key="root">
 
     <Preference
@@ -8,7 +8,7 @@
         app:title="@string/hToUse" />
 
     <PreferenceScreen
-        app:key="common"
+        app:key="spr_common"
         app:title="@string/common">
         <CheckBoxPreference
             app:defaultValue="true"
@@ -59,7 +59,8 @@
     </PreferenceScreen>
 
     <PreferenceScreen
-        app:key="appearance" app:title="@string/appearance">
+        app:key="spr_appearance"
+        app:title="@string/appearance">
         <ListPreference
             app:defaultValue="default"
             app:entries="@array/uiStyleSelection"
@@ -89,8 +90,12 @@
             app:title="@string/onClickFuncChooseActionStyle" />
     </PreferenceScreen>
 
-    <PreferenceScreen app:title="@string/notificationBar">
-        <PreferenceScreen app:title="@string/freezeAUF">
+    <PreferenceScreen
+        app:key="spr_notification"
+        app:title="@string/notificationBar">
+        <PreferenceScreen
+            app:key="spr_notification_fuf"
+            app:title="@string/freezeAUF">
             <CheckBoxPreference
                 app:defaultValue="true"
                 app:key="createQuickFUFNotiAfterUnfrozen"
@@ -127,7 +132,9 @@
             app:title="@string/more" />
     </PreferenceScreen>
 
-    <PreferenceScreen app:title="@string/automation">
+    <PreferenceScreen
+        app:key="spr_automation"
+        app:title="@string/automation">
         <Preference app:title="@string/scheduledTasks">
             <intent
                 android:targetClass="cf.playhi.freezeyou.ScheduledTasksManageActivity"
@@ -157,7 +164,9 @@
             app:title="@string/delAllScheduledTasks" />
     </PreferenceScreen>
 
-    <PreferenceScreen app:title="@string/freezeAUF">
+    <PreferenceScreen
+        app:key="spr_fuf"
+        app:title="@string/freezeAUF">
         <ListPreference
             app:defaultValue="0"
             app:entries="@array/selectFUFModeSelection"
@@ -215,7 +224,9 @@
         </Preference>
     </PreferenceScreen>
 
-    <PreferenceScreen app:title="@string/iconAEntry">
+    <PreferenceScreen
+        app:key="spr_iconAEntry"
+        app:title="@string/iconAEntry">
         <CheckBoxPreference
             app:defaultValue="false"
             app:icon="@mipmap/ic_launcher"
@@ -233,7 +244,9 @@
             app:title="@string/dialEntry" />
     </PreferenceScreen>
 
-    <PreferenceScreen app:title="@string/installAndUninstall">
+    <PreferenceScreen
+        app:key="spr_installUninstall"
+        app:title="@string/installAndUninstall">
         <CheckBoxPreference
             app:defaultValue="false"
             app:key="enableInstallPkgFunc"
@@ -271,7 +284,9 @@
             android:targetPackage="cf.playhi.freezeyou" />
     </Preference>
 
-    <PreferenceScreen app:title="@string/manageSpace">
+    <PreferenceScreen
+        app:key="spr_manageSpace"
+        app:title="@string/manageSpace">
         <Preference app:title="@string/manageMyCustomization">
             <intent
                 android:targetClass="cf.playhi.freezeyou.UserDefinedListsManageActivity"
@@ -323,7 +338,9 @@
         app:key="backupAndRestore"
         app:title="@string/backupAndRestore" />
 
-    <PreferenceScreen app:title="@string/advance">
+    <PreferenceScreen
+        app:key="spr_advance"
+        app:title="@string/advance">
         <CheckBoxPreference
             app:defaultValue="false"
             app:key="debugModeEnabled"
