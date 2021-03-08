@@ -91,6 +91,15 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        app:key="spr_security"
+        app:title="@string/security">
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="enableAuthentication"
+            app:title="@string/enableAuthentication" />
+    </PreferenceScreen>
+
+    <PreferenceScreen
         app:key="spr_notification"
         app:title="@string/notificationBar">
         <PreferenceScreen

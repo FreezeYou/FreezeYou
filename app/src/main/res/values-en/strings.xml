@@ -363,6 +363,8 @@
     <string name="isNotSystemApp">Is not system app</string>
     <string name="telegramGroup_colon">Telegram Group: %1$s</string>
     <string name="unlock">Unlock</string>
+    <string name="security">Security</string>
+    <string name="enableAuthentication">Enable authentication</string>
     <string name="correspondingAndAvailableWebsiteUrlLanguageCode">en-US</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>

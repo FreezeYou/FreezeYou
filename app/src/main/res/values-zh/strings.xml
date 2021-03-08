@@ -363,6 +363,8 @@
     <string name="isNotSystemApp">非系统应用</string>
     <string name="telegramGroup_colon">电报群组：%1$s</string>
     <string name="unlock">解锁</string>
+    <string name="security">安全</string>
+    <string name="enableAuthentication">启用身份验证</string>
     <string name="correspondingAndAvailableWebsiteUrlLanguageCode">zh-CN</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
