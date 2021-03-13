@@ -37,7 +37,7 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
     @CallSuper
     protected void onResume() {
         super.onResume();
-        if (activityNeedCheckAppLock() && isBiometricPromptPartAvailable()) {
+        if (activityNeedCheckAppLock() && isAuthenticationEnabled() && isBiometricPromptPartAvailable()) {
             if (isLocked()) {
                 mHadBeenUnlocked = false;
                 startActivityForResult(
@@ -49,6 +49,11 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
                 mHadBeenUnlocked = true;
             }
         }
+    }
+
+    private boolean isAuthenticationEnabled() {
+        AppPreferences appPreferences = new AppPreferences(this);
+        return appPreferences.getBoolean("enableAuthentication", false);
     }
 
     @Override
@@ -88,8 +93,8 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
 
         AppPreferences appPreferences = new AppPreferences(this);
         long currentTime = new Date().getTime();
-        // 15 minutes900000
-        if (appPreferences.getLong("lockTime", 0) < currentTime - 2000) {
+        // 15 minutes
+        if (appPreferences.getLong("lockTime", 0) < currentTime - 900000) {
             return true;
         } else {
             resetLockWaitTime(appPreferences);

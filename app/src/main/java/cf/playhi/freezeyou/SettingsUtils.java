@@ -181,6 +181,10 @@ final class SettingsUtils {
             case "mainActivityPattern":
                 showToast(activity, R.string.willTakeEffectsNextLaunch);
                 break;
+            case "enableAuthentication":
+                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
+                // TODO: Check authentication availability
+                break;
             default:
                 break;
         }
