@@ -89,6 +89,7 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
     }
 
     protected boolean isLocked() {
+        if (!isAuthenticationEnabled()) return false;
         if (!isBiometricPromptPartAvailable()) return false;
 
         AppPreferences appPreferences = new AppPreferences(this);
