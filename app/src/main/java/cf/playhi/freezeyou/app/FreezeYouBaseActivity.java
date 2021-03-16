@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import androidx.annotation.CallSuper;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.biometric.BiometricManager;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -15,9 +14,8 @@ import java.util.Date;
 
 import cf.playhi.freezeyou.AppLockActivity;
 
-import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK;
-import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+import static cf.playhi.freezeyou.utils.AuthenticationUtils.isAuthenticationEnabled;
+import static cf.playhi.freezeyou.utils.AuthenticationUtils.isBiometricPromptPartAvailable;
 import static cf.playhi.freezeyou.utils.Support.checkLanguage;
 
 public class FreezeYouBaseActivity extends AppCompatActivity {
@@ -37,7 +35,8 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
     @CallSuper
     protected void onResume() {
         super.onResume();
-        if (activityNeedCheckAppLock() && isAuthenticationEnabled() && isBiometricPromptPartAvailable()) {
+        if (activityNeedCheckAppLock() && isAuthenticationEnabled(this)
+                && isBiometricPromptPartAvailable(this)) {
             if (isLocked()) {
                 mHadBeenUnlocked = false;
                 startActivityForResult(
@@ -49,11 +48,6 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
                 mHadBeenUnlocked = true;
             }
         }
-    }
-
-    private boolean isAuthenticationEnabled() {
-        AppPreferences appPreferences = new AppPreferences(this);
-        return appPreferences.getBoolean("enableAuthentication", false);
     }
 
     @Override
@@ -89,8 +83,8 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
     }
 
     protected boolean isLocked() {
-        if (!isAuthenticationEnabled()) return false;
-        if (!isBiometricPromptPartAvailable()) return false;
+        if (!isAuthenticationEnabled(this)) return false;
+        if (!isBiometricPromptPartAvailable(this)) return false;
 
         AppPreferences appPreferences = new AppPreferences(this);
         long currentTime = new Date().getTime();
@@ -111,20 +105,4 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
         mUnlockLogoPkgName = pkgName;
     }
 
-    private boolean isBiometricPromptPartAvailable() {
-        BiometricManager biometricManager = BiometricManager.from(this);
-        switch (biometricManager.canAuthenticate(
-                BIOMETRIC_STRONG | BIOMETRIC_WEAK | DEVICE_CREDENTIAL)) {
-            case BiometricManager.BIOMETRIC_SUCCESS:
-                return true;
-            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-            case BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED:
-            case BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED:
-            case BiometricManager.BIOMETRIC_STATUS_UNKNOWN:
-            default:
-                return false;
-        }
-    }
 }
