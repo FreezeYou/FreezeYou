@@ -214,12 +214,19 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
                 case "OO":
                 case "OOU":
                 case "FOQ":
+                case "OS":
+                case "OU":
+                case "UFU":
                     finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
                     break;
                 case "cf.playhi.freezeyou.extra.oklock":
                     finalDrawable = getResources().getDrawable(R.drawable.screenlock);
                     break;
                 default:
+                    if (pkgName.startsWith("CATEGORY") || pkgName.startsWith("FORCESTOPCATEGORY")) {
+                        finalDrawable = getResources().getDrawable(R.mipmap.ic_launcher_round);
+                        break;
+                    }
                     finalDrawable = getString(R.string.plsSelect).equals(pkgName)
                             ?
                             getResources().getDrawable(R.drawable.grid_add)

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutManager;
 import android.content.res.ColorStateList;
@@ -51,6 +52,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -66,6 +68,7 @@ import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.Support;
+import cf.playhi.freezeyou.utils.TasksUtils;
 
 import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
@@ -112,6 +115,8 @@ public class Main extends FreezeYouBaseActivity {
     private final static int SORT_BY_FF_DESCENDING = 5;
     private final static int SORT_BY_US_ASCENDING = 6;
     private final static int SORT_BY_US_DESCENDING = 7;
+    private final static int SORT_BY_ALPHABETICAL = 8;
+    private final static int SORT_BY_LAST_INSTALLED = 9;
 
     private final ArrayList<String> selectedPackages = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
@@ -324,21 +329,21 @@ public class Main extends FreezeYouBaseActivity {
             e.printStackTrace();
         }
 
-        ApplicationInfo applicationInfo1;
+        PackageInfo packageInfo1;
         PackageManager packageManager = applicationContext.getPackageManager();
-        List<ApplicationInfo> applicationInfo = packageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
-        int size = applicationInfo == null ? 0 : applicationInfo.size();
+        List<PackageInfo> packageInfo = packageManager.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+        int size = packageInfo == null ? 0 : packageInfo.size();
         boolean saveIconCache =
                 PreferenceManager.getDefaultSharedPreferences(applicationContext)
                         .getBoolean("cacheApplicationsIcons", false);
         switch (filter) {
             case "all":
                 for (int i = 0; i < size; i++) {
-                    applicationInfo1 = applicationInfo.get(i);
+                    packageInfo1 = packageInfo.get(i);
                     Map<String, Object> keyValuePair = processAppStatus(
-                            getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
-                            applicationInfo1.packageName,
-                            applicationInfo1,
+                            getApplicationLabel(applicationContext, packageManager, packageInfo1.applicationInfo, packageInfo1.packageName),
+                            packageInfo1.packageName,
+                            packageInfo1,
                             packageManager,
                             saveIconCache
                     );
@@ -350,11 +355,11 @@ public class Main extends FreezeYouBaseActivity {
                 break;
             case "OF":
                 for (int i = 0; i < size; i++) {
-                    applicationInfo1 = applicationInfo.get(i);
+                    packageInfo1 = packageInfo.get(i);
                     Map<String, Object> keyValuePair = processAppStatus(
-                            getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
-                            applicationInfo1.packageName,
-                            applicationInfo1,
+                            getApplicationLabel(applicationContext, packageManager, packageInfo1.applicationInfo, packageInfo1.packageName),
+                            packageInfo1.packageName,
+                            packageInfo1,
                             packageManager,
                             saveIconCache
                     );
@@ -366,11 +371,11 @@ public class Main extends FreezeYouBaseActivity {
                 break;
             case "UF":
                 for (int i = 0; i < size; i++) {
-                    applicationInfo1 = applicationInfo.get(i);
+                    packageInfo1 = packageInfo.get(i);
                     Map<String, Object> keyValuePair = processAppStatus(
-                            getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
-                            applicationInfo1.packageName,
-                            applicationInfo1,
+                            getApplicationLabel(applicationContext, packageManager, packageInfo1.applicationInfo, packageInfo1.packageName),
+                            packageInfo1.packageName,
+                            packageInfo1,
                             packageManager,
                             saveIconCache
                     );
@@ -400,12 +405,12 @@ public class Main extends FreezeYouBaseActivity {
                 break;
             case "OS":
                 for (int i = 0; i < size; i++) {
-                    applicationInfo1 = applicationInfo.get(i);
-                    if ((applicationInfo1.flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM) {
+                    packageInfo1 = packageInfo.get(i);
+                    if ((packageInfo1.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM) {
                         Map<String, Object> keyValuePair = processAppStatus(
-                                getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
-                                applicationInfo1.packageName,
-                                applicationInfo1,
+                                getApplicationLabel(applicationContext, packageManager, packageInfo1.applicationInfo, packageInfo1.packageName),
+                                packageInfo1.packageName,
+                                packageInfo1,
                                 packageManager,
                                 saveIconCache
                         );
@@ -418,16 +423,34 @@ public class Main extends FreezeYouBaseActivity {
                 break;
             case "OU":
                 for (int i = 0; i < size; i++) {
-                    applicationInfo1 = applicationInfo.get(i);
-                    if ((applicationInfo1.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
+                    packageInfo1 = packageInfo.get(i);
+                    if ((packageInfo1.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
                         Map<String, Object> keyValuePair = processAppStatus(
-                                getApplicationLabel(applicationContext, packageManager, applicationInfo1, applicationInfo1.packageName),
-                                applicationInfo1.packageName,
-                                applicationInfo1,
+                                getApplicationLabel(applicationContext, packageManager, packageInfo1.applicationInfo, packageInfo1.packageName),
+                                packageInfo1.packageName,
+                                packageInfo1,
                                 packageManager,
                                 saveIconCache
                         );
                         if (keyValuePair != null) {
+                            AppList.add(keyValuePair);
+                        }
+                    }
+                }
+                checkAndAddNotAvailablePair(AppList);
+                break;
+            case "UFU":
+                for (int i = 0; i < size; i++) {
+                    packageInfo1 = packageInfo.get(i);
+                    if ((packageInfo1.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
+                        Map<String, Object> keyValuePair = processAppStatus(
+                                getApplicationLabel(applicationContext, packageManager, packageInfo1.applicationInfo, packageInfo1.packageName),
+                                packageInfo1.packageName,
+                                packageInfo1,
+                                packageManager,
+                                saveIconCache
+                        );
+                        if (keyValuePair != null && customThemeEnabledDot == (int) keyValuePair.get("isFrozen")) {
                             AppList.add(keyValuePair);
                         }
                     }
@@ -640,9 +663,29 @@ public class Main extends FreezeYouBaseActivity {
                         }
                     });
                     break;
+                case SORT_BY_ALPHABETICAL:
+                    setSortByDefault(AppList);
+                    Collator collator = Collator.getInstance();
+                    Collections.sort(AppList, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+                            return collator.compare((String) m0.get("Name"), (String) m1.get("Name"));
+                        }
+                    });
+                    break;
+                case SORT_BY_LAST_INSTALLED:
+                    setSortByDefault(AppList);
+                    Collections.sort(AppList, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+                            return -Long.compare((Long) m0.get("InstallTime"), (Long) m1.get("InstallTime"));
+                        }
+                    });
+                    break;
                 case SORT_BY_NO:
                 default:
                     break;
+
             }
         }
         if (isFinishing()) return;
@@ -885,6 +928,10 @@ public class Main extends FreezeYouBaseActivity {
                                         processDisableAndEnableImmediately(false);
                                         actionMode.finish();
                                         return true;
+                                    case R.id.list_menu_ForceStopImmediately:
+                                        processForceStopImmediately();
+                                        actionMode.finish();
+                                        return true;
                                     case R.id.list_menu_createDisEnableShortCut:
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                             ShortcutManager mShortcutManager =
@@ -1050,6 +1097,7 @@ public class Main extends FreezeYouBaseActivity {
         keyValuePair.put("Img", android.R.drawable.sym_def_app_icon);
         keyValuePair.put("Name", context.getString(R.string.notAvailable));
         keyValuePair.put("PackageName", context.getString(R.string.notAvailable));
+        keyValuePair.put("InstallTime", 0L);
         AppList.add(keyValuePair);
     }
 
@@ -1146,6 +1194,9 @@ public class Main extends FreezeYouBaseActivity {
             this.registerReceiver(updateFrozenStatusBroadcastReceiver, filter);
         }
 
+        TasksUtils.checkTimeTasks(this);
+        TasksUtils.checkTriggerTasks(this);
+
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
         if (sharedPref.getBoolean("saveOnClickFunctionStatus", false)) {
             appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", APPListViewOnClickMode_chooseAction);
@@ -1208,6 +1259,11 @@ public class Main extends FreezeYouBaseActivity {
                 if (mode == null) {
                     mode = "";
                 }
+                if (mode.startsWith("CATEGORY")) {
+                    String categoryLabel = mode.substring("CATEGORY".length());
+                    generateListForCategory(categoryLabel);
+                    return;
+                }
                 switch (mode) {
                     case "OF":
                         generateList("OF");
@@ -1229,6 +1285,9 @@ public class Main extends FreezeYouBaseActivity {
                         break;
                     case "FOQ":
                         generateList("FOQ");
+                        break;
+                    case "UFU":
+                        generateList("UFU");
                         break;
                     default:
                         generateList("all");
@@ -1252,7 +1311,7 @@ public class Main extends FreezeYouBaseActivity {
         keyValuePair.put("isFrozen", getFrozenStatus(packageName, packageManager));
     }
 
-    private Map<String, Object> processAppStatus(String name, String packageName, ApplicationInfo applicationInfo, PackageManager packageManager, boolean saveIconCache) {
+    private Map<String, Object> processAppStatus(String name, String packageName, PackageInfo packageInfo, PackageManager packageManager, boolean saveIconCache) {
         if (!("android".equals(packageName) || "cf.playhi.freezeyou".equals(packageName))) {
             Map<String, Object> keyValuePair = new HashMap<>();
             keyValuePair.put(
@@ -1264,7 +1323,7 @@ public class Main extends FreezeYouBaseActivity {
                                             getBitmapFromDrawable(
                                                     getApplicationIcon(
                                                             this, packageName,
-                                                            applicationInfo,
+                                                            packageInfo.applicationInfo,
                                                             false,
                                                             saveIconCache)
                                             )
@@ -1274,7 +1333,7 @@ public class Main extends FreezeYouBaseActivity {
                             getApplicationIcon(
                                     Main.this,
                                     packageName,
-                                    applicationInfo,
+                                    packageInfo.applicationInfo,
                                     false,
                                     saveIconCache
                             )
@@ -1283,6 +1342,7 @@ public class Main extends FreezeYouBaseActivity {
             keyValuePair.put("Name", name);
             processFrozenStatus(keyValuePair, packageName, packageManager);
             keyValuePair.put("PackageName", packageName);
+            keyValuePair.put("InstallTime", packageInfo.firstInstallTime);
             return keyValuePair;
         }
         return null;
@@ -1293,6 +1353,13 @@ public class Main extends FreezeYouBaseActivity {
         Drawable icon;
         for (String aPkg : source) {
             name = getApplicationLabel(getApplicationContext(), null, null, aPkg);
+            long installTime = 0L;
+            try {
+                PackageInfo pi = getPackageManager().getPackageInfo(aPkg, PackageManager.GET_UNINSTALLED_PACKAGES);
+                installTime = pi.firstInstallTime;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
             if (!("android".equals(aPkg) || "cf.playhi.freezeyou".equals(aPkg) || "".equals(aPkg))) {
                 Map<String, Object> keyValuePair = new HashMap<>();
                 icon = isGridMode && realGetFrozenStatus(this, aPkg, null)
@@ -1317,6 +1384,7 @@ public class Main extends FreezeYouBaseActivity {
                 keyValuePair.put("Name", name);
                 processFrozenStatus(keyValuePair, aPkg, null);
                 keyValuePair.put("PackageName", aPkg);
+                keyValuePair.put("InstallTime", installTime);
                 AppList.add(keyValuePair);
             }
         }
@@ -1363,6 +1431,16 @@ public class Main extends FreezeYouBaseActivity {
                         .putExtra("single", false)
                         .putExtra("packages", pkgNameList)
                         .putExtra("freeze", freeze));
+    }
+
+    private void processForceStopImmediately() {
+        int size = selectedPackages.size();
+        String[] pkgNameList = selectedPackages.toArray(new String[size]);
+        ServiceUtils.startService(
+                Main.this,
+                new Intent(Main.this, ForceStopService.class)
+                        .putExtra("packages", pkgNameList)
+        );
     }
 
     private void updateFrozenStatus() {
@@ -1595,37 +1673,82 @@ public class Main extends FreezeYouBaseActivity {
         return hashMap;
     }
 
+    private void addUserDefinedCategoriesTo(SubMenu subMenu, int groupId, int newClassificationId, int idBase) {
+        subMenu.clear(); // 清空先前产生的数据
+
+        subMenu.add(
+                groupId,
+                newClassificationId,
+                0,
+                R.string.newClassification
+        ); // 加入“新建分类”
+
+        // 添加用户定义的自定义分类
+        SQLiteDatabase userDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
+        userDefinedDb.execSQL(
+                "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+        );
+        Cursor cursor = userDefinedDb.query("categories", new String[]{"label", "_id"}, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                int id = cursor.getInt(cursor.getColumnIndex("_id"));
+                String title = cursor.getString(cursor.getColumnIndex("label"));
+                subMenu.add(groupId, id + idBase, id, new String(Base64.decode(title, Base64.DEFAULT)));
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        userDefinedDb.close();
+    }
+
     private void onPrepareMainOptionsMenu(Menu menu) {
         try {
             SubMenu vmUserDefinedSubMenu = menu.findItem(R.id.menu_vM_userDefined).getSubMenu();
-            vmUserDefinedSubMenu.clear(); // 清空先前产生的数据
+            SubMenu createUserDefinedShortcutSubMenu = menu.findItem(R.id.menu_createUserDefinedShortcut).getSubMenu();
+            SubMenu forceStopUserDefinedShortcutSubMenu = menu.findItem(R.id.menu_forceStopUserDefinedShortcut).getSubMenu();
 
-            vmUserDefinedSubMenu.add(
+            addUserDefinedCategoriesTo(vmUserDefinedSubMenu,
                     R.id.menu_vM_userDefined_menuGroup,
                     R.id.menu_vM_userDefined_newClassification,
-                    0,
-                    R.string.newClassification
-            ); // 加入“新建分类”
-
-            // 添加用户定义的自定义分类
-            SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
-            vmUserDefinedDb.execSQL(
-                    "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+                    0
             );
-            Cursor cursor = vmUserDefinedDb.query("categories", new String[]{"label", "_id"}, null, null, null, null, null);
-            if (cursor.moveToFirst()) {
-                for (int i = 0; i < cursor.getCount(); i++) {
-                    int id = cursor.getInt(cursor.getColumnIndex("_id"));
-                    String title = cursor.getString(cursor.getColumnIndex("label"));
-                    vmUserDefinedSubMenu.add(R.id.menu_vM_userDefined_menuGroup, id, id, new String(Base64.decode(title, Base64.DEFAULT)));
-                    cursor.moveToNext();
-                }
-            }
-            cursor.close();
-            vmUserDefinedDb.close();
+
+            addUserDefinedCategoriesTo(createUserDefinedShortcutSubMenu,
+                    R.id.menu_createUserDefinedShortcut_menuGroup,
+                    R.id.menu_createUserDefinedShortcut_newClassification,
+                    0x2AAAAAAA
+            );
+
+            addUserDefinedCategoriesTo(forceStopUserDefinedShortcutSubMenu,
+                    R.id.menu_forceStopUserDefinedShortcut_menuGroup,
+                    R.id.menu_forceStopUserDefinedShortcut_newClassification,
+                    0x55555555
+            );
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void generateListForCategory(String base64Label) {
+        SQLiteDatabase userDefinedDb = openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
+        userDefinedDb.execSQL(
+                "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+        );
+        Cursor cursor =
+                userDefinedDb.query(
+                        "categories",
+                        new String[]{"packages"},
+                        "label = '" + base64Label + "'",
+                        null, null, null, null
+                );
+        if (cursor.moveToFirst()) {
+            generateList(cursor.getString(cursor.getColumnIndex("packages")));
+        } else {
+            showToast(this, R.string.failed);
+        }
+        cursor.close();
+        userDefinedDb.close();
     }
 
     private boolean onMainOptionsItemSelected(MenuItem item) {
@@ -1638,26 +1761,46 @@ public class Main extends FreezeYouBaseActivity {
                         return true;
                     default:
                         String title = item.getTitle().toString();
-                        SQLiteDatabase vmUserDefinedDb = openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null);
-                        vmUserDefinedDb.execSQL(
-                                "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
-                        );
-                        Cursor cursor =
-                                vmUserDefinedDb.query(
-                                        "categories",
-                                        new String[]{"packages"},
-                                        "label = '" + Base64.encodeToString(title.getBytes(), Base64.DEFAULT) + "'",
-                                        null, null, null, null
-                                );
-                        if (cursor.moveToFirst()) {
-                            generateList(cursor.getString(cursor.getColumnIndex("packages")));
-                        } else {
-                            showToast(this, R.string.failed);
-                        }
-                        cursor.close();
-                        vmUserDefinedDb.close();
+                        generateListForCategory(Base64.encodeToString(title.getBytes(), Base64.DEFAULT));
                         return true;
                 }
+            case R.id.menu_createUserDefinedShortcut_menuGroup:
+                switch (item.getItemId()) {
+                    case R.id.menu_createUserDefinedShortcut_newClassification:
+                        showAddNewUserDefinedClassificationDialog();
+                        return true;
+                    default:
+                        String title = item.getTitle().toString();
+
+                        checkSettingsAndRequestCreateShortcut(
+                                title,
+                                "CATEGORY" + Base64.encodeToString(title.getBytes(), Base64.DEFAULT),
+                                getResources().getDrawable(R.mipmap.ic_launcher_round),
+                                Main.class,
+                                "Category " + Base64.encodeToString(title.getBytes(), Base64.DEFAULT),
+                                this);
+
+                        return true;
+                }
+            case R.id.menu_forceStopUserDefinedShortcut_menuGroup:
+                switch (item.getItemId()) {
+                    case R.id.menu_forceStopUserDefinedShortcut_newClassification:
+                        showAddNewUserDefinedClassificationDialog();
+                        return true;
+                    default:
+                        String title = item.getTitle().toString();
+
+                        checkSettingsAndRequestCreateShortcut(
+                                getString(R.string.forceStop) + " " + title,
+                                "FORCESTOPCATEGORY" + Base64.encodeToString(title.getBytes(), Base64.DEFAULT),
+                                getResources().getDrawable(R.mipmap.ic_launcher_round),
+                                ForceStop.class,
+                                "ForceStopCategory " + Base64.encodeToString(title.getBytes(), Base64.DEFAULT),
+                                this);
+
+                        return true;
+                }
+
             default:
                 switch (item.getItemId()) {
                     case R.id.menu_createOneKeyFreezeShortCut:
@@ -1730,6 +1873,33 @@ public class Main extends FreezeYouBaseActivity {
                                 getResources().getDrawable(R.mipmap.ic_launcher_round),
                                 Main.class,
                                 "FOQ",
+                                this);
+                        return true;
+                    case R.id.menu_createOnlySAShortcut:
+                        checkSettingsAndRequestCreateShortcut(
+                                getString(R.string.onlySA),
+                                "OS",
+                                getResources().getDrawable(R.mipmap.ic_launcher_round),
+                                Main.class,
+                                "OS",
+                                this);
+                        return true;
+                    case R.id.menu_createOnlyUAShortcut:
+                        checkSettingsAndRequestCreateShortcut(
+                                getString(R.string.onlyUA),
+                                "OU",
+                                getResources().getDrawable(R.mipmap.ic_launcher_round),
+                                Main.class,
+                                "OU",
+                                this);
+                        return true;
+                    case R.id.menu_createUnfrozenUAShortcut:
+                        checkSettingsAndRequestCreateShortcut(
+                                getString(R.string.unfrozenUA),
+                                "UFU",
+                                getResources().getDrawable(R.mipmap.ic_launcher_round),
+                                Main.class,
+                                "UFU",
                                 this);
                         return true;
                     case R.id.menu_createNewFolderShortCut:
@@ -1812,6 +1982,14 @@ public class Main extends FreezeYouBaseActivity {
                             @Override
                             public void run() {
                                 generateList("FOQ");
+                            }
+                        }).start();
+                        return true;
+                    case R.id.menu_vM_unfrozenUA:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList("UFU");
                             }
                         }).start();
                         return true;
@@ -1951,6 +2129,24 @@ public class Main extends FreezeYouBaseActivity {
                             }
                         }).start();
                         saveSortMethodStatus(SORT_BY_US_DESCENDING);
+                        return true;
+                    case R.id.menu_sB_alphabetical:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList(currentFilter, SORT_BY_ALPHABETICAL);
+                            }
+                        }).start();
+                        saveSortMethodStatus(SORT_BY_ALPHABETICAL);
+                        return true;
+                    case R.id.menu_sB_last_install:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList(currentFilter, SORT_BY_LAST_INSTALLED);
+                            }
+                        }).start();
+                        saveSortMethodStatus(SORT_BY_LAST_INSTALLED);
                         return true;
                     default:
                         return super.onOptionsItemSelected(item);

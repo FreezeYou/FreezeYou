@@ -370,7 +370,7 @@ public final class FUFUtils {
         return false;
     }
 
-    private static boolean isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(Context context, String pkgName) {
+    public static boolean isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(Context context, String pkgName) {
         if (Build.VERSION.SDK_INT >= 21) {
             return new AppPreferences(context).getBoolean("avoidFreezeNotifyingApplications", false) && isAppStillNotifying(pkgName);
         } else {
@@ -378,7 +378,7 @@ public final class FUFUtils {
         }
     }
 
-    private static void checkAndShowAppStillNotifyingToast(Context context, String pkgName) {
+    public static void checkAndShowAppStillNotifyingToast(Context context, String pkgName) {
         String label =
                 ApplicationLabelUtils.getApplicationLabel(
                         context,
@@ -395,7 +395,7 @@ public final class FUFUtils {
             );
     }
 
-    private static void checkAndShowAppIsForegroundApplicationToast(Context context, String pkgName) {
+    public static void checkAndShowAppIsForegroundApplicationToast(Context context, String pkgName) {
         String label =
                 ApplicationLabelUtils.getApplicationLabel(
                         context,

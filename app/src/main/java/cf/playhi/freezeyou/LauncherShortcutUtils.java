@@ -46,6 +46,7 @@ public final class LauncherShortcutUtils {
         requestCreateShortCut(
                 title, new Intent(context, cls)
                         .setAction(Intent.ACTION_MAIN)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         .putExtra("pkgName", pkgName)
                         .putExtra("target", target)
                         .putExtra("tasks", tasks),

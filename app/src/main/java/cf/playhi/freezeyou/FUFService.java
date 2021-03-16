@@ -11,8 +11,11 @@ import android.os.IBinder;
 import net.grandcentrix.tray.AppPreferences;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseService;
+import cf.playhi.freezeyou.utils.FUFUtils;
 
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;
 import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyAction;
@@ -65,7 +68,26 @@ public class FUFService extends FreezeYouBaseService {
             }
         } else {
             String[] packages = intent.getStringArrayExtra("packages");
-            oneKeyAction(context, freeze, packages, apiMode);
+
+            int decidedApiMode;
+
+            if (apiMode == API_FREEZEYOU_LEGACY_AUTO) {
+                if (freeze) {
+                    if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(context)) {
+                        decidedApiMode = API_FREEZEYOU_MROOT_DPM;
+                    } else {
+                        decidedApiMode = API_FREEZEYOU_ROOT_DISABLE_ENABLE;
+                    }
+                } else {
+                    if (FUFUtils.checkRootPermission()) {
+                        decidedApiMode = API_FREEZEYOU_ROOT_DISABLE_ENABLE;
+                    } else {
+                        decidedApiMode = API_FREEZEYOU_MROOT_DPM;
+                    }
+                }
+            } else { decidedApiMode = apiMode; }
+
+            oneKeyAction(context, freeze, packages, decidedApiMode);
         }
         stopSelf();
         return super.onStartCommand(intent, flags, startId);
