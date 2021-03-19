@@ -12,10 +12,6 @@ import android.provider.Settings;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
-import cf.playhi.freezeyou.utils.ServiceUtils;
-import cf.playhi.freezeyou.utils.Support;
-
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
@@ -25,11 +21,14 @@ import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.checkAndSetOrganizationName;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.openDevicePolicyManager;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkRootPermission;
 import static cf.playhi.freezeyou.utils.FUFUtils.isSystemApp;
+import static cf.playhi.freezeyou.utils.ServiceUtils.startService;
+import static cf.playhi.freezeyou.utils.Support.checkLanguage;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 final class SettingsUtils {
@@ -85,7 +84,7 @@ final class SettingsUtils {
             case "onekeyFreezeWhenLockScreen":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));
                 if (sharedPreferences.getBoolean(s, false)) {
-                    ServiceUtils.startService(
+                    startService(
                             context,
                             new Intent(context, ScreenLockOneKeyFreezeService.class));
                 } else {
@@ -118,7 +117,7 @@ final class SettingsUtils {
                 appPreferences.put(s, sharedPreferences.getBoolean(s, true));
                 break;
             case "organizationName":
-                DevicePolicyManagerUtils.checkAndSetOrganizationName(context, sharedPreferences.getString(s, null));
+                checkAndSetOrganizationName(context, sharedPreferences.getString(s, null));
                 break;
             case "avoidFreezeNotifyingApplications":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));
@@ -143,7 +142,7 @@ final class SettingsUtils {
                 }
                 break;
             case "languagePref":
-                Support.checkLanguage(activity);
+                checkLanguage(activity);
                 showToast(activity, R.string.willTakeEffectsNextLaunch);
                 break;
             case "selectFUFMode":
@@ -180,10 +179,6 @@ final class SettingsUtils {
             case "displayListDivider":
             case "mainActivityPattern":
                 showToast(activity, R.string.willTakeEffectsNextLaunch);
-                break;
-            case "enableAuthentication":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                // TODO: Check authentication availability
                 break;
             default:
                 break;

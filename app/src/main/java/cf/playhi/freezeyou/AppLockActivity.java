@@ -115,6 +115,7 @@ public class AppLockActivity extends FreezeYouBaseActivity {
                     }
                 });
 
+        // TODO: Translation
         mPromptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle("身份验证")
                 .setSubtitle("验证以继续")
