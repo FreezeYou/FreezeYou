@@ -100,8 +100,10 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 if (activity != null) {
                     if (Boolean.TRUE.equals(newValue)) {
                         if (isBiometricPromptPartAvailable(activity)) {
-                            enableAuthenticationActivityResultLauncher
-                                    .launch(new Intent(activity, AppLockActivity.class));
+                            if (enableAuthenticationActivityResultLauncher != null) {
+                                enableAuthenticationActivityResultLauncher
+                                        .launch(new Intent(activity, AppLockActivity.class));
+                            }
                         }
                         return false;
                     } else {
