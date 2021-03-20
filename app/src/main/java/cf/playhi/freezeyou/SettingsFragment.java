@@ -9,6 +9,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
@@ -17,11 +22,13 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
 
+import static android.app.Activity.RESULT_OK;
 import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
 import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
 import static cf.playhi.freezeyou.SettingsUtils.syncAndCheckSharedPreference;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
+import static cf.playhi.freezeyou.utils.AuthenticationUtils.isBiometricPromptPartAvailable;
 import static cf.playhi.freezeyou.utils.DataStatisticsUtils.resetTimes;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
 import static cf.playhi.freezeyou.utils.FileUtils.deleteAllFiles;
@@ -31,7 +38,35 @@ import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeUninstalledFromOne
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
 
-public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+    ActivityResultLauncher<Intent> enableAuthenticationActivityResultLauncher;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        final Activity activity = getActivity();
+        if (activity != null) {
+            enableAuthenticationActivityResultLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == RESULT_OK) {
+                            PreferenceManager.getDefaultSharedPreferences(activity)
+                                    .edit()
+                                    .putBoolean("enableAuthentication", true)
+                                    .apply();
+                            new AppPreferences(activity)
+                                    .put("enableAuthentication", true);
+                            CheckBoxPreference enableAuthenticationPreference = findPreference("enableAuthentication");
+                            if (enableAuthenticationPreference != null) {
+                                enableAuthenticationPreference.setChecked(true);
+                            }
+                        }
+                    });
+        }
+    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -56,6 +91,26 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             }
         }
         initSummary(getPreferenceScreen());
+
+        Preference enableAuthenticationPreference = findPreference("enableAuthentication");
+        if (enableAuthenticationPreference != null) {
+            enableAuthenticationPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                final Activity activity = getActivity();
+                showToast(activity, newValue.toString());
+                if (activity != null) {
+                    if (Boolean.TRUE.equals(newValue)) {
+                        if (isBiometricPromptPartAvailable(activity)) {
+                            enableAuthenticationActivityResultLauncher
+                                    .launch(new Intent(activity, AppLockActivity.class));
+                        }
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+                return true;
+            });
+        }
     }
 
     @Override
@@ -232,7 +287,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     private void askIfResetTimes(final String dbName) {
         Activity activity = getActivity();
-        if (activity!=null) {
+        if (activity != null) {
             buildAlertDialog(
                     activity, android.R.drawable.ic_dialog_alert, R.string.askIfDel, R.string.caution)
                     .setPositiveButton(R.string.yes, (dialog, which) -> resetTimes(activity, dbName))
