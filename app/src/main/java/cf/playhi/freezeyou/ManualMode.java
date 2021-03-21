@@ -25,7 +25,7 @@ public class ManualMode extends FreezeYouBaseActivity {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manualmode);
-        processActionBar(getActionBar());
+        processActionBar(getSupportActionBar());
 
         final EditText packageNameEditText = findViewById(R.id.manualMode_packageNameEditText);
         final Button selectFUFModeButton = findViewById(R.id.manualMode_selectFUFMode_button);

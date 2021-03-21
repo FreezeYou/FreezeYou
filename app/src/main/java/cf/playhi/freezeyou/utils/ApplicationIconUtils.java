@@ -12,6 +12,8 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import androidx.annotation.Nullable;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,11 +45,11 @@ public final class ApplicationIconUtils {
         }
     }
 
-    public static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo, boolean resize) {
+    public static Drawable getApplicationIcon(Context context, String pkgName, @Nullable ApplicationInfo applicationInfo, boolean resize) {
         return getApplicationIcon(context, pkgName, applicationInfo, resize, false);
     }
 
-    public static Drawable getApplicationIcon(Context context, String pkgName, ApplicationInfo applicationInfo, boolean resize, boolean saveIconCache) {
+    public static Drawable getApplicationIcon(Context context, String pkgName, @Nullable ApplicationInfo applicationInfo, boolean resize, boolean saveIconCache) {
         Drawable drawable = null;
         String path = context.getCacheDir() + "/icon/" + pkgName + ".png";
         if (new File(path).exists()) {

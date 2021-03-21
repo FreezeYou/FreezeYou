@@ -24,7 +24,7 @@ public class SelectTargetActivityActivity extends FreezeYouBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         ThemeUtils.processSetTheme(this);
         super.onCreate(savedInstanceState);
-        ThemeUtils.processActionBar(getActionBar());
+        ThemeUtils.processActionBar(getSupportActionBar());
         setContentView(R.layout.staa_main);
         init();
     }

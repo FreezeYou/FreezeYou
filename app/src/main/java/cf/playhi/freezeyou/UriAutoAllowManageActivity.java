@@ -30,7 +30,7 @@ public class UriAutoAllowManageActivity extends FreezeYouBaseActivity {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.uaam_main);
-        processActionBar(getActionBar());
+        processActionBar(getSupportActionBar());
 
         init();
     }

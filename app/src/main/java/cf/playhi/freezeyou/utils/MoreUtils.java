@@ -7,6 +7,8 @@ import android.net.Uri;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import cf.playhi.freezeyou.R;
 
@@ -60,6 +62,34 @@ public final class MoreUtils {
             sb.append(s);
         }
         return sb.toString();
+    }
+
+    public static ArrayList<Map<String, Object>> processListFilter(CharSequence prefix, ArrayList<Map<String, Object>> unfilteredValues) {
+
+        String prefixString = prefix.toString().toLowerCase();
+
+        if (unfilteredValues != null) {
+            int count = unfilteredValues.size();
+
+            ArrayList<Map<String, Object>> newValues = new ArrayList<>(count);
+            for (int i = 0; i < count; i++) {
+                try {
+                    Map<String, Object> h = unfilteredValues.get(i);
+                    String name = ((String) h.get("Name"));
+                    String pkgName = ((String) h.get("PackageName"));
+                    if ((name != null && name.toLowerCase(Locale.ROOT).contains(prefixString))
+                            || (pkgName != null
+                            && pkgName.toLowerCase(Locale.ROOT).contains(prefixString))) {
+                        newValues.add(h);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return newValues;
+        }
+
+        return new ArrayList<>();
     }
 
 }

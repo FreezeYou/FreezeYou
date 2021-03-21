@@ -32,7 +32,7 @@ public class SelectShortcutIconActivity extends FreezeYouBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         ThemeUtils.processSetTheme(this);
         super.onCreate(savedInstanceState);
-        ThemeUtils.processActionBar(getActionBar());
+        ThemeUtils.processActionBar(getSupportActionBar());
         setContentView(R.layout.ssia_main);
         init();
     }

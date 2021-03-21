@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:showAsAction="never"
         android:id="@+id/stma_menu_mc_selectAll"
-        android:title="@string/selectAll"/>
+        android:title="@string/selectAll"
+        app:showAsAction="never" />
     <item
-        android:showAsAction="never"
         android:id="@+id/stma_menu_mc_selectUnselected"
-        android:title="@string/selectUnselected"/>
+        android:title="@string/selectUnselected"
+        app:showAsAction="never" />
     <item
-        android:showAsAction="ifRoom"
         android:id="@+id/stma_menu_mc_delete"
         android:icon="@drawable/ic_action_delete"
-        android:title="@string/delete" />
+        android:title="@string/delete"
+        app:showAsAction="ifRoom" />
 
 </menu>

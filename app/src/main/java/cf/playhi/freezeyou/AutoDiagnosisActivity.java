@@ -44,7 +44,7 @@ public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.autodiagnosis);
-        processActionBar(getActionBar());
+        processActionBar(getSupportActionBar());
 
         new Thread(this::go).start();
     }

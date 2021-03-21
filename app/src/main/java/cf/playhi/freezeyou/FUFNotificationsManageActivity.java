@@ -27,7 +27,7 @@ public class FUFNotificationsManageActivity extends FreezeYouBaseActivity {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fufnm_main);
-        processActionBar(getActionBar());
+        processActionBar(getSupportActionBar());
 
         init();
     }

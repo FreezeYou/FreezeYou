@@ -34,7 +34,7 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
-        processActionBar(getActionBar());
+        processActionBar(getSupportActionBar());
         setContentView(R.layout.bma_main);
 
         onCreateInit();

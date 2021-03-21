@@ -1,233 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="@string/viewMode">
+    <item
+        android:id="@+id/menu_timedTasks"
+        android:contentDescription="@string/scheduledTasks"
+        android:icon="@drawable/ic_action_alarm"
+        android:title="@string/scheduledTasks"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_more"
+        android:icon="@drawable/ic_action_more"
+        android:title="@string/more"
+        app:showAsAction="ifRoom">
         <menu>
             <item
-                android:id="@+id/menu_vM_userDefined"
-                android:title="@string/myCustomization">
-                <menu>
-                    <group
-                        android:checkableBehavior="none"
-                        android:id="@+id/menu_vM_userDefined_menuGroup">
-                        <item
-                            android:id="@+id/menu_vM_userDefined_newClassification"
-                            android:title="@string/newClassification"
-                            android:orderInCategory="0"/>
-                    </group>
-                </menu>
-            </item>
-            <item
-                android:id="@+id/menu_vM_onlyFrozen"
-                android:title="@string/onlyFrozen" />
-            <item
-                android:id="@+id/menu_vM_onlyUF"
-                android:title="@string/onlyUF" />
-            <item
-                android:id="@+id/menu_vM_onlyOnekey"
-                android:title="@string/onlyOnekey" />
-            <item
-                android:id="@+id/menu_vM_onlyOnekeyUF"
-                android:title="@string/oneKeyUF" />
-            <item
-                android:id="@+id/menu_vM_freezeOnceQuit"
-                android:title="@string/freezeOnceQuit" />
-            <item
-                android:id="@+id/menu_vM_onlySA"
-                android:title="@string/onlySA" />
-            <item
-                android:id="@+id/menu_vM_onlyUA"
-                android:title="@string/onlyUA" />
-            <item
-                android:id="@+id/menu_vM_unfrozenUA"
-                android:title="@string/unfrozenUA" />
-            <item
-                android:id="@+id/menu_vM_all"
-                android:title="@string/displayAll" />
-        </menu>
-    </item>
-
-    <item android:title="@string/sortBy">
-        <menu>
-            <item
-                android:id="@+id/menu_sB_default"
-                android:title="@string/sortBy_default" />
-            <item
-                android:id="@+id/menu_sB_no"
-                android:title="@string/sortBy_no" />
-            <item
-                android:id="@+id/menu_sB_uf_ascending"
-                android:title="@string/uf_ascending" />
-            <item
-                android:id="@+id/menu_sB_uf_descending"
-                android:title="@string/uf_descending" />
-            <item
-                android:id="@+id/menu_sB_ff_ascending"
-                android:title="@string/ff_ascending" />
-            <item
-                android:id="@+id/menu_sB_ff_descending"
-                android:title="@string/ff_descending" />
-            <item
-                android:id="@+id/menu_sB_us_ascending"
-                android:title="@string/us_ascending" />
-            <item
-                android:id="@+id/menu_sB_us_descending"
-                android:title="@string/us_descending" />
-
-            <item
-                android:id="@+id/menu_sB_alphabetical"
-                android:title="@string/alphabetical" />
-
-            <item
-                android:id="@+id/menu_sB_last_install"
-                android:title="@string/lastInstall" />
-        </menu>
-    </item>
-
-    <item android:title="@string/shortCut">
-        <menu>
-            <item
-                android:id="@+id/menu_createOneKeyFreezeShortCut"
-                android:title="@string/createOneKeyFreezeShortcut" />
-            <item
-                android:id="@+id/menu_createOneKeyUFShortCut"
-                android:title="@string/oneKeyUF" />
-            <item
-                android:id="@+id/menu_createOneKeyLockScreenShortCut"
-                android:title="@string/oneKeyLockScreen" />
-            <item
-                android:id="@+id/menu_forceStopUserDefinedShortcut"
-                android:title="@string/forceStopMyCustomization">
-                <menu>
-                    <group
-                        android:checkableBehavior="none"
-                        android:id="@+id/menu_forceStopUserDefinedShortcut_menuGroup">
-                        <item
-                            android:id="@+id/menu_forceStopUserDefinedShortcut_newClassification"
-                            android:title="@string/newClassification"
-                            android:orderInCategory="0"/>
-                    </group>
-                </menu>
-            </item>
-            <item android:title="@string/quickView">
+                android:title="@string/viewMode"
+                app:showAsAction="never">
                 <menu>
                     <item
-                        android:id="@+id/menu_createOnlyFrozenShortCut"
-                        android:title="@string/onlyFrozen" />
-                    <item
-                        android:id="@+id/menu_createOnlyUFShortCut"
-                        android:title="@string/onlyUF" />
-                    <item
-                        android:id="@+id/menu_createOnlyOnekeyShortCut"
-                        android:title="@string/onlyOnekey" />
-                    <item
-                        android:id="@+id/menu_createOnlyOnekeyUFShortCut"
-                        android:title="@string/oneKeyUF" />
-                    <item
-                        android:id="@+id/menu_createFreezeOnceQuitShortCut"
-                        android:title="@string/freezeOnceQuit" />
-                    <item
-                        android:id="@+id/menu_createOnlySAShortcut"
-                        android:title="@string/onlySA" />
-                    <item
-                        android:id="@+id/menu_createOnlyUAShortcut"
-                        android:title="@string/onlyUA" />
-                    <item
-                        android:id="@+id/menu_createUnfrozenUAShortcut"
-                        android:title="@string/unfrozenUA" />
-                    <item
-                        android:id="@+id/menu_createNewFolderShortCut"
-                        android:title="@string/newFolder" />
-                    <item
-                        android:id="@+id/menu_createUserDefinedShortcut"
+                        android:id="@+id/menu_vM_userDefined"
                         android:title="@string/myCustomization">
                         <menu>
                             <group
-                                android:checkableBehavior="none"
-                                android:id="@+id/menu_createUserDefinedShortcut_menuGroup">
+                                android:id="@+id/menu_vM_userDefined_menuGroup"
+                                android:checkableBehavior="none">
                                 <item
-                                    android:id="@+id/menu_createUserDefinedShortcut_newClassification"
+                                    android:id="@+id/menu_vM_userDefined_newClassification"
+                                    android:orderInCategory="0"
+                                    android:title="@string/newClassification" />
+                            </group>
+                        </menu>
+                    </item>
+                    <item
+                        android:id="@+id/menu_vM_onlyFrozen"
+                        android:title="@string/onlyFrozen" />
+                    <item
+                        android:id="@+id/menu_vM_onlyUF"
+                        android:title="@string/onlyUF" />
+                    <item
+                        android:id="@+id/menu_vM_onlyOnekey"
+                        android:title="@string/onlyOnekey" />
+                    <item
+                        android:id="@+id/menu_vM_onlyOnekeyUF"
+                        android:title="@string/oneKeyUF" />
+                    <item
+                        android:id="@+id/menu_vM_freezeOnceQuit"
+                        android:title="@string/freezeOnceQuit" />
+                    <item
+                        android:id="@+id/menu_vM_onlySA"
+                        android:title="@string/onlySA" />
+                    <item
+                        android:id="@+id/menu_vM_onlyUA"
+                        android:title="@string/onlyUA" />
+                    <item
+                        android:id="@+id/menu_vM_unfrozenUA"
+                        android:title="@string/unfrozenUA" />
+                    <item
+                        android:id="@+id/menu_vM_all"
+                        android:title="@string/displayAll" />
+                </menu>
+            </item>
+
+            <item
+                android:title="@string/sortBy"
+                app:showAsAction="never">
+                <menu>
+                    <item
+                        android:id="@+id/menu_sB_default"
+                        android:title="@string/sortBy_default" />
+                    <item
+                        android:id="@+id/menu_sB_no"
+                        android:title="@string/sortBy_no" />
+                    <item
+                        android:id="@+id/menu_sB_uf_ascending"
+                        android:title="@string/uf_ascending" />
+                    <item
+                        android:id="@+id/menu_sB_uf_descending"
+                        android:title="@string/uf_descending" />
+                    <item
+                        android:id="@+id/menu_sB_ff_ascending"
+                        android:title="@string/ff_ascending" />
+                    <item
+                        android:id="@+id/menu_sB_ff_descending"
+                        android:title="@string/ff_descending" />
+                    <item
+                        android:id="@+id/menu_sB_us_ascending"
+                        android:title="@string/us_ascending" />
+                    <item
+                        android:id="@+id/menu_sB_us_descending"
+                        android:title="@string/us_descending" />
+                  
+                    <item
+                        android:id="@+id/menu_sB_alphabetical"
+                        android:title="@string/alphabetical" />
+
+                    <item
+                        android:id="@+id/menu_sB_last_install"
+                        android:title="@string/lastInstall" />
+                </menu>
+            </item>
+
+            <item
+                android:title="@string/shortCut"
+                app:showAsAction="never">
+                <menu>
+                    <item
+                        android:id="@+id/menu_createOneKeyFreezeShortCut"
+                        android:title="@string/createOneKeyFreezeShortcut" />
+                    <item
+                        android:id="@+id/menu_createOneKeyUFShortCut"
+                        android:title="@string/oneKeyUF" />
+                    <item
+                        android:id="@+id/menu_createOneKeyLockScreenShortCut"
+                        android:title="@string/oneKeyLockScreen" />
+                    <item
+                        android:id="@+id/menu_forceStopUserDefinedShortcut"
+                        android:title="@string/forceStopMyCustomization">
+                        <menu>
+                            <group
+                                android:checkableBehavior="none"
+                                android:id="@+id/menu_forceStopUserDefinedShortcut_menuGroup">
+                                <item
+                                    android:id="@+id/menu_forceStopUserDefinedShortcut_newClassification"
                                     android:title="@string/newClassification"
                                     android:orderInCategory="0"/>
                             </group>
                         </menu>
                     </item>
+                    <item android:title="@string/quickView">
+                        <menu>
+                            <item
+                                android:id="@+id/menu_createOnlyFrozenShortCut"
+                                android:title="@string/onlyFrozen" />
+                            <item
+                                android:id="@+id/menu_createOnlyUFShortCut"
+                                android:title="@string/onlyUF" />
+                            <item
+                                android:id="@+id/menu_createOnlyOnekeyShortCut"
+                                android:title="@string/onlyOnekey" />
+                            <item
+                                android:id="@+id/menu_createOnlyOnekeyUFShortCut"
+                                android:title="@string/oneKeyUF" />
+                            <item
+                                android:id="@+id/menu_createFreezeOnceQuitShortCut"
+                                android:title="@string/freezeOnceQuit" />
+                            <item
+                                android:id="@+id/menu_createOnlySAShortcut"
+                                android:title="@string/onlySA" />
+                            <item
+                                android:id="@+id/menu_createOnlyUAShortcut"
+                                android:title="@string/onlyUA" />
+                            <item
+                                android:id="@+id/menu_createUnfrozenUAShortcut"
+                                android:title="@string/unfrozenUA" />
+                            <item
+                                android:id="@+id/menu_createNewFolderShortCut"
+                                android:title="@string/newFolder" />
+                            <item
+                                android:id="@+id/menu_createUserDefinedShortcut"
+                                android:title="@string/myCustomization">
+                                <menu>
+                                    <group
+                                        android:checkableBehavior="none"
+                                        android:id="@+id/menu_createUserDefinedShortcut_menuGroup">
+                                        <item
+                                            android:id="@+id/menu_createUserDefinedShortcut_newClassification"
+                                            android:title="@string/newClassification"
+                                            android:orderInCategory="0"/>
+                                    </group>
+                                </menu>
+                            </item>
+                        </menu>
+                    </item>
                 </menu>
             </item>
+
+            <item
+                android:title="@string/onClickFunction"
+                app:showAsAction="never">
+                <menu>
+                    <item
+                        android:id="@+id/menu_onClickFunc_chooseAction"
+                        android:title="@string/chooseAction" />
+                    <item
+                        android:id="@+id/menu_onClickFunc_freezeImmediately"
+                        android:title="@string/freezeImmediately" />
+                    <item
+                        android:id="@+id/menu_onClickFunc_UFImmediately"
+                        android:title="@string/UFImmediately" />
+                    <item
+                        android:id="@+id/menu_onClickFunc_UFAndRun"
+                        android:title="@string/UFAndRun" />
+                    <item
+                        android:id="@+id/menu_onClickFunc_autoUFOrFreeze"
+                        android:title="@string/autoUFOrFreeze" />
+                    <item
+                        android:id="@+id/menu_onClickFunc_autoUFOrFreezeAndRun"
+                        android:title="@string/autoUFOrFreezeAndRun" />
+                    <item
+                        android:id="@+id/menu_onClickFunc_addToOFList"
+                        android:title="@string/addToOneKeyList" />
+                    <item
+                        android:id="@+id/menu_onClickFunc_removeFromOFList"
+                        android:title="@string/removeFromOneKeyList" />
+                    <item
+                        android:id="@+id/menu_onClickFunc_addToOUFList"
+                        android:title="@string/addToOneKeyUFList" />
+                    <item
+                        android:id="@+id/menu_onClickFunc_removeFromOUFList"
+                        android:title="@string/removeFromOneKeyUFList" />
+                    <item
+                        android:id="@+id/menu_onClickFunc_addToFOQList"
+                        android:title="@string/addToFreezeOnceQuit" />
+                    <item
+                        android:id="@+id/menu_onClickFunc_removeFromFOQList"
+                        android:title="@string/removeFromFreezeOnceQuit" />
+                    <item
+                        android:id="@+id/menu_onClickFunc_createFUFShortcut"
+                        android:title="@string/createDisEnableShortCut" />
+                </menu>
+            </item>
+
+            <item
+                android:title="@string/executeImmediately"
+                app:showAsAction="never">
+                <menu>
+                    <item
+                        android:id="@+id/menu_oneKeyFreezeImmediately"
+                        android:title="@string/OneKeyFreezeImmediately" />
+                    <item
+                        android:id="@+id/menu_oneKeyUFImmediately"
+                        android:title="@string/oneKeyUF" />
+                </menu>
+            </item>
+
+            <item
+                android:id="@+id/menu_moreSettings"
+                android:title="@string/moreSettings"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/menu_update"
+                android:title="@string/update"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/menu_faq"
+                android:title="@string/faq"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/menu_about"
+                android:title="@string/about"
+                app:showAsAction="never" />
         </menu>
     </item>
-
-    <item android:title="@string/onClickFunction">
-        <menu>
-            <item
-                android:id="@+id/menu_onClickFunc_chooseAction"
-                android:title="@string/chooseAction" />
-            <item
-                android:id="@+id/menu_onClickFunc_freezeImmediately"
-                android:title="@string/freezeImmediately" />
-            <item
-                android:id="@+id/menu_onClickFunc_UFImmediately"
-                android:title="@string/UFImmediately" />
-            <item
-                android:id="@+id/menu_onClickFunc_UFAndRun"
-                android:title="@string/UFAndRun" />
-            <item
-                android:id="@+id/menu_onClickFunc_autoUFOrFreeze"
-                android:title="@string/autoUFOrFreeze" />
-            <item
-                android:id="@+id/menu_onClickFunc_autoUFOrFreezeAndRun"
-                android:title="@string/autoUFOrFreezeAndRun" />
-            <item
-                android:id="@+id/menu_onClickFunc_addToOFList"
-                android:title="@string/addToOneKeyList" />
-            <item
-                android:id="@+id/menu_onClickFunc_removeFromOFList"
-                android:title="@string/removeFromOneKeyList" />
-            <item
-                android:id="@+id/menu_onClickFunc_addToOUFList"
-                android:title="@string/addToOneKeyUFList" />
-            <item
-                android:id="@+id/menu_onClickFunc_removeFromOUFList"
-                android:title="@string/removeFromOneKeyUFList" />
-            <item
-                android:id="@+id/menu_onClickFunc_addToFOQList"
-                android:title="@string/addToFreezeOnceQuit" />
-            <item
-                android:id="@+id/menu_onClickFunc_removeFromFOQList"
-                android:title="@string/removeFromFreezeOnceQuit" />
-            <item
-                android:id="@+id/menu_onClickFunc_createFUFShortcut"
-                android:title="@string/createDisEnableShortCut" />
-        </menu>
-    </item>
-
-    <item android:title="@string/executeImmediately">
-        <menu>
-            <item
-                android:id="@+id/menu_oneKeyFreezeImmediately"
-                android:title="@string/OneKeyFreezeImmediately" />
-            <item
-                android:id="@+id/menu_oneKeyUFImmediately"
-                android:title="@string/oneKeyUF" />
-        </menu>
-    </item>
-
-    <item
-        android:id="@+id/menu_moreSettings"
-        android:title="@string/moreSettings" />
-    <item
-        android:id="@+id/menu_update"
-        android:title="@string/update" />
-    <item
-        android:id="@+id/menu_faq"
-        android:title="@string/faq" />
-    <item
-        android:id="@+id/menu_about"
-        android:title="@string/about" />
-    <item
-        android:id="@+id/menu_timedTasks"
-        android:contentDescription="@string/scheduledTasks"
-        android:icon="@drawable/ic_action_alarm"
-        android:showAsAction="always"
-        android:title="@string/scheduledTasks" />
 </menu>

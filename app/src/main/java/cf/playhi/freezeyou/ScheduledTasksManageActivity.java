@@ -42,7 +42,7 @@ public class ScheduledTasksManageActivity extends FreezeYouBaseActivity {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stma_main);
-        processActionBar(getActionBar());
+        processActionBar(getSupportActionBar());
         init();
     }
 

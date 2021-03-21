@@ -13,7 +13,7 @@ public class CommandExecutorActivity extends FreezeYouBaseActivity {
         ThemeUtils.processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cea_main);
-        ThemeUtils.processActionBar(getActionBar());
+        ThemeUtils.processActionBar(getSupportActionBar());
 
         init();
     }

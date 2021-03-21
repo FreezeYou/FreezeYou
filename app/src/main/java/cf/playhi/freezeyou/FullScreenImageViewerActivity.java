@@ -1,11 +1,12 @@
 package cf.playhi.freezeyou;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.ActionBar;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 
@@ -15,7 +16,7 @@ public class FullScreenImageViewerActivity extends FreezeYouBaseActivity {
         ThemeUtils.processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fsiva_main);
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);

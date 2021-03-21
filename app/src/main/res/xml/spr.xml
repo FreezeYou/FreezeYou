@@ -1,377 +1,407 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="root">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:key="root">
 
     <Preference
-        android:key="howToUse"
-        android:title="@string/hToUse" />
+        app:key="howToUse"
+        app:title="@string/hToUse" />
 
-    <PreferenceScreen android:title="@string/common">
+    <PreferenceScreen
+        app:key="spr_common"
+        app:title="@string/common">
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="allowEditWhenCreateShortcut"
-            android:title="@string/allowEditWhCreateShortcut" />
+            app:defaultValue="true"
+            app:key="allowEditWhenCreateShortcut"
+            app:title="@string/allowEditWhCreateShortcut" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="noCaution"
-            android:title="@string/nSCaution" />
+            app:defaultValue="false"
+            app:key="noCaution"
+            app:title="@string/nSCaution" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="saveOnClickFunctionStatus"
-            android:title="@string/saveOnClickFunctionStatus" />
+            app:defaultValue="false"
+            app:key="saveOnClickFunctionStatus"
+            app:title="@string/saveOnClickFunctionStatus" />
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="saveSortMethodStatus"
-            android:title="@string/saveSortMethodStatus" />
+            app:defaultValue="true"
+            app:key="saveSortMethodStatus"
+            app:title="@string/saveSortMethodStatus" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="cacheApplicationsIcons"
-            android:title="@string/cacheApplicationsIcons" />
+            app:defaultValue="false"
+            app:key="cacheApplicationsIcons"
+            app:title="@string/cacheApplicationsIcons" />
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="showInRecents"
-            android:summary="@string/mayHaveNoEffectsL"
-            android:title="@string/showInRecents" />
+            app:defaultValue="true"
+            app:key="showInRecents"
+            app:summary="@string/mayHaveNoEffectsL"
+            app:title="@string/showInRecents" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="lesserToast"
-            android:title="@string/lesserToast" />
+            app:defaultValue="false"
+            app:key="lesserToast"
+            app:title="@string/lesserToast" />
         <ListPreference
-            android:defaultValue="all"
-            android:entries="@array/launchModeSelection"
-            android:entryValues="@array/launchModeSelectionValues"
-            android:key="launchMode"
-            android:title="@string/launchMode" />
+            app:defaultValue="all"
+            app:entries="@array/launchModeSelection"
+            app:entryValues="@array/launchModeSelectionValues"
+            app:key="launchMode"
+            app:title="@string/launchMode" />
         <EditTextPreference
-            android:defaultValue="@string/app_name"
-            android:key="organizationName"
-            android:summary="@string/onlyMROOTModeUse"
-            android:title="@string/organizationName" />
+            app:defaultValue="@string/app_name"
+            app:key="organizationName"
+            app:summary="@string/onlyMROOTModeUse"
+            app:title="@string/organizationName" />
         <ListPreference
-            android:defaultValue="default"
-            android:entries="@array/displayLanguageOptionsSelection"
-            android:entryValues="@array/displayLanguageOptionsSelectionValues"
-            android:key="languagePref"
-            android:title="@string/displayLanguage" />
+            app:defaultValue="default"
+            app:entries="@array/displayLanguageOptionsSelection"
+            app:entryValues="@array/displayLanguageOptionsSelectionValues"
+            app:key="languagePref"
+            app:title="@string/displayLanguage" />
     </PreferenceScreen>
 
-    <PreferenceScreen android:title="@string/appearance">
+    <PreferenceScreen
+        app:key="spr_appearance"
+        app:title="@string/appearance">
         <ListPreference
-            android:defaultValue="default"
-            android:entries="@array/uiStyleSelection"
-            android:entryValues="@array/uiStyleSelectionValues"
-            android:key="uiStyleSelection"
-            android:title="@string/uiStyle" />
+            app:defaultValue="default"
+            app:entries="@array/uiStyleSelection"
+            app:entryValues="@array/uiStyleSelectionValues"
+            app:key="uiStyleSelection"
+            app:title="@string/uiStyle" />
         <ListPreference
-            android:defaultValue="default"
-            android:entries="@array/mainActivityPatternSelection"
-            android:entryValues="@array/mainActivityPatternSelectionValues"
-            android:key="mainActivityPattern"
-            android:title="@string/mainActivityPattern" />
+            app:defaultValue="default"
+            app:entries="@array/mainActivityPatternSelection"
+            app:entryValues="@array/mainActivityPatternSelectionValues"
+            app:key="mainActivityPattern"
+            app:title="@string/mainActivityPattern" />
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="allowFollowSystemAutoSwitchDarkMode"
-            android:summary="@string/willOverrideInterfaceStyle"
-            android:title="@string/allowFollowSystemAutoSwitchDarkMode" />
+            app:defaultValue="true"
+            app:key="allowFollowSystemAutoSwitchDarkMode"
+            app:summary="@string/willOverrideInterfaceStyle"
+            app:title="@string/allowFollowSystemAutoSwitchDarkMode" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="displayListDivider"
-            android:title="@string/displayListDivider" />
+            app:defaultValue="false"
+            app:key="displayListDivider"
+            app:title="@string/displayListDivider" />
         <ListPreference
-            android:defaultValue="1"
-            android:entries="@array/onClickFuncChooseActionStyles"
-            android:entryValues="@array/onClickFuncChooseActionStyles"
-            android:key="onClickFuncChooseActionStyle"
-            android:title="@string/onClickFuncChooseActionStyle" />
+            app:defaultValue="1"
+            app:entries="@array/onClickFuncChooseActionStyles"
+            app:entryValues="@array/onClickFuncChooseActionStyles"
+            app:key="onClickFuncChooseActionStyle"
+            app:title="@string/onClickFuncChooseActionStyle" />
     </PreferenceScreen>
 
-    <PreferenceScreen android:title="@string/notificationBar">
-        <PreferenceScreen android:title="@string/freezeAUF">
+    <PreferenceScreen
+        app:key="spr_security"
+        app:title="@string/security">
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="enableAuthentication"
+            app:title="@string/enableAuthentication" />
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        app:key="spr_notification"
+        app:title="@string/notificationBar">
+        <PreferenceScreen
+            app:key="spr_notification_fuf"
+            app:title="@string/freezeAUF">
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="createQuickFUFNotiAfterUnfrozen"
-                android:summary="@string/effectNextCreate"
-                android:title="@string/createQuickFUFNotiAfterUnfrozen" />
+                app:defaultValue="true"
+                app:key="createQuickFUFNotiAfterUnfrozen"
+                app:summary="@string/effectNextCreate"
+                app:title="@string/createQuickFUFNotiAfterUnfrozen" />
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="notificationBarFreezeImmediately"
-                android:summary="@string/effectNextCreate"
-                android:title="@string/notificationBarFreezeImmediately" />
+                app:defaultValue="true"
+                app:key="notificationBarFreezeImmediately"
+                app:summary="@string/effectNextCreate"
+                app:title="@string/notificationBarFreezeImmediately" />
             <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="notificationBarDisableSlideOut"
-                android:summary="@string/effectNextCreate"
-                android:title="@string/disableSlideOut" />
+                app:defaultValue="false"
+                app:key="notificationBarDisableSlideOut"
+                app:summary="@string/effectNextCreate"
+                app:title="@string/disableSlideOut" />
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="notificationBarDisableClickDisappear"
-                android:summary="@string/effectNextCreate"
-                android:title="@string/disableClickDisappear" />
-            <Preference android:title="@string/manageQuickFUFNoti">
+                app:defaultValue="true"
+                app:key="notificationBarDisableClickDisappear"
+                app:summary="@string/effectNextCreate"
+                app:title="@string/disableClickDisappear" />
+            <Preference app:title="@string/manageQuickFUFNoti">
                 <intent
                     android:targetClass="cf.playhi.freezeyou.FUFNotificationsManageActivity"
                     android:targetPackage="cf.playhi.freezeyou" />
             </Preference>
         </PreferenceScreen>
-        <Preference android:title="@string/manageQuickFUFNoti">
+        <Preference app:title="@string/manageQuickFUFNoti">
             <intent
                 android:targetClass="cf.playhi.freezeyou.FUFNotificationsManageActivity"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
-            android:key="notificationBar_more"
-            android:title="@string/more" />
+            app:key="notificationBar_more"
+            app:title="@string/more" />
     </PreferenceScreen>
 
-    <PreferenceScreen android:title="@string/automation">
-        <Preference android:title="@string/scheduledTasks">
+    <PreferenceScreen
+        app:key="spr_automation"
+        app:title="@string/automation">
+        <Preference app:title="@string/scheduledTasks">
             <intent
                 android:targetClass="cf.playhi.freezeyou.ScheduledTasksManageActivity"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
-        <Preference android:title="@string/manageUriAutoAllow">
+        <Preference app:title="@string/manageUriAutoAllow">
             <intent
                 android:targetClass="cf.playhi.freezeyou.UriAutoAllowManageActivity"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
-            android:key="manageIpaAutoAllow"
-            android:title="@string/manageIpaAutoAllow" />
+            app:key="manageIpaAutoAllow"
+            app:title="@string/manageIpaAutoAllow" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="onekeyFreezeWhenLockScreen"
-            android:summary="@string/suggestUseTasksInstead"
-            android:title="@string/freezeAfterScreenLock" />
+            app:defaultValue="false"
+            app:key="onekeyFreezeWhenLockScreen"
+            app:summary="@string/suggestUseTasksInstead"
+            app:title="@string/freezeAfterScreenLock" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="freezeOnceQuit"
-            android:summary="@string/suggestUseTasksInstead"
-            android:title="@string/freezeOnceQuit" />
+            app:defaultValue="false"
+            app:key="freezeOnceQuit"
+            app:summary="@string/suggestUseTasksInstead"
+            app:title="@string/freezeOnceQuit" />
         <Preference
-            android:key="deleteAllScheduledTasks"
-            android:summary="@string/delAllScheduledTasks"
-            android:title="@string/delAllScheduledTasks" />
-    </PreferenceScreen>
-
-    <PreferenceScreen android:title="@string/freezeAUF">
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/selectFUFModeSelection"
-            android:entryValues="@array/selectFUFModeSelectionValues"
-            android:key="selectFUFMode"
-            android:title="@string/selectFUFMode" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="avoidFreezeForegroundApplications"
-            android:summary="@string/needActiveAccessibilityService"
-            android:title="@string/avoidFreezeForegroundApplications" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="avoidFreezeNotifyingApplications"
-            android:summary="@string/needL"
-            android:title="@string/avoidFreezeNotifyingApplications" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="openImmediately"
-            android:summary="@string/openImmediatelyEx"
-            android:title="@string/openImmediately" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="openAndUFImmediately"
-            android:summary="@string/openAndUFImmediatelyEx"
-            android:title="@string/openAndUFImmediately" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:disableDependentsState="false"
-            android:key="shortcutAutoFUF"
-            android:summary="@string/shortcutAutoFUFEx"
-            android:title="@string/shortcutAutoFUF" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:dependency="shortcutAutoFUF"
-            android:key="needConfirmWhenFreezeUseShortcutAutoFUF"
-            android:summary="@string/workWithShortcutAutoFUF"
-            android:title="@string/needCfmWhenFreeze" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:dependency="shortcutAutoFUF"
-            android:key="openImmediatelyAfterUnfreezeUseShortcutAutoFUF"
-            android:summary="@string/workWithShortcutAutoFUF"
-            android:title="@string/openImmediatelyAfterUF" />
-        <ListPreference
-            android:defaultValue="nothing"
-            android:entries="@array/shortCutOneKeyFreezeAdditionalOptionsSelection"
-            android:entryValues="@array/shortCutOneKeyFreezeAdditionalOptionsSelectionValues"
-            android:key="shortCutOneKeyFreezeAdditionalOptions"
-            android:title="@string/shortCutOneKeyFreezeAdditionalOptions" />
-        <Preference android:title="@string/manageUriAutoAllow">
-            <intent
-                android:targetClass="cf.playhi.freezeyou.UriAutoAllowManageActivity"
-                android:targetPackage="cf.playhi.freezeyou" />
-        </Preference>
-    </PreferenceScreen>
-
-    <PreferenceScreen android:title="@string/iconAEntry">
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:icon="@mipmap/ic_launcher"
-            android:key="firstIconEnabled" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:icon="@mipmap/ic_launcher_round"
-            android:key="secondIconEnabled" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:icon="@mipmap/ic_launcher_new_round"
-            android:key="thirdIconEnabled" />
-        <Preference
-            android:summary="@string/dialEntry_Ex"
-            android:title="@string/dialEntry" />
-    </PreferenceScreen>
-
-    <PreferenceScreen android:title="@string/installAndUninstall">
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="enableInstallPkgFunc"
-            android:title="@string/enableInstallPkgFunc" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="tryDelApkAfterInstalled"
-            android:title="@string/tryDelApkAfterInstalled" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="notAllowInstallWhenIsObsd"
-            android:title="@string/notAllowWhenIsObsd" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="tryToAvoidUpdateWhenUsing"
-            android:title="@string/tryToAvoidUpdateWhenUsing" />
-        <Preference
-            android:key="manageIpaAutoAllow"
-            android:title="@string/manageIpaAutoAllow" />
+            app:key="deleteAllScheduledTasks"
+            app:summary="@string/delAllScheduledTasks"
+            app:title="@string/delAllScheduledTasks" />
     </PreferenceScreen>
 
     <PreferenceScreen
-        android:key="backgroundService"
-        android:title="@string/backgroundService">
+        app:key="spr_fuf"
+        app:title="@string/freezeAUF">
+        <ListPreference
+            app:defaultValue="0"
+            app:entries="@array/selectFUFModeSelection"
+            app:entryValues="@array/selectFUFModeSelectionValues"
+            app:key="selectFUFMode"
+            app:title="@string/selectFUFMode" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="useForegroundService"
-            android:summary="@string/serviceLongerEx"
-            android:title="@string/useForegroundService" />
+            app:defaultValue="false"
+            app:key="avoidFreezeForegroundApplications"
+            app:summary="@string/needActiveAccessibilityService"
+            app:title="@string/avoidFreezeForegroundApplications" />
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="avoidFreezeNotifyingApplications"
+            app:summary="@string/needL"
+            app:title="@string/avoidFreezeNotifyingApplications" />
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="openImmediately"
+            app:summary="@string/openImmediatelyEx"
+            app:title="@string/openImmediately" />
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="openAndUFImmediately"
+            app:summary="@string/openAndUFImmediatelyEx"
+            app:title="@string/openAndUFImmediately" />
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:disableDependentsState="false"
+            app:key="shortcutAutoFUF"
+            app:summary="@string/shortcutAutoFUFEx"
+            app:title="@string/shortcutAutoFUF" />
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:dependency="shortcutAutoFUF"
+            app:key="needConfirmWhenFreezeUseShortcutAutoFUF"
+            app:summary="@string/workWithShortcutAutoFUF"
+            app:title="@string/needCfmWhenFreeze" />
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:dependency="shortcutAutoFUF"
+            app:key="openImmediatelyAfterUnfreezeUseShortcutAutoFUF"
+            app:summary="@string/workWithShortcutAutoFUF"
+            app:title="@string/openImmediatelyAfterUF" />
+        <ListPreference
+            app:defaultValue="nothing"
+            app:entries="@array/shortCutOneKeyFreezeAdditionalOptionsSelection"
+            app:entryValues="@array/shortCutOneKeyFreezeAdditionalOptionsSelectionValues"
+            app:key="shortCutOneKeyFreezeAdditionalOptions"
+            app:title="@string/shortCutOneKeyFreezeAdditionalOptions" />
+        <Preference app:title="@string/manageUriAutoAllow">
+            <intent
+                android:targetClass="cf.playhi.freezeyou.UriAutoAllowManageActivity"
+                android:targetPackage="cf.playhi.freezeyou" />
+        </Preference>
     </PreferenceScreen>
 
-    <Preference android:title="@string/autoDiagnosis">
+    <PreferenceScreen
+        app:key="spr_iconAEntry"
+        app:title="@string/iconAEntry">
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:icon="@mipmap/ic_launcher"
+            app:key="firstIconEnabled" />
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:icon="@mipmap/ic_launcher_round"
+            app:key="secondIconEnabled" />
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:icon="@mipmap/ic_launcher_new_round"
+            app:key="thirdIconEnabled" />
+        <Preference
+            app:summary="@string/dialEntry_Ex"
+            app:title="@string/dialEntry" />
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        app:key="spr_installUninstall"
+        app:title="@string/installAndUninstall">
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="enableInstallPkgFunc"
+            app:title="@string/enableInstallPkgFunc" />
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="tryDelApkAfterInstalled"
+            app:title="@string/tryDelApkAfterInstalled" />
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="notAllowInstallWhenIsObsd"
+            app:title="@string/notAllowWhenIsObsd" />
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="tryToAvoidUpdateWhenUsing"
+            app:title="@string/tryToAvoidUpdateWhenUsing" />
+        <Preference
+            app:key="manageIpaAutoAllow"
+            app:title="@string/manageIpaAutoAllow" />
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        app:key="backgroundService"
+        app:title="@string/backgroundService">
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="useForegroundService"
+            app:summary="@string/serviceLongerEx"
+            app:title="@string/useForegroundService" />
+    </PreferenceScreen>
+
+    <Preference app:title="@string/autoDiagnosis">
         <intent
             android:targetClass="cf.playhi.freezeyou.AutoDiagnosisActivity"
             android:targetPackage="cf.playhi.freezeyou" />
     </Preference>
 
-    <PreferenceScreen android:title="@string/manageSpace">
-        <Preference android:title="@string/manageMyCustomization">
+    <PreferenceScreen
+        app:key="spr_manageSpace"
+        app:title="@string/manageSpace">
+        <Preference app:title="@string/manageMyCustomization">
             <intent
                 android:targetClass="cf.playhi.freezeyou.UserDefinedListsManageActivity"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
-            android:key="clearUninstalledPkgsInOKFFList"
-            android:summary="@string/clearUninstalledPkgsInOKFFList"
-            android:title="@string/clearUninstalledPkgsInOKFFList" />
+            app:key="clearUninstalledPkgsInOKFFList"
+            app:summary="@string/clearUninstalledPkgsInOKFFList"
+            app:title="@string/clearUninstalledPkgsInOKFFList" />
         <Preference
-            android:key="clearUninstalledPkgsInOKUFList"
-            android:summary="@string/clearUninstalledPkgsInOKUFList"
-            android:title="@string/clearUninstalledPkgsInOKUFList" />
+            app:key="clearUninstalledPkgsInOKUFList"
+            app:summary="@string/clearUninstalledPkgsInOKUFList"
+            app:title="@string/clearUninstalledPkgsInOKUFList" />
         <Preference
-            android:key="clearUninstalledPkgsInFOQList"
-            android:summary="@string/clearUninstalledPkgsInFOQList"
-            android:title="@string/clearUninstalledPkgsInFOQList" />
+            app:key="clearUninstalledPkgsInFOQList"
+            app:summary="@string/clearUninstalledPkgsInFOQList"
+            app:title="@string/clearUninstalledPkgsInFOQList" />
         <Preference
-            android:key="clearIconCache"
-            android:summary="@string/refreshCache"
-            android:title="@string/clearIconCache" />
+            app:key="clearIconCache"
+            app:summary="@string/refreshCache"
+            app:title="@string/clearIconCache" />
         <Preference
-            android:key="clearNameCache"
-            android:summary="@string/refreshCache"
-            android:title="@string/clearNameCache" />
+            app:key="clearNameCache"
+            app:summary="@string/refreshCache"
+            app:title="@string/clearNameCache" />
         <Preference
-            android:key="clearAllCache"
-            android:summary="@string/delAllCache"
-            android:title="@string/delAllCache" />
+            app:key="clearAllCache"
+            app:summary="@string/delAllCache"
+            app:title="@string/delAllCache" />
         <Preference
-            android:key="resetFreezeTimes"
-            android:summary="@string/resetFreezeTimes"
-            android:title="@string/resetFreezeTimes" />
+            app:key="resetFreezeTimes"
+            app:summary="@string/resetFreezeTimes"
+            app:title="@string/resetFreezeTimes" />
         <Preference
-            android:key="resetUFTimes"
-            android:summary="@string/resetUFTimes"
-            android:title="@string/resetUFTimes" />
+            app:key="resetUFTimes"
+            app:summary="@string/resetUFTimes"
+            app:title="@string/resetUFTimes" />
         <Preference
-            android:key="resetUseTimes"
-            android:summary="@string/resetUseTimes"
-            android:title="@string/resetUseTimes" />
+            app:key="resetUseTimes"
+            app:summary="@string/resetUseTimes"
+            app:title="@string/resetUseTimes" />
         <Preference
-            android:key="deleteAllScheduledTasks"
-            android:summary="@string/delAllScheduledTasks"
-            android:title="@string/delAllScheduledTasks" />
+            app:key="deleteAllScheduledTasks"
+            app:summary="@string/delAllScheduledTasks"
+            app:title="@string/delAllScheduledTasks" />
     </PreferenceScreen>
 
     <Preference
-        android:key="backupAndRestore"
-        android:title="@string/backupAndRestore" />
+        app:key="backupAndRestore"
+        app:title="@string/backupAndRestore" />
 
-    <PreferenceScreen android:title="@string/advance">
+    <PreferenceScreen
+        app:key="spr_advance"
+        app:title="@string/advance">
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="debugModeEnabled"
-            android:title="@string/debugMode" />
+            app:defaultValue="false"
+            app:key="debugModeEnabled"
+            app:title="@string/debugMode" />
         <EditTextPreference
-            android:defaultValue="@string/app_name"
-            android:key="organizationName"
-            android:summary="@string/onlyMROOTModeUse"
-            android:title="@string/organizationName" />
+            app:defaultValue="@string/app_name"
+            app:key="organizationName"
+            app:summary="@string/onlyMROOTModeUse"
+            app:title="@string/organizationName" />
         <Preference
-            android:key="configureAccessibilityService"
-            android:summary="@string/accessibility_service_description"
-            android:title="@string/configureAccessibilityService" />
-        <Preference android:title="@string/manualMode">
+            app:key="configureAccessibilityService"
+            app:summary="@string/accessibility_service_description"
+            app:title="@string/configureAccessibilityService" />
+        <Preference app:title="@string/manualMode">
             <intent
                 android:data="ManualMode"
                 android:targetClass="cf.playhi.freezeyou.ManualMode"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
-        <Preference android:title="@string/showLogcat">
+        <Preference app:title="@string/showLogcat">
             <intent
                 android:targetClass="cf.playhi.freezeyou.ShowLogcatActivity"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
-        <!--        <Preference android:title="@string/commandExecutionTool">-->
+        <!--        <Preference app:title="@string/commandExecutionTool">-->
         <!--            <intent-->
-        <!--                android:targetClass="cf.playhi.freezeyou.CommandExecutorActivity"-->
-        <!--                android:targetPackage="cf.playhi.freezeyou" />-->
+        <!--                app:targetClass="cf.playhi.freezeyou.CommandExecutorActivity"-->
+        <!--                app:targetPackage="cf.playhi.freezeyou" />-->
         <!--        </Preference>-->
     </PreferenceScreen>
 
     <PreferenceScreen
-        android:key="dangerZone"
-        android:title="@string/dangerZone">
+        app:key="dangerZone"
+        app:title="@string/dangerZone">
         <Preference
-            android:key="clearAllUserData"
-            android:summary="@string/app_name"
-            android:title="@string/clearAllUserData" />
+            app:key="clearAllUserData"
+            app:summary="@string/app_name"
+            app:title="@string/clearAllUserData" />
         <Preference
-            android:summary="@string/disableMRootModeEx"
-            android:title="@string/disableMRootMode">
+            app:summary="@string/disableMRootModeEx"
+            app:title="@string/disableMRootMode">
             <intent
                 android:data="Uninstall"
                 android:targetClass="cf.playhi.freezeyou.Uninstall"
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
-            android:key="uninstall"
-            android:title="@string/uninstall" />
+            app:key="uninstall"
+            app:title="@string/uninstall" />
     </PreferenceScreen>
 
-    <Preference android:title="@string/about">
+    <Preference app:title="@string/about">
         <intent
             android:targetClass="cf.playhi.freezeyou.AboutActivity"
             android:targetPackage="cf.playhi.freezeyou" />

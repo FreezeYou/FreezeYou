@@ -39,7 +39,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
     protected void onCreate(Bundle savedInstanceState) {
         ThemeUtils.processSetTheme(this);
         super.onCreate(savedInstanceState);
-        ThemeUtils.processActionBar(getActionBar());
+        ThemeUtils.processActionBar(getSupportActionBar());
 
         setContentView(R.layout.lscaga_main);
 

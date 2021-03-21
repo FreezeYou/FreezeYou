@@ -1,53 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/list_menu_selectAll"
-        android:showAsAction="ifRoom"
-        android:title="@string/selectAll" />
+        android:title="@string/selectAll"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/list_menu_selectUnselected"
-        android:showAsAction="ifRoom"
-        android:title="@string/selectUnselected" />
+        android:title="@string/selectUnselected"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/list_menu_freezeImmediately"
-        android:showAsAction="never"
-        android:title="@string/freezeImmediately" />
+        android:title="@string/freezeImmediately"
+        app:showAsAction="never" />
     <item
         android:id="@+id/list_menu_UFImmediately"
-        android:showAsAction="never"
-        android:title="@string/UFImmediately" />
+        android:title="@string/UFImmediately"
+        app:showAsAction="never" />
     <item
         android:id="@+id/list_menu_ForceStopImmediately"
         android:showAsAction="never"
         android:title="@string/ForceStopImmediately" />
     <item
         android:id="@+id/list_menu_addToOneKeyFreezeList"
-        android:showAsAction="never"
-        android:title="@string/addToOneKeyList" />
+        android:title="@string/addToOneKeyList"
+        app:showAsAction="never" />
     <item
         android:id="@+id/list_menu_addToOneKeyUFList"
-        android:showAsAction="never"
-        android:title="@string/addToOneKeyUFList" />
+        android:title="@string/addToOneKeyUFList"
+        app:showAsAction="never" />
     <item
         android:id="@+id/list_menu_addToFreezeOnceQuit"
-        android:showAsAction="never"
-        android:title="@string/addToFreezeOnceQuit" />
+        android:title="@string/addToFreezeOnceQuit"
+        app:showAsAction="never" />
     <item
         android:id="@+id/list_menu_removeFromOneKeyFreezeList"
-        android:showAsAction="never"
-        android:title="@string/removeFromOneKeyList" />
+        android:title="@string/removeFromOneKeyList"
+        app:showAsAction="never" />
     <item
         android:id="@+id/list_menu_removeFromOneKeyUFList"
-        android:showAsAction="never"
-        android:title="@string/removeFromOneKeyUFList" />
+        android:title="@string/removeFromOneKeyUFList"
+        app:showAsAction="never" />
     <item
         android:id="@+id/list_menu_removeFromFreezeOnceQuit"
-        android:showAsAction="never"
-        android:title="@string/removeFromFreezeOnceQuit" />
+        android:title="@string/removeFromFreezeOnceQuit"
+        app:showAsAction="never" />
     <item
         android:id="@+id/list_menu_groupItem_addToUserDefined"
-        android:showAsAction="never"
-        android:title="@string/addToMyCustomization">
+        android:title="@string/addToMyCustomization"
+        app:showAsAction="never">
         <menu>
             <group
                 android:id="@+id/list_menu_groupItem_addToUserDefined_menuGroup"
@@ -61,8 +62,8 @@
     </item>
     <item
         android:id="@+id/list_menu_groupItem_removeFromUserDefined"
-        android:showAsAction="never"
-        android:title="@string/removeFromMyCustomization">
+        android:title="@string/removeFromMyCustomization"
+        app:showAsAction="never">
         <menu>
             <group
                 android:id="@+id/list_menu_groupItem_removeFromUserDefined_menuGroup"
@@ -76,10 +77,10 @@
     </item>
     <item
         android:id="@+id/list_menu_createDisEnableShortCut"
-        android:showAsAction="never"
-        android:title="@string/createDisEnableShortCut" />
+        android:title="@string/createDisEnableShortCut"
+        app:showAsAction="never" />
     <item
         android:id="@+id/list_menu_copyAfterBeingFormatted"
-        android:showAsAction="never"
-        android:title="@string/copyAfterBeingFormatted" />
+        android:title="@string/copyAfterBeingFormatted"
+        app:showAsAction="never" />
 </menu>
