@@ -82,6 +82,7 @@ import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getGrayBitmap;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;
 import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
+import static cf.playhi.freezeyou.utils.MoreUtils.processListFilter;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.addToOneKeyList;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList;
@@ -1111,31 +1112,6 @@ public class Main extends FreezeYouBaseActivity {
         } else {
             checkIfNeedAskFirstTimeSetupAndShowDialog();
         }
-    }
-
-    private ArrayList<Map<String, Object>> processListFilter(CharSequence prefix, ArrayList<Map<String, Object>> unfilteredValues) {
-
-        String prefixString = prefix.toString().toLowerCase();
-
-        if (unfilteredValues != null) {
-            int count = unfilteredValues.size();
-
-            ArrayList<Map<String, Object>> newValues = new ArrayList<>(count);
-            for (int i = 0; i < count; i++) {
-                try {
-                    Map<String, Object> h = unfilteredValues.get(i);
-                    String name = ((String) h.get("Name"));
-                    if (name != null && name.toLowerCase().contains(prefixString)) {
-                        newValues.add(h);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return newValues;
-        }
-
-        return new ArrayList<>();
     }
 
     private void go() {

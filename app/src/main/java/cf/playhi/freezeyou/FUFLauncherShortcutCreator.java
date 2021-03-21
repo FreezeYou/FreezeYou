@@ -37,6 +37,7 @@ import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
+import static cf.playhi.freezeyou.utils.MoreUtils.processListFilter;
 
 public class FUFLauncherShortcutCreator extends FreezeYouBaseActivity {
 
@@ -195,31 +196,6 @@ public class FUFLauncherShortcutCreator extends FreezeYouBaseActivity {
             finish();
         }
 
-    }
-
-    private ArrayList<Map<String, Object>> processListFilter(CharSequence prefix, ArrayList<Map<String, Object>> unfilteredValues) {
-
-        String prefixString = prefix.toString().toLowerCase();
-
-        if (unfilteredValues != null) {
-            int count = unfilteredValues.size();
-
-            ArrayList<Map<String, Object>> newValues = new ArrayList<>(count);
-            for (int i = 0; i < count; i++) {
-                try {
-                    Map<String, Object> h = unfilteredValues.get(i);
-                    String name = ((String) h.get("Name"));
-                    if (name != null && name.toLowerCase().contains(prefixString)) {
-                        newValues.add(h);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return newValues;
-        }
-
-        return new ArrayList<>();
     }
 
     private Map<String, Object> processAppStatus(String name, String packageName, ApplicationInfo applicationInfo, PackageManager packageManager) {
