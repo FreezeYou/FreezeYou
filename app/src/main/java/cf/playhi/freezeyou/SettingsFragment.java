@@ -102,7 +102,11 @@ public class SettingsFragment extends PreferenceFragmentCompat
                         if (isBiometricPromptPartAvailable(activity)) {
                             if (enableAuthenticationActivityResultLauncher != null) {
                                 enableAuthenticationActivityResultLauncher
-                                        .launch(new Intent(activity, AppLockActivity.class));
+                                        .launch(
+                                                new Intent(activity, AppLockActivity.class)
+                                                        .putExtra("ignoreCurrentUnlockStatus",
+                                                                true)
+                                        );
                             }
                         }
                         return false;

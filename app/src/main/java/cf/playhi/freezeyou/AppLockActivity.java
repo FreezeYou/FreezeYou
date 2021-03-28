@@ -53,6 +53,12 @@ public class AppLockActivity extends FreezeYouBaseActivity {
     protected void onResume() {
         super.onResume();
 
+        if (!getIntent().getBooleanExtra("ignoreCurrentUnlockStatus", false)
+                && !isLocked()) {
+            finish();
+            return;
+        }
+
         Button unlockButton = findViewById(R.id.app_lock_main_unlock_button);
         ImageView logoImageView = findViewById(R.id.app_lock_main_logo_imageView);
         unlockButton.setOnClickListener(v -> mBiometricPrompt.authenticate(mPromptInfo));
