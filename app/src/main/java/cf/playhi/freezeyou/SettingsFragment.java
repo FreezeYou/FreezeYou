@@ -96,7 +96,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
         if (enableAuthenticationPreference != null) {
             enableAuthenticationPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 final Activity activity = getActivity();
-                showToast(activity, newValue.toString());
                 if (activity != null) {
                     if (Boolean.TRUE.equals(newValue)) {
                         if (isBiometricPromptPartAvailable(activity)) {
