@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,13 +12,14 @@ import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import androidx.fragment.app.Fragment;
+
 import java.util.ArrayList;
 import java.util.Map;
 
 public class MainActivityAppListFragment extends Fragment {
 
     private boolean mUseGridMode = false;
-    private boolean mShowListViewDivider = false;
 
     private AdapterView.OnItemClickListener mOnItemClickListener = null;
     private AbsListView.OnItemLongClickListener mOnItemLongClickListener = null;
@@ -61,10 +61,6 @@ public class MainActivityAppListFragment extends Fragment {
                 mAppListListView.setMultiChoiceModeListener(mMultiChoiceModeListener);
             if (mAppListAdapter != null)
                 mAppListListView.setAdapter(mAppListAdapter);
-            if (!mShowListViewDivider) {
-                mAppListListView.setDivider(getResources().getDrawable(R.color.realTranslucent));
-                mAppListListView.setDividerHeight(2);
-            }
         }
         return view;
     }
@@ -161,14 +157,6 @@ public class MainActivityAppListFragment extends Fragment {
                 mAppListListView.setItemChecked(position, value);
             }
         }
-    }
-
-    public boolean getShowListViewDivider() {
-        return mShowListViewDivider;
-    }
-
-    public void setShowListViewDivider(boolean show) {
-        mShowListViewDivider = show;
     }
 
 }

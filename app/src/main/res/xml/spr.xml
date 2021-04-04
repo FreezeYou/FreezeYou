@@ -78,10 +78,6 @@
             app:key="allowFollowSystemAutoSwitchDarkMode"
             app:summary="@string/willOverrideInterfaceStyle"
             app:title="@string/allowFollowSystemAutoSwitchDarkMode" />
-        <CheckBoxPreference
-            app:defaultValue="false"
-            app:key="displayListDivider"
-            app:title="@string/displayListDivider" />
         <ListPreference
             app:defaultValue="1"
             app:entries="@array/onClickFuncChooseActionStyles"

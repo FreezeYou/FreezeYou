@@ -21,12 +21,14 @@ import java.io.File;
 import java.util.Date;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
-import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
-import cf.playhi.freezeyou.utils.MoreUtils;
 
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
+import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
+import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
+import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
+import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseActivity {
@@ -37,9 +39,9 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeUtils.processSetTheme(this);
+        processSetTheme(this);
         super.onCreate(savedInstanceState);
-        ThemeUtils.processActionBar(getSupportActionBar());
+        processActionBar(getSupportActionBar());
 
         setContentView(R.layout.lscaga_main);
 
@@ -74,7 +76,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
                 finish();
                 return true;
             case R.id.lscaga_menu_help:
-                MoreUtils.requestOpenWebSite(this,
+                requestOpenWebSite(this,
                         String.format("https://www.zidon.net/%1$s/guide/schedules.html",
                                 getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)));
                 return true;
@@ -227,7 +229,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
                             getApplicationIcon(
                                     this,
                                     pkgName,
-                                    ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this),
+                                    getApplicationInfoFromPkgName(pkgName, this),
                                     false
                             );
                     break;

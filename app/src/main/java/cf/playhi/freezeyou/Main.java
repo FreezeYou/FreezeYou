@@ -1,7 +1,5 @@
 package cf.playhi.freezeyou;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutManager;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -44,6 +41,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -298,19 +297,9 @@ public class Main extends FreezeYouBaseActivity {
 
         runOnUiThread(() -> {
 
-            if (Build.VERSION.SDK_INT >= 21) {
-                moreSettingsImageButton.setBackgroundResource(R.drawable.oval_ripple);
-                if (!PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                        .getBoolean("displayListDivider", false)) {
-                    search_editText.setBackgroundTintList(
-                            ColorStateList.valueOf(
-                                    getResources().getColor(R.color.realTranslucent)
-                            )
-                    );
-                }
-            } else {
-                moreSettingsImageButton.setBackgroundResource(getThemeFabDotBackground(Main.this));
-            }
+            moreSettingsImageButton.setBackgroundResource(
+                    Build.VERSION.SDK_INT >= 21 ?
+                            R.drawable.oval_ripple : getThemeFabDotBackground(Main.this));
 
             linearLayout.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.VISIBLE);
@@ -1167,13 +1156,9 @@ public class Main extends FreezeYouBaseActivity {
         if (mMainActivityAppListFragment == null) {
             mMainActivityAppListFragment = new MainActivityAppListFragment();
             mMainActivityAppListFragment.setUseGridMode(isGridMode);
-            mMainActivityAppListFragment.setShowListViewDivider(
-                    sharedPref.getBoolean("displayListDivider", false)
-            );
-
         }
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.main_appList_fragmentContainer_frameLayout, mMainActivityAppListFragment);
         fragmentTransaction.commit();
