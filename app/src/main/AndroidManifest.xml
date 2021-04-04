@@ -58,6 +58,7 @@
         <activity
             android:name=".Main"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:exported="true"
             android:icon="@mipmap/ic_launcher_new_round"
             android:launchMode="singleTask"
             android:roundIcon="@mipmap/ic_launcher_new_round"
@@ -93,6 +94,7 @@
             android:name=".ThirdIcon"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:enabled="true"
+            android:exported="true"
             android:icon="@mipmap/ic_launcher_new_round"
             android:label="@string/app_name"
             android:launchMode="singleTask"
@@ -114,6 +116,7 @@
             android:name=".FirstIcon"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:launchMode="singleTask"
@@ -134,6 +137,7 @@
             android:name=".SecondIcon"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:enabled="false"
+            android:exported="true"
             android:icon="@mipmap/ic_launcher_round"
             android:label="@string/app_name"
             android:launchMode="singleTask"
@@ -155,6 +159,7 @@
             android:name=".Freeze"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:documentLaunchMode="always"
+            android:exported="true"
             android:label="@string/disableAEnable"
             android:launchMode="singleInstance"
             android:maxRecents="6"
@@ -169,6 +174,7 @@
             android:name=".OneKeyFreeze"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:label="@string/oneKeyFreeze"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
@@ -185,6 +191,7 @@
             android:name=".OneKeyUF"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:label="@string/oneKeyUF"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
@@ -206,6 +213,7 @@
             android:name=".UriFreezeActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:label="@string/disableAEnable"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Default.Dialog">
@@ -223,6 +231,7 @@
         <activity
             android:name=".ScheduledTasksManageActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:exported="true"
             android:icon="@drawable/ic_shortcut_access_alarm"
             android:label="@string/scheduledTasks"
             android:theme="@style/AppTheme.Default">
@@ -240,6 +249,7 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:enabled="false"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:label="@string/installAndUninstall"
             android:launchMode="singleInstance"
             android:process=":installAndUninstall"
@@ -343,6 +353,7 @@
         <activity
             android:name=".LauncherShortcutConfirmAndGenerateActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:exported="true"
             android:label="@string/createLauncherShortcut"
             android:theme="@style/AppTheme.Default">
             <intent-filter>
@@ -394,6 +405,7 @@
             android:name=".OneKeyScreenLockImmediatelyActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:icon="@drawable/screenlock"
             android:label="@string/oneKeyLockScreen"
             android:launchMode="singleInstance"
@@ -418,6 +430,7 @@
             android:name=".ShortcutLauncherFolderActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:label="@string/folder"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Default.Dialog">
@@ -442,6 +455,7 @@
         <receiver
             android:name=".DeviceAdminReceiver"
             android:description="@string/app_name"
+            android:exported="true"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data
@@ -523,6 +537,7 @@
             android:process=":backgroundService" />
         <service
             android:name=".AccessibilityService"
+            android:exported="true"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:process=":backgroundService">
@@ -535,6 +550,7 @@
         </service>
         <service
             android:name=".OneKeyFreezeQSTileService"
+            android:exported="true"
             android:icon="@drawable/ic_notification"
             android:label="@string/oneKeyFreeze"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -544,6 +560,7 @@
         </service>
         <service
             android:name=".OneKeyUFQSTileService"
+            android:exported="true"
             android:icon="@drawable/ic_notification"
             android:label="@string/oneKeyUF"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -553,6 +570,7 @@
         </service>
         <service
             android:name=".OneKeyScreenLockQSTileService"
+            android:exported="true"
             android:icon="@drawable/ic_notification"
             android:label="@string/oneKeyLockScreen"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -562,6 +580,7 @@
         </service>
         <service
             android:name=".LaunchFreezeYouQSTileService"
+            android:exported="true"
             android:icon="@drawable/ic_notification"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -586,6 +605,7 @@
             android:process=":backgroundService" />
         <service
             android:name=".MyNotificationListenerService"
+            android:exported="true"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
             android:process=":backgroundService">
