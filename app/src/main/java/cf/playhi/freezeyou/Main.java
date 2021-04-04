@@ -32,7 +32,6 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.AbsListView;
 import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -62,10 +61,7 @@ import java.util.Map;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.AccessibilityUtils;
-import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
-import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
-import cf.playhi.freezeyou.utils.Support;
 
 import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.LauncherShortcutUtils.createShortCut;
@@ -78,13 +74,18 @@ import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getGrayBitmap;
+import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;
+import static cf.playhi.freezeyou.utils.FUFUtils.askRun;
+import static cf.playhi.freezeyou.utils.FUFUtils.processFreezeAction;
+import static cf.playhi.freezeyou.utils.FUFUtils.processUnfreezeAction;
 import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
 import static cf.playhi.freezeyou.utils.MoreUtils.processListFilter;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.addToOneKeyList;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList;
+import static cf.playhi.freezeyou.utils.Support.showChooseActionPopupMenu;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.utils.VersionUtils.getVersionCode;
@@ -166,7 +167,7 @@ public class Main extends FreezeYouBaseActivity {
                     getApplicationIcon(
                             Main.this,
                             pkgName,
-                            ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this),
+                            getApplicationInfoFromPkgName(pkgName, this),
                             false),
                     Freeze.class,
                     "FreezeYou! " + pkgName,
@@ -894,7 +895,7 @@ public class Main extends FreezeYouBaseActivity {
                                                             getApplicationIcon(
                                                                     Main.this,
                                                                     pkgName,
-                                                                    ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, Main.this),
+                                                                    getApplicationInfoFromPkgName(pkgName, Main.this),
                                                                     false),
                                                             Freeze.class,
                                                             "FreezeYou! " + pkgName,
@@ -936,105 +937,110 @@ public class Main extends FreezeYouBaseActivity {
             }
         });
 
-        mMainActivityAppListFragment.setOnAppListItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Map<String, Object> map =
-                        ((MainAppListSimpleAdapter) mMainActivityAppListFragment.getAppListAdapter())
-                                .getStoredArrayList().get(i);
-                final String name = (String) map.get("Name");
-                final String pkgName = (String) map.get("PackageName");
-                if (!getString(R.string.notAvailable).equals(name)) {
-                    switch (appListViewOnClickMode) {
-                        case APPListViewOnClickMode_chooseAction:
-                            if ("2".equals(PreferenceManager.getDefaultSharedPreferences(Main.this).getString("onClickFuncChooseActionStyle", "1"))) {
-                                startActivityForResult(
-                                        new Intent(Main.this, SelectOperation.class).
-                                                putExtra("Name", name).
-                                                putExtra("pkgName", pkgName),
-                                        1092
-                                );
-                                overridePendingTransition(R.anim.pullup, R.anim.pulldown);
-                            } else {
-                                Support.showChooseActionPopupMenu(Main.this, Main.this, view, pkgName, name);
+        mMainActivityAppListFragment.setOnAppListItemClickListener((adapterView, view, i, l) -> {
+            Map<String, Object> map =
+                    ((MainAppListSimpleAdapter) mMainActivityAppListFragment.getAppListAdapter())
+                            .getStoredArrayList().get(i);
+            final String name = (String) map.get("Name");
+            final String pkgName = (String) map.get("PackageName");
+            if (!getString(R.string.notAvailable).equals(name)) {
+                switch (appListViewOnClickMode) {
+                    case APPListViewOnClickMode_chooseAction:
+                        showChooseActionPopupMenu(Main.this, Main.this, view, pkgName, name);
+                        break;
+                    case APPListViewOnClickMode_autoUFOrFreeze:
+                        if (realGetFrozenStatus(Main.this, pkgName, null)) {
+                            processUnfreezeAction(
+                                    Main.this, pkgName, null, null,
+                                    false, false, null, false);
+                        } else {
+                            processFreezeAction(
+                                    Main.this, pkgName, null, null,
+                                    false, null, false);
+                        }
+                        break;
+                    case APPListViewOnClickMode_freezeImmediately:
+                        if (!realGetFrozenStatus(Main.this, pkgName, null)) {
+                            processFreezeAction(
+                                    Main.this, pkgName, null, null,
+                                    false, null, false);
+                        } else {
+                            if (!(new AppPreferences(Main.this)
+                                    .getBoolean("lesserToast", false))) {
+                                showToast(Main.this, R.string.freezeCompleted);
                             }
-                            break;
-                        case APPListViewOnClickMode_autoUFOrFreeze:
-                            if (realGetFrozenStatus(Main.this, pkgName, null)) {
-                                FUFUtils.processUnfreezeAction(Main.this, pkgName, null, null, false, false, null, false);
-                            } else {
-                                FUFUtils.processFreezeAction(Main.this, pkgName, null, null, false, null, false);
+                        }
+                        break;
+                    case APPListViewOnClickMode_UFImmediately:
+                        if (realGetFrozenStatus(Main.this, pkgName, null)) {
+                            processUnfreezeAction(
+                                    Main.this, pkgName, null, null,
+                                    false, false, null, false);
+                        } else {
+                            if (!(new AppPreferences(Main.this)
+                                    .getBoolean("lesserToast", false))) {
+                                showToast(Main.this, R.string.UFCompleted);
                             }
-                            break;
-                        case APPListViewOnClickMode_freezeImmediately:
-                            if (!realGetFrozenStatus(Main.this, pkgName, null)) {
-                                FUFUtils.processFreezeAction(Main.this, pkgName, null, null, false, null, false);
-                            } else {
-                                if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
-                                    showToast(Main.this, R.string.freezeCompleted);
-                                }
+                        }
+                        break;
+                    case APPListViewOnClickMode_UFAndRun:
+                        if (realGetFrozenStatus(Main.this, pkgName, null)) {
+                            processUnfreezeAction(
+                                    Main.this, pkgName, null, null,
+                                    true, false, null, false);
+                        } else {
+                            if (!(new AppPreferences(Main.this)
+                                    .getBoolean("lesserToast", false))) {
+                                showToast(Main.this, R.string.UFCompleted);
                             }
-                            break;
-                        case APPListViewOnClickMode_UFImmediately:
-                            if (realGetFrozenStatus(Main.this, pkgName, null)) {
-                                FUFUtils.processUnfreezeAction(Main.this, pkgName, null, null, false, false, null, false);
-                            } else {
-                                if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
-                                    showToast(Main.this, R.string.UFCompleted);
-                                }
-                            }
-                            break;
-                        case APPListViewOnClickMode_UFAndRun:
-                            if (realGetFrozenStatus(Main.this, pkgName, null)) {
-                                FUFUtils.processUnfreezeAction(Main.this, pkgName, null, null, true, false, null, false);
-                            } else {
-                                if (!(new AppPreferences(Main.this).getBoolean("lesserToast", false))) {
-                                    showToast(Main.this, R.string.UFCompleted);
-                                }
-                                FUFUtils.askRun(Main.this, pkgName, null, null, false, null, false);
-                            }
-                            break;
-                        case APPListViewOnClickMode_autoUFOrFreezeAndRun:
-                            if (realGetFrozenStatus(Main.this, pkgName, null)) {
-                                FUFUtils.processUnfreezeAction(Main.this, pkgName, null, null, true, false, null, false);
-                            } else {
-                                FUFUtils.processFreezeAction(Main.this, pkgName, null, null, false, null, false);
-                            }
-                            break;
-                        case APPListViewOnClickMode_addToOFList:
-                            showToast(Main.this, addToOneKeyList(Main.this, getString(R.string.sAutoFreezeApplicationList), pkgName) ? R.string.added : R.string.failed);
-                            break;
-                        case APPListViewOnClickMode_removeFromOFList:
-                            showToast(Main.this, removeFromOneKeyList(Main.this, getString(R.string.sAutoFreezeApplicationList), pkgName) ? R.string.removed : R.string.failed);
-                            break;
-                        case APPListViewOnClickMode_addToOUFList:
-                            showToast(Main.this, addToOneKeyList(Main.this, getString(R.string.sOneKeyUFApplicationList), pkgName) ? R.string.added : R.string.failed);
-                            break;
-                        case APPListViewOnClickMode_removeFromOUFList:
-                            showToast(Main.this, removeFromOneKeyList(Main.this, getString(R.string.sOneKeyUFApplicationList), pkgName) ? R.string.removed : R.string.failed);
-                            break;
-                        case APPListViewOnClickMode_addToFOQList:
-                            showToast(Main.this, addToOneKeyList(Main.this, getString(R.string.sFreezeOnceQuit), pkgName) ? R.string.added : R.string.failed);
-                            break;
-                        case APPListViewOnClickMode_removeFromFOQList:
-                            showToast(Main.this, removeFromOneKeyList(Main.this, getString(R.string.sFreezeOnceQuit), pkgName) ? R.string.removed : R.string.failed);
-                            break;
-                        case APPListViewOnClickMode_createFUFShortcut:
-                            checkSettingsAndRequestCreateShortcut(
-                                    name,
-                                    pkgName,
-                                    getApplicationIcon(
-                                            Main.this,
-                                            pkgName,
-                                            ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, Main.this),
-                                            false),
-                                    Freeze.class,
-                                    "FreezeYou! " + pkgName,
-                                    Main.this);
-                            break;
-                        default:
-                            break;
-                    }
+                            askRun(Main.this, pkgName, null,
+                                    null, false, null, false);
+                        }
+                        break;
+                    case APPListViewOnClickMode_autoUFOrFreezeAndRun:
+                        if (realGetFrozenStatus(Main.this, pkgName, null)) {
+                            processUnfreezeAction(
+                                    Main.this, pkgName, null, null,
+                                    true, false, null, false);
+                        } else {
+                            processFreezeAction(
+                                    Main.this, pkgName, null, null,
+                                    false, null, false);
+                        }
+                        break;
+                    case APPListViewOnClickMode_addToOFList:
+                        showToast(Main.this, addToOneKeyList(Main.this, getString(R.string.sAutoFreezeApplicationList), pkgName) ? R.string.added : R.string.failed);
+                        break;
+                    case APPListViewOnClickMode_removeFromOFList:
+                        showToast(Main.this, removeFromOneKeyList(Main.this, getString(R.string.sAutoFreezeApplicationList), pkgName) ? R.string.removed : R.string.failed);
+                        break;
+                    case APPListViewOnClickMode_addToOUFList:
+                        showToast(Main.this, addToOneKeyList(Main.this, getString(R.string.sOneKeyUFApplicationList), pkgName) ? R.string.added : R.string.failed);
+                        break;
+                    case APPListViewOnClickMode_removeFromOUFList:
+                        showToast(Main.this, removeFromOneKeyList(Main.this, getString(R.string.sOneKeyUFApplicationList), pkgName) ? R.string.removed : R.string.failed);
+                        break;
+                    case APPListViewOnClickMode_addToFOQList:
+                        showToast(Main.this, addToOneKeyList(Main.this, getString(R.string.sFreezeOnceQuit), pkgName) ? R.string.added : R.string.failed);
+                        break;
+                    case APPListViewOnClickMode_removeFromFOQList:
+                        showToast(Main.this, removeFromOneKeyList(Main.this, getString(R.string.sFreezeOnceQuit), pkgName) ? R.string.removed : R.string.failed);
+                        break;
+                    case APPListViewOnClickMode_createFUFShortcut:
+                        checkSettingsAndRequestCreateShortcut(
+                                name,
+                                pkgName,
+                                getApplicationIcon(
+                                        Main.this,
+                                        pkgName,
+                                        getApplicationInfoFromPkgName(pkgName, Main.this),
+                                        false),
+                                Freeze.class,
+                                "FreezeYou! " + pkgName,
+                                Main.this);
+                        break;
+                    default:
+                        break;
                 }
             }
         });
@@ -1267,7 +1273,7 @@ public class Main extends FreezeYouBaseActivity {
                                 getGrayBitmap(
                                         getBitmapFromDrawable(getApplicationIcon(
                                                 this, aPkg,
-                                                ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkg, this),
+                                                getApplicationInfoFromPkgName(aPkg, this),
                                                 false)
                                         )
                                 )
@@ -1276,7 +1282,7 @@ public class Main extends FreezeYouBaseActivity {
                         getApplicationIcon(
                                 Main.this,
                                 aPkg,
-                                ApplicationInfoUtils.getApplicationInfoFromPkgName(aPkg, Main.this),
+                                getApplicationInfoFromPkgName(aPkg, Main.this),
                                 true
                         );
                 keyValuePair.put("Img", icon);
@@ -1344,7 +1350,7 @@ public class Main extends FreezeYouBaseActivity {
             for (int i = 0; i < count; i++) {
                 Map<String, Object> hm = ((MainAppListSimpleAdapter) adapter).getStoredArrayList().get(i);
                 String pkgName = (String) hm.get("PackageName");
-                ApplicationInfo applicationInfo = ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this);
+                ApplicationInfo applicationInfo = getApplicationInfoFromPkgName(pkgName, this);
 
                 //检查是否已卸载
                 if (applicationInfo == null) {
@@ -1449,7 +1455,7 @@ public class Main extends FreezeYouBaseActivity {
                     getApplicationIcon(
                             Main.this,
                             pkgName,
-                            ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, Main.this),
+                            getApplicationInfoFromPkgName(pkgName, Main.this),
                             false),
                     Freeze.class,
                     "FreezeYou! " + pkgName,

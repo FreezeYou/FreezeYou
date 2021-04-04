@@ -78,12 +78,6 @@
             app:key="allowFollowSystemAutoSwitchDarkMode"
             app:summary="@string/willOverrideInterfaceStyle"
             app:title="@string/allowFollowSystemAutoSwitchDarkMode" />
-        <ListPreference
-            app:defaultValue="1"
-            app:entries="@array/onClickFuncChooseActionStyles"
-            app:entryValues="@array/onClickFuncChooseActionStyles"
-            app:key="onClickFuncChooseActionStyle"
-            app:title="@string/onClickFuncChooseActionStyle" />
     </PreferenceScreen>
 
     <PreferenceScreen
