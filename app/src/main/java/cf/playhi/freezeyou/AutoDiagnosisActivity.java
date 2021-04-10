@@ -305,6 +305,8 @@ public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
 //                }
 //            }
 
+            // TODO: Check save icon cache option, and clear or clear and regenerate it.
+
             PackageManager pm = getPackageManager();
             List<ApplicationInfo> installedApplications = pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
             if (installedApplications != null) {

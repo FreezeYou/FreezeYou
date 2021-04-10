@@ -4,46 +4,55 @@
     app:key="root">
 
     <Preference
+        app:iconSpaceReserved="false"
         app:key="howToUse"
         app:singleLineTitle="false"
         app:title="@string/hToUse" />
 
     <PreferenceScreen
+        app:iconSpaceReserved="false"
         app:key="spr_common"
         app:title="@string/common">
         <CheckBoxPreference
             app:defaultValue="true"
+            app:iconSpaceReserved="false"
             app:key="allowEditWhenCreateShortcut"
             app:singleLineTitle="false"
             app:title="@string/allowEditWhCreateShortcut" />
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="noCaution"
             app:singleLineTitle="false"
             app:title="@string/nSCaution" />
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="saveOnClickFunctionStatus"
             app:singleLineTitle="false"
             app:title="@string/saveOnClickFunctionStatus" />
         <CheckBoxPreference
             app:defaultValue="true"
+            app:iconSpaceReserved="false"
             app:key="saveSortMethodStatus"
             app:singleLineTitle="false"
             app:title="@string/saveSortMethodStatus" />
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="cacheApplicationsIcons"
             app:singleLineTitle="false"
             app:title="@string/cacheApplicationsIcons" />
         <CheckBoxPreference
             app:defaultValue="true"
+            app:iconSpaceReserved="false"
             app:key="showInRecents"
             app:singleLineTitle="false"
             app:summary="@string/mayHaveNoEffectsL"
             app:title="@string/showInRecents" />
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="lesserToast"
             app:singleLineTitle="false"
             app:title="@string/lesserToast" />
@@ -51,11 +60,13 @@
             app:defaultValue="all"
             app:entries="@array/launchModeSelection"
             app:entryValues="@array/launchModeSelectionValues"
+            app:iconSpaceReserved="false"
             app:key="launchMode"
             app:singleLineTitle="false"
             app:title="@string/launchMode" />
         <EditTextPreference
             app:defaultValue="@string/app_name"
+            app:iconSpaceReserved="false"
             app:key="organizationName"
             app:singleLineTitle="false"
             app:summary="@string/onlyMROOTModeUse"
@@ -64,18 +75,21 @@
             app:defaultValue="default"
             app:entries="@array/displayLanguageOptionsSelection"
             app:entryValues="@array/displayLanguageOptionsSelectionValues"
+            app:iconSpaceReserved="false"
             app:key="languagePref"
             app:singleLineTitle="false"
             app:title="@string/displayLanguage" />
     </PreferenceScreen>
 
     <PreferenceScreen
+        app:iconSpaceReserved="false"
         app:key="spr_appearance"
         app:title="@string/appearance">
         <ListPreference
             app:defaultValue="default"
             app:entries="@array/uiStyleSelection"
             app:entryValues="@array/uiStyleSelectionValues"
+            app:iconSpaceReserved="false"
             app:key="uiStyleSelection"
             app:singleLineTitle="false"
             app:title="@string/uiStyle" />
@@ -83,11 +97,13 @@
             app:defaultValue="default"
             app:entries="@array/mainActivityPatternSelection"
             app:entryValues="@array/mainActivityPatternSelectionValues"
+            app:iconSpaceReserved="false"
             app:key="mainActivityPattern"
             app:singleLineTitle="false"
             app:title="@string/mainActivityPattern" />
         <CheckBoxPreference
             app:defaultValue="true"
+            app:iconSpaceReserved="false"
             app:key="allowFollowSystemAutoSwitchDarkMode"
             app:singleLineTitle="false"
             app:summary="@string/willOverrideInterfaceStyle"
@@ -95,46 +111,55 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        app:iconSpaceReserved="false"
         app:key="spr_security"
         app:title="@string/security">
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="enableAuthentication"
             app:singleLineTitle="false"
             app:title="@string/enableAuthentication" />
     </PreferenceScreen>
 
     <PreferenceScreen
+        app:iconSpaceReserved="false"
         app:key="spr_notification"
         app:title="@string/notificationBar">
         <PreferenceScreen
+            app:iconSpaceReserved="false"
             app:key="spr_notification_fuf"
             app:title="@string/freezeAUF">
             <CheckBoxPreference
                 app:defaultValue="true"
+                app:iconSpaceReserved="false"
                 app:key="createQuickFUFNotiAfterUnfrozen"
                 app:singleLineTitle="false"
                 app:summary="@string/effectNextCreate"
                 app:title="@string/createQuickFUFNotiAfterUnfrozen" />
             <CheckBoxPreference
                 app:defaultValue="true"
+                app:iconSpaceReserved="false"
                 app:key="notificationBarFreezeImmediately"
                 app:singleLineTitle="false"
                 app:summary="@string/effectNextCreate"
                 app:title="@string/notificationBarFreezeImmediately" />
             <CheckBoxPreference
                 app:defaultValue="false"
+                app:iconSpaceReserved="false"
                 app:key="notificationBarDisableSlideOut"
                 app:singleLineTitle="false"
                 app:summary="@string/effectNextCreate"
                 app:title="@string/disableSlideOut" />
             <CheckBoxPreference
                 app:defaultValue="true"
+                app:iconSpaceReserved="false"
                 app:key="notificationBarDisableClickDisappear"
                 app:singleLineTitle="false"
                 app:summary="@string/effectNextCreate"
                 app:title="@string/disableClickDisappear" />
             <Preference
+                app:iconSpaceReserved="false"
                 app:singleLineTitle="false"
                 app:title="@string/manageQuickFUFNoti">
                 <intent
@@ -143,6 +168,7 @@
             </Preference>
         </PreferenceScreen>
         <Preference
+            app:iconSpaceReserved="false"
             app:singleLineTitle="false"
             app:title="@string/manageQuickFUFNoti">
             <intent
@@ -150,15 +176,18 @@
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
+            app:iconSpaceReserved="false"
             app:key="notificationBar_more"
             app:singleLineTitle="false"
             app:title="@string/more" />
     </PreferenceScreen>
 
     <PreferenceScreen
+        app:iconSpaceReserved="false"
         app:key="spr_automation"
         app:title="@string/automation">
         <Preference
+            app:iconSpaceReserved="false"
             app:singleLineTitle="false"
             app:title="@string/scheduledTasks">
             <intent
@@ -166,6 +195,7 @@
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
+            app:iconSpaceReserved="false"
             app:singleLineTitle="false"
             app:title="@string/manageUriAutoAllow">
             <intent
@@ -173,22 +203,26 @@
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
+            app:iconSpaceReserved="false"
             app:key="manageIpaAutoAllow"
             app:singleLineTitle="false"
             app:title="@string/manageIpaAutoAllow" />
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="onekeyFreezeWhenLockScreen"
             app:singleLineTitle="false"
             app:summary="@string/suggestUseTasksInstead"
             app:title="@string/freezeAfterScreenLock" />
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="freezeOnceQuit"
             app:singleLineTitle="false"
             app:summary="@string/suggestUseTasksInstead"
             app:title="@string/freezeOnceQuit" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="deleteAllScheduledTasks"
             app:singleLineTitle="false"
             app:summary="@string/delAllScheduledTasks"
@@ -196,35 +230,41 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        app:iconSpaceReserved="false"
         app:key="spr_fuf"
         app:title="@string/freezeAUF">
         <ListPreference
             app:defaultValue="0"
             app:entries="@array/selectFUFModeSelection"
             app:entryValues="@array/selectFUFModeSelectionValues"
+            app:iconSpaceReserved="false"
             app:key="selectFUFMode"
             app:singleLineTitle="false"
             app:title="@string/selectFUFMode" />
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="avoidFreezeForegroundApplications"
             app:singleLineTitle="false"
             app:summary="@string/needActiveAccessibilityService"
             app:title="@string/avoidFreezeForegroundApplications" />
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="avoidFreezeNotifyingApplications"
             app:singleLineTitle="false"
             app:summary="@string/needL"
             app:title="@string/avoidFreezeNotifyingApplications" />
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="openImmediately"
             app:singleLineTitle="false"
             app:summary="@string/openImmediatelyEx"
             app:title="@string/openImmediately" />
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="openAndUFImmediately"
             app:singleLineTitle="false"
             app:summary="@string/openAndUFImmediatelyEx"
@@ -232,6 +272,7 @@
         <CheckBoxPreference
             app:defaultValue="false"
             app:disableDependentsState="false"
+            app:iconSpaceReserved="false"
             app:key="shortcutAutoFUF"
             app:singleLineTitle="false"
             app:summary="@string/shortcutAutoFUFEx"
@@ -239,6 +280,7 @@
         <CheckBoxPreference
             app:defaultValue="false"
             app:dependency="shortcutAutoFUF"
+            app:iconSpaceReserved="false"
             app:key="needConfirmWhenFreezeUseShortcutAutoFUF"
             app:singleLineTitle="false"
             app:summary="@string/workWithShortcutAutoFUF"
@@ -246,6 +288,7 @@
         <CheckBoxPreference
             app:defaultValue="true"
             app:dependency="shortcutAutoFUF"
+            app:iconSpaceReserved="false"
             app:key="openImmediatelyAfterUnfreezeUseShortcutAutoFUF"
             app:singleLineTitle="false"
             app:summary="@string/workWithShortcutAutoFUF"
@@ -254,10 +297,12 @@
             app:defaultValue="nothing"
             app:entries="@array/shortCutOneKeyFreezeAdditionalOptionsSelection"
             app:entryValues="@array/shortCutOneKeyFreezeAdditionalOptionsSelectionValues"
+            app:iconSpaceReserved="false"
             app:key="shortCutOneKeyFreezeAdditionalOptions"
             app:singleLineTitle="false"
             app:title="@string/shortCutOneKeyFreezeAdditionalOptions" />
         <Preference
+            app:iconSpaceReserved="false"
             app:singleLineTitle="false"
             app:title="@string/manageUriAutoAllow">
             <intent
@@ -267,63 +312,76 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        app:iconSpaceReserved="false"
         app:key="spr_iconAEntry"
         app:title="@string/iconAEntry">
         <CheckBoxPreference
             app:defaultValue="false"
             app:icon="@mipmap/ic_launcher"
+            app:iconSpaceReserved="false"
             app:key="firstIconEnabled"
             app:singleLineTitle="false" />
         <CheckBoxPreference
             app:defaultValue="false"
             app:icon="@mipmap/ic_launcher_round"
+            app:iconSpaceReserved="false"
             app:key="secondIconEnabled"
             app:singleLineTitle="false" />
         <CheckBoxPreference
             app:defaultValue="true"
             app:icon="@mipmap/ic_launcher_new_round"
+            app:iconSpaceReserved="false"
             app:key="thirdIconEnabled"
             app:singleLineTitle="false" />
         <Preference
+            app:iconSpaceReserved="false"
             app:singleLineTitle="false"
             app:summary="@string/dialEntry_Ex"
             app:title="@string/dialEntry" />
     </PreferenceScreen>
 
     <PreferenceScreen
+        app:iconSpaceReserved="false"
         app:key="spr_installUninstall"
         app:title="@string/installAndUninstall">
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="enableInstallPkgFunc"
             app:singleLineTitle="false"
             app:title="@string/enableInstallPkgFunc" />
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="tryDelApkAfterInstalled"
             app:singleLineTitle="false"
             app:title="@string/tryDelApkAfterInstalled" />
         <CheckBoxPreference
             app:defaultValue="true"
+            app:iconSpaceReserved="false"
             app:key="notAllowInstallWhenIsObsd"
             app:singleLineTitle="false"
             app:title="@string/notAllowWhenIsObsd" />
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="tryToAvoidUpdateWhenUsing"
             app:singleLineTitle="false"
             app:title="@string/tryToAvoidUpdateWhenUsing" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="manageIpaAutoAllow"
             app:singleLineTitle="false"
             app:title="@string/manageIpaAutoAllow" />
     </PreferenceScreen>
 
     <PreferenceScreen
+        app:iconSpaceReserved="false"
         app:key="backgroundService"
         app:title="@string/backgroundService">
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="useForegroundService"
             app:singleLineTitle="false"
             app:summary="@string/serviceLongerEx"
@@ -331,6 +389,7 @@
     </PreferenceScreen>
 
     <Preference
+        app:iconSpaceReserved="false"
         app:singleLineTitle="false"
         app:title="@string/autoDiagnosis">
         <intent
@@ -339,9 +398,11 @@
     </Preference>
 
     <PreferenceScreen
+        app:iconSpaceReserved="false"
         app:key="spr_manageSpace"
         app:title="@string/manageSpace">
         <Preference
+            app:iconSpaceReserved="false"
             app:singleLineTitle="false"
             app:title="@string/manageMyCustomization">
             <intent
@@ -349,51 +410,61 @@
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
+            app:iconSpaceReserved="false"
             app:key="clearUninstalledPkgsInOKFFList"
             app:singleLineTitle="false"
             app:summary="@string/clearUninstalledPkgsInOKFFList"
             app:title="@string/clearUninstalledPkgsInOKFFList" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="clearUninstalledPkgsInOKUFList"
             app:singleLineTitle="false"
             app:summary="@string/clearUninstalledPkgsInOKUFList"
             app:title="@string/clearUninstalledPkgsInOKUFList" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="clearUninstalledPkgsInFOQList"
             app:singleLineTitle="false"
             app:summary="@string/clearUninstalledPkgsInFOQList"
             app:title="@string/clearUninstalledPkgsInFOQList" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="clearIconCache"
             app:singleLineTitle="false"
             app:summary="@string/refreshCache"
             app:title="@string/clearIconCache" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="clearNameCache"
             app:singleLineTitle="false"
             app:summary="@string/refreshCache"
             app:title="@string/clearNameCache" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="clearAllCache"
             app:singleLineTitle="false"
             app:summary="@string/delAllCache"
             app:title="@string/delAllCache" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="resetFreezeTimes"
             app:singleLineTitle="false"
             app:summary="@string/resetFreezeTimes"
             app:title="@string/resetFreezeTimes" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="resetUFTimes"
             app:singleLineTitle="false"
             app:summary="@string/resetUFTimes"
             app:title="@string/resetUFTimes" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="resetUseTimes"
             app:singleLineTitle="false"
             app:summary="@string/resetUseTimes"
             app:title="@string/resetUseTimes" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="deleteAllScheduledTasks"
             app:singleLineTitle="false"
             app:summary="@string/delAllScheduledTasks"
@@ -401,30 +472,36 @@
     </PreferenceScreen>
 
     <Preference
+        app:iconSpaceReserved="false"
         app:key="backupAndRestore"
         app:singleLineTitle="false"
         app:title="@string/backupAndRestore" />
 
     <PreferenceScreen
+        app:iconSpaceReserved="false"
         app:key="spr_advance"
         app:title="@string/advance">
         <CheckBoxPreference
             app:defaultValue="false"
+            app:iconSpaceReserved="false"
             app:key="debugModeEnabled"
             app:singleLineTitle="false"
             app:title="@string/debugMode" />
         <EditTextPreference
             app:defaultValue="@string/app_name"
+            app:iconSpaceReserved="false"
             app:key="organizationName"
             app:singleLineTitle="false"
             app:summary="@string/onlyMROOTModeUse"
             app:title="@string/organizationName" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="configureAccessibilityService"
             app:singleLineTitle="false"
             app:summary="@string/accessibility_service_description"
             app:title="@string/configureAccessibilityService" />
         <Preference
+            app:iconSpaceReserved="false"
             app:singleLineTitle="false"
             app:title="@string/manualMode">
             <intent
@@ -433,6 +510,7 @@
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
+            app:iconSpaceReserved="false"
             app:singleLineTitle="false"
             app:title="@string/showLogcat">
             <intent
@@ -447,14 +525,17 @@
     </PreferenceScreen>
 
     <PreferenceScreen
+        app:iconSpaceReserved="false"
         app:key="dangerZone"
         app:title="@string/dangerZone">
         <Preference
+            app:iconSpaceReserved="false"
             app:key="clearAllUserData"
             app:singleLineTitle="false"
             app:summary="@string/app_name"
             app:title="@string/clearAllUserData" />
         <Preference
+            app:iconSpaceReserved="false"
             app:singleLineTitle="false"
             app:summary="@string/disableMRootModeEx"
             app:title="@string/disableMRootMode">
@@ -464,12 +545,14 @@
                 android:targetPackage="cf.playhi.freezeyou" />
         </Preference>
         <Preference
+            app:iconSpaceReserved="false"
             app:key="uninstall"
             app:singleLineTitle="false"
             app:title="@string/uninstall" />
     </PreferenceScreen>
 
     <Preference
+        app:iconSpaceReserved="false"
         app:singleLineTitle="false"
         app:title="@string/about">
         <intent
