@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.ListView;
@@ -25,7 +26,6 @@ import java.util.Map;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.AccessibilityUtils;
-import cf.playhi.freezeyou.utils.ApplicationLabelUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.NotificationUtils;
 import cf.playhi.freezeyou.utils.ProcessUtils;
@@ -33,6 +33,9 @@ import cf.playhi.freezeyou.utils.ProcessUtils;
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
+import static cf.playhi.freezeyou.utils.FileUtils.clearIconCache;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.utils.VersionUtils.isOutdated;
@@ -288,41 +291,38 @@ public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
             problemsList.add(generateHashMap(getString(R.string.inPowerSaveMode), getString(R.string.someFuncMayBeAff), "5", R.drawable.ic_done));
     }
 
-    private void doRegenerateSomeCache(List<Map<String, Object>> problemsList, ProgressBar progressBar) {
+    private void doRegenerateSomeCache(
+            List<Map<String, Object>> problemsList, ProgressBar progressBar) {
+
         getSharedPreferences("NameOfPackages", Context.MODE_PRIVATE).edit().clear().apply();
-        try {
-//            File file = new File(getFilesDir() + "/icon");
-//            if (file.exists() && file.isDirectory()) {
-//                File[] childFile = file.listFiles();
-//                if (childFile == null || childFile.length == 0) {
-//                    file.delete();
-//                } else {
-//                    for (File f : childFile) {
-//                        if (f.isFile()) {
-//                            f.delete();
-//                        }
-//                    }
-//                }
-//            }
 
-            // TODO: Check save icon cache option, and clear or clear and regenerate it.
+        clearIconCache(getApplicationContext());
 
-            PackageManager pm = getPackageManager();
-            List<ApplicationInfo> installedApplications = pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
-            if (installedApplications != null) {
-                int size = installedApplications.size();
-                for (int i = 0; i < size; i++) {
-                    ApplicationInfo applicationInfo = installedApplications.get(i);
-                    ApplicationLabelUtils.getApplicationLabel(this, pm, applicationInfo, applicationInfo.packageName);
-//                    ApplicationIconUtils.getApplicationIcon(this, applicationInfo.packageName, applicationInfo, false);
-                    setProgress(progressBar, 40 + (int) ((double) i / (double) size * 50));
+        boolean cacheApplicationsIcons =
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                        .getBoolean("cacheApplicationsIcons", false);
+
+        PackageManager pm = getPackageManager();
+        List<ApplicationInfo> installedApplications =
+                pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
+
+        if (installedApplications != null) {
+            int size = installedApplications.size();
+            for (int i = 0; i < size; i++) {
+                ApplicationInfo applicationInfo = installedApplications.get(i);
+                getApplicationLabel(this, pm, applicationInfo, applicationInfo.packageName);
+                if (cacheApplicationsIcons) {
+                    getApplicationIcon(this, applicationInfo.packageName,
+                            applicationInfo, false, true);
                 }
+                setProgress(progressBar, 40 + (int) ((double) i / (double) size * 50));
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        problemsList.add(generateHashMap(getString(R.string.regenerateSomeCache), getString(R.string.updateSomeData), "10", R.drawable.ic_done));
+
+        problemsList.add(
+                generateHashMap(getString(R.string.regenerateSomeCache),
+                        getString(R.string.updateSomeData), "10", R.drawable.ic_done)
+        );
 
     }
 
