@@ -5,7 +5,7 @@
     <string name="UFAndRun">Разморозка и запуск</string>
     <string name="UFCompleted">Разморожено</string>
     <string name="UFImmediately">Разморозка немедленно</string>
-    <string name="UfSlashRun">Разморозка/Запуск</string>
+    <string name="UfSlashRun">Разморозка/запуск</string>
     <string name="about">О FreezeYou!</string>
     <string name="accessibility_service_description">"Следить за изменениями приложений переднего плана.
 Используется для работы функции, которая предотвращает заморозку приложений переднего плана при авто-заморозке, и для автозаморозки приложений, когда они не являются приложениями переднего плана, и т.д."</string>
@@ -13,11 +13,11 @@
     <string name="add">Добавить</string>
     <string name="addFailed">Не удалось добавить</string>
     <string name="addQQGroup">Присоединиться к QQ группе</string>
-    <string name="addToFreezeOnceQuit">Добавить в Заморозка после выхода</string>
+    <string name="addToFreezeOnceQuit">Добавить в \"Заморозка после выхода\"</string>
     <string name="addToMyCustomization">Добавить в \"Моя подборка\"</string>
-    <string name="addToOneKeyList">Добавить в список OneKEY заморозка</string>
-    <string name="addToOneKeyUFList">Добавить в список OneKEY разморозка</string>
-    <string name="addToRemoveFrom">Добавить в / Удалить из</string>
+    <string name="addToOneKeyList">Добавить в OneKEY заморозка</string>
+    <string name="addToOneKeyUFList">Добавить в OneKEY разморозка</string>
+    <string name="addToRemoveFrom">Добавить в/удалить из</string>
     <string name="added">Добавлен</string>
     <string name="advance">Дополнительно</string>
     <string name="affect">Влияет на</string>
@@ -30,7 +30,7 @@
     <string name="alwaysAllow_name">Всегда разрешать %1$s</string>
     <string name="appDetail">Сведения о приложении</string>
     <string name="appHasNotifi">%1$s все еще уведомляет</string>
-    <string name="appStore">Play Маркет</string>
+    <string name="appStore">Магазин приложений</string>
     <string name="app_installFailed">Ошибка установки %1$s</string>
     <string name="app_installFinished">%1$s установлено</string>
     <string name="app_name">FreezeYou!</string>
@@ -64,7 +64,7 @@
     <string name="clearAllUserData">Очистить все данные</string>
     <string name="clearIconCache">Очистить кэш иконок</string>
     <string name="clearNameCache">Очистить кэш имен приложений</string>
-    <string name="clearUninstalledPkgsInFOQList">Убрать удаленные приложения из Заморозка после выхода</string>
+    <string name="clearUninstalledPkgsInFOQList">Убрать удаленные приложения из \"Заморозка после выхода\"</string>
     <string name="clearUninstalledPkgsInOKFFList">Убрать удаленные приложения из OneKEY заморозка</string>
     <string name="clearUninstalledPkgsInOKUFList">Убрать удаленные приложения из OneKEY заморозка</string>
     <string name="commandExecutionTool">Инструмент выполнения команд</string>
@@ -87,7 +87,7 @@
     <string name="devicePolicyManagerNotFound">Диспетчер политики устройств не обнаружен</string>
     <string name="dialEntry">Используйте клавиатуру для ввода</string>
     <string name="dialEntry_Ex">*#*#73393968#*#* (*#*#FreezeYou#*#*) (большинство устройств Android поддерживают)</string>
-    <string name="disableAEnable">Заморозка/Разморозка/ Запуск</string>
+    <string name="disableAEnable">Заморозка/разморозка/запуск</string>
     <string name="disableApplications">Замороженые пакеты</string>
     <string name="disableClickDisappear">Не исчезать после нажатия</string>
     <string name="disableConfirmation">Подтвердить отмену?</string>
@@ -141,9 +141,9 @@
     <string name="freezeCompleted">Заморожено</string>
     <string name="freezeImmediately">Заморозка немедленно</string>
     <string name="freezeOnceQuit">Заморозка после выхода</string>
-    <string name="freezeOnceQuitList">Список Заморозка после выхода</string>
-    <string name="freezeOrLaunch">Заморозка / Запуск</string>
-    <string name="freezeSlashRun">Заморозка / Запуск</string>
+    <string name="freezeOnceQuitList">Список \"Заморозка после выхода\"</string>
+    <string name="freezeOrLaunch">Заморозка/запуск</string>
+    <string name="freezeSlashRun">Заморозка/запуск</string>
     <string name="frozen">Замороженый</string>
     <string name="generate">Генерировать</string>
     <string name="getDisabledApplications">Получить список замороженых приложений</string>
@@ -184,7 +184,7 @@
     <string name="loading___">Загрузка...</string>
     <string name="mainActivityPattern">Вид стартовой страницы</string>
     <string name="manageIpaAutoAllow">Управление запросами на установку приложений БЕЛОГО списка</string>
-    <string name="manageMyCustomization">Управление Моей подборкой</string>
+    <string name="manageMyCustomization">Управление списком \"Моя подборка\"</string>
     <string name="manageQuickFUFNoti">Управление уведомлениями о быстрой заморозке</string>
     <string name="manageSpace">Управление пространством</string>
     <string name="manageUriAutoAllow">Управление запросами белого списка URI</string>
@@ -219,7 +219,7 @@
     <string name="noRootPermission">Разрешение ROOT не предоставлено</string>
     <string name="noSuchApiMode">Нет такого режима API</string>
     <string name="notAllowWhenIsObsd">Не позволять окну затемняться</string>
-    <string name="notAvailable">N/A</string>
+    <string name="notAvailable">Н/Д</string>
     <string name="notUpdatedForALongTime">Давно не обновлялось</string>
     <string name="notUpdatedForALongTimeMessage">Давно не обновлялось, хотите проверить наличие обновлений сейчас?</string>
     <string name="nothing">None</string>
@@ -227,9 +227,9 @@
     <string name="notificationBar">Уведомления</string>
     <string name="notificationBarFreezeImmediately">Заморозка сразу после нажатия на уведомление о заморозке/разморозке</string>
     <string name="okay">ОК</string>
-    <string name="onClickFuncChooseActionStyle">Стиль пункта Действия при нажатии</string>
+    <string name="onClickFuncChooseActionStyle">Стиль пункта \"Действия при нажатии\"</string>
     <string name="onClickFunction">Действия при нажатии</string>
-    <string name="onClickFunctionStatus">Состояние Действия при нажатии</string>
+    <string name="onClickFunctionStatus">Состояние \"Действия при нажатии\"</string>
     <string name="oneKeyFreeze">OneKEY заморозка</string>
     <string name="oneKeyFreezeList">Список OneKEY заморозка</string>
     <string name="oneKeyLockScreen">Блокировка экрана</string>
@@ -269,10 +269,10 @@
     <string name="reject">Отклонено</string>
     <string name="remove">Удалить</string>
     <string name="removeFailed">Не удалось удалить</string>
-    <string name="removeFromFreezeOnceQuit">Удалить из Заморозка после выхода</string>
+    <string name="removeFromFreezeOnceQuit">Удалить из \"Заморозка после выхода\"</string>
     <string name="removeFromMyCustomization">Удалить из \"Моя подборка\"</string>
-    <string name="removeFromOneKeyList">Удалить из списка OneKEY заморозка</string>
-    <string name="removeFromOneKeyUFList">Удалить из списка OneKEY разморозка</string>
+    <string name="removeFromOneKeyList">Удалить из OneKEY заморозка</string>
+    <string name="removeFromOneKeyUFList">Удалить из OneKEY разморозка</string>
     <string name="removeNoRootCaution">"Вы действительно хотите отменить разрешение для режима без-ROOT? 
 Чтобы избежать ненужных проблем, разморозьте все замороженные приложения перед отключением этого режима!"</string>
     <string name="removed">Удалено</string>
@@ -287,7 +287,7 @@
     <string name="restore">Восстановить</string>
     <string name="retry">Повтор</string>
     <string name="save">Сохранить</string>
-    <string name="saveOnClickFunctionStatus">Сохранить состояние Действия при нажатии</string>
+    <string name="saveOnClickFunctionStatus">Сохранить состояние \"Действия при нажатии\"</string>
     <string name="saveSortMethodStatus">Сохранить состояние метода сортировки</string>
     <string name="scheduledTaskDashLineLabel">Запланированное задание - %1$s</string>
     <string name="scheduledTasks">Запланированные задания</string>
@@ -343,7 +343,7 @@
     <string name="uninstalling_app">Удаление %1$s</string>
     <string name="unknown">Неизвестный</string>
     <string name="unknownError">Неизвестная ошибка</string>
-    <string name="unknownResult_probablySuccess">Результат неизвестен (Вероятно успех)</string>
+    <string name="unknownResult_probablySuccess">Результат неизвестен (вероятно успех)</string>
     <string name="unrootedOrCannotFindTheLaunchIntent">Разморозка завершилась успешно, но не удалось найти вход этого приложения, или разморозка не удалась из-за недостаточного разрешения.</string>
     <string name="update">Обновить</string>
     <string name="updateSomeData">Обновить некоторые данные</string>
@@ -366,13 +366,13 @@
     <string name="yes">Да</string>
     <string-array name="launchModeSelection">
         <item>Показать все</item>
-        <item>Заморожено</item>
-        <item>Разморожено</item>
-        <item>Системные</item>
-        <item>Приложения пользователя</item>
+        <item>Замороженые</item>
+        <item>Размороженые</item>
+        <item>Системные приложения</item>
+        <item>Пользовательские приложения</item>
         <item>OneKEY заморозка</item>
         <item>OneKEY разморозка</item>
-        <item>Заморозка при выходе</item>
+        <item>Заморозка после выхода</item>
     </string-array>
     <string-array name="mainActivityPatternSelection">
         <item>По умолчанию</item>
@@ -422,13 +422,13 @@
     </string-array>
     <string-array name="uiStyleSelection">
         <item>По умолчанию</item>
-        <item>Темный</item>
-        <item>Синий</item>
-        <item>Розовый</item>
-        <item>Зеленый</item>
-        <item>Желтый</item>
-        <item>Оранжевый</item>
-        <item>Белый</item>
-        <item>Красный</item>
+        <item>Темная</item>
+        <item>Синяя</item>
+        <item>Розовая</item>
+        <item>Зеленая</item>
+        <item>Желтая</item>
+        <item>Оранжевая</item>
+        <item>Белая</item>
+        <item>Красная</item>
     </string-array>
 </resources>
