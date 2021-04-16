@@ -9,16 +9,10 @@
         android:id="@+id/first_time_setup_main_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginBottom="5dp"
         android:singleLine="true"
         android:text="@string/quickSetup"
-        android:textSize="36sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="5dp"
-        android:background="?android:attr/listDivider" />
+        android:textSize="34sp" />
 
     <FrameLayout
         android:id="@+id/first_time_setup_main_frameLayout"
@@ -26,15 +20,9 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="?android:attr/listDivider" />
-
     <Button
         android:id="@+id/first_time_setup_main_next_button"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

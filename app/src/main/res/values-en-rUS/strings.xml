@@ -365,6 +365,10 @@
     <string name="unlock">Unlock</string>
     <string name="security">Security</string>
     <string name="enableAuthentication">Enable authentication</string>
+    <string name="authentication">Authentication</string>
+    <string name="verifyToContinue">Verify to continue</string>
+    <string name="authenticationFailed">Authentication failed</string>
+    <string name="authenticationError_colon">Authentication error: %1$s</string>
     <string name="correspondingAndAvailableWebsiteUrlLanguageCode">en-US</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
