@@ -52,7 +52,7 @@ public final class ApplicationIconUtils {
     public static Drawable getApplicationIcon(Context context, String pkgName, @Nullable ApplicationInfo applicationInfo, boolean resize, boolean saveIconCache) {
         Drawable drawable = null;
         String path = context.getCacheDir() + "/icon/" + pkgName + ".png";
-        if (new File(path).exists()) {
+        if (saveIconCache && new File(path).exists()) {
             drawable = BitmapDrawable.createFromPath(path);
         } else if (applicationInfo != null) {
             drawable = applicationInfo.loadIcon(context.getPackageManager());
