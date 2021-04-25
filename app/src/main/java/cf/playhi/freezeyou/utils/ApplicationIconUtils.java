@@ -12,7 +12,9 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -45,11 +47,21 @@ public final class ApplicationIconUtils {
         }
     }
 
-    public static Drawable getApplicationIcon(Context context, String pkgName, @Nullable ApplicationInfo applicationInfo, boolean resize) {
-        return getApplicationIcon(context, pkgName, applicationInfo, resize, false);
+    public static Drawable getApplicationIcon(
+            @NonNull Context context, @NonNull String pkgName,
+            @Nullable ApplicationInfo applicationInfo, boolean resize
+    ) {
+        return getApplicationIcon(
+                context, pkgName, applicationInfo, resize,
+                PreferenceManager.getDefaultSharedPreferences(context)
+                        .getBoolean("cacheApplicationsIcons", false)
+        );
     }
 
-    public static Drawable getApplicationIcon(Context context, String pkgName, @Nullable ApplicationInfo applicationInfo, boolean resize, boolean saveIconCache) {
+    public static Drawable getApplicationIcon(
+            @NonNull Context context, @NonNull String pkgName,
+            @Nullable ApplicationInfo applicationInfo, boolean resize, boolean saveIconCache
+    ) {
         Drawable drawable = null;
         String path = context.getCacheDir() + "/icon/" + pkgName + ".png";
         if (saveIconCache && new File(path).exists()) {
