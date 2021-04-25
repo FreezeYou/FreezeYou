@@ -17,12 +17,15 @@ import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.ApplicationIconUtils;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 
+import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
+import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
+
 public class SelectTargetActivityActivity extends FreezeYouBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeUtils.processSetTheme(this);
+        processSetTheme(this);
         super.onCreate(savedInstanceState);
-        ThemeUtils.processActionBar(getSupportActionBar());
+        processActionBar(getSupportActionBar());
         setContentView(R.layout.staa_main);
         init();
     }

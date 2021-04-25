@@ -42,21 +42,34 @@ import static cf.playhi.freezeyou.utils.VersionUtils.isOutdated;
 
 public class AutoDiagnosisActivity extends FreezeYouBaseActivity {
 
+    private Thread mDiagnosisThread;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.autodiagnosis);
         processActionBar(getSupportActionBar());
-
-        new Thread(this::go).start();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        new Thread(this::go).start();
+        if (mDiagnosisThread != null && mDiagnosisThread.isAlive()) {
+            mDiagnosisThread.interrupt();
+        }
+        mDiagnosisThread = new Thread(this::go);
+        mDiagnosisThread.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mDiagnosisThread != null && mDiagnosisThread.isAlive()) {
+            mDiagnosisThread.interrupt();
+        }
     }
 
     private void go() {
