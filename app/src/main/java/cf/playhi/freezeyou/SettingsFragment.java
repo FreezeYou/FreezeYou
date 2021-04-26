@@ -111,6 +111,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
                         }
                         return false;
                     } else {
+                        new AppPreferences(activity).put("enableAuthentication", false);
                         return true;
                     }
                 }
