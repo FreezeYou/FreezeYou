@@ -1,90 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="@string/common">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/common">
         <Preference
-            android:key="howToUse"
-            android:title="@string/hToUse" />
+            app:iconSpaceReserved="false"
+            app:key="howToUse"
+            app:singleLineTitle="false"
+            app:title="@string/hToUse" />
         <ListPreference
-            android:defaultValue="default"
-            android:entries="@array/mainActivityPatternSelection"
-            android:entryValues="@array/mainActivityPatternSelectionValues"
-            android:key="mainActivityPattern"
-            android:title="@string/mainActivityPattern" />
+            app:defaultValue="default"
+            app:entries="@array/mainActivityPatternSelection"
+            app:entryValues="@array/mainActivityPatternSelectionValues"
+            app:iconSpaceReserved="false"
+            app:key="mainActivityPattern"
+            app:singleLineTitle="false"
+            app:title="@string/mainActivityPattern" />
         <ListPreference
-            android:defaultValue="default"
-            android:entries="@array/uiStyleSelection"
-            android:entryValues="@array/uiStyleSelectionValues"
-            android:key="uiStyleSelection"
-            android:title="@string/uiStyle" />
+            app:defaultValue="default"
+            app:entries="@array/uiStyleSelection"
+            app:entryValues="@array/uiStyleSelectionValues"
+            app:iconSpaceReserved="false"
+            app:key="uiStyleSelection"
+            app:singleLineTitle="false"
+            app:title="@string/uiStyle" />
         <ListPreference
-            android:defaultValue="all"
-            android:entries="@array/launchModeSelection"
-            android:entryValues="@array/launchModeSelectionValues"
-            android:key="launchMode"
-            android:title="@string/launchMode" />
+            app:defaultValue="all"
+            app:entries="@array/launchModeSelection"
+            app:entryValues="@array/launchModeSelectionValues"
+            app:iconSpaceReserved="false"
+            app:key="launchMode"
+            app:singleLineTitle="false"
+            app:title="@string/launchMode" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="cacheApplicationsIcons"
-            android:title="@string/cacheApplicationsIcons" />
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="cacheApplicationsIcons"
+            app:singleLineTitle="false"
+            app:title="@string/cacheApplicationsIcons" />
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="showInRecents"
-            android:summary="@string/mayHaveNoEffectsL"
-            android:title="@string/showInRecents" />
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="showInRecents"
+            app:singleLineTitle="false"
+            app:summary="@string/mayHaveNoEffectsL"
+            app:title="@string/showInRecents" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="lesserToast"
-            android:title="@string/lesserToast" />
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="lesserToast"
+            app:singleLineTitle="false"
+            app:title="@string/lesserToast" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/freezeAUF">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/freezeAUF">
         <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/selectFUFModeSelection"
-            android:entryValues="@array/selectFUFModeSelectionValues"
-            android:key="selectFUFMode"
-            android:title="@string/selectFUFMode" />
+            app:defaultValue="0"
+            app:entries="@array/selectFUFModeSelection"
+            app:entryValues="@array/selectFUFModeSelectionValues"
+            app:iconSpaceReserved="false"
+            app:key="selectFUFMode"
+            app:singleLineTitle="false"
+            app:title="@string/selectFUFMode" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/notificationBar">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/notificationBar">
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="notificationBarFreezeImmediately"
-            android:summary="@string/effectNextCreate"
-            android:title="@string/notificationBarFreezeImmediately" />
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="notificationBarFreezeImmediately"
+            app:singleLineTitle="false"
+            app:summary="@string/effectNextCreate"
+            app:title="@string/notificationBarFreezeImmediately" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="notificationBarDisableSlideOut"
-            android:summary="@string/effectNextCreate"
-            android:title="@string/disableSlideOut" />
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="notificationBarDisableSlideOut"
+            app:singleLineTitle="false"
+            app:summary="@string/effectNextCreate"
+            app:title="@string/disableSlideOut" />
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="notificationBarDisableClickDisappear"
-            android:summary="@string/effectNextCreate"
-            android:title="@string/disableClickDisappear" />
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="notificationBarDisableClickDisappear"
+            app:singleLineTitle="false"
+            app:summary="@string/effectNextCreate"
+            app:title="@string/disableClickDisappear" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/freezeAUF">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/freezeAUF">
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="avoidFreezeForegroundApplications"
-            android:summary="@string/needActiveAccessibilityService"
-            android:title="@string/avoidFreezeForegroundApplications" />
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="avoidFreezeForegroundApplications"
+            app:singleLineTitle="false"
+            app:summary="@string/needActiveAccessibilityService"
+            app:title="@string/avoidFreezeForegroundApplications" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="avoidFreezeNotifyingApplications"
-            android:summary="@string/needL"
-            android:title="@string/avoidFreezeNotifyingApplications" />
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="avoidFreezeNotifyingApplications"
+            app:singleLineTitle="false"
+            app:summary="@string/needL"
+            app:title="@string/avoidFreezeNotifyingApplications" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="openAndUFImmediately"
-            android:summary="@string/openAndUFImmediatelyEx"
-            android:title="@string/openAndUFImmediately" />
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="openAndUFImmediately"
+            app:singleLineTitle="false"
+            app:summary="@string/openAndUFImmediatelyEx"
+            app:title="@string/openAndUFImmediately" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/moreSettings">
-        <Preference android:title="@string/moreSettings">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/moreSettings">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="false"
+            app:title="@string/moreSettings">
             <intent
                 android:targetClass="cf.playhi.freezeyou.SettingsActivity"
                 android:targetPackage="cf.playhi.freezeyou" />

@@ -1,35 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditTextPreference
-        android:key="stma_add_label"
-        android:title="@string/label"
-        android:defaultValue="@string/label"/>
+        app:defaultValue="@string/label"
+        app:iconSpaceReserved="false"
+        app:key="stma_add_label"
+        app:singleLineTitle="false"
+        app:title="@string/label" />
 
     <SwitchPreference
-        android:title="@string/enable"
-        android:key="stma_add_enable"
-        android:defaultValue="true"/>
+        app:defaultValue="true"
+        app:iconSpaceReserved="false"
+        app:key="stma_add_enable"
+        app:singleLineTitle="false"
+        app:title="@string/enable" />
 
     <EditTextPreference
-        android:defaultValue="09:09"
-        android:inputType="time"
-        android:key="stma_add_time"
-        android:title="@string/time" />
+        app:defaultValue="09:09"
+        app:iconSpaceReserved="false"
+        app:key="stma_add_time"
+        app:singleLineTitle="false"
+        app:title="@string/time" />
 
     <MultiSelectListPreference
-        android:entries="@array/sevenDays"
-        android:entryValues="@array/sevenDaysValues"
-        android:title="@string/repeat"
-        android:key="stma_add_repeat"/>
+        app:entries="@array/sevenDays"
+        app:entryValues="@array/sevenDaysValues"
+        app:iconSpaceReserved="false"
+        app:key="stma_add_repeat"
+        app:singleLineTitle="false"
+        app:title="@string/repeat" />
 
     <EditTextPreference
-        android:key="stma_add_task"
-        android:title="@string/task"
-        android:defaultValue="okuf"/>
+        app:defaultValue="okuf"
+        app:iconSpaceReserved="false"
+        app:key="stma_add_task"
+        app:singleLineTitle="false"
+        app:title="@string/task" />
 
     <Preference
-        android:title="@string/help"
-        android:key="stma_add_help"/>
+        app:iconSpaceReserved="false"
+        app:key="stma_add_help"
+        app:singleLineTitle="false"
+        app:title="@string/help" />
 
 </PreferenceScreen>

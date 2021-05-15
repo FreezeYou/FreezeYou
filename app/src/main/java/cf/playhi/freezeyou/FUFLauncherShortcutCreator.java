@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
-import cf.playhi.freezeyou.utils.OneKeyListUtils;
-import cf.playhi.freezeyou.utils.ToastUtils;
 
 import static cf.playhi.freezeyou.ThemeUtils.getThemeDot;
 import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
@@ -38,6 +36,8 @@ import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
 import static cf.playhi.freezeyou.utils.MoreUtils.processListFilter;
+import static cf.playhi.freezeyou.utils.OneKeyListUtils.existsInOneKeyList;
+import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class FUFLauncherShortcutCreator extends FreezeYouBaseActivity {
 
@@ -173,11 +173,11 @@ public class FUFLauncherShortcutCreator extends FreezeYouBaseActivity {
                             final String pkgName = (String) map.get("PackageName");
                             if (isSlfMode) {
                                 SharedPreferences sp = getSharedPreferences(getIntent().getStringExtra("slf_n"), MODE_PRIVATE);
-                                if (!OneKeyListUtils.existsInOneKeyList(sp.getString("pkgS", ""), pkgName)) {
+                                if (!existsInOneKeyList(sp.getString("pkgS", ""), pkgName)) {
                                     sp.edit().putString("pkgS", sp.getString("pkgS", "") + pkgName + ",").apply();
-                                    ToastUtils.showToast(FUFLauncherShortcutCreator.this, R.string.added);
+                                    showToast(FUFLauncherShortcutCreator.this, R.string.added);
                                 } else {
-                                    ToastUtils.showToast(FUFLauncherShortcutCreator.this, R.string.alreadyExist);
+                                    showToast(FUFLauncherShortcutCreator.this, R.string.alreadyExist);
                                 }
                                 setResult(RESULT_OK);
                             } else {// if (returnPkgName)s

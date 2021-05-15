@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditTextPreference
-        android:key="stma_add_label"
-        android:title="@string/label"
-        android:defaultValue="@string/label"/>
+        app:defaultValue="@string/label"
+        app:iconSpaceReserved="false"
+        app:key="stma_add_label"
+        app:singleLineTitle="false"
+        app:title="@string/label" />
 
     <SwitchPreference
-        android:title="@string/enable"
-        android:key="stma_add_enable"
-        android:defaultValue="true"/>
+        app:defaultValue="true"
+        app:iconSpaceReserved="false"
+        app:key="stma_add_enable"
+        app:singleLineTitle="false"
+        app:title="@string/enable" />
 
     <ListPreference
-        android:entries="@array/triggers"
-        android:entryValues="@array/triggersValues"
-        android:title="@string/triggers"
-        android:key="stma_add_trigger"/>
+        app:entries="@array/triggers"
+        app:entryValues="@array/triggersValues"
+        app:iconSpaceReserved="false"
+        app:key="stma_add_trigger"
+        app:singleLineTitle="false"
+        app:title="@string/triggers" />
 
     <EditTextPreference
-        android:key="stma_add_trigger_extra_parameters"
-        android:title="@string/triggers_extra_parameters"/>
+        app:iconSpaceReserved="false"
+        app:key="stma_add_trigger_extra_parameters"
+        app:singleLineTitle="false"
+        app:title="@string/triggers_extra_parameters" />
 
     <EditTextPreference
-        android:key="stma_add_task"
-        android:title="@string/task"
-        android:defaultValue="okuf"/>
+        app:defaultValue="okuf"
+        app:iconSpaceReserved="false"
+        app:key="stma_add_task"
+        app:singleLineTitle="false"
+        app:title="@string/task" />
 
     <Preference
-        android:title="@string/help"
-        android:key="stma_add_help"/>
+        app:iconSpaceReserved="false"
+        app:key="stma_add_help"
+        app:singleLineTitle="false"
+        app:title="@string/help" />
 
 </PreferenceScreen>

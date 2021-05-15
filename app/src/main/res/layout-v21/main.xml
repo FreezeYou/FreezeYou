@@ -13,6 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="pkgLabel"
+            android:backgroundTint="@color/realTranslucent"
             android:hint="@string/search"
             android:inputType="text"
             android:paddingLeft="5dp"

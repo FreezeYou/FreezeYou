@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -27,6 +26,7 @@ import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
+import static cf.playhi.freezeyou.utils.ToastUtils.showShortToast;
 
 public class AppLockActivity extends FreezeYouBaseActivity {
     private BiometricPrompt mBiometricPrompt;
@@ -52,6 +52,12 @@ public class AppLockActivity extends FreezeYouBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (!getIntent().getBooleanExtra("ignoreCurrentUnlockStatus", false)
+                && !isLocked()) {
+            finish();
+            return;
+        }
 
         Button unlockButton = findViewById(R.id.app_lock_main_unlock_button);
         ImageView logoImageView = findViewById(R.id.app_lock_main_logo_imageView);
@@ -91,8 +97,12 @@ public class AppLockActivity extends FreezeYouBaseActivity {
                     public void onAuthenticationError(
                             int errorCode, @NonNull CharSequence errString) {
                         super.onAuthenticationError(errorCode, errString);
-                        Toast.makeText(getApplicationContext(),
-                                "Authentication error: " + errString, Toast.LENGTH_SHORT).show();
+                        showShortToast(
+                                getApplicationContext(),
+                                String.format(
+                                        getString(R.string.authenticationError_colon), errString
+                                )
+                        );
                         setResult(RESULT_CANCELED);
                     }
 
@@ -109,16 +119,14 @@ public class AppLockActivity extends FreezeYouBaseActivity {
                     @Override
                     public void onAuthenticationFailed() {
                         super.onAuthenticationFailed();
-                        Toast.makeText(getApplicationContext(), "Authentication failed",
-                                Toast.LENGTH_SHORT).show();
+                        showShortToast(getApplicationContext(), R.string.authenticationFailed);
                         setResult(RESULT_CANCELED);
                     }
                 });
 
-        // TODO: Translation
         mPromptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("身份验证")
-                .setSubtitle("验证以继续")
+                .setTitle(getString(R.string.authentication))
+                .setSubtitle(getString(R.string.verifyToContinue))
                 .setAllowedAuthenticators(BIOMETRIC_STRONG | BIOMETRIC_WEAK | DEVICE_CREDENTIAL)
                 .build();
     }

@@ -31,6 +31,7 @@ import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.AuthenticationUtils.isBiometricPromptPartAvailable;
 import static cf.playhi.freezeyou.utils.DataStatisticsUtils.resetTimes;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.FileUtils.clearIconCache;
 import static cf.playhi.freezeyou.utils.FileUtils.deleteAllFiles;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.utils.NotificationUtils.startAppNotificationSettingsSystemActivity;
@@ -96,17 +97,21 @@ public class SettingsFragment extends PreferenceFragmentCompat
         if (enableAuthenticationPreference != null) {
             enableAuthenticationPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 final Activity activity = getActivity();
-                showToast(activity, newValue.toString());
                 if (activity != null) {
                     if (Boolean.TRUE.equals(newValue)) {
                         if (isBiometricPromptPartAvailable(activity)) {
                             if (enableAuthenticationActivityResultLauncher != null) {
                                 enableAuthenticationActivityResultLauncher
-                                        .launch(new Intent(activity, AppLockActivity.class));
+                                        .launch(
+                                                new Intent(activity, AppLockActivity.class)
+                                                        .putExtra("ignoreCurrentUnlockStatus",
+                                                                true)
+                                        );
                             }
                         }
                         return false;
                     } else {
+                        new AppPreferences(activity).put("enableAuthentication", false);
                         return true;
                     }
                 }
@@ -158,14 +163,8 @@ public class SettingsFragment extends PreferenceFragmentCompat
                         showToast(activity, R.string.success);
                         break;
                     case "clearIconCache":
-                        try {
-                            deleteAllFiles(new File(activity.getFilesDir() + "/icon"), false);
-                            deleteAllFiles(new File(activity.getCacheDir() + "/icon"), false);
-                            showToast(activity, R.string.success);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            showToast(activity, R.string.failed);
-                        }
+                        showToast(activity,
+                                clearIconCache(activity) ? R.string.success : R.string.failed);
                         break;
                     case "checkUpdate":
                         checkUpdate(activity);

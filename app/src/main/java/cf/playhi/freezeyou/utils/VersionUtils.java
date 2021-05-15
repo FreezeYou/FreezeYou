@@ -88,7 +88,7 @@ final public class VersionUtils {
      * @return Whether need to ask for checking update.
      */
     public static boolean isOutdated(SharedPreferences sp) {
-        return (new Date().getTime() - sp.getLong("Time", 0L)) > 2592000000L;
+        return (new Date().getTime() - sp.getLong("Time", 0L)) > 5184000000L;
     }
 
 }

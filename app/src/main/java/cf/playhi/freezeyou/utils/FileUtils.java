@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou.utils;
 
+import android.content.Context;
 import android.os.Build;
 
 import java.io.File;
@@ -51,6 +52,17 @@ public final class FileUtils {
             in.close();
         } else {
             Files.copy(in, new File(apkFilePath).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
+
+    public static boolean clearIconCache(Context context) {
+        try {
+            deleteAllFiles(new File(context.getFilesDir() + "/icon"), false);
+            deleteAllFiles(new File(context.getCacheDir() + "/icon"), false);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

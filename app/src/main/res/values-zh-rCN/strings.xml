@@ -365,6 +365,10 @@
     <string name="unlock">解锁</string>
     <string name="security">安全</string>
     <string name="enableAuthentication">启用身份验证</string>
+    <string name="authentication">身份验证</string>
+    <string name="verifyToContinue">验证以继续</string>
+    <string name="authenticationFailed">验证失败</string>
+    <string name="authenticationError_colon">验证出错：%1$s</string>
     <string name="correspondingAndAvailableWebsiteUrlLanguageCode">zh-CN</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
