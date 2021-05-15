@@ -375,6 +375,7 @@
     <string name="forceStopMyCustomization">Force stop my customation</string>
     <string name="unfrozenUA">Unfrozen User App</string>
     <string name="lastInstall">Recently Installed</string>
+    <string name="lastUpdate">Recently Updated</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>

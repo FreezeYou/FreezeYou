@@ -120,6 +120,7 @@ public class Main extends FreezeYouBaseActivity {
     private final static int SORT_BY_US_DESCENDING = 7;
     private final static int SORT_BY_ALPHABETICAL = 8;
     private final static int SORT_BY_LAST_INSTALLED = 9;
+    private final static int SORT_BY_LAST_UPDATED = 10;
 
     private final ArrayList<String> selectedPackages = new ArrayList<>();
     private int appListViewOnClickMode = APPListViewOnClickMode_chooseAction;
@@ -688,6 +689,15 @@ public class Main extends FreezeYouBaseActivity {
                         }
                     });
                     break;
+                case SORT_BY_LAST_UPDATED:
+                    setSortByDefault(AppList);
+                    Collections.sort(AppList, new Comparator<Map<String, Object>>() {
+                        @Override
+                        public int compare(Map<String, Object> m0, Map<String, Object> m1) {
+                            return -Long.compare((Long) m0.get("UpdateTime"), (Long) m1.get("UpdateTime"));
+                        }
+                    });
+                    break;
                 case SORT_BY_NO:
                 default:
                     break;
@@ -1104,6 +1114,7 @@ public class Main extends FreezeYouBaseActivity {
         keyValuePair.put("Name", context.getString(R.string.notAvailable));
         keyValuePair.put("PackageName", context.getString(R.string.notAvailable));
         keyValuePair.put("InstallTime", 0L);
+        keyValuePair.put("UpdateTime", 0L);
         AppList.add(keyValuePair);
     }
 
@@ -1324,6 +1335,7 @@ public class Main extends FreezeYouBaseActivity {
             processFrozenStatus(keyValuePair, packageName, packageManager);
             keyValuePair.put("PackageName", packageName);
             keyValuePair.put("InstallTime", packageInfo.firstInstallTime);
+            keyValuePair.put("UpdateTime", packageInfo.lastUpdateTime);
             return keyValuePair;
         }
         return null;
@@ -1335,9 +1347,11 @@ public class Main extends FreezeYouBaseActivity {
         for (String aPkg : source) {
             name = getApplicationLabel(getApplicationContext(), null, null, aPkg);
             long installTime = 0L;
+            long updateTime = 0L;
             try {
                 PackageInfo pi = getPackageManager().getPackageInfo(aPkg, PackageManager.GET_UNINSTALLED_PACKAGES);
                 installTime = pi.firstInstallTime;
+                updateTime = pi.lastUpdateTime;
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
@@ -1366,6 +1380,7 @@ public class Main extends FreezeYouBaseActivity {
                 processFrozenStatus(keyValuePair, aPkg, null);
                 keyValuePair.put("PackageName", aPkg);
                 keyValuePair.put("InstallTime", installTime);
+                keyValuePair.put("UpdateTime", updateTime);
                 AppList.add(keyValuePair);
             }
         }
@@ -2112,6 +2127,15 @@ public class Main extends FreezeYouBaseActivity {
                             }
                         }).start();
                         saveSortMethodStatus(SORT_BY_LAST_INSTALLED);
+                        return true;
+                    case R.id.menu_sB_last_update:
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                generateList(currentFilter, SORT_BY_LAST_UPDATED);
+                            }
+                        }).start();
+                        saveSortMethodStatus(SORT_BY_LAST_UPDATED);
                         return true;
                     default:
                         return super.onOptionsItemSelected(item);

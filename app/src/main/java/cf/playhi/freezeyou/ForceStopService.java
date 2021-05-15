@@ -8,25 +8,14 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
-import net.grandcentrix.tray.AppPreferences;
-
 import cf.playhi.freezeyou.app.FreezeYouBaseService;
 import cf.playhi.freezeyou.utils.ForceStopUtils;
-
-import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO;
-import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
-import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;
-import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyAction;
-import static cf.playhi.freezeyou.utils.FUFUtils.processAction;
-import static cf.playhi.freezeyou.utils.FUFUtils.processMRootAction;
-import static cf.playhi.freezeyou.utils.FUFUtils.processRootAction;
 
 public class ForceStopService extends FreezeYouBaseService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Context context = getApplicationContext();
-        AppPreferences appPreferences = new AppPreferences(context);
 
         String[] packages = intent.getStringArrayExtra("packages");
         ForceStopUtils.forceStop(context, packages);
@@ -47,9 +36,9 @@ public class ForceStopService extends FreezeYouBaseService {
             if (notificationManager != null)
                 notificationManager.createNotificationChannel(channel);
             mBuilder.setChannelId("ForceStop");
-            startForeground(4, mBuilder.build());
+            startForeground(6, mBuilder.build());
         } else {
-            startForeground(4, new Notification());
+            startForeground(6, new Notification());
         }
     }
 

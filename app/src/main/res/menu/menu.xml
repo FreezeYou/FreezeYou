@@ -98,6 +98,10 @@
                     <item
                         android:id="@+id/menu_sB_last_install"
                         android:title="@string/lastInstall" />
+
+                    <item
+                        android:id="@+id/menu_sB_last_update"
+                        android:title="@string/lastUpdate" />
                 </menu>
             </item>
 

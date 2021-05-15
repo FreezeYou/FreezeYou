@@ -17,6 +17,12 @@ public class ForceStop extends FreezeYouBaseActivity {
         super.onCreate(savedInstanceState);
 
         String pkgName = getIntent().getStringExtra("pkgName");
+
+        if (pkgName == null || pkgName.equals("")) {
+            finish();
+            return;
+        }
+
         String[] packages = null;
 
         if (pkgName.startsWith("FORCESTOPCATEGORY")) {
