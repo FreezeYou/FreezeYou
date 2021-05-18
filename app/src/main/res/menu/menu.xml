@@ -54,6 +54,9 @@
                         android:id="@+id/menu_vM_onlyUA"
                         android:title="@string/onlyUA" />
                     <item
+                        android:id="@+id/menu_vM_unfrozenUA"
+                        android:title="@string/unfrozenUA" />
+                    <item
                         android:id="@+id/menu_vM_all"
                         android:title="@string/displayAll" />
                 </menu>
@@ -87,6 +90,18 @@
                     <item
                         android:id="@+id/menu_sB_us_descending"
                         android:title="@string/us_descending" />
+                  
+                    <item
+                        android:id="@+id/menu_sB_alphabetical"
+                        android:title="@string/alphabetical" />
+
+                    <item
+                        android:id="@+id/menu_sB_last_install"
+                        android:title="@string/lastInstall" />
+
+                    <item
+                        android:id="@+id/menu_sB_last_update"
+                        android:title="@string/lastUpdate" />
                 </menu>
             </item>
 
@@ -103,6 +118,20 @@
                     <item
                         android:id="@+id/menu_createOneKeyLockScreenShortCut"
                         android:title="@string/oneKeyLockScreen" />
+                    <item
+                        android:id="@+id/menu_forceStopUserDefinedShortcut"
+                        android:title="@string/forceStopMyCustomization">
+                        <menu>
+                            <group
+                                android:checkableBehavior="none"
+                                android:id="@+id/menu_forceStopUserDefinedShortcut_menuGroup">
+                                <item
+                                    android:id="@+id/menu_forceStopUserDefinedShortcut_newClassification"
+                                    android:title="@string/newClassification"
+                                    android:orderInCategory="0"/>
+                            </group>
+                        </menu>
+                    </item>
                     <item android:title="@string/quickView">
                         <menu>
                             <item
@@ -121,8 +150,31 @@
                                 android:id="@+id/menu_createFreezeOnceQuitShortCut"
                                 android:title="@string/freezeOnceQuit" />
                             <item
+                                android:id="@+id/menu_createOnlySAShortcut"
+                                android:title="@string/onlySA" />
+                            <item
+                                android:id="@+id/menu_createOnlyUAShortcut"
+                                android:title="@string/onlyUA" />
+                            <item
+                                android:id="@+id/menu_createUnfrozenUAShortcut"
+                                android:title="@string/unfrozenUA" />
+                            <item
                                 android:id="@+id/menu_createNewFolderShortCut"
                                 android:title="@string/newFolder" />
+                            <item
+                                android:id="@+id/menu_createUserDefinedShortcut"
+                                android:title="@string/myCustomization">
+                                <menu>
+                                    <group
+                                        android:checkableBehavior="none"
+                                        android:id="@+id/menu_createUserDefinedShortcut_menuGroup">
+                                        <item
+                                            android:id="@+id/menu_createUserDefinedShortcut_newClassification"
+                                            android:title="@string/newClassification"
+                                            android:orderInCategory="0"/>
+                                    </group>
+                                </menu>
+                            </item>
                         </menu>
                     </item>
                 </menu>

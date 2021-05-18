@@ -8,6 +8,10 @@
         android:id="@+id/main_sca_menu_disableAEnable"
         android:title="@string/disableAEnable" />
 
+    <item
+        android:id="@+id/main_sca_menu_forceStop"
+        android:title="@string/forceStop" />
+
     <item android:title="@string/addToRemoveFrom">
         <menu>
             <item

@@ -29,6 +29,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import cf.playhi.freezeyou.FUFService;
+import cf.playhi.freezeyou.ForceStop;
+import cf.playhi.freezeyou.ForceStopService;
 import cf.playhi.freezeyou.OneKeyFreezeService;
 import cf.playhi.freezeyou.OneKeyUFService;
 import cf.playhi.freezeyou.R;
@@ -203,6 +205,14 @@ public final class TasksUtils {
                                     new Intent(context, FUFService.class)
                                             .putExtra("packages", OneKeyListUtils.decodeUserListsInPackageNames(context, tasks))
                                             .putExtra("freeze", false)
+                            );
+                        break;
+                    case "fc":
+                        if (length >= 4 && parseTaskAndReturnIfNeedExecuteImmediately(context, asTasks, taskTrigger))
+                            startService(
+                                    context,
+                                    new Intent(context, ForceStopService.class)
+                                            .putExtra("packages", OneKeyListUtils.decodeUserListsInPackageNames(context, tasks))
                             );
                         break;
                     default:

@@ -30,6 +30,7 @@ import net.grandcentrix.tray.AppPreferences;
 import java.util.HashMap;
 import java.util.Locale;
 
+import cf.playhi.freezeyou.ForceStop;
 import cf.playhi.freezeyou.Freeze;
 import cf.playhi.freezeyou.InstallPackagesActivity;
 import cf.playhi.freezeyou.R;
@@ -266,6 +267,11 @@ public final class Support {
                         }
                     default:
                         switch (item.getItemId()) {
+                            case R.id.main_sca_menu_forceStop:
+                                if (!(context.getString(R.string.notAvailable).equals(name))) {
+                                    context.startActivity(new Intent(context, ForceStop.class).putExtra("pkgName", pkgName));
+                                }
+                                break;
                             case R.id.main_sca_menu_addToFreezeOnceQuit:
                                 Support.checkAddOrRemove(context, FreezeOnceQuitPkgNames, pkgName, context.getString(R.string.sFreezeOnceQuit));
                                 break;

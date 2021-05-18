@@ -171,6 +171,18 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ForceStop"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:excludeFromRecents="true"
+            android:label="@string/forceStop"
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".OneKeyFreeze"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
@@ -602,6 +614,11 @@
             android:name=".FUFService"
             android:exported="false"
             android:label="@string/freezeAUF"
+            android:process=":backgroundService" />
+        <service
+            android:name=".ForceStopService"
+            android:exported="false"
+            android:label="@string/forceStop"
             android:process=":backgroundService" />
         <service
             android:name=".MyNotificationListenerService"
