@@ -120,7 +120,7 @@
                         android:title="@string/oneKeyLockScreen" />
                     <item
                         android:id="@+id/menu_forceStopUserDefinedShortcut"
-                        android:title="@string/forceStopMyCustomization">
+                        android:title="@string/forceStop">
                         <menu>
                             <group
                                 android:checkableBehavior="none"
