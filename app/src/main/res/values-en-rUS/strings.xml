@@ -370,6 +370,11 @@
     <string name="authenticationFailed">Authentication failed</string>
     <string name="authenticationError_colon">Authentication error: %1$s</string>
     <string name="correspondingAndAvailableWebsiteUrlLanguageCode">en-US</string>
+    <string name="forceStop">Force Stop</string>
+    <string name="unfrozenUA">Unfrozen User App</string>
+    <string name="lastInstall">Recently Installed</string>
+    <string name="lastUpdate">Recently Updated</string>
+    <string name="alphabetical">Alphabetical</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>

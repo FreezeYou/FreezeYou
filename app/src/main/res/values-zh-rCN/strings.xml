@@ -370,6 +370,11 @@
     <string name="authenticationFailed">验证失败</string>
     <string name="authenticationError_colon">验证出错：%1$s</string>
     <string name="correspondingAndAvailableWebsiteUrlLanguageCode">zh-CN</string>
+    <string name="forceStop">强行停止</string>
+    <string name="unfrozenUA">未冻用应</string>
+    <string name="lastInstall">最近安装</string>
+    <string name="lastUpdate">最近更新</string>
+    <string name="alphabetical">字母顺序</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
