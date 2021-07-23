@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" /><!-- 开关移动数据，需 pri app -->
     <uses-permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <permission
         android:name="cf.playhi.freezeyou.permission.GET_DISABLED_APPLICATIONS"

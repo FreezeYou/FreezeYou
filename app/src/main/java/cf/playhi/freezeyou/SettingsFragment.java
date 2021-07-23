@@ -176,7 +176,9 @@ public class SettingsFragment extends PreferenceFragmentCompat
                         );
                         break;
                     case "thanksList":
-                        requestOpenWebSite(activity, "https://freezeyou.playhi.net/thanks.html");
+                        requestOpenWebSite(activity,
+                                String.format("https://www.zidon.net/%1$s/thanks/",
+                                        getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)));
                         break;
                     case "configureAccessibilityService":
                         openAccessibilitySettings(activity);
