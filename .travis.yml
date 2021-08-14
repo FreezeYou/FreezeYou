@@ -1,8 +1,7 @@
 language: android
-sudo: required
-machine:
-  environment:
-    ANDROID_HOME: /usr/local/android-sdk-linux
+dist: xenial
+os: linux
+jdk: openjdk-11
 android:
   components:
     # Uncomment the lines below if you want to
@@ -11,10 +10,10 @@ android:
     - platform-tools
 
     # The BuildTools version used by your project
-    - build-tools-28.0.3
+    - build-tools-30.0.3
 
     # The SDK version used to compile your project
-    - android-28
+    - android-30
 
     # Additional components
     # - extra-google-google_play_services
@@ -25,7 +24,6 @@ android:
   licenses:
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
-    - 'android-sdk-license-.+'
     - '.+'
     # https://docs.travis-ci.com/user/languages/android/
     # Specify at least one system image,
