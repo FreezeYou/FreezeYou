@@ -1,26 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
     package="cf.playhi.freezeyou">
 
     <uses-sdk tools:overrideLibrary="net.grandcentrix.tray" />
 
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /><!-- 开关蓝牙 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- 开关蓝牙 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
-    <uses-permission android:name="android.permission.INSTALL_SHORTCUT" /><!-- 安装快捷方式 -->
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" /><!-- 安装快捷方式 -->
+    <uses-permission android:name="android.permission.INSTALL_SHORTCUT" /> <!-- 安装快捷方式 -->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" /> <!-- 安装快捷方式 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /><!-- 部分奇怪的设备需要这个权限才能开关WIFI -->
-    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" /><!-- 开关移动数据，需 pri app -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 部分奇怪的设备需要这个权限才能开关WIFI -->
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" /> <!-- 开关移动数据，需 pri app -->
     <uses-permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <permission
         android:name="cf.playhi.freezeyou.permission.GET_DISABLED_APPLICATIONS"
@@ -53,8 +54,7 @@
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher_new_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_new_round"
-        android:supportsRtl="true">
+        android:roundIcon="@mipmap/ic_launcher_new_round">
 
         <activity
             android:name=".Main"
@@ -92,14 +92,13 @@
         </activity>
 
         <activity-alias
-            android:name=".ThirdIcon"
+            android:name=".SecondIcon"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_new_round"
+            android:icon="@mipmap/ic_launcher_round"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:roundIcon="@mipmap/ic_launcher_new_round"
             android:targetActivity=".Main"
             android:theme="@style/AppTheme.Default">
             <intent-filter>
@@ -109,6 +108,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
@@ -130,18 +130,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity-alias>
         <activity-alias
-            android:name=".SecondIcon"
+            android:name=".ThirdIcon"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:enabled="false"
+            android:enabled="true"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_round"
+            android:icon="@mipmap/ic_launcher_new_round"
             android:label="@string/app_name"
             android:launchMode="singleTask"
+            android:roundIcon="@mipmap/ic_launcher_new_round"
             android:targetActivity=".Main"
             android:theme="@style/AppTheme.Default">
             <intent-filter>
@@ -151,6 +153,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
@@ -168,6 +171,7 @@
             tools:ignore="UnusedAttribute">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -180,6 +184,7 @@
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -193,10 +198,12 @@
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -210,10 +217,12 @@
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -250,10 +259,12 @@
             android:theme="@style/AppTheme.Default">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -282,6 +293,7 @@
                 <action android:name="android.intent.action.UNINSTALL_PACKAGE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="package" />
             </intent-filter>
         </activity>
@@ -297,6 +309,7 @@
             android:theme="@style/AppTheme.Default">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -371,6 +384,7 @@
             android:theme="@style/AppTheme.Default">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -425,11 +439,12 @@
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -449,6 +464,7 @@
             android:theme="@style/AppTheme.Default.Dialog">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -464,7 +480,6 @@
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Default" />
 
-
         <receiver
             android:name=".DeviceAdminReceiver"
             android:description="@string/app_name"
@@ -474,6 +489,7 @@
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/device_admin" />
+
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
@@ -484,6 +500,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SECRET_CODE" />
+
                 <data
                     android:host="373393968"
                     android:scheme="android_secret_code" />
@@ -495,6 +512,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
+
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
@@ -504,6 +522,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
+
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
@@ -557,6 +576,7 @@
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
@@ -633,19 +653,19 @@
         </service>
 
         <provider
-            android:name="cf.playhi.freezeyou.export.Query"
+            android:name=".export.Query"
             android:authorities="cf.playhi.freezeyou.export.QUERY"
             android:exported="true"
             android:permission="cf.playhi.freezeyou.permission.QUERY_STATUS"
             android:process=":backgroundService" />
         <provider
-            android:name="cf.playhi.freezeyou.export.Unfreeze"
+            android:name=".export.Unfreeze"
             android:authorities="cf.playhi.freezeyou.export.UNFREEZE"
             android:exported="true"
             android:permission="cf.playhi.freezeyou.permission.ENABLE_APPLICATIONS"
             android:process=":backgroundService" />
         <provider
-            android:name="cf.playhi.freezeyou.export.Freeze"
+            android:name=".export.Freeze"
             android:authorities="cf.playhi.freezeyou.export.FREEZE"
             android:exported="true"
             android:permission="cf.playhi.freezeyou.permission.DISABLE_APPLICATIONS"
@@ -659,7 +679,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>
