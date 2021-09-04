@@ -65,7 +65,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
         inflater.inflate(R.menu.lscaga_menu, menu);
         String cTheme = ThemeUtils.getUiTheme(this);
         if ("white".equals(cTheme) || "default".equals(cTheme))
-            menu.findItem(R.id.lscaga_menu_help).setIcon(R.drawable.ic_action_help_outline);
+            menu.findItem(R.id.lscaga_menu_help).setIcon(R.drawable.ic_action_help_outline_light);
         return true;
     }
 

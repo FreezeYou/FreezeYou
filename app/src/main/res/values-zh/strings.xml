@@ -375,6 +375,7 @@
     <string name="lastInstall">最近安装</string>
     <string name="lastUpdate">最近更新</string>
     <string name="alphabetical">字母顺序</string>
+    <string name="refresh">刷新</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>

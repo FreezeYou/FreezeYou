@@ -5,7 +5,7 @@
     <item
         android:id="@+id/lscaga_menu_help"
         android:contentDescription="@string/help"
-        android:icon="@drawable/ic_action_help_outline_light"
+        android:icon="@drawable/ic_action_help_outline"
         android:title="@string/help"
         app:showAsAction="always" />
 

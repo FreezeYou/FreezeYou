@@ -375,6 +375,7 @@
     <string name="lastInstall">Recently Installed</string>
     <string name="lastUpdate">Recently Updated</string>
     <string name="alphabetical">Alphabetical</string>
+    <string name="refresh">Refresh</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>

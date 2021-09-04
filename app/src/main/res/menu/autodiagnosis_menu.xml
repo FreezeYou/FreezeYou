@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_autoDiagnosis_refresh"
+        android:contentDescription="@string/refresh"
+        android:icon="@drawable/ic_action_refresh"
+        android:title="@string/refresh"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_autoDiagnosis_help"
+        android:contentDescription="@string/help"
+        android:icon="@drawable/ic_action_help_outline"
+        android:title="@string/help"
+        app:showAsAction="ifRoom" />
+
+</menu>
