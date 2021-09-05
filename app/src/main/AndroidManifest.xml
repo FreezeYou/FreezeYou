@@ -179,6 +179,7 @@
             android:name=".ForceStop"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:label="@string/forceStop"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Translucent.NoTitleBar">
