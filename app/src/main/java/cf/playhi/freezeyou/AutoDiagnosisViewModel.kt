@@ -42,7 +42,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
 
     fun refreshDiagnosisData() {
         viewModelScope.launch(Dispatchers.IO) {
-            if(mutex.tryLock("AutoDiagnosisViewModelRefreshingDiagnosisData")) {
+            if (mutex.tryLock("AutoDiagnosisViewModelRefreshingDiagnosisData")) {
                 loadingProgress.postValue(-1)
 
                 problemsList.value!!.clear()
@@ -82,8 +82,8 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                 loadingProgress.postValue(98)
 
                 problemsList.value!!.sortWith { t0: Map<String, Any>, t1: Map<String, Any> ->
-                    val i = (t0["status"] as Int).compareTo(
-                        (t1["status"] as Int)
+                    val i = (t0["level"] as Int).compareTo(
+                        (t1["level"] as Int)
                     )
                     if (i == 0) (t0["id"] as String).compareTo((t1["id"] as String)) else i
                 }
@@ -106,6 +106,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
         hashMap["sTitle"] = sTitle
         hashMap["id"] = id
         hashMap["status"] = statusId
+        hashMap["level"] = if (statusId == R.drawable.ic_warning) 0 else 1
         return hashMap
     }
 
@@ -116,7 +117,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                     getApplication<Application>().getString(R.string.sysVerLow),
                     getApplication<Application>().getString(R.string.someFuncUn),
                     "-50",
-                    R.drawable.ic_attention
+                    R.drawable.ic_warning
                 )
             )
         } else {
@@ -153,7 +154,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                         R.string.scheduledTasks
                     ) + " " + getApplication<Application>().getString(R.string.etc),
                     "1",
-                    R.drawable.ic_attention
+                    R.drawable.ic_warning
                 )
             }
         )
@@ -175,7 +176,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                             R.string.avoidFreezeNotifyingApplications
                         ),
                         "2",
-                        R.drawable.ic_attention
+                        R.drawable.ic_warning
                     )
                 } else {
                     generateHashMap(
@@ -200,7 +201,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                     getApplication<Application>().getString(R.string.noNotifyPermission),
                     getApplication<Application>().getString(R.string.mayCannotNotify),
                     "6",
-                    R.drawable.ic_attention
+                    R.drawable.ic_warning
                 )
             )
         } else {
@@ -231,7 +232,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                     getApplication<Application>().getString(R.string.noMRootPermission),
                     getApplication<Application>().getString(R.string.someFuncMayRestrict),
                     "-3",
-                    R.drawable.ic_attention
+                    R.drawable.ic_warning
                 )
             )
         }
@@ -244,7 +245,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                     getApplication<Application>().getString(R.string.notUpdatedForALongTime),
                     getApplication<Application>().getString(R.string.someNewFuncMayPub),
                     "-30",
-                    R.drawable.ic_attention
+                    R.drawable.ic_warning
                 )
             )
         } else {
@@ -282,7 +283,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                     getApplication<Application>().getString(R.string.noRootPermission),
                     getApplication<Application>().getString(R.string.someFuncMayRestrict),
                     "-3",
-                    R.drawable.ic_attention
+                    R.drawable.ic_warning
                 )
             )
         } else {
@@ -307,7 +308,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                     getApplication<Application>().getString(R.string.noIgnoringBO),
                     getApplication<Application>().getString(R.string.someFuncMayBeAff),
                     "4",
-                    R.drawable.ic_attention
+                    R.drawable.ic_warning
                 )
             )
         } else {
@@ -331,7 +332,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                     getApplication<Application>().getString(R.string.inPowerSaveMode),
                     getApplication<Application>().getString(R.string.someFuncMayBeAff),
                     "5",
-                    R.drawable.ic_attention
+                    R.drawable.ic_warning
                 )
             )
         } else {
