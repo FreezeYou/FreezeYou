@@ -5,15 +5,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.preference.PreferenceManager;
 
 final class ThemeUtils {
 
     static int getThemeDot(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return R.drawable.shapedot_coloraccent;
+        }
         int resId;
         String string = getUiTheme(context);
         if (string != null) {
@@ -37,6 +40,7 @@ final class ThemeUtils {
                     resId = R.drawable.shapedotred;
                     break;
                 case "black":
+                case "deepBlack":
                     resId = R.drawable.shapedotwhite;
                     break;
                 case "white":
@@ -62,6 +66,7 @@ final class ThemeUtils {
         if (string != null) {
             switch (string) {
                 case "black":
+                case "deepBlack":
                     resId = R.drawable.shapedotblack;
                     break;
                 case "blue":
@@ -161,34 +166,32 @@ final class ThemeUtils {
             if (string != null) {
                 switch (string) {
                     case "blue":
-                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Blue : R.style.AppTheme_Default_Blue);
+                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_Blue : R.style.AppTheme_Light_Blue);
                         break;
                     case "orange":
-                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Orange : R.style.AppTheme_Default_Orange);
+                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_Orange : R.style.AppTheme_Light_Orange);
                         break;
                     case "green":
-                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Green : R.style.AppTheme_Default_Green);
+                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_Green : R.style.AppTheme_Light_Green);
                         break;
                     case "pink":
-                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Pink : R.style.AppTheme_Default_Pink);
+                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_Pink : R.style.AppTheme_Light_Pink);
                         break;
                     case "yellow":
-                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Yellow : R.style.AppTheme_Default_Yellow);
+                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_Yellow : R.style.AppTheme_Light_Yellow);
                         break;
                     case "black":
-                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog : R.style.AppTheme_Default);
+                        context.setTheme(isDialog ? R.style.AppTheme_Dark_Dialog_Default : R.style.AppTheme_Dark_Default);
                         break;
                     case "red":
-                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_Red : R.style.AppTheme_Default_Red);
+                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_Red : R.style.AppTheme_Light_Red);
+                        break;
+                    case "deepBlack":
+                        context.setTheme(isDialog ? R.style.AppTheme_Dark_Dialog_Black : R.style.AppTheme_Dark_Black);
                         break;
                     case "white":
                     default:
-                        context.setTheme(isDialog ? R.style.AppTheme_Default_Dialog_White : R.style.AppTheme_Default_White);
-//                        if (Build.VERSION.SDK_INT >= 21) {
-//                            context.setTheme(R.style.AppTheme_Default_Blue);
-//                        } else {
-//                            context.setTheme(R.style.AppTheme_Default);
-//                        }
+                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_White : R.style.AppTheme_Light_White);
                         break;
                 }
             }

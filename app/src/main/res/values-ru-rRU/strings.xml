@@ -423,6 +423,7 @@
     <string-array name="uiStyleSelection">
         <item>По умолчанию</item>
         <item>Темная</item>
+        <item>Black</item>
         <item>Синяя</item>
         <item>Розовая</item>
         <item>Зеленая</item>

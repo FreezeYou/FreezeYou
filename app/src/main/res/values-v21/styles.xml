@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.Translucent.NoTitleBar" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/translucentBackground</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
+    <style name="Base.AppTheme.Translucent.NoTitleBar" parent="Base.V21.AppTheme.Translucent.NoTitleBar" />
+
+    <style name="Base.V21.AppTheme.Translucent.NoTitleBar" parent="Base.V19.AppTheme.Translucent.NoTitleBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="AppTheme.Default" parent="Theme.AppCompat">
-        <item name="colorPrimaryDark">#000000</item>
-        <item name="colorPrimary">#212121</item>
-        <item name="colorAccent">#1976d2</item>
+    <style name="Base.AppTheme.Dark" parent="Base.V21.AppTheme.Dark" />
+
+    <style name="Base.V21.AppTheme.Dark" parent="Theme.AppCompat">
         <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
     </style>
 
-    <style name="AppTheme.Default.Light" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Base.AppTheme.Light.DarkActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
     </style>
 
-    <style name="AppTheme.Default.Light.White" parent="Theme.AppCompat.Light">
+    <style name="Base.AppTheme.Light" parent="Theme.AppCompat.Light">
         <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
     </style>
 

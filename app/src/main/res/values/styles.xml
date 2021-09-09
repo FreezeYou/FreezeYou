@@ -1,129 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.Translucent.NoTitleBar" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/realTranslucent</item>
+    <style name="Base.AppTheme.Translucent.NoTitleBar" parent="Theme.AppCompat.NoActionBar" />
+
+    <style name="AppTheme.Translucent.NoTitleBar" parent="Base.AppTheme.Translucent.NoTitleBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
-    <style name="AppTheme.Default" parent="Theme.AppCompat">
-        <item name="colorPrimaryDark">#000000</item>
-        <item name="colorPrimary">#212121</item>
-        <item name="colorAccent">#1976d2</item>
-<!--        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>-->
-    </style>
+    <style name="Base.AppTheme.Dark" parent="Theme.AppCompat" />
 
-    <style name="AppTheme.Default.Light" parent="Theme.AppCompat.Light.DarkActionBar">
-<!--        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle</item>-->
-    </style>
-
-    <style name="AppTheme.Default.Light.White" parent="Theme.AppCompat.Light">
-<!--        <item name="android:actionOverflowButtonStyle">@style/OverflowStyle.LightBackground</item>-->
-    </style>
-
-    <style name="AppTheme.Default.Blue" parent="AppTheme.Default.Light">
-        <item name="colorPrimaryDark">#026FDE</item>
-        <item name="colorPrimary">#0383E9</item>
-        <item name="colorAccent">#0300EF</item>
-    </style>
-
-    <style name="AppTheme.Default.Yellow" parent="AppTheme.Default.Light">
-        <item name="colorPrimaryDark">#f7a500</item>
-        <item name="colorPrimary">#ffbf00</item>
-        <item name="colorAccent">#ffbf00</item>
-    </style>
-
-    <style name="AppTheme.Default.Orange" parent="AppTheme.Default.Light">
-        <item name="colorPrimaryDark">#c43e00</item>
-        <item name="colorPrimary">#ff6f00</item>
-        <item name="colorAccent">#ff5500</item>
-    </style>
-
-    <style name="AppTheme.Default.Green" parent="AppTheme.Default.Light">
-        <item name="colorPrimaryDark">#009624</item>
-        <item name="colorPrimary">#00c853</item>
-        <item name="colorAccent">#00aa00</item>
-    </style>
-
-    <style name="AppTheme.Default.Pink" parent="AppTheme.Default.Light">
-        <item name="colorPrimaryDark">#ec407a</item>
-        <item name="colorPrimary">#FF4081</item>
-        <item name="colorAccent">#FF4081</item>
-    </style>
-
-    <style name="AppTheme.Default.Red" parent="AppTheme.Default.Light">
-        <item name="colorPrimaryDark">#9b0000</item>
-        <item name="colorPrimary">#d50000</item>
-        <item name="colorAccent">#d50000</item>
-    </style>
-
-    <style name="AppTheme.Default.White" parent="AppTheme.Default.Light.White">
-        <item name="colorPrimaryDark">#eeeeee</item>
-        <item name="colorPrimary">#fafafa</item>
-        <item name="colorAccent">#424242</item>
-    </style>
-
-    <style name="AppTheme.Default.Dialog" parent="Theme.AppCompat.Dialog">
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.Dark.Default" parent="Base.AppTheme.Dark">
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorPrimary">#212121</item>
         <item name="colorAccent">#1976d2</item>
     </style>
 
-    <style name="AppTheme.Default.Dialog.Blue" parent="Theme.AppCompat.Light.Dialog">
-        <item name="windowNoTitle">true</item>
+    <style name="Base.AppTheme.Dark.Black" parent="Base.AppTheme.Dark" />
+
+    <style name="AppTheme.Dark.Black" parent="Base.AppTheme.Dark.Black">
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorPrimary">#000000</item>
+        <item name="colorAccent">#1976d2</item>
+        <item name="colorBackgroundFloating">@android:color/black</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:colorBackground">@android:color/black</item>
+    </style>
+
+    <style name="Base.AppTheme.Light.DarkActionBar" parent="Theme.AppCompat.Light.DarkActionBar" />
+
+    <style name="Base.AppTheme.Light" parent="Theme.AppCompat.Light" />
+
+    <style name="AppTheme.Light.Blue" parent="Base.AppTheme.Light.DarkActionBar">
         <item name="colorPrimaryDark">#026FDE</item>
         <item name="colorPrimary">#0383E9</item>
         <item name="colorAccent">#0300EF</item>
     </style>
 
-    <style name="AppTheme.Default.Dialog.Yellow" parent="Theme.AppCompat.Light.Dialog">
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.Light.Yellow" parent="Base.AppTheme.Light.DarkActionBar">
         <item name="colorPrimaryDark">#f7a500</item>
         <item name="colorPrimary">#ffbf00</item>
         <item name="colorAccent">#ffbf00</item>
     </style>
 
-    <style name="AppTheme.Default.Dialog.Orange" parent="Theme.AppCompat.Light.Dialog">
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.Light.Orange" parent="Base.AppTheme.Light.DarkActionBar">
         <item name="colorPrimaryDark">#c43e00</item>
         <item name="colorPrimary">#ff6f00</item>
         <item name="colorAccent">#ff5500</item>
     </style>
 
-    <style name="AppTheme.Default.Dialog.Green" parent="Theme.AppCompat.Light.Dialog">
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.Light.Green" parent="Base.AppTheme.Light.DarkActionBar">
         <item name="colorPrimaryDark">#009624</item>
         <item name="colorPrimary">#00c853</item>
         <item name="colorAccent">#00aa00</item>
     </style>
 
-    <style name="AppTheme.Default.Dialog.Pink" parent="Theme.AppCompat.Light.Dialog">
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.Light.Pink" parent="Base.AppTheme.Light.DarkActionBar">
         <item name="colorPrimaryDark">#ec407a</item>
         <item name="colorPrimary">#FF4081</item>
         <item name="colorAccent">#FF4081</item>
     </style>
 
-    <style name="AppTheme.Default.Dialog.Red" parent="Theme.AppCompat.Light.Dialog">
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.Light.Red" parent="Base.AppTheme.Light.DarkActionBar">
         <item name="colorPrimaryDark">#9b0000</item>
         <item name="colorPrimary">#d50000</item>
         <item name="colorAccent">#d50000</item>
     </style>
 
-    <style name="AppTheme.Default.Dialog.White" parent="Theme.AppCompat.Light.Dialog">
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.Light.White" parent="Base.AppTheme.Light">
         <item name="colorPrimaryDark">#eeeeee</item>
         <item name="colorPrimary">#fafafa</item>
         <item name="colorAccent">#424242</item>
     </style>
 
-    <style name="OverflowStyle" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_action_more</item>
+    <style name="Base.AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="OverflowStyle.LightBackground" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_action_more_light</item>
+    <style name="AppTheme.Dark.Dialog.Default" parent="Base.AppTheme.Dark.Dialog">
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorPrimary">#212121</item>
+        <item name="colorAccent">#1976d2</item>
     </style>
+
+    <style name="Base.V14.AppTheme.Dark.Dialog" parent="Base.AppTheme.Dark.Dialog">
+        <item name="colorBackgroundFloating">@android:color/black</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:colorBackground">@android:color/black</item>
+    </style>
+
+    <style name="Base.AppTheme.Dark.Dialog.Black" parent="Base.V14.AppTheme.Dark.Dialog" />
+
+    <style name="AppTheme.Dark.Dialog.Black" parent="Base.AppTheme.Dark.Dialog.Black">
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorPrimary">#000000</item>
+        <item name="colorAccent">#1976d2</item>
+    </style>
+
+    <style name="Base.AppTheme.Light.Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.Light.Dialog.Blue" parent="Base.AppTheme.Light.Dialog">
+        <item name="colorPrimaryDark">#026FDE</item>
+        <item name="colorPrimary">#0383E9</item>
+        <item name="colorAccent">#0300EF</item>
+    </style>
+
+    <style name="AppTheme.Light.Dialog.Yellow" parent="Base.AppTheme.Light.Dialog">
+        <item name="colorPrimaryDark">#f7a500</item>
+        <item name="colorPrimary">#ffbf00</item>
+        <item name="colorAccent">#ffbf00</item>
+    </style>
+
+    <style name="AppTheme.Light.Dialog.Orange" parent="Base.AppTheme.Light.Dialog">
+        <item name="colorPrimaryDark">#c43e00</item>
+        <item name="colorPrimary">#ff6f00</item>
+        <item name="colorAccent">#ff5500</item>
+    </style>
+
+    <style name="AppTheme.Light.Dialog.Green" parent="Base.AppTheme.Light.Dialog">
+        <item name="colorPrimaryDark">#009624</item>
+        <item name="colorPrimary">#00c853</item>
+        <item name="colorAccent">#00aa00</item>
+    </style>
+
+    <style name="AppTheme.Light.Dialog.Pink" parent="Base.AppTheme.Light.Dialog">
+        <item name="colorPrimaryDark">#ec407a</item>
+        <item name="colorPrimary">#FF4081</item>
+        <item name="colorAccent">#FF4081</item>
+    </style>
+
+    <style name="AppTheme.Light.Dialog.Red" parent="Base.AppTheme.Light.Dialog">
+        <item name="colorPrimaryDark">#9b0000</item>
+        <item name="colorPrimary">#d50000</item>
+        <item name="colorAccent">#d50000</item>
+    </style>
+
+    <style name="AppTheme.Light.Dialog.White" parent="Base.AppTheme.Light.Dialog">
+        <item name="colorPrimaryDark">#eeeeee</item>
+        <item name="colorPrimary">#fafafa</item>
+        <item name="colorAccent">#424242</item>
+    </style>
+
 </resources>

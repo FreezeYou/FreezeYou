@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.Translucent.NoTitleBar" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/translucentBackground</item>
-        <item name="android:windowIsTranslucent">true</item>
+    <style name="Base.AppTheme.Translucent.NoTitleBar" parent="Base.V19.AppTheme.Translucent.NoTitleBar" />
+
+    <style name="Base.V19.AppTheme.Translucent.NoTitleBar" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>

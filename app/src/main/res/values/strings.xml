@@ -422,6 +422,7 @@
     <string-array name="uiStyleSelection">
         <item>Default</item>
         <item>Dark</item>
+        <item>Black</item>
         <item>Blue</item>
         <item>Pink</item>
         <item>Green</item>
@@ -433,6 +434,7 @@
     <string-array name="uiStyleSelectionValues" translatable="false">
         <item>default</item>
         <item>black</item>
+        <item>deepBlack</item>
         <item>blue</item>
         <item>pink</item>
         <item>green</item>

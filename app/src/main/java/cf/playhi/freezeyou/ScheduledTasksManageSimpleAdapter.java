@@ -4,15 +4,17 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.SimpleAdapter;
-import android.widget.Switch;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.SwitchCompat;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 import cf.playhi.freezeyou.utils.TasksUtils;
+
+import static cf.playhi.freezeyou.ThemeUtils.getThemeSecondDot;
 
 class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
 
@@ -31,7 +33,7 @@ class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
         mIdIndexArrayList = idIndexArrayList;
 
         mLabelTextColor =
-                ThemeUtils.getThemeSecondDot(mContext) == R.drawable.shapedotblack ?
+                getThemeSecondDot(mContext) == R.drawable.shapedotblack ?
                         mContext.getResources().getColor(android.R.color.white) :
                         mContext.getResources().getColor(android.R.color.black);
 
@@ -55,30 +57,27 @@ class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
         TextView label = view.findViewById(R.id.stma_label);
         label.setTextColor(mLabelTextColor);
 
-        Switch sc = view.findViewById(R.id.stma_switch);
-        sc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                final String timeS = (String) mTasksList.get(position).get("time");
-                mTasksList.get(position).put("enabled", isChecked);
-                SQLiteDatabase db =
-                        mContext.openOrCreateDatabase(
-                                (timeS != null && timeS.contains(":")) ?
-                                        "scheduledTasks" : "scheduledTriggerTasks",
-                                Context.MODE_PRIVATE, null);
-                db.execSQL(
-                        "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
-                );
-                db.execSQL(
-                        "UPDATE tasks SET enabled = " + (isChecked ? 1 : 0) +
-                                " WHERE _id = " + mIdIndexArrayList.get(position) + ";"
-                );
-                db.close();
-                if (timeS != null && timeS.contains(":")) {
-                    TasksUtils.checkTimeTasks(mContext);
-                }
-                notifyDataSetChanged();
+        SwitchCompat sc = view.findViewById(R.id.stma_switch);
+        sc.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            final String timeS = (String) mTasksList.get(position).get("time");
+            mTasksList.get(position).put("enabled", isChecked);
+            SQLiteDatabase db =
+                    mContext.openOrCreateDatabase(
+                            (timeS != null && timeS.contains(":")) ?
+                                    "scheduledTasks" : "scheduledTriggerTasks",
+                            Context.MODE_PRIVATE, null);
+            db.execSQL(
+                    "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+            );
+            db.execSQL(
+                    "UPDATE tasks SET enabled = " + (isChecked ? 1 : 0) +
+                            " WHERE _id = " + mIdIndexArrayList.get(position) + ";"
+            );
+            db.close();
+            if (timeS != null && timeS.contains(":")) {
+                TasksUtils.checkTimeTasks(mContext);
             }
+            notifyDataSetChanged();
         });
 
         return view;

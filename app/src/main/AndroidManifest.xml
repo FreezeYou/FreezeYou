@@ -63,7 +63,7 @@
             android:icon="@mipmap/ic_launcher_new_round"
             android:launchMode="singleTask"
             android:roundIcon="@mipmap/ic_launcher_new_round"
-            android:theme="@style/AppTheme.Default"
+            android:theme="@style/AppTheme.Dark.Default"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -100,7 +100,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:targetActivity=".Main"
-            android:theme="@style/AppTheme.Default">
+            android:theme="@style/AppTheme.Dark.Default">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -122,7 +122,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:targetActivity=".Main"
-            android:theme="@style/AppTheme.Default">
+            android:theme="@style/AppTheme.Dark.Default">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -145,7 +145,7 @@
             android:launchMode="singleTask"
             android:roundIcon="@mipmap/ic_launcher_new_round"
             android:targetActivity=".Main"
-            android:theme="@style/AppTheme.Default">
+            android:theme="@style/AppTheme.Dark.Default">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -167,7 +167,7 @@
             android:label="@string/disableAEnable"
             android:launchMode="singleInstance"
             android:maxRecents="6"
-            android:theme="@style/AppTheme.Default.Dialog"
+            android:theme="@style/AppTheme.Dark.Dialog.Default"
             tools:ignore="UnusedAttribute">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -231,7 +231,7 @@
             android:name=".ManualMode"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/manualMode"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".UriFreezeActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
@@ -239,7 +239,7 @@
             android:exported="true"
             android:label="@string/disableAEnable"
             android:launchMode="singleInstance"
-            android:theme="@style/AppTheme.Default.Dialog">
+            android:theme="@style/AppTheme.Dark.Dialog.Default">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -257,7 +257,7 @@
             android:exported="true"
             android:icon="@drawable/ic_shortcut_access_alarm"
             android:label="@string/scheduledTasks"
-            android:theme="@style/AppTheme.Default">
+            android:theme="@style/AppTheme.Dark.Default">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -278,7 +278,7 @@
             android:label="@string/installAndUninstall"
             android:launchMode="singleInstance"
             android:process=":installAndUninstall"
-            android:theme="@style/AppTheme.Default.Dialog">
+            android:theme="@style/AppTheme.Dark.Dialog.Default">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.INSTALL_PACKAGE" />
@@ -301,13 +301,13 @@
         <activity
             android:name=".ScheduledTasksAddActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".SettingsActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:exported="true"
             android:label="@string/moreSettings"
-            android:theme="@style/AppTheme.Default">
+            android:theme="@style/AppTheme.Dark.Default">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
 
@@ -322,67 +322,67 @@
             android:name=".AboutActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/about"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".FirstTimeSetupActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".AutoDiagnosisActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/autoDiagnosis"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".ShowLogcatActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/showLogcat"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".FUFNotificationsManageActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/manageQuickFUFNoti"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".UserDefinedListsManageActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/manageMyCustomization"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".UriAutoAllowManageActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/manageUriAutoAllow"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".SelectShortcutIconActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/createLauncherShortcut"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".BackupMainActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/backupAndRestore"
-            android:theme="@style/AppTheme.Default"
+            android:theme="@style/AppTheme.Dark.Default"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".FullScreenImageViewerActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".SelectTargetActivityActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/plsSelect"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".BackupImportChooserActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/impt"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".LauncherShortcutConfirmAndGenerateActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:exported="true"
             android:label="@string/createLauncherShortcut"
-            android:theme="@style/AppTheme.Default">
+            android:theme="@style/AppTheme.Dark.Default">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
 
@@ -395,19 +395,19 @@
             android:excludeFromRecents="true"
             android:label="@string/askIfLockScreen"
             android:launchMode="singleInstance"
-            android:theme="@style/AppTheme.Default.Dialog" />
+            android:theme="@style/AppTheme.Dark.Dialog.Default" />
         <activity
             android:name=".AskRunActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
-            android:theme="@style/AppTheme.Default.Dialog" />
+            android:theme="@style/AppTheme.Dark.Dialog.Default" />
         <activity
             android:name=".ShowSimpleDialogActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
-            android:theme="@style/AppTheme.Default.Dialog" />
+            android:theme="@style/AppTheme.Dark.Dialog.Default" />
         <activity
             android:name=".GetDisabledApplications"
             android:excludeFromRecents="true"
@@ -454,7 +454,7 @@
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:label="@string/disableAEnable"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".ShortcutLauncherFolderActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
@@ -462,7 +462,7 @@
             android:exported="true"
             android:label="@string/folder"
             android:launchMode="singleInstance"
-            android:theme="@style/AppTheme.Default.Dialog">
+            android:theme="@style/AppTheme.Dark.Dialog.Default">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
 
@@ -473,13 +473,13 @@
             android:name=".CommandExecutorActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/commandExecutionTool"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".AppLockActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
-            android:theme="@style/AppTheme.Default" />
+            android:theme="@style/AppTheme.Dark.Default" />
 
         <receiver
             android:name=".DeviceAdminReceiver"

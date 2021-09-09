@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--    <style name="AppTheme.Default.White" parent="AppTheme.Default.Light.LightActionBar">-->
-    <!--        <item name="android:colorPrimary">#fafafa</item>-->
-    <!--        <item name="android:colorPrimaryDark">#eeeeee</item>-->
-    <!--        <item name="android:colorAccent">#424242</item>-->
-    <!--        <item name="android:navigationBarColor">#eeeeee</item>-->
-    <!--        <item name="android:windowLightStatusBar">true</item>-->
-    <!--    </style>-->
-
-    <style name="AppTheme.Default.Light.White" parent="Theme.AppCompat.Light">
+    <style name="Base.AppTheme.Light" parent="Theme.AppCompat.Light">
         <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
         <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Base.AppTheme.Dark.Black" parent="Base.V23.AppTheme.Dark.Black" />
+
+    <style name="Base.V23.AppTheme.Dark.Black" parent="Base.V21.AppTheme.Dark">
+        <item name="android:colorBackgroundFloating">@android:color/black</item>
+    </style>
+
+    <style name="Base.AppTheme.Dark.Dialog.Black" parent="Base.V23.AppTheme.Dark.Dialog" />
+
+    <style name="Base.V23.AppTheme.Dark.Dialog" parent="Base.V14.AppTheme.Dark.Dialog">
+        <item name="android:colorBackgroundFloating">@android:color/black</item>
     </style>
 
 </resources>
