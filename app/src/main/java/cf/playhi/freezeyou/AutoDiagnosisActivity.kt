@@ -13,7 +13,9 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.SimpleAdapter
 import androidx.activity.viewModels
-import cf.playhi.freezeyou.ThemeUtils.*
+import cf.playhi.freezeyou.ThemeUtils.getUiTheme
+import cf.playhi.freezeyou.ThemeUtils.processActionBar
+import cf.playhi.freezeyou.ThemeUtils.processSetTheme
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.databinding.AutodiagnosisBinding
 import cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings

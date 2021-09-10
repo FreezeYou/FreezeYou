@@ -3,13 +3,13 @@ apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.3'
+    buildToolsVersion '31.0.0'
     defaultConfig {
         applicationId "cf.playhi.freezeyou"
         minSdkVersion 14
         targetSdkVersion 30
         versionCode 141
-        versionName '10.15.141.20210202-t142-h-20210909-1'
+        versionName '10.15.141.20210202-t142-h-20210910-1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

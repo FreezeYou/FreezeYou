@@ -1,57 +1,38 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.Build;
-import android.view.Window;
-import android.view.WindowManager;
+import android.app.Activity
+import android.content.Context
+import android.content.res.Configuration
+import android.os.Build
+import android.view.Window
+import android.view.WindowManager
+import androidx.appcompat.app.ActionBar
+import androidx.preference.PreferenceManager
 
-import androidx.appcompat.app.ActionBar;
-import androidx.preference.PreferenceManager;
+internal object ThemeUtils {
 
-final class ThemeUtils {
-
-    static int getThemeDot(Context context) {
+    @JvmStatic
+    fun getThemeDot(context: Context): Int {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return R.drawable.shapedot_coloraccent;
+            return R.drawable.shapedot_coloraccent
         }
-        int resId;
-        String string = getUiTheme(context);
-        if (string != null) {
-            switch (string) {
-                case "blue":
-                    resId = R.drawable.shapedotblue;
-                    break;
-                case "orange":
-                    resId = R.drawable.shapedotorange;
-                    break;
-                case "green":
-                    resId = R.drawable.shapedotgreen;
-                    break;
-                case "pink":
-                    resId = R.drawable.shapedotpink;
-                    break;
-                case "yellow":
-                    resId = R.drawable.shapedotyellow;
-                    break;
-                case "red":
-                    resId = R.drawable.shapedotred;
-                    break;
-                case "black":
-                case "deepBlack":
-                    resId = R.drawable.shapedotwhite;
-                    break;
-                case "white":
-                default:
-                    resId = R.drawable.shapedotblack;//resId = R.drawable.shapedotblue;
-                    break;
+
+        val string = getUiTheme(context)
+        return if (string != null) {
+            when (string) {
+                "blue" -> R.drawable.shapedotblue
+                "orange" -> R.drawable.shapedotorange
+                "green" -> R.drawable.shapedotgreen
+                "pink" -> R.drawable.shapedotpink
+                "yellow" -> R.drawable.shapedotyellow
+                "red" -> R.drawable.shapedotred
+                "black", "deepBlack" -> R.drawable.shapedotwhite
+                "white" -> R.drawable.shapedotblack
+                else -> R.drawable.shapedotblack
             }
         } else {
-            resId = R.drawable.shapedotblack;//resId = R.drawable.shapedotblue;
+            R.drawable.shapedotblack
         }
-        return resId;
     }
 
     /**
@@ -60,146 +41,102 @@ final class ThemeUtils {
      * @param context Context
      * @return 资源 Id
      */
-    static int getThemeSecondDot(Context context) {
-        int resId;
-        String string = getUiTheme(context);
-        if (string != null) {
-            switch (string) {
-                case "black":
-                case "deepBlack":
-                    resId = R.drawable.shapedotblack;
-                    break;
-                case "blue":
-                case "orange":
-                case "green":
-                case "pink":
-                case "yellow":
-                case "white":
-                case "red":
-                default:
-                    resId = R.drawable.shapedotwhite;
-                    break;
+    @JvmStatic
+    fun getThemeSecondDot(context: Context): Int {
+        val string = getUiTheme(context)
+        return if (string != null) {
+            when (string) {
+                "black", "deepBlack" -> R.drawable.shapedotblack
+                "blue", "orange", "green", "pink", "yellow", "white", "red" -> R.drawable.shapedotwhite
+                else -> R.drawable.shapedotwhite
             }
         } else {
-            resId = R.drawable.shapedotwhite;
+            R.drawable.shapedotwhite
         }
-        return resId;
     }
 
-    static int getThemeFabDotBackground(Context context) {
-        int resId;
-        String string = getUiTheme(context);
-        if (string != null) {
-            switch (string) {
-                case "pink":
-                    resId = R.drawable.shapedotpink;
-                    break;
-                case "blue":
-                    resId = R.drawable.shapedotblue;
-                    break;
-                case "orange":
-                    resId = R.drawable.shapedotorange;
-                    break;
-                case "green":
-                    resId = R.drawable.shapedotgreen;
-                    break;
-                case "yellow":
-                    resId = R.drawable.shapedotyellow;
-                    break;
-                case "red":
-                    resId = R.drawable.shapedotred;
-                    break;
-                case "black":
-                case "white":
-                default:
-                    resId = R.drawable.shapedotblack;
-                    break;
+    @JvmStatic
+    fun getThemeFabDotBackground(context: Context): Int {
+        val string = getUiTheme(context)
+        return if (string != null) {
+            when (string) {
+                "pink" -> R.drawable.shapedotpink
+                "blue" -> R.drawable.shapedotblue
+                "orange" -> R.drawable.shapedotorange
+                "green" -> R.drawable.shapedotgreen
+                "yellow" -> R.drawable.shapedotyellow
+                "red" -> R.drawable.shapedotred
+                "black", "white" -> R.drawable.shapedotblack
+                else -> R.drawable.shapedotblack
             }
         } else {
-            resId = R.drawable.shapedotblack;
+            R.drawable.shapedotblack
         }
-        return resId;
     }
 
-    static String getUiTheme(Context context) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        if (sp.getBoolean("allowFollowSystemAutoSwitchDarkMode", true)) {
-            return isSystemDarkModeEnabled(context)
-                    ? "dark".equals(sp.getString("themeOfAutoSwitchDarkMode", "dark"))
-                    ? "black" : "deepBlack"
-                    : sp.getString("uiStyleSelection", "default");
+    @JvmStatic
+    fun getUiTheme(context: Context): String? {
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+        return if (sp.getBoolean("allowFollowSystemAutoSwitchDarkMode", true)) {
+            if (isSystemDarkModeEnabled(context))
+                if ("dark" == sp.getString("themeOfAutoSwitchDarkMode", "dark"))
+                    "black"
+                else
+                    "deepBlack"
+            else sp.getString("uiStyleSelection", "default")
         } else {
-            return sp.getString("uiStyleSelection", "default");
+            sp.getString("uiStyleSelection", "default")
         }
     }
 
-    private static boolean isSystemDarkModeEnabled(Context context) {
-        return (context.getResources().getConfiguration().uiMode &
-                Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+    private fun isSystemDarkModeEnabled(context: Context): Boolean {
+        return context.resources.configuration.uiMode and
+                Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
     }
 
-    static void processAddTranslucent(Activity activity) {
-        Window window = activity.getWindow();
+    @JvmStatic
+    fun processAddTranslucent(activity: Activity) {
+        val window = activity.window
         if (window != null) {
-            window.requestFeature(Window.FEATURE_NO_TITLE);
-            window.setBackgroundDrawableResource(R.color.realTranslucent);
+            window.requestFeature(Window.FEATURE_NO_TITLE)
+            window.setBackgroundDrawableResource(R.color.realTranslucent)
             if (Build.VERSION.SDK_INT >= 19) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             }
         }
     }
 
-    static void processActionBar(ActionBar actionBar) {
+    @JvmStatic
+    fun processActionBar(actionBar: ActionBar?) {
         if (actionBar != null) {
-            actionBar.setDisplayShowHomeEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(false)
+            actionBar.setDisplayShowTitleEnabled(true)
+            actionBar.setDisplayHomeAsUpEnabled(true)
         }
     }
 
-    static void processSetTheme(Context context) {
-        processSetTheme(context, false);
-    }
-
-    static void processSetTheme(Context context, boolean isDialog) {
+    @JvmStatic
+    @JvmOverloads
+    fun processSetTheme(context: Context, isDialog: Boolean = false) {
         try {
-            String string = getUiTheme(context);
+            val string = getUiTheme(context)
             if (string != null) {
-                switch (string) {
-                    case "blue":
-                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_Blue : R.style.AppTheme_Light_Blue);
-                        break;
-                    case "orange":
-                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_Orange : R.style.AppTheme_Light_Orange);
-                        break;
-                    case "green":
-                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_Green : R.style.AppTheme_Light_Green);
-                        break;
-                    case "pink":
-                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_Pink : R.style.AppTheme_Light_Pink);
-                        break;
-                    case "yellow":
-                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_Yellow : R.style.AppTheme_Light_Yellow);
-                        break;
-                    case "black":
-                        context.setTheme(isDialog ? R.style.AppTheme_Dark_Dialog_Default : R.style.AppTheme_Dark_Default);
-                        break;
-                    case "red":
-                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_Red : R.style.AppTheme_Light_Red);
-                        break;
-                    case "deepBlack":
-                        context.setTheme(isDialog ? R.style.AppTheme_Dark_Dialog_Black : R.style.AppTheme_Dark_Black);
-                        break;
-                    case "white":
-                    default:
-                        context.setTheme(isDialog ? R.style.AppTheme_Light_Dialog_White : R.style.AppTheme_Light_White);
-                        break;
+                when (string) {
+                    "blue" -> context.setTheme(if (isDialog) R.style.AppTheme_Light_Dialog_Blue else R.style.AppTheme_Light_Blue)
+                    "orange" -> context.setTheme(if (isDialog) R.style.AppTheme_Light_Dialog_Orange else R.style.AppTheme_Light_Orange)
+                    "green" -> context.setTheme(if (isDialog) R.style.AppTheme_Light_Dialog_Green else R.style.AppTheme_Light_Green)
+                    "pink" -> context.setTheme(if (isDialog) R.style.AppTheme_Light_Dialog_Pink else R.style.AppTheme_Light_Pink)
+                    "yellow" -> context.setTheme(if (isDialog) R.style.AppTheme_Light_Dialog_Yellow else R.style.AppTheme_Light_Yellow)
+                    "black" -> context.setTheme(if (isDialog) R.style.AppTheme_Dark_Dialog_Default else R.style.AppTheme_Dark_Default)
+                    "red" -> context.setTheme(if (isDialog) R.style.AppTheme_Light_Dialog_Red else R.style.AppTheme_Light_Red)
+                    "deepBlack" -> context.setTheme(if (isDialog) R.style.AppTheme_Dark_Dialog_Black else R.style.AppTheme_Dark_Black)
+                    "white" -> context.setTheme(if (isDialog) R.style.AppTheme_Light_Dialog_White else R.style.AppTheme_Light_White)
+                    else -> context.setTheme(if (isDialog) R.style.AppTheme_Light_Dialog_White else R.style.AppTheme_Light_White)
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
-
 }
