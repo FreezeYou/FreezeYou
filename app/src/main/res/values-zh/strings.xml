@@ -376,6 +376,7 @@
     <string name="lastUpdate">最近更新</string>
     <string name="alphabetical">字母顺序</string>
     <string name="refresh">刷新</string>
+    <string name="themeOfAutoSwitchDarkMode">自动切换暗色模式时的界面风格</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
@@ -443,5 +444,9 @@
         <item>系统应用（DISABLE模式）</item>
         <item>系统应用（DISABLE_USER模式）</item>
         <item>系统应用（DISABLE_UNTIL_USED模式）</item>
+    </string-array>
+    <string-array name="themeOfAutoSwitchDarkModeEntries">
+        <item>暗色</item>
+        <item>黑色</item>
     </string-array>
 </resources>

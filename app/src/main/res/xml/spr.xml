@@ -108,6 +108,14 @@
             app:singleLineTitle="false"
             app:summary="@string/willOverrideInterfaceStyle"
             app:title="@string/allowFollowSystemAutoSwitchDarkMode" />
+        <ListPreference
+            app:defaultValue="dark"
+            app:entries="@array/themeOfAutoSwitchDarkModeEntries"
+            app:entryValues="@array/themeOfAutoSwitchDarkModeEntryValues"
+            app:iconSpaceReserved="false"
+            app:key="themeOfAutoSwitchDarkMode"
+            app:singleLineTitle="false"
+            app:title="@string/themeOfAutoSwitchDarkMode" />
     </PreferenceScreen>
 
     <PreferenceScreen

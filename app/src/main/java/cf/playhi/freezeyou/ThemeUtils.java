@@ -124,8 +124,10 @@ final class ThemeUtils {
     static String getUiTheme(Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         if (sp.getBoolean("allowFollowSystemAutoSwitchDarkMode", true)) {
-            return isSystemDarkModeEnabled(context) ? "black" :
-                    sp.getString("uiStyleSelection", "default");
+            return isSystemDarkModeEnabled(context)
+                    ? "dark".equals(sp.getString("themeOfAutoSwitchDarkMode", "dark"))
+                    ? "black" : "deepBlack"
+                    : sp.getString("uiStyleSelection", "default");
         } else {
             return sp.getString("uiStyleSelection", "default");
         }
