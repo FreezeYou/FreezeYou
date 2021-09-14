@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceScreen
+        app:fragment="cf.playhi.freezeyou.SettingsNotificationFufFragment"
+        app:iconSpaceReserved="false"
+        app:key="spr_notification_fuf"
+        app:singleLineTitle="false"
+        app:title="@string/freezeAUF" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="notificationBar_more"
+        app:singleLineTitle="false"
+        app:title="@string/more" />
+
+</PreferenceScreen>

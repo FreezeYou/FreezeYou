@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="useForegroundService"
+        app:singleLineTitle="false"
+        app:summary="@string/serviceLongerEx"
+        app:title="@string/useForegroundService" />
+
+</PreferenceScreen>

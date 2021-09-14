@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:defaultValue="0"
+        app:entries="@array/selectFUFModeSelection"
+        app:entryValues="@array/selectFUFModeSelectionValues"
+        app:iconSpaceReserved="false"
+        app:key="selectFUFMode"
+        app:singleLineTitle="false"
+        app:title="@string/selectFUFMode"
+        app:useSimpleSummaryProvider="true" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="avoidFreezeForegroundApplications"
+        app:singleLineTitle="false"
+        app:summary="@string/needActiveAccessibilityService"
+        app:title="@string/avoidFreezeForegroundApplications" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="avoidFreezeNotifyingApplications"
+        app:singleLineTitle="false"
+        app:summary="@string/needL"
+        app:title="@string/avoidFreezeNotifyingApplications" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="openImmediately"
+        app:singleLineTitle="false"
+        app:summary="@string/openImmediatelyEx"
+        app:title="@string/openImmediately" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="openAndUFImmediately"
+        app:singleLineTitle="false"
+        app:summary="@string/openAndUFImmediatelyEx"
+        app:title="@string/openAndUFImmediately" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:disableDependentsState="false"
+        app:iconSpaceReserved="false"
+        app:key="shortcutAutoFUF"
+        app:singleLineTitle="false"
+        app:summary="@string/shortcutAutoFUFEx"
+        app:title="@string/shortcutAutoFUF" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:dependency="shortcutAutoFUF"
+        app:iconSpaceReserved="false"
+        app:key="needConfirmWhenFreezeUseShortcutAutoFUF"
+        app:singleLineTitle="false"
+        app:summary="@string/workWithShortcutAutoFUF"
+        app:title="@string/needCfmWhenFreeze" />
+    <CheckBoxPreference
+        app:defaultValue="true"
+        app:dependency="shortcutAutoFUF"
+        app:iconSpaceReserved="false"
+        app:key="openImmediatelyAfterUnfreezeUseShortcutAutoFUF"
+        app:singleLineTitle="false"
+        app:summary="@string/workWithShortcutAutoFUF"
+        app:title="@string/openImmediatelyAfterUF" />
+    <ListPreference
+        app:defaultValue="nothing"
+        app:entries="@array/shortCutOneKeyFreezeAdditionalOptionsSelection"
+        app:entryValues="@array/shortCutOneKeyFreezeAdditionalOptionsSelectionValues"
+        app:iconSpaceReserved="false"
+        app:key="shortCutOneKeyFreezeAdditionalOptions"
+        app:singleLineTitle="false"
+        app:title="@string/shortCutOneKeyFreezeAdditionalOptions"
+        app:useSimpleSummaryProvider="true" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/manageUriAutoAllow">
+        <intent
+            android:targetClass="cf.playhi.freezeyou.UriAutoAllowManageActivity"
+            android:targetPackage="cf.playhi.freezeyou" />
+    </Preference>
+
+</PreferenceScreen>

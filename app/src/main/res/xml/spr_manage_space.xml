@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/manageMyCustomization">
+        <intent
+            android:targetClass="cf.playhi.freezeyou.UserDefinedListsManageActivity"
+            android:targetPackage="cf.playhi.freezeyou" />
+    </Preference>
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="clearUninstalledPkgsInOKFFList"
+        app:singleLineTitle="false"
+        app:summary="@string/clearUninstalledPkgsInOKFFList"
+        app:title="@string/clearUninstalledPkgsInOKFFList" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="clearUninstalledPkgsInOKUFList"
+        app:singleLineTitle="false"
+        app:summary="@string/clearUninstalledPkgsInOKUFList"
+        app:title="@string/clearUninstalledPkgsInOKUFList" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="clearUninstalledPkgsInFOQList"
+        app:singleLineTitle="false"
+        app:summary="@string/clearUninstalledPkgsInFOQList"
+        app:title="@string/clearUninstalledPkgsInFOQList" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="clearIconCache"
+        app:singleLineTitle="false"
+        app:summary="@string/refreshCache"
+        app:title="@string/clearIconCache" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="clearNameCache"
+        app:singleLineTitle="false"
+        app:summary="@string/refreshCache"
+        app:title="@string/clearNameCache" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="clearAllCache"
+        app:singleLineTitle="false"
+        app:summary="@string/delAllCache"
+        app:title="@string/delAllCache" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="resetFreezeTimes"
+        app:singleLineTitle="false"
+        app:summary="@string/resetFreezeTimes"
+        app:title="@string/resetFreezeTimes" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="resetUFTimes"
+        app:singleLineTitle="false"
+        app:summary="@string/resetUFTimes"
+        app:title="@string/resetUFTimes" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="resetUseTimes"
+        app:singleLineTitle="false"
+        app:summary="@string/resetUseTimes"
+        app:title="@string/resetUseTimes" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="deleteAllScheduledTasks"
+        app:singleLineTitle="false"
+        app:summary="@string/delAllScheduledTasks"
+        app:title="@string/delAllScheduledTasks" />
+
+</PreferenceScreen>

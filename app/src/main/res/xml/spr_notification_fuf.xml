@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <CheckBoxPreference
+        app:defaultValue="true"
+        app:iconSpaceReserved="false"
+        app:key="createQuickFUFNotiAfterUnfrozen"
+        app:singleLineTitle="false"
+        app:summary="@string/effectNextCreate"
+        app:title="@string/createQuickFUFNotiAfterUnfrozen" />
+    <CheckBoxPreference
+        app:defaultValue="true"
+        app:iconSpaceReserved="false"
+        app:key="notificationBarFreezeImmediately"
+        app:singleLineTitle="false"
+        app:summary="@string/effectNextCreate"
+        app:title="@string/notificationBarFreezeImmediately" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="notificationBarDisableSlideOut"
+        app:singleLineTitle="false"
+        app:summary="@string/effectNextCreate"
+        app:title="@string/disableSlideOut" />
+    <CheckBoxPreference
+        app:defaultValue="true"
+        app:iconSpaceReserved="false"
+        app:key="notificationBarDisableClickDisappear"
+        app:singleLineTitle="false"
+        app:summary="@string/effectNextCreate"
+        app:title="@string/disableClickDisappear" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/manageQuickFUFNoti">
+        <intent
+            android:targetClass="cf.playhi.freezeyou.FUFNotificationsManageActivity"
+            android:targetPackage="cf.playhi.freezeyou" />
+    </Preference>
+
+</PreferenceScreen>

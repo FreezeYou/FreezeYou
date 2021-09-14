@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:icon="@mipmap/ic_launcher"
+        app:iconSpaceReserved="false"
+        app:key="firstIconEnabled"
+        app:singleLineTitle="false" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:icon="@mipmap/ic_launcher_round"
+        app:iconSpaceReserved="false"
+        app:key="secondIconEnabled"
+        app:singleLineTitle="false" />
+    <CheckBoxPreference
+        app:defaultValue="true"
+        app:icon="@mipmap/ic_launcher_new_round"
+        app:iconSpaceReserved="false"
+        app:key="thirdIconEnabled"
+        app:singleLineTitle="false" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:summary="@string/dialEntry_Ex"
+        app:title="@string/dialEntry" />
+
+</PreferenceScreen>

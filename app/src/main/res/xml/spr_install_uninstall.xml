@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="enableInstallPkgFunc"
+        app:singleLineTitle="false"
+        app:title="@string/enableInstallPkgFunc" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="tryDelApkAfterInstalled"
+        app:singleLineTitle="false"
+        app:title="@string/tryDelApkAfterInstalled" />
+    <CheckBoxPreference
+        app:defaultValue="true"
+        app:iconSpaceReserved="false"
+        app:key="notAllowInstallWhenIsObsd"
+        app:singleLineTitle="false"
+        app:title="@string/notAllowWhenIsObsd" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="tryToAvoidUpdateWhenUsing"
+        app:singleLineTitle="false"
+        app:title="@string/tryToAvoidUpdateWhenUsing" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="manageIpaAutoAllow"
+        app:singleLineTitle="false"
+        app:title="@string/manageIpaAutoAllow" />
+
+</PreferenceScreen>

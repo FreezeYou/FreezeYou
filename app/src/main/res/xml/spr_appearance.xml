@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:useSimpleSummaryProvider="true"
+        app:defaultValue="default"
+        app:entries="@array/uiStyleSelection"
+        app:entryValues="@array/uiStyleSelectionValues"
+        app:iconSpaceReserved="false"
+        app:key="uiStyleSelection"
+        app:singleLineTitle="false"
+        app:title="@string/uiStyle" />
+    <ListPreference
+        app:useSimpleSummaryProvider="true"
+        app:defaultValue="default"
+        app:entries="@array/mainActivityPatternSelection"
+        app:entryValues="@array/mainActivityPatternSelectionValues"
+        app:iconSpaceReserved="false"
+        app:key="mainActivityPattern"
+        app:singleLineTitle="false"
+        app:title="@string/mainActivityPattern" />
+    <CheckBoxPreference
+        app:defaultValue="true"
+        app:iconSpaceReserved="false"
+        app:key="allowFollowSystemAutoSwitchDarkMode"
+        app:singleLineTitle="false"
+        app:summary="@string/willOverrideInterfaceStyle"
+        app:title="@string/allowFollowSystemAutoSwitchDarkMode" />
+    <ListPreference
+        app:useSimpleSummaryProvider="true"
+        app:defaultValue="dark"
+        app:entries="@array/themeOfAutoSwitchDarkModeEntries"
+        app:entryValues="@array/themeOfAutoSwitchDarkModeEntryValues"
+        app:iconSpaceReserved="false"
+        app:key="themeOfAutoSwitchDarkMode"
+        app:singleLineTitle="false"
+        app:title="@string/themeOfAutoSwitchDarkMode" />
+
+</PreferenceScreen>

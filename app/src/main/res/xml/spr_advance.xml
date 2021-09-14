@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="debugModeEnabled"
+        app:singleLineTitle="false"
+        app:title="@string/debugMode" />
+    <EditTextPreference
+        app:defaultValue="@string/app_name"
+        app:iconSpaceReserved="false"
+        app:key="organizationName"
+        app:singleLineTitle="false"
+        app:summary="@string/onlyMROOTModeUse"
+        app:title="@string/organizationName"
+        app:useSimpleSummaryProvider="true" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="configureAccessibilityService"
+        app:singleLineTitle="false"
+        app:summary="@string/accessibility_service_description"
+        app:title="@string/configureAccessibilityService" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/manualMode">
+        <intent
+            android:data="ManualMode"
+            android:targetClass="cf.playhi.freezeyou.ManualMode"
+            android:targetPackage="cf.playhi.freezeyou" />
+    </Preference>
+    <Preference
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/showLogcat">
+        <intent
+            android:targetClass="cf.playhi.freezeyou.ShowLogcatActivity"
+            android:targetPackage="cf.playhi.freezeyou" />
+    </Preference>
+    <!--        <Preference app:title="@string/commandExecutionTool">-->
+    <!--            <intent-->
+    <!--                app:targetClass="cf.playhi.freezeyou.CommandExecutorActivity"-->
+    <!--                app:targetPackage="cf.playhi.freezeyou" />-->
+    <!--        </Preference>-->
+
+</PreferenceScreen>

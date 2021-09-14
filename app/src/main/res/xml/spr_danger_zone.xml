@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="clearAllUserData"
+        app:singleLineTitle="false"
+        app:summary="@string/app_name"
+        app:title="@string/clearAllUserData" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:summary="@string/disableMRootModeEx"
+        app:title="@string/disableMRootMode">
+        <intent
+            android:data="Uninstall"
+            android:targetClass="cf.playhi.freezeyou.Uninstall"
+            android:targetPackage="cf.playhi.freezeyou" />
+    </Preference>
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="uninstall"
+        app:singleLineTitle="false"
+        app:title="@string/uninstall" />
+
+</PreferenceScreen>

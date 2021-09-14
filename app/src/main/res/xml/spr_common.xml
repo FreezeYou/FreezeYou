@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <CheckBoxPreference
+        app:defaultValue="true"
+        app:iconSpaceReserved="false"
+        app:key="allowEditWhenCreateShortcut"
+        app:singleLineTitle="false"
+        app:title="@string/allowEditWhCreateShortcut" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="noCaution"
+        app:singleLineTitle="false"
+        app:title="@string/nSCaution" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="saveOnClickFunctionStatus"
+        app:singleLineTitle="false"
+        app:title="@string/saveOnClickFunctionStatus" />
+    <CheckBoxPreference
+        app:defaultValue="true"
+        app:iconSpaceReserved="false"
+        app:key="saveSortMethodStatus"
+        app:singleLineTitle="false"
+        app:title="@string/saveSortMethodStatus" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="cacheApplicationsIcons"
+        app:singleLineTitle="false"
+        app:title="@string/cacheApplicationsIcons" />
+    <CheckBoxPreference
+        app:defaultValue="true"
+        app:iconSpaceReserved="false"
+        app:key="showInRecents"
+        app:singleLineTitle="false"
+        app:summary="@string/mayHaveNoEffectsL"
+        app:title="@string/showInRecents" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="lesserToast"
+        app:singleLineTitle="false"
+        app:title="@string/lesserToast" />
+    <ListPreference
+        app:defaultValue="all"
+        app:entries="@array/launchModeSelection"
+        app:entryValues="@array/launchModeSelectionValues"
+        app:iconSpaceReserved="false"
+        app:key="launchMode"
+        app:singleLineTitle="false"
+        app:title="@string/launchMode"
+        app:useSimpleSummaryProvider="true" />
+    <EditTextPreference
+        app:defaultValue="@string/app_name"
+        app:iconSpaceReserved="false"
+        app:key="organizationName"
+        app:singleLineTitle="false"
+        app:summary="@string/onlyMROOTModeUse"
+        app:title="@string/organizationName"
+        app:useSimpleSummaryProvider="true" />
+    <ListPreference
+        app:defaultValue="default"
+        app:entries="@array/displayLanguageOptionsSelection"
+        app:entryValues="@array/displayLanguageOptionsSelectionValues"
+        app:iconSpaceReserved="false"
+        app:key="languagePref"
+        app:singleLineTitle="false"
+        app:title="@string/displayLanguage"
+        app:useSimpleSummaryProvider="true" />
+
+</PreferenceScreen>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/scheduledTasks">
+        <intent
+            android:targetClass="cf.playhi.freezeyou.ScheduledTasksManageActivity"
+            android:targetPackage="cf.playhi.freezeyou" />
+    </Preference>
+    <Preference
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/manageUriAutoAllow">
+        <intent
+            android:targetClass="cf.playhi.freezeyou.UriAutoAllowManageActivity"
+            android:targetPackage="cf.playhi.freezeyou" />
+    </Preference>
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="manageIpaAutoAllow"
+        app:singleLineTitle="false"
+        app:title="@string/manageIpaAutoAllow" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="onekeyFreezeWhenLockScreen"
+        app:singleLineTitle="false"
+        app:summary="@string/suggestUseTasksInstead"
+        app:title="@string/freezeAfterScreenLock" />
+    <CheckBoxPreference
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="freezeOnceQuit"
+        app:singleLineTitle="false"
+        app:summary="@string/suggestUseTasksInstead"
+        app:title="@string/freezeOnceQuit" />
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="deleteAllScheduledTasks"
+        app:singleLineTitle="false"
+        app:summary="@string/delAllScheduledTasks"
+        app:title="@string/delAllScheduledTasks" />
+
+</PreferenceScreen>
