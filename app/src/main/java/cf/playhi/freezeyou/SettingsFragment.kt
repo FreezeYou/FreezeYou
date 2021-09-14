@@ -1,79 +1,70 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite
+import cf.playhi.freezeyou.utils.VersionUtils.checkUpdate
 
-import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceScreen;
+class SettingsFragment : PreferenceFragmentCompat() {
 
-import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
-import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
-
-public class SettingsFragment extends PreferenceFragmentCompat {
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().setTitle(R.string.moreSettings);
+    override fun onResume() {
+        super.onResume()
+        activity?.setTitle(R.string.moreSettings)
     }
 
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+    override fun onCreatePreferences(savedInstanceState: Bundle, rootKey: String) {
 
         // Load the preferences from an XML resource
-        setPreferencesFromResource(R.xml.spr, rootKey);//preferences
+        setPreferencesFromResource(R.xml.spr, rootKey)
 
-        PreferenceScreen rootPreferenceScreen = getPreferenceScreen();
-        if (rootPreferenceScreen != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                rootPreferenceScreen.removePreference(findPreference("backgroundService"));
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            preferenceScreen?.removePreference(findPreference("backgroundService"))
         }
 
     }
 
-    @Override
-    public boolean onPreferenceTreeClick(androidx.preference.Preference preference) {
-        Activity activity = getActivity();
+    override fun onPreferenceTreeClick(preference: Preference): Boolean {
+        val activity: Activity? = activity
         if (activity != null) {
-            String key = preference.getKey();
+            val key = preference.key
             if (key != null) {
-                switch (key) {
-                    case "checkUpdate":
-                        checkUpdate(activity);
-                        break;
-                    case "helpTranslate":
-                        requestOpenWebSite(
-                                activity,
-                                "https://github.com/FreezeYou/FreezeYou/blob/master/README_Translation.md"
-                        );
-                        break;
-                    case "thanksList":
-                        requestOpenWebSite(activity,
-                                String.format("https://www.zidon.net/%1$s/thanks/",
-                                        getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)));
-                        break;
-                    case "faq":
-                        requestOpenWebSite(activity,
-                                String.format("https://www.zidon.net/%1$s/faq/",
-                                        getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)));
-                        break;
-                    case "backupAndRestore":
-                        startActivity(new Intent(activity, BackupMainActivity.class));
-                        break;
-                    case "howToUse":
-                        requestOpenWebSite(activity,
-                                String.format("https://www.zidon.net/%1$s/guide/how-to-use.html",
-                                        getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)));
-                        break;
-                    default:
-                        break;
+                when (key) {
+                    "checkUpdate" -> checkUpdate(activity)
+                    "helpTranslate" -> requestOpenWebSite(
+                        activity,
+                        "https://github.com/FreezeYou/FreezeYou/blob/master/README_Translation.md"
+                    )
+                    "thanksList" -> requestOpenWebSite(
+                        activity, String.format(
+                            "https://www.zidon.net/%1\$s/thanks/",
+                            getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)
+                        )
+                    )
+                    "faq" -> requestOpenWebSite(
+                        activity, String.format(
+                            "https://www.zidon.net/%1\$s/faq/",
+                            getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)
+                        )
+                    )
+                    "backupAndRestore" -> startActivity(
+                        Intent(
+                            activity,
+                            BackupMainActivity::class.java
+                        )
+                    )
+                    "howToUse" -> requestOpenWebSite(
+                        activity, String.format(
+                            "https://www.zidon.net/%1\$s/guide/how-to-use.html",
+                            getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)
+                        )
+                    )
                 }
             }
         }
-        return super.onPreferenceTreeClick(preference);
+        return super.onPreferenceTreeClick(preference)
     }
-
 }

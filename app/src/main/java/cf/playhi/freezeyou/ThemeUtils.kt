@@ -6,13 +6,14 @@ import android.content.res.Configuration
 import android.os.Build
 import android.view.Window
 import android.view.WindowManager
+import androidx.annotation.NonNull
 import androidx.appcompat.app.ActionBar
 import androidx.preference.PreferenceManager
 
 internal object ThemeUtils {
 
     @JvmStatic
-    fun getThemeDot(context: Context): Int {
+    fun getThemeDot(@NonNull context: Context): Int {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return R.drawable.shapedot_coloraccent
         }
@@ -42,7 +43,7 @@ internal object ThemeUtils {
      * @return 资源 Id
      */
     @JvmStatic
-    fun getThemeSecondDot(context: Context): Int {
+    fun getThemeSecondDot(@NonNull context: Context): Int {
         val string = getUiTheme(context)
         return if (string != null) {
             when (string) {
@@ -56,7 +57,7 @@ internal object ThemeUtils {
     }
 
     @JvmStatic
-    fun getThemeFabDotBackground(context: Context): Int {
+    fun getThemeFabDotBackground(@NonNull context: Context): Int {
         val string = getUiTheme(context)
         return if (string != null) {
             when (string) {
@@ -75,7 +76,7 @@ internal object ThemeUtils {
     }
 
     @JvmStatic
-    fun getUiTheme(context: Context): String? {
+    fun getUiTheme(@NonNull context: Context): String? {
         val sp = PreferenceManager.getDefaultSharedPreferences(context)
         return if (sp.getBoolean("allowFollowSystemAutoSwitchDarkMode", true)) {
             if (isSystemDarkModeEnabled(context))
@@ -89,13 +90,13 @@ internal object ThemeUtils {
         }
     }
 
-    private fun isSystemDarkModeEnabled(context: Context): Boolean {
+    private fun isSystemDarkModeEnabled(@NonNull context: Context): Boolean {
         return context.resources.configuration.uiMode and
                 Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
     }
 
     @JvmStatic
-    fun processAddTranslucent(activity: Activity) {
+    fun processAddTranslucent(@NonNull activity: Activity) {
         val window = activity.window
         if (window != null) {
             window.requestFeature(Window.FEATURE_NO_TITLE)
@@ -118,7 +119,7 @@ internal object ThemeUtils {
 
     @JvmStatic
     @JvmOverloads
-    fun processSetTheme(context: Context, isDialog: Boolean = false) {
+    fun processSetTheme(@NonNull context: Context, isDialog: Boolean = false) {
         try {
             val string = getUiTheme(context)
             if (string != null) {
