@@ -17,7 +17,8 @@
             app:iconSpaceReserved="false"
             app:key="mainActivityPattern"
             app:singleLineTitle="false"
-            app:title="@string/mainActivityPattern" />
+            app:title="@string/mainActivityPattern"
+            app:useSimpleSummaryProvider="true" />
         <ListPreference
             app:defaultValue="default"
             app:entries="@array/uiStyleSelection"
@@ -25,7 +26,8 @@
             app:iconSpaceReserved="false"
             app:key="uiStyleSelection"
             app:singleLineTitle="false"
-            app:title="@string/uiStyle" />
+            app:title="@string/uiStyle"
+            app:useSimpleSummaryProvider="true" />
         <ListPreference
             app:defaultValue="all"
             app:entries="@array/launchModeSelection"
@@ -33,7 +35,8 @@
             app:iconSpaceReserved="false"
             app:key="launchMode"
             app:singleLineTitle="false"
-            app:title="@string/launchMode" />
+            app:title="@string/launchMode"
+            app:useSimpleSummaryProvider="true" />
         <CheckBoxPreference
             app:defaultValue="false"
             app:iconSpaceReserved="false"
@@ -65,7 +68,8 @@
             app:iconSpaceReserved="false"
             app:key="selectFUFMode"
             app:singleLineTitle="false"
-            app:title="@string/selectFUFMode" />
+            app:title="@string/selectFUFMode"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
     <PreferenceCategory

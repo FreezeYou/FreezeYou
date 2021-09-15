@@ -11,16 +11,14 @@ import androidx.preference.PreferenceManager;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
-import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 
-public class FirstTimeSetupFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class FirstTimeSetupFragment extends PreferenceFragmentCompat implements
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.first_time_setup_pr);
-        initSummary(getPreferenceScreen());
     }
 
     @Override
@@ -51,7 +49,6 @@ public class FirstTimeSetupFragment extends PreferenceFragmentCompat implements 
         SettingsUtils.syncAndCheckSharedPreference(
                 getActivity().getApplicationContext(),
                 getActivity(), sharedPreferences, key, appPreferences);
-        updatePrefSummary(findPreference(key));
     }
 
     @Override

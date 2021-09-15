@@ -6,7 +6,8 @@
         app:iconSpaceReserved="false"
         app:key="stma_add_label"
         app:singleLineTitle="false"
-        app:title="@string/label" />
+        app:title="@string/label"
+        app:useSimpleSummaryProvider="true" />
 
     <SwitchPreference
         app:defaultValue="true"
@@ -20,7 +21,8 @@
         app:iconSpaceReserved="false"
         app:key="stma_add_time"
         app:singleLineTitle="false"
-        app:title="@string/time" />
+        app:title="@string/time"
+        app:useSimpleSummaryProvider="true" />
 
     <MultiSelectListPreference
         app:entries="@array/sevenDays"
@@ -35,7 +37,8 @@
         app:iconSpaceReserved="false"
         app:key="stma_add_task"
         app:singleLineTitle="false"
-        app:title="@string/task" />
+        app:title="@string/task"
+        app:useSimpleSummaryProvider="true" />
 
     <Preference
         app:iconSpaceReserved="false"

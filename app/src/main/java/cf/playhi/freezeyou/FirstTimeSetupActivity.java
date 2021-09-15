@@ -32,12 +32,7 @@ public class FirstTimeSetupActivity extends FreezeYouBaseActivity {
                 .commit();
 
         Button first_time_setup_main_next_button = findViewById(R.id.first_time_setup_main_next_button);
-        first_time_setup_main_next_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        first_time_setup_main_next_button.setOnClickListener(v -> finish());
 
     }
 }

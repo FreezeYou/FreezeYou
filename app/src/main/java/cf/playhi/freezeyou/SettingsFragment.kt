@@ -16,13 +16,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         activity?.setTitle(R.string.moreSettings)
     }
 
-    override fun onCreatePreferences(savedInstanceState: Bundle, rootKey: String) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 
         // Load the preferences from an XML resource
         setPreferencesFromResource(R.xml.spr, rootKey)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            preferenceScreen?.removePreference(findPreference("backgroundService"))
+            preferenceScreen?.removePreferenceRecursively("backgroundService")
         }
 
     }

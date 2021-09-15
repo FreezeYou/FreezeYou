@@ -9,8 +9,6 @@ import androidx.preference.PreferenceManager;
 
 import cf.playhi.freezeyou.utils.MoreUtils;
 
-import static cf.playhi.freezeyou.PreferenceSupport.initSummary;
-import static cf.playhi.freezeyou.PreferenceSupport.updatePrefSummary;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class STAAFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -18,7 +16,6 @@ public class STAAFragment extends PreferenceFragmentCompat implements SharedPref
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.stma_add_pr);
-        initSummary(getPreferenceScreen());
     }
 
     @Override
@@ -29,7 +26,6 @@ public class STAAFragment extends PreferenceFragmentCompat implements SharedPref
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        updatePrefSummary(findPreference(s));
         switch (s) {
             case "stma_add_time":
                 String time = sharedPreferences.getString("stma_add_time", "09:09");
