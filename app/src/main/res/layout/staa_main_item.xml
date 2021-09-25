@@ -15,18 +15,36 @@
         android:layout_marginBottom="5dp"
         android:contentDescription="@string/icon"
         android:scaleType="fitCenter"
-        android:src="@mipmap/ic_launcher_new_round"/>
+        android:src="@mipmap/ic_launcher_new_round" />
 
-    <TextView
-        android:id="@+id/staa_main_item_textView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="match_parent"
         android:layout_margin="5dp"
-        android:gravity="center_vertical"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:maxLines="2"
-        android:scrollHorizontally="true"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/staa_main_item_textView"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="2dp"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:maxLines="2"
+            android:scrollHorizontally="true"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/staa_main_item_subtitle_textView"
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:gravity="center_vertical"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:maxLines="2"
+            android:scrollHorizontally="true"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>

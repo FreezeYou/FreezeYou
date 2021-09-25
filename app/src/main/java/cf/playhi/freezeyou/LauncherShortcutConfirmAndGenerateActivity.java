@@ -94,8 +94,10 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
                     EditText lscaga_target_editText = findViewById(R.id.lscaga_target_editText);
                     EditText lscaga_id_editText = findViewById(R.id.lscaga_id_editText);
                     ImageButton lscaga_icon_imageButton = findViewById(R.id.lscaga_icon_imageButton);
+                    EditText lscaga_displayName_editText = findViewById(R.id.lscaga_displayName_editText);
                     lscaga_target_editText.setText(data.getStringExtra("name"));
                     lscaga_id_editText.setText(data.getStringExtra("id"));
+                    lscaga_displayName_editText.setText(data.getStringExtra("label"));
                     Bitmap bm = data.getParcelableExtra("icon");
                     if (bm != null) {
                         finalDrawable = new BitmapDrawable(bm);

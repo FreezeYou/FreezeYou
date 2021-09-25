@@ -15,10 +15,12 @@ import java.util.HashMap;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 import cf.playhi.freezeyou.utils.ApplicationIconUtils;
-import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 
 import static cf.playhi.freezeyou.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
+import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
+import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
+import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
 
 public class SelectTargetActivityActivity extends FreezeYouBaseActivity {
     @Override
@@ -42,35 +44,45 @@ public class SelectTargetActivityActivity extends FreezeYouBaseActivity {
             } else {
                 HashMap<String, Object> hm = new HashMap<>();
                 hm.put("Img",
-                        ApplicationIconUtils.getApplicationIcon(
+                        getApplicationIcon(
                                 this,
                                 pkgName,
-                                ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this),
+                                getApplicationInfoFromPkgName(pkgName, this),
                                 false));
                 hm.put("Name", getString(R.string.launch));
+                hm.put("Label",
+                        getApplicationLabel(
+                                this, getPackageManager(),
+                                getApplicationInfoFromPkgName(pkgName, this), pkgName)
+                );
                 arrayList.add(hm);
 
                 HashMap<String, Object> hm2 = new HashMap<>();
                 hm2.put("Img",
-                        ApplicationIconUtils.getApplicationIcon(
+                        getApplicationIcon(
                                 this,
                                 pkgName,
-                                ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, this),
+                                getApplicationInfoFromPkgName(pkgName, this),
                                 false));
                 hm2.put("Name", getString(R.string.onlyUnfreeze));
+                hm2.put("Label",
+                        getApplicationLabel(
+                                this, getPackageManager(),
+                                getApplicationInfoFromPkgName(pkgName, this), pkgName)
+                );
                 arrayList.add(hm2);
 
                 try {
                     PackageManager pm = getPackageManager();
                     ActivityInfo[] activityInfos = pm.getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES).activities;
                     if (activityInfos != null) {
-                        String ais;
                         for (ActivityInfo activityInfo : activityInfos) {
-                            ais = activityInfo.name;
+                            String ais = activityInfo.name;
                             if (ais != null && activityInfo.exported) {
                                 HashMap<String, Object> hashMap = new HashMap<>();
                                 hashMap.put("Img", activityInfo.loadIcon(pm));
                                 hashMap.put("Name", ais);
+                                hashMap.put("Label", activityInfo.loadLabel(pm).toString());
                                 arrayList.add(hashMap);
                             }
                         }
@@ -84,8 +96,12 @@ public class SelectTargetActivityActivity extends FreezeYouBaseActivity {
                                 SelectTargetActivityActivity.this,
                                 arrayList,
                                 R.layout.staa_main_item,
-                                new String[]{"Img", "Name"},
-                                new int[]{R.id.staa_main_item_imageView, R.id.staa_main_item_textView});
+                                new String[]{"Img", "Label", "Name"},
+                                new int[]{
+                                        R.id.staa_main_item_imageView,
+                                        R.id.staa_main_item_textView,
+                                        R.id.staa_main_item_subtitle_textView
+                                });
 
                 adapter.setViewBinder((view, data, textRepresentation) -> {
                     if (view instanceof ImageView && data instanceof Drawable) {
@@ -101,16 +117,18 @@ public class SelectTargetActivityActivity extends FreezeYouBaseActivity {
                 staaMainListView.setAdapter(adapter);
 
                 staaMainListView.setOnItemClickListener((parent, view, position, id) -> {
-                    String s = (String) arrayList.get(position).get("Name");
+                    String name = (String) arrayList.get(position).get("Name");
+                    String label = (String) arrayList.get(position).get("Label");
                     Drawable drawable = (Drawable) arrayList.get(position).get("Img");
                     Bitmap icon = drawable == null ?
                             null : ApplicationIconUtils.getBitmapFromDrawable(drawable);
                     setResult(
                             RESULT_OK,
                             new Intent()
-                                    .putExtra("name", s)
+                                    .putExtra("name", name)
                                     .putExtra("icon", icon)
-                                    .putExtra("id", "FreezeYou!" + pkgName + " " + s));
+                                    .putExtra("label", label)
+                                    .putExtra("id", "FreezeYou!" + pkgName + " " + name));
                     finish();
                 });
             }
