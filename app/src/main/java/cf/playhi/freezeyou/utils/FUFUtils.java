@@ -210,6 +210,7 @@ public final class FUFUtils {
         checkAndDoActivityFinish(activity, finish);
     }
 
+    @Deprecated
     public static void oneKeyActionRoot(Context context, boolean freeze, String[] pkgNameList) {
         oneKeyActionRoot(context, freeze, pkgNameList, true);
     }
@@ -310,6 +311,7 @@ public final class FUFUtils {
     }
 
     @TargetApi(21)
+    @Deprecated
     public static void oneKeyActionMRoot(Context context, boolean freeze, String[] pkgNameList) {
         oneKeyAction(context, freeze, pkgNameList, API_FREEZEYOU_MROOT_DPM);
     }

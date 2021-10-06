@@ -13,9 +13,7 @@ import net.grandcentrix.tray.AppPreferences;
 import cf.playhi.freezeyou.app.FreezeYouBaseService;
 
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.doLockScreen;
-import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
-import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionMRoot;
-import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionRoot;
+import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyAction;
 
 public class OneKeyFreezeService extends FreezeYouBaseService {
 
@@ -35,15 +33,15 @@ public class OneKeyFreezeService extends FreezeYouBaseService {
             startForeground(2, new Notification());
         }
         boolean auto = intent.getBooleanExtra("autoCheckAndLockScreen", true);
-        String pkgNames = new AppPreferences(getApplicationContext()).getString(getString(R.string.sAutoFreezeApplicationList), "");
+        AppPreferences pref = new AppPreferences(getApplicationContext());
+        String pkgNames = pref.getString(getString(R.string.sAutoFreezeApplicationList), "");
         if (pkgNames != null) {
-            if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(getApplicationContext())) {
-                oneKeyActionMRoot(this, true, pkgNames.split(","));
-                checkAuto(auto, this);
-            } else {
-                oneKeyActionRoot(this, true, pkgNames.split(","));
-                checkAuto(auto, this);
-            }
+            oneKeyAction(
+                    this, true,
+                    pkgNames.split(","),
+                    pref.getInt("selectFUFMode", 0)
+            );
+            checkAuto(auto, this);
         }
         return super.onStartCommand(intent, flags, startId);
     }

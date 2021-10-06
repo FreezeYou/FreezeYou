@@ -12,9 +12,7 @@ import net.grandcentrix.tray.AppPreferences;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseService;
 
-import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
-import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionMRoot;
-import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionRoot;
+import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyAction;
 
 public class OneKeyUFService extends FreezeYouBaseService {
     @Override
@@ -34,15 +32,15 @@ public class OneKeyUFService extends FreezeYouBaseService {
         }
 //        String[] pkgNames = getApplicationContext().getSharedPreferences(
 //                getString(R.string.sOneKeyUFApplicationList), Context.MODE_PRIVATE).getString("pkgName", "").split(",");
-        String pkgNames = new AppPreferences(getApplicationContext()).getString(getString(R.string.sOneKeyUFApplicationList), "");
+        AppPreferences pref = new AppPreferences(getApplicationContext());
+        String pkgNames = pref.getString(getString(R.string.sOneKeyUFApplicationList), "");
         if (pkgNames != null) {
-            if (Build.VERSION.SDK_INT >= 21 && isDeviceOwner(this)) {
-                oneKeyActionMRoot(this, false, pkgNames.split(","));
-                doFinish();
-            } else {
-                oneKeyActionRoot(this, false, pkgNames.split(","));
-                doFinish();
-            }
+            oneKeyAction(
+                    this, false,
+                    pkgNames.split(","),
+                    pref.getInt("selectFUFMode", 0)
+            );
+            doFinish();
         }
         return super.onStartCommand(intent, flags, startId);
     }
