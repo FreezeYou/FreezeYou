@@ -76,15 +76,15 @@ class ManualMode : FreezeYouBaseActivity() {
     }
 
     private fun processFUFOperation(pkgName: String, context: Context, freeze: Boolean) {
-        val fufSinglePackage = FUFSinglePackage(context)
-            .setActionMode(
-                if (freeze) FUFSinglePackage.ACTION_MODE_FREEZE else FUFSinglePackage.ACTION_MODE_UNFREEZE
-            )
-            .setAPIMode(selectedMode)
-            .setSinglePackageName(pkgName)
-
         preProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-            context, fufSinglePackage.commit(), true
+            context,
+            FUFSinglePackage(
+                context,
+                pkgName,
+                if (freeze) FUFSinglePackage.ACTION_MODE_FREEZE else FUFSinglePackage.ACTION_MODE_UNFREEZE,
+                selectedMode
+            ).commit(),
+            true
         )
     }
 

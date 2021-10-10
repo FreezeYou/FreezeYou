@@ -1,89 +1,88 @@
-package cf.playhi.freezeyou;
+package cf.playhi.freezeyou
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.os.IBinder;
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.os.IBinder
+import cf.playhi.freezeyou.app.FreezeYouBaseService
+import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils
+import cf.playhi.freezeyou.utils.FUFUtils.oneKeyAction
+import net.grandcentrix.tray.AppPreferences
 
-import net.grandcentrix.tray.AppPreferences;
-
-import cf.playhi.freezeyou.app.FreezeYouBaseService;
-
-import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.doLockScreen;
-import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyAction;
-
-public class OneKeyFreezeService extends FreezeYouBaseService {
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+class OneKeyFreezeService : FreezeYouBaseService() {
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if (Build.VERSION.SDK_INT >= 26) {
-            Notification.Builder mBuilder = new Notification.Builder(this);
-            mBuilder.setSmallIcon(R.drawable.ic_notification);
-            mBuilder.setContentText(getString(R.string.oneKeyFreeze));
-            NotificationChannel channel = new NotificationChannel("OneKeyFreeze", getString(R.string.oneKeyFreeze), NotificationManager.IMPORTANCE_NONE);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            if (notificationManager != null)
-                notificationManager.createNotificationChannel(channel);
-            mBuilder.setChannelId("OneKeyFreeze");
-            startForeground(2, mBuilder.build());
+            val channel = NotificationChannel(
+                "OneKeyFreeze",
+                getString(R.string.oneKeyFreeze),
+                NotificationManager.IMPORTANCE_NONE
+            )
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager?
+            notificationManager?.createNotificationChannel(channel)
+            val mBuilder = Notification.Builder(this, "OneKeyFreeze")
+            mBuilder.setSmallIcon(R.drawable.ic_notification)
+            mBuilder.setContentText(getString(R.string.oneKeyFreeze))
+            startForeground(2, mBuilder.build())
         } else {
-            startForeground(2, new Notification());
+            startForeground(2, Notification())
         }
-        boolean auto = intent.getBooleanExtra("autoCheckAndLockScreen", true);
-        AppPreferences pref = new AppPreferences(getApplicationContext());
-        String pkgNames = pref.getString(getString(R.string.sAutoFreezeApplicationList), "");
+        val auto = intent.getBooleanExtra("autoCheckAndLockScreen", true)
+        val pref = AppPreferences(applicationContext)
+        val pkgNames = pref.getString(getString(R.string.sAutoFreezeApplicationList), "")
         if (pkgNames != null) {
             oneKeyAction(
-                    this, true,
-                    pkgNames.split(","),
-                    pref.getInt("selectFUFMode", 0)
-            );
-            checkAuto(auto, this);
+                this, true,
+                pkgNames.trim(',').split(",").toTypedArray(),
+                pref.getInt("selectFUFMode", 0)
+            )
+            checkAuto(auto, this)
         }
-        return super.onStartCommand(intent, flags, startId);
+        return super.onStartCommand(intent, flags, startId)
     }
 
-    private void checkAndLockScreen(Context context) {
-        String options = new AppPreferences(getApplicationContext()).getString("shortCutOneKeyFreezeAdditionalOptions", "nothing");
-        if (options == null)
-            options = "";
-        switch (options) {
-            case "askLockScreen":
-                startActivity(new Intent(getApplicationContext(), AskLockScreenActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                doFinish();
-                break;
-            case "lockScreenImmediately":
-                doLockScreen(context);
-                doFinish();
-                break;
-            case "nothing":
-            default:
-                doFinish();
-                break;
+    private fun checkAndLockScreen(context: Context) {
+        var options = AppPreferences(applicationContext).getString(
+            "shortCutOneKeyFreezeAdditionalOptions",
+            "nothing"
+        )
+        if (options == null) options = ""
+        when (options) {
+            "askLockScreen" -> {
+                startActivity(
+                    Intent(
+                        applicationContext,
+                        AskLockScreenActivity::class.java
+                    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
+                doFinish()
+            }
+            "lockScreenImmediately" -> {
+                DevicePolicyManagerUtils.doLockScreen(context)
+                doFinish()
+            }
+            "nothing" -> doFinish()
+            else -> doFinish()
         }
     }
 
-    private void doFinish() {
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (mNotificationManager != null) {
-            mNotificationManager.cancel(2);
-        }
-        stopSelf();
+    private fun doFinish() {
+        val mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager?
+        mNotificationManager?.cancel(2)
+        stopSelf()
     }
 
-    private void checkAuto(boolean auto, Context context) {
+    private fun checkAuto(auto: Boolean, context: Context) {
         if (auto) {
-            checkAndLockScreen(context);
+            checkAndLockScreen(context)
         } else {
-            doFinish();
+            doFinish()
         }
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    override fun onBind(intent: Intent): IBinder? {
+        return null
     }
 }

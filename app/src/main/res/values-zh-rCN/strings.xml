@@ -357,6 +357,7 @@
     <string name="unknownResult_probablySuccess">结果未知（可能成功）</string>
     <string name="unknownError">未知错误</string>
     <string name="packageNameIsNull">包名为空</string>
+    <string name="packageNameIsEmpty">包名为空</string>
     <string name="isNotDevicePolicyManager">无 DPM 权限</string>
     <string name="noSuchApiMode">无该 API 模式</string>
     <string name="executeFailedFromSystem">系统内部错误</string>

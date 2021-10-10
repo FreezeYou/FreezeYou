@@ -37,7 +37,7 @@ import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ERROR_SUCCESS;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ROOT_PERMISSION;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_SUCH_API_MODE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_OTHER;
-import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_SINGLE_PACKAGE_NAME_IS_NULL;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_SINGLE_PACKAGE_NAME_IS_BLANK;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
@@ -529,9 +529,9 @@ public final class FUFUtils {
                     showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
                             context, context.getString(R.string.success));
                 return true;
-            case ERROR_SINGLE_PACKAGE_NAME_IS_NULL:
+            case ERROR_SINGLE_PACKAGE_NAME_IS_BLANK:
                 showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-                        context, context.getString(R.string.packageNameIsNull));
+                        context, context.getString(R.string.packageNameIsEmpty));
                 return false;
             case ERROR_DEVICE_ANDROID_VERSION_TOO_LOW:
                 showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(

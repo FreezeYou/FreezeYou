@@ -13,22 +13,24 @@ import cf.playhi.freezeyou.utils.ProcessUtils.fAURoot
 open class FUFSinglePackage {
 
     private val mContext: Context
-    private var mSinglePackageName: String? = null
+    private lateinit var mSinglePackageName: String
     private var mActionMode = ACTION_MODE_UNFREEZE
+
+    @Suppress("DEPRECATION")
     private var mAPIMode = API_FREEZEYOU_LEGACY_AUTO
 
     constructor(context: Context) {
         mContext = context
     }
 
-    constructor(context: Context, singlePackageName: String?, actionMode: Int, apiMode: Int) {
+    constructor(context: Context, singlePackageName: String, actionMode: Int, apiMode: Int) {
         mContext = context
         mSinglePackageName = singlePackageName
         mActionMode = actionMode
         mAPIMode = apiMode
     }
 
-    fun setSinglePackageName(singlePackageName: String?): FUFSinglePackage {
+    fun setSinglePackageName(singlePackageName: String): FUFSinglePackage {
         mSinglePackageName = singlePackageName
         return this
     }
@@ -44,7 +46,10 @@ open class FUFSinglePackage {
     }
 
     fun commit(): Int {
+        if (mSinglePackageName.isBlank()) return ERROR_SINGLE_PACKAGE_NAME_IS_BLANK
+
         return when (mAPIMode) {
+            @Suppress("DEPRECATION")
             API_FREEZEYOU_LEGACY_AUTO ->
                 pureExecuteAPIAutoAction()
             API_FREEZEYOU_MROOT_DPM ->
@@ -81,39 +86,37 @@ open class FUFSinglePackage {
     }
 
     private fun pureExecuteAPIDPMAction(): Int {
-        if (mSinglePackageName == null) return ERROR_SINGLE_PACKAGE_NAME_IS_NULL
+
         if (Build.VERSION.SDK_INT < 21) return ERROR_DEVICE_ANDROID_VERSION_TOO_LOW
         if (!isDeviceOwner(mContext)) return ERROR_NOT_DEVICE_POLICY_MANAGER
-        var returnValue = ERROR_OTHER
+
         val hidden = mActionMode == ACTION_MODE_FREEZE
         if (!hidden &&
             !getDevicePolicyManager(mContext)
-                .isApplicationHidden(
-                    getComponentName(mContext),
-                    mSinglePackageName
-                )
+                .isApplicationHidden(getComponentName(mContext), mSinglePackageName)
         ) {
-            returnValue = ERROR_NO_ERROR_SUCCESS
-        } else {
-            if ("cf.playhi.freezeyou" != mSinglePackageName) {
-                returnValue =
-                    if (getDevicePolicyManager(mContext).setApplicationHidden(
-                            getComponentName(mContext),
-                            mSinglePackageName,
-                            hidden
-                        )
-                    ) {
-                        ERROR_NO_ERROR_SUCCESS
-                    } else {
-                        ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM
-                    }
+            return ERROR_NO_ERROR_SUCCESS
+        }
+
+        if ("cf.playhi.freezeyou" != mSinglePackageName) {
+            return if (getDevicePolicyManager(mContext).setApplicationHidden(
+                    getComponentName(mContext),
+                    mSinglePackageName,
+                    hidden
+                )
+            ) {
+                ERROR_NO_ERROR_SUCCESS
+            } else {
+                ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM
             }
         }
-        return returnValue
+
+        return ERROR_OTHER
     }
 
     private fun pureExecuteAPIRootAction(): Int {
         return when (mAPIMode) {
+            @Suppress("DEPRECATION")
             API_FREEZEYOU_LEGACY_AUTO, API_FREEZEYOU_ROOT_DISABLE_ENABLE ->
                 pureExecuteAPIRootAction(false)
             API_FREEZEYOU_ROOT_UNHIDE_HIDE ->
@@ -124,7 +127,7 @@ open class FUFSinglePackage {
     }
 
     private fun pureExecuteAPIRootAction(hideMode: Boolean): Int {
-        if (mSinglePackageName == null) return ERROR_SINGLE_PACKAGE_NAME_IS_NULL
+
         var returnValue = ERROR_OTHER
         val enable = mActionMode == ACTION_MODE_UNFREEZE
         if ("cf.playhi.freezeyou" != mSinglePackageName) {
@@ -150,14 +153,14 @@ open class FUFSinglePackage {
     }
 
     private fun pureExecuteAPISystemAppDisabledUntilUsedAction(): Int {
-        if (mSinglePackageName == null) return ERROR_SINGLE_PACKAGE_NAME_IS_NULL
+
         if (Build.VERSION.SDK_INT < 18) return ERROR_DEVICE_ANDROID_VERSION_TOO_LOW
         if (!isSystemApp(mContext)) return ERROR_NOT_SYSTEM_APP
         var returnValue = ERROR_OTHER
         val freeze = mActionMode == ACTION_MODE_FREEZE
         if ("cf.playhi.freezeyou" != mSinglePackageName) {
             mContext.packageManager.setApplicationEnabledSetting(
-                mSinglePackageName!!,
+                mSinglePackageName,
                 if (freeze)
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED
                 else
@@ -170,13 +173,13 @@ open class FUFSinglePackage {
     }
 
     private fun pureExecuteAPISystemAppDisabledUserAction(): Int {
-        if (mSinglePackageName == null) return ERROR_SINGLE_PACKAGE_NAME_IS_NULL
+
         if (!isSystemApp(mContext)) return ERROR_NOT_SYSTEM_APP
         var returnValue = ERROR_OTHER
         val freeze = mActionMode == ACTION_MODE_FREEZE
         if ("cf.playhi.freezeyou" != mSinglePackageName) {
             mContext.packageManager.setApplicationEnabledSetting(
-                mSinglePackageName!!,
+                mSinglePackageName,
                 if (freeze)
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER
                 else
@@ -189,13 +192,13 @@ open class FUFSinglePackage {
     }
 
     private fun pureExecuteAPISystemAppDisabledAction(): Int {
-        if (mSinglePackageName == null) return ERROR_SINGLE_PACKAGE_NAME_IS_NULL
+
         if (!isSystemApp(mContext)) return ERROR_NOT_SYSTEM_APP
         var returnValue = ERROR_OTHER
         val freeze = mActionMode == ACTION_MODE_FREEZE
         if ("cf.playhi.freezeyou" != mSinglePackageName) {
             mContext.packageManager.setApplicationEnabledSetting(
-                mSinglePackageName!!,
+                mSinglePackageName,
                 if (freeze)
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED
                 else
@@ -213,7 +216,7 @@ open class FUFSinglePackage {
         const val ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT = 1
         const val ERROR_NO_ERROR_SUCCESS = 0
         const val ERROR_OTHER = -1
-        const val ERROR_SINGLE_PACKAGE_NAME_IS_NULL = -2
+        const val ERROR_SINGLE_PACKAGE_NAME_IS_BLANK = -2
         const val ERROR_DEVICE_ANDROID_VERSION_TOO_LOW = -3
         const val ERROR_NO_ROOT_PERMISSION = -4
         const val ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM = -5

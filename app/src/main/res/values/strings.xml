@@ -357,6 +357,7 @@
     <string name="unknownResult_probablySuccess">Unknown result (Probably success)</string>
     <string name="unknownError">Unknown error</string>
     <string name="packageNameIsNull">Package name is null</string>
+    <string name="packageNameIsEmpty">Package name is empty</string>
     <string name="isNotDevicePolicyManager">Is not device policy manager</string>
     <string name="noSuchApiMode">No such api mode</string>
     <string name="executeFailedFromSystem">Execute failed from system</string>
