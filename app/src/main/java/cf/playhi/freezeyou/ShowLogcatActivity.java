@@ -26,13 +26,15 @@ public class ShowLogcatActivity extends FreezeYouBaseActivity {
         try {
             Process process = Runtime.getRuntime().exec("logcat -d");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String log_line;
+            String logLine;
+            StringBuilder sb = new StringBuilder();
             String rn = System.getProperty("line.separator");
-            while ((log_line = bufferedReader.readLine()) != null) {
-                editText.setText(editText.getText().append(log_line).append(rn));
+            while ((logLine = bufferedReader.readLine()) != null) {
+                sb.append(logLine).append(rn);
             }
             bufferedReader.close();
             process.destroy();
+            editText.setText(sb.toString());
             editText.setSelection(editText.getText().length());
 
         } catch (IOException e) {
