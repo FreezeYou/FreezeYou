@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+
 import cf.playhi.freezeyou.fuf.FUFSinglePackage;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
@@ -65,13 +67,13 @@ public class Freeze extends ContentProvider {
         Bundle bundle = new Bundle();
         if (method != null && extras != null) {
             String pkgName = extras.getString("packageName");
-            switch (method) {
-                case MODE_AUTO:
-                    if (context == null) {
-                        bundle.putInt("result", -1);
-                    } else if (pkgName == null) {
-                        bundle.putInt("result", -2);
-                    } else {
+            if (context == null) {
+                bundle.putInt("result", -1);
+            } else if (pkgName == null) {
+                bundle.putInt("result", -2);
+            } else {
+                switch (method) {
+                    case MODE_AUTO:
                         if (ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context) == null) {
                             bundle.putInt("result", 998);
                         } else {
@@ -100,14 +102,8 @@ public class Freeze extends ContentProvider {
                                 bundle.putInt("result", 999);
                             }
                         }
-                    }
-                    return bundle;
-                case MODE_MROOT:
-                    if (context == null) {
-                        bundle.putInt("result", -1);
-                    } else if (pkgName == null) {
-                        bundle.putInt("result", -2);
-                    } else {
+                        return bundle;
+                    case MODE_MROOT:
                         if (ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context) == null) {
                             bundle.putInt("result", 998);
                         } else {
@@ -124,14 +120,8 @@ public class Freeze extends ContentProvider {
                                 }
                             }
                         }
-                    }
-                    return bundle;
-                case MODE_ROOT:
-                    if (context == null) {
-                        bundle.putInt("result", -1);
-                    } else if (pkgName == null) {
-                        bundle.putInt("result", -2);
-                    } else {
+                        return bundle;
+                    case MODE_ROOT:
                         if (ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context) == null) {
                             bundle.putInt("result", 998);
                         } else {
@@ -147,76 +137,74 @@ public class Freeze extends ContentProvider {
                                 }
                             }
                         }
-                    }
-                    bundle.putInt("result", 0);
-                    return bundle;
-                case MODE_DPM:
-                    bundle.putInt(
-                            "result",
-                            doApiV2Action(
-                                    context, pkgName, FUFSinglePackage.API_FREEZEYOU_MROOT_DPM)
-                    );
-                    return bundle;
-                case MODE_ROOT_DISABLE_ENABLE:
-                    bundle.putInt(
-                            "result",
-                            doApiV2Action(
-                                    context, pkgName, FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE)
-                    );
-                    return bundle;
-                case MODE_ROOT_HIDE_UNHIDE:
-                    bundle.putInt(
-                            "result",
-                            doApiV2Action(
-                                    context, pkgName, FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE)
-                    );
-                    return bundle;
-                case MODE_LEGACY_AUTO:
-                    bundle.putInt(
-                            "result",
-                            doApiV2Action(
-                                    context, pkgName, FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO)
-                    );
-                    return bundle;
-                case MODE_SYSTEM_APP_ENABLE_DISABLE:
-                    bundle.putInt(
-                            "result",
-                            doApiV2Action(
-                                    context, pkgName, FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE)
-                    );
-                    return bundle;
-                case MODE_SYSTEM_APP_ENABLE_DISABLE_USER:
-                    bundle.putInt(
-                            "result",
-                            doApiV2Action(
-                                    context, pkgName,
-                                    FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER
-                            )
-                    );
-                    return bundle;
-                case MODE_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED:
-                    bundle.putInt(
-                            "result",
-                            doApiV2Action(
-                                    context, pkgName,
-                                    FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED
-                            )
-                    );
-                    return bundle;
-                default:
-                    break;
+                        bundle.putInt("result", 0);
+                        return bundle;
+                    case MODE_DPM:
+                        bundle.putInt(
+                                "result",
+                                doApiV2Action(
+                                        context, pkgName, FUFSinglePackage.API_FREEZEYOU_MROOT_DPM)
+                        );
+                        return bundle;
+                    case MODE_ROOT_DISABLE_ENABLE:
+                        bundle.putInt(
+                                "result",
+                                doApiV2Action(
+                                        context, pkgName, FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE)
+                        );
+                        return bundle;
+                    case MODE_ROOT_HIDE_UNHIDE:
+                        bundle.putInt(
+                                "result",
+                                doApiV2Action(
+                                        context, pkgName, FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE)
+                        );
+                        return bundle;
+                    case MODE_LEGACY_AUTO:
+                        bundle.putInt(
+                                "result",
+                                doApiV2Action(
+                                        context, pkgName, FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO)
+                        );
+                        return bundle;
+                    case MODE_SYSTEM_APP_ENABLE_DISABLE:
+                        bundle.putInt(
+                                "result",
+                                doApiV2Action(
+                                        context, pkgName, FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE)
+                        );
+                        return bundle;
+                    case MODE_SYSTEM_APP_ENABLE_DISABLE_USER:
+                        bundle.putInt(
+                                "result",
+                                doApiV2Action(
+                                        context, pkgName,
+                                        FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER
+                                )
+                        );
+                        return bundle;
+                    case MODE_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED:
+                        bundle.putInt(
+                                "result",
+                                doApiV2Action(
+                                        context, pkgName,
+                                        FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED
+                                )
+                        );
+                        return bundle;
+                    default:
+                        break;
+                }
             }
         }
         return bundle;
     }
 
-    private int doApiV2Action(Context context, String pkgName, int apiMode) {
-        FUFSinglePackage fufSinglePackage = new FUFSinglePackage(context);
-        fufSinglePackage.setActionMode(FUFSinglePackage.ACTION_MODE_FREEZE);
-        fufSinglePackage.setAPIMode(apiMode);
-        fufSinglePackage.setSinglePackageName(pkgName);
+    private int doApiV2Action(Context context, @NonNull String pkgName, int apiMode) {
 
-        int result = fufSinglePackage.commit();
+        int result =
+                new FUFSinglePackage(context, pkgName, FUFSinglePackage.ACTION_MODE_FREEZE, apiMode)
+                        .commit();
 
         if (FUFUtils.preProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
                 context, result, false)) {

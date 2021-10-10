@@ -168,12 +168,7 @@ public final class FUFUtils {
             } else if (actionMode == ACTION_MODE_FREEZE && currentPackage.equals(pkgName)) {
                 checkAndShowAppIsForegroundApplicationToast(context, pkgName);
             } else {
-                returnValue =
-                        new FUFSinglePackage(context)
-                                .setSinglePackageName(pkgName)
-                                .setAPIMode(apiMode)
-                                .setActionMode(actionMode)
-                                .commit();
+                returnValue = new FUFSinglePackage(context, pkgName, actionMode, apiMode).commit();
             }
         }
         return returnValue;

@@ -10,40 +10,12 @@ import cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen
 import cf.playhi.freezeyou.utils.FUFUtils.isSystemApp
 import cf.playhi.freezeyou.utils.ProcessUtils.fAURoot
 
-open class FUFSinglePackage {
-
-    private val mContext: Context
-    private lateinit var mSinglePackageName: String
-    private var mActionMode = ACTION_MODE_UNFREEZE
-
-    @Suppress("DEPRECATION")
-    private var mAPIMode = API_FREEZEYOU_LEGACY_AUTO
-
-    constructor(context: Context) {
-        mContext = context
-    }
-
-    constructor(context: Context, singlePackageName: String, actionMode: Int, apiMode: Int) {
-        mContext = context
-        mSinglePackageName = singlePackageName
-        mActionMode = actionMode
-        mAPIMode = apiMode
-    }
-
-    fun setSinglePackageName(singlePackageName: String): FUFSinglePackage {
-        mSinglePackageName = singlePackageName
-        return this
-    }
-
-    fun setActionMode(actionMode: Int): FUFSinglePackage {
-        mActionMode = actionMode
-        return this
-    }
-
-    fun setAPIMode(apiMode: Int): FUFSinglePackage {
-        mAPIMode = apiMode
-        return this
-    }
+open class FUFSinglePackage(
+    private val mContext: Context,
+    private val mSinglePackageName: String,
+    private val mActionMode: Int,
+    private val mAPIMode: Int
+) {
 
     fun commit(): Int {
         if (mSinglePackageName.isBlank()) return ERROR_SINGLE_PACKAGE_NAME_IS_BLANK
@@ -226,11 +198,12 @@ open class FUFSinglePackage {
 
         /**
          * 使用 FreezeYou 的 自动（免ROOT(DPM)/ROOT(DISABLE)） 模式
+         *
          * 推荐直接使用 [API_FREEZEYOU_MROOT_DPM]
          * 与 [API_FREEZEYOU_ROOT_DISABLE_ENABLE]
          * 与 [API_FREEZEYOU_ROOT_UNHIDE_HIDE]
          */
-        @Deprecated("old")
+        @Deprecated("Use API_FREEZEYOU_MROOT_DPM or API_FREEZEYOU_ROOT_DISABLE_ENABLE instead.")
         const val API_FREEZEYOU_LEGACY_AUTO = 0
 
         /**
