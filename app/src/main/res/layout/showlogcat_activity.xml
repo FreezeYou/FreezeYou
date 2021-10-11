@@ -6,8 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:ems="10"
         android:gravity="start|top"
+        android:hint="@string/loading___"
         android:inputType="textMultiLine"
         android:textSize="12sp" />
 
