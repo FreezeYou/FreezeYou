@@ -110,7 +110,7 @@ class AutoDiagnosisActivity : FreezeYouBaseActivity() {
         viewModel.refreshDiagnosisData()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.autodiagnosis_menu, menu)
         val cTheme = getUiTheme(this@AutoDiagnosisActivity)

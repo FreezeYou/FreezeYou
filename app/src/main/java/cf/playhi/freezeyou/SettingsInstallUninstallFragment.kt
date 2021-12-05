@@ -13,7 +13,7 @@ class SettingsInstallUninstallFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.spr_install_uninstall, rootKey)
 
         findPreference<Preference?>("manageIpaAutoAllow")?.intent = Intent(
-            activity,
+            requireActivity(),
             UriAutoAllowManageActivity::class.java
         )
             .putExtra("isIpaMode", true)

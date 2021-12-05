@@ -15,14 +15,14 @@ class SettingsAutomationFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.spr_automation, rootKey)
 
         findPreference<Preference?>("manageIpaAutoAllow")?.intent = Intent(
-            activity,
+            requireActivity(),
             UriAutoAllowManageActivity::class.java
         )
             .putExtra("isIpaMode", true)
 
         findPreference<Preference?>("deleteAllScheduledTasks")?.setOnPreferenceClickListener {
             buildAlertDialog(
-                activity,
+                requireActivity(),
                 R.drawable.ic_warning,
                 R.string.askIfDel,
                 R.string.caution
