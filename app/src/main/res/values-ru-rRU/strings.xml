@@ -92,7 +92,7 @@
     <string name="disableClickDisappear">Не исчезать после нажатия</string>
     <string name="disableConfirmation">Подтвердить отмену?</string>
     <string name="disableMRootMode">Отключить режим без-ROOT</string>
-    <string name="disableMRootModeEx">Если вы включили режим без-ROOT, вам необходимо отключить его перед удалением FreezeYou!.</string>
+    <string name="disableMRootModeEx">Если вы включили режим без-ROOT, вам необходимо отключить его перед удалением FreezeYou!</string>
     <string name="disableSlideOut">Не исчезать при смахивании</string>
     <string name="disable_MRoot">Заморозка - без-ROOT</string>
     <string name="disable_MRoot_DPM">Заморозка без-ROOT (DPM)</string>
@@ -335,7 +335,7 @@
     <string name="unfreeze">Разморозка</string>
     <string name="unfreezedAndAskLaunch">Запрошена разморозка, попробовать сразу запустить?</string>
     <string name="uninstall">Удаление</string>
-    <string name="uninstallFailed">Ошибка удаления</string>
+    <string name="uninstallFailed">Сбой удаления</string>
     <string name="uninstallFinished">Удаление завершено</string>
     <string name="uninstallPackage_colon">Удаление пакета:</string>
     <string name="uninstalled">Удаленный</string>
@@ -355,7 +355,7 @@
     <string name="version_colon">Версия:</string>
     <string name="version_colon_vN_longVC">Версия: %1$s (%2$s)</string>
     <string name="viewMode">Режим просмотра</string>
-    <string name="visitWebsite">Посетите вебсайт FreezeYou!</string>
+    <string name="visitWebsite">Посетить вебсайт FreezeYou!</string>
     <string name="waitingToInstall_app">Ожидание установки после выхода %1$s</string>
     <string name="wechatMp_colon">WeChat официальный аккаунт: %1$s</string>
     <string name="welcomeToUseAppName">Добро пожаловать в %1$s</string>
@@ -363,11 +363,25 @@
     <string name="willOverrideInterfaceStyle">Переопределит стиль интерфейса</string>
     <string name="willTakeEffectsNextLaunch">Вступит в силу при следующем запуске приложения</string>
     <string name="workWithShortcutAutoFUF">Действует, если включен ярлык \"Автозаморозка или разморозка\"</string>
+    <string name="packageNameIsEmpty">Имя пакета пустое</string>
+    <string name="unlock">Разблокировать</string>
+    <string name="security">Безопасность</string>
+    <string name="enableAuthentication">Включить аутентификацию</string>
+    <string name="authentication">Аутентификация</string>
+    <string name="authenticationFailed">Сбой аутентификации</string>
+    <string name="authenticationError_colon">Ошибка аутентификации: %1$s</string>
+    <string name="forceStop">Принудительная остановка</string>
+    <string name="unfrozenUA">Незамороженые пользовательские приложения</string>
+    <string name="lastInstall">Недавно установленные</string>
+    <string name="lastUpdate">Недавно обновленные</string>
+    <string name="alphabetical">В алфавитном порядке</string>
+    <string name="refresh">Обновить</string>
+    <string name="themeOfAutoSwitchDarkMode">Стиль интерфейса автопереключения темного режима</string>
     <string name="yes">Да</string>
     <string-array name="launchModeSelection">
         <item>Показать все</item>
         <item>Замороженые</item>
-        <item>Размороженые</item>
+        <item>Незамороженые</item>
         <item>Системные приложения</item>
         <item>Пользовательские приложения</item>
         <item>OneKEY заморозка</item>
@@ -383,7 +397,7 @@
         <item>без-ROOT (режим DPM)</item>
         <item>ROOT(режим скрытия)</item>
         <item>ROOT(режим отключения)</item>
-        <item>Legacy(Автоматический DPM или режим отключения)</item>
+        <item>Legacy(автоматический DPM или режим отключения)</item>
         <item>Системное (режим DISABLE)</item>
         <item>Системное (режим DISABLE_USER)</item>
         <item>Системное (режим DISABLE_UNTIL_USED)</item>
@@ -423,7 +437,7 @@
     <string-array name="uiStyleSelection">
         <item>По умолчанию</item>
         <item>Темная</item>
-        <item>Black</item>
+        <item>Черная</item>
         <item>Синяя</item>
         <item>Розовая</item>
         <item>Зеленая</item>
@@ -431,5 +445,9 @@
         <item>Оранжевая</item>
         <item>Белая</item>
         <item>Красная</item>
+    </string-array>
+	    <string-array name="themeOfAutoSwitchDarkModeEntries">
+        <item>Темная тема</item>
+        <item>Черная тема</item>
     </string-array>
 </resources>

@@ -69,10 +69,10 @@
     <string name="commandExecutionTool">Інструмент виконання команд</string>
     <string name="common">Загальні налаштування</string>
     <string name="configureAccessibilityService">Налаштування служби спеціальних можливостей</string>
-    <string name="contactUs">"Зв'язатися з нами"</string>
+    <string name="contactUs">Зв\'\язатися з нами</string>
     <string name="copyAfterBeingFormatted">Копіювати імена пакетів</string>
     <string name="copyAlias">Скопіювати alias</string>
-    <string name="copyPkgName">"Скопіювати ім'я пакета"</string>
+    <string name="copyPkgName">"Скопіювати ім\'\ я пакета"</string>
     <string name="createDisEnableShortCut">Створити ярлик заморозка / розморозка</string>
     <string name="createLauncherShortcut">Створити ярлик на робочому столі</string>
     <string name="createOneKeyFreezeShortcut">OneKEY заморозка</string>
@@ -119,14 +119,14 @@
     <string name="etc">і т.д.</string>
     <string name="everySeemsAllRight">Здається все в порядку</string>
     <string name="exception">Виняток:</string>
-    <string name="exceptionHC">Произошло исключение, но операция продолжится:</string>
+    <string name="exceptionHC">Стався виняток, але операція продовжиться:</string>
     <string name="executeFailedFromSystem">Збій виконання з системи</string>
     <string name="executeImmediately">Виконати</string>
     <string name="execute_colon">Виконати:</string>
     <string name="executed">Виконано</string>
     <string name="executionResult_colon_message">Результат виконання: %1$s</string>
-    <string name="existed_colon">Существовавшие: %1$s</string>
-    <string name="existed_colon_vN_longVC">Существовавшие: %1$s (%2$s)</string>
+    <string name="existed_colon">Існуючі: %1$s</string>
+    <string name="existed_colon_vN_longVC">Існуючі: %1$s (%2$s)</string>
     <string name="expt">Експорт</string>
     <string name="failed">Не вдалося</string>
     <string name="faq">Часті запитання</string>
@@ -149,7 +149,7 @@
     <string name="hToUse">Як користуватися (довідка на сайті програми)</string>
     <string name="help">Допомога</string>
     <string name="helpTranslate">Допоможіть перекласти цей додаток</string>
-    <string name="hourShouldBetween">Час повинен бути між 0 і 23</string>
+    <string name="hourShouldBetween">Години мають бути між 0 і 23</string>
     <string name="icon">Значок</string>
     <string name="iconAEntry">Іконки і вхід</string>
     <string name="id">ID</string>
@@ -205,7 +205,7 @@
     <string name="needActiveAccessibilityService">Потрібно включити службу підтримки спеціальних можливостей</string>
     <string name="needCfmWhenFreeze">Додаткове підтвердження при заморозці</string>
     <string name="needL">Потрібен Android 5.0 і новіше</string>
-    <string name="needStoragePermission">"Потрібен дозвіл на доступ до пам'яті"</string>
+    <string name="needStoragePermission">Потрібен дозвіл на доступ до пам\'\яті</string>
     <string name="newClassification">Нова категорія</string>
     <string name="newFolder">Нова папка</string>
     <string name="no">Ні</string>
@@ -247,11 +247,11 @@
     <string name="openImmediatelyAfterUF">Запуск відразу після розморозки</string>
     <string name="openImmediatelyEx">Запустити додаток відразу після розморозки</string>
     <string name="organizationName">Назва організації</string>
-    <string name="packageName">"Ім'я пакету"</string>
-    <string name="packageNameIsNull">"Ім'я пакету порожнє"</string>
+    <string name="packageName">Ім\'\я пакету</string>
+    <string name="packageNameIsNull">Ім\'\я пакету порожнє</string>
     <string name="packageNotFound">Додаток не знайдено</string>
     <string name="parseFailed">Збій розбору</string>
-    <string name="pkgName_colon">"Ім'я пакету:"</string>
+    <string name="pkgName_colon">Ім\'\я пакету:</string>
     <string name="pkgName_colon_pkgName">Пакет: %1$s</string>
     <string name="plsConfirm">Будь ласка підтвердіть</string>
     <string name="plsRemoveUninstalledApplications">[Підказка] Ви можете прибрати видалені додатки зі списку</string>
@@ -268,14 +268,13 @@
     <string name="reject">Відхилено</string>
     <string name="remove">Видалити</string>
     <string name="removeFailed">Не вдалося видалити</string>
-    <string name="removeFromFreezeOnceQuit">Видалити з Заморозка після виходу</string>
+    <string name="removeFromFreezeOnceQuit">Видалити з \"Заморозка після виходу\"</string>
     <string name="removeFromMyCustomization">Видалити з \"Моя підбірка\"</string>
     <string name="removeFromOneKeyList">Видалити з списку OneKEY заморозка</string>
-    <string name="removeFromOneKeyUFList">Видалити з списку OneKEY розморозка</string>
-    <string name="removeNoRootCaution">"Ви дійсно хочете скасувати дозвіл для режиму без-ROOT?
-Щоб уникнути непотрібних проблем, необхідно розморозити всі заморожені додатки перед відключенням цього режиму! "</string>
-    <string name="removed">Видалено</string>
-    <string name="repeat">Повтор</string>
+    <string name="removeFromOneKeyUFList">Видалити з списку OneKEY розморозка</string> 
+    <string name="removeNoRootCaution">Ви дійсно хочете скасувати дозвіл для режиму без-ROOT? Щоб уникнути непотрібних проблем, необхідно розморозити всі заморожені додатки перед відключенням цього режиму!</string> 
+    <string name="removed">Видалено</string> 
+    <string name="repeat">Повтор</string> 
     <string name="requestFailed">Не вдалося створити запит:</string>
     <string name="requestFailedPlsRetry">Запит не вдався, спробуйте ще раз</string>
     <string name="requestFromPackage_colon">З пакету:</string>
@@ -342,8 +341,8 @@
     <string name="uninstalling_app">Видалення %1$s</string>
     <string name="unknown">Невідомий</string>
     <string name="unknownError">Невідома помилка</string>
-    <string name="unknownResult_probablySuccess">Результат невідомий (Ймовірно успіх)</string>
-    <string name="unrootedOrCannotFindTheLaunchIntent">Розморозкая завершилася успішно, але не вдалося знайти вхід цього додатка, або розморозка не вдалася через відсутніть дозволу.</string>
+    <string name="unknownResult_probablySuccess">Результат невідомий (ймовірно успіх)</string>
+    <string name="unrootedOrCannotFindTheLaunchIntent">Розморозка завершилася успішно, але не вдалося знайти вхід цього додатка, або розморозка не вдалася через відсутніть дозволу.</string>
     <string name="update">Оновити</string>
     <string name="updateSomeData">Оновити деякі дані</string>
     <string name="uriAutoAllowList">Запит дозволених URI</string>
@@ -362,11 +361,25 @@
     <string name="willOverrideInterfaceStyle">Перевизначить стиль інтерфейсу</string>
     <string name="willTakeEffectsNextLaunch">Вступить в силу при наступному запуску програми</string>
     <string name="workWithShortcutAutoFUF">Діє, якщо включений ярлик Автозаморозка або розморозка</string>
+    <string name="packageNameIsEmpty">Ім\’\я пакета порожнє</string>
+    <string name="unlock">Розблокування</string>
+    <string name="security">Безпека</string>
+    <string name="enableAuthentication">Ввімкнути автентифікацію</string>
+    <string name="authentication">Автентифікація</string>
+    <string name="authenticationFailed">Помилка автентифікації</string>
+    <string name="authenticationError_colon">Помилка автентифікації: %1$s</string>
+    <string name="forceStop">Примусова зупинка</string>
+    <string name="unfrozenUA">Незаморожені додатки користувача</string>
+    <string name="lastInstall">Нещодавно встановлені</string>
+    <string name="lastUpdate">Нещодавно оновлені</string>
+    <string name="alphabetical">За алфавітом</string>
+    <string name="refresh">Оновити</string>
+    <string name="themeOfAutoSwitchDarkMode">Стиль інтерфейсу для автоматичного перемикання темного режиму</string>
     <string name="yes">Так</string>
     <string-array name="launchModeSelection">
         <item>Показати все</item>
         <item>Заморожено</item>
-        <item>Розморожено</item>
+        <item>Незаморожено</item>
         <item>Системні</item>
         <item>Додатки користувача</item>
         <item>OneKEY заморозка</item>
@@ -375,7 +388,7 @@
     </string-array>
     <string-array name="mainActivityPatternSelection">
         <item>За замовчуванням</item>
-        <item>Перелік</item>
+        <item>Список</item>
         <item>Сітка</item>
     </string-array>
     <string-array name="selectFUFModeSelection">
@@ -392,7 +405,7 @@
         <item>У вівторок</item>
         <item>В середу</item>
         <item>В четвер</item>
-        <item>"В п'ятницю"</item>
+        <item>В п\'\ятницю</item>
         <item>В суботу</item>
         <item>В неділю</item>
     </string-array>
@@ -421,14 +434,18 @@
     </string-array>
     <string-array name="uiStyleSelection">
         <item>За замовчуванням</item>
-        <item>Темний</item>
-        <item>Black</item>
-        <item>Синій</item>
-        <item>Рожевий</item>
-        <item>Зелений</item>
-        <item>Жовтий</item>
-        <item>Помаранчевий</item>
-        <item>Білий</item>
-        <item>Червоний</item>
+        <item>Темна</item>
+        <item>Чорна</item>
+        <item>Синя</item>
+        <item>Рожева</item>
+        <item>Зелена</item>
+        <item>Жовта</item>
+        <item>Помаранчева</item>
+        <item>Біла</item>
+        <item>Червона</item>
+    </string-array>
+	    <string-array name="themeOfAutoSwitchDarkModeEntries">
+        <item>Темна тема</item>
+        <item>Чорна тема</item>
     </string-array>
 </resources>
