@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.util.Date;
 
@@ -60,7 +62,7 @@ public class LauncherShortcutConfirmAndGenerateActivity extends FreezeYouBaseAct
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.lscaga_menu, menu);
         String cTheme = ThemeUtils.getUiTheme(this);
