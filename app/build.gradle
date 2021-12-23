@@ -9,7 +9,7 @@ android {
         minSdkVersion 14
         targetSdk 30
         versionCode 143
-        versionName '10.16.143.20211210-t144-h-20211221-1'
+        versionName '10.16.143.20211223-pre2'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
