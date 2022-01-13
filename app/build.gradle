@@ -6,10 +6,10 @@ android {
     buildToolsVersion '32.0.0'
     defaultConfig {
         applicationId "cf.playhi.freezeyou"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdk 30
-        versionCode 143
-        versionName '10.16.143.20211223-pre2'
+        versionCode 144
+        versionName '10.16.144.20211223-t145-h-20220113-1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,7 +33,7 @@ android {
 }
 
 dependencies {
-    implementation "net.grandcentrix.tray:tray:0.12.0"
+    implementation fileTree(include: ['*.aar'], dir: 'libs') // Contains MMKV & Tray
 
     implementation "androidx.activity:activity:1.4.0"
     implementation "androidx.activity:activity-ktx:1.4.0"
