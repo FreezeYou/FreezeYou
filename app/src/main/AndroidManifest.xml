@@ -680,6 +680,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <provider
+            android:name="com.tencent.mmkv.MMKVContentProvider"
+            android:authorities="cf.playhi.freezeyou.MMKVContentProvider"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -8,6 +8,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 
+import com.getkeepsafe.relinker.ReLinker;
+import com.tencent.mmkv.MMKV;
+
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
@@ -28,6 +31,13 @@ public class MainApplication extends Application {
         CrashHandler crashHandler = new CrashHandler();
         crashHandler.init(this);
         Support.checkLanguage(getApplicationContext());
+
+        // Initialize MMKV,
+        // use [ReLinker](https://github.com/KeepSafe/ReLinker)
+        // to avoid errors like `java.lang.UnsatisfiedLinkError`.
+        MMKV.initialize(this, libName ->
+                ReLinker.loadLibrary(MainApplication.this, libName));
+
         try {
 
             File checkFile = new File(getFilesDir().getAbsolutePath() + File.separator + "20180808");

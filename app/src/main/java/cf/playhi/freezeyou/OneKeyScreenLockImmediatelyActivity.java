@@ -21,4 +21,10 @@ public class OneKeyScreenLockImmediatelyActivity extends FreezeYouBaseActivity {
         }
         finish();
     }
+
+    @Override
+    protected boolean activityNeedCheckAppLock() {
+        return false;
+    }
+
 }

@@ -8,7 +8,7 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import net.grandcentrix.tray.AppPreferences;
+import com.tencent.mmkv.MMKV;
 
 import java.util.Date;
 
@@ -55,7 +55,12 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (mHadBeenUnlocked) {
-            resetLockWaitTime(new AppPreferences(this));
+            resetLockWaitTime(
+                    MMKV.mmkvWithAshmemID(
+                            getApplicationContext(), "AshmemKV",
+                            32, MMKV.MULTI_PROCESS_MODE, null
+                    )
+            );
         }
     }
 
@@ -78,6 +83,12 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * If the activity does not need the app lock logic,
+     * override the method and return false.
+     *
+     * @return Whether the app lock needs to be checked.
+     */
     protected boolean activityNeedCheckAppLock() {
         return true;
     }
@@ -86,19 +97,23 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
         if (!isAuthenticationEnabled(this)) return false;
         if (!isBiometricPromptPartAvailable(this)) return false;
 
-        AppPreferences appPreferences = new AppPreferences(this);
+        MMKV mmkv =
+                MMKV.mmkvWithAshmemID(
+                        getApplicationContext(), "AshmemKV",
+                        32, MMKV.MULTI_PROCESS_MODE, null);
+
         long currentTime = new Date().getTime();
         // 15 minutes
-        if (appPreferences.getLong("lockTime", 0) < currentTime - 900000) {
+        if (mmkv.decodeLong("unlockTime", 0) < currentTime - 900000) {
             return true;
         } else {
-            resetLockWaitTime(appPreferences);
+            resetLockWaitTime(mmkv);
             return false;
         }
     }
 
-    protected boolean resetLockWaitTime(AppPreferences appPreferences) {
-        return appPreferences.put("lockTime", new Date().getTime());
+    protected boolean resetLockWaitTime(MMKV mmkv) {
+        return mmkv.encode("unlockTime", new Date().getTime());
     }
 
     protected void setUnlockLogoPkgName(String pkgName) {

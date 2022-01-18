@@ -12,7 +12,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
-import net.grandcentrix.tray.AppPreferences;
+import com.tencent.mmkv.MMKV;
 
 import java.util.Date;
 import java.util.concurrent.Executor;
@@ -110,8 +110,12 @@ public class AppLockActivity extends FreezeYouBaseActivity {
                     public void onAuthenticationSucceeded(
                             @NonNull BiometricPrompt.AuthenticationResult result) {
                         super.onAuthenticationSucceeded(result);
-                        new AppPreferences(AppLockActivity.this)
-                                .put("lockTime", new Date().getTime());
+
+                        MMKV.mmkvWithAshmemID(
+                                        getApplicationContext(), "AshmemKV",
+                                        32, MMKV.MULTI_PROCESS_MODE, null)
+                                .encode("unlockTime", new Date().getTime());
+
                         setResult(RESULT_OK);
                         finish();
                     }
