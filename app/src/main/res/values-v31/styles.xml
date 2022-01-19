@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.V31.AppTheme.SplashScreen" parent="Base.V14.AppTheme.SplashScreen">
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_new_round</item>
+        <item name="android:windowSplashScreenBackground">?attr/colorControlNormal</item>
+    </style>
+
+    <style name="Base.AppTheme.SplashScreen" parent="Base.V31.AppTheme.SplashScreen" />
+
+</resources>

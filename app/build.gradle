@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdk 30
         versionCode 144
-        versionName '10.16.144.20211223-t145-h-20220116-1'
+        versionName '10.16.144.20211223-t145-h-20220118-1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -46,7 +46,10 @@ dependencies {
     implementation "androidx.appcompat:appcompat-resources:$appcompat_version"
 
     implementation "androidx.biometric:biometric:1.2.0-alpha04"
-    implementation "androidx.core:core:1.7.0"
+
+    def core_version = "1.7.0"
+    implementation "androidx.core:core:$core_version"
+    implementation "androidx.core:core-ktx:$core_version"
 
     def fragment_version = "1.4.0"
     implementation "androidx.fragment:fragment:$fragment_version"

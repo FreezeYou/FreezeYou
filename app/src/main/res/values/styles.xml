@@ -143,4 +143,10 @@
         <item name="colorAccent">#424242</item>
     </style>
 
+    <style name="Base.AppTheme.SplashScreen" parent="Base.V14.AppTheme.SplashScreen" />
+
+    <style name="Base.V14.AppTheme.SplashScreen" parent="AppTheme.Dark.Default" />
+
+    <style name="AppTheme.SplashScreen" parent="Base.AppTheme.SplashScreen" />
+
 </resources>
