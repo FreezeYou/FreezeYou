@@ -35,7 +35,7 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
     @CallSuper
     protected void onResume() {
         super.onResume();
-        if (activityNeedCheckAppLock() && isAuthenticationEnabled(this)
+        if (activityNeedCheckAppLock() && isAuthenticationEnabled()
                 && isBiometricPromptPartAvailable(this)) {
             if (isLocked()) {
                 mHadBeenUnlocked = false;
@@ -94,7 +94,7 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
     }
 
     protected boolean isLocked() {
-        if (!isAuthenticationEnabled(this)) return false;
+        if (!isAuthenticationEnabled()) return false;
         if (!isBiometricPromptPartAvailable(this)) return false;
 
         MMKV mmkv =

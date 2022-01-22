@@ -10,9 +10,7 @@ import androidx.annotation.Keep
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.utils.AuthenticationUtils.isBiometricPromptPartAvailable
-import net.grandcentrix.tray.AppPreferences
 
 @Keep
 class SettingsSecurityFragment : PreferenceFragmentCompat() {
@@ -28,12 +26,8 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 StartActivityForResult()
             ) { result: ActivityResult ->
                 if (result.resultCode == Activity.RESULT_OK) {
-                    PreferenceManager.getDefaultSharedPreferences(activity)
-                        .edit()
+                    (preferenceManager.preferenceDataStore as DefaultMultiProcessMMKVDataStore)
                         .putBoolean("enableAuthentication", true)
-                        .apply()
-                    AppPreferences(activity)
-                        .put("enableAuthentication", true)
 
                     findPreference<CheckBoxPreference>("enableAuthentication")?.isChecked = true
                 }
@@ -42,6 +36,8 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        preferenceManager.preferenceDataStore = DefaultMultiProcessMMKVDataStore()
+
         setPreferencesFromResource(R.xml.spr_security, rootKey)
 
 
@@ -65,7 +61,6 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                         }
                         return@OnPreferenceChangeListener false
                     } else {
-                        AppPreferences(activity).put("enableAuthentication", false)
                         return@OnPreferenceChangeListener true
                     }
                 }

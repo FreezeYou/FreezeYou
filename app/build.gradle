@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdk 30
         versionCode 145
-        versionName '10.16.145.20220119-pre3'
+        versionName '10.16.145.20220119-t146-h-20220122-1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -62,7 +62,7 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.5.0'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
 
 //    implementation 'com.google.zxing:core:3.3.3' 先把文本方式稳定下来，再做 QRCode
 

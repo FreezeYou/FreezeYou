@@ -8,14 +8,16 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.Nullable;
+
 import com.getkeepsafe.relinker.ReLinker;
 import com.tencent.mmkv.MMKV;
 
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.File;
+import java.io.IOException;
 
-import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.Support;
@@ -39,67 +41,14 @@ public class MainApplication extends Application {
                 ReLinker.loadLibrary(MainApplication.this, libName));
 
         try {
-
-            File checkFile = new File(getFilesDir().getAbsolutePath() + File.separator + "20180808");
-            if (!checkFile.exists()) {
-                updateConfig();
-                checkFile.createNewFile();
-            }
-
-            File importTrayLock = new File(getFilesDir().getAbsolutePath() + File.separator + "p2d.lock");
-            if (!importTrayLock.exists()) {
-                new ImportTrayPreferences(this);
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                AppPreferences appPreferences = new AppPreferences(this);
-                appPreferences.put("freezeOnceQuit", sharedPreferences.getBoolean("freezeOnceQuit", false));
-                appPreferences.put("shortCutOneKeyFreezeAdditionalOptions", sharedPreferences.getString("shortCutOneKeyFreezeAdditionalOptions", "nothing"));
-                appPreferences.put("useForegroundService", sharedPreferences.getBoolean("useForegroundService", false));
-                appPreferences.put("onekeyFreezeWhenLockScreen", sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen", false));
-                importTrayLock.createNewFile();
-            }
-
-            File dataTransfer20180816Lock = new File(getFilesDir().getAbsolutePath() + File.separator + "20180816.lock");
-            if (!dataTransfer20180816Lock.exists()) {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                AppPreferences appPreferences = new AppPreferences(this);
-                appPreferences.put("notificationBarFreezeImmediately", sharedPreferences.getBoolean("notificationBarFreezeImmediately", true));
-                appPreferences.put("openImmediately", sharedPreferences.getBoolean("openImmediately", false));
-                appPreferences.put("openAndUFImmediately", sharedPreferences.getBoolean("openAndUFImmediately", false));
-                appPreferences.put("notificationBarDisableSlideOut", sharedPreferences.getBoolean("notificationBarDisableSlideOut", false));
-                appPreferences.put("notificationBarDisableClickDisappear", sharedPreferences.getBoolean("notificationBarDisableClickDisappear", false));
-                dataTransfer20180816Lock.createNewFile();
-            }
-
-            File appIconDataTransfer20181014 = new File(getFilesDir().getAbsolutePath() + File.separator + "appIconDataTransfer20181014.lock");
-            if (!appIconDataTransfer20181014.exists()) {
-                PackageManager pm = getPackageManager();
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                String[] theCls = new String[]{"cf.playhi.freezeyou.FirstIcon", "cf.playhi.freezeyou.SecondIcon", "cf.playhi.freezeyou.ThirdIcon"};
-                String[] theAppIconPrefs = new String[]{"firstIconEnabled", "secondIconEnabled", "thirdIconEnabled"};
-                for (int i = 0; i < theCls.length; i++) {
-                    if (sharedPreferences.getBoolean(theAppIconPrefs[i], "thirdIconEnabled".equals(theAppIconPrefs[i]))) {
-                        pm.setComponentEnabledSetting(new ComponentName(this, theCls[i]),
-                                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-                    } else {
-                        pm.setComponentEnabledSetting(new ComponentName(this, theCls[i]),
-                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-                    }
-                }
-                appIconDataTransfer20181014.createNewFile();
-            }
-
-            File organizationName = new File(getFilesDir().getAbsolutePath() + File.separator + "organizationName.lock");
-            if (!organizationName.exists()) {
-                DevicePolicyManagerUtils.checkAndSetOrganizationName(this, getString(R.string.app_name));
-                organizationName.createNewFile();
-            }
-
+            checkAndMigrateOneKeyConfig();
+            checkAndMigrateSharedPreferenceDataToTray();
+            checkAndMigrateAppIconDataPreference();
+            checkAndMigrateEnableAuthenticationPreferenceDataToMMKV();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (new AppPreferences(this).getBoolean("onekeyFreezeWhenLockScreen", false)) {
-            ServiceUtils.startService(this, new Intent(this, ScreenLockOneKeyFreezeService.class));
-        }
+        checkAndStartScreenLockOneKeyFreezeService();
     }
 
     public static void setCurrentPackage(String pkgName) {
@@ -114,7 +63,7 @@ public class MainApplication extends Application {
     /**
      * @param intent 可空，使用后尽快置空
      */
-    public static void setWaitingForLeavingToInstallApplicationIntent(Intent intent) {
+    public static void setWaitingForLeavingToInstallApplicationIntent(@Nullable Intent intent) {
         mWaitingForLeavingToInstallApplicationIntent = intent;
     }
 
@@ -125,24 +74,26 @@ public class MainApplication extends Application {
         return mWaitingForLeavingToInstallApplicationIntent;
     }
 
-    private void updateConfig() {
+    private void migrateOneKeyConfig() {
         String absoluteFilesPath = getFilesDir().getAbsolutePath();
-        String shared_prefsPath = absoluteFilesPath.substring(0, absoluteFilesPath.length() - 5) + "shared_prefs" + File.separator;
-        updateOneKeyData(
+        String shared_prefsPath =
+                absoluteFilesPath.substring(0, absoluteFilesPath.length() - 5)
+                        + "shared_prefs" + File.separator;
+        migrateOneKeyData(
                 new File(shared_prefsPath + "AutoFreezeApplicationList.xml"),
                 "AutoFreezeApplicationList",
                 getString(R.string.sAutoFreezeApplicationList));
-        updateOneKeyData(
+        migrateOneKeyData(
                 new File(shared_prefsPath + "OneKeyUFApplicationList.xml"),
                 "OneKeyUFApplicationList",
                 getString(R.string.sOneKeyUFApplicationList));
-        updateOneKeyData(
+        migrateOneKeyData(
                 new File(shared_prefsPath + "FreezeOnceQuit.xml"),
                 "FreezeOnceQuit",
                 getString(R.string.sFreezeOnceQuit));
     }
 
-    private void updateOneKeyData(File oldFile, String old_shared_prefs_name, String new_key_name) {
+    private void migrateOneKeyData(File oldFile, String old_shared_prefs_name, String new_key_name) {
         if (oldFile.exists() && oldFile.isFile()) {
             String pkgNameS = getApplicationContext().getSharedPreferences(
                     old_shared_prefs_name, Context.MODE_PRIVATE).getString("pkgName", "");
@@ -155,6 +106,113 @@ public class MainApplication extends Application {
                 }
                 oldFile.delete();
             }
+        }
+    }
+
+    private void checkAndMigrateOneKeyConfig() throws IOException {
+        File checkFile =
+                new File(getFilesDir().getAbsolutePath() + File.separator + "20180808");
+        if (!checkFile.exists()) {
+            migrateOneKeyConfig();
+            checkFile.createNewFile();
+        }
+    }
+
+    private void checkAndStartScreenLockOneKeyFreezeService() {
+        if (new AppPreferences(this)
+                .getBoolean("onekeyFreezeWhenLockScreen", false)) {
+            ServiceUtils.startService(
+                    this,
+                    new Intent(this, ScreenLockOneKeyFreezeService.class));
+        }
+    }
+
+    private void checkAndMigrateAppIconDataPreference() throws IOException {
+        File appIconDataTransfer20181014 =
+                new File(getFilesDir().getAbsolutePath()
+                        + File.separator + "appIconDataTransfer20181014.lock");
+
+        if (!appIconDataTransfer20181014.exists()) {
+            PackageManager pm = getPackageManager();
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(this);
+            String[] theCls =
+                    new String[]{
+                            "cf.playhi.freezeyou.FirstIcon",
+                            "cf.playhi.freezeyou.SecondIcon",
+                            "cf.playhi.freezeyou.ThirdIcon"};
+            String[] theAppIconPrefs =
+                    new String[]{"firstIconEnabled", "secondIconEnabled", "thirdIconEnabled"};
+            for (int i = 0; i < theCls.length; i++) {
+                if (sharedPreferences.getBoolean(
+                        theAppIconPrefs[i], theAppIconPrefs[2].equals(theAppIconPrefs[i]))) {
+                    pm.setComponentEnabledSetting(
+                            new ComponentName(this, theCls[i]),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                            PackageManager.DONT_KILL_APP
+                    );
+                } else {
+                    pm.setComponentEnabledSetting(
+                            new ComponentName(this, theCls[i]),
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                    );
+                }
+            }
+            appIconDataTransfer20181014.createNewFile();
+        }
+    }
+
+    private void checkAndMigrateSharedPreferenceDataToTray() throws IOException {
+
+        File importTrayLock =
+                new File(getFilesDir().getAbsolutePath() + File.separator + "p2d.lock");
+        if (!importTrayLock.exists()) {
+            new ImportTrayPreferences(this);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            AppPreferences appPreferences = new AppPreferences(this);
+            appPreferences.put("freezeOnceQuit",
+                    sharedPreferences.getBoolean("freezeOnceQuit", false));
+            appPreferences.put("shortCutOneKeyFreezeAdditionalOptions",
+                    sharedPreferences.getString("shortCutOneKeyFreezeAdditionalOptions", "nothing"));
+            appPreferences.put("useForegroundService",
+                    sharedPreferences.getBoolean("useForegroundService", false));
+            appPreferences.put("onekeyFreezeWhenLockScreen",
+                    sharedPreferences.getBoolean("onekeyFreezeWhenLockScreen", false));
+            importTrayLock.createNewFile();
+        }
+
+        File dataTransfer20180816Lock = new File(getFilesDir().getAbsolutePath() + File.separator + "20180816.lock");
+        if (!dataTransfer20180816Lock.exists()) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            AppPreferences appPreferences = new AppPreferences(this);
+            appPreferences.put("notificationBarFreezeImmediately",
+                    sharedPreferences.getBoolean("notificationBarFreezeImmediately", true));
+            appPreferences.put("openImmediately",
+                    sharedPreferences.getBoolean("openImmediately", false));
+            appPreferences.put("openAndUFImmediately",
+                    sharedPreferences.getBoolean("openAndUFImmediately", false));
+            appPreferences.put("notificationBarDisableSlideOut",
+                    sharedPreferences.getBoolean("notificationBarDisableSlideOut", false));
+            appPreferences.put("notificationBarDisableClickDisappear",
+                    sharedPreferences.getBoolean("notificationBarDisableClickDisappear", false));
+            dataTransfer20180816Lock.createNewFile();
+        }
+
+    }
+
+    private void checkAndMigrateEnableAuthenticationPreferenceDataToMMKV() throws IOException {
+        File migrateLock =
+                new File(getFilesDir().getAbsolutePath() + File.separator
+                        + "migrateEnableAuthenticationPreferenceDataToMMKV.lock");
+        if (!migrateLock.exists()) {
+            new DefaultMultiProcessMMKVDataStore()
+                    .putBoolean(
+                            "enableAuthentication",
+                            new AppPreferences(this)
+                                    .getBoolean("enableAuthentication", false)
+                    );
+            migrateLock.createNewFile();
         }
     }
 }
