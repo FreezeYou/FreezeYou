@@ -113,12 +113,14 @@ class AutoDiagnosisActivity : FreezeYouBaseActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.autodiagnosis_menu, menu)
-        val cTheme = getUiTheme(this@AutoDiagnosisActivity)
-        if (menu != null && ("white" == cTheme || "default" == cTheme)) {
-            menu.findItem(R.id.menu_autoDiagnosis_refresh)
-                .setIcon(R.drawable.ic_action_refresh_light)
-            menu.findItem(R.id.menu_autoDiagnosis_help)
-                .setIcon(R.drawable.ic_action_help_outline_light)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            val cTheme = getUiTheme(this@AutoDiagnosisActivity)
+            if ("white" == cTheme || "default" == cTheme) {
+                menu.findItem(R.id.menu_autoDiagnosis_refresh)
+                    .setIcon(R.drawable.ic_action_refresh_light)
+                menu.findItem(R.id.menu_autoDiagnosis_help)
+                    .setIcon(R.drawable.ic_action_help_outline_light)
+            }
         }
         return true
     }

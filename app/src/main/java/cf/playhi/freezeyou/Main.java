@@ -40,6 +40,7 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -222,13 +223,16 @@ public class Main extends FreezeYouBaseActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        String cTheme = getUiTheme(this);
-        if ("white".equals(cTheme) || "default".equals(cTheme)) {
-            menu.findItem(R.id.menu_timedTasks).setIcon(R.drawable.ic_action_alarm_light);
-            menu.findItem(R.id.menu_more).setIcon(R.drawable.ic_action_more_light);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            String cTheme = getUiTheme(this);
+            if ("white".equals(cTheme) || "default".equals(cTheme)) {
+                menu.findItem(R.id.menu_timedTasks).setIcon(R.drawable.ic_action_alarm_light);
+                menu.findItem(R.id.menu_viewMode).setIcon(R.drawable.ic_action_filter_light);
+                menu.findItem(R.id.menu_sortBy).setIcon(R.drawable.ic_action_sort_light);
+            }
         }
         return true;
     }
