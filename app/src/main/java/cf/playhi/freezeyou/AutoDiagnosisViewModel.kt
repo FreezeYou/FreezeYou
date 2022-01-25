@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou
 
+import android.Manifest
 import android.app.Application
 import android.app.NotificationManager
 import android.content.Context.*
@@ -7,6 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -63,11 +65,14 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                 checkNotifyPermission()
                 loadingProgress.postValue(30)
 
-                checkIsDeviceOwner()
+                checkBlueToothPermission()
                 loadingProgress.postValue(35)
 
+                checkIsDeviceOwner()
+                loadingProgress.postValue(50)
+
                 checkRootPermission()
-                loadingProgress.postValue(40)
+                loadingProgress.postValue(55)
 
                 doRegenerateSomeCache()
                 loadingProgress.postValue(90)
@@ -347,6 +352,34 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
+    private fun checkBlueToothPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+            && ActivityCompat.checkSelfPermission(
+                getApplication(),
+                Manifest.permission.BLUETOOTH_CONNECT
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            problemsList.value!!.add(
+                generateHashMap(
+                    getApplication<Application>().getString(R.string.bluetoothPermissionIsNotGranted),
+                    getApplication<Application>().getString(R.string.mayCannotUseScheduledTaskToEnableOrDisableBluetooth),
+                    "7",
+                    R.drawable.ic_warning
+                )
+            )
+        } else {
+            problemsList.value!!.add(
+                generateHashMap(
+                    getApplication<Application>().getString(R.string.bluetoothPermissionIsNotGranted),
+                    getApplication<Application>().getString(R.string.mayCannotUseScheduledTaskToEnableOrDisableBluetooth),
+                    "7",
+                    R.drawable.ic_done
+                )
+            )
+        }
+    }
+
     private fun doRegenerateSomeCache() {
         getApplication<Application>().getSharedPreferences("NameOfPackages", MODE_PRIVATE)
             .edit().clear().apply()
@@ -357,24 +390,22 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
         val pm = getApplication<Application>().packageManager
         val installedApplications =
             pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES)
-        if (installedApplications != null) {
-            val size = installedApplications.size
-            for (i in 0 until size) {
-                val applicationInfo = installedApplications[i]
-                getApplicationLabel(
-                    getApplication(),
-                    pm,
-                    applicationInfo,
-                    applicationInfo.packageName
+        val size = installedApplications.size
+        for (i in 0 until size) {
+            val applicationInfo = installedApplications[i]
+            getApplicationLabel(
+                getApplication(),
+                pm,
+                applicationInfo,
+                applicationInfo.packageName
+            )
+            if (cacheApplicationsIcons) {
+                getApplicationIcon(
+                    getApplication<Application>(), applicationInfo.packageName,
+                    applicationInfo, false, true
                 )
-                if (cacheApplicationsIcons) {
-                    getApplicationIcon(
-                        getApplication<Application>(), applicationInfo.packageName,
-                        applicationInfo, false, true
-                    )
-                }
-                loadingProgress.postValue(40 + (i.toDouble() / size.toDouble() * 50).toInt())
             }
+            loadingProgress.postValue(40 + (i.toDouble() / size.toDouble() * 50).toInt())
         }
         problemsList.value!!.add(
             generateHashMap(

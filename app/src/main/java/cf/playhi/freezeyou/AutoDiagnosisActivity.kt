@@ -1,6 +1,8 @@
 package cf.playhi.freezeyou
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +15,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.SimpleAdapter
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import cf.playhi.freezeyou.ThemeUtils.getUiTheme
 import cf.playhi.freezeyou.ThemeUtils.processActionBar
 import cf.playhi.freezeyou.ThemeUtils.processSetTheme
@@ -100,6 +103,20 @@ class AutoDiagnosisActivity : FreezeYouBaseActivity() {
                             "cf.play" + "hi.free" + "zeyou",
                             applicationInfo.uid
                         )
+                        "7" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+                            && ActivityCompat
+                                .checkSelfPermission(
+                                    applicationContext,
+                                    Manifest.permission.BLUETOOTH_CONNECT
+                                )
+                            != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            ActivityCompat.requestPermissions(
+                                this@AutoDiagnosisActivity,
+                                arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
+                                0
+                            )
+                        }
                     }
                 }
             }

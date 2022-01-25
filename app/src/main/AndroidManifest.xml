@@ -3,21 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="cf.playhi.freezeyou">
 
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- 开关蓝牙 -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" /> <!-- 开关蓝牙 -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" /> <!-- 开关蓝牙 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" /> <!-- 开关蓝牙 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.INSTALL_SHORTCUT" /> <!-- 安装快捷方式 -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" /> <!-- 安装快捷方式 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 部分奇怪的设备需要这个权限才能开关WIFI -->
-    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" /> <!-- 开关移动数据，需 pri app -->
-    <uses-permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE" />
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <uses-permission
+        android:name="android.permission.MODIFY_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" /> <!-- 开关移动数据，需 pri app -->
+    <uses-permission
+        android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 

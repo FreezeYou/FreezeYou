@@ -4,21 +4,21 @@
     <ListPreference
         app:useSimpleSummaryProvider="true"
         app:defaultValue="default"
-        app:entries="@array/uiStyleSelection"
-        app:entryValues="@array/uiStyleSelectionValues"
-        app:iconSpaceReserved="false"
-        app:key="uiStyleSelection"
-        app:singleLineTitle="false"
-        app:title="@string/uiStyle" />
-    <ListPreference
-        app:useSimpleSummaryProvider="true"
-        app:defaultValue="default"
         app:entries="@array/mainActivityPatternSelection"
         app:entryValues="@array/mainActivityPatternSelectionValues"
         app:iconSpaceReserved="false"
         app:key="mainActivityPattern"
         app:singleLineTitle="false"
         app:title="@string/mainActivityPattern" />
+    <ListPreference
+        app:useSimpleSummaryProvider="true"
+        app:defaultValue="default"
+        app:entries="@array/uiStyleSelection"
+        app:entryValues="@array/uiStyleSelectionValues"
+        app:iconSpaceReserved="false"
+        app:key="uiStyleSelection"
+        app:singleLineTitle="false"
+        app:title="@string/uiStyle" />
     <CheckBoxPreference
         app:defaultValue="true"
         app:iconSpaceReserved="false"

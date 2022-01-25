@@ -21,16 +21,23 @@ public class ScreenLockOneKeyFreezeService extends FreezeYouBaseService {
         super.onCreate();
         if (new AppPreferences(getApplicationContext()).getBoolean("useForegroundService", false) || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Notification.Builder mBuilder = new Notification.Builder(this);
+                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                if (notificationManager != null) {
+                    notificationManager.createNotificationChannel(
+                            new NotificationChannel(
+                                    "BackgroundService", getString(R.string.backgroundService),
+                                    NotificationManager.IMPORTANCE_NONE)
+                    );
+                }
+                Notification.Builder mBuilder =
+                        new Notification.Builder(this, "BackgroundService");
                 mBuilder.setSmallIcon(R.drawable.ic_notification);
                 mBuilder.setContentText(getString(R.string.backgroundService));
-                NotificationChannel channel = new NotificationChannel("BackgroundService", getString(R.string.backgroundService), NotificationManager.IMPORTANCE_NONE);
-                NotificationManager notificationManager = getSystemService(NotificationManager.class);
-                if (notificationManager != null)
-                    notificationManager.createNotificationChannel(channel);
-                mBuilder.setChannelId("BackgroundService");
                 Intent resultIntent = new Intent(getApplicationContext(), Main.class);
-                PendingIntent resultPendingIntent = PendingIntent.getActivity(getApplicationContext(), 1, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent resultPendingIntent =
+                        PendingIntent.getActivity(
+                                getApplicationContext(), 1, resultIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
                 mBuilder.setContentIntent(resultPendingIntent);
                 startForeground(1, mBuilder.build());
             } else {

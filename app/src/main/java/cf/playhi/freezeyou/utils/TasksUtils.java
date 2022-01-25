@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -20,6 +21,8 @@ import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
+
 import net.grandcentrix.tray.AppPreferences;
 
 import java.io.DataOutputStream;
@@ -29,7 +32,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import cf.playhi.freezeyou.FUFService;
-import cf.playhi.freezeyou.ForceStop;
 import cf.playhi.freezeyou.ForceStopService;
 import cf.playhi.freezeyou.OneKeyFreezeService;
 import cf.playhi.freezeyou.OneKeyUFService;
@@ -44,7 +46,8 @@ import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public final class TasksUtils {
 
-    public static void publishTask(Context context, int id, int hour, int minute, String repeat, String task) {
+    public static void publishTask(
+            Context context, int id, int hour, int minute, String repeat, String task) {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TasksNeedExecuteReceiver.class)
                 .putExtra("id", id)
@@ -52,7 +55,13 @@ public final class TasksUtils {
                 .putExtra("repeat", repeat)
                 .putExtra("hour", hour)
                 .putExtra("minute", minute);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent alarmIntent =
+                PendingIntent.getBroadcast(
+                        context, id, intent,
+                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                                ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                                : PendingIntent.FLAG_UPDATE_CURRENT
+                );
 
         Calendar calendar = Calendar.getInstance();
         long systemTime = System.currentTimeMillis();
@@ -257,11 +266,14 @@ public final class TasksUtils {
                         context, id,
                         new Intent(context, ShowSimpleDialogActivity.class)
                                 .putExtra("title", title)
-                                .putExtra("text", text), PendingIntent.FLAG_UPDATE_CURRENT)
+                                .putExtra("text", text),
+                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                                ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                                : PendingIntent.FLAG_UPDATE_CURRENT)
         );
         builder.setAutoCancel(true);
 
-        notificationManager.notify(id, builder.getNotification());
+        notificationManager.notify(id, builder.build());
 
     }
 
@@ -297,19 +309,26 @@ public final class TasksUtils {
     private static void enableAndDisableSysSettings(String[] tasks, Context context, boolean enable) {
         for (String aTask : tasks) {
             switch (aTask) {
-                case "wifi"://WiFi
+                case "wifi": // WiFi
                     WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                     if (wifiManager != null)
                         wifiManager.setWifiEnabled(enable);
                     break;
-                case "cd"://CellularData
+                case "cd": // CellularData
                     setMobileDataEnabled(context, enable);
                     break;
-                case "bluetooth"://Bluetooth
-                    if (enable) {
-                        BluetoothAdapter.getDefaultAdapter().enable();
+                case "bluetooth": // Bluetooth
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+                            && ActivityCompat
+                            .checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        showToast(context, R.string.bluetoothPermissionIsNotGranted);
                     } else {
-                        BluetoothAdapter.getDefaultAdapter().disable();
+                        if (enable) {
+                            BluetoothAdapter.getDefaultAdapter().enable();
+                        } else {
+                            BluetoothAdapter.getDefaultAdapter().disable();
+                        }
                     }
                     break;
                 default:
@@ -333,13 +352,16 @@ public final class TasksUtils {
                                 .putExtra("repeat", "-1")
                                 .putExtra("hour", -1)
                                 .putExtra("minute", -1);
-                        int requestCode = (task + new Date().toString()).hashCode();
+                        int requestCode = (task + new Date()).hashCode();
                         PendingIntent pendingIntent =
                                 PendingIntent.getBroadcast(
                                         context,
                                         requestCode,
                                         intent,
-                                        PendingIntent.FLAG_UPDATE_CURRENT);
+                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                                                ? PendingIntent.FLAG_UPDATE_CURRENT
+                                                | PendingIntent.FLAG_IMMUTABLE
+                                                : PendingIntent.FLAG_UPDATE_CURRENT);
                         createDelayTasks(alarmMgr, delayAtSeconds, pendingIntent);
                         if (taskTrigger != null) {//定时或无撤回判断能力或目前不计划实现撤销的任务直接null
                             AppPreferences appPreferences = new AppPreferences(context);
@@ -372,14 +394,14 @@ public final class TasksUtils {
         Cursor cursor = db.query("tasks", null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
-                String tgExtra = cursor.getString(cursor.getColumnIndex("tgextra"));
+                String tgExtra = cursor.getString(cursor.getColumnIndexOrThrow("tgextra"));
                 if (tgExtra == null) {
                     tgExtra = "";
                 }
-                String tg = cursor.getString(cursor.getColumnIndex("tg"));
-                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                String tg = cursor.getString(cursor.getColumnIndexOrThrow("tg"));
+                int enabled = cursor.getInt(cursor.getColumnIndexOrThrow("enabled"));
                 if (enabled == 1 && "onUFApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(OneKeyListUtils.decodeUserListsInPackageNames(context, tgExtra.split(","))).contains(pkgNameString))) {
-                    String task = cursor.getString(cursor.getColumnIndex("task"));
+                    String task = cursor.getString(cursor.getColumnIndexOrThrow("task"));
                     if (task != null && !"".equals(task)) {
                         runTask(task.replace("[cpkgn]", pkgNameString), context, null);
                     }
@@ -402,14 +424,14 @@ public final class TasksUtils {
         Cursor cursor = db.query("tasks", null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
-                String tg = cursor.getString(cursor.getColumnIndex("tg"));
-                String tgExtra = cursor.getString(cursor.getColumnIndex("tgextra"));
-                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                String tg = cursor.getString(cursor.getColumnIndexOrThrow("tg"));
+                String tgExtra = cursor.getString(cursor.getColumnIndexOrThrow("tgextra"));
+                int enabled = cursor.getInt(cursor.getColumnIndexOrThrow("enabled"));
                 if (tgExtra == null) {
                     tgExtra = "";
                 }
                 if (enabled == 1 && "onFApplications".equals(tg) && ("".equals(tgExtra) || Arrays.asList(OneKeyListUtils.decodeUserListsInPackageNames(context, tgExtra.split(","))).contains(pkgNameString))) {
-                    String task = cursor.getString(cursor.getColumnIndex("task"));
+                    String task = cursor.getString(cursor.getColumnIndexOrThrow("task"));
                     if (task != null && !"".equals(task)) {
                         runTask(task.replace("[cpkgn]", pkgNameString), context, null);
                     }
@@ -465,7 +487,12 @@ public final class TasksUtils {
 
             for (String id : unprocessed.split(",")) {
                 if (id != null && !"".equals(id)) {
-                    PendingIntent alarmIntent = PendingIntent.getBroadcast(context, Integer.parseInt(id), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent alarmIntent =
+                            PendingIntent.getBroadcast(
+                                    context, Integer.parseInt(id), intent,
+                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                                            ? PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                                            : PendingIntent.FLAG_CANCEL_CURRENT);
                     if (alarmMgr != null) {
                         alarmMgr.cancel(alarmIntent);
                     }
@@ -479,7 +506,12 @@ public final class TasksUtils {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TasksNeedExecuteReceiver.class)
                 .putExtra("id", id);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent alarmIntent =
+                PendingIntent.getBroadcast(
+                        context, id, intent,
+                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                                ? PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                                : PendingIntent.FLAG_CANCEL_CURRENT);
         if (alarmMgr != null) {
             alarmMgr.cancel(alarmIntent);
         }
@@ -494,12 +526,12 @@ public final class TasksUtils {
         final Cursor cursor = db.query("tasks", null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
-                int id = cursor.getInt(cursor.getColumnIndex("_id"));
-                String repeat = cursor.getString(cursor.getColumnIndex("repeat"));
-                int hour = cursor.getInt(cursor.getColumnIndex("hour"));
-                int minutes = cursor.getInt(cursor.getColumnIndex("minutes"));
-                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
-                String task = cursor.getString(cursor.getColumnIndex("task"));
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
+                String repeat = cursor.getString(cursor.getColumnIndexOrThrow("repeat"));
+                int hour = cursor.getInt(cursor.getColumnIndexOrThrow("hour"));
+                int minutes = cursor.getInt(cursor.getColumnIndexOrThrow("minutes"));
+                int enabled = cursor.getInt(cursor.getColumnIndexOrThrow("enabled"));
+                String task = cursor.getString(cursor.getColumnIndexOrThrow("task"));
                 TasksUtils.cancelTheTask(context, id);
                 if (enabled == 1) {
                     publishTask(context, id, hour, minutes, repeat, task);
@@ -521,8 +553,8 @@ public final class TasksUtils {
         final Cursor cursor = db.query("tasks", null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
-                String tg = cursor.getString(cursor.getColumnIndex("tg"));
-                int enabled = cursor.getInt(cursor.getColumnIndex("enabled"));
+                String tg = cursor.getString(cursor.getColumnIndexOrThrow("tg"));
+                int enabled = cursor.getInt(cursor.getColumnIndexOrThrow("enabled"));
                 if (enabled == 1) {
                     if (tg == null) {
                         tg = "";

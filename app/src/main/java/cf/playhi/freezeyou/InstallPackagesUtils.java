@@ -66,7 +66,9 @@ final class InstallPackagesUtils {
                                             context,
                                             (beOperatedPackageName + "@InstallPackagesNotification").hashCode(),
                                             resultIntent,
-                                            PendingIntent.FLAG_UPDATE_CURRENT);
+                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                                                    ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                                                    : PendingIntent.FLAG_UPDATE_CURRENT);
                     builder.setContentIntent(resultPendingIntent);
                     builder.setAutoCancel(true);
 
@@ -84,7 +86,9 @@ final class InstallPackagesUtils {
                                         new Intent(context, ShowSimpleDialogActivity.class)
                                                 .putExtra("title", title)
                                                 .putExtra("text", text),
-                                        PendingIntent.FLAG_UPDATE_CURRENT);
+                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                                                ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                                                : PendingIntent.FLAG_UPDATE_CURRENT);
                 builder.setContentIntent(resultPendingIntent);
             }
 
@@ -104,13 +108,15 @@ final class InstallPackagesUtils {
                                     new Intent(context, ShowSimpleDialogActivity.class)
                                             .putExtra("title", title)
                                             .putExtra("text", text),
-                                    PendingIntent.FLAG_UPDATE_CURRENT);
+                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                                            ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                                            : PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(resultPendingIntent);
 
         }
 
         notificationManager.notify(
-                (beOperatedPackageName + "@InstallPackagesNotification").hashCode(), builder.getNotification()
+                (beOperatedPackageName + "@InstallPackagesNotification").hashCode(), builder.build()
         );
 
     }
@@ -146,7 +152,7 @@ final class InstallPackagesUtils {
         builder.setContentTitle(
                 String.format(
                         context.getString(R.string.waitingToInstall_app),
-                        pm.getApplicationLabel(packageInfo.applicationInfo).toString()
+                        pm.getApplicationLabel(packageInfo.applicationInfo)
                 )
         );
         builder.setProgress(100, 0, true);
@@ -157,7 +163,7 @@ final class InstallPackagesUtils {
         );
         notificationManager.notify(
                 (packageInfo.packageName + "@InstallPackagesNotification").hashCode(),
-                builder.getNotification()
+                builder.build()
         );
 
     }
