@@ -60,18 +60,22 @@ class SettingsActivity : FreezeYouBaseActivity(),
     ): Boolean {
         // Instantiate the new Fragment
         val args = pref.extras
-        val fragment = supportFragmentManager.fragmentFactory.instantiate(
-            classLoader,
-            pref.fragment
-        )
-        fragment.arguments = args
-        fragment.setTargetFragment(caller, 0)
-        // Replace the existing Fragment with the new Fragment
-        supportFragmentManager.beginTransaction()
-            .replace(android.R.id.content, fragment)
-            .addToBackStack(null)
-            .commit()
-        return true
+        val prefFragment = pref.fragment
+        if (prefFragment != null) {
+            val fragment = supportFragmentManager.fragmentFactory.instantiate(
+                classLoader,
+                prefFragment
+            )
+            fragment.arguments = args
+            fragment.setTargetFragment(caller, 0)
+            // Replace the existing Fragment with the new Fragment
+            supportFragmentManager.beginTransaction()
+                .replace(android.R.id.content, fragment)
+                .addToBackStack(null)
+                .commit()
+            return true
+        }
+        return false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

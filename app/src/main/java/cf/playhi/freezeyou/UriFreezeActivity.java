@@ -202,18 +202,9 @@ public class UriFreezeActivity extends FreezeYouBaseActivity {
                                         R.drawable.ic_warning,
                                         R.string.alert_isObsd,
                                         R.string.dangerous)
-                                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        finish();
-                                    }
-                                })
-                                .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        checkAndCreateUserCheckDialog(intent, pkgName, mode);
-                                    }
-                                })
+                                .setNegativeButton(R.string.cancel, (dialog1, which1) -> finish())
+                                .setPositiveButton(R.string.retry, (dialog12, which12) ->
+                                        checkAndCreateUserCheckDialog(intent, pkgName, mode))
                                 .create().show();
                     } else {
                         CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.ufa_dialog_checkBox);
