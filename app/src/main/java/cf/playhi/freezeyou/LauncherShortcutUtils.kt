@@ -120,8 +120,8 @@ object LauncherShortcutUtils {
                             )
                         )
                         .setIntent(intent)
-                        .setShortLabel(title)
-                        .setLongLabel(title)
+                        .setShortLabel(title.ifEmpty { " " })
+                        .setLongLabel(title.ifEmpty { " " })
 
                     val pinShortcutInfo = shortcutInfoBuilder.build()
                     // Create the PendingIntent object only if your app needs to be notified

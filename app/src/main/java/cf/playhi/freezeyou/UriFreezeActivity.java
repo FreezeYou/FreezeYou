@@ -45,15 +45,26 @@ public class UriFreezeActivity extends FreezeYouBaseActivity {
 
     private void init() {
         Intent intent = getIntent();
-        String pkgName;
         if (intent != null) {
             if ("freezeyou".equals(intent.getScheme())) {
                 Uri dataUri = intent.getData();
                 if (dataUri != null) {
-                    String action = dataUri.getQueryParameter("action");
+                    String action = "", pkgName = "";
+                    try {
+                        action = dataUri.getQueryParameter("action");
+                    } catch (NullPointerException ignored) {
+                    }
                     if (action == null || "".equals(action))
                         action = "fuf";
-                    pkgName = dataUri.getQueryParameter("pkgName");
+
+                    try {
+                        pkgName = dataUri.getQueryParameter("pkgName");
+                    } catch (NullPointerException ignored) {
+                    }
+                    if (pkgName == null || "".equals(pkgName)) {
+                        finish();
+                        return;
+                    }
 
                     switch (action.toLowerCase()) {
                         case "freeze":
@@ -184,72 +195,69 @@ public class UriFreezeActivity extends FreezeYouBaseActivity {
                         isFrozen ?
                                 R.string.unfreeze :
                                 R.string.launch),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (((ObsdAlertDialog) dialog).isObsd()) {
-                            AlertDialogUtils.buildAlertDialog(
-                                    UriFreezeActivity.this,
-                                    android.R.drawable.ic_dialog_alert,
-                                    R.string.alert_isObsd,
-                                    R.string.dangerous)
-                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            finish();
-                                        }
-                                    })
-                                    .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            checkAndCreateUserCheckDialog(intent, pkgName, mode);
-                                        }
-                                    })
-                                    .create().show();
-                        } else {
-                            CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.ufa_dialog_checkBox);
-                            if (checkBox != null && checkBox.isChecked()) {
-                                AppPreferences sp = new AppPreferences(UriFreezeActivity.this);
-                                String originData = sp.getString("uriAutoAllowPkgs_allows", "");
-                                List<String> originData_list = MoreUtils.convertToList(originData, ",");
-                                if (!ILLEGALPKGNAME.equals(refererPackage)
-                                        &&
-                                        (originData == null ||
-                                                !originData_list.contains(
-                                                        Base64.encodeToString(
-                                                                refererPackage.getBytes(), Base64.DEFAULT)))) {
-                                    originData_list.add(
-                                            Base64.encodeToString(refererPackage.getBytes(), Base64.DEFAULT));
-                                    sp.put(
-                                            "uriAutoAllowPkgs_allows",
-                                            MoreUtils.listToString(originData_list, ",")
-                                    );
-                                }
+                (dialog, which) -> {
+                    if (((ObsdAlertDialog) dialog).isObsd()) {
+                        AlertDialogUtils.buildAlertDialog(
+                                        UriFreezeActivity.this,
+                                        R.drawable.ic_warning,
+                                        R.string.alert_isObsd,
+                                        R.string.dangerous)
+                                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        finish();
+                                    }
+                                })
+                                .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        checkAndCreateUserCheckDialog(intent, pkgName, mode);
+                                    }
+                                })
+                                .create().show();
+                    } else {
+                        CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.ufa_dialog_checkBox);
+                        if (checkBox != null && checkBox.isChecked()) {
+                            AppPreferences sp = new AppPreferences(UriFreezeActivity.this);
+                            String originData = sp.getString("uriAutoAllowPkgs_allows", "");
+                            List<String> originData_list = MoreUtils.convertToList(originData, ",");
+                            if (!ILLEGALPKGNAME.equals(refererPackage)
+                                    &&
+                                    (originData == null ||
+                                            !originData_list.contains(
+                                                    Base64.encodeToString(
+                                                            refererPackage.getBytes(), Base64.DEFAULT)))) {
+                                originData_list.add(
+                                        Base64.encodeToString(refererPackage.getBytes(), Base64.DEFAULT));
+                                sp.put(
+                                        "uriAutoAllowPkgs_allows",
+                                        MoreUtils.listToString(originData_list, ",")
+                                );
                             }
-                            if (suitableForAutoAllow) {
-                                doSuitableForAutoAllowAllow(mode, pkgName, isFrozen);
+                        }
+                        if (suitableForAutoAllow) {
+                            doSuitableForAutoAllowAllow(mode, pkgName, isFrozen);
+                        } else {
+                            if (isFrozen) {
+                                FUFUtils.processUnfreezeAction(
+                                        UriFreezeActivity.this,
+                                        pkgName,
+                                        null,
+                                        null,
+                                        true,
+                                        false,
+                                        UriFreezeActivity.this,
+                                        true
+                                );
                             } else {
-                                if (isFrozen) {
-                                    FUFUtils.processUnfreezeAction(
-                                            UriFreezeActivity.this,
-                                            pkgName,
-                                            null,
-                                            null,
-                                            true,
-                                            false,
-                                            UriFreezeActivity.this,
-                                            true
-                                    );
-                                } else {
-                                    FUFUtils.checkAndStartApp(
-                                            UriFreezeActivity.this,
-                                            pkgName,
-                                            null,
-                                            null,
-                                            UriFreezeActivity.this,
-                                            true
-                                    );
-                                }
+                                FUFUtils.checkAndStartApp(
+                                        UriFreezeActivity.this,
+                                        pkgName,
+                                        null,
+                                        null,
+                                        UriFreezeActivity.this,
+                                        true
+                                );
                             }
                         }
                     }
@@ -259,36 +267,26 @@ public class UriFreezeActivity extends FreezeYouBaseActivity {
                 getString(
                         suitableForAutoAllow ?
                                 R.string.reject : R.string.freeze),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (suitableForAutoAllow) {
-                            finish();
-                        } else {
-                            FUFUtils.processFreezeAction(
-                                    UriFreezeActivity.this,
-                                    pkgName,
-                                    null,
-                                    null,
-                                    false,
-                                    UriFreezeActivity.this,
-                                    true
-                            );
-                        }
+                (dialog, which) -> {
+                    if (suitableForAutoAllow) {
+                        finish();
+                    } else {
+                        FUFUtils.processFreezeAction(
+                                UriFreezeActivity.this,
+                                pkgName,
+                                null,
+                                null,
+                                false,
+                                UriFreezeActivity.this,
+                                true
+                        );
                     }
                 });
-        obsdAlertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-        obsdAlertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
-            }
-        });
+        obsdAlertDialog.setButton(
+                DialogInterface.BUTTON_NEUTRAL, getString(R.string.cancel),
+                (dialog, which) -> finish()
+        );
+        obsdAlertDialog.setOnCancelListener(dialog -> finish());
         obsdAlertDialog.show();
         Window w = obsdAlertDialog.getWindow();
         if (w != null) {
