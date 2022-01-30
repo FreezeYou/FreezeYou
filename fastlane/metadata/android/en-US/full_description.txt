@@ -1,0 +1,27 @@
+<ul>
+<li>Power save! No frequent charging! ⚡️</li>
+<li>Speed up! No stiff animation! 💨</li>
+<li>Keep silent! No unnecessary notification! 🔇</li>
+<li>Disable (or enable) some terrible but useful apps to improve your device's speed and battery life.</li>
+</ul>
+
+<h3>Features</h3>
+
+<ul>
+<li>Support NoRoot(DPM), Root(HIDE), Root(DISABLE), System App(DISABLE), System App(DISABLE_USER), System App(DISABLE_UNTIL_USED) mode</li>
+<li>Support scheduled task</li>
+<li>Support timed task</li>
+<li>Support triggered task</li>
+<li>Support delayed task</li>
+<li>Support one key freeze</li>
+<li>Support one key unfreeze</li>
+<li>Support leave freeze</li>
+<li>Support view by category</li>
+<li>Support notification tiles for one key freeze, unfreeze and screen lock</li>
+<li>Support auto freeze after screen locked</li>
+<li>Support many kinds of shortcut for operation</li>
+<li>Support many ways of freeze and unfreeze</li>
+<li>Support change interface style</li>
+<li>Support backup and restore</li>
+<li>And more other functions!</li>
+</ul>
