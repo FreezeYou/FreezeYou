@@ -1,32 +1,32 @@
 ---
-name: 错误提交（简体中文）
-about: 帮助改进产品
+name: Bug Report (English)
+about: Create a report to help us improve
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
-**描述错误**  
-对问题/错误/异常的清晰简洁描述。 
+**Describe the bug**  
+A clear and concise description of what the bug is.
 
-**重现**  
-重现步骤：
-1.去'...' 
-2.点击“......” 
-3.向下滚动到“....” 
-4.发生错误“......”
+**To Reproduce**  
+Steps to reproduce the behavior: 
+1. Go to '...' 
+2. Click on '....' 
+3. Scroll down to '....' 
+4. See error
 
-**预期行为**   
-清楚简洁地描述期望发生的事情。 
+**Expected behavior**  
+A clear and concise description of what you expected to happen.
 
-**截图**  
-如果适用，请添加屏幕截图以帮助解释您的问题。 
+**Screenshots**  
+If applicable, add screenshots to help explain your problem.
 
-**设备信息**  
- - 设备：[例如OnePlus 18]  
- - 操作系统：[例如Android6.0]  
- - FreezeYou 版本：[例如8.2.20001011（可在“关于”中找到）] 
+**Smartphone (please complete the following information):**
 
-**附加背景**  
-在此添加有关此问题的任何其他上下文。
+- Device: [e.g. OnePlus 18]
+- OS: [e.g. Android6.0]
+- FreezeYou Version: [e.g. 8.2.20001011(Can be found in 'About')]
+
+**Additional context**  
+Add any other context about the problem here.
