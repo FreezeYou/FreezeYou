@@ -11,6 +11,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**  
 Steps to reproduce the behavior:
+
 1. Go to '...' 
 2. Click on '....' 
 3. Scroll down to '....' 
@@ -23,6 +24,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Smartphone (please complete the following information):**
+
 - Device: [e.g. OnePlus 18]
 - OS: [e.g. Android6.0]
 - FreezeYou Version: [e.g. 8.2.20001011(Can be found in 'About')]
