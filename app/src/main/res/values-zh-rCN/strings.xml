@@ -25,10 +25,10 @@
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="requested">已发出创建请求</string>
-    <string name="requestFailed">请求创建失败：</string>
+    <string name="requestFailed">请求创建失败： </string>
     <string name="createOneKeyFreezeShortcut">一键冻结</string>
     <string name="executed">执行完成</string>
-    <string name="exception">异常：</string>
+    <string name="exception">异常： </string>
     <string name="launch">启动</string>
     <string name="mayUnrooted">可能尚未ROOT或免ROOT模式未启用成功</string>
     <string name="mayUnrootedOrOtherEx">可能没有授予权限、目标已卸载或发生了其它异常</string>
@@ -221,9 +221,9 @@
     <string name="insufficientPermission">权限不足</string>
     <string name="onlyUnfreeze">仅解冻</string>
     <string name="unknown">未知</string>
-    <string name="installPackage_colon">安装应用：</string>
-    <string name="requestFromPackage_colon">来源应用：</string>
-    <string name="application_colon">应用：</string>
+    <string name="installPackage_colon">安装应用： </string>
+    <string name="requestFromPackage_colon">来源应用： </string>
+    <string name="application_colon">应用： </string>
     <string name="pkgName_colon">包名：</string>
     <string name="version_colon">版本：</string>
     <string name="whetherAllow">是否允许？</string>
@@ -378,6 +378,8 @@
     <string name="alphabetical">字母顺序</string>
     <string name="refresh">刷新</string>
     <string name="themeOfAutoSwitchDarkMode">自动切换暗色模式时的界面风格</string>
+    <string name="bluetoothPermissionIsNotGranted">相关的蓝牙权限尚未授予</string>
+    <string name="mayCannotUseScheduledTaskToEnableOrDisableBluetooth">可能无法使用计划任务启用或禁用蓝牙</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
