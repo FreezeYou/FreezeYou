@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">自冻</string>
     <string name="oneKeyFreeze">一键冻结</string>
-    <string name="oneKeyUF">一键解冻</string>
+    <string name="oneKeyUF">一键冻结</string>
     <string name="alertT1">注意！\n不知道的不要乱冻结，可能会使系统崩溃！\n请谨慎操作！\n请谨慎操作！</string>
     <string name="cancel">取消</string>
     <string name="chooseDetailAction">请选择具体操作</string>
