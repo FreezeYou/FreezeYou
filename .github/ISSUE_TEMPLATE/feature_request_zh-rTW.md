@@ -1,5 +1,5 @@
 ---
-name: 功能建議（繁體中文）
+name: 功能建議
 about: 提出意見建議
 title: ''
 labels: ''
