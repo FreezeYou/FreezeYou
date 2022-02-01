@@ -1,5 +1,5 @@
 ---
-name: Feature request
+name: Запрос новой функции
 about: Предложите идею для этого проекта
 title: ''
 labels: ''
