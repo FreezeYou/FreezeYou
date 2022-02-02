@@ -1,5 +1,5 @@
 ---
-name: 错误提交(简体中文)
+name: 错误提交
 about: 帮助改进产品
 title: ''
 labels: ''

@@ -367,7 +367,7 @@
     <string name="security">Безпека</string>
     <string name="enableAuthentication">Ввімкнути автентифікацію</string>
     <string name="authentication">Автентифікація</string>
-    <string name="verifyToContinue">Підтвердити для продовження</string>
+    <string name="verifyToContinue">Подтвердите для продолжения</string>
     <string name="authenticationFailed">Помилка автентифікації</string>
     <string name="authenticationError_colon">Помилка автентифікації: %1$s</string>
     <string name="forceStop">Примусова зупинка</string>
@@ -377,8 +377,8 @@
     <string name="alphabetical">За алфавітом</string>
     <string name="refresh">Оновити</string>
     <string name="themeOfAutoSwitchDarkMode">Стиль інтерфейсу для автоматичного перемикання темного режиму</string>
-    <string name="bluetoothPermissionIsNotGranted">Пов\'язаний дозвіл Bluetooth не надано</string>
-    <string name="mayCannotUseScheduledTaskToEnableOrDisableBluetooth">Можливо, не вдасться використати заплановані завдання для ввімкнення або вимкнення Bluetooth</string>
+    <string name="bluetoothPermissionIsNotGranted">Связанное разрешение Bluetooth не предоставлено</string>
+    <string name="mayCannotUseScheduledTaskToEnableOrDisableBluetooth">Возможно, не удастся использовать запланированные задачи для включения или отключения Bluetooth</string>
     <string-array name="launchModeSelection">
         <item>Показати все</item>
         <item>Заморожено</item>

@@ -1,5 +1,5 @@
 ---
-name: 錯誤提交（繁體中文）
+name: 錯誤提交
 about: 説明改進產品
 title: ''
 labels: ''
