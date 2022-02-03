@@ -383,6 +383,7 @@
     <string name="sFreezeOnceQuit" translatable="false">New_FreezeOnceQuit</string>
     <string name="sAutoFreezeApplicationList" translatable="false">New_AutoFreezeApplicationList</string>
     <string name="sOneKeyUFApplicationList" translatable="false">New_OneKeyUFApplicationList</string>
+    <string name="gotoStore">Go to the store</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
