@@ -381,6 +381,7 @@
     <string name="themeOfAutoSwitchDarkMode">Стиль интерфейса автопереключения темного режима</string>
     <string name="bluetoothPermissionIsNotGranted">Связанное разрешение Bluetooth не предоставлено</string>
     <string name="mayCannotUseScheduledTaskToEnableOrDisableBluetooth">Возможно, не удастся использовать запланированные задачи для включения или отключения Bluetooth</string>
+    <string name="gotoStore">Перейти в магазин приложений</string>
     <string-array name="launchModeSelection">
         <item>Показать все</item>
         <item>Замороженые</item>
