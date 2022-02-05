@@ -380,6 +380,7 @@
     <string name="themeOfAutoSwitchDarkMode">Interface style of auto switch dark mode</string>
     <string name="bluetoothPermissionIsNotGranted">Related Bluetooth permission is not granted</string>
     <string name="mayCannotUseScheduledTaskToEnableOrDisableBluetooth">May cannot use the scheduled task to enable or disable Bluetooth</string>
+    <string name="gotoStore">Go to the store</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
