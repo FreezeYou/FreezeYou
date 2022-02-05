@@ -380,6 +380,7 @@
     <string name="themeOfAutoSwitchDarkMode">自动切换暗色模式时的界面风格</string>
     <string name="bluetoothPermissionIsNotGranted">相关的蓝牙权限尚未授予</string>
     <string name="mayCannotUseScheduledTaskToEnableOrDisableBluetooth">可能无法使用计划任务启用或禁用蓝牙</string>
+    <string name="gotoStore">转至市场</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
