@@ -386,14 +386,12 @@ public final class Support {
         }
 
         switch (s) {
+            case "en":
+                return new Locale("en");
             case "en-US":
                 return new Locale("en", "US");
-            case "ru":
-                return new Locale("ru");
             case "ru-RU":
                 return new Locale("ru", "RU");
-            case "uk":
-                return new Locale("uk");
             case "uk-UA":
                 return new Locale("uk", "UA");
             case "zh-CN":
