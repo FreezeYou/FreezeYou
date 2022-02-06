@@ -3,6 +3,7 @@ package cf.playhi.freezeyou
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Build
 import android.view.Window
 import android.view.WindowManager
@@ -101,9 +102,17 @@ internal object ThemeUtils {
         if (window != null) {
             window.requestFeature(Window.FEATURE_NO_TITLE)
             window.setBackgroundDrawableResource(R.color.realTranslucent)
-            if (Build.VERSION.SDK_INT >= 19) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            when {
+                Build.VERSION.SDK_INT >= 21 -> {
+                    window.navigationBarColor = Color.TRANSPARENT
+                    window.statusBarColor = Color.TRANSPARENT
+                }
+                Build.VERSION.SDK_INT >= 19 -> {
+                    @Suppress("DEPRECATION")
+                    window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+                    @Suppress("DEPRECATION")
+                    window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                }
             }
         }
     }
