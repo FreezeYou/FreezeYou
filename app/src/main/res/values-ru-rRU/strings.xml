@@ -373,7 +373,7 @@
     <string name="authenticationFailed">Сбой аутентификации</string>
     <string name="authenticationError_colon">Ошибка аутентификации: %1$s</string>
     <string name="forceStop">Принудительная остановка</string>
-    <string name="unfrozenUA">Незамороженые пользовательские приложения</string>
+    <string name="unfrozenUA">Незамороженые пользовательские</string>
     <string name="lastInstall">Недавно установленные</string>
     <string name="lastUpdate">Недавно обновленные</string>
     <string name="alphabetical">В алфавитном порядке</string>
