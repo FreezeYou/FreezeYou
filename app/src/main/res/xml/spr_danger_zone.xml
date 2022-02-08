@@ -20,6 +20,12 @@
     </Preference>
     <Preference
         app:iconSpaceReserved="false"
+        app:key="selfRevokeProfileOwner"
+        app:singleLineTitle="false"
+        app:summary="@string/selfRevokeProfileOwnerSummary"
+        app:title="@string/selfRevokeProfileOwner" />
+    <Preference
+        app:iconSpaceReserved="false"
         app:key="uninstall"
         app:singleLineTitle="false"
         app:title="@string/uninstall" />

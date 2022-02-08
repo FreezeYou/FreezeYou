@@ -1,6 +1,7 @@
 package cf.playhi.freezeyou
 
 import android.app.ActivityManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -10,8 +11,11 @@ import androidx.annotation.Keep
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog
+import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner
+import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isProfileOwner
 import cf.playhi.freezeyou.utils.ToastUtils.showToast
+import cf.playhi.freezeyou.utils.VersionUtils.checkUpdate
 
 @Keep
 class SettingsDangerZoneFragment : PreferenceFragmentCompat() {
@@ -53,6 +57,46 @@ class SettingsDangerZoneFragment : PreferenceFragmentCompat() {
                     }
                 }
                 .setNegativeButton(R.string.no, null)
+                .show()
+            true
+        }
+
+        findPreference<Preference?>("selfRevokeProfileOwner")?.setOnPreferenceClickListener {
+            buildAlertDialog(
+                requireActivity(),
+                R.drawable.ic_warning,
+                R.string.selfRevokeProfileOwner,
+                R.string.plsConfirm
+            )
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    if (isProfileOwner(requireContext())) {
+                        try {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                DevicePolicyManagerUtils
+                                    .getDevicePolicyManager(
+                                        requireContext()
+                                    )
+                                    .clearProfileOwner(
+                                        ComponentName(
+                                            requireContext(),
+                                            DeviceAdminReceiver::class.java
+                                        )
+                                    )
+                                showToast(requireActivity(), R.string.success)
+                            } else {
+                                // TODO: Unsupported
+                            }
+                        } catch (e: SecurityException) {
+                            // TODO: Is not an active profile owner, or the method is being called from a managed profile.
+                        }
+                    } else {
+                        // TODO: Is not an active profile owner
+                    }
+                }
+                .setNegativeButton(R.string.no, null)
+                .setNeutralButton(R.string.update) { _, _ ->
+                    checkUpdate(requireActivity())
+                }
                 .show()
             true
         }

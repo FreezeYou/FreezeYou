@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import net.grandcentrix.tray.AppPreferences;
@@ -51,14 +52,6 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
         super.onCreate(savedInstanceState);
 
         init();
-//        try {
-//            getDevicePolicyManager(this).clearPackagePersistentPreferredActivities(
-//                    DeviceAdminReceiver.getComponentName(this), getPackageName()
-//            );
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }
     }
 
     private void clearTempFile(String filePath) {
@@ -102,27 +95,14 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                     android.R.drawable.ic_dialog_alert,
                                     R.string.needStoragePermission,
                                     R.string.notice)
-                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    finish();
-                                }
-                            })
-                            .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                            .setOnCancelListener(dialog -> finish())
+                            .setPositiveButton(R.string.okay, (dialog, which) ->
                                     requestPermissions(
                                             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                                             301
-                                    );
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            });
+                                    )
+                            )
+                            .setNegativeButton(R.string.cancel, (dialog, which) -> finish());
                     if (!isFinishing()) {
                         b.show();
                     }
@@ -183,145 +163,129 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                 ProgressDialog.show(this, getString(R.string.plsWait), getString(R.string.loading___));
         final String nl = System.getProperty("line.separator");
         if (install) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (apkFilePath.startsWith(getExternalCacheDir() + File.separator + "ZDF-")) {
-                            InputStream in = getContentResolver().openInputStream(packageUri);
-                            if (in == null) {
-                                finish();
-                                return;
-                            }
-                            FileUtils.copyFile(in, apkFilePath);
+            new Thread(() -> {
+                try {
+                    if (apkFilePath.startsWith(getExternalCacheDir() + File.separator + "ZDF-")) {
+                        InputStream in = getContentResolver().openInputStream(packageUri);
+                        if (in == null) {
+                            finish();
+                            return;
                         }
+                        FileUtils.copyFile(in, apkFilePath);
+                    }
 
-                        PackageManager pm = getPackageManager();
-                        final PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePath, 0);
-                        packageInfo.applicationInfo.sourceDir = apkFilePath;
-                        packageInfo.applicationInfo.publicSourceDir = apkFilePath;
+                    PackageManager pm = getPackageManager();
+                    final PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePath, 0);
+                    packageInfo.applicationInfo.sourceDir = apkFilePath;
+                    packageInfo.applicationInfo.publicSourceDir = apkFilePath;
 
-                        //Check AutoAllow
-                        AppPreferences sp = new AppPreferences(InstallPackagesActivity.this);
-                        String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
-                        if (originData != null
-                                && !ILLEGALPKGNAME.equals(fromPkgLabel)
-                                && MoreUtils.convertToList(originData, ",").contains(
-                                Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT))) {
-                            //Allow
-                            ServiceUtils.startService(
-                                    InstallPackagesActivity.this,
-                                    new Intent(InstallPackagesActivity.this, InstallPackagesService.class)
-                                            .putExtra("install", true)
-                                            .putExtra("packageUri", packageUri)
-                                            .putExtra("apkFilePath", apkFilePath)
-                                            .putExtra("packageInfo", packageInfo)
-                                            .putExtra("waitForLeaving",
-                                                    new AppPreferences(InstallPackagesActivity.this)
-                                                            .getBoolean("tryToAvoidUpdateWhenUsing", false)
-                                            )
-                            );
-
-                            if (isFinishing()) return;
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (progressDialog.isShowing())
-                                        progressDialog.cancel();
-                                    finish();
-                                }
-                            });
-                        }
-
-                        alertDialogMessage.append(getString(R.string.requestFromPackage_colon));
-                        alertDialogMessage.append(nl);
-                        alertDialogMessage.append(
-                                ILLEGALPKGNAME.equals(fromPkgLabel) ?
-                                        getString(R.string.unknown) : fromPkgLabel);
-                        alertDialogMessage.append(nl);
-                        alertDialogMessage.append(nl);
-                        alertDialogMessage.append(getString(R.string.installPackage_colon));
-                        alertDialogMessage.append(nl);
-                        alertDialogMessage.append(
-                                String.format(
-                                        getString(R.string.application_colon_app),
-                                        pm.getApplicationLabel(packageInfo.applicationInfo)
-                                )
-                        );
-                        alertDialogMessage.append(nl);
-                        alertDialogMessage.append(
-                                String.format(
-                                        getString(R.string.pkgName_colon_pkgName),
-                                        packageInfo.packageName
-                                )
-                        );
-                        alertDialogMessage.append(nl);
-                        alertDialogMessage.append(
-                                String.format(
-                                        getString(R.string.version_colon_vN_longVC),
-                                        packageInfo.versionName,
-                                        Build.VERSION.SDK_INT < 28 ?
-                                                Integer.toString(packageInfo.versionCode) :
-                                                Long.toString(packageInfo.getLongVersionCode())
-                                )
-                        );
-                        try {
-                            PackageInfo pi =
-                                    getPackageManager().getPackageInfo(
-                                            packageInfo.packageName,
-                                            PackageManager.GET_UNINSTALLED_PACKAGES
-                                    );
-                            alertDialogMessage.append(nl);
-                            alertDialogMessage.append(
-                                    String.format(
-                                            getString(R.string.existed_colon_vN_longVC),
-                                            pi.versionName,
-                                            Build.VERSION.SDK_INT < 28 ?
-                                                    Integer.toString(pi.versionCode) :
-                                                    Long.toString(pi.getLongVersionCode())
-                                    )
-                            );
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        alertDialogMessage.append(nl);
-                        alertDialogMessage.append(nl);
-                        alertDialogMessage.append(getString(R.string.whetherAllow));
-
-                        if (isFinishing()) return;
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                showInstallDialog(
-                                        progressDialog, 1,
-                                        alertDialogMessage, apkFilePath,
-                                        packageUri, fromPkgLabel, fromPkgName, packageInfo
-                                );
-                            }
-                        });
-                    } catch (Exception e) {
-                        alertDialogMessage.append(
-                                String.format(
-                                        getString(R.string.cannotInstall_colon_msg),
-                                        e.getLocalizedMessage()
-                                )
+                    //Check AutoAllow
+                    AppPreferences sp = new AppPreferences(InstallPackagesActivity.this);
+                    String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
+                    if (originData != null
+                            && !ILLEGALPKGNAME.equals(fromPkgLabel)
+                            && MoreUtils.convertToList(originData, ",").contains(
+                            Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT))) {
+                        //Allow
+                        ServiceUtils.startService(
+                                InstallPackagesActivity.this,
+                                new Intent(InstallPackagesActivity.this, InstallPackagesService.class)
+                                        .putExtra("install", true)
+                                        .putExtra("packageUri", packageUri)
+                                        .putExtra("apkFilePath", apkFilePath)
+                                        .putExtra("packageInfo", packageInfo)
+                                        .putExtra("waitForLeaving",
+                                                new AppPreferences(InstallPackagesActivity.this)
+                                                        .getBoolean("tryToAvoidUpdateWhenUsing", false)
+                                        )
                         );
 
                         if (isFinishing()) return;
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                showInstallDialog(
-                                        progressDialog, 2,
-                                        alertDialogMessage, apkFilePath,
-                                        packageUri, fromPkgLabel, fromPkgName, null
-                                );
-                            }
+                        runOnUiThread(() -> {
+                            if (progressDialog.isShowing())
+                                progressDialog.cancel();
+                            finish();
                         });
                     }
+
+                    alertDialogMessage.append(getString(R.string.requestFromPackage_colon));
+                    alertDialogMessage.append(nl);
+                    alertDialogMessage.append(
+                            ILLEGALPKGNAME.equals(fromPkgLabel) ?
+                                    getString(R.string.unknown) : fromPkgLabel);
+                    alertDialogMessage.append(nl);
+                    alertDialogMessage.append(nl);
+                    alertDialogMessage.append(getString(R.string.installPackage_colon));
+                    alertDialogMessage.append(nl);
+                    alertDialogMessage.append(
+                            String.format(
+                                    getString(R.string.application_colon_app),
+                                    pm.getApplicationLabel(packageInfo.applicationInfo)
+                            )
+                    );
+                    alertDialogMessage.append(nl);
+                    alertDialogMessage.append(
+                            String.format(
+                                    getString(R.string.pkgName_colon_pkgName),
+                                    packageInfo.packageName
+                            )
+                    );
+                    try {
+                        PackageInfo pi =
+                                getPackageManager().getPackageInfo(
+                                        packageInfo.packageName,
+                                        PackageManager.GET_UNINSTALLED_PACKAGES
+                                );
+                        alertDialogMessage.append(nl);
+                        alertDialogMessage.append(
+                                String.format(
+                                        getString(R.string.existed_colon_vN_longVC),
+                                        pi.versionName,
+                                        Build.VERSION.SDK_INT < 28 ?
+                                                Integer.toString(pi.versionCode) :
+                                                Long.toString(pi.getLongVersionCode())
+                                )
+                        );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    alertDialogMessage.append(nl);
+                    alertDialogMessage.append(
+                            String.format(
+                                    getString(R.string.version_colon_vN_longVC),
+                                    packageInfo.versionName,
+                                    Build.VERSION.SDK_INT < 28 ?
+                                            Integer.toString(packageInfo.versionCode) :
+                                            Long.toString(packageInfo.getLongVersionCode())
+                            )
+                    );
+                    alertDialogMessage.append(nl);
+                    alertDialogMessage.append(nl);
+                    alertDialogMessage.append(getString(R.string.whetherAllow));
+
+                    if (isFinishing()) return;
+
+                    runOnUiThread(() -> showInstallDialog(
+                            progressDialog, 1,
+                            alertDialogMessage, apkFilePath,
+                            packageUri, fromPkgLabel, fromPkgName, packageInfo
+                    ));
+                } catch (Exception e) {
+                    alertDialogMessage.append(
+                            String.format(
+                                    getString(R.string.cannotInstall_colon_msg),
+                                    e.getLocalizedMessage()
+                            )
+                    );
+
+                    if (isFinishing()) return;
+
+                    runOnUiThread(() -> showInstallDialog(
+                            progressDialog, 2,
+                            alertDialogMessage, apkFilePath,
+                            packageUri, fromPkgLabel, fromPkgName, null
+                    ));
                 }
             }).start();
         } else {
@@ -400,35 +364,107 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
         installPackagesAlertDialog.setButton(
                 DialogInterface.BUTTON_POSITIVE,
                 getString(R.string.yes),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                (dialog, which) -> {
+                    if (new AppPreferences(getApplicationContext())
+                            .getBoolean("notAllowInstallWhenIsObsd", true)
+                            && installPackagesAlertDialog.isObsd()) {
+                        AlertDialogUtils.buildAlertDialog(
+                                        InstallPackagesActivity.this,
+                                        R.drawable.ic_warning,
+                                        R.string.alert_isObsd,
+                                        R.string.dangerous)
+                                .setPositiveButton(R.string.retry, (dialog1, which1) ->
+                                        showInstallDialog(
+                                                progressDialog, install,
+                                                alertDialogMessage, apkFilePath, packageUri,
+                                                fromPkgLabel, fromPkgName, processedPackageInfo)
+                                )
+                                .setNegativeButton(R.string.cancel, (dialog12, which12) -> {
+                                    if (install != 0) clearTempFile(apkFilePath);
+                                    finish();
+                                })
+                                .setOnCancelListener(dialog13 ->
+                                        showInstallDialog(progressDialog, install,
+                                                alertDialogMessage, apkFilePath, packageUri,
+                                                fromPkgLabel, fromPkgName, processedPackageInfo)
+                                )
+                                .create().show();
+                    } else {
+                        if (install == 1) {
+                            CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.ipa_dialog_checkBox);
+                            if (checkBox != null && checkBox.isChecked()) {
+                                AppPreferences sp = new AppPreferences(InstallPackagesActivity.this);
+                                String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
+                                List<String> originData_list = MoreUtils.convertToList(originData, ",");
+                                if (!ILLEGALPKGNAME.equals(fromPkgLabel)
+                                        &&
+                                        (originData == null ||
+                                                !MoreUtils.convertToList(originData, ",").contains(
+                                                        Base64.encodeToString(
+                                                                fromPkgName.getBytes(), Base64.DEFAULT)))) {
+                                    originData_list.add(
+                                            Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT));
+                                    sp.put(
+                                            "installPkgs_autoAllowPkgs_allows",
+                                            MoreUtils.listToString(originData_list, ",")
+                                    );
+                                }
+                            }
+                        }
+                        if (install == 2) {
+                            clearTempFile(apkFilePath);
+                            finish();
+                        } else {
+                            if (DevicePolicyManagerUtils
+                                    .isDeviceOwner(InstallPackagesActivity.this) ||
+                                    FUFUtils.checkRootPermission()) {
+                                ServiceUtils.startService(
+                                        InstallPackagesActivity.this,
+                                        new Intent(InstallPackagesActivity.this,
+                                                InstallPackagesService.class)
+                                                .putExtra("install", install == 1)
+                                                .putExtra("packageUri", packageUri)
+                                                .putExtra("apkFilePath", apkFilePath)
+                                                .putExtra("packageInfo", processedPackageInfo)
+                                                .putExtra("waitForLeaving", preDefinedTryToAvoidUpdateWhenUsing));
+                                finish();
+                            } else {
+                                showInstallPermissionCheckFailedDialog(
+                                        install, apkFilePath, packageUri,
+                                        processedPackageInfo, preDefinedTryToAvoidUpdateWhenUsing);
+                            }
+                        }
+                    }
+                });
+        installPackagesAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.no), (dialog, which) -> {
+            if (install != 0) clearTempFile(apkFilePath);
+            finish();
+        });
+        if (!preDefinedTryToAvoidUpdateWhenUsing
+                && processedPackageInfo != null
+                && AccessibilityUtils.isAccessibilitySettingsOn(this)) {
+            installPackagesAlertDialog.setButton(
+                    DialogInterface.BUTTON_NEUTRAL,
+                    getString(R.string.installWhenNotUsing),
+                    (dialog, which) -> {
                         if (new AppPreferences(getApplicationContext())
                                 .getBoolean("notAllowInstallWhenIsObsd", true)
                                 && installPackagesAlertDialog.isObsd()) {
                             AlertDialogUtils.buildAlertDialog(
-                                    InstallPackagesActivity.this,
-                                    android.R.drawable.ic_dialog_alert,
-                                    R.string.alert_isObsd,
-                                    R.string.dangerous)
-                                    .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            showInstallDialog(progressDialog, install, alertDialogMessage, apkFilePath, packageUri, fromPkgLabel, fromPkgName, processedPackageInfo);
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (install != 0) clearTempFile(apkFilePath);
-                                            finish();
-                                        }
-                                    })
-                                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                        @Override
-                                        public void onCancel(DialogInterface dialog) {
-                                            showInstallDialog(progressDialog, install, alertDialogMessage, apkFilePath, packageUri, fromPkgLabel, fromPkgName, processedPackageInfo);
-                                        }
+                                            InstallPackagesActivity.this,
+                                            R.drawable.ic_warning,
+                                            R.string.alert_isObsd,
+                                            R.string.dangerous)
+                                    .setPositiveButton(R.string.retry, (dialog14, which13) ->
+                                            showInstallDialog(
+                                                    progressDialog, install,
+                                                    alertDialogMessage, apkFilePath,
+                                                    packageUri, fromPkgLabel,
+                                                    fromPkgName, processedPackageInfo)
+                                    )
+                                    .setNegativeButton(R.string.cancel, (dialog15, which14) -> {
+                                        if (install != 0) clearTempFile(apkFilePath);
+                                        finish();
                                     })
                                     .create().show();
                         } else {
@@ -455,118 +491,24 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                             }
                             if (install == 2) {
                                 clearTempFile(apkFilePath);
-                                finish();
                             } else {
-                                if (DevicePolicyManagerUtils
-                                        .isDeviceOwner(InstallPackagesActivity.this) ||
-                                        FUFUtils.checkRootPermission()) {
-                                    ServiceUtils.startService(
-                                            InstallPackagesActivity.this,
-                                            new Intent(InstallPackagesActivity.this,
-                                                    InstallPackagesService.class)
-                                                    .putExtra("install", install == 1)
-                                                    .putExtra("packageUri", packageUri)
-                                                    .putExtra("apkFilePath", apkFilePath)
-                                                    .putExtra("packageInfo", processedPackageInfo)
-                                                    .putExtra("waitForLeaving", preDefinedTryToAvoidUpdateWhenUsing));
-                                    finish();
-                                } else {
-                                    showInstallPermissionCheckFailedDialog(
-                                            install, apkFilePath, packageUri,
-                                            processedPackageInfo, preDefinedTryToAvoidUpdateWhenUsing);
-                                }
-                            }
-                        }
-                    }
-                });
-        installPackagesAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (install != 0) clearTempFile(apkFilePath);
-                finish();
-            }
-        });
-        if (!preDefinedTryToAvoidUpdateWhenUsing
-                && processedPackageInfo != null
-                && AccessibilityUtils.isAccessibilitySettingsOn(this)) {
-            installPackagesAlertDialog.setButton(
-                    DialogInterface.BUTTON_NEUTRAL,
-                    getString(R.string.installWhenNotUsing),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (new AppPreferences(getApplicationContext())
-                                    .getBoolean("notAllowInstallWhenIsObsd", true)
-                                    && installPackagesAlertDialog.isObsd()) {
-                                AlertDialogUtils.buildAlertDialog(
+                                ServiceUtils.startService(
                                         InstallPackagesActivity.this,
-                                        android.R.drawable.ic_dialog_alert,
-                                        R.string.alert_isObsd,
-                                        R.string.dangerous)
-                                        .setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                showInstallDialog(
-                                                        progressDialog, install,
-                                                        alertDialogMessage, apkFilePath,
-                                                        packageUri, fromPkgLabel,
-                                                        fromPkgName, processedPackageInfo);
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                if (install != 0) clearTempFile(apkFilePath);
-                                                finish();
-                                            }
-                                        })
-                                        .create().show();
-                            } else {
-                                if (install == 1) {
-                                    CheckBox checkBox = ((ObsdAlertDialog) dialog).findViewById(R.id.ipa_dialog_checkBox);
-                                    if (checkBox != null && checkBox.isChecked()) {
-                                        AppPreferences sp = new AppPreferences(InstallPackagesActivity.this);
-                                        String originData = sp.getString("installPkgs_autoAllowPkgs_allows", "");
-                                        List<String> originData_list = MoreUtils.convertToList(originData, ",");
-                                        if (!ILLEGALPKGNAME.equals(fromPkgLabel)
-                                                &&
-                                                (originData == null ||
-                                                        !MoreUtils.convertToList(originData, ",").contains(
-                                                                Base64.encodeToString(
-                                                                        fromPkgName.getBytes(), Base64.DEFAULT)))) {
-                                            originData_list.add(
-                                                    Base64.encodeToString(fromPkgName.getBytes(), Base64.DEFAULT));
-                                            sp.put(
-                                                    "installPkgs_autoAllowPkgs_allows",
-                                                    MoreUtils.listToString(originData_list, ",")
-                                            );
-                                        }
-                                    }
-                                }
-                                if (install == 2) {
-                                    clearTempFile(apkFilePath);
-                                } else {
-                                    ServiceUtils.startService(
-                                            InstallPackagesActivity.this,
-                                            new Intent(InstallPackagesActivity.this,
-                                                    InstallPackagesService.class)
-                                                    .putExtra("install", install == 1)
-                                                    .putExtra("packageUri", packageUri)
-                                                    .putExtra("apkFilePath", apkFilePath)
-                                                    .putExtra("packageInfo", processedPackageInfo)
-                                                    .putExtra("waitForLeaving", true));
-                                }
-                                finish();
+                                        new Intent(InstallPackagesActivity.this,
+                                                InstallPackagesService.class)
+                                                .putExtra("install", install == 1)
+                                                .putExtra("packageUri", packageUri)
+                                                .putExtra("apkFilePath", apkFilePath)
+                                                .putExtra("packageInfo", processedPackageInfo)
+                                                .putExtra("waitForLeaving", true));
                             }
+                            finish();
                         }
                     });
         }
-        installPackagesAlertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                if (install != 0) clearTempFile(apkFilePath);
-                finish();
-            }
+        installPackagesAlertDialog.setOnCancelListener(dialog -> {
+            if (install != 0) clearTempFile(apkFilePath);
+            finish();
         });
 
         if (progressDialog.isShowing()) {
@@ -591,80 +533,64 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
         AlertDialog.Builder adbd = new AlertDialog.Builder(InstallPackagesActivity.this);
         adbd.setMessage(R.string.installPerimisionCheckFailed_ifContinue);
         adbd.setTitle(R.string.notice);
-        adbd.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ServiceUtils.startService(
-                        InstallPackagesActivity.this,
-                        new Intent(InstallPackagesActivity.this,
-                                InstallPackagesService.class)
-                                .putExtra("install", install == 1)
-                                .putExtra("packageUri", packageUri)
-                                .putExtra("apkFilePath", apkFilePath)
-                                .putExtra("packageInfo", processedPackageInfo)
-                                .putExtra("waitForLeaving", preDefinedTryToAvoidUpdateWhenUsing));
-                finish();
-            }
+        adbd.setPositiveButton(R.string.yes, (dialog, which) -> {
+            ServiceUtils.startService(
+                    InstallPackagesActivity.this,
+                    new Intent(InstallPackagesActivity.this,
+                            InstallPackagesService.class)
+                            .putExtra("install", install == 1)
+                            .putExtra("packageUri", packageUri)
+                            .putExtra("apkFilePath", apkFilePath)
+                            .putExtra("packageInfo", processedPackageInfo)
+                            .putExtra("waitForLeaving", preDefinedTryToAvoidUpdateWhenUsing));
+            finish();
         });
-        adbd.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        adbd.setNegativeButton(R.string.no, (dialog, which) -> finish());
+        adbd.setNeutralButton(R.string.jumpToSysInstaller, (dialog, which) -> {
+            if (install == 0) {
+                InstallPackagesActivity.this.startActivity(
+                        new Intent(
+                                Intent.ACTION_DELETE,
+                                Uri.parse("package:" + packageUri.getEncodedSchemeSpecificPart())
+                        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                );
                 finish();
-            }
-        });
-        adbd.setNeutralButton(R.string.jumpToSysInstaller, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (install == 0) {
-                    InstallPackagesActivity.this.startActivity(
-                            new Intent(
-                                    Intent.ACTION_DELETE,
-                                    Uri.parse("package:" + packageUri.getEncodedSchemeSpecificPart())
-                            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    );
-                    finish();
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        if (getPackageManager().canRequestPackageInstalls()) {
-                            requestSysInstallPkg(apkFilePath);
-                            finish();
-                        } else {
-                            showInstallPermissionCheckFailedDialog(
-                                    install, apkFilePath, packageUri,
-                                    processedPackageInfo, preDefinedTryToAvoidUpdateWhenUsing);
-                            Uri packageUri = Uri.parse("package:cf.playhi.freezeyou");
-                            Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri);
-                            startActivity(intent);
-                        }
-                    } else {
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (getPackageManager().canRequestPackageInstalls()) {
                         requestSysInstallPkg(apkFilePath);
                         finish();
+                    } else {
+                        showInstallPermissionCheckFailedDialog(
+                                install, apkFilePath, packageUri,
+                                processedPackageInfo, preDefinedTryToAvoidUpdateWhenUsing);
+                        Uri packageUri1 = Uri.parse("package:cf.playhi.freezeyou");
+                        Intent intent =
+                                new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageUri1);
+                        startActivity(intent);
                     }
+                } else {
+                    requestSysInstallPkg(apkFilePath);
+                    finish();
                 }
             }
         });
-        adbd.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
-            }
-        });
+        adbd.setOnCancelListener(dialog -> finish());
         adbd.show();
     }
 
     private void requestSysInstallPkg(String filePath) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         File file = new File(filePath);
+        Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Uri uri = FileProvider.getUriForFile(this, "cf.playhi.freezeyou.fileprovider", file);
+            uri = FileProvider.getUriForFile(this, "cf.playhi.freezeyou.fileprovider", file);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setDataAndType(uri, "application/vnd.android.package-archive");
         } else {
-            Uri uri = Uri.fromFile(file);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setDataAndType(uri, "application/vnd.android.package-archive");
+            uri = Uri.fromFile(file);
         }
+        intent.setDataAndType(uri, "application/vnd.android.package-archive");
         Intent chooser = Intent.createChooser(intent, getString(R.string.plsSelect));
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(chooser);
@@ -672,7 +598,8 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 301) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {

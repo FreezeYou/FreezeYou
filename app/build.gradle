@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdk 31
         versionCode 146
-        versionName '11.0.146.20220206'
+        versionName '11.0.146.20220206-t147-h-20220208-1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
