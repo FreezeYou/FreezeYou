@@ -371,7 +371,7 @@
     <string name="authenticationFailed">Помилка автентифікації</string>
     <string name="authenticationError_colon">Помилка автентифікації: %1$s</string>
     <string name="forceStop">Примусова зупинка</string>
-    <string name="unfrozenUA">Незаморожені додатки користувача</string>
+    <string name="unfrozenUA">Незаморожені користувацькі</string>
     <string name="lastInstall">Нещодавно встановлені</string>
     <string name="lastUpdate">Нещодавно оновлені</string>
     <string name="alphabetical">За алфавітом</string>
