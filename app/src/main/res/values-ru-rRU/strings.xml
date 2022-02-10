@@ -277,7 +277,7 @@
     <string name="ff_descending">Заморожено ↓</string>
     <string name="us_ascending">Частота использования ↑</string>
     <string name="us_descending">Частота использования ↓</string>
-    <string name="clearUninstalledPkgsInOKUFList">Убрать удаленные приложения из OneKEY заморозка</string>
+    <string name="clearUninstalledPkgsInOKUFList">Убрать удаленные приложения из OneKEY разморозка</string>
     <string name="clearUninstalledPkgsInOKFFList">Убрать удаленные приложения из OneKEY заморозка</string>
     <string name="clearUninstalledPkgsInFOQList">Убрать удаленные приложения из \"Заморозка после выхода\"</string>
     <string name="impt">Импортировать</string>
@@ -382,6 +382,8 @@
     <string name="bluetoothPermissionIsNotGranted">Связанное разрешение Bluetooth не предоставлено</string>
     <string name="mayCannotUseScheduledTaskToEnableOrDisableBluetooth">Возможно, не удастся использовать запланированные задачи для включения или отключения Bluetooth</string>
     <string name="gotoStore">Перейти в магазин приложений</string>
+    <string name="selfRevokeProfileOwner">Отключить режим без-ROOT</string>
+    <string name="selfRevokeProfileOwnerSummary">Если вы включили режим без-ROOT, вам необходимо отключить его перед удалением FreezeYou!</string>
     <string-array name="launchModeSelection">
         <item>Показать все</item>
         <item>Замороженые</item>
