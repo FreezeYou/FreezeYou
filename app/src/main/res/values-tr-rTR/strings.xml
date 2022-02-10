@@ -1,2 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">FreezeYou!</string>
+    <string name="oneKeyFreeze">Tek tuş ile dondur</string>
+    <string name="oneKeyUF">Tek tuş ile çöz</string>
+    <string name="alertT1">Dikkat! \nSistem için çok önemli olan uygulamayı dondurmayın, bu sistemin çökmesine neden olabilir!</string>
+    <string name="cancel">İptal Et</string>
+    <string name="chooseDetailAction">Lütfen bir işlem seçin</string>
+    <string name="added">Eklendi</string>
+    <string name="notice">İpuçları</string>
+    <string name="freeze">Dondur</string>
+    <string name="more">Daha fazla</string>
+    <string name="appDetail">Uygulama detayları</string>
+    <string name="removeFromOneKeyList">Tek tuş ile dondurma listesinden kaldır</string>
+    <string name="removeFromOneKeyUFList">Tek tuş ile çözme listesinden kaldır</string>
+    <string name="removed">Kaldırıldı</string>
+    <string name="removeFailed">Kaldırılamadı</string>
+</resources>
