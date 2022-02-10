@@ -50,4 +50,8 @@
     <string name="onlySA">Sistem önceden yüklenmiş</string>
     <string name="onlyUA">Kullanıcı Uygulaması</string>
     <string name="moreSettings">Ayarlar</string>
+    <string name="dangerZone">Tehlikeli Bölge</string>
+    <string name="common">Genel</string>
+    <string name="openImmediately">Hemen Aç</string>
+    <string name="nCaution">Hatırlatma</string>
 </resources>
