@@ -79,7 +79,7 @@ class SettingsActivity : FreezeYouBaseActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.home) {
+        if (item.itemId == android.R.id.home) {
             val fragmentManager = supportFragmentManager
             if (fragmentManager.backStackEntryCount == 0) {
                 finish()
@@ -97,6 +97,11 @@ class SettingsActivity : FreezeYouBaseActivity(),
             applicationContext, this,
             sharedPreferences, s, appPreferences
         )
+        if ("languagePref" == s || "uiStyleSelection" == s
+            || "allowFollowSystemAutoSwitchDarkMode" == s
+        ) {
+            recreate()
+        }
     }
 
     override fun onResume() {

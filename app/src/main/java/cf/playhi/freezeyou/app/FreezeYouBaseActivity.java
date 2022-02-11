@@ -1,6 +1,9 @@
 package cf.playhi.freezeyou.app;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -8,15 +11,19 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.play.core.splitcompat.SplitCompat;
 import com.tencent.mmkv.MMKV;
 
 import java.util.Date;
+import java.util.Locale;
 
 import cf.playhi.freezeyou.AppLockActivity;
 
 import static cf.playhi.freezeyou.utils.AuthenticationUtils.isAuthenticationEnabled;
 import static cf.playhi.freezeyou.utils.AuthenticationUtils.isBiometricPromptPartAvailable;
 import static cf.playhi.freezeyou.utils.Support.checkLanguage;
+import static cf.playhi.freezeyou.utils.Support.getLocalString;
+import static cf.playhi.freezeyou.utils.VersionUtils.isGooglePlayVersion;
 
 public class FreezeYouBaseActivity extends AppCompatActivity {
     private static final int APP_LOCK_ACTIVITY_REQUEST_CODE = 65533;
@@ -26,8 +33,30 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
 
     @Override
     @CallSuper
+    protected void attachBaseContext(Context newBase) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String locale = getLocalString(newBase);
+            Configuration configuration = new Configuration();
+            configuration.setLocale(
+                    "Default".equals(locale) ? Locale.getDefault() : Locale.forLanguageTag(locale)
+            );
+            Context context = newBase.createConfigurationContext(configuration);
+            super.attachBaseContext(context);
+        } else {
+            super.attachBaseContext(newBase);
+        }
+    }
+
+    @Override
+    @CallSuper
     protected void onCreate(Bundle savedInstanceState) {
-        checkLanguage(this);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            checkLanguage(this);
+        } else {
+            if (isGooglePlayVersion(this)) {
+                SplitCompat.install(this);
+            }
+        }
         super.onCreate(savedInstanceState);
     }
 

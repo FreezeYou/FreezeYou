@@ -61,14 +61,5 @@
         app:summary="@string/onlyMROOTModeUse"
         app:title="@string/organizationName"
         app:useSimpleSummaryProvider="true" />
-    <ListPreference
-        app:defaultValue="default"
-        app:entries="@array/displayLanguageOptionsSelection"
-        app:entryValues="@array/displayLanguageOptionsSelectionValues"
-        app:iconSpaceReserved="false"
-        app:key="languagePref"
-        app:singleLineTitle="false"
-        app:title="@string/displayLanguage"
-        app:useSimpleSummaryProvider="true" />
 
 </PreferenceScreen>

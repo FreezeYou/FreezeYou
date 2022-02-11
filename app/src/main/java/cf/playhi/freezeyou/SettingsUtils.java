@@ -28,7 +28,6 @@ import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.openDevicePolic
 import static cf.playhi.freezeyou.utils.FUFUtils.checkRootPermission;
 import static cf.playhi.freezeyou.utils.FUFUtils.isSystemApp;
 import static cf.playhi.freezeyou.utils.ServiceUtils.startService;
-import static cf.playhi.freezeyou.utils.Support.checkLanguage;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 final class SettingsUtils {
@@ -78,8 +77,8 @@ final class SettingsUtils {
                 break;
             case "uiStyleSelection":
             case "allowFollowSystemAutoSwitchDarkMode":
+            case "languagePref":
                 showToast(activity, R.string.willTakeEffectsNextLaunch);
-                activity.recreate();
                 break;
             case "onekeyFreezeWhenLockScreen":
                 appPreferences.put(s, sharedPreferences.getBoolean(s, false));
@@ -140,10 +139,6 @@ final class SettingsUtils {
                     context.getPackageManager().setComponentEnabledSetting(new ComponentName(context, "cf.playhi.freezeyou.InstallPackagesActivity"),
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 }
-                break;
-            case "languagePref":
-                checkLanguage(activity);
-                showToast(activity, R.string.willTakeEffectsNextLaunch);
                 break;
             case "selectFUFMode":
                 appPreferences.put(s, Integer.parseInt(sharedPreferences.getString(s, "0")));

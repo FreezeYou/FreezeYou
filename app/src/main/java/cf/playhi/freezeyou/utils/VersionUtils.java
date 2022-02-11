@@ -50,6 +50,10 @@ final public class VersionUtils {
         return "";
     }
 
+    public static boolean isGooglePlayVersion(Context context) {
+        return getVersionName(context).contains("gp");
+    }
+
     public static void checkUpdate(final Activity activity) {
         //"https://play.google.com/store/apps/details?id=cf.playhi.freezeyou"
         //"https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(context)

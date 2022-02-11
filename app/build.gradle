@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdk 31
         versionCode 146
-        versionName '11.0.146.20220206-t147-h-20220208-1'
+        versionName '11.0.146.20220206-t147-h-20220211-1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -61,6 +61,8 @@ dependencies {
     implementation "androidx.preference:preference:1.2.0"
 
     implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.play:core:1.10.3'
+    implementation 'com.google.android.play:core-ktx:1.8.1'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
 

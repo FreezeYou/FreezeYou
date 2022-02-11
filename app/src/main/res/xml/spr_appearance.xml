@@ -35,5 +35,14 @@
         app:key="themeOfAutoSwitchDarkMode"
         app:singleLineTitle="false"
         app:title="@string/themeOfAutoSwitchDarkMode" />
+    <ListPreference
+        app:defaultValue="Default"
+        app:entries="@array/displayLanguageOptionsSelection"
+        app:entryValues="@array/displayLanguageOptionsSelectionValues"
+        app:iconSpaceReserved="false"
+        app:key="languagePref"
+        app:singleLineTitle="false"
+        app:title="@string/displayLanguage"
+        app:useSimpleSummaryProvider="true" />
 
 </PreferenceScreen>

@@ -378,14 +378,20 @@ public final class Support {
         resources.updateConfiguration(config, dm);
     }
 
-    private static Locale getLocal(Context context) {
-        String s = PreferenceManager.getDefaultSharedPreferences(context).getString("languagePref", "Default");
+    public static String getLocalString(Context context) {
+        String s =
+                PreferenceManager.getDefaultSharedPreferences(context)
+                        .getString("languagePref", "Default");
 
         if (s == null) {
             s = "Default";
         }
 
-        switch (s) {
+        return s;
+    }
+
+    private static Locale getLocal(Context context) {
+        switch (getLocalString(context)) {
             case "en":
                 return new Locale("en");
             case "en-US":
