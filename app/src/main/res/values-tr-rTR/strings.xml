@@ -30,7 +30,7 @@
     <string name="executed">Uygulandı</string>
     <string name="exception">İstisna: </string>
     <string name="launch">Çalıştır</string>
-    <string name="mayUnrooted">Kök izni yok veya kök yok modu etkinleştirilmedi</string>
+    <string name="mayUnrooted">Root izni yok veya root yok modu etkinleştirilmedi</string>
     <string name="mayUnrootedOrOtherEx">İzinler verilmemiş, hedefler kaldırılmış veya başka istisnalar meydana gelmiş olabilir</string>
     <string name="unfreeze">Çöz</string>
     <string name="unfreezedAndAskLaunch">Çözülmesi istendi, şimdi çalıştırmayı deneyin?</string>
@@ -50,6 +50,8 @@
     <string name="onlySA">Sistem önceden yüklenmiş</string>
     <string name="onlyUA">Kullanıcı Uygulaması</string>
     <string name="moreSettings">Ayarlar</string>
+    <string name="visitWebsite">Web sitesini ziyaret edin</string>
+    <string name="addQQGroup">QQ Grubuna katılın</string>
     <string name="dangerZone">Tehlikeli Bölge</string>
     <string name="common">Genel</string>
     <string name="openImmediately">Hemen Aç</string>
