@@ -59,7 +59,11 @@
     <string name="openImmediately">Hemen Aç</string>
     <string name="openImmediatelyEx">Uygulamayı çözüldükten sonra hemen aç</string>
     <string name="hToUse">Nasıl kullanılır</string>
+    <string name="openAndUFImmediately">Hemen çözün ve kısayolu tıklatarak çalıştırın</string>
+    <string name="openAndUFImmediatelyEx">Artık kısayolu uygulamayı dondurmak için kullanamazsınız.</string>
+    <string name="quickView">Hızlı Görünüm</string>
     <string name="nCaution">Hatırlatma</string>
+    <string name="nSCaution">Artık başlangıçta uyarı gösterilmeyecek</string>
     <string name="advance">Gelişmiş</string>
     <string name="manualMode">Manuel Mod</string>
     <string name="packageName">Paket Adı</string>
