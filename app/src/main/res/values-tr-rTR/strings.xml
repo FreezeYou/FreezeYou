@@ -63,6 +63,9 @@
     <string name="advance">Gelişmiş</string>
     <string name="manualMode">Manuel Mod</string>
     <string name="packageName">Paket Adı</string>
+    <string name="disable_Root">Dondur - ROOT</string>
+    <string name="enable_MRoot">Çöz - ROOT YOK</string>
+    <string name="enable_Root">Çöz - ROOT</string>
     <string name="failed">Başarısız</string>
     <string name="success">Başarı</string>
     <string name="disableAEnable">Dondur/Çöz/Çalıştır</string>
@@ -79,7 +82,15 @@
     <string name="autoUFOrFreezeAndRun">Otomatik Dondur/Çöz ve Çalıştır</string>
     <string name="freezeCompleted">Donduruldu</string>
     <string name="UFCompleted">Çözüldü</string>
+    <string name="activated">Etkinleştirildi</string>
+    <string name="disableConfirmation">İptal etmeyi onayla?</string>
+    <string name="disabled">Devre dışı</string>
+    <string name="freezeAUF">Dondur ve Çöz</string>
+    <string name="notificationBar">Bildirim</string>
+    <string name="helpTranslate">Çeviriye yardım et</string>
     <string name="automation">Otomasyon</string>
+    <string name="backgroundService">Arka Plan Hizmetleri</string>
+    <string name="useForegroundService">Ön plan hizmetini kullan</string>
     <string name="invalidArguments">Geçersiz parametreler</string>
     <string name="etc">vb.</string>
     <string name="mayCannotNotify">Bildirimleri göndermeyebilir</string>
