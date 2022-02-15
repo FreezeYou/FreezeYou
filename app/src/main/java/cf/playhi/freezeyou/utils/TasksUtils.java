@@ -31,14 +31,14 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-import cf.playhi.freezeyou.FUFService;
-import cf.playhi.freezeyou.ForceStopService;
-import cf.playhi.freezeyou.OneKeyFreezeService;
-import cf.playhi.freezeyou.OneKeyUFService;
 import cf.playhi.freezeyou.R;
-import cf.playhi.freezeyou.ShowSimpleDialogActivity;
-import cf.playhi.freezeyou.TasksNeedExecuteReceiver;
 import cf.playhi.freezeyou.TriggerTasksService;
+import cf.playhi.freezeyou.receiver.TasksNeedExecuteReceiver;
+import cf.playhi.freezeyou.service.FUFService;
+import cf.playhi.freezeyou.service.ForceStopService;
+import cf.playhi.freezeyou.service.OneKeyFreezeService;
+import cf.playhi.freezeyou.service.OneKeyUFService;
+import cf.playhi.freezeyou.ui.ShowSimpleDialogActivity;
 
 import static cf.playhi.freezeyou.utils.ProcessUtils.destroyProcess;
 import static cf.playhi.freezeyou.utils.ServiceUtils.startService;

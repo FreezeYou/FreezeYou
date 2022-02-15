@@ -17,7 +17,7 @@ import com.tencent.mmkv.MMKV;
 import java.util.Date;
 import java.util.Locale;
 
-import cf.playhi.freezeyou.AppLockActivity;
+import cf.playhi.freezeyou.ui.AppLockActivity;
 
 import static cf.playhi.freezeyou.utils.AuthenticationUtils.isAuthenticationEnabled;
 import static cf.playhi.freezeyou.utils.AuthenticationUtils.isBiometricPromptPartAvailable;

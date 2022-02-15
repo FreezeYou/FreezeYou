@@ -31,10 +31,10 @@ import java.util.Locale;
 
 import cf.playhi.freezeyou.ForceStop;
 import cf.playhi.freezeyou.Freeze;
-import cf.playhi.freezeyou.InstallPackagesActivity;
+import cf.playhi.freezeyou.ui.InstallPackagesActivity;
 import cf.playhi.freezeyou.R;
 
-import static cf.playhi.freezeyou.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
+import static cf.playhi.freezeyou.utils.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;

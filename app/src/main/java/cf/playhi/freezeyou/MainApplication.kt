@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.annotation.NonNull
 import androidx.preference.PreferenceManager
+import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService
 import cf.playhi.freezeyou.utils.OneKeyListUtils
 import cf.playhi.freezeyou.utils.ServiceUtils
 import cf.playhi.freezeyou.utils.Support.checkLanguage

@@ -28,7 +28,7 @@
         app:title="@string/manualMode">
         <intent
             android:data="ManualMode"
-            android:targetClass="cf.playhi.freezeyou.ManualMode"
+            android:targetClass="cf.playhi.freezeyou.ui.ManualModeActivity"
             android:targetPackage="cf.playhi.freezeyou" />
     </Preference>
     <Preference
@@ -36,7 +36,7 @@
         app:singleLineTitle="false"
         app:title="@string/showLogcat">
         <intent
-            android:targetClass="cf.playhi.freezeyou.ShowLogcatActivity"
+            android:targetClass="cf.playhi.freezeyou.ui.ShowLogcatActivity"
             android:targetPackage="cf.playhi.freezeyou" />
     </Preference>
     <!--        <Preference app:title="@string/commandExecutionTool">-->

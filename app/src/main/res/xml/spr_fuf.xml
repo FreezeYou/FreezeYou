@@ -77,7 +77,7 @@
         app:singleLineTitle="false"
         app:title="@string/manageUriAutoAllow">
         <intent
-            android:targetClass="cf.playhi.freezeyou.UriAutoAllowManageActivity"
+            android:targetClass="cf.playhi.freezeyou.ui.UriAutoAllowManageActivity"
             android:targetPackage="cf.playhi.freezeyou" />
     </Preference>
 

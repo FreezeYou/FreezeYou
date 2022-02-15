@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/bica_list_item_switch"
         android:layout_width="match_parent"
         android:textOn="@string/impt"

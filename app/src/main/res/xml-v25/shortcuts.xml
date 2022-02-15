@@ -58,7 +58,7 @@
         android:shortcutShortLabel="@string/scheduledTasks">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="cf.playhi.freezeyou.ScheduledTasksManageActivity"
+            android:targetClass="cf.playhi.freezeyou.ui.ScheduledTasksManageActivity"
             android:targetPackage="cf.playhi.freezeyou" />
         <!-- If your shortcut is associated with multiple intents, include them
              here. The last intent in the list determines what the user sees when

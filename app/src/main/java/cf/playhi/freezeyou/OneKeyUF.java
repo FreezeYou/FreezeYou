@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.service.OneKeyUFService;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 
 public class OneKeyUF extends FreezeYouBaseActivity {

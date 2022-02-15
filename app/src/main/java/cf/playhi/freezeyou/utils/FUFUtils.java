@@ -14,9 +14,9 @@ import net.grandcentrix.tray.AppPreferences;
 
 import java.io.DataOutputStream;
 
-import cf.playhi.freezeyou.AskRunActivity;
+import cf.playhi.freezeyou.ui.AskRunActivity;
 import cf.playhi.freezeyou.DeviceAdminReceiver;
-import cf.playhi.freezeyou.FUFService;
+import cf.playhi.freezeyou.service.FUFService;
 import cf.playhi.freezeyou.MainApplication;
 import cf.playhi.freezeyou.MyNotificationListenerService;
 import cf.playhi.freezeyou.R;

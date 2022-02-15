@@ -6,7 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
-import static cf.playhi.freezeyou.DebugModeUtils.isDebugModeEnabled;
+import static cf.playhi.freezeyou.utils.DebugModeUtils.isDebugModeEnabled;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
 import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionMRoot;
 import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyActionRoot;

@@ -9,63 +9,63 @@
         app:title="@string/hToUse" />
 
     <Preference
-        app:fragment="cf.playhi.freezeyou.SettingsCommonFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsCommonFragment"
         app:iconSpaceReserved="false"
         app:key="spr_common"
         app:singleLineTitle="false"
         app:title="@string/common" />
 
     <Preference
-        app:fragment="cf.playhi.freezeyou.SettingsAppearanceFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsAppearanceFragment"
         app:iconSpaceReserved="false"
         app:key="spr_appearance"
         app:singleLineTitle="false"
         app:title="@string/appearance" />
 
     <Preference
-        app:fragment="cf.playhi.freezeyou.SettingsSecurityFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsSecurityFragment"
         app:iconSpaceReserved="false"
         app:key="spr_security"
         app:singleLineTitle="false"
         app:title="@string/security" />
 
     <Preference
-        app:fragment="cf.playhi.freezeyou.SettingsNotificationFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsNotificationFragment"
         app:iconSpaceReserved="false"
         app:key="spr_notification"
         app:singleLineTitle="false"
         app:title="@string/notificationBar" />
 
     <Preference
-        app:fragment="cf.playhi.freezeyou.SettingsAutomationFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsAutomationFragment"
         app:iconSpaceReserved="false"
         app:key="spr_automation"
         app:singleLineTitle="false"
         app:title="@string/automation" />
 
     <Preference
-        app:fragment="cf.playhi.freezeyou.SettingsFufFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsFufFragment"
         app:iconSpaceReserved="false"
         app:key="spr_fuf"
         app:singleLineTitle="false"
         app:title="@string/freezeAUF" />
 
     <Preference
-        app:fragment="cf.playhi.freezeyou.SettingsIconEntryFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsIconEntryFragment"
         app:iconSpaceReserved="false"
         app:key="spr_iconAEntry"
         app:singleLineTitle="false"
         app:title="@string/iconAEntry" />
 
     <Preference
-        app:fragment="cf.playhi.freezeyou.SettingsInstallUninstallFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsInstallUninstallFragment"
         app:iconSpaceReserved="false"
         app:key="spr_installUninstall"
         app:singleLineTitle="false"
         app:title="@string/installAndUninstall" />
 
     <Preference
-        app:fragment="cf.playhi.freezeyou.SettingsBackgroundServiceFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsBackgroundServiceFragment"
         app:iconSpaceReserved="false"
         app:key="backgroundService"
         app:singleLineTitle="false"
@@ -76,12 +76,12 @@
         app:singleLineTitle="false"
         app:title="@string/autoDiagnosis">
         <intent
-            android:targetClass="cf.playhi.freezeyou.AutoDiagnosisActivity"
+            android:targetClass="cf.playhi.freezeyou.ui.AutoDiagnosisActivity"
             android:targetPackage="cf.playhi.freezeyou" />
     </Preference>
 
     <Preference
-        app:fragment="cf.playhi.freezeyou.SettingsManageSpaceFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsManageSpaceFragment"
         app:iconSpaceReserved="false"
         app:key="spr_manageSpace"
         app:singleLineTitle="false"
@@ -94,14 +94,14 @@
         app:title="@string/backupAndRestore" />
 
     <Preference
-        app:fragment="cf.playhi.freezeyou.SettingsAdvanceFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsAdvanceFragment"
         app:iconSpaceReserved="false"
         app:key="spr_advance"
         app:singleLineTitle="false"
         app:title="@string/advance" />
 
     <Preference
-        app:fragment="cf.playhi.freezeyou.SettingsDangerZoneFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsDangerZoneFragment"
         app:iconSpaceReserved="false"
         app:key="dangerZone"
         app:singleLineTitle="false"
@@ -112,7 +112,7 @@
         app:singleLineTitle="false"
         app:title="@string/about">
         <intent
-            android:targetClass="cf.playhi.freezeyou.AboutActivity"
+            android:targetClass="cf.playhi.freezeyou.ui.AboutActivity"
             android:targetPackage="cf.playhi.freezeyou" />
     </Preference>
 

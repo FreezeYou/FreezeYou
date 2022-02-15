@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.service.ForceStopService;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;

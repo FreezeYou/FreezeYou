@@ -12,7 +12,7 @@ import net.grandcentrix.tray.AppPreferences;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 
-import static cf.playhi.freezeyou.ThemeUtils.processSetTheme;
+import static cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;

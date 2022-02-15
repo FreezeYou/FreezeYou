@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdk 31
         versionCode 146
-        versionName '11.0.146.20220206-t147-h-20220211-1'
+        versionName '11.0.146.20220206-t147-h-20220215-1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -55,8 +55,8 @@ dependencies {
     implementation "androidx.fragment:fragment:$fragment_version"
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
 
     implementation "androidx.preference:preference:1.2.0"
 

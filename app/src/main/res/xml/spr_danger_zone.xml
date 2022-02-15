@@ -15,7 +15,7 @@
         app:title="@string/disableMRootMode">
         <intent
             android:data="Uninstall"
-            android:targetClass="cf.playhi.freezeyou.Uninstall"
+            android:targetClass="cf.playhi.freezeyou.ui.UninstallActivity"
             android:targetPackage="cf.playhi.freezeyou" />
     </Preference>
     <Preference
