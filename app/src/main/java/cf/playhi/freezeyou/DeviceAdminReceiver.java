@@ -6,6 +6,8 @@ import android.content.Intent;
 
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
+// Needs to be retained for compatibility
+// with old FreezeYou structures and settings.
 public class DeviceAdminReceiver extends android.app.admin.DeviceAdminReceiver {
 
     @Override

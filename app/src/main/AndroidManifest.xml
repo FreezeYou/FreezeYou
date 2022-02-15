@@ -263,7 +263,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.ScheduledTasksManageActivity"
+            android:name=".ScheduledTasksManageActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:exported="true"
             android:icon="@drawable/ic_shortcut_access_alarm"
@@ -280,6 +280,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.ScheduledTasksManageActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
+            android:exported="true"
+            android:icon="@drawable/ic_shortcut_access_alarm"
+            android:label="@string/scheduledTasks"
+            android:theme="@style/AppTheme.Dark.Default" />
         <activity
             android:name=".InstallPackagesActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"

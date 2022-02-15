@@ -25,6 +25,8 @@ import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
 import static cf.playhi.freezeyou.utils.Support.shortcutMakeDialog;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
+// Needs to be retained for compatibility
+// with old FreezeYou structures and settings.
 public class Freeze extends FreezeYouBaseActivity {
     private Intent mStartedIntent;
     private String mPkgName;

@@ -107,6 +107,8 @@ import static cf.playhi.freezeyou.utils.VersionUtils.checkUpdate;
 import static cf.playhi.freezeyou.utils.VersionUtils.getVersionCode;
 import static cf.playhi.freezeyou.utils.VersionUtils.isOutdated;
 
+// Needs to be retained for compatibility
+// with old FreezeYou structures and settings.
 public class Main extends FreezeYouBaseActivity {
 
     private final static int APPListViewOnClickMode_chooseAction = 0;

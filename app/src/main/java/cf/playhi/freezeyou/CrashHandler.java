@@ -2,7 +2,10 @@ package cf.playhi.freezeyou;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -19,7 +22,7 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     @Override
-    public void uncaughtException(Thread thread, Throwable throwable) {
+    public void uncaughtException(@NonNull Thread thread, @NonNull Throwable throwable) {
 
         final Date date = new Date();
         final String logPath = mContext.getCacheDir() + File.separator + "log";
@@ -48,7 +51,7 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
                     + date.getTime() + ".log", true);
             fw.write(date + "\n");
             fw.write("Model: " + android.os.Build.MODEL + ","
-                    + android.os.Build.VERSION.SDK + ","
+                    + Build.VERSION.SDK_INT + ","
                     + android.os.Build.VERSION.RELEASE + "\n");
             StackTraceElement[] stackTrace = throwable.getStackTrace();
             PackageInfo packageInfo = mContext.getPackageManager().getPackageInfo("cf.playhi.freezeyou", 0);

@@ -21,6 +21,8 @@ import cf.playhi.freezeyou.utils.TasksUtils;
 import static cf.playhi.freezeyou.utils.Support.checkLanguage;
 import static cf.playhi.freezeyou.utils.TasksUtils.cancelAllUnexecutedDelayTasks;
 
+// Needs to be retained for compatibility
+// with old FreezeYou structures and settings.
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
 
     @Override

@@ -12,6 +12,8 @@ import cf.playhi.freezeyou.utils.ServiceUtils;
 
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
+// Needs to be retained for compatibility
+// with old FreezeYou structures and settings.
 public class ForceStop extends FreezeYouBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

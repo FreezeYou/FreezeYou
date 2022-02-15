@@ -12,6 +12,8 @@ import java.util.List;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkRootFrozen;
 
+// Needs to be retained for compatibility
+// with old FreezeYou structures and settings.
 public class GetDisabledApplications extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

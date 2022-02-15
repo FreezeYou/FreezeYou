@@ -6,6 +6,8 @@ import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
+// Needs to be retained for compatibility
+// with old FreezeYou structures and settings.
 @TargetApi(21)
 public class MyNotificationListenerService extends NotificationListenerService {
 
