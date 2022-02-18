@@ -31,17 +31,21 @@ import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_DEVICE_ANDROID_VERSION_TOO_LOW;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NOT_DEVICE_POLICY_MANAGER;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NOT_PROFILE_OWNER;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NOT_SYSTEM_APP;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ERROR_SUCCESS;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ROOT_PERMISSION;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_SUCH_API_MODE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_OTHER;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_PROFILE_OWNER_EXECUTE_FAILED_FROM_SYSTEM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_SINGLE_PACKAGE_NAME_IS_BLANK;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isProfileOwner;
 import static cf.playhi.freezeyou.utils.NotificationUtils.createFUFQuickNotification;
 import static cf.playhi.freezeyou.utils.NotificationUtils.deleteNotification;
 import static cf.playhi.freezeyou.utils.ProcessUtils.destroyProcess;
@@ -434,7 +438,10 @@ public final class FUFUtils {
 
     public static boolean checkMRootFrozen(Context context, String pkgName) {
         try {
-            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && DevicePolicyManagerUtils.isDeviceOwner(context) && getDevicePolicyManager(context).isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
+            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                    && (isDeviceOwner(context) || isProfileOwner(context))
+                    && getDevicePolicyManager(context)
+                    .isApplicationHidden(DeviceAdminReceiver.getComponentName(context), pkgName);
         } catch (Exception e) {
             return false;
         }
@@ -537,12 +544,17 @@ public final class FUFUtils {
                         context, context.getString(R.string.noRootPermission));
                 return false;
             case ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM:
+            case ERROR_PROFILE_OWNER_EXECUTE_FAILED_FROM_SYSTEM:
                 showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
                         context, context.getString(R.string.executeFailedFromSystem));
                 return false;
             case ERROR_NOT_DEVICE_POLICY_MANAGER:
                 showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
                         context, context.getString(R.string.isNotDevicePolicyManager));
+                return false;
+            case ERROR_NOT_PROFILE_OWNER:
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.isNotProfileOwner));
                 return false;
             case ERROR_NO_SUCH_API_MODE:
                 showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(

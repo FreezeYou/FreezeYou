@@ -58,10 +58,10 @@ final public class VersionUtils {
         //"https://play.google.com/store/apps/details?id=cf.playhi.freezeyou"
         //"https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(context)
         AlertDialogUtils.buildAlertDialog(
-                activity,
-                R.mipmap.ic_launcher_new_round,
-                R.string.plsSelect,
-                R.string.notice)
+                        activity,
+                        R.mipmap.ic_launcher_new_round,
+                        R.string.plsSelect,
+                        R.string.notice)
                 .setPositiveButton(R.string.appStore, (dialogInterface, i) -> {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details/?id=cf.playhi.freezeyou"));
                     String title = activity.getString(R.string.plsSelect);
@@ -70,14 +70,11 @@ final public class VersionUtils {
                         activity.startActivity(chooser);
                     }
                 })
-                .setNeutralButton(R.string.visitWebsite, (dialog, i) -> {
-                    String s = getVersionName(activity);
-                    requestOpenWebSite(activity,
-                            s != null && s.contains("g") ?
-                                    "https://play.google.com/store/apps/details?id=cf.playhi.freezeyou" :
-                                    "https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(activity));
-                })
-                .create().show();
+                .setNeutralButton(R.string.visitWebsite, (dialog, i) -> requestOpenWebSite(activity,
+                        isGooglePlayVersion(activity) ?
+                                "https://play.google.com/store/apps/details?id=cf.playhi.freezeyou" :
+                                "https://freezeyou.playhi.net/checkupdate.php?v=" + getVersionCode(activity)))
+                .show();
     }
 
     /**

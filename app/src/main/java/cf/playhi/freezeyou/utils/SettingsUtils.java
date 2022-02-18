@@ -18,6 +18,7 @@ import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
 
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_PROFILE_OWNER;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE;
@@ -28,6 +29,7 @@ import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySett
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.checkAndSetOrganizationName;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
+import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isProfileOwner;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.openDevicePolicyManager;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkRootPermission;
 import static cf.playhi.freezeyou.utils.FUFUtils.isSystemApp;
@@ -151,6 +153,11 @@ public final class SettingsUtils {
                     case API_FREEZEYOU_MROOT_DPM:
                         if (!isDeviceOwner(context)) {
                             showToast(context, R.string.noMRootPermission);
+                        }
+                        break;
+                    case API_FREEZEYOU_MROOT_PROFILE_OWNER:
+                        if (!isProfileOwner(context)) {
+                            showToast(context, R.string.isNotProfileOwner);
                         }
                         break;
                     case API_FREEZEYOU_ROOT_DISABLE_ENABLE:
