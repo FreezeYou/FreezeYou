@@ -169,6 +169,12 @@
     <string name="noNotificationListenerPermission">Bildirim dinleme izni verilmedi</string>
     <string name="noProblemsFound">Hiçbir sorun bulunmadı</string>
     <string name="everySeemsAllRight">Görünüşe göre her şey yolunda</string>
+    <string name="inPowerSaveMode">Güç Tasarrufu modu açık</string>
+    <string name="backupAndRestore">Yedekleme ve geri yükleme</string>
+    <string name="backup">Yedekle</string>
+    <string name="restore">Geri yükle</string>
+    <string name="status">Durum</string>
+    <string name="debugMode">Hata Ayıklama modu</string>
     <string name="onlyUnfreeze">Sadece Çöz</string>
     <string name="unknown">Bilinmeyen</string>
     <string name="installPackage_colon">Paketi Yükle: </string>
