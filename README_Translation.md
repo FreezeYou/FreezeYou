@@ -1,6 +1,9 @@
 # Translation 翻译
+## By Crowdin 通过 Crowdin
+* [Crowdin(https://crwd.in/freezeyou)](https://crwd.in/freezeyou)
 
-## Guide 导引
+## By GitHub 通过 GitHub 
+### Guide 导引
 * It is not necessary to translate all strings at once, it is ok to translate only one sentence.
 * 哪怕翻译一句话也是可以的，不是必须一次性翻译所有内容。
 * Source files are in `values`, `values-zh-rCN`, `values-en-rUS`, `values-**-r**` folders in 
@@ -11,12 +14,12 @@ translated strings is available for reference.
 * Thank you very much for your translation!
 * 感谢各位的翻译！
 
-## Improve Translation 完善翻译
+### Improve Translation 完善翻译
 * Modify the `strings.xml` of the corresponding language directly, 
 and then submit the modified file through `Pull Request`.
 * 直接修改对应语言的 `strings.xml`，然后将修改后的文件通过 `Pull Request` 提交即可。
 
-## Add New Language 新增语言
+### Add New Language 新增语言
 1. Create a new `Issue`, indicates the language you want to add and its region, then wait for a reply.
 *  发起一个新 `Issue`，表明想新增的语言及其所属地区，等待回复。
 2. The administrator will provide a `strings.xml` file in a folder 

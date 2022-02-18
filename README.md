@@ -1,6 +1,8 @@
-# 自冻 FreezeYou  [![GitHub license](https://img.shields.io/github/license/FreezeYou/FreezeYou.svg)](https://github.com/FreezeYou/FreezeYou/blob/master/LICENSE) [![Maintainability](https://api.codeclimate.com/v1/badges/727a63c38deeadb0c468/maintainability)](https://codeclimate.com/github/Playhi/FreezeYou/maintainability) [![Build Status](https://app.travis-ci.com/FreezeYou/FreezeYou.svg?branch=master)](https://travis-ci.org/FreezeYou/FreezeYou) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/freezeyou/localized.svg)](https://crowdin.com/project/freezeyou) [![GitHub release](https://img.shields.io/github/v/release/FreezeYou/FreezeYou.svg)](https://github.com/FreezeYou/FreezeYou/releases)
+# 自冻 FreezeYou
 
 ###### [Website - FreezeYou](https://www.freezeyou.net/) | [官方主页 - 自冻](https://zidon.net/) | [官方主页 - 旧版](https://freezeyou.playhi.net/)
+
+[![GitHub license](https://img.shields.io/github/license/FreezeYou/FreezeYou.svg)](https://github.com/FreezeYou/FreezeYou/blob/master/LICENSE) [![Maintainability](https://api.codeclimate.com/v1/badges/727a63c38deeadb0c468/maintainability)](https://codeclimate.com/github/Playhi/FreezeYou/maintainability) [![Build Status](https://app.travis-ci.com/FreezeYou/FreezeYou.svg?branch=master)](https://travis-ci.org/FreezeYou/FreezeYou) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/freezeyou/localized.svg)](https://crowdin.com/project/freezeyou) [![GitHub release](https://img.shields.io/github/v/release/FreezeYou/FreezeYou.svg)](https://github.com/FreezeYou/FreezeYou/releases)
 
 ## 介绍 Introduction
 * 支持 ROOT、免 ROOT 与系统应用模式（免ROOT方法请点[这里](https://zidon.net/zh-CN/guide/enable-mroot.html)或[这里](https://github.com/Playhi/FreezeYou/wiki/%E5%85%8DROOT%E4%BD%BF%E7%94%A8)或[这里](https://freezeyou.playhi.net/MRootUse.html)）
