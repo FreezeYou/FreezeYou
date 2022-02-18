@@ -383,6 +383,7 @@
     <string name="gotoStore">Go to the store</string>
     <string name="selfRevokeProfileOwner">Release profile owner permission</string>
     <string name="selfRevokeProfileOwnerSummary">If the profile owner is set, we need to release it before uninstalling the application.</string>
+    <string name="isNotProfileOwner">Is not profile owner</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
