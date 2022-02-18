@@ -383,6 +383,7 @@
     <string name="gotoStore">转至市场</string>
     <string name="selfRevokeProfileOwner">释放配置文件所有者（Profile-Owner）权限</string>
     <string name="selfRevokeProfileOwnerSummary">如果被设定为配置文件所有者（Profile-Owner），需要解除后才能正常卸载本应用程序。</string>
+    <string name="isNotProfileOwner">不是配置文件所有者（Profile Owner）</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
@@ -444,13 +445,13 @@
     </string-array>
     <string-array name="selectFUFModeSelection">
         <item>免ROOT（DPM模式）</item>
-        <item>No-root (Profile Owner Mode)</item>
-        <item>ROOT (Hide Mode)</item>
-        <item>ROOT (Disable Mode)</item>
-        <item>Legacy (Auto DPM or Disable Mode)</item>
-        <item>System App (Disable Mode)</item>
-        <item>System App (Disable_User Mode)</item>
-        <item>System App (Disable_Until_Used Mode)</item>
+        <item>免ROOT（Profile Owner 模式）</item>
+        <item>ROOT（HIDE模式）</item>
+        <item>ROOT（DISABLE模式）</item>
+        <item>遗留的（自动DPM或DISABLE模式）</item>
+        <item>系统应用（DISABLE模式）</item>
+        <item>系统应用（DISABLE_USER模式）</item>
+        <item>系统应用（DISABLE_UNTIL_USED模式）</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
         <item>暗色</item>
