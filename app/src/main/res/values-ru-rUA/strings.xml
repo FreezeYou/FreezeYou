@@ -380,6 +380,8 @@
     <string name="bluetoothPermissionIsNotGranted">Связанное разрешение Bluetooth не предоставлено</string>
     <string name="mayCannotUseScheduledTaskToEnableOrDisableBluetooth">Возможно, не удастся использовать запланированные задачи для включения или отключения Bluetooth</string>
     <string name="gotoStore">Перейти в магазин приложений</string>
+    <string name="selfRevokeProfileOwner">Отключить режим без-ROOT</string>
+    <string name="selfRevokeProfileOwnerSummary">Если вы включили режим без-ROOT, вам необходимо отключить его перед удалением FreezeYou!</string>
     <string-array name="launchModeSelection">
         <item>Показати все</item>
         <item>Заморожено</item>
@@ -441,12 +443,13 @@
     </string-array>
     <string-array name="selectFUFModeSelection">
         <item>без-ROOT (режим DPM)</item>
-        <item>ROOT (режим приховування)</item>
-        <item>ROOT (режим відключення)</item>
-        <item>Legacy (Автоматичний DPM або режим відключення)</item>
-        <item>Системний (режим DISABLE)</item>
-        <item>Системний (режим DISABLE_USER)</item>
-        <item>Системний (режим DISABLE_UNTIL_USED)</item>
+        <item>No-root (Profile Owner Mode)</item>
+        <item>ROOT (Hide Mode)</item>
+        <item>ROOT (Disable Mode)</item>
+        <item>Legacy (Auto DPM or Disable Mode)</item>
+        <item>System App (Disable Mode)</item>
+        <item>System App (Disable_User Mode)</item>
+        <item>System App (Disable_Until_Used Mode)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
         <item>Темна тема</item>
