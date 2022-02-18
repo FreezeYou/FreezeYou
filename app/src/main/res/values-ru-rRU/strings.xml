@@ -445,12 +445,13 @@
     </string-array>
     <string-array name="selectFUFModeSelection">
         <item>без-ROOT (режим DPM)</item>
-        <item>ROOT(режим скрытия)</item>
-        <item>ROOT(режим отключения)</item>
-        <item>Legacy(автоматический DPM или режим отключения)</item>
-        <item>Системное (режим DISABLE)</item>
-        <item>Системное (режим DISABLE_USER)</item>
-        <item>Системное (режим DISABLE_UNTIL_USED)</item>
+        <item>No-root (Profile Owner Mode)</item>
+        <item>ROOT (Hide Mode)</item>
+        <item>ROOT (Disable Mode)</item>
+        <item>Legacy (Auto DPM or Disable Mode)</item>
+        <item>System App (Disable Mode)</item>
+        <item>System App (Disable_User Mode)</item>
+        <item>System App (Disable_Until_Used Mode)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
         <item>Темная тема</item>
