@@ -175,6 +175,19 @@
     <string name="restore">Geri yükle</string>
     <string name="status">Durum</string>
     <string name="debugMode">Hata Ayıklama modu</string>
+    <string name="showLogcat">Günlükleri görüntüle</string>
+    <string name="freezeOrLaunch">Dondur/Çalıştır</string>
+    <string name="askIfSave">Kaydet?</string>
+    <string name="openImmediatelyAfterUF">Çözüldükten hemen sonra çalıştır</string>
+    <string name="createLauncherShortcut">Başlatıcı kısayolu oluştur</string>
+    <string name="name">Ad</string>
+    <string name="icon">Simge</string>
+    <string name="target">Hedef</string>
+    <string name="generate">Oluştur</string>
+    <string name="plsSelect">Lütfen seçin</string>
+    <string name="application">Uygulama</string>
+    <string name="id">Kimlik</string>
+    <string name="insufficientPermission">Yetersiz izinler</string>
     <string name="onlyUnfreeze">Sadece Çöz</string>
     <string name="unknown">Bilinmeyen</string>
     <string name="installPackage_colon">Paketi Yükle: </string>
@@ -194,4 +207,6 @@
     <string name="uninstallFailed">Kaldırma Başarısız Oldu</string>
     <string name="installAndUninstall">Yükle ve Kaldır</string>
     <string name="errorUninstallToast">Uygulama kaldırılırken bir sorun oluştu: %1$s </string>
+    <string name="errorInstallToast">Uygulama yüklenirken bir sorun oluştu: %1$s </string>
+    <string name="invalidUriToast">Geçersiz URL: %1$s </string>
 </resources>
