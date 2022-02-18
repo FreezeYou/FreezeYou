@@ -444,6 +444,7 @@
     </string-array>
     <string-array name="selectFUFModeSelection">
         <item>No-root (DPM Mode)</item>
+        <item>No-root (Profile Owner Mode)</item>
         <item>ROOT (Hide Mode)</item>
         <item>ROOT (Disable Mode)</item>
         <item>Legacy (Auto DPM or Disable Mode)</item>
