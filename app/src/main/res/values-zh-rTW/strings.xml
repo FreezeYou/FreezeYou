@@ -414,11 +414,12 @@
     </string-array>
     <string-array name="selectFUFModeSelection">
         <item>免ROOT（DPM模式）</item>
-        <item>ROOT（HIDE模式）</item>
-        <item>ROOT（DISABLE模式）</item>
-        <item>遺留的（自動DPM或DISABLE模式）</item>
-        <item>系统应用（DISABLE模式）</item>
-        <item>系统应用（DISABLE_USER模式）</item>
-        <item>系统应用（DISABLE_UNTIL_USED模式）</item>
+        <item>No-root (Profile Owner Mode)</item>
+        <item>ROOT (Hide Mode)</item>
+        <item>ROOT (Disable Mode)</item>
+        <item>Legacy (Auto DPM or Disable Mode)</item>
+        <item>System App (Disable Mode)</item>
+        <item>System App (Disable_User Mode)</item>
+        <item>System App (Disable_Until_Used Mode)</item>
     </string-array>
 </resources>
