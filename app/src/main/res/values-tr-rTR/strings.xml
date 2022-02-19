@@ -169,7 +169,11 @@
     <string name="noNotificationListenerPermission">Bildirim dinleme izni verilmedi</string>
     <string name="noProblemsFound">Hiçbir sorun bulunmadı</string>
     <string name="everySeemsAllRight">Görünüşe göre her şey yolunda</string>
+    <string name="notUpdatedForALongTime">Uzun zamandır güncellenmedi</string>
+    <string name="someNewFuncMayPub">Bazı yeni özellikler yayınlanmış olabilir</string>
     <string name="inPowerSaveMode">Güç Tasarrufu modu açık</string>
+    <string name="manageQuickFUFNoti">Hızlı dondurma bildirimlerini yönet</string>
+    <string name="updateSomeData">Bazı verileri güncelle</string>
     <string name="backupAndRestore">Yedekleme ve geri yükleme</string>
     <string name="backup">Yedekle</string>
     <string name="restore">Geri yükle</string>
@@ -178,6 +182,7 @@
     <string name="showLogcat">Günlükleri görüntüle</string>
     <string name="freezeOrLaunch">Dondur/Çalıştır</string>
     <string name="askIfSave">Kaydet?</string>
+    <string name="needCfmWhenFreeze">Dondurulduğunda ekstra onay</string>
     <string name="openImmediatelyAfterUF">Çözüldükten hemen sonra çalıştır</string>
     <string name="createLauncherShortcut">Başlatıcı kısayolu oluştur</string>
     <string name="name">Ad</string>
@@ -186,6 +191,9 @@
     <string name="generate">Oluştur</string>
     <string name="plsSelect">Lütfen seçin</string>
     <string name="application">Uygulama</string>
+    <string name="allowEditWhCreateShortcut">Kısayolları oluştururken düzenlemeye izin ver</string>
+    <string name="clearAllUserData">Tüm verileri temizle</string>
+    <string name="packageNotFound">Uygulama bulunamadı</string>
     <string name="id">Kimlik</string>
     <string name="insufficientPermission">Yetersiz izinler</string>
     <string name="onlyUnfreeze">Sadece Çöz</string>
@@ -209,4 +217,20 @@
     <string name="errorUninstallToast">Uygulama kaldırılırken bir sorun oluştu: %1$s </string>
     <string name="errorInstallToast">Uygulama yüklenirken bir sorun oluştu: %1$s </string>
     <string name="invalidUriToast">Geçersiz URL: %1$s </string>
+    <string name="reason_colon">Sebep: %1$s </string>
+    <string name="plsWait">Lütfen bekleyin</string>
+    <string name="loading___">Yükleniyor...</string>
+    <string name="freezeSlashRun">Dondur/Çalıştır</string>
+    <string name="UfSlashRun">Çöz/Çalıştır</string>
+    <string name="dangerous">Tehlikeli</string>
+    <string name="alert_isObsd">Pencere gizlendi, işlem reddedildi, lütfen maske katmanını kaldırın ve yeniden deneyin</string>
+    <string name="retry">Yeniden dene</string>
+    <string name="allow">İzin ver</string>
+    <string name="reject">Reddet</string>
+    <string name="execute_colon">Çalıştır: </string>
+    <string name="target_colon">Hedef: </string>
+    <string name="expt">Dışa aktar</string>
+    <string name="appStore">Uygulama Mağazası</string>
+    <string name="finish">Tamamlandı</string>
+    <string name="quickSetup">Hızlı Kurulum</string>
 </resources>
