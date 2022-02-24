@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.biometric.BiometricManager;
 
-import cf.playhi.freezeyou.DefaultMultiProcessMMKVDataStore;
+import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK;

@@ -10,7 +10,7 @@ import androidx.annotation.Keep
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import cf.playhi.freezeyou.DefaultMultiProcessMMKVDataStore
+import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.ui.AppLockActivity
 import cf.playhi.freezeyou.utils.AuthenticationUtils.isBiometricPromptPartAvailable
