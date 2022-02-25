@@ -5,6 +5,8 @@ import androidx.annotation.Keep
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import cf.playhi.freezeyou.R
+import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
+import cf.playhi.freezeyou.storage.mmkv.DefaultMultiProcessMMKVStorageBooleanFalseKeys
 import cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings
 
 @Keep
@@ -17,6 +19,10 @@ class SettingsAdvanceFragment : PreferenceFragmentCompat() {
             openAccessibilitySettings(activity);
             true
         }
+
+        // TODO: Value
+        findPreference<Preference?>(DefaultMultiProcessMMKVStorageBooleanFalseKeys.DebugModeEnabled.name)
+            ?.preferenceDataStore = DefaultMultiProcessMMKVDataStore()
     }
 
     override fun onResume() {

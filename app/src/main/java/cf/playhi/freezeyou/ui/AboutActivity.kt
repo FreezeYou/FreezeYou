@@ -11,11 +11,11 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import cf.playhi.freezeyou.R
-import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
-import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.utils.MoreUtils.joinQQGroup
 import cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite
+import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
+import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
 import cf.playhi.freezeyou.utils.ToastUtils.showToast
 import cf.playhi.freezeyou.utils.VersionUtils.*
 

@@ -22,7 +22,7 @@ public class DisableApplications extends Activity {
         if (intent != null) {
             String[] packages = intent.getStringArrayExtra("packages");
 
-            if (isDebugModeEnabled(this)) {
+            if (isDebugModeEnabled()) {
                 Log.e("DebugModeLogcat", "Intent toString:" + intent.toString());
                 for (String p : packages) {
                     Log.e("DebugModeLogcat", "Intent packages:" + p);
@@ -40,7 +40,7 @@ public class DisableApplications extends Activity {
                 }
             }
         } else {
-            if (isDebugModeEnabled(this)) {
+            if (isDebugModeEnabled()) {
                 Log.e("DebugModeLogcat", "Intent: null");
             }
         }

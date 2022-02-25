@@ -7,9 +7,12 @@ import android.content.pm.PackageManager
 import androidx.annotation.NonNull
 import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService
+import cf.playhi.freezeyou.storage.mmkv.DefaultMultiProcessMMKVStorage
+import cf.playhi.freezeyou.storage.mmkv.DefaultMultiProcessMMKVStorageBooleanFalseKeys
 import cf.playhi.freezeyou.utils.OneKeyListUtils
 import cf.playhi.freezeyou.utils.ServiceUtils
 import cf.playhi.freezeyou.utils.Support.checkLanguage
+import cf.playhi.freezeyou.utils.ToastUtils.showToast
 import com.getkeepsafe.relinker.ReLinker
 import com.tencent.mmkv.MMKV
 import net.grandcentrix.tray.AppPreferences
@@ -36,6 +39,7 @@ class MainApplication : Application() {
             checkAndMigrateSharedPreferenceDataToTray()
             checkAndMigrateAppIconDataPreference()
             checkAndMigrateEnableAuthenticationPreferenceDataToMMKV()
+            // checkAndMigrateMultiProcessPreferenceDataToMMKV()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -202,12 +206,46 @@ class MainApplication : Application() {
                     + "migrateEnableAuthenticationPreferenceDataToMMKV.lock"
         )
         if (!migrateLock.exists()) {
-            DefaultMultiProcessMMKVDataStore()
+            DefaultMultiProcessMMKVStorage()
                 .putBoolean(
                     "enableAuthentication",
                     AppPreferences(this)
                         .getBoolean("enableAuthentication", false)
                 )
+                .sync()
+            migrateLock.createNewFile()
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun checkAndMigrateMultiProcessPreferenceDataToMMKV() {
+        val migrateLock = File(
+            filesDir.absolutePath + File.separator
+                    + "migrateMultiProcessPreferenceDataToMMKVtest220225.lock"
+        )
+        if (!migrateLock.exists()) {
+            val appPreference = AppPreferences(this)
+            DefaultMultiProcessMMKVStorage().run {
+                DefaultMultiProcessMMKVStorageBooleanFalseKeys.values().forEach { key ->
+                    putBoolean(
+                        key.name,
+                        appPreference
+                            .getBoolean(key.name.replaceFirstChar {
+                                it.lowercase()
+                            }, false)
+                    )
+                    showToast(
+                        this@MainApplication,
+                        key.name +
+                                appPreference.getBoolean(
+                                    key.name.replaceFirstChar {
+                                        it.lowercase()
+                                    }, false
+                                )
+                    )
+                }
+                sync()
+            }
             migrateLock.createNewFile()
         }
     }

@@ -5,7 +5,7 @@
     <CheckBoxPreference
         app:defaultValue="false"
         app:iconSpaceReserved="false"
-        app:key="debugModeEnabled"
+        app:key="DebugModeEnabled"
         app:singleLineTitle="false"
         app:title="@string/debugMode" />
     <EditTextPreference
