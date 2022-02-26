@@ -173,6 +173,7 @@
     <string name="noNotificationListenerPermission">Bildirim dinleme izni verilmedi</string>
     <string name="noProblemsFound">Hiçbir sorun bulunmadı</string>
     <string name="everySeemsAllRight">Görünüşe göre her şey yolunda</string>
+    <string name="noMRootPermission">Root\'suz izni verilmedi</string>
     <string name="someFuncMayRestrict">Bazı özellikler kısıtlanmış olabilir</string>
     <string name="noRootPermission">Root izni verilmedi</string>
     <string name="noIgnoringBO">Pil optimizasyonu göz ardı edilmedi</string>
@@ -181,6 +182,11 @@
     <string name="someNewFuncMayPub">Bazı yeni özellikler yayınlanmış olabilir</string>
     <string name="inPowerSaveMode">Güç Tasarrufu modu açık</string>
     <string name="manageQuickFUFNoti">Hızlı dondurma bildirimlerini yönet</string>
+    <string name="addToRemoveFrom">Ekle/Kaldır</string>
+    <string name="onClickFuncChooseActionStyle">Tıklama seçim eylemi stili</string>
+    <string name="shortcutAutoFUF">Kısayol otomatik dondur veya çöz</string>
+    <string name="shortcutAutoFUFEx">Dondurulmuş çözdürme, dondurulmamış dondurma</string>
+    <string name="regenerateSomeCache">Bazı önbellekleri yeniden oluşturun</string>
     <string name="updateSomeData">Bazı verileri güncelle</string>
     <string name="backupAndRestore">Yedekleme ve geri yükleme</string>
     <string name="backup">Yedekle</string>
@@ -190,6 +196,8 @@
     <string name="showLogcat">Günlükleri görüntüle</string>
     <string name="freezeOrLaunch">Dondur/Çalıştır</string>
     <string name="askIfSave">Kaydet?</string>
+    <string name="mainActivityPattern">Ana desen</string>
+    <string name="workWithShortcutAutoFUF">\"Kısayol otomatik dondur veya çöz\" etkinleştirildiğinde etkilidir</string>
     <string name="needCfmWhenFreeze">Dondurulduğunda ekstra onay</string>
     <string name="openImmediatelyAfterUF">Çözüldükten hemen sonra çalıştır</string>
     <string name="createLauncherShortcut">Başlatıcı kısayolu oluştur</string>
@@ -231,14 +239,19 @@
     <string name="freezeSlashRun">Dondur/Çalıştır</string>
     <string name="UfSlashRun">Çöz/Çalıştır</string>
     <string name="isForegroundApplication">%1$s bir önplan uygulamasıdır</string>
+    <string name="appHasNotifi">%1$s hala bildiriyor</string>
     <string name="dangerous">Tehlikeli</string>
     <string name="alert_isObsd">Pencere gizlendi, işlem reddedildi, lütfen maske katmanını kaldırın ve yeniden deneyin</string>
     <string name="retry">Yeniden dene</string>
+    <string name="enableInstallPkgFunc">Paketleri yükle işlevini etkinleştir</string>
     <string name="allow">İzin ver</string>
     <string name="reject">Reddet</string>
     <string name="execute_colon">Çalıştır: </string>
     <string name="target_colon">Hedef: </string>
     <string name="alwaysAllow_name">Her zaman izin ver %1$s</string>
+    <string name="existed_colon">Mevcut: %1$s</string>
+    <string name="manageUriAutoAllow">URI İsteği Otomatik İzin Listesini Yönet</string>
+    <string name="manageIpaAutoAllow">Uygulama Yükleme İsteği Otomatik İzin Listesini Yönet</string>
     <string name="delAllCache">Tüm önbellekleri temizle</string>
     <string name="needStoragePermission">Depolama izni gerekli</string>
     <string name="okay">Tamam</string>
@@ -246,6 +259,7 @@
     <string name="manageSpace">Alanı yönet</string>
     <string name="cacheApplicationsIcons">Uygulamaların simgelerini önbellekle</string>
     <string name="tryDelApkAfterInstalled">Yüklendikten sonra APK\'yı silmeyi deneyin</string>
+    <string name="sortBy">Sıralama şekli</string>
     <string name="sortBy_default">Varsayılan</string>
     <string name="sortBy_no">Sıralama yok</string>
     <string name="uf_ascending">Çöz ↑</string>
@@ -265,29 +279,79 @@
     <string name="importConfig">Yapılandırmayı içe aktar</string>
     <string name="loadingPkgList">Uygulamalar listesi yükleniyor</string>
     <string name="sorting">Sıralama</string>
+    <string name="resetFreezeTimes">Donma süresi sayacını sıfırla</string>
+    <string name="resetUFTimes">Donma süresi sayacını sıfırla</string>
     <string name="resetUseTimes">Kullanım sayacını sıfırla</string>
     <string name="selectAll">Hepsini seç</string>
+    <string name="selectUnselected">Diğerlerini seç</string>
+    <string name="onClickFunctionStatus">Tıklandığında işlev durumu</string>
+    <string name="sortMethodStatus">Sıralama yöntemi durumu</string>
+    <string name="oneKeyFreezeList">Tek tuşla dondurma listesi</string>
+    <string name="oneKeyUFList">Tek tuşla çözme listesi</string>
+    <string name="freezeOnceQuitList">Çıktıktan sonra dondurma listesi</string>
+    <string name="scheduledTaskDashLineLabel">Zamanlanmış Görev - %1$s</string>
+    <string name="moreSettingsDashLineLabel">Daha Fazla Ayar - %1$s</string>
+    <string name="parseFailed">Ayrıştırma başarısız oldu</string>
+    <string name="nothing">Yok</string>
     <string name="share">Paylaş</string>
+    <string name="notAllowWhenIsObsd">Pencerenin gizlenmesine izin verme</string>
+    <string name="remove">Kaldır</string>
+    <string name="newFolder">Yeni Klasör</string>
     <string name="alreadyExist">Zaten var</string>
+    <string name="queryStatus">Sorgu Durumu</string>
     <string name="newClassification">Yeni kategori</string>
+    <string name="userDefined">Kullanıcı Özelleştirme</string>
     <string name="displayLanguage">Görüntüleme Dili</string>
+    <string name="emptyNotAllowed">Boşa izin verilmiyor</string>
     <string name="myCustomization">Özelleştirmem</string>
     <string name="manageMyCustomization">Özelleştirmemi yönet</string>
     <string name="myCustomizationDashLineLabel">Özelleştirmem - %1$s</string>
     <string name="copyAlias">Takma Adı kopyala</string>
     <string name="version_colon_vN_longVC">Sürüm: %1$s (%2$s)</string>
+    <string name="existed_colon_vN_longVC">Mevcut: %1$s (%2$s)</string>
     <string name="application_colon_app">Uygulama: %1$s</string>
     <string name="pkgName_colon_pkgName">Paket Adı: %1$s</string>
     <string name="cannotInstall_colon_msg">Yüklenemiyor: %1$s</string>
+    <string name="uriAutoAllowList">URI İsteği Otomatik İzin Listesi</string>
+    <string name="ipaAutoAllowList">Uygulama Yükleme İsteği Otomatik İzin Listesi</string>
     <string name="installing_app">%1$s yükleniyor</string>
     <string name="uninstalling_app">%1$s kaldırılıyor</string>
     <string name="app_installFinished">%1$s yüklendi</string>
     <string name="app_installFailed">%1$s yüklenemedi</string>
     <string name="app_uninstallFinished">%1$s kaldırıldı</string>
     <string name="app_uninstallFailed">%1$s kaldırılamadı</string>
+    <string name="commandExecutionTool">Komut yürütme aracı</string>
+    <string name="addToMyCustomization">Özelleştirmeme ekle</string>
+    <string name="removeFromMyCustomization">Özelleştirmemden kaldır</string>
+    <string name="waitingToInstall_app">%1$s Çıktıktan sonra yüklemeyi bekliyor</string>
+    <string name="contactUs">Bizimle iletişime geç</string>
+    <string name="email_colon">E-posta: %1$s </string>
+    <string name="qqGroup_colon">QQ Grubu: %1$s </string>
+    <string name="wechatMp_colon">WeChat Resmi Hesap: %1$s </string>
+    <string name="tryToAvoidUpdateWhenUsing">Kullanırken güncellemeden kaçınmaya çalışın</string>
+    <string name="selectFUFMode">Dondurma ve çözme modunu seçin</string>
+    <string name="enable_Root_unhide">Çöz - ROOT(Göster)</string>
+    <string name="disable_Root_hide">Dondur - ROOT(Gizle)</string>
+    <string name="enable_Root_enable">Çöz - ROOT(Etkinleştir)</string>
+    <string name="disable_Root_disable">Dondur - ROOT(Devre Dışı Bırak)</string>
+    <string name="enable_MRoot_DPM">Çöz - Root\'suz(DPM)</string>
+    <string name="disable_MRoot_DPM">Dondur - Root\'suz(DPM)</string>
+    <string name="allowFollowSystemAutoSwitchDarkMode">Sistemin otomatik olarak karanlık modu değiştirmesine izin ver</string>
+    <string name="willOverrideInterfaceStyle">Arayüz stilini geçersiz kılar</string>
+    <string name="installPerimisionCheckFailed_ifContinue">Yükleme izni denetimi başarısız oldu, devam edilsin mi?</string>
+    <string name="jumpToSysInstaller">Sistem yükleyicisine git</string>
+    <string name="displayListDivider">Liste bölücüyü görüntüle</string>
+    <string name="appearance">Görünüm</string>
+    <string name="createQuickFUFNotiAfterUnfrozen">Çözüldükten sonra hızlı dondurma bildirimi oluştur</string>
+    <string name="executionResult_colon_message">Yürütme sonucu: %1$s</string>
+    <string name="unknownResult_probablySuccess">Bilinmeyen sonuç (Muhtemelen başarılı)</string>
+    <string name="unknownError">Bilinmeyen hata</string>
     <string name="packageNameIsNull">Paket adı geçersiz</string>
     <string name="packageNameIsEmpty">Paket adı boş</string>
     <string name="isNotDevicePolicyManager">Aygıt ilkesi yöneticisi değil</string>
+    <string name="noSuchApiMode">Böyle bir api modu yok</string>
+    <string name="executeFailedFromSystem">Sistemden yürütme başarısız oldu</string>
+    <string name="isNotSystemApp">Sistem uygulaması değil</string>
     <string name="telegramGroup_colon">Telegram Grubu: %1$s</string>
     <string name="unlock">Kilidi aç</string>
     <string name="security">Güvenlik</string>
@@ -305,4 +369,82 @@
     <string name="refresh">Yenile</string>
     <string name="themeOfAutoSwitchDarkMode">Otomatik karanlık moda geçişin arayüz stili</string>
     <string name="bluetoothPermissionIsNotGranted">İlgili Bluetooth izni verilmedi</string>
+    <string name="mayCannotUseScheduledTaskToEnableOrDisableBluetooth">Bluetooth\'u etkinleştirmek veya devre dışı bırakmak için zamanlanmış görevi kullanamayabilir</string>
+    <string name="gotoStore">Mağazaya git</string>
+    <string name="selfRevokeProfileOwner">Profil sahibi iznini serbest bırak</string>
+    <string name="selfRevokeProfileOwnerSummary">Profil sahibi ayarlanmışsa, uygulamayı kaldırmadan önce onu serbest bırakmamız gerekir.</string>
+    <string name="isNotProfileOwner">Profil sahibi değil</string>
+    <string-array name="launchModeSelection">
+        <item>Tümünü Göster</item>
+        <item>Sadece dondurulmuş</item>
+        <item>Sadece çözülmüş</item>
+        <item>Sistem önceden yüklenmiş</item>
+        <item>Kullanıcı Uygulaması</item>
+        <item>Tek Tuşla Dondur</item>
+        <item>Tek Tuşla Çöz</item>
+        <item>Dondurmayı bırak</item>
+    </string-array>
+    <string-array name="shortCutOneKeyFreezeAdditionalOptionsSelection">
+        <item>Yok</item>
+        <item>Ekranı Kilitleyip Kilitlemediğini Sor</item>
+        <item>Ekranı Hemen Kilitle</item>
+    </string-array>
+    <string-array name="mainActivityPatternSelection">
+        <item>Varsayılan</item>
+        <item>Liste</item>
+        <item>Izgara</item>
+    </string-array>
+    <string-array name="uiStyleSelection">
+        <item>Varsayılan</item>
+        <item>Koyu</item>
+        <item>Siyah</item>
+        <item>Mavi</item>
+        <item>Pembe</item>
+        <item>Yeşil</item>
+        <item>Sarı</item>
+        <item>Turuncu</item>
+        <item>Beyaz</item>
+        <item>Kırmızı</item>
+    </string-array>
+    <string-array name="sevenDays">
+        <item>Pazartesi</item>
+        <item>Salı</item>
+        <item>Çarşamba</item>
+        <item>Perşembe</item>
+        <item>Cuma</item>
+        <item>Cumartesi</item>
+        <item>Pazar</item>
+    </string-array>
+    <string-array name="triggers">
+        <item>Ekran açıkken</item>
+        <item>Ekran kapalıyken</item>
+        <item>Uygulamarı açarken</item>
+        <item>Uygulamalardan ayrılırken</item>
+        <item>Uygulamları çözerken</item>
+        <item>Uygulamaları dondururken</item>
+    </string-array>
+    <string-array name="sortBySelection">
+        <item>Varsayılan</item>
+        <item>Sıralama yok</item>
+        <item>Çöz ↑</item>
+        <item>Çöz ↓</item>
+        <item>Dondur ↑</item>
+        <item>Dondur ↓</item>
+        <item>Kullanma frekansı ↑</item>
+        <item>Kullanma frekansı ↓</item>
+    </string-array>
+    <string-array name="selectFUFModeSelection">
+        <item>Root\'suz (DPM Modu)</item>
+        <item>Root\'suz (Profil Sahibi Modu)</item>
+        <item>ROOT (Gizleme Modu)</item>
+        <item>ROOT (Devre Dışı Bırakma Modu)</item>
+        <item>Eski (Otomatik DPM veya Devre Dışı Bırakma Modu)</item>
+        <item>Sistem Uygulaması (Devre Dışı Bırakma Modu)</item>
+        <item>Sistem Uygulaması (Disable_User Modu)</item>
+        <item>Sistem Uygulaması (Disable_Until_Used Modu)</item>
+    </string-array>
+    <string-array name="themeOfAutoSwitchDarkModeEntries">
+        <item>Koyu</item>
+        <item>Siyah</item>
+    </string-array>
 </resources>
