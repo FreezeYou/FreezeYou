@@ -122,7 +122,10 @@
     <string name="clearNameCache">Uygulamaların Ad Önbelleğini Temizle</string>
     <string name="refreshCache">Önbelleği yenile</string>
     <string name="configureAccessibilityService">Erişilebilirlik hizmetini yapılandır</string>
+    <string name="freezeOnceQuit">Dondurmayı bırak</string>
+    <string name="needActiveAccessibilityService">Erişilebilirlik Hizmetini etkinleştirilmesi gerekiyor</string>
     <string name="invalidArguments">Geçersiz parametreler</string>
+    <string name="exceptionHC">Bir istisna oluştu ancak işlem devam edecek: </string>
     <string name="plsConfirm">Lütfen onaylayın</string>
     <string name="faq">SSS</string>
     <string name="executeImmediately">Çalıştır</string>
@@ -235,6 +238,7 @@
     <string name="reject">Reddet</string>
     <string name="execute_colon">Çalıştır: </string>
     <string name="target_colon">Hedef: </string>
+    <string name="alwaysAllow_name">Her zaman izin ver %1$s</string>
     <string name="delAllCache">Tüm önbellekleri temizle</string>
     <string name="needStoragePermission">Depolama izni gerekli</string>
     <string name="okay">Tamam</string>
@@ -250,9 +254,13 @@
     <string name="ff_descending">Dondur ↓</string>
     <string name="us_ascending">Kullanma frekansı ↑</string>
     <string name="us_descending">Kullanma frekansı ↓</string>
+    <string name="clearUninstalledPkgsInOKUFList">Silinen uygulamaları Tek Tuşla Çöz listesinden kaldır</string>
+    <string name="clearUninstalledPkgsInOKFFList">Silinen uygulamaları Tek Tuşla Dondur listesinden kaldır</string>
+    <string name="impt">İçe aktar</string>
     <string name="expt">Dışa aktar</string>
     <string name="appStore">Uygulama Mağazası</string>
     <string name="finish">Tamamlandı</string>
+    <string name="welcomeToUseAppName">%1$s\'e hoş geldiniz</string>
     <string name="quickSetup">Hızlı Kurulum</string>
     <string name="importConfig">Yapılandırmayı içe aktar</string>
     <string name="loadingPkgList">Uygulamalar listesi yükleniyor</string>
