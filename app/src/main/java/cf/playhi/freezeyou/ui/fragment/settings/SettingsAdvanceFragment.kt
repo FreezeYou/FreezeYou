@@ -2,6 +2,7 @@ package cf.playhi.freezeyou.ui.fragment.settings
 
 import android.os.Bundle
 import androidx.annotation.Keep
+import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import cf.playhi.freezeyou.R
@@ -16,13 +17,18 @@ class SettingsAdvanceFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.spr_advance, rootKey)
 
         findPreference<Preference?>("configureAccessibilityService")?.setOnPreferenceClickListener {
-            openAccessibilitySettings(activity);
+            openAccessibilitySettings(activity)
             true
         }
 
-        // TODO: Value
-        findPreference<Preference?>(DefaultMultiProcessMMKVStorageBooleanFalseKeys.DebugModeEnabled.name)
-            ?.preferenceDataStore = DefaultMultiProcessMMKVDataStore()
+        findPreference<CheckBoxPreference?>(DefaultMultiProcessMMKVStorageBooleanFalseKeys.DebugModeEnabled.name)
+            ?.run {
+                preferenceDataStore = DefaultMultiProcessMMKVDataStore()
+                isChecked = DefaultMultiProcessMMKVDataStore().getBoolean(
+                    DefaultMultiProcessMMKVStorageBooleanFalseKeys.DebugModeEnabled.name,
+                    false
+                )
+            }
     }
 
     override fun onResume() {
