@@ -12,6 +12,8 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
 import cf.playhi.freezeyou.R
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.enableAuthentication
 import cf.playhi.freezeyou.ui.AppLockActivity
 import cf.playhi.freezeyou.utils.AuthenticationUtils.isBiometricPromptPartAvailable
 
@@ -30,9 +32,9 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             ) { result: ActivityResult ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     (preferenceManager.preferenceDataStore as DefaultMultiProcessMMKVDataStore)
-                        .putBoolean("enableAuthentication", true)
+                        .putBoolean(enableAuthentication.name, true)
 
-                    findPreference<CheckBoxPreference>("enableAuthentication")?.isChecked = true
+                    findPreference<CheckBoxPreference>(enableAuthentication.name)?.isChecked = true
                 }
             }
         }
@@ -44,7 +46,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.spr_security, rootKey)
 
 
-        val enableAuthenticationPreference: Preference? = findPreference("enableAuthentication")
+        val enableAuthenticationPreference: Preference? = findPreference(enableAuthentication.name)
         enableAuthenticationPreference?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _: Preference?, newValue: Any ->
                 val activity: Activity? = activity

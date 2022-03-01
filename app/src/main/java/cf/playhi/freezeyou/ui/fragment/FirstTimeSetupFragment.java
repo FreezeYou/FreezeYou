@@ -49,10 +49,10 @@ public class FirstTimeSetupFragment extends PreferenceFragmentCompat implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        final AppPreferences appPreferences = new AppPreferences(getActivity());
         SettingsUtils.syncAndCheckSharedPreference(
                 getActivity().getApplicationContext(),
-                getActivity(), sharedPreferences, key, appPreferences);
+                getActivity(), sharedPreferences, key
+        );
     }
 
     @Override

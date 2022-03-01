@@ -1,16 +1,24 @@
 package cf.playhi.freezeyou;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Parcelable;
 import android.os.PowerManager;
 import android.view.accessibility.AccessibilityEvent;
 
+import androidx.annotation.CallSuper;
+
+import com.google.android.play.core.splitcompat.SplitCompat;
+
 import net.grandcentrix.tray.AppPreferences;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import cf.playhi.freezeyou.utils.DataStatisticsUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
@@ -19,15 +27,39 @@ import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
 import static cf.playhi.freezeyou.utils.Support.checkLanguage;
+import static cf.playhi.freezeyou.utils.Support.getLocalString;
 import static cf.playhi.freezeyou.utils.TasksUtils.cancelAllUnexecutedDelayTasks;
+import static cf.playhi.freezeyou.utils.VersionUtils.isGooglePlayVersion;
 
 // Needs to be retained for compatibility
 // with old FreezeYou structures and settings.
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
 
     @Override
+    @CallSuper
+    protected void attachBaseContext(Context newBase) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String locale = getLocalString(newBase);
+            Configuration configuration = new Configuration();
+            configuration.setLocale(
+                    "Default".equals(locale) ? Locale.getDefault() : Locale.forLanguageTag(locale)
+            );
+            Context context = newBase.createConfigurationContext(configuration);
+            super.attachBaseContext(context);
+        } else {
+            super.attachBaseContext(newBase);
+        }
+    }
+
+    @Override
     public void onCreate() {
-        checkLanguage(this);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            checkLanguage(this);
+        } else {
+            if (isGooglePlayVersion(this)) {
+                SplitCompat.install(this);
+            }
+        }
         super.onCreate();
     }
 

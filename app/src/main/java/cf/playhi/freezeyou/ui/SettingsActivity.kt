@@ -9,11 +9,14 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
 import cf.playhi.freezeyou.R
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.languagePref
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.allowFollowSystemAutoSwitchDarkMode
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.uiStyleSelection
 import cf.playhi.freezeyou.ui.fragment.settings.SettingsFragment
 import cf.playhi.freezeyou.utils.SettingsUtils.syncAndCheckSharedPreference
 import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
-import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import net.grandcentrix.tray.AppPreferences
 
 class SettingsActivity : FreezeYouBaseActivity(),
@@ -94,13 +97,10 @@ class SettingsActivity : FreezeYouBaseActivity(),
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, s: String) {
-        val appPreferences = AppPreferences(applicationContext)
-        syncAndCheckSharedPreference(
-            applicationContext, this,
-            sharedPreferences, s, appPreferences
-        )
-        if ("languagePref" == s || "uiStyleSelection" == s
-            || "allowFollowSystemAutoSwitchDarkMode" == s
+        syncAndCheckSharedPreference(applicationContext, this, sharedPreferences, s)
+        if (languagePref.name == s
+            || uiStyleSelection.name == s
+            || allowFollowSystemAutoSwitchDarkMode.name == s
         ) {
             recreate()
         }

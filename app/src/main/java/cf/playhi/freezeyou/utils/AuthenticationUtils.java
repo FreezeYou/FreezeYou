@@ -9,12 +9,13 @@ import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.enableAuthentication;
 
 public class AuthenticationUtils {
 
     public static boolean isAuthenticationEnabled() {
         return new DefaultMultiProcessMMKVDataStore()
-                .getBoolean("enableAuthentication", false);
+                .getBoolean(enableAuthentication.name(), enableAuthentication.defaultValue());
     }
 
     public static boolean isBiometricPromptPartAvailable(Context context) {

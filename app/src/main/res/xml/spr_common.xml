@@ -53,13 +53,5 @@
         app:singleLineTitle="false"
         app:title="@string/launchMode"
         app:useSimpleSummaryProvider="true" />
-    <EditTextPreference
-        app:defaultValue="@string/app_name"
-        app:iconSpaceReserved="false"
-        app:key="organizationName"
-        app:singleLineTitle="false"
-        app:summary="@string/onlyMROOTModeUse"
-        app:title="@string/organizationName"
-        app:useSimpleSummaryProvider="true" />
 
 </PreferenceScreen>

@@ -1,190 +1,269 @@
-package cf.playhi.freezeyou.utils;
+package cf.playhi.freezeyou.utils
 
-import android.app.Activity;
-import android.app.admin.DevicePolicyManager;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.provider.Settings;
+import android.app.Activity
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
+import android.provider.Settings
+import cf.playhi.freezeyou.DeviceAdminReceiver
+import cf.playhi.freezeyou.R
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_LEGACY_AUTO
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_MROOT_DPM
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_MROOT_PROFILE_OWNER
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_ROOT_DISABLE_ENABLE
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_ROOT_UNHIDE_HIDE
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER
+import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService
+import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.*
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.*
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.*
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.*
+import cf.playhi.freezeyou.utils.ToastUtils.showToast
 
-import net.grandcentrix.tray.AppPreferences;
-
-import cf.playhi.freezeyou.DeviceAdminReceiver;
-import cf.playhi.freezeyou.R;
-import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService;
-
-import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO;
-import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
-import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_PROFILE_OWNER;
-import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
-import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
-import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE;
-import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED;
-import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER;
-import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
-import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
-import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.checkAndSetOrganizationName;
-import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager;
-import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
-import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isProfileOwner;
-import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.openDevicePolicyManager;
-import static cf.playhi.freezeyou.utils.FUFUtils.checkRootPermission;
-import static cf.playhi.freezeyou.utils.FUFUtils.isSystemApp;
-import static cf.playhi.freezeyou.utils.ServiceUtils.startService;
-import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
-
-public final class SettingsUtils {
-    public static void syncAndCheckSharedPreference(Context context, Activity activity,
-                                             SharedPreferences sharedPreferences, String s,
-                                             AppPreferences appPreferences) {
-        switch (s) {
-            case "firstIconEnabled":
-                if (sharedPreferences.getBoolean(s, true)) {
-                    context.getPackageManager().setComponentEnabledSetting(new ComponentName(context, "cf.playhi.freezeyou.FirstIcon"),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+object SettingsUtils {
+    /**
+     * Reserved for importing backups in v1 format.
+     *
+     * @param context           Context
+     * @param activity          Activity
+     * @param sharedPreferences SharedPreference
+     * @param s                 Preference key
+     */
+    @JvmStatic
+    fun syncAndCheckSharedPreference(
+        context: Context, activity: Activity,
+        sharedPreferences: SharedPreferences, s: String
+    ) {
+        // TODO: DefaultMultiProcessMMKVStorageBooleanKeys.valueOf(s) (把 Keys 都合起来？再想想～)
+        when (s) {
+            firstIconEnabled.name -> {
+                if (sharedPreferences.getBoolean(s, firstIconEnabled.defaultValue())) {
+                    context.packageManager.setComponentEnabledSetting(
+                        ComponentName(context, "cf.playhi.freezeyou.FirstIcon"),
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
                 } else {
-                    context.getPackageManager().setComponentEnabledSetting(new ComponentName(context, "cf.playhi.freezeyou.FirstIcon"),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                    context.packageManager.setComponentEnabledSetting(
+                        ComponentName(context, "cf.playhi.freezeyou.FirstIcon"),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
                 }
-                ToastUtils.showToast(activity, R.string.ciFinishedToast);
-                break;
-            case "secondIconEnabled":
-                if (sharedPreferences.getBoolean(s, true)) {
-                    context.getPackageManager().setComponentEnabledSetting(new ComponentName(context, "cf.playhi.freezeyou.SecondIcon"),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+                showToast(activity, R.string.ciFinishedToast)
+            }
+            secondIconEnabled.name -> {
+                if (sharedPreferences.getBoolean(s, secondIconEnabled.defaultValue())) {
+                    context.packageManager.setComponentEnabledSetting(
+                        ComponentName(context, "cf.playhi.freezeyou.SecondIcon"),
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
                 } else {
-                    context.getPackageManager().setComponentEnabledSetting(new ComponentName(context, "cf.playhi.freezeyou.SecondIcon"),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                    context.packageManager.setComponentEnabledSetting(
+                        ComponentName(context, "cf.playhi.freezeyou.SecondIcon"),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
                 }
-                showToast(activity, R.string.ciFinishedToast);
-                break;
-            case "thirdIconEnabled":
-                if (sharedPreferences.getBoolean(s, true)) {
-                    context.getPackageManager().setComponentEnabledSetting(new ComponentName(context, "cf.playhi.freezeyou.ThirdIcon"),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+                showToast(activity, R.string.ciFinishedToast)
+            }
+            thirdIconEnabled.name -> {
+                if (sharedPreferences.getBoolean(s, thirdIconEnabled.defaultValue())) {
+                    context.packageManager.setComponentEnabledSetting(
+                        ComponentName(context, "cf.playhi.freezeyou.ThirdIcon"),
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
                 } else {
-                    context.getPackageManager().setComponentEnabledSetting(new ComponentName(context, "cf.playhi.freezeyou.ThirdIcon"),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                    context.packageManager.setComponentEnabledSetting(
+                        ComponentName(context, "cf.playhi.freezeyou.ThirdIcon"),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
                 }
-                showToast(activity, R.string.ciFinishedToast);
-                break;
-            case "shortCutOneKeyFreezeAdditionalOptions":
-                appPreferences.put(s, sharedPreferences.getString(s, "nothing"));
-                if (!"nothing".equals(sharedPreferences.getString(s, "nothing"))) {
-                    DevicePolicyManager devicePolicyManager = getDevicePolicyManager(context);
+                showToast(activity, R.string.ciFinishedToast)
+            }
+            shortCutOneKeyFreezeAdditionalOptions.name -> {
+                DefaultMultiProcessMMKVDataStore()
+                    .putString(
+                        s,
+                        sharedPreferences.getString(
+                            s,
+                            shortCutOneKeyFreezeAdditionalOptions.defaultValue()
+                        )
+                    )
+                if (shortCutOneKeyFreezeAdditionalOptions.defaultValue()
+                    != sharedPreferences.getString(
+                        s,
+                        shortCutOneKeyFreezeAdditionalOptions.defaultValue()
+                    )
+                ) {
+                    val devicePolicyManager =
+                        DevicePolicyManagerUtils.getDevicePolicyManager(context)
                     if (devicePolicyManager != null && !devicePolicyManager.isAdminActive(
-                            new ComponentName(context, DeviceAdminReceiver.class))) {
-                        openDevicePolicyManager(activity);
+                            ComponentName(context, DeviceAdminReceiver::class.java)
+                        )
+                    ) {
+                        DevicePolicyManagerUtils.openDevicePolicyManager(activity)
                     }
                 }
-                break;
-            case "uiStyleSelection":
-            case "allowFollowSystemAutoSwitchDarkMode":
-            case "languagePref":
-            case "mainActivityPattern":
-                showToast(activity, R.string.willTakeEffectsNextLaunch);
-                break;
-            case "onekeyFreezeWhenLockScreen":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                if (sharedPreferences.getBoolean(s, false)) {
-                    startService(
-                            context,
-                            new Intent(context, ScreenLockOneKeyFreezeService.class));
+            }
+            uiStyleSelection.name,
+            allowFollowSystemAutoSwitchDarkMode.name,
+            languagePref.name,
+            mainActivityPattern.name ->
+                showToast(
+                    activity,
+                    R.string.willTakeEffectsNextLaunch
+                )
+            languagePref.name -> {
+                DefaultMultiProcessMMKVDataStore().putString(
+                    s,
+                    sharedPreferences.getString(
+                        s,
+                        languagePref.defaultValue()
+                    )
+                )
+                showToast(
+                    activity,
+                    R.string.willTakeEffectsNextLaunch
+                )
+            }
+            onekeyFreezeWhenLockScreen.name -> {
+                DefaultMultiProcessMMKVDataStore()
+                    .putBoolean(
+                        s,
+                        sharedPreferences.getBoolean(
+                            s,
+                            onekeyFreezeWhenLockScreen.defaultValue()
+                        )
+                    )
+                if (sharedPreferences.getBoolean(s, onekeyFreezeWhenLockScreen.defaultValue())) {
+                    ServiceUtils.startService(
+                        context,
+                        Intent(context, ScreenLockOneKeyFreezeService::class.java)
+                    )
                 } else {
-                    context.stopService(new Intent(context, ScreenLockOneKeyFreezeService.class));
+                    context.stopService(Intent(context, ScreenLockOneKeyFreezeService::class.java))
                 }
-                break;
-            case "freezeOnceQuit":
-            case "avoidFreezeForegroundApplications":
-            case "tryToAvoidUpdateWhenUsing":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                if (sharedPreferences.getBoolean(s, false) && !isAccessibilitySettingsOn(context)) {
-                    showToast(activity, R.string.needActiveAccessibilityService);
-                    openAccessibilitySettings(context);
+            }
+            freezeOnceQuit.name,
+            avoidFreezeForegroundApplications.name,
+            tryToAvoidUpdateWhenUsing.name -> {
+                DefaultMultiProcessMMKVDataStore()
+                    .putBoolean(s, sharedPreferences.getBoolean(s, false))
+                if (sharedPreferences.getBoolean(
+                        s,
+                        false
+                    ) && !AccessibilityUtils.isAccessibilitySettingsOn(context)
+                ) {
+                    showToast(activity, R.string.needActiveAccessibilityService)
+                    AccessibilityUtils.openAccessibilitySettings(context)
                 }
-                break;
-            case "useForegroundService":// 使用前台服务
-            case "openImmediately":// 解冻后立即打开
-            case "openAndUFImmediately":// 快捷方式立即解冻并启动
-            case "notificationBarDisableSlideOut":// 禁止滑动移除
-            case "notificationBarDisableClickDisappear":// 禁止点击消失
-            case "lesserToast":// 更少的 Toast
-            case "debugModeEnabled":// 启用 调试模式
-            case "tryDelApkAfterInstalled"://安装完成后尝试删除安装包
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                break;
-            case "notificationBarFreezeImmediately":
-            case "showInRecents":
-            case "notAllowInstallWhenIsObsd":
-            case "createQuickFUFNotiAfterUnfrozen":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, true));
-                break;
-            case "organizationName":
-                checkAndSetOrganizationName(context, sharedPreferences.getString(s, null));
-                break;
-            case "avoidFreezeNotifyingApplications":
-                appPreferences.put(s, sharedPreferences.getBoolean(s, false));
-                if (Build.VERSION.SDK_INT >= 21) {//这项不兼容 5.0 以下了
-                    String enabledNotificationListeners = Settings.Secure.getString(context.getContentResolver(), "enabled_notification_listeners");
-                    if (enabledNotificationListeners != null && !enabledNotificationListeners.contains("cf." + "playhi." + "freezeyou")) {
+            }
+            useForegroundService.name,
+            openImmediately.name,
+            openAndUFImmediately.name,
+            notificationBarDisableSlideOut.name,
+            notificationBarDisableClickDisappear.name,
+            lesserToast.name,
+            debugModeEnabled.name,
+            tryDelApkAfterInstalled.name ->
+                DefaultMultiProcessMMKVDataStore()
+                    .putBoolean(s, sharedPreferences.getBoolean(s, false))
+            notificationBarFreezeImmediately.name,
+            showInRecents.name,
+            notAllowInstallWhenIsObsd.name,
+            createQuickFUFNotiAfterUnfrozen.name ->
+                DefaultMultiProcessMMKVDataStore().putBoolean(
+                    s,
+                    sharedPreferences.getBoolean(s, true)
+                )
+            organizationName.name ->
+                DevicePolicyManagerUtils.checkAndSetOrganizationName(
+                    context,
+                    sharedPreferences.getString(s, null)
+                )
+            avoidFreezeNotifyingApplications.name -> {
+                DefaultMultiProcessMMKVDataStore()
+                    .putBoolean(
+                        s, sharedPreferences.getBoolean(
+                            s, avoidFreezeNotifyingApplications.defaultValue()
+                        )
+                    )
+                if (Build.VERSION.SDK_INT >= 21) { // 这项不兼容 5.0 以下了
+                    val enabledNotificationListeners = Settings.Secure.getString(
+                        context.contentResolver, "enabled_notification_listeners"
+                    )
+                    if (enabledNotificationListeners != null
+                        && !enabledNotificationListeners.contains("cf." + "playhi." + "freezeyou")
+                    ) {
                         try {
-                            activity.startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-                        } catch (Exception e) {
-                            showToast(activity, R.string.failed);
+                            activity.startActivity(
+                                Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+                            )
+                        } catch (e: Exception) {
+                            showToast(activity, R.string.failed)
                         }
                     }
                 }
-                break;
-            case "enableInstallPkgFunc":
-                if (sharedPreferences.getBoolean(s, true)) {
-                    context.getPackageManager().setComponentEnabledSetting(new ComponentName(context, "cf.playhi.freezeyou.InstallPackagesActivity"),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+            }
+            enableInstallPkgFunc.name ->
+                if (sharedPreferences.getBoolean(s, enableInstallPkgFunc.defaultValue())) {
+                    context.packageManager.setComponentEnabledSetting(
+                        ComponentName(context, "cf.playhi.freezeyou.InstallPackagesActivity"),
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
                 } else {
-                    context.getPackageManager().setComponentEnabledSetting(new ComponentName(context, "cf.playhi.freezeyou.InstallPackagesActivity"),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                    context.packageManager.setComponentEnabledSetting(
+                        ComponentName(context, "cf.playhi.freezeyou.InstallPackagesActivity"),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
                 }
-                break;
-            case "selectFUFMode":
-                appPreferences.put(s, Integer.parseInt(sharedPreferences.getString(s, "0")));
-                switch (appPreferences.getInt("selectFUFMode", 0)) {
-                    case API_FREEZEYOU_MROOT_DPM:
-                        if (!isDeviceOwner(context)) {
-                            showToast(context, R.string.noMRootPermission);
+            selectFUFMode.name -> {
+                DefaultMultiProcessMMKVDataStore()
+                    .putString(s, sharedPreferences.getString(s, selectFUFMode.defaultValue()))
+                when (DefaultMultiProcessMMKVDataStore()
+                    .getString(selectFUFMode.name, selectFUFMode.defaultValue())?.toInt()) {
+                    API_FREEZEYOU_MROOT_DPM ->
+                        if (!DevicePolicyManagerUtils.isDeviceOwner(context)) {
+                            showToast(context, R.string.noMRootPermission)
                         }
-                        break;
-                    case API_FREEZEYOU_MROOT_PROFILE_OWNER:
-                        if (!isProfileOwner(context)) {
-                            showToast(context, R.string.isNotProfileOwner);
+                    API_FREEZEYOU_MROOT_PROFILE_OWNER ->
+                        if (!DevicePolicyManagerUtils.isProfileOwner(context)) {
+                            showToast(context, R.string.isNotProfileOwner)
                         }
-                        break;
-                    case API_FREEZEYOU_ROOT_DISABLE_ENABLE:
-                    case API_FREEZEYOU_ROOT_UNHIDE_HIDE:
-                        if (!checkRootPermission()) {
-                            showToast(context, R.string.noRootPermission);
+                    API_FREEZEYOU_ROOT_DISABLE_ENABLE,
+                    API_FREEZEYOU_ROOT_UNHIDE_HIDE ->
+                        if (!FUFUtils.checkRootPermission()) {
+                            showToast(context, R.string.noRootPermission)
                         }
-                        break;
-                    case API_FREEZEYOU_LEGACY_AUTO:
-                        if (!(checkRootPermission() || isDeviceOwner(context))) {
-                            showToast(context, R.string.insufficientPermission);
+                    @Suppress("DEPRECATION")
+                    API_FREEZEYOU_LEGACY_AUTO ->
+                        if (!(FUFUtils.checkRootPermission()
+                                    || DevicePolicyManagerUtils.isDeviceOwner(context))
+                        ) {
+                            showToast(context, R.string.insufficientPermission)
                         }
-                        break;
-                    case API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED:
-                    case API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER:
-                    case API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE:
-                        if (!(isSystemApp(context))) {
-                            showToast(context, R.string.insufficientPermission);
+                    API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED,
+                    API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER,
+                    API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE ->
+                        if (!FUFUtils.isSystemApp(context)) {
+                            showToast(context, R.string.insufficientPermission)
                         }
-                        break;
-                    default:
-                        showToast(context, R.string.unknown);
-                        break;
+                    else -> showToast(context, R.string.unknown)
                 }
-                break;
-            default:
-                break;
+            }
+            else -> {}
         }
     }
 }

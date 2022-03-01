@@ -7,7 +7,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
-import cf.playhi.freezeyou.storage.mmkv.DefaultMultiProcessMMKVStorageBooleanFalseKeys
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.debugModeEnabled
 import cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings
 
 @Keep
@@ -21,12 +21,11 @@ class SettingsAdvanceFragment : PreferenceFragmentCompat() {
             true
         }
 
-        findPreference<CheckBoxPreference?>(DefaultMultiProcessMMKVStorageBooleanFalseKeys.DebugModeEnabled.name)
+        findPreference<CheckBoxPreference?>(debugModeEnabled.name)
             ?.run {
                 preferenceDataStore = DefaultMultiProcessMMKVDataStore()
                 isChecked = DefaultMultiProcessMMKVDataStore().getBoolean(
-                    DefaultMultiProcessMMKVStorageBooleanFalseKeys.DebugModeEnabled.name,
-                    false
+                    debugModeEnabled.name, debugModeEnabled.defaultValue()
                 )
             }
     }

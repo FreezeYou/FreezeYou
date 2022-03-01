@@ -45,23 +45,23 @@ public final class BackupUtils {
 
     private static void importStringSharedPreference(
             Context context, Activity activity, JSONObject jsonObject,
-            SharedPreferences sp, AppPreferences ap, String key) {
+            SharedPreferences sp, String key) {
         sp.edit().putString(key, jsonObject.optString(key, "")).apply();
-        SettingsUtils.syncAndCheckSharedPreference(context, activity, sp, key, ap);
+        SettingsUtils.syncAndCheckSharedPreference(context, activity, sp, key);
     }
 
     private static void importBooleanSharedPreference(
             Context context, Activity activity, JSONObject jsonObject,
-            SharedPreferences sp, AppPreferences ap, String key) {
+            SharedPreferences sp, String key) {
         sp.edit().putBoolean(key, jsonObject.optBoolean(key, false)).apply();
-        SettingsUtils.syncAndCheckSharedPreference(context, activity, sp, key, ap);
+        SettingsUtils.syncAndCheckSharedPreference(context, activity, sp, key);
     }
 
     private static void importIntSharedPreference(
             Context context, Activity activity, JSONObject jsonObject,
-            SharedPreferences sp, AppPreferences ap, String key) {
+            SharedPreferences sp, String key) {
         sp.edit().putInt(key, jsonObject.optInt(key, 0)).apply();
-        SettingsUtils.syncAndCheckSharedPreference(context, activity, sp, key, ap);
+        SettingsUtils.syncAndCheckSharedPreference(context, activity, sp, key);
     }
 
     private static boolean importUserTimeTasksJSONArray(Context context, JSONObject jsonObject) {
@@ -167,7 +167,7 @@ public final class BackupUtils {
         Cursor cursor = db.query("categories", new String[]{"label"}, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
-                existedLabels.add(cursor.getString(cursor.getColumnIndex("label")));
+                existedLabels.add(cursor.getString(cursor.getColumnIndexOrThrow("label")));
                 cursor.moveToNext();
             }
         }
@@ -285,7 +285,7 @@ public final class BackupUtils {
                 case "onClickFunctionStatus":
                 case "sortMethodStatus":
                     importIntSharedPreference(
-                            context, activity, generalSettingsIntJSONObject, defSP, appPreferences, s);
+                            context, activity, generalSettingsIntJSONObject, defSP, s);
                     break;
                 default:
                     break;
@@ -325,7 +325,7 @@ public final class BackupUtils {
                 case "organizationName":
                 case "shortCutOneKeyFreezeAdditionalOptions":
                     importStringSharedPreference(
-                            context, activity, generalSettingsStringJSONObject, defSP, appPreferences, s);
+                            context, activity, generalSettingsStringJSONObject, defSP, s);
                     break;
                 default:
                     break;
@@ -386,7 +386,7 @@ public final class BackupUtils {
                 case "debugModeEnabled":
                 case "notAllowInstallWhenIsObsd":
                     importBooleanSharedPreference(
-                            context, activity, generalSettingsBooleanJSONObject, defSP, appPreferences, s);
+                            context, activity, generalSettingsBooleanJSONObject, defSP, s);
                     break;
                 default:
                     break;
