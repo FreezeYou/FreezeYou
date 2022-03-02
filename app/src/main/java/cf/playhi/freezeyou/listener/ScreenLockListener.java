@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import net.grandcentrix.tray.AppPreferences;
-
 import cf.playhi.freezeyou.service.OneKeyFreezeService;
 import cf.playhi.freezeyou.utils.ServiceUtils;
+
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.onekeyFreezeWhenLockScreen;
 
 public class ScreenLockListener {
 
@@ -27,7 +27,7 @@ public class ScreenLockListener {
             if (action != null) {
                 switch (action) {
                     case Intent.ACTION_SCREEN_OFF:
-                        if (new AppPreferences(context).getBoolean("onekeyFreezeWhenLockScreen", false)) {
+                        if (onekeyFreezeWhenLockScreen.getValue(null)) {
                             ServiceUtils.startService(context,
                                     new Intent(context, OneKeyFreezeService.class)
                                             .putExtra("autoCheckAndLockScreen", false)

@@ -1,6 +1,9 @@
 package cf.playhi.freezeyou.storage.key
 
+import android.content.Context
+import androidx.annotation.StringRes
 import cf.playhi.freezeyou.R
+import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
 import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS
 import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_ADVANCE
 import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_AUTOMATION
@@ -12,7 +15,7 @@ import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_NOTIFICATIO
 import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_NOTIFICATION_FUF
 import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_SECURITY
 
-enum class DefaultMultiProcessMMKVStorageBooleanKeys {
+enum class DefaultMultiProcessMMKVStorageBooleanKeys : AbstractKey<Boolean> {
 
     debugModeEnabled {
         override fun defaultValue(): Boolean = false
@@ -36,6 +39,12 @@ enum class DefaultMultiProcessMMKVStorageBooleanKeys {
         override fun defaultValue(): Boolean = false
         override fun titleTextStringId(): Int = R.string.useForegroundService
         override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_BACKGROUND_SERVICE
+    },
+
+    showInRecents {
+        override fun defaultValue(): Boolean = true
+        override fun titleTextStringId(): Int = R.string.showInRecents
+        override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_COMMON
     },
 
     lesserToast {
@@ -120,7 +129,16 @@ enum class DefaultMultiProcessMMKVStorageBooleanKeys {
         override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_SECURITY
     };
 
-    abstract fun defaultValue(): Boolean
-    abstract fun titleTextStringId(): Int
-    abstract fun category(): Int
+    abstract override fun defaultValue(): Boolean
+
+    @StringRes
+    abstract override fun titleTextStringId(): Int
+    abstract override fun category(): Int
+    override fun getValue(context: Context?): Boolean {
+        return DefaultMultiProcessMMKVDataStore().getBoolean(this.name, this.defaultValue())
+    }
+
+    override fun setValue(context: Context?, value: Boolean) {
+        DefaultMultiProcessMMKVDataStore().putBoolean(this.name, value)
+    }
 }

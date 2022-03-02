@@ -15,8 +15,6 @@ import androidx.annotation.CallSuper;
 
 import com.google.android.play.core.splitcompat.SplitCompat;
 
-import net.grandcentrix.tray.AppPreferences;
-
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -26,6 +24,7 @@ import cf.playhi.freezeyou.utils.OneKeyListUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.freezeOnceQuit;
 import static cf.playhi.freezeyou.utils.Support.checkLanguage;
 import static cf.playhi.freezeyou.utils.Support.getLocalString;
 import static cf.playhi.freezeyou.utils.TasksUtils.cancelAllUnexecutedDelayTasks;
@@ -85,7 +84,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                                 !"android".equals(pkgNameString)) {
                             MainApplication.setCurrentPackage(pkgNameString);
                             if (!pkgNameString.equals(previousPkg)
-                                    && new AppPreferences(getApplicationContext()).getBoolean("freezeOnceQuit", false)
+                                    && freezeOnceQuit.getValue(null)
                                     && OneKeyListUtils.existsInOneKeyList(getApplicationContext(), getString(R.string.sFreezeOnceQuit), previousPkg)) {
                                 FUFUtils.processFreezeAction(getApplicationContext(), previousPkg, null, null, false, null, false);
                             }

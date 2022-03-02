@@ -10,14 +10,14 @@ import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.showInRecents
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.languagePref
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.allowFollowSystemAutoSwitchDarkMode
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.uiStyleSelection
 import cf.playhi.freezeyou.ui.fragment.settings.SettingsFragment
-import cf.playhi.freezeyou.utils.SettingsUtils.syncAndCheckSharedPreference
+import cf.playhi.freezeyou.utils.SettingsUtils.checkPreferenceData
 import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
-import net.grandcentrix.tray.AppPreferences
 
 class SettingsActivity : FreezeYouBaseActivity(),
     PreferenceFragmentCompat.OnPreferenceStartScreenCallback,
@@ -35,11 +35,7 @@ class SettingsActivity : FreezeYouBaseActivity(),
     }
 
     override fun finish() {
-        if (Build.VERSION.SDK_INT >= 21 && !AppPreferences(this).getBoolean(
-                "showInRecents",
-                true
-            )
-        ) {
+        if (Build.VERSION.SDK_INT >= 21 && !showInRecents.getValue()) {
             finishAndRemoveTask()
         }
         super.finish()
@@ -97,7 +93,7 @@ class SettingsActivity : FreezeYouBaseActivity(),
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, s: String) {
-        syncAndCheckSharedPreference(applicationContext, this, sharedPreferences, s)
+        checkPreferenceData(applicationContext, this, sharedPreferences, s)
         if (languagePref.name == s
             || uiStyleSelection.name == s
             || allowFollowSystemAutoSwitchDarkMode.name == s

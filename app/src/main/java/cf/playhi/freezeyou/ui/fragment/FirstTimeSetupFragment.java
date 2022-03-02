@@ -10,12 +10,10 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
-import net.grandcentrix.tray.AppPreferences;
-
 import cf.playhi.freezeyou.R;
-import cf.playhi.freezeyou.utils.SettingsUtils;
 
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
+import static cf.playhi.freezeyou.utils.SettingsUtils.checkPreferenceData;
 
 public class FirstTimeSetupFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -49,7 +47,7 @@ public class FirstTimeSetupFragment extends PreferenceFragmentCompat implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        SettingsUtils.syncAndCheckSharedPreference(
+        checkPreferenceData(
                 getActivity().getApplicationContext(),
                 getActivity(), sharedPreferences, key
         );

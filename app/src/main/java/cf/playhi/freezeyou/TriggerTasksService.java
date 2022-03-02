@@ -13,12 +13,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.IBinder;
 
-import net.grandcentrix.tray.AppPreferences;
-
 import cf.playhi.freezeyou.app.FreezeYouBaseService;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
 import static android.content.Context.MODE_PRIVATE;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.useForegroundService;
 import static cf.playhi.freezeyou.utils.TasksUtils.cancelAllUnexecutedDelayTasks;
 
 public class TriggerTasksService extends FreezeYouBaseService {
@@ -46,7 +45,8 @@ public class TriggerTasksService extends FreezeYouBaseService {
     @Override
     public void onCreate() {
         super.onCreate();
-        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) || new AppPreferences(getApplicationContext()).getBoolean("useForegroundService", false)) {
+        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                || useForegroundService.getValue(null)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationManager notificationManager = getSystemService(NotificationManager.class);
                 if (notificationManager != null) {

@@ -79,6 +79,7 @@ import cf.playhi.freezeyou.utils.LauncherShortcutUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.showInRecents;
 import static cf.playhi.freezeyou.utils.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.utils.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
@@ -2199,7 +2200,7 @@ public class Main extends FreezeYouBaseActivity {
 
     @Override
     public void finish() {
-        if (Build.VERSION.SDK_INT >= 21 && !(new AppPreferences(this).getBoolean("showInRecents", true))) {
+        if (Build.VERSION.SDK_INT >= 21 && !showInRecents.getValue(null)) {
             finishAndRemoveTask();
         }
         super.finish();

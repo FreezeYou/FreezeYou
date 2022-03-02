@@ -31,13 +31,14 @@ import java.util.Locale;
 
 import cf.playhi.freezeyou.ForceStop;
 import cf.playhi.freezeyou.Freeze;
-import cf.playhi.freezeyou.ui.InstallPackagesActivity;
 import cf.playhi.freezeyou.R;
+import cf.playhi.freezeyou.ui.InstallPackagesActivity;
 
-import static cf.playhi.freezeyou.utils.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.freezeOnceQuit;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;
+import static cf.playhi.freezeyou.utils.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.addToOneKeyList;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.existsInOneKeyList;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList;
@@ -108,10 +109,8 @@ public final class Support {
                             oneKeyName,
                             pkgName) ? R.string.added : R.string.addFailed);
             if (context.getString(R.string.sFreezeOnceQuit).equals(oneKeyName)) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                if (!preferences.getBoolean("freezeOnceQuit", false)) {
-                    preferences.edit().putBoolean("freezeOnceQuit", true).apply();
-                    new AppPreferences(context).put("freezeOnceQuit", true);
+                if (!freezeOnceQuit.getValue(null)) {
+                    freezeOnceQuit.setValue(null, true);
                 }
                 AccessibilityUtils.checkAndRequestIfAccessibilitySettingsOff(context);
             }

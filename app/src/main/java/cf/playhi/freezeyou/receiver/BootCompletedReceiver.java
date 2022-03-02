@@ -19,6 +19,7 @@ import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
 import cf.playhi.freezeyou.utils.VersionUtils;
 
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.onekeyFreezeWhenLockScreen;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkAndCreateFUFQuickNotification;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkRootFrozen;
@@ -64,8 +65,7 @@ public class BootCompletedReceiver extends BroadcastReceiver {
     }
 
     private void runBackgroundService(Context context) {
-        if (PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean("onekeyFreezeWhenLockScreen", false)) {
+        if (onekeyFreezeWhenLockScreen.getValue(null)) {
             ServiceUtils.startService(context,
                     new Intent(context, ScreenLockOneKeyFreezeService.class));
         }

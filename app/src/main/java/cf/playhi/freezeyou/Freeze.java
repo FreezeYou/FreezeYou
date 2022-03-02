@@ -8,10 +8,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import net.grandcentrix.tray.AppPreferences;
-
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.showInRecents;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
@@ -143,8 +142,7 @@ public class Freeze extends FreezeYouBaseActivity {
 
     @Override
     public void finish() {
-        if (Build.VERSION.SDK_INT >= 21
-                && !(new AppPreferences(this).getBoolean("showInRecents", true))) {
+        if (Build.VERSION.SDK_INT >= 21 && !showInRecents.getValue(null)) {
             finishAndRemoveTask();
         }
         super.finish();

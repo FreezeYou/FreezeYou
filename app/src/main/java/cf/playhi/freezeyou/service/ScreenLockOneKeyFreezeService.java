@@ -8,12 +8,12 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
-import net.grandcentrix.tray.AppPreferences;
-
 import cf.playhi.freezeyou.Main;
 import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.app.FreezeYouBaseService;
 import cf.playhi.freezeyou.listener.ScreenLockListener;
+
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.useForegroundService;
 
 public class ScreenLockOneKeyFreezeService extends FreezeYouBaseService {
 
@@ -22,7 +22,8 @@ public class ScreenLockOneKeyFreezeService extends FreezeYouBaseService {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (new AppPreferences(getApplicationContext()).getBoolean("useForegroundService", false) || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                || useForegroundService.getValue(null)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationManager notificationManager = getSystemService(NotificationManager.class);
                 if (notificationManager != null) {
