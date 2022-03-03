@@ -79,9 +79,8 @@ import cf.playhi.freezeyou.utils.LauncherShortcutUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.lesserToast;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.showInRecents;
-import static cf.playhi.freezeyou.utils.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
-import static cf.playhi.freezeyou.utils.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
@@ -93,6 +92,8 @@ import static cf.playhi.freezeyou.utils.FUFUtils.askRun;
 import static cf.playhi.freezeyou.utils.FUFUtils.processFreezeAction;
 import static cf.playhi.freezeyou.utils.FUFUtils.processUnfreezeAction;
 import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
+import static cf.playhi.freezeyou.utils.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
+import static cf.playhi.freezeyou.utils.LauncherShortcutUtils.createShortCut;
 import static cf.playhi.freezeyou.utils.MoreUtils.processListFilter;
 import static cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite;
 import static cf.playhi.freezeyou.utils.OneKeyListUtils.addToOneKeyList;
@@ -1041,8 +1042,7 @@ public class Main extends FreezeYouBaseActivity {
                                     Main.this, pkgName, null, null,
                                     false, null, false);
                         } else {
-                            if (!(new AppPreferences(Main.this)
-                                    .getBoolean("lesserToast", false))) {
+                            if (!lesserToast.getValue(null)) {
                                 showToast(Main.this, R.string.freezeCompleted);
                             }
                         }
@@ -1053,8 +1053,7 @@ public class Main extends FreezeYouBaseActivity {
                                     Main.this, pkgName, null, null,
                                     false, false, null, false);
                         } else {
-                            if (!(new AppPreferences(Main.this)
-                                    .getBoolean("lesserToast", false))) {
+                            if (!lesserToast.getValue(null)) {
                                 showToast(Main.this, R.string.UFCompleted);
                             }
                         }
@@ -1065,8 +1064,7 @@ public class Main extends FreezeYouBaseActivity {
                                     Main.this, pkgName, null, null,
                                     true, false, null, false);
                         } else {
-                            if (!(new AppPreferences(Main.this)
-                                    .getBoolean("lesserToast", false))) {
+                            if (!lesserToast.getValue(null)) {
                                 showToast(Main.this, R.string.UFCompleted);
                             }
                             askRun(Main.this, pkgName, null,

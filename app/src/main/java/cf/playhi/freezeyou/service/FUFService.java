@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
-import net.grandcentrix.tray.AppPreferences;
+import java.util.Objects;
 
 import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.app.FreezeYouBaseService;
@@ -17,6 +17,8 @@ import cf.playhi.freezeyou.utils.FUFUtils;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.lesserToast;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.selectFUFMode;
 import static cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.isDeviceOwner;
 import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;
 import static cf.playhi.freezeyou.utils.FUFUtils.oneKeyAction;
@@ -30,8 +32,7 @@ public class FUFService extends FreezeYouBaseService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         boolean freeze = intent.getBooleanExtra("freeze", false);
         Context context = getApplicationContext();
-        AppPreferences appPreferences = new AppPreferences(context);
-        int apiMode = appPreferences.getInt("selectFUFMode", 0);
+        int apiMode = Integer.parseInt(Objects.requireNonNull(selectFUFMode.getValue(null)));
         if (intent.getBooleanExtra("single", false)) {
             String pkgName = intent.getStringExtra("pkgName");
             String target = intent.getStringExtra("target");
@@ -44,27 +45,27 @@ public class FUFService extends FreezeYouBaseService {
                         processMRootAction(
                                 context, pkgName, target, tasks, true, askRun,
                                 false, null, false,
-                                !(appPreferences.getBoolean("lesserToast", false)));
+                                !lesserToast.getValue(null));
                     } else {
                         processRootAction(pkgName, target, tasks, context, false, askRun,
                                 false, null, false,
-                                !(appPreferences.getBoolean("lesserToast", false)));
+                                !lesserToast.getValue(null));
                     }
                 } else {
                     if (checkMRootFrozen(context, pkgName)) {
                         processMRootAction(context, pkgName, target, tasks, false,
                                 askRun, runImmediately, null, false,
-                                !(appPreferences.getBoolean("lesserToast", false)));
+                                !lesserToast.getValue(null));
                     } else {
                         processRootAction(pkgName, target, tasks, context, true, askRun,
                                 runImmediately, null, false,
-                                !(appPreferences.getBoolean("lesserToast", false)));
+                                !lesserToast.getValue(null));
                     }
                 }
             } else {
                 processAction(
                         context, pkgName, apiMode, !freeze,
-                        !(appPreferences.getBoolean("lesserToast", false)),
+                        !lesserToast.getValue(null),
                         askRun, target, tasks,
                         runImmediately, null, false
                 );

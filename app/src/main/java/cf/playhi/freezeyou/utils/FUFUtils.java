@@ -10,17 +10,15 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
 
-import net.grandcentrix.tray.AppPreferences;
-
 import java.io.DataOutputStream;
 
-import cf.playhi.freezeyou.ui.AskRunActivity;
 import cf.playhi.freezeyou.DeviceAdminReceiver;
-import cf.playhi.freezeyou.service.FUFService;
 import cf.playhi.freezeyou.MainApplication;
 import cf.playhi.freezeyou.MyNotificationListenerService;
 import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.fuf.FUFSinglePackage;
+import cf.playhi.freezeyou.service.FUFService;
+import cf.playhi.freezeyou.ui.AskRunActivity;
 
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_FREEZE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_UNFREEZE;
@@ -40,6 +38,11 @@ import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_SUCH_API_MODE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_OTHER;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_PROFILE_OWNER_EXECUTE_FAILED_FROM_SYSTEM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_SINGLE_PACKAGE_NAME_IS_BLANK;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.avoidFreezeForegroundApplications;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.avoidFreezeNotifyingApplications;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.createQuickFUFNotiAfterUnfrozen;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.lesserToast;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.openImmediately;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
@@ -59,7 +62,7 @@ import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 public final class FUFUtils {
 
     public static void askRun(final Context context, final String pkgName, String target, String tasks, final boolean runImmediately, Activity activity, boolean finish) {
-        if (runImmediately || (new AppPreferences(context).getBoolean("openImmediately", false))) {
+        if (runImmediately || openImmediately.getValue(null)) {
             checkAndStartApp(context, pkgName, target, tasks, activity, finish);
         } else {
             if (!context.getString(R.string.onlyUnfreeze).equals(target)) {
@@ -161,7 +164,7 @@ public final class FUFUtils {
     public static int checkAndExecuteAction(Context context, String pkgName, int apiMode, int actionMode) {
         int returnValue = 999;
         String currentPackage = " ";
-        if (new AppPreferences(context).getBoolean("avoidFreezeForegroundApplications", false)) {
+        if (avoidFreezeForegroundApplications.getValue(null)) {
             currentPackage = MainApplication.getCurrentPackage();
         }
         if (currentPackage == null) currentPackage = " ";
@@ -219,8 +222,7 @@ public final class FUFUtils {
             boolean disableModeTrueOrHideModeFalse) {
         if (pkgNameList != null) {
             String currentPackage = " ";
-            if (new AppPreferences(context)
-                    .getBoolean("avoidFreezeForegroundApplications", false)) {
+            if (avoidFreezeForegroundApplications.getValue(null)) {
                 currentPackage = MainApplication.getCurrentPackage();
             }
             if (currentPackage == null) currentPackage = " ";
@@ -290,7 +292,7 @@ public final class FUFUtils {
                             checkAndCreateFUFQuickNotification(context, aPkgNameList);
                         }
                     }
-                    if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                    if (!lesserToast.getValue(null)) {
                         showToast(context, R.string.executed);
                     }
                 } else {
@@ -341,7 +343,7 @@ public final class FUFUtils {
                         }
                     }
                     sendStatusChangedBroadcast(context);
-                    if (!(new AppPreferences(context).getBoolean("lesserToast", false))) {
+                    if (!lesserToast.getValue(null)) {
                         showToast(context, R.string.executed);
                     }
                 }
@@ -373,7 +375,7 @@ public final class FUFUtils {
 
     public static boolean isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(Context context, String pkgName) {
         if (Build.VERSION.SDK_INT >= 21) {
-            return new AppPreferences(context).getBoolean("avoidFreezeNotifyingApplications", false) && isAppStillNotifying(pkgName);
+            return avoidFreezeNotifyingApplications.getValue(null) && isAppStillNotifying(pkgName);
         } else {
             return false;
         }
@@ -498,8 +500,7 @@ public final class FUFUtils {
     }
 
     public static void checkAndCreateFUFQuickNotification(Context context, String pkgName) {
-        if (new AppPreferences(context)
-                .getBoolean("createQuickFUFNotiAfterUnfrozen", true)) {
+        if (createQuickFUFNotiAfterUnfrozen.getValue(null)) {
             createFUFQuickNotification(
                     context, pkgName, R.drawable.ic_notification,
                     getBitmapFromDrawable(

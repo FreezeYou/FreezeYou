@@ -27,21 +27,23 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
-import cf.playhi.freezeyou.service.InstallPackagesService;
-import cf.playhi.freezeyou.utils.InstallPackagesUtils;
-import cf.playhi.freezeyou.app.ObsdAlertDialog;
 import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.app.ObsdAlertDialog;
+import cf.playhi.freezeyou.service.InstallPackagesService;
 import cf.playhi.freezeyou.utils.AccessibilityUtils;
 import cf.playhi.freezeyou.utils.AlertDialogUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.FileUtils;
+import cf.playhi.freezeyou.utils.InstallPackagesUtils;
 import cf.playhi.freezeyou.utils.MoreUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 
-import static cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.notAllowInstallWhenIsObsd;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.tryToAvoidUpdateWhenUsing;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
+import static cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 /**
@@ -199,8 +201,7 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                         .putExtra("apkFilePath", apkFilePath)
                                         .putExtra("packageInfo", packageInfo)
                                         .putExtra("waitForLeaving",
-                                                new AppPreferences(InstallPackagesActivity.this)
-                                                        .getBoolean("tryToAvoidUpdateWhenUsing", false)
+                                                tryToAvoidUpdateWhenUsing.getValue(null)
                                         )
                         );
 
@@ -361,16 +362,14 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
         }
 
         final boolean preDefinedTryToAvoidUpdateWhenUsing =
-                new AppPreferences(this)
-                        .getBoolean("tryToAvoidUpdateWhenUsing", false);
+                tryToAvoidUpdateWhenUsing.getValue(null);
 
         installPackagesAlertDialog.setMessage(alertDialogMessage);
         installPackagesAlertDialog.setButton(
                 DialogInterface.BUTTON_POSITIVE,
                 getString(R.string.yes),
                 (dialog, which) -> {
-                    if (new AppPreferences(getApplicationContext())
-                            .getBoolean("notAllowInstallWhenIsObsd", true)
+                    if (notAllowInstallWhenIsObsd.getValue(null)
                             && installPackagesAlertDialog.isObsd()) {
                         AlertDialogUtils.buildAlertDialog(
                                         InstallPackagesActivity.this,
@@ -451,8 +450,7 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                     DialogInterface.BUTTON_NEUTRAL,
                     getString(R.string.installWhenNotUsing),
                     (dialog, which) -> {
-                        if (new AppPreferences(getApplicationContext())
-                                .getBoolean("notAllowInstallWhenIsObsd", true)
+                        if (notAllowInstallWhenIsObsd.getValue(null)
                                 && installPackagesAlertDialog.isObsd()) {
                             AlertDialogUtils.buildAlertDialog(
                                             InstallPackagesActivity.this,

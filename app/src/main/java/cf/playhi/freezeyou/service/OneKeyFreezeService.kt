@@ -7,9 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import cf.playhi.freezeyou.ui.AskLockScreenActivity
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.app.FreezeYouBaseService
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.selectFUFMode
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.shortCutOneKeyFreezeAdditionalOptions
+import cf.playhi.freezeyou.ui.AskLockScreenActivity
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils
 import cf.playhi.freezeyou.utils.FUFUtils.oneKeyAction
 import net.grandcentrix.tray.AppPreferences
@@ -38,7 +40,7 @@ class OneKeyFreezeService : FreezeYouBaseService() {
             oneKeyAction(
                 this, true,
                 pkgNames.trim(',').split(",").toTypedArray(),
-                pref.getInt("selectFUFMode", 0)
+                selectFUFMode.getValue()!!.toInt()
             )
             checkAuto(auto, this)
         }
@@ -46,12 +48,7 @@ class OneKeyFreezeService : FreezeYouBaseService() {
     }
 
     private fun checkAndLockScreen(context: Context) {
-        var options = AppPreferences(applicationContext).getString(
-            "shortCutOneKeyFreezeAdditionalOptions",
-            "nothing"
-        )
-        if (options == null) options = ""
-        when (options) {
+        when (shortCutOneKeyFreezeAdditionalOptions.getValue(null)) {
             "askLockScreen" -> {
                 startActivity(
                     Intent(

@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.IBinder
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.app.FreezeYouBaseService
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.selectFUFMode
 import cf.playhi.freezeyou.utils.FUFUtils.oneKeyAction
 import net.grandcentrix.tray.AppPreferences
 
@@ -33,7 +34,7 @@ class OneKeyUFService : FreezeYouBaseService() {
             oneKeyAction(
                 this, false,
                 pkgNames.trim(',').split(",").toTypedArray(),
-                pref.getInt("selectFUFMode", 0)
+                selectFUFMode.getValue()!!.toInt()
             )
             doFinish()
         }

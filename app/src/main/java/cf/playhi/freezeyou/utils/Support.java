@@ -15,7 +15,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -32,9 +31,11 @@ import java.util.Locale;
 import cf.playhi.freezeyou.ForceStop;
 import cf.playhi.freezeyou.Freeze;
 import cf.playhi.freezeyou.R;
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys;
 import cf.playhi.freezeyou.ui.InstallPackagesActivity;
 
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.freezeOnceQuit;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.openAndUFImmediately;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;
@@ -86,7 +87,7 @@ public final class Support {
     }
 
     public static void shortcutMakeDialog(Context context, String title, String message, final Activity activity, final ApplicationInfo applicationInfo, final String pkgName, String target, String tasks, int ot, boolean auto, boolean finish) {
-        if (new AppPreferences(context).getBoolean("openAndUFImmediately", false) && auto) {
+        if (openAndUFImmediately.getValue(null) && auto) {
             if (ot == 2) {
                 FUFUtils.checkAndStartApp(context, pkgName, target, tasks, activity, finish);
             } else {
@@ -378,9 +379,7 @@ public final class Support {
     }
 
     public static String getLocalString(Context context) {
-        String s =
-                PreferenceManager.getDefaultSharedPreferences(context)
-                        .getString("languagePref", "Default");
+        String s = DefaultMultiProcessMMKVStorageStringKeys.languagePref.getValue(null);
 
         if (s == null) {
             s = "Default";

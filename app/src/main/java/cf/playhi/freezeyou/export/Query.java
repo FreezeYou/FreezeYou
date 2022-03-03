@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
-import net.grandcentrix.tray.AppPreferences;
+import java.util.Objects;
 
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
@@ -29,6 +29,7 @@ import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.selectFUFMode;
 
 public class Query extends ContentProvider {
 
@@ -86,7 +87,7 @@ public class Query extends ContentProvider {
                 case QUERY_MODE_V2:
                     if (context == null) return bundle;
 
-                    switch (new AppPreferences(context).getInt("selectFUFMode", 0)) {
+                    switch (Integer.parseInt(Objects.requireNonNull(selectFUFMode.getValue(null)))) {
                         case API_FREEZEYOU_MROOT_DPM:
                             bundle.putString("currentMode", MODE_DPM);
                             break;
