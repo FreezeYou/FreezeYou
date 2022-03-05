@@ -81,6 +81,12 @@ import cf.playhi.freezeyou.utils.TasksUtils;
 
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.lesserToast;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.showInRecents;
+import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.cacheApplicationsIcons;
+import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.noCaution;
+import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.saveOnClickFunctionStatus;
+import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.saveSortMethodStatus;
+import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.launchMode;
+import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.mainActivityPattern;
 import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
@@ -200,10 +206,10 @@ public class Main extends FreezeYouBaseActivity {
         }
         updateFrozenStatus();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sharedPref.getBoolean("saveOnClickFunctionStatus", false)) {
+        if (sharedPref.getBoolean(saveOnClickFunctionStatus.name(), saveOnClickFunctionStatus.defaultValue())) {
             appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", APPListViewOnClickMode_chooseAction);
         }
-        if (sharedPref.getBoolean("saveSortMethodStatus", true)) {
+        if (sharedPref.getBoolean(saveSortMethodStatus.name(), saveSortMethodStatus.defaultValue())) {
             currentSortRule = sharedPref.getInt("sortMethodStatus", SORT_BY_DEFAULT);
         }
     }
@@ -333,8 +339,7 @@ public class Main extends FreezeYouBaseActivity {
             main_loading_progress_textView.setVisibility(View.VISIBLE);
             appListFragmentContainer.setVisibility(View.GONE);
             main_loading_progress_textView.setText(R.string.loadingPkgList);
-            if (PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                    .getBoolean("noCaution", false)) {
+            if (noCaution.getValue(applicationContext)) {
                 mainCautionTextView.setVisibility(View.GONE);
             }
         });
@@ -350,9 +355,7 @@ public class Main extends FreezeYouBaseActivity {
         PackageManager packageManager = applicationContext.getPackageManager();
         List<PackageInfo> packageInfo = packageManager.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
         int size = packageInfo == null ? 0 : packageInfo.size();
-        boolean saveIconCache =
-                PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                        .getBoolean("cacheApplicationsIcons", false);
+        boolean saveIconCache = cacheApplicationsIcons.getValue(applicationContext);
         switch (filter) {
             case "all":
                 for (int i = 0; i < size; i++) {
@@ -1202,41 +1205,31 @@ public class Main extends FreezeYouBaseActivity {
         TasksUtils.checkTriggerTasks(this);
 
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(Main.this);
-        if (sharedPref.getBoolean("saveOnClickFunctionStatus", false)) {
+        if (sharedPref.getBoolean(saveOnClickFunctionStatus.name(), saveOnClickFunctionStatus.defaultValue())) {
             appListViewOnClickMode = sharedPref.getInt("onClickFunctionStatus", APPListViewOnClickMode_chooseAction);
         }
-        if (sharedPref.getBoolean("saveSortMethodStatus", true)) {
+        if (sharedPref.getBoolean(saveSortMethodStatus.name(), saveSortMethodStatus.defaultValue())) {
             currentSortRule = sharedPref.getInt("sortMethodStatus", SORT_BY_DEFAULT);
         }
-        if (!sharedPref.getBoolean("noCaution", false)) {
+        if (!sharedPref.getBoolean(noCaution.name(), noCaution.defaultValue())) {
             buildAlertDialog(Main.this, R.mipmap.ic_launcher_new_round, R.string.cautionContent, R.string.caution)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int ii) {
-                        }
+                    .setPositiveButton(android.R.string.ok, (dialogInterface, ii) -> {
                     })
-                    .setNeutralButton(R.string.hToUse, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            requestOpenWebSite(Main.this, "https://www.zidon.net/");
-                        }
-                    })
-                    .setNegativeButton(R.string.nCaution, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            sharedPref.edit().putBoolean("noCaution", true).apply();
-                        }
-                    })
+                    .setNeutralButton(R.string.hToUse, (dialog, which) ->
+                            requestOpenWebSite(Main.this, "https://www.zidon.net/"))
+                    .setNegativeButton(R.string.nCaution, (dialog, which) ->
+                            sharedPref.edit().putBoolean(noCaution.name(), true).apply())
                     .create().show();
         }
 
-        String mainActivityPattern = sharedPref.getString("mainActivityPattern", "default");
-        if ("default".equals(mainActivityPattern)) {
+        String mainPattern =
+                sharedPref.getString(mainActivityPattern.name(), mainActivityPattern.defaultValue());
+        if (mainActivityPattern.defaultValue().equals(mainPattern)) {
             isGridMode =
                     getWindowManager().getDefaultDisplay().getWidth()
                             > getWindowManager().getDefaultDisplay().getHeight() * 1.2;
         } else {
-            isGridMode = "grid".equals(mainActivityPattern);
+            isGridMode = "grid".equals(mainPattern);
         }
         if (mMainActivityAppListFragment == null) {
             mMainActivityAppListFragment = new MainActivityAppListFragment();
@@ -1252,9 +1245,9 @@ public class Main extends FreezeYouBaseActivity {
         initThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String mode = getIntent().getStringExtra("pkgName");//快捷方式提供
+                String mode = getIntent().getStringExtra("pkgName"); // 快捷方式提供
                 if (mode == null) {
-                    mode = PreferenceManager.getDefaultSharedPreferences(Main.this).getString("launchMode", "all");
+                    mode = launchMode.getValue(Main.this);
                 }
                 if (mode == null) {
                     mode = "";
@@ -1507,14 +1500,15 @@ public class Main extends FreezeYouBaseActivity {
 
     private void saveOnClickFunctionStatus(int status) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if (sharedPreferences.getBoolean("saveOnClickFunctionStatus", false)) {
+        if (sharedPreferences.getBoolean(
+                saveOnClickFunctionStatus.name(), saveOnClickFunctionStatus.defaultValue())) {
             sharedPreferences.edit().putInt("onClickFunctionStatus", status).apply();
         }
     }
 
     private void saveSortMethodStatus(int status) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if (sharedPreferences.getBoolean("saveSortMethodStatus", true)) {
+        if (sharedPreferences.getBoolean(saveSortMethodStatus.name(), saveSortMethodStatus.defaultValue())) {
             sharedPreferences.edit().putInt("sortMethodStatus", status).apply();
         }
     }

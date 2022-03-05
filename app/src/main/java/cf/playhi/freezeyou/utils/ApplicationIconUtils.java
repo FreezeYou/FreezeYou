@@ -14,13 +14,14 @@ import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.preference.PreferenceManager;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
 import cf.playhi.freezeyou.R;
+
+import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.cacheApplicationsIcons;
 
 public final class ApplicationIconUtils {
 
@@ -53,8 +54,7 @@ public final class ApplicationIconUtils {
     ) {
         return getApplicationIcon(
                 context, pkgName, applicationInfo, resize,
-                PreferenceManager.getDefaultSharedPreferences(context)
-                        .getBoolean("cacheApplicationsIcons", false)
+                cacheApplicationsIcons.getValue(context)
         );
     }
 

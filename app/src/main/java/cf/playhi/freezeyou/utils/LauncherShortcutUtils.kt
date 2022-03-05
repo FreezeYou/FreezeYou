@@ -12,6 +12,8 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.R
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.allowEditWhenCreateShortcut
 import cf.playhi.freezeyou.ui.LauncherShortcutConfirmAndGenerateActivity
 import cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable
 import cf.playhi.freezeyou.utils.ToastUtils.showToast
@@ -35,9 +37,7 @@ object LauncherShortcutUtils {
         id: String,
         context: Context
     ) {
-        if (PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean("allowEditWhenCreateShortcut", true)
-        ) {
+        if (allowEditWhenCreateShortcut.getValue(context)) {
             context.startActivity(
                 Intent(
                     context, LauncherShortcutConfirmAndGenerateActivity::class.java

@@ -16,7 +16,6 @@ import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.
 import cf.playhi.freezeyou.storage.mmkv.DefaultMultiProcessMMKVStorage
 import cf.playhi.freezeyou.utils.OneKeyListUtils
 import cf.playhi.freezeyou.utils.ServiceUtils
-import cf.playhi.freezeyou.utils.Support.checkLanguage
 import com.getkeepsafe.relinker.ReLinker
 import com.tencent.mmkv.MMKV
 import net.grandcentrix.tray.AppPreferences
@@ -27,7 +26,6 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         CrashHandler().init(this)
-        checkLanguage(applicationContext)
 
         // Initialize MMKV,
         // use [ReLinker](https://github.com/KeepSafe/ReLinker)

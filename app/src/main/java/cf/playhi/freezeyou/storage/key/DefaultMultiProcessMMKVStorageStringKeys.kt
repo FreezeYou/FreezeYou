@@ -10,6 +10,20 @@ import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_FREEZE_AND_
 
 enum class DefaultMultiProcessMMKVStorageStringKeys : AbstractKey<String?> {
 
+    uiStyleSelection {
+        override fun defaultValue(): String = "default"
+        override fun valueStringId(): Int = -1
+        override fun titleTextStringId(): Int = R.string.uiStyle
+        override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_APPEARANCE
+    },
+
+    themeOfAutoSwitchDarkMode {
+        override fun defaultValue(): String = "dark"
+        override fun valueStringId(): Int = -1
+        override fun titleTextStringId(): Int = R.string.themeOfAutoSwitchDarkMode
+        override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_APPEARANCE
+    },
+
     languagePref {
         override fun defaultValue() = "Default"
         override fun valueStringId(): Int = -1

@@ -11,6 +11,9 @@ import android.preference.PreferenceManager;
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
 
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.showInRecents;
+import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.needConfirmWhenFreezeUseShortcutAutoFUF;
+import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.openImmediatelyAfterUnfreezeUseShortcutAutoFUF;
+import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.shortcutAutoFUF;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
@@ -79,14 +82,20 @@ public class Freeze extends FreezeYouBaseActivity {
             }
 
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            if (mAutoRun && sp.getBoolean("shortcutAutoFUF", false)) {
+            if (mAutoRun && sp.getBoolean(shortcutAutoFUF.name(), shortcutAutoFUF.defaultValue())) {
                 if (realGetFrozenStatus(this, mPkgName, getPackageManager())) {
                     processUnfreezeAction(
                             this, mPkgName, target, tasks, true,
-                            sp.getBoolean("openImmediatelyAfterUnfreezeUseShortcutAutoFUF", true),
+                            sp.getBoolean(
+                                    openImmediatelyAfterUnfreezeUseShortcutAutoFUF.name(),
+                                    openImmediatelyAfterUnfreezeUseShortcutAutoFUF.defaultValue()
+                            ),
                             this, true);
                 } else {
-                    if (sp.getBoolean("needConfirmWhenFreezeUseShortcutAutoFUF", false)) {
+                    if (sp.getBoolean(
+                            needConfirmWhenFreezeUseShortcutAutoFUF.name(),
+                            needConfirmWhenFreezeUseShortcutAutoFUF.defaultValue())
+                    ) {
                         processDialog(mPkgName, target, tasks, false, 2);
                     } else {
                         processFreezeAction(this, mPkgName, target, tasks,

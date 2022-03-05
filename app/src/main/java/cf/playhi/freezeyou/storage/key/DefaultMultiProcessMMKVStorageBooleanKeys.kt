@@ -23,6 +23,12 @@ enum class DefaultMultiProcessMMKVStorageBooleanKeys : AbstractKey<Boolean> {
         override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_ADVANCE
     },
 
+    allowFollowSystemAutoSwitchDarkMode {
+        override fun defaultValue(): Boolean = true
+        override fun titleTextStringId(): Int = R.string.allowFollowSystemAutoSwitchDarkMode
+        override fun category(): Int = CATEGORY_SETTINGS or KeyCategory.CATEGORY_SETTINGS_APPEARANCE
+    },
+
     onekeyFreezeWhenLockScreen {
         override fun defaultValue(): Boolean = false
         override fun titleTextStringId(): Int = R.string.freezeAfterScreenLock

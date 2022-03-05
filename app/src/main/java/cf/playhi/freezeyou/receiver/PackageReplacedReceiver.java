@@ -4,12 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.preference.PreferenceManager;
 
 import java.io.File;
 
 import cf.playhi.freezeyou.utils.ApplicationIconUtils;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
+
+import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.cacheApplicationsIcons;
 
 public class PackageReplacedReceiver extends BroadcastReceiver {
     @Override
@@ -26,9 +27,8 @@ public class PackageReplacedReceiver extends BroadcastReceiver {
                 ApplicationInfo applicationInfo =
                         ApplicationInfoUtils.getApplicationInfoFromPkgName(pkgName, context);
                 if (applicationInfo != null) {
-                    //检查设置并更新应用程序图标数据
-                    if (PreferenceManager.getDefaultSharedPreferences(context)
-                            .getBoolean("cacheApplicationsIcons", false)) {
+                    // 检查设置并更新应用程序图标数据
+                    if (cacheApplicationsIcons.getValue(context)) {
                         File file2 = new File(context.getCacheDir() + "/icon/" + pkgName + ".png");
                         if (file2.exists() && file2.isFile()) {
                             file2.delete();

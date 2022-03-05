@@ -13,8 +13,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.R
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.cacheApplicationsIcons
 import cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn
 import cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon
 import cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel
@@ -385,10 +385,9 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
         getApplication<Application>().getSharedPreferences("NameOfPackages", MODE_PRIVATE)
             .edit().clear().apply()
         clearIconCache(getApplication())
-        val cacheApplicationsIcons = PreferenceManager.getDefaultSharedPreferences(
-            getApplication()
-        ).getBoolean("cacheApplicationsIcons", false)
+        val cacheApplicationsIcons = cacheApplicationsIcons.getValue(getApplication())
         val pm = getApplication<Application>().packageManager
+        @Suppress("DEPRECATION")
         val installedApplications =
             pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES)
         val size = installedApplications.size

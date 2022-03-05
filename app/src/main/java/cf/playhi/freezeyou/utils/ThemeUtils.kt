@@ -9,8 +9,10 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.NonNull
 import androidx.appcompat.app.ActionBar
-import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.R
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.allowFollowSystemAutoSwitchDarkMode
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.themeOfAutoSwitchDarkMode
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.uiStyleSelection
 
 internal object ThemeUtils {
 
@@ -79,16 +81,15 @@ internal object ThemeUtils {
 
     @JvmStatic
     fun getUiTheme(@NonNull context: Context): String? {
-        val sp = PreferenceManager.getDefaultSharedPreferences(context)
-        return if (sp.getBoolean("allowFollowSystemAutoSwitchDarkMode", true)) {
+        return if (allowFollowSystemAutoSwitchDarkMode.getValue()) {
             if (isSystemDarkModeEnabled(context))
-                if ("dark" == sp.getString("themeOfAutoSwitchDarkMode", "dark"))
+                if ("dark" == themeOfAutoSwitchDarkMode.getValue())
                     "black"
                 else
                     "deepBlack"
-            else sp.getString("uiStyleSelection", "default")
+            else uiStyleSelection.getValue()
         } else {
-            sp.getString("uiStyleSelection", "default")
+            uiStyleSelection.getValue()
         }
     }
 

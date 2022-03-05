@@ -13,12 +13,6 @@ import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_INSTALL_UNI
 
 enum class DefaultSharedPreferenceStorageBooleanKeys : AbstractKey<Boolean> {
 
-    allowFollowSystemAutoSwitchDarkMode {
-        override fun defaultValue(): Boolean = true
-        override fun titleTextStringId(): Int = R.string.allowFollowSystemAutoSwitchDarkMode
-        override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_APPEARANCE
-    },
-
     allowEditWhenCreateShortcut {
         override fun defaultValue(): Boolean = true
         override fun titleTextStringId(): Int = R.string.allowEditWhCreateShortcut
@@ -62,7 +56,7 @@ enum class DefaultSharedPreferenceStorageBooleanKeys : AbstractKey<Boolean> {
     },
 
     openImmediatelyAfterUnfreezeUseShortcutAutoFUF {
-        override fun defaultValue(): Boolean = false
+        override fun defaultValue(): Boolean = true
         override fun titleTextStringId(): Int = R.string.openImmediatelyAfterUF
         override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_FREEZE_AND_UNFREEZE
     },

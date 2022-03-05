@@ -22,28 +22,14 @@ enum class DefaultSharedPreferenceStorageStringKeys : AbstractKey<String?> {
     },
 
     mainActivityPattern {
-        override fun defaultValue() = "default"
+        override fun defaultValue(): String = "default"
         override fun valueStringId(): Int = -1
         override fun titleTextStringId(): Int = R.string.mainActivityPattern
         override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_APPEARANCE
     },
 
-    uiStyleSelection {
-        override fun defaultValue() = "default"
-        override fun valueStringId(): Int = -1
-        override fun titleTextStringId(): Int = R.string.uiStyle
-        override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_APPEARANCE
-    },
-
-    themeOfAutoSwitchDarkMode {
-        override fun defaultValue() = "dark"
-        override fun valueStringId(): Int = -1
-        override fun titleTextStringId(): Int = R.string.themeOfAutoSwitchDarkMode
-        override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_APPEARANCE
-    },
-
     launchMode {
-        override fun defaultValue() = "all"
+        override fun defaultValue(): String = "all"
         override fun valueStringId(): Int = -1
         override fun titleTextStringId(): Int = R.string.launchMode
         override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_COMMON
