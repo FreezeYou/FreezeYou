@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Free</string>
-    <string name="oneKeyFreeze">Onekey Free</string>
+    <string name="app_name">FreezeYou!</string>
+    <string name="oneKeyFreeze">Onekey Freeze</string>
     <string name="oneKeyUF">Onekey Unfreeze</string>
     <string name="alertT1">Attention! \nDo not freeze the application which is very important to the system, that may cause the system to crash!</string>
     <string name="cancel">Cancel</string>
