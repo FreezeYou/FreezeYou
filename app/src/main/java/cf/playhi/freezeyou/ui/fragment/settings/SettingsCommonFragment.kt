@@ -13,13 +13,6 @@ class SettingsCommonFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.spr_common, rootKey)
-        findPreference<CheckBoxPreference?>(lesserToast.name)
-            ?.run {
-                preferenceDataStore = DefaultMultiProcessMMKVDataStore()
-                isChecked = DefaultMultiProcessMMKVDataStore().getBoolean(
-                    lesserToast.name, lesserToast.defaultValue()
-                )
-            }
     }
 
     override fun onResume() {

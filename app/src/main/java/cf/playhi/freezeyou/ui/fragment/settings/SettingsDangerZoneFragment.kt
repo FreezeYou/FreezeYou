@@ -25,7 +25,7 @@ class SettingsDangerZoneFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.spr_danger_zone, rootKey)
 
-        if (isDeviceOwner(activity)) {
+        if (isDeviceOwner(activity) || isProfileOwner(activity)) {
             findPreference<Preference?>("clearAllUserData")?.let {
                 preferenceScreen?.removePreference(it)
             }

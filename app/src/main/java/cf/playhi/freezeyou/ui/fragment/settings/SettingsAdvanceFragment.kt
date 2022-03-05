@@ -21,13 +21,6 @@ class SettingsAdvanceFragment : PreferenceFragmentCompat() {
             true
         }
 
-        findPreference<CheckBoxPreference?>(debugModeEnabled.name)
-            ?.run {
-                preferenceDataStore = DefaultMultiProcessMMKVDataStore()
-                isChecked = DefaultMultiProcessMMKVDataStore().getBoolean(
-                    debugModeEnabled.name, debugModeEnabled.defaultValue()
-                )
-            }
     }
 
     override fun onResume() {

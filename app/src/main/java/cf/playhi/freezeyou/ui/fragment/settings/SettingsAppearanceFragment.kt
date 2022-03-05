@@ -13,14 +13,6 @@ class SettingsAppearanceFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.spr_appearance, rootKey)
-
-        findPreference<ListPreference?>(languagePref.name)
-            ?.run {
-                preferenceDataStore = DefaultMultiProcessMMKVDataStore()
-                value = DefaultMultiProcessMMKVDataStore().getString(
-                    languagePref.name, languagePref.defaultValue()
-                )
-            }
     }
 
     override fun onResume() {

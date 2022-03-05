@@ -10,6 +10,7 @@ import androidx.annotation.Keep
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys
@@ -31,9 +32,11 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 StartActivityForResult()
             ) { result: ActivityResult ->
                 if (result.resultCode == Activity.RESULT_OK) {
-                    (preferenceManager.preferenceDataStore as DefaultMultiProcessMMKVDataStore)
+                    enableAuthentication.setValue(value = true)
+                    PreferenceManager.getDefaultSharedPreferences(activity)
+                        .edit()
                         .putBoolean(enableAuthentication.name, true)
-
+                        .apply()
                     findPreference<CheckBoxPreference>(enableAuthentication.name)?.isChecked = true
                 }
             }
@@ -41,10 +44,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        preferenceManager.preferenceDataStore = DefaultMultiProcessMMKVDataStore()
-
         setPreferencesFromResource(R.xml.spr_security, rootKey)
-
 
         val enableAuthenticationPreference: Preference? = findPreference(enableAuthentication.name)
         enableAuthenticationPreference?.onPreferenceChangeListener =
@@ -77,6 +77,5 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         super.onResume()
         activity?.setTitle(R.string.security)
     }
-
 
 }

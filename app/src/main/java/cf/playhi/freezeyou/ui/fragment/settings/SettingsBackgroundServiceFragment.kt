@@ -10,7 +10,6 @@ import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
 class SettingsBackgroundServiceFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        preferenceManager.preferenceDataStore = DefaultMultiProcessMMKVDataStore()
         setPreferencesFromResource(R.xml.spr_background_service, rootKey)
     }
 

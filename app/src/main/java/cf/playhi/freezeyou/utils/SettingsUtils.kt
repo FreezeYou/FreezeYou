@@ -8,7 +8,6 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
-import cf.playhi.freezeyou.DeviceAdminReceiver
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_LEGACY_AUTO
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_MROOT_DPM
@@ -20,12 +19,13 @@ import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SYSTEM_A
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER
 import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService
 import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.*
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.*
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.*
-import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.*
-import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.getDevicePolicyManager
-import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.openDevicePolicyManager
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.mainActivityPattern
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.organizationName
 import cf.playhi.freezeyou.utils.ToastUtils.showToast
 
 object SettingsUtils {
@@ -42,78 +42,29 @@ object SettingsUtils {
         context: Context, activity: Activity,
         sharedPreferences: SharedPreferences, s: String
     ) {
+        syncMMKVDataToMMKVWhenSharedPreferenceDataChanged(context, sharedPreferences, s)
+
         when (s) {
             firstIconEnabled.name -> {
-                if (sharedPreferences.getBoolean(s, firstIconEnabled.defaultValue())) {
-                    context.packageManager.setComponentEnabledSetting(
-                        ComponentName(context, "cf.playhi.freezeyou.FirstIcon"),
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP
-                    )
-                } else {
-                    context.packageManager.setComponentEnabledSetting(
-                        ComponentName(context, "cf.playhi.freezeyou.FirstIcon"),
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP
-                    )
-                }
-                showToast(activity, R.string.ciFinishedToast)
+                changeIconEntryComponentState(
+                    context,
+                    sharedPreferences.getBoolean(s, firstIconEnabled.defaultValue()),
+                    "cf.playhi.freezeyou.FirstIcon"
+                )
             }
             secondIconEnabled.name -> {
-                if (sharedPreferences.getBoolean(s, secondIconEnabled.defaultValue())) {
-                    context.packageManager.setComponentEnabledSetting(
-                        ComponentName(context, "cf.playhi.freezeyou.SecondIcon"),
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP
-                    )
-                } else {
-                    context.packageManager.setComponentEnabledSetting(
-                        ComponentName(context, "cf.playhi.freezeyou.SecondIcon"),
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP
-                    )
-                }
-                showToast(activity, R.string.ciFinishedToast)
+                changeIconEntryComponentState(
+                    context,
+                    sharedPreferences.getBoolean(s, secondIconEnabled.defaultValue()),
+                    "cf.playhi.freezeyou.SecondIcon"
+                )
             }
             thirdIconEnabled.name -> {
-                if (sharedPreferences.getBoolean(s, thirdIconEnabled.defaultValue())) {
-                    context.packageManager.setComponentEnabledSetting(
-                        ComponentName(context, "cf.playhi.freezeyou.ThirdIcon"),
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP
-                    )
-                } else {
-                    context.packageManager.setComponentEnabledSetting(
-                        ComponentName(context, "cf.playhi.freezeyou.ThirdIcon"),
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP
-                    )
-                }
-                showToast(activity, R.string.ciFinishedToast)
-            }
-            shortCutOneKeyFreezeAdditionalOptions.name -> {
-                DefaultMultiProcessMMKVDataStore()
-                    .putString(
-                        s,
-                        sharedPreferences.getString(
-                            s,
-                            shortCutOneKeyFreezeAdditionalOptions.defaultValue()
-                        )
-                    )
-                if (shortCutOneKeyFreezeAdditionalOptions.defaultValue()
-                    != sharedPreferences.getString(
-                        s,
-                        shortCutOneKeyFreezeAdditionalOptions.defaultValue()
-                    )
-                ) {
-                    val devicePolicyManager = getDevicePolicyManager(context)
-                    if (devicePolicyManager != null && !devicePolicyManager.isAdminActive(
-                            ComponentName(context, DeviceAdminReceiver::class.java)
-                        )
-                    ) {
-                        openDevicePolicyManager(activity)
-                    }
-                }
+                changeIconEntryComponentState(
+                    context,
+                    sharedPreferences.getBoolean(s, thirdIconEnabled.defaultValue()),
+                    "cf.playhi.freezeyou.ThirdIcon"
+                )
             }
             uiStyleSelection.name,
             allowFollowSystemAutoSwitchDarkMode.name,
@@ -123,28 +74,7 @@ object SettingsUtils {
                     activity,
                     R.string.willTakeEffectsNextLaunch
                 )
-            languagePref.name -> {
-                DefaultMultiProcessMMKVDataStore().putString(
-                    s,
-                    sharedPreferences.getString(
-                        s,
-                        languagePref.defaultValue()
-                    )
-                )
-                showToast(
-                    activity,
-                    R.string.willTakeEffectsNextLaunch
-                )
-            }
             onekeyFreezeWhenLockScreen.name -> {
-                DefaultMultiProcessMMKVDataStore()
-                    .putBoolean(
-                        s,
-                        sharedPreferences.getBoolean(
-                            s,
-                            onekeyFreezeWhenLockScreen.defaultValue()
-                        )
-                    )
                 if (sharedPreferences.getBoolean(s, onekeyFreezeWhenLockScreen.defaultValue())) {
                     ServiceUtils.startService(
                         context,
@@ -157,9 +87,7 @@ object SettingsUtils {
             freezeOnceQuit.name,
             avoidFreezeForegroundApplications.name,
             tryToAvoidUpdateWhenUsing.name -> {
-                DefaultMultiProcessMMKVDataStore()
-                    .putBoolean(s, sharedPreferences.getBoolean(s, false))
-                if (sharedPreferences.getBoolean(
+                if (DefaultMultiProcessMMKVDataStore().getBoolean(
                         s,
                         false
                     ) && !AccessibilityUtils.isAccessibilitySettingsOn(context)
@@ -168,36 +96,12 @@ object SettingsUtils {
                     AccessibilityUtils.openAccessibilitySettings(context)
                 }
             }
-            useForegroundService.name,
-            openImmediately.name,
-            openAndUFImmediately.name,
-            notificationBarDisableSlideOut.name,
-            notificationBarDisableClickDisappear.name,
-            lesserToast.name,
-            debugModeEnabled.name,
-            tryDelApkAfterInstalled.name ->
-                DefaultMultiProcessMMKVDataStore()
-                    .putBoolean(s, sharedPreferences.getBoolean(s, false))
-            notificationBarFreezeImmediately.name,
-            showInRecents.name,
-            notAllowInstallWhenIsObsd.name,
-            createQuickFUFNotiAfterUnfrozen.name ->
-                DefaultMultiProcessMMKVDataStore().putBoolean(
-                    s,
-                    sharedPreferences.getBoolean(s, true)
-                )
             organizationName.name ->
                 DevicePolicyManagerUtils.checkAndSetOrganizationName(
                     context,
                     sharedPreferences.getString(s, null)
                 )
             avoidFreezeNotifyingApplications.name -> {
-                DefaultMultiProcessMMKVDataStore()
-                    .putBoolean(
-                        s, sharedPreferences.getBoolean(
-                            s, avoidFreezeNotifyingApplications.defaultValue()
-                        )
-                    )
                 if (Build.VERSION.SDK_INT >= 21) { // 这项不兼容 5.0 以下了
                     val enabledNotificationListeners = Settings.Secure.getString(
                         context.contentResolver, "enabled_notification_listeners"
@@ -275,6 +179,10 @@ object SettingsUtils {
         context: Context, activity: Activity,
         sharedPreferences: SharedPreferences?, key: String?
     ) {
+        if (key == null || sharedPreferences == null) return
+
+        syncMMKVDataToMMKVWhenSharedPreferenceDataChanged(context, sharedPreferences, key)
+
         when (key) {
             uiStyleSelection.name,
             allowFollowSystemAutoSwitchDarkMode.name,
@@ -312,7 +220,7 @@ object SettingsUtils {
             organizationName.name ->
                 DevicePolicyManagerUtils.checkAndSetOrganizationName(
                     context,
-                    sharedPreferences?.getString(key, null)
+                    sharedPreferences.getString(key, null)
                 )
             avoidFreezeNotifyingApplications.name -> {
                 if (Build.VERSION.SDK_INT >= 21) {
@@ -333,22 +241,18 @@ object SettingsUtils {
                 }
             }
             enableInstallPkgFunc.name ->
-                when (sharedPreferences?.getBoolean(key, enableInstallPkgFunc.defaultValue())) {
-                    true -> {
-                        context.packageManager.setComponentEnabledSetting(
-                            ComponentName(context, "cf.playhi.freezeyou.InstallPackagesActivity"),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                    }
-                    false -> {
-                        context.packageManager.setComponentEnabledSetting(
-                            ComponentName(context, "cf.playhi.freezeyou.InstallPackagesActivity"),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP
-                        )
-                    }
-                    else -> {}
+                if (sharedPreferences.getBoolean(key, enableInstallPkgFunc.defaultValue())) {
+                    context.packageManager.setComponentEnabledSetting(
+                        ComponentName(context, "cf.playhi.freezeyou.InstallPackagesActivity"),
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
+                } else {
+                    context.packageManager.setComponentEnabledSetting(
+                        ComponentName(context, "cf.playhi.freezeyou.InstallPackagesActivity"),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP
+                    )
                 }
             selectFUFMode.name -> {
                 when (DefaultMultiProcessMMKVDataStore()
@@ -383,5 +287,44 @@ object SettingsUtils {
                 }
             }
         }
+    }
+
+    private fun syncMMKVDataToMMKVWhenSharedPreferenceDataChanged(
+        context: Context,
+        sharedPreferences: SharedPreferences,
+        key: String
+    ) {
+        try {
+            DefaultMultiProcessMMKVStorageBooleanKeys.valueOf(key).run {
+                setValue(context, sharedPreferences.getBoolean(key, defaultValue()))
+            }
+            return
+        } catch (_: IllegalArgumentException) {
+        }
+
+        try {
+            DefaultMultiProcessMMKVStorageStringKeys.valueOf(key).run {
+                setValue(context, sharedPreferences.getString(key, defaultValue()))
+            }
+            return
+        } catch (_: IllegalArgumentException) {
+        }
+    }
+
+    fun changeIconEntryComponentState(context: Context, newValue: Boolean, cls: String) {
+        if (newValue) {
+            context.packageManager.setComponentEnabledSetting(
+                ComponentName(context, cls),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+            )
+        } else {
+            context.packageManager.setComponentEnabledSetting(
+                ComponentName(context, cls),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+        }
+        showToast(context, R.string.ciFinishedToast)
     }
 }

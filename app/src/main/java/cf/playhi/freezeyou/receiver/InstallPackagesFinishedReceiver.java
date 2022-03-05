@@ -8,10 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInstaller;
 import android.os.Build;
-import android.preference.PreferenceManager;
 
-import cf.playhi.freezeyou.utils.InstallPackagesUtils;
 import cf.playhi.freezeyou.R;
+import cf.playhi.freezeyou.utils.InstallPackagesUtils;
+
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.tryDelApkAfterInstalled;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class InstallPackagesFinishedReceiver extends BroadcastReceiver {
@@ -56,8 +57,7 @@ public class InstallPackagesFinishedReceiver extends BroadcastReceiver {
                                 null,
                                 true);
 
-                if (PreferenceManager.getDefaultSharedPreferences(context)
-                        .getBoolean("tryDelApkAfterInstalled", false))
+                if (tryDelApkAfterInstalled.getValue(null))
                     InstallPackagesUtils.deleteTempFile(context, apkFilePath, true);
 
             } else {

@@ -16,7 +16,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -28,7 +27,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-import cf.playhi.freezeyou.utils.InstallPackagesUtils;
 import cf.playhi.freezeyou.MainApplication;
 import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.app.FreezeYouBaseService;
@@ -36,7 +34,9 @@ import cf.playhi.freezeyou.receiver.InstallPackagesFinishedReceiver;
 import cf.playhi.freezeyou.utils.ApplicationInfoUtils;
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils;
 import cf.playhi.freezeyou.utils.FileUtils;
+import cf.playhi.freezeyou.utils.InstallPackagesUtils;
 
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.tryDelApkAfterInstalled;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
@@ -303,8 +303,7 @@ public class InstallPackagesService extends FreezeYouBaseService {
                                                 willBeInstalledName),
                                         null,
                                         true);
-                        if (PreferenceManager.getDefaultSharedPreferences(this)
-                                .getBoolean("tryDelApkAfterInstalled", false))
+                        if (tryDelApkAfterInstalled.getValue(null))
                             InstallPackagesUtils.deleteTempFile(this, apkFilePath, true);
                     } else {
                         InstallPackagesUtils

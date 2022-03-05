@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceScreen
-        app:fragment="cf.playhi.freezeyou.ui.SettingsNotificationFufFragment"
+        app:fragment="cf.playhi.freezeyou.ui.fragment.settings.SettingsNotificationFufFragment"
         app:iconSpaceReserved="false"
         app:key="spr_notification_fuf"
         app:singleLineTitle="false"
