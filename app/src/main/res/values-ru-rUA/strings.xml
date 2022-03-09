@@ -382,6 +382,7 @@
     <string name="gotoStore">Перейти в магазин приложений</string>
     <string name="selfRevokeProfileOwner">Отключить режим без-ROOT</string>
     <string name="selfRevokeProfileOwnerSummary">Если вы включили режим без-ROOT, вам необходимо отключить его перед удалением FreezeYou!</string>
+    <string name="isNotProfileOwner">Это не профиль владельца</string>
     <string-array name="launchModeSelection">
         <item>Показати все</item>
         <item>Заморожено</item>
@@ -443,13 +444,13 @@
     </string-array>
     <string-array name="selectFUFModeSelection">
         <item>без-ROOT (режим DPM)</item>
-        <item>No-root (Profile Owner Mode)</item>
-        <item>ROOT (Hide Mode)</item>
-        <item>ROOT (Disable Mode)</item>
-        <item>Legacy (Auto DPM or Disable Mode)</item>
-        <item>System App (Disable Mode)</item>
-        <item>System App (Disable_User Mode)</item>
-        <item>System App (Disable_Until_Used Mode)</item>
+        <item>Без-root (режим владельца профиля)</item>
+        <item>ROOT (режим скрытия)</item>
+        <item>ROOT (режим отключения)</item>
+        <item>Legacy (автоматический DPM или режим отключения)</item>
+        <item>Системное (режим DISABLE)</item>
+        <item>Системное (режим Disable_User)</item>
+        <item>Системное (режим Disable_Until_Used)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
         <item>Темна тема</item>
