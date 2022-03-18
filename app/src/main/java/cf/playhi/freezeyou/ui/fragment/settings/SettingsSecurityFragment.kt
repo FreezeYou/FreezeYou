@@ -11,9 +11,7 @@ import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
 import cf.playhi.freezeyou.R
-import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.enableAuthentication
 import cf.playhi.freezeyou.ui.AppLockActivity
 import cf.playhi.freezeyou.utils.AuthenticationUtils.isBiometricPromptPartAvailable

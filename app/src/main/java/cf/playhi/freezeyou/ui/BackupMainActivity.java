@@ -1,5 +1,6 @@
 package cf.playhi.freezeyou.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -19,6 +20,10 @@ import java.util.Date;
 
 import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys;
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys;
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys;
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys;
 import cf.playhi.freezeyou.utils.BackupUtils;
 import cf.playhi.freezeyou.utils.ClipboardUtils;
 import cf.playhi.freezeyou.utils.GZipUtils;
@@ -82,8 +87,9 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
     }
 
     private String processExportContent() {
-        final AppPreferences appPreferences = new AppPreferences(getApplicationContext());
-        final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final Context applicationContext = getApplicationContext();
+        final AppPreferences appPreferences = new AppPreferences(applicationContext);
+        final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(applicationContext);
 
         JSONObject finalOutputJsonObject = new JSONObject();
 
@@ -102,106 +108,16 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
             // boolean 开始
             JSONArray generalSettingsBooleanJSONArray = new JSONArray();
             JSONObject generalSettingsBooleanJSONObject = new JSONObject();
-            generalSettingsBooleanJSONObject.put(
-                    "allowEditWhenCreateShortcut",
-                    BackupUtils.convertSharedPreference(defSP, "allowEditWhenCreateShortcut", true)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "noCaution",
-                    BackupUtils.convertSharedPreference(defSP, "noCaution", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "saveOnClickFunctionStatus",
-                    BackupUtils.convertSharedPreference(defSP, "saveOnClickFunctionStatus", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "saveSortMethodStatus",
-                    BackupUtils.convertSharedPreference(defSP, "saveSortMethodStatus", true)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "cacheApplicationsIcons",
-                    BackupUtils.convertSharedPreference(defSP, "cacheApplicationsIcons", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "showInRecents",
-                    BackupUtils.convertSharedPreference(appPreferences, "showInRecents", true)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "lesserToast",
-                    BackupUtils.convertSharedPreference(appPreferences, "lesserToast", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "notificationBarFreezeImmediately",
-                    BackupUtils.convertSharedPreference(appPreferences, "notificationBarFreezeImmediately", true)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "notificationBarDisableSlideOut",
-                    BackupUtils.convertSharedPreference(appPreferences, "notificationBarDisableSlideOut", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "notificationBarDisableClickDisappear",
-                    BackupUtils.convertSharedPreference(appPreferences, "notificationBarDisableClickDisappear", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "onekeyFreezeWhenLockScreen",
-                    BackupUtils.convertSharedPreference(appPreferences, "onekeyFreezeWhenLockScreen", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "freezeOnceQuit",
-                    BackupUtils.convertSharedPreference(appPreferences, "freezeOnceQuit", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "avoidFreezeForegroundApplications",
-                    BackupUtils.convertSharedPreference(appPreferences, "avoidFreezeForegroundApplications", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "tryToAvoidUpdateWhenUsing",
-                    BackupUtils.convertSharedPreference(appPreferences, "tryToAvoidUpdateWhenUsing", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "avoidFreezeNotifyingApplications",
-                    BackupUtils.convertSharedPreference(appPreferences, "avoidFreezeNotifyingApplications", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "openImmediately",
-                    BackupUtils.convertSharedPreference(appPreferences, "openImmediately", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "openAndUFImmediately",
-                    BackupUtils.convertSharedPreference(appPreferences, "openAndUFImmediately", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "shortcutAutoFUF",
-                    BackupUtils.convertSharedPreference(defSP, "shortcutAutoFUF", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "needConfirmWhenFreezeUseShortcutAutoFUF",
-                    BackupUtils.convertSharedPreference(defSP, "needConfirmWhenFreezeUseShortcutAutoFUF", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "openImmediatelyAfterUnfreezeUseShortcutAutoFUF",
-                    BackupUtils.convertSharedPreference(defSP, "openImmediatelyAfterUnfreezeUseShortcutAutoFUF", true)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "enableInstallPkgFunc",
-                    BackupUtils.convertSharedPreference(defSP, "enableInstallPkgFunc", true)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "tryDelApkAfterInstalled",
-                    BackupUtils.convertSharedPreference(appPreferences, "tryDelApkAfterInstalled", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "useForegroundService",
-                    BackupUtils.convertSharedPreference(appPreferences, "useForegroundService", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "debugModeEnabled",
-                    BackupUtils.convertSharedPreference(appPreferences, "debugModeEnabled", false)
-            );
-            generalSettingsBooleanJSONObject.put(
-                    "notAllowInstallWhenIsObsd",
-                    BackupUtils.convertSharedPreference(appPreferences, "notAllowInstallWhenIsObsd", true)
-            );
+
+            for (DefaultSharedPreferenceStorageBooleanKeys key
+                    : DefaultSharedPreferenceStorageBooleanKeys.values()) {
+                generalSettingsBooleanJSONObject.put(key.name(), key.getValue(applicationContext));
+            }
+            for (DefaultMultiProcessMMKVStorageBooleanKeys key
+                    : DefaultMultiProcessMMKVStorageBooleanKeys.values()) {
+                generalSettingsBooleanJSONObject.put(key.name(), key.getValue(applicationContext));
+            }
+
             generalSettingsBooleanJSONArray.put(generalSettingsBooleanJSONObject);
             finalOutputJsonObject.put("generalSettings_boolean", generalSettingsBooleanJSONArray);
             // boolean 结束
@@ -209,26 +125,16 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
             // String 开始
             JSONArray generalSettingsStringJSONArray = new JSONArray();
             JSONObject generalSettingsStringJSONObject = new JSONObject();
-            generalSettingsStringJSONObject.put(
-                    "onClickFuncChooseActionStyle",
-                    BackupUtils.convertSharedPreference(defSP, "onClickFuncChooseActionStyle", "1")
-            );
-            generalSettingsStringJSONObject.put(
-                    "uiStyleSelection",
-                    BackupUtils.convertSharedPreference(defSP, "uiStyleSelection", "default")
-            );
-            generalSettingsStringJSONObject.put(
-                    "launchMode",
-                    BackupUtils.convertSharedPreference(defSP, "launchMode", "all")
-            );
-            generalSettingsStringJSONObject.put(
-                    "organizationName",
-                    BackupUtils.convertSharedPreference(defSP, "organizationName", getString(R.string.app_name))
-            );
-            generalSettingsStringJSONObject.put(
-                    "shortCutOneKeyFreezeAdditionalOptions",
-                    BackupUtils.convertSharedPreference(appPreferences, "shortCutOneKeyFreezeAdditionalOptions", "nothing")
-            );
+
+            for (DefaultSharedPreferenceStorageStringKeys key
+                    : DefaultSharedPreferenceStorageStringKeys.values()) {
+                generalSettingsBooleanJSONObject.put(key.name(), key.getValue(applicationContext));
+            }
+            for (DefaultMultiProcessMMKVStorageStringKeys key
+                    : DefaultMultiProcessMMKVStorageStringKeys.values()) {
+                generalSettingsBooleanJSONObject.put(key.name(), key.getValue(applicationContext));
+            }
+
             generalSettingsStringJSONArray.put(generalSettingsStringJSONObject);
             finalOutputJsonObject.put("generalSettings_string", generalSettingsStringJSONArray);
             // String 结束

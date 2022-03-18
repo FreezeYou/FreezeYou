@@ -2,12 +2,9 @@ package cf.playhi.freezeyou.ui.fragment.settings
 
 import android.os.Bundle
 import androidx.annotation.Keep
-import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import cf.playhi.freezeyou.R
-import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
-import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.debugModeEnabled
 import cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings
 
 @Keep

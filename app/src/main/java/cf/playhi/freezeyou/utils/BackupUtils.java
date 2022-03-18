@@ -17,6 +17,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import cf.playhi.freezeyou.R;
+import cf.playhi.freezeyou.storage.key.AbstractKey;
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys;
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys;
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys;
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -24,44 +29,29 @@ import static android.content.Context.MODE_PRIVATE;
 public final class BackupUtils {
 
     public static String convertSharedPreference(
-            SharedPreferences sharedPreferences, String key, String defValue) {
-        return sharedPreferences.getString(key, defValue);
-    }
-
-    public static String convertSharedPreference(
             AppPreferences appPreferences, String key, String defValue) {
         return appPreferences.getString(key, defValue);
-    }
-
-    public static boolean convertSharedPreference(
-            SharedPreferences sharedPreferences, String key, boolean defValue) {
-        return sharedPreferences.getBoolean(key, defValue);
-    }
-
-    public static boolean convertSharedPreference(
-            AppPreferences appPreferences, String key, boolean defValue) {
-        return appPreferences.getBoolean(key, defValue);
     }
 
     private static void importStringSharedPreference(
             Context context, Activity activity, JSONObject jsonObject,
             SharedPreferences sp, String key) {
         sp.edit().putString(key, jsonObject.optString(key, "")).apply();
-        SettingsUtils.syncAndCheckSharedPreference(context, activity, sp, key);
+        SettingsUtils.checkPreferenceData(context, activity, sp, key);
     }
 
     private static void importBooleanSharedPreference(
             Context context, Activity activity, JSONObject jsonObject,
             SharedPreferences sp, String key) {
         sp.edit().putBoolean(key, jsonObject.optBoolean(key, false)).apply();
-        SettingsUtils.syncAndCheckSharedPreference(context, activity, sp, key);
+        SettingsUtils.checkPreferenceData(context, activity, sp, key);
     }
 
     private static void importIntSharedPreference(
             Context context, Activity activity, JSONObject jsonObject,
             SharedPreferences sp, String key) {
         sp.edit().putInt(key, jsonObject.optInt(key, 0)).apply();
-        SettingsUtils.syncAndCheckSharedPreference(context, activity, sp, key);
+        SettingsUtils.checkPreferenceData(context, activity, sp, key);
     }
 
     private static boolean importUserTimeTasksJSONArray(Context context, JSONObject jsonObject) {
@@ -254,10 +244,9 @@ public final class BackupUtils {
         }
     }
 
-
     private static boolean importIntSharedPreferences(
-            Context context, Activity activity, JSONObject jsonObject,
-            SharedPreferences defSP, AppPreferences appPreferences) {
+            Context context, Activity activity,
+            JSONObject jsonObject, SharedPreferences defSP) {
         // Int 开始
         JSONArray array = jsonObject.optJSONArray("generalSettings_int");
         if (array == null) {
@@ -269,14 +258,14 @@ public final class BackupUtils {
         }
 
         importIntSharedPreferencesFromProcessedJSONObject(
-                context, activity, generalSettingsIntJSONObject, defSP, appPreferences);
+                context, activity, generalSettingsIntJSONObject, defSP);
         // Int 结束
         return true;
     }
 
     private static void importIntSharedPreferencesFromProcessedJSONObject(
-            Context context, Activity activity, JSONObject generalSettingsIntJSONObject,
-            SharedPreferences defSP, AppPreferences appPreferences) {
+            Context context, Activity activity,
+            JSONObject generalSettingsIntJSONObject, SharedPreferences defSP) {
         Iterator<String> it = generalSettingsIntJSONObject.keys();
         String s;
         while (it.hasNext()) {
@@ -294,8 +283,8 @@ public final class BackupUtils {
     }
 
     private static boolean importStringSharedPreferences(
-            Context context, Activity activity, JSONObject jsonObject,
-            SharedPreferences defSP, AppPreferences appPreferences) {
+            Context context, Activity activity,
+            JSONObject jsonObject, SharedPreferences defSP) {
         // String 开始
         JSONArray array = jsonObject.optJSONArray("generalSettings_string");
         if (array == null) {
@@ -306,36 +295,45 @@ public final class BackupUtils {
             return false;
         }
         importStringSharedPreferencesFromProcessedJSONObject(
-                context, activity, generalSettingsStringJSONObject, defSP, appPreferences);
+                context, activity, generalSettingsStringJSONObject, defSP);
         // String 结束
         return true;
     }
 
     private static void importStringSharedPreferencesFromProcessedJSONObject(
             Context context, Activity activity, JSONObject generalSettingsStringJSONObject,
-            SharedPreferences defSP, AppPreferences appPreferences) {
+            SharedPreferences defSP) {
         Iterator<String> it = generalSettingsStringJSONObject.keys();
         String s;
         while (it.hasNext()) {
             s = it.next();
-            switch (s) {
-                case "onClickFuncChooseActionStyle":
-                case "uiStyleSelection":
-                case "launchMode":
-                case "organizationName":
-                case "shortCutOneKeyFreezeAdditionalOptions":
-                    importStringSharedPreference(
-                            context, activity, generalSettingsStringJSONObject, defSP, s);
-                    break;
-                default:
-                    break;
+
+            if (s == null) continue;
+
+            AbstractKey<String> key = null;
+
+            try {
+                key = DefaultSharedPreferenceStorageStringKeys.valueOf(s);
+            } catch (IllegalArgumentException ignored) {
             }
+
+            if (key == null) {
+                try {
+                    key = DefaultMultiProcessMMKVStorageStringKeys.valueOf(s);
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+
+            if (key == null) continue;
+
+            importStringSharedPreference(
+                    context, activity, generalSettingsStringJSONObject, defSP, s);
         }
     }
 
     private static boolean importBooleanSharedPreferences(
-            Context context, Activity activity, JSONObject jsonObject,
-            SharedPreferences defSP, AppPreferences appPreferences) {
+            Context context, Activity activity,
+            JSONObject jsonObject, SharedPreferences defSP) {
         // boolean 开始
         JSONArray array = jsonObject.optJSONArray("generalSettings_boolean");
         if (array == null) {
@@ -347,50 +345,46 @@ public final class BackupUtils {
         }
 
         importBooleanSharedPreferencesFromProcessedJSONObject(
-                context, activity, generalSettingsBooleanJSONObject, defSP, appPreferences);
+                context, activity, generalSettingsBooleanJSONObject, defSP);
         // boolean 结束
         return true;
     }
 
     private static void importBooleanSharedPreferencesFromProcessedJSONObject(
-            Context context, Activity activity, JSONObject generalSettingsBooleanJSONObject,
-            SharedPreferences defSP, AppPreferences appPreferences) {
+            Context context, Activity activity,
+            JSONObject generalSettingsBooleanJSONObject, SharedPreferences defSP) {
         Iterator<String> it = generalSettingsBooleanJSONObject.keys();
         String s;
         while (it.hasNext()) {
             s = it.next();
-            switch (s) {
-                case "allowEditWhenCreateShortcut":
-                case "noCaution":
-                case "saveOnClickFunctionStatus":
-                case "saveSortMethodStatus":
-                case "cacheApplicationsIcons":
-                case "showInRecents":
-                case "lesserToast":
-                case "notificationBarFreezeImmediately":
-                case "notificationBarDisableSlideOut":
-                case "notificationBarDisableClickDisappear":
-                case "onekeyFreezeWhenLockScreen":
-                case "freezeOnceQuit":
-                case "avoidFreezeForegroundApplications":
-                case "tryToAvoidUpdateWhenUsing":
-                case "avoidFreezeNotifyingApplications":
-                case "openImmediately":
-                case "openAndUFImmediately":
-                case "shortcutAutoFUF":
-                case "needConfirmWhenFreezeUseShortcutAutoFUF":
-                case "openImmediatelyAfterUnfreezeUseShortcutAutoFUF":
-                case "enableInstallPkgFunc":
-                case "tryDelApkAfterInstalled":
-                case "useForegroundService":
-                case "debugModeEnabled":
-                case "notAllowInstallWhenIsObsd":
-                    importBooleanSharedPreference(
-                            context, activity, generalSettingsBooleanJSONObject, defSP, s);
-                    break;
-                default:
-                    break;
+
+            if (s == null) continue;
+
+            if (DefaultSharedPreferenceStorageBooleanKeys.firstIconEnabled.name().equals(s)
+                    || DefaultSharedPreferenceStorageBooleanKeys.secondIconEnabled.name().equals(s)
+                    || DefaultSharedPreferenceStorageBooleanKeys.thirdIconEnabled.name().equals(s)
+                    || DefaultMultiProcessMMKVStorageBooleanKeys.enableAuthentication.name().equals(s)) {
+                continue;
             }
+
+            AbstractKey<Boolean> key = null;
+
+            try {
+                key = DefaultSharedPreferenceStorageBooleanKeys.valueOf(s);
+            } catch (IllegalArgumentException ignored) {
+            }
+
+            if (key == null) {
+                try {
+                    key = DefaultMultiProcessMMKVStorageBooleanKeys.valueOf(s);
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+
+            if (key == null) continue;
+
+            importBooleanSharedPreference(
+                    context, activity, generalSettingsBooleanJSONObject, defSP, s);
         }
     }
 
@@ -427,13 +421,13 @@ public final class BackupUtils {
             switch (jsonKeysIterator.next()) {
                 // 通用设置转入（更多设置 中的选项，不转移图标选择相关设置） 开始
                 case "generalSettings_boolean":
-                    importBooleanSharedPreferences(context, activity, jsonObject, defSP, appPreferences);
+                    importBooleanSharedPreferences(context, activity, jsonObject, defSP);
                     break;
                 case "generalSettings_string":
-                    importStringSharedPreferences(context, activity, jsonObject, defSP, appPreferences);
+                    importStringSharedPreferences(context, activity, jsonObject, defSP);
                     break;
                 case "generalSettings_int":
-                    importIntSharedPreferences(context, activity, jsonObject, defSP, appPreferences);
+                    importIntSharedPreferences(context, activity, jsonObject, defSP);
                     break;
                 // 通用设置转出 结束
                 // 一键冻结、一键解冻、离开冻结列表 开始

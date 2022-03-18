@@ -14,10 +14,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import cf.playhi.freezeyou.adapter.BackupImportChooserActivitySwitchSimpleAdapter;
-import cf.playhi.freezeyou.utils.BackupUtils;
 import cf.playhi.freezeyou.R;
+import cf.playhi.freezeyou.adapter.BackupImportChooserActivitySwitchSimpleAdapter;
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.storage.key.AbstractKey;
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys;
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys;
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys;
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys;
+import cf.playhi.freezeyou.utils.BackupUtils;
 import cf.playhi.freezeyou.utils.ToastUtils;
 
 import static cf.playhi.freezeyou.utils.ThemeUtils.processActionBar;
@@ -113,40 +118,6 @@ public class BackupImportChooserActivity extends FreezeYouBaseActivity {
     }
 
     private void generateKeyToStringIdValuePair() {
-        // String 开始
-        keyToStringIdValuePair.put("onClickFuncChooseActionStyle", getString(R.string.onClickFuncChooseActionStyle));
-        keyToStringIdValuePair.put("uiStyleSelection", getString(R.string.uiStyle));
-        keyToStringIdValuePair.put("launchMode", getString(R.string.launchMode));
-        keyToStringIdValuePair.put("organizationName", getString(R.string.organizationName));
-        keyToStringIdValuePair.put("shortCutOneKeyFreezeAdditionalOptions", getString(R.string.shortCutOneKeyFreezeAdditionalOptions));
-        // String 结束
-        // boolean 开始
-        keyToStringIdValuePair.put("allowEditWhenCreateShortcut", getString(R.string.allowEditWhCreateShortcut));
-        keyToStringIdValuePair.put("noCaution", getString(R.string.nSCaution));
-        keyToStringIdValuePair.put("saveOnClickFunctionStatus", getString(R.string.saveOnClickFunctionStatus));
-        keyToStringIdValuePair.put("saveSortMethodStatus", getString(R.string.saveSortMethodStatus));
-        keyToStringIdValuePair.put("cacheApplicationsIcons", getString(R.string.cacheApplicationsIcons));
-        keyToStringIdValuePair.put("showInRecents", getString(R.string.showInRecents));
-        keyToStringIdValuePair.put("lesserToast", getString(R.string.lesserToast));
-        keyToStringIdValuePair.put("notificationBarFreezeImmediately", getString(R.string.notificationBarFreezeImmediately));
-        keyToStringIdValuePair.put("notificationBarDisableSlideOut", getString(R.string.disableSlideOut));
-        keyToStringIdValuePair.put("notificationBarDisableClickDisappear", getString(R.string.disableClickDisappear));
-        keyToStringIdValuePair.put("onekeyFreezeWhenLockScreen", getString(R.string.freezeAfterScreenLock));
-        keyToStringIdValuePair.put("freezeOnceQuit", getString(R.string.freezeOnceQuit));
-        keyToStringIdValuePair.put("avoidFreezeForegroundApplications", getString(R.string.avoidFreezeForegroundApplications));
-        keyToStringIdValuePair.put("tryToAvoidUpdateWhenUsing", getString(R.string.tryToAvoidUpdateWhenUsing));
-        keyToStringIdValuePair.put("avoidFreezeNotifyingApplications", getString(R.string.avoidFreezeNotifyingApplications));
-        keyToStringIdValuePair.put("openImmediately", getString(R.string.openImmediately));
-        keyToStringIdValuePair.put("openAndUFImmediately", getString(R.string.openAndUFImmediately));
-        keyToStringIdValuePair.put("shortcutAutoFUF", getString(R.string.shortcutAutoFUF));
-        keyToStringIdValuePair.put("needConfirmWhenFreezeUseShortcutAutoFUF", getString(R.string.needCfmWhenFreeze));
-        keyToStringIdValuePair.put("openImmediatelyAfterUnfreezeUseShortcutAutoFUF", getString(R.string.openImmediatelyAfterUF));
-        keyToStringIdValuePair.put("enableInstallPkgFunc", getString(R.string.enableInstallPkgFunc));
-        keyToStringIdValuePair.put("tryDelApkAfterInstalled", getString(R.string.tryDelApkAfterInstalled));
-        keyToStringIdValuePair.put("useForegroundService", getString(R.string.useForegroundService));
-        keyToStringIdValuePair.put("debugModeEnabled", getString(R.string.debugMode));
-        keyToStringIdValuePair.put("notAllowInstallWhenIsObsd", getString(R.string.notAllowWhenIsObsd));
-        // boolean 结束
         // Int 开始
         keyToStringIdValuePair.put("onClickFunctionStatus", getString(R.string.onClickFunctionStatus));
         keyToStringIdValuePair.put("sortMethodStatus", getString(R.string.sortMethodStatus));
@@ -228,43 +199,40 @@ public class BackupImportChooserActivity extends FreezeYouBaseActivity {
         String s;
         while (it.hasNext()) {
             s = it.next();
-            switch (s) {
-                case "allowEditWhenCreateShortcut":
-                case "noCaution":
-                case "saveOnClickFunctionStatus":
-                case "saveSortMethodStatus":
-                case "cacheApplicationsIcons":
-                case "showInRecents":
-                case "lesserToast":
-                case "notificationBarFreezeImmediately":
-                case "notificationBarDisableSlideOut":
-                case "notificationBarDisableClickDisappear":
-                case "onekeyFreezeWhenLockScreen":
-                case "freezeOnceQuit":
-                case "avoidFreezeForegroundApplications":
-                case "tryToAvoidUpdateWhenUsing":
-                case "avoidFreezeNotifyingApplications":
-                case "openImmediately":
-                case "openAndUFImmediately":
-                case "shortcutAutoFUF":
-                case "needConfirmWhenFreezeUseShortcutAutoFUF":
-                case "openImmediatelyAfterUnfreezeUseShortcutAutoFUF":
-                case "enableInstallPkgFunc":
-                case "tryDelApkAfterInstalled":
-                case "useForegroundService":
-                case "debugModeEnabled":
-                    HashMap<String, String> keyValuePair = new HashMap<>();
-                    keyValuePair.put("title",
-                            String.format(moreSettingsDashLineLabel,
-                                    keyToStringIdValuePair.containsKey(s) ?
-                                            keyToStringIdValuePair.get(s) : s));
-                    keyValuePair.put("spKey", s);
-                    keyValuePair.put("category", "generalSettings_boolean");
-                    list.add(keyValuePair);
-                    break;
-                default:
-                    break;
+
+            if (s == null) continue;
+
+            if (DefaultSharedPreferenceStorageBooleanKeys.firstIconEnabled.name().equals(s)
+                    || DefaultSharedPreferenceStorageBooleanKeys.secondIconEnabled.name().equals(s)
+                    || DefaultSharedPreferenceStorageBooleanKeys.thirdIconEnabled.name().equals(s)
+                    || DefaultMultiProcessMMKVStorageBooleanKeys.enableAuthentication.name().equals(s)) {
+                continue;
             }
+
+            AbstractKey<Boolean> key = null;
+
+            try {
+                key = DefaultSharedPreferenceStorageBooleanKeys.valueOf(s);
+            } catch (IllegalArgumentException ignored) {
+            }
+
+            if (key == null) {
+                try {
+                    key = DefaultMultiProcessMMKVStorageBooleanKeys.valueOf(s);
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+
+            if (key == null) continue;
+
+            HashMap<String, String> keyValuePair = new HashMap<>();
+            keyValuePair.put(
+                    "title",
+                    String.format(moreSettingsDashLineLabel, getString(key.titleTextStringId()))
+            );
+            keyValuePair.put("spKey", s);
+            keyValuePair.put("category", "generalSettings_boolean");
+            list.add(keyValuePair);
         }
     }
 
@@ -312,24 +280,33 @@ public class BackupImportChooserActivity extends FreezeYouBaseActivity {
         String s;
         while (it.hasNext()) {
             s = it.next();
-            switch (s) {
-                case "onClickFuncChooseActionStyle":
-                case "uiStyleSelection":
-                case "launchMode":
-                case "organizationName":
-                case "shortCutOneKeyFreezeAdditionalOptions":
-                    HashMap<String, String> keyValuePair = new HashMap<>();
-                    keyValuePair.put("title",
-                            String.format(moreSettingsDashLineLabel,
-                                    keyToStringIdValuePair.containsKey(s) ?
-                                            keyToStringIdValuePair.get(s) : s));
-                    keyValuePair.put("spKey", s);
-                    keyValuePair.put("category", "generalSettings_string");
-                    list.add(keyValuePair);
-                    break;
-                default:
-                    break;
+
+            if (s == null) continue;
+
+            AbstractKey<String> key = null;
+
+            try {
+                key = DefaultSharedPreferenceStorageStringKeys.valueOf(s);
+            } catch (IllegalArgumentException ignored) {
             }
+
+            if (key == null) {
+                try {
+                    key = DefaultMultiProcessMMKVStorageStringKeys.valueOf(s);
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+
+            if (key == null) continue;
+
+            HashMap<String, String> keyValuePair = new HashMap<>();
+            keyValuePair.put(
+                    "title",
+                    String.format(moreSettingsDashLineLabel, getString(key.titleTextStringId()))
+            );
+            keyValuePair.put("spKey", s);
+            keyValuePair.put("category", "generalSettings_string");
+            list.add(keyValuePair);
         }
     }
 

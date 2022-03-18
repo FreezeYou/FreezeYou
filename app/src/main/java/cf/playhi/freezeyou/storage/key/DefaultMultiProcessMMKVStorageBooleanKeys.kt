@@ -96,7 +96,7 @@ enum class DefaultMultiProcessMMKVStorageBooleanKeys : AbstractKey<Boolean> {
     },
 
     tryToAvoidUpdateWhenUsing {
-        override fun defaultValue(): Boolean = true
+        override fun defaultValue(): Boolean = false
         override fun titleTextStringId(): Int = R.string.tryToAvoidUpdateWhenUsing
         override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_INSTALL_UNINSTALL
     },

@@ -195,7 +195,7 @@ class MainApplication : Application() {
             )
             appPreferences.put(
                 "notificationBarDisableClickDisappear",
-                sharedPreferences.getBoolean("notificationBarDisableClickDisappear", false)
+                sharedPreferences.getBoolean("notificationBarDisableClickDisappear", true)
             )
             dataTransfer20180816Lock.createNewFile()
         }

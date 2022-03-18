@@ -5,7 +5,6 @@ import androidx.annotation.StringRes
 import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS
-import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_APPEARANCE
 import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_COMMON
 import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_FREEZE_AND_UNFREEZE
 import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_ICON_ENTRY

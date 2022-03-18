@@ -2,11 +2,8 @@ package cf.playhi.freezeyou.ui.fragment.settings
 
 import android.os.Bundle
 import androidx.annotation.Keep
-import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import cf.playhi.freezeyou.R
-import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
-import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.languagePref
 
 @Keep
 class SettingsAppearanceFragment : PreferenceFragmentCompat() {

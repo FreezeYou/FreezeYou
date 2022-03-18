@@ -10,9 +10,7 @@ import android.graphics.Matrix
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.Icon
 import android.os.Build
-import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.R
-import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.allowEditWhenCreateShortcut
 import cf.playhi.freezeyou.ui.LauncherShortcutConfirmAndGenerateActivity
 import cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable
