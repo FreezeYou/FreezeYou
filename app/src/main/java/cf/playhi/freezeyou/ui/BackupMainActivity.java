@@ -128,11 +128,11 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
 
             for (DefaultSharedPreferenceStorageStringKeys key
                     : DefaultSharedPreferenceStorageStringKeys.values()) {
-                generalSettingsBooleanJSONObject.put(key.name(), key.getValue(applicationContext));
+                generalSettingsStringJSONObject.put(key.name(), key.getValue(applicationContext));
             }
             for (DefaultMultiProcessMMKVStorageStringKeys key
                     : DefaultMultiProcessMMKVStorageStringKeys.values()) {
-                generalSettingsBooleanJSONObject.put(key.name(), key.getValue(applicationContext));
+                generalSettingsStringJSONObject.put(key.name(), key.getValue(applicationContext));
             }
 
             generalSettingsStringJSONArray.put(generalSettingsStringJSONObject);
