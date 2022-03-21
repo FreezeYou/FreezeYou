@@ -3,12 +3,13 @@ package cf.playhi.freezeyou.storage.key
 import android.content.Context
 import androidx.annotation.StringRes
 import cf.playhi.freezeyou.R
-import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
 import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS
 import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_APPEARANCE
 import cf.playhi.freezeyou.storage.key.KeyCategory.CATEGORY_SETTINGS_FREEZE_AND_UNFREEZE
+import cf.playhi.freezeyou.storage.mmkv.DefaultMultiProcessMMKVStorage
+import cf.playhi.freezeyou.storage.mmkv.FreezeYouMMKVStorage
 
-enum class DefaultMultiProcessMMKVStorageStringKeys : AbstractKey<String?> {
+enum class DefaultMultiProcessMMKVStorageStringKeys : AbstractMMKVKey<String?> {
 
     uiStyleSelection {
         override fun defaultValue(): String = "default"
@@ -61,7 +62,7 @@ enum class DefaultMultiProcessMMKVStorageStringKeys : AbstractKey<String?> {
     abstract override fun titleTextStringId(): Int
     abstract override fun category(): Int
     override fun getValue(context: Context?): String? {
-        return DefaultMultiProcessMMKVDataStore().getString(
+        return DefaultMultiProcessMMKVStorage().getString(
             this.name,
             if (this.defaultValue() == null) context?.getString(this.valueStringId())
             else this.defaultValue()
@@ -69,6 +70,10 @@ enum class DefaultMultiProcessMMKVStorageStringKeys : AbstractKey<String?> {
     }
 
     override fun setValue(context: Context?, value: String?) {
-        DefaultMultiProcessMMKVDataStore().putString(this.name, value)
+        DefaultMultiProcessMMKVStorage().putString(this.name, value)
+    }
+
+    override fun sync(): FreezeYouMMKVStorage {
+        return DefaultMultiProcessMMKVStorage().sync()
     }
 }

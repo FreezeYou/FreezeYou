@@ -6,7 +6,6 @@ import androidx.annotation.Keep
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import cf.playhi.freezeyou.R
-import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
 import cf.playhi.freezeyou.ui.UriAutoAllowManageActivity
 import cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog
 import java.io.File
@@ -15,8 +14,6 @@ import java.io.File
 class SettingsAutomationFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        preferenceManager.preferenceDataStore = DefaultMultiProcessMMKVDataStore()
-
         setPreferencesFromResource(R.xml.spr_automation, rootKey)
 
         findPreference<Preference?>("manageIpaAutoAllow")?.intent = Intent(

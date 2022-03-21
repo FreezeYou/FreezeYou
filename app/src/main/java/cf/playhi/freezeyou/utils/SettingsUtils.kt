@@ -18,12 +18,10 @@ import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SYSTEM_A
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER
 import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService
-import cf.playhi.freezeyou.storage.datastore.DefaultMultiProcessMMKVDataStore
-import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys
+import cf.playhi.freezeyou.storage.key.*
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.*
-import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.*
-import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.*
+import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.enableInstallPkgFunc
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.mainActivityPattern
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.organizationName
 import cf.playhi.freezeyou.utils.ToastUtils.showToast
@@ -40,21 +38,21 @@ object SettingsUtils {
     ) {
         if (key == null || sharedPreferences == null) return
 
-        syncMMKVDataToMMKVWhenSharedPreferenceDataChanged(context, sharedPreferences, key)
+        val abstractKey = convertToAbstractKey(key) ?: return
 
-        when (key) {
-            uiStyleSelection.name,
-            allowFollowSystemAutoSwitchDarkMode.name,
-            mainActivityPattern.name,
-            languagePref.name ->
+        syncMMKVDataToMMKVWhenSharedPreferenceDataChanged(context, sharedPreferences, abstractKey)
+
+        when (abstractKey) {
+            uiStyleSelection,
+            allowFollowSystemAutoSwitchDarkMode,
+            mainActivityPattern,
+            languagePref ->
                 showToast(
                     activity,
                     R.string.willTakeEffectsNextLaunch
                 )
-            onekeyFreezeWhenLockScreen.name -> {
-                if (DefaultMultiProcessMMKVDataStore()
-                        .getBoolean(key, onekeyFreezeWhenLockScreen.defaultValue())
-                ) {
+            onekeyFreezeWhenLockScreen -> {
+                if (onekeyFreezeWhenLockScreen.getValue()) {
                     ServiceUtils.startService(
                         context,
                         Intent(context, ScreenLockOneKeyFreezeService::class.java)
@@ -63,24 +61,22 @@ object SettingsUtils {
                     context.stopService(Intent(context, ScreenLockOneKeyFreezeService::class.java))
                 }
             }
-            freezeOnceQuit.name,
-            avoidFreezeForegroundApplications.name,
-            tryToAvoidUpdateWhenUsing.name -> {
-                if (DefaultMultiProcessMMKVDataStore().getBoolean(
-                        key,
-                        tryToAvoidUpdateWhenUsing.defaultValue()
-                    ) && !AccessibilityUtils.isAccessibilitySettingsOn(context)
+            freezeOnceQuit,
+            avoidFreezeForegroundApplications,
+            tryToAvoidUpdateWhenUsing -> {
+                if (abstractKey.getValue() as Boolean
+                    && !AccessibilityUtils.isAccessibilitySettingsOn(context)
                 ) {
                     showToast(activity, R.string.needActiveAccessibilityService)
                     AccessibilityUtils.openAccessibilitySettings(context)
                 }
             }
-            organizationName.name ->
+            organizationName ->
                 DevicePolicyManagerUtils.checkAndSetOrganizationName(
                     context,
                     sharedPreferences.getString(key, null)
                 )
-            avoidFreezeNotifyingApplications.name -> {
+            avoidFreezeNotifyingApplications -> {
                 if (Build.VERSION.SDK_INT >= 21) {
                     val enabledNotificationListeners = Settings.Secure.getString(
                         context.contentResolver, "enabled_notification_listeners"
@@ -98,7 +94,7 @@ object SettingsUtils {
                     }
                 }
             }
-            enableInstallPkgFunc.name ->
+            enableInstallPkgFunc ->
                 if (sharedPreferences.getBoolean(key, enableInstallPkgFunc.defaultValue())) {
                     context.packageManager.setComponentEnabledSetting(
                         ComponentName(context, "cf.playhi.freezeyou.InstallPackagesActivity"),
@@ -112,9 +108,8 @@ object SettingsUtils {
                         PackageManager.DONT_KILL_APP
                     )
                 }
-            selectFUFMode.name -> {
-                when (DefaultMultiProcessMMKVDataStore()
-                    .getString(selectFUFMode.name, selectFUFMode.defaultValue())?.toInt()) {
+            selectFUFMode -> {
+                when (selectFUFMode.getValue()?.toInt()) {
                     API_FREEZEYOU_MROOT_DPM ->
                         if (!DevicePolicyManagerUtils.isDeviceOwner(context)) {
                             showToast(context, R.string.noMRootPermission)
@@ -150,22 +145,21 @@ object SettingsUtils {
     private fun syncMMKVDataToMMKVWhenSharedPreferenceDataChanged(
         context: Context,
         sharedPreferences: SharedPreferences,
-        key: String
+        key: AbstractKey<*>
     ) {
-        try {
-            DefaultMultiProcessMMKVStorageBooleanKeys.valueOf(key).run {
-                setValue(context, sharedPreferences.getBoolean(key, defaultValue()))
+        when (key) {
+            is DefaultMultiProcessMMKVStorageBooleanKeys -> {
+                key.run {
+                    setValue(context, sharedPreferences.getBoolean(key.name, key.defaultValue()))
+                    sync()
+                }
             }
-            return
-        } catch (_: IllegalArgumentException) {
-        }
-
-        try {
-            DefaultMultiProcessMMKVStorageStringKeys.valueOf(key).run {
-                setValue(context, sharedPreferences.getString(key, defaultValue()))
+            is DefaultMultiProcessMMKVStorageStringKeys -> {
+                key.run {
+                    setValue(context, sharedPreferences.getString(key.name, key.defaultValue()))
+                    sync()
+                }
             }
-            return
-        } catch (_: IllegalArgumentException) {
         }
     }
 
@@ -184,5 +178,29 @@ object SettingsUtils {
             )
         }
         showToast(context, R.string.ciFinishedToast)
+    }
+
+    private fun convertToAbstractKey(key: String): AbstractKey<*>? {
+        try {
+            return DefaultMultiProcessMMKVStorageBooleanKeys.valueOf(key)
+        } catch (_: IllegalArgumentException) {
+        }
+
+        try {
+            return DefaultSharedPreferenceStorageBooleanKeys.valueOf(key)
+        } catch (_: IllegalArgumentException) {
+        }
+
+        try {
+            return DefaultMultiProcessMMKVStorageStringKeys.valueOf(key)
+        } catch (_: IllegalArgumentException) {
+        }
+
+        try {
+            return DefaultSharedPreferenceStorageStringKeys.valueOf(key)
+        } catch (_: IllegalArgumentException) {
+        }
+
+        return null
     }
 }
