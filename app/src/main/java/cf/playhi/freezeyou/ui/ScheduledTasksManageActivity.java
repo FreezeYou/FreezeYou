@@ -124,8 +124,11 @@ public class ScheduledTasksManageActivity extends FreezeYouBaseActivity {
             public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.stma_menu_mc_delete:
-                        AlertDialogUtils.buildAlertDialog(ScheduledTasksManageActivity.this,
-                                android.R.drawable.ic_dialog_alert, R.string.askIfDel, R.string.notice)
+                        AlertDialogUtils
+                                .buildAlertDialog(
+                                        ScheduledTasksManageActivity.this,
+                                        R.drawable.ic_warning, R.string.askIfDel, R.string.notice
+                                )
                                 .setPositiveButton(R.string.yes, (dialog, which) -> {
                                     for (int aSelectedTaskPosition : selectedTasksPositions) {
                                         boolean isTimeTask =

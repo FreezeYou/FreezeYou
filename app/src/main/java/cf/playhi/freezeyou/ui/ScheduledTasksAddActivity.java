@@ -81,7 +81,10 @@ public class ScheduledTasksAddActivity extends FreezeYouBaseActivity {
                 checkAndDecideIfFinish();
                 return true;
             case R.id.menu_staa_delete:
-                AlertDialogUtils.buildAlertDialog(this, android.R.drawable.ic_dialog_alert, R.string.askIfDel, R.string.notice)
+                AlertDialogUtils
+                        .buildAlertDialog(
+                                this, R.drawable.ic_warning, R.string.askIfDel, R.string.notice
+                        )
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

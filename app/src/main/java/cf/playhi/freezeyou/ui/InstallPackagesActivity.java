@@ -98,7 +98,7 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                     AlertDialog.Builder b = AlertDialogUtils
                             .buildAlertDialog(
                                     this,
-                                    android.R.drawable.ic_dialog_alert,
+                                    R.drawable.ic_warning,
                                     R.string.needStoragePermission,
                                     R.string.notice)
                             .setOnCancelListener(dialog -> finish())
