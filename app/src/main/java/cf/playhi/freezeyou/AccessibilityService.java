@@ -67,7 +67,10 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         int type = accessibilityEvent.getEventType();
         switch (type) {
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-                if (accessibilityEvent.isFullScreen()) {
+                if (accessibilityEvent.isFullScreen()
+                        && !"android.inputmethodservice.SoftInputWindow".equals(
+                        accessibilityEvent.getClassName().toString())
+                ) {
                     CharSequence pkgName = accessibilityEvent.getPackageName();
                     if (pkgName != null) {
                         boolean isScreenOn = true;
