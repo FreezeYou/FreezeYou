@@ -1,44 +1,18 @@
 package cf.playhi.freezeyou.ui.fragment;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
 
 import cf.playhi.freezeyou.R;
-import cf.playhi.freezeyou.utils.AccessibilityUtils;
 import cf.playhi.freezeyou.utils.MoreUtils;
 
-import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
-
-public class STAATriggerFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class STAATriggerFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.stma_add_trigger_pr);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        switch (s) {
-            case "stma_add_trigger":
-                String stma_add_trigger = sharedPreferences.getString("stma_add_trigger", "");
-                if ("onApplicationsForeground".equals(stma_add_trigger) && !AccessibilityUtils.isAccessibilitySettingsOn(getActivity())) {
-                    showToast(getActivity(), R.string.needActiveAccessibilityService);
-                    AccessibilityUtils.openAccessibilitySettings(getActivity());
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     @Override
@@ -58,9 +32,4 @@ public class STAATriggerFragment extends PreferenceFragmentCompat implements Sha
         return super.onPreferenceTreeClick(preference);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
-    }
 }

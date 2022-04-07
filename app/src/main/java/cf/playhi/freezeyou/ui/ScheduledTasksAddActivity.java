@@ -1,20 +1,20 @@
 package cf.playhi.freezeyou.ui;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.preference.PreferenceManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,27 +24,30 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import cf.playhi.freezeyou.utils.GZipUtils;
 import cf.playhi.freezeyou.R;
-import cf.playhi.freezeyou.ui.fragment.STAAFragment;
-import cf.playhi.freezeyou.ui.fragment.STAATriggerFragment;
-import cf.playhi.freezeyou.utils.ThemeUtils;
 import cf.playhi.freezeyou.TriggerTasksService;
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.ui.fragment.STAAFragment;
+import cf.playhi.freezeyou.ui.fragment.STAATriggerFragment;
 import cf.playhi.freezeyou.utils.AccessibilityUtils;
 import cf.playhi.freezeyou.utils.AlertDialogUtils;
+import cf.playhi.freezeyou.utils.GZipUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
+import cf.playhi.freezeyou.utils.ThemeUtils;
 
+import static cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn;
+import static cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings;
+import static cf.playhi.freezeyou.utils.TasksUtils.publishTask;
 import static cf.playhi.freezeyou.utils.ThemeUtils.getThemeFabDotBackground;
 import static cf.playhi.freezeyou.utils.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.utils.TasksUtils.publishTask;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
-public class ScheduledTasksAddActivity extends FreezeYouBaseActivity {
+public class ScheduledTasksAddActivity extends FreezeYouBaseActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private boolean isTimeTask;
+    private boolean isEdited;
     private int id;
 
     @Override
@@ -63,7 +66,7 @@ public class ScheduledTasksAddActivity extends FreezeYouBaseActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.staa_menu, menu);
         String cTheme = ThemeUtils.getUiTheme(ScheduledTasksAddActivity.this);
@@ -85,27 +88,19 @@ public class ScheduledTasksAddActivity extends FreezeYouBaseActivity {
                         .buildAlertDialog(
                                 this, R.drawable.ic_warning, R.string.askIfDel, R.string.notice
                         )
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                setResult(RESULT_OK);
-                                if (id != -5) {
-                                    SQLiteDatabase db = openOrCreateDatabase(isTimeTask ? "scheduledTasks" : "scheduledTriggerTasks", MODE_PRIVATE, null);
-                                    if (isTimeTask) {
-                                        TasksUtils.cancelTheTask(ScheduledTasksAddActivity.this, id);
-                                    }
-                                    db.execSQL("DELETE FROM tasks WHERE _id = " + id);
-                                    db.close();
+                        .setPositiveButton(R.string.yes, (dialog, which) -> {
+                            setResult(RESULT_OK);
+                            if (id != -5) {
+                                SQLiteDatabase db = openOrCreateDatabase(isTimeTask ? "scheduledTasks" : "scheduledTriggerTasks", MODE_PRIVATE, null);
+                                if (isTimeTask) {
+                                    TasksUtils.cancelTheTask(ScheduledTasksAddActivity.this, id);
                                 }
-                                finish();
+                                db.execSQL("DELETE FROM tasks WHERE _id = " + id);
+                                db.close();
                             }
+                            finish();
                         })
-                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
+                        .setNegativeButton(R.string.no, null)
                         .create().show();
                 return true;
             case R.id.menu_staa_share:
@@ -381,6 +376,11 @@ public class ScheduledTasksAddActivity extends FreezeYouBaseActivity {
     }
 
     private void checkAndDecideIfFinish() {
+        if (isEdited) {
+            finish();
+            return;
+        }
+
         AlertDialogUtils.buildAlertDialog(this, R.mipmap.ic_launcher_new_round, R.string.askIfSave, R.string.notice)
                 .setPositiveButton(R.string.yes, (dialog, which) -> {
                     if (isTimeTask) {
@@ -396,5 +396,74 @@ public class ScheduledTasksAddActivity extends FreezeYouBaseActivity {
                 .setNegativeButton(R.string.no, (dialog, which) -> finish())
                 .setNeutralButton(R.string.cancel, null)
                 .create().show();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        isEdited = true;
+        switch (key) {
+            case "stma_add_time":
+                String time = sharedPreferences.getString("stma_add_time", "09:09");
+                if (time != null) {
+                    if (time.contains(":")) {
+                        String sHour = time.substring(0, time.indexOf(":"));
+                        String sMin = time.substring(time.indexOf(":") + 1);
+                        if ("".equals(sHour))
+                            sHour = "0";
+                        if ("".equals(sMin))
+                            sMin = "0";
+
+                        int hour;
+                        int minutes;
+                        try {
+                            hour = Integer.parseInt(sHour);
+                            minutes = Integer.parseInt(sMin);
+                        } catch (Exception e) {
+                            showToast(
+                                    this,
+                                    getString(R.string.minutesShouldBetween)
+                                            + System.getProperty("line.separator")
+                                            + getString(R.string.hourShouldBetween)
+                            );
+                            break;
+                        }
+
+                        if (hour < 0 || hour >= 24) {
+                            showToast(this, R.string.hourShouldBetween);
+                        }
+                        if (minutes < 0 || minutes > 59) {
+                            showToast(this, R.string.minutesShouldBetween);
+                        }
+                    } else {
+                        showToast(this, R.string.mustContainColon);
+                    }
+                }
+                break;
+            case "stma_add_trigger":
+                String stma_add_trigger = sharedPreferences.getString("stma_add_trigger", "");
+                if ("onApplicationsForeground".equals(stma_add_trigger)
+                        || "onLeaveApplications".equals(stma_add_trigger)
+                        && !isAccessibilitySettingsOn(this)) {
+                    showToast(this, R.string.needActiveAccessibilityService);
+                    openAccessibilitySettings(this);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 }

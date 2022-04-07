@@ -19,12 +19,13 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import cf.playhi.freezeyou.utils.DataStatisticsUtils;
-import cf.playhi.freezeyou.utils.FUFUtils;
 import cf.playhi.freezeyou.utils.OneKeyListUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.freezeOnceQuit;
+import static cf.playhi.freezeyou.utils.FUFUtils.processFreezeAction;
+import static cf.playhi.freezeyou.utils.OneKeyListUtils.existsInOneKeyList;
 import static cf.playhi.freezeyou.utils.Support.checkLanguage;
 import static cf.playhi.freezeyou.utils.Support.getLocalString;
 import static cf.playhi.freezeyou.utils.TasksUtils.cancelAllUnexecutedDelayTasks;
@@ -67,40 +68,52 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         int type = accessibilityEvent.getEventType();
         switch (type) {
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-                if (accessibilityEvent.isFullScreen()
-                        && !"android.inputmethodservice.SoftInputWindow".equals(
-                        accessibilityEvent.getClassName().toString())
+
+                if (!accessibilityEvent.isFullScreen()) return;
+
+                CharSequence pkgName = accessibilityEvent.getPackageName();
+                if (pkgName == null) return;
+                String pkgNameString = pkgName.toString();
+
+                addUpUseTimes(pkgNameString);//使用次数计数（增加）
+
+                if ("".equals(pkgNameString)
+                        || "android".equals(pkgNameString)
+                        || "com.android.systemui".equals(pkgNameString)
+                        || "com.android.packageinstaller".equals(pkgNameString) // Grant permissions, etc.
+                        || "miui.systemui.plugin".equals(pkgNameString) // MIUI 系统界面组件：各类弹窗，声音助手（含音量条）、无线反向充电等
+
                 ) {
-                    CharSequence pkgName = accessibilityEvent.getPackageName();
-                    if (pkgName != null) {
-                        boolean isScreenOn = true;
-                        PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
-                        if (pm != null) {
-                            isScreenOn = pm.isScreenOn();
-                        }
-                        String pkgNameString = pkgName.toString();
-                        String previousPkg = MainApplication.getCurrentPackage();
-                        if (isScreenOn &&
-                                !"".equals(pkgNameString) &&
-                                !"com.android.systemui".equals(pkgNameString) &&
-                                !"com.android.packageinstaller".equals(pkgNameString) &&
-                                !"android".equals(pkgNameString)) {
-                            MainApplication.setCurrentPackage(pkgNameString);
-                            if (!pkgNameString.equals(previousPkg)
-                                    && freezeOnceQuit.getValue(null)
-                                    && OneKeyListUtils.existsInOneKeyList(getApplicationContext(), getString(R.string.sFreezeOnceQuit), previousPkg)) {
-                                FUFUtils.processFreezeAction(getApplicationContext(), previousPkg, null, null, false, null, false);
-                            }
-
-                            onLeaveApplications(previousPkg, pkgNameString);//检测+执行
-                        }
-
-                        onApplicationsForeground(previousPkg, pkgNameString);//检测+执行
-
-                        addUpUseTimes(pkgNameString);//使用次数计数（增加）
-
-                    }
+                    return;
                 }
+
+                String className = accessibilityEvent.getClassName().toString();
+                if ("android.inputmethodservice.SoftInputWindow".equals(className)
+                        || "com.miui.misound.playervolume.MiuiVolumeDialogImpl$CustomDialog".equals(className) // MIUI 音质音效：声音助手 - 多应用媒体音调节浮窗
+                ) {
+                    return;
+                }
+
+                PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+                if (pm == null) return;
+                if (!pm.isScreenOn()) return;
+
+                String previousPkg = MainApplication.getCurrentPackage();
+
+                MainApplication.setCurrentPackage(pkgNameString);
+                if (!pkgNameString.equals(previousPkg)
+                        && freezeOnceQuit.getValue(null)
+                        && existsInOneKeyList(getApplicationContext(), getString(R.string.sFreezeOnceQuit), previousPkg)) {
+                    processFreezeAction(
+                            getApplicationContext(), previousPkg, null, null,
+                            false, null, false
+                    );
+                }
+
+                onLeaveApplications(previousPkg, pkgNameString);//检测+执行
+
+                onApplicationsForeground(previousPkg, pkgNameString);//检测+执行
+
                 break;
             default:
                 break;

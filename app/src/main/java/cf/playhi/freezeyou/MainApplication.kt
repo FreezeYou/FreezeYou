@@ -41,7 +41,7 @@ class MainApplication : Application() {
             checkAndMigrateSharedPreferenceDataToTray()
             checkAndMigrateAppIconDataPreference()
             checkAndMigrateEnableAuthenticationPreferenceDataToMMKV()
-            // checkAndMigrateMultiProcessPreferenceDataToMMKV()
+            checkAndMigrateMultiProcessPreferenceDataToMMKV()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -224,7 +224,7 @@ class MainApplication : Application() {
         checkAndMigratePreferenceDataFromSharedPreferenceToTrayForFurtherMigrateToMMKV()
         val migrateLock = File(
             filesDir.absolutePath + File.separator
-                    + "migrateMultiProcessPreferenceDataToMMKVtest220225.lock"
+                    + "migrateMultiProcessPreferenceDataToMMKV.lock"
         )
         if (!migrateLock.exists()) {
             val appPreference = AppPreferences(this)
@@ -255,7 +255,7 @@ class MainApplication : Application() {
     private fun checkAndMigratePreferenceDataFromSharedPreferenceToTrayForFurtherMigrateToMMKV() {
         val migrateLock = File(
             filesDir.absolutePath + File.separator
-                    + "migrateSomePreferenceDataFromSharedPreferenceToTrayForFurtherMigrateToMMKVTest031.lock"
+                    + "migrateSomePreferenceDataFromSharedPreferenceToTrayForFurtherMigrateToMMKV.lock"
         )
         if (!migrateLock.exists()) {
             val sp = PreferenceManager.getDefaultSharedPreferences(this@MainApplication);
