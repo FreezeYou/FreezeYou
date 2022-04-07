@@ -376,7 +376,7 @@ public class ScheduledTasksAddActivity extends FreezeYouBaseActivity implements 
     }
 
     private void checkAndDecideIfFinish() {
-        if (isEdited) {
+        if (!isEdited) {
             finish();
             return;
         }
