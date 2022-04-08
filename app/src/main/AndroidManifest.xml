@@ -3,6 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="cf.playhi.freezeyou">
 
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="false" />
+
     <uses-permission
         android:name="android.permission.BLUETOOTH_ADMIN"
         android:maxSdkVersion="30" /> <!-- 开关蓝牙 -->
@@ -58,6 +71,12 @@
         android:icon="@drawable/ic_notification"
         android:label="@string/queryStatus"
         android:protectionLevel="normal" />
+    <permission
+        android:name="cf.playhi.freezeyou.permission.GET_BACKUP_DATA"
+        android:description="@string/getBackupData"
+        android:icon="@drawable/ic_notification"
+        android:label="@string/getBackupData"
+        android:protectionLevel="signature" />
 
     <application
         android:name=".MainApplication"

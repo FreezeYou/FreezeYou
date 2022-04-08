@@ -8,8 +8,8 @@ android {
         applicationId "cf.playhi.freezeyou"
         minSdkVersion 16
         targetSdk 31
-        versionCode 146
-        versionName '11.0.146.20220206-t147-20220407-1-gh'
+        versionCode 147
+        versionName '11.1.147.20220408-gh'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
