@@ -384,6 +384,7 @@
     <string name="selfRevokeProfileOwner">Release profile owner permission</string>
     <string name="selfRevokeProfileOwnerSummary">If the profile owner is set, we need to release it before uninstalling the application.</string>
     <string name="isNotProfileOwner">Is not profile owner</string>
+    <string name="getBackupData">Get backup data</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
