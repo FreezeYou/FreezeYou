@@ -13,8 +13,6 @@ import android.view.accessibility.AccessibilityEvent;
 
 import androidx.annotation.CallSuper;
 
-import com.google.android.play.core.splitcompat.SplitCompat;
-
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -29,7 +27,6 @@ import static cf.playhi.freezeyou.utils.OneKeyListUtils.existsInOneKeyList;
 import static cf.playhi.freezeyou.utils.Support.checkLanguage;
 import static cf.playhi.freezeyou.utils.Support.getLocalString;
 import static cf.playhi.freezeyou.utils.TasksUtils.cancelAllUnexecutedDelayTasks;
-import static cf.playhi.freezeyou.utils.VersionUtils.isGooglePlayVersion;
 
 // Needs to be retained for compatibility
 // with old FreezeYou structures and settings.
@@ -55,10 +52,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     public void onCreate() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             checkLanguage(this);
-        } else {
-            if (isGooglePlayVersion(this)) {
-                SplitCompat.install(this);
-            }
         }
         super.onCreate();
     }

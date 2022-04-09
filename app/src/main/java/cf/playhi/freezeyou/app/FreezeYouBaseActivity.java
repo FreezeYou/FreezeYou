@@ -11,7 +11,6 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.play.core.splitcompat.SplitCompat;
 import com.tencent.mmkv.MMKV;
 
 import java.util.Date;
@@ -23,7 +22,6 @@ import static cf.playhi.freezeyou.utils.AuthenticationUtils.isAuthenticationEnab
 import static cf.playhi.freezeyou.utils.AuthenticationUtils.isBiometricPromptPartAvailable;
 import static cf.playhi.freezeyou.utils.Support.checkLanguage;
 import static cf.playhi.freezeyou.utils.Support.getLocalString;
-import static cf.playhi.freezeyou.utils.VersionUtils.isGooglePlayVersion;
 
 public class FreezeYouBaseActivity extends AppCompatActivity {
     private static final int APP_LOCK_ACTIVITY_REQUEST_CODE = 65533;
@@ -52,10 +50,6 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             checkLanguage(this);
-        } else {
-            if (isGooglePlayVersion(this)) {
-                SplitCompat.install(this);
-            }
         }
         super.onCreate(savedInstanceState);
     }

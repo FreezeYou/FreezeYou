@@ -8,8 +8,8 @@ android {
         applicationId "cf.playhi.freezeyou"
         minSdkVersion 16
         targetSdk 31
-        versionCode 147
-        versionName '11.1.147.20220408-gh'
+        versionCode 148
+        versionName '11.2.148.20220409-gh'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -29,6 +29,12 @@ android {
 
     buildFeatures {
         viewBinding true
+    }
+
+    bundle {
+        language {
+             enableSplit = false
+         }
     }
 }
 
@@ -61,8 +67,6 @@ dependencies {
     implementation "androidx.preference:preference:1.2.0"
 
     implementation 'com.google.android.material:material:1.5.0'
-    implementation 'com.google.android.play:core:1.10.3'
-    implementation 'com.google.android.play:core-ktx:1.8.1'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
 

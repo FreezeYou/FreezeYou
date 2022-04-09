@@ -7,13 +7,10 @@ import android.os.Build;
 
 import androidx.annotation.CallSuper;
 
-import com.google.android.play.core.splitcompat.SplitCompat;
-
 import java.util.Locale;
 
 import static cf.playhi.freezeyou.utils.Support.checkLanguage;
 import static cf.playhi.freezeyou.utils.Support.getLocalString;
-import static cf.playhi.freezeyou.utils.VersionUtils.isGooglePlayVersion;
 
 public abstract class FreezeYouBaseService extends Service {
 
@@ -37,10 +34,6 @@ public abstract class FreezeYouBaseService extends Service {
     public void onCreate() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             checkLanguage(this);
-        } else {
-            if (isGooglePlayVersion(this)) {
-                SplitCompat.install(this);
-            }
         }
         super.onCreate();
     }
