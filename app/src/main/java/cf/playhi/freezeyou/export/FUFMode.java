@@ -5,18 +5,21 @@ public final class FUFMode {
     /**
      * API v1
      */
+    @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
     public static final String MODE_AUTO = "MODE_AUTO";
 
     /**
      * 不建议使用自动切换模式
      */
+    @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
     public static final String MODE_LEGACY_AUTO = "MODE_LEGACY_AUTO";
 
     /**
      * API v1
      */
+    @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
     public static final String MODE_ROOT = "MODE_ROOT";
 
@@ -27,6 +30,7 @@ public final class FUFMode {
     /**
      * API v1
      */
+    @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
     public static final String MODE_MROOT = "MODE_MROOT";
 
@@ -40,6 +44,9 @@ public final class FUFMode {
 
     public static final String MODE_SYSTEM_APP_ENABLE_DISABLE =
             "MODE_SYSTEM_APP_ENABLE_DISABLE";
+
+    public static final String MODE_PROFILE_OWNER =
+            "MODE_PROFILE_OWNER";
 
     public static final String MODE_UNKNOWN = "MODE_UNKNOWN";
 }
