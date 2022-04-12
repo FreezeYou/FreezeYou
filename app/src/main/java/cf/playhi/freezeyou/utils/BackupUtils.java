@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
+
 import net.grandcentrix.tray.AppPreferences;
 
 import org.json.JSONArray;
@@ -14,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import cf.playhi.freezeyou.R;
@@ -467,4 +470,234 @@ public final class BackupUtils {
 
     }
 
+    public static String getExportContent(@NonNull Context context) {
+        final AppPreferences appPreferences = new AppPreferences(context);
+        final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(context);
+
+        JSONObject finalOutputJsonObject = new JSONObject();
+
+        try {
+            // 标记转出格式版本 开始
+            JSONArray formatVersionJSONArray = new JSONArray();
+            JSONObject formatVersionJSONObject = new JSONObject();
+            formatVersionJSONObject.put("version", 1); // 标记备份文件格式版本
+            formatVersionJSONObject.put("generateTime", new Date().getTime()); // 标记备份文件格式版本
+            formatVersionJSONArray.put(formatVersionJSONObject);
+            finalOutputJsonObject.put("format_version", formatVersionJSONArray);
+            // 标记转出格式版本 结束
+
+            // 通用设置转出（更多设置 中的选项，不转移图标选择相关设置） 开始
+
+            // boolean 开始
+            JSONArray generalSettingsBooleanJSONArray = new JSONArray();
+            JSONObject generalSettingsBooleanJSONObject = new JSONObject();
+
+            for (DefaultSharedPreferenceStorageBooleanKeys key
+                    : DefaultSharedPreferenceStorageBooleanKeys.values()) {
+                generalSettingsBooleanJSONObject.put(key.name(), key.getValue(context));
+            }
+            for (DefaultMultiProcessMMKVStorageBooleanKeys key
+                    : DefaultMultiProcessMMKVStorageBooleanKeys.values()) {
+                generalSettingsBooleanJSONObject.put(key.name(), key.getValue(context));
+            }
+
+            generalSettingsBooleanJSONArray.put(generalSettingsBooleanJSONObject);
+            finalOutputJsonObject.put("generalSettings_boolean", generalSettingsBooleanJSONArray);
+            // boolean 结束
+
+            // String 开始
+            JSONArray generalSettingsStringJSONArray = new JSONArray();
+            JSONObject generalSettingsStringJSONObject = new JSONObject();
+
+            for (DefaultSharedPreferenceStorageStringKeys key
+                    : DefaultSharedPreferenceStorageStringKeys.values()) {
+                generalSettingsStringJSONObject.put(key.name(), key.getValue(context));
+            }
+            for (DefaultMultiProcessMMKVStorageStringKeys key
+                    : DefaultMultiProcessMMKVStorageStringKeys.values()) {
+                generalSettingsStringJSONObject.put(key.name(), key.getValue(context));
+            }
+
+            generalSettingsStringJSONArray.put(generalSettingsStringJSONObject);
+            finalOutputJsonObject.put("generalSettings_string", generalSettingsStringJSONArray);
+            // String 结束
+
+            // Int 开始
+            JSONArray generalSettingsIntJSONArray = new JSONArray();
+            JSONObject generalSettingsIntJSONObject = new JSONObject();
+            generalSettingsIntJSONObject.put(
+                    "onClickFunctionStatus",
+                    defSP.getInt("onClickFunctionStatus", 0)
+            );
+            generalSettingsIntJSONObject.put(
+                    "sortMethodStatus",
+                    defSP.getInt("sortMethodStatus", 0)
+            );
+            generalSettingsIntJSONArray.put(generalSettingsIntJSONObject);
+            finalOutputJsonObject.put("generalSettings_int", generalSettingsIntJSONArray);
+            // Int 结束
+
+            // 通用设置转出 结束
+
+            // 一键冻结、一键解冻、离开冻结列表 开始
+            JSONArray oneKeyListJSONArray = new JSONArray();
+            JSONObject oneKeyListJSONObject = new JSONObject();
+            oneKeyListJSONObject.put(
+                    "okff",
+                    appPreferences.getString(context.getString(R.string.sAutoFreezeApplicationList), "")
+            );
+            oneKeyListJSONObject.put(
+                    "okuf",
+                    appPreferences.getString(context.getString(R.string.sOneKeyUFApplicationList), "")
+            );
+            oneKeyListJSONObject.put(
+                    "foq",
+                    appPreferences.getString(context.getString(R.string.sFreezeOnceQuit), "")
+            );
+            oneKeyListJSONArray.put(oneKeyListJSONObject);
+            finalOutputJsonObject.put("oneKeyList", oneKeyListJSONArray);
+            // 一键冻结、一键解冻、离开冻结列表 结束
+
+            // 安装应用请求、URI 请求白名单 开始
+            finalOutputJsonObject.put("uriAutoAllowPkgs_allows", generateUriAutoAllowPkgsJSONArray(context));
+            finalOutputJsonObject.put("installPkgs_autoAllowPkgs_allows", generateInstallPkgsAutoAllowPkgsJSONArray(context));
+            // 安装应用请求、URI 请求白名单 结束
+
+            // 计划任务 - 时间 开始
+            finalOutputJsonObject.put("userTimeScheduledTasks", generateUserTimeTasksJSONArray(context));
+            // 计划任务 - 时间 结束
+
+            // 计划任务 - 触发器 开始
+            finalOutputJsonObject.put("userTriggerScheduledTasks", generateUserTriggerTasksJSONArray(context));
+            // 计划任务 - 触发器 结束
+
+            // 用户自定分类（我的列表） 开始
+            finalOutputJsonObject.put("userDefinedCategories", generateUserDefinedCategoriesJSONArray(context));
+            // 用户自定分类（我的列表） 结束
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return finalOutputJsonObject.toString();
+    }
+
+    private static JSONArray generateUserTimeTasksJSONArray(Context context) throws JSONException {
+        JSONArray userTimeScheduledTasksJSONArray = new JSONArray();
+        SQLiteDatabase db = context.openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+        Cursor cursor =
+                db.query("tasks", null, null, null,
+                        null, null, null);
+        if (cursor.moveToFirst()) {
+            boolean ifContinue = true;
+            while (ifContinue) {
+                JSONObject oneUserTimeScheduledTaskJSONObject = new JSONObject();
+                oneUserTimeScheduledTaskJSONObject.put("hour",
+                        cursor.getInt(cursor.getColumnIndexOrThrow("hour")));
+                oneUserTimeScheduledTaskJSONObject.put("minutes",
+                        cursor.getInt(cursor.getColumnIndexOrThrow("minutes")));
+                oneUserTimeScheduledTaskJSONObject.put("enabled",
+                        cursor.getInt(cursor.getColumnIndexOrThrow("enabled")));
+                oneUserTimeScheduledTaskJSONObject.put("label",
+                        cursor.getString(cursor.getColumnIndexOrThrow("label")));
+                oneUserTimeScheduledTaskJSONObject.put("task",
+                        cursor.getString(cursor.getColumnIndexOrThrow("task")));
+                oneUserTimeScheduledTaskJSONObject.put("repeat",
+                        cursor.getString(cursor.getColumnIndexOrThrow("repeat")));
+                userTimeScheduledTasksJSONArray.put(oneUserTimeScheduledTaskJSONObject);
+                ifContinue = cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return userTimeScheduledTasksJSONArray;
+    }
+
+    private static JSONArray generateUserTriggerTasksJSONArray(Context context) throws JSONException {
+        JSONArray userTriggerScheduledTasksJSONArray = new JSONArray();
+        SQLiteDatabase db = context.openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+        );
+        Cursor cursor =
+                db.query("tasks", null, null, null,
+                        null, null, null);
+        if (cursor.moveToFirst()) {
+            boolean ifContinue = true;
+            while (ifContinue) {
+                JSONObject oneUserTriggerScheduledTaskJSONObject = new JSONObject();
+                oneUserTriggerScheduledTaskJSONObject.put("tgextra",
+                        cursor.getString(cursor.getColumnIndexOrThrow("tgextra")));
+                oneUserTriggerScheduledTaskJSONObject.put("enabled",
+                        cursor.getInt(cursor.getColumnIndexOrThrow("enabled")));
+                oneUserTriggerScheduledTaskJSONObject.put("label",
+                        cursor.getString(cursor.getColumnIndexOrThrow("label")));
+                oneUserTriggerScheduledTaskJSONObject.put("task",
+                        cursor.getString(cursor.getColumnIndexOrThrow("task")));
+                oneUserTriggerScheduledTaskJSONObject.put("tg",
+                        cursor.getString(cursor.getColumnIndexOrThrow("tg")));
+                userTriggerScheduledTasksJSONArray.put(oneUserTriggerScheduledTaskJSONObject);
+                ifContinue = cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return userTriggerScheduledTasksJSONArray;
+    }
+
+    private static JSONArray generateUserDefinedCategoriesJSONArray(Context context) throws JSONException {
+        JSONArray userDefinedCategoriesJSONArray = new JSONArray();
+        SQLiteDatabase db = context.openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
+        db.execSQL(
+                "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+        );
+        Cursor cursor =
+                db.query(
+                        "categories", new String[]{"label", "packages"},
+                        null, null, null,
+                        null, null
+                );
+        if (cursor.moveToFirst()) {
+            boolean ifContinue = true;
+            while (ifContinue) {
+                JSONObject oneUserDefinedCategoriesJSONObject = new JSONObject();
+                oneUserDefinedCategoriesJSONObject.put("label",
+                        cursor.getString(cursor.getColumnIndexOrThrow("label")));
+                oneUserDefinedCategoriesJSONObject.put("packages",
+                        cursor.getString(cursor.getColumnIndexOrThrow("packages")));
+                userDefinedCategoriesJSONArray.put(oneUserDefinedCategoriesJSONObject);
+                ifContinue = cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return userDefinedCategoriesJSONArray;
+    }
+
+    private static JSONArray generateUriAutoAllowPkgsJSONArray(Context context) throws JSONException {
+        JSONArray userDefinedCategoriesJSONArray = new JSONArray();
+        JSONObject oneUserDefinedCategoriesJSONObject = new JSONObject();
+        AppPreferences ap = new AppPreferences(context);
+        oneUserDefinedCategoriesJSONObject.put(
+                "lists",
+                convertSharedPreference(ap, "uriAutoAllowPkgs_allows", "")
+        );
+        userDefinedCategoriesJSONArray.put(oneUserDefinedCategoriesJSONObject);
+        return userDefinedCategoriesJSONArray;
+    }
+
+    private static JSONArray generateInstallPkgsAutoAllowPkgsJSONArray(Context context) throws JSONException {
+        JSONArray userDefinedCategoriesJSONArray = new JSONArray();
+        JSONObject oneUserDefinedCategoriesJSONObject = new JSONObject();
+        AppPreferences ap = new AppPreferences(context);
+        oneUserDefinedCategoriesJSONObject.put(
+                "lists",
+                convertSharedPreference(ap, "installPkgs_autoAllowPkgs_allows", "")
+        );
+        userDefinedCategoriesJSONArray.put(oneUserDefinedCategoriesJSONObject);
+        return userDefinedCategoriesJSONArray;
+    }
 }

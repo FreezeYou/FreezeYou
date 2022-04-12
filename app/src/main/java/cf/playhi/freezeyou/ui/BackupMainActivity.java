@@ -1,34 +1,17 @@
 package cf.playhi.freezeyou.ui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import net.grandcentrix.tray.AppPreferences;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Date;
-
 import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
-import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys;
-import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys;
-import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys;
-import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys;
-import cf.playhi.freezeyou.utils.BackupUtils;
 import cf.playhi.freezeyou.utils.ClipboardUtils;
 import cf.playhi.freezeyou.utils.GZipUtils;
 import cf.playhi.freezeyou.utils.ToastUtils;
 
+import static cf.playhi.freezeyou.utils.BackupUtils.getExportContent;
 import static cf.playhi.freezeyou.utils.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme;
 
@@ -58,7 +41,7 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
 
         bma_main_export_button.setOnClickListener(v -> {
             EditText editText = findViewById(R.id.bma_main_inputAndoutput_editText);
-            editText.setText(processExportContent());
+            editText.setText(GZipUtils.gzipCompress(getExportContent(getApplicationContext())));
             editText.selectAll();
         });
 
@@ -84,238 +67,6 @@ public class BackupMainActivity extends FreezeYouBaseActivity {
             editText.setText(ClipboardUtils.getClipboardItemText(getApplicationContext()));
         });
 
-    }
-
-    private String processExportContent() {
-        final Context applicationContext = getApplicationContext();
-        final AppPreferences appPreferences = new AppPreferences(applicationContext);
-        final SharedPreferences defSP = PreferenceManager.getDefaultSharedPreferences(applicationContext);
-
-        JSONObject finalOutputJsonObject = new JSONObject();
-
-        try {
-            // 标记转出格式版本 开始
-            JSONArray formatVersionJSONArray = new JSONArray();
-            JSONObject formatVersionJSONObject = new JSONObject();
-            formatVersionJSONObject.put("version", 1); // 标记备份文件格式版本
-            formatVersionJSONObject.put("generateTime", new Date().getTime()); // 标记备份文件格式版本
-            formatVersionJSONArray.put(formatVersionJSONObject);
-            finalOutputJsonObject.put("format_version", formatVersionJSONArray);
-            // 标记转出格式版本 结束
-
-            // 通用设置转出（更多设置 中的选项，不转移图标选择相关设置） 开始
-
-            // boolean 开始
-            JSONArray generalSettingsBooleanJSONArray = new JSONArray();
-            JSONObject generalSettingsBooleanJSONObject = new JSONObject();
-
-            for (DefaultSharedPreferenceStorageBooleanKeys key
-                    : DefaultSharedPreferenceStorageBooleanKeys.values()) {
-                generalSettingsBooleanJSONObject.put(key.name(), key.getValue(applicationContext));
-            }
-            for (DefaultMultiProcessMMKVStorageBooleanKeys key
-                    : DefaultMultiProcessMMKVStorageBooleanKeys.values()) {
-                generalSettingsBooleanJSONObject.put(key.name(), key.getValue(applicationContext));
-            }
-
-            generalSettingsBooleanJSONArray.put(generalSettingsBooleanJSONObject);
-            finalOutputJsonObject.put("generalSettings_boolean", generalSettingsBooleanJSONArray);
-            // boolean 结束
-
-            // String 开始
-            JSONArray generalSettingsStringJSONArray = new JSONArray();
-            JSONObject generalSettingsStringJSONObject = new JSONObject();
-
-            for (DefaultSharedPreferenceStorageStringKeys key
-                    : DefaultSharedPreferenceStorageStringKeys.values()) {
-                generalSettingsStringJSONObject.put(key.name(), key.getValue(applicationContext));
-            }
-            for (DefaultMultiProcessMMKVStorageStringKeys key
-                    : DefaultMultiProcessMMKVStorageStringKeys.values()) {
-                generalSettingsStringJSONObject.put(key.name(), key.getValue(applicationContext));
-            }
-
-            generalSettingsStringJSONArray.put(generalSettingsStringJSONObject);
-            finalOutputJsonObject.put("generalSettings_string", generalSettingsStringJSONArray);
-            // String 结束
-
-            // Int 开始
-            JSONArray generalSettingsIntJSONArray = new JSONArray();
-            JSONObject generalSettingsIntJSONObject = new JSONObject();
-            generalSettingsIntJSONObject.put(
-                    "onClickFunctionStatus",
-                    defSP.getInt("onClickFunctionStatus", 0)
-            );
-            generalSettingsIntJSONObject.put(
-                    "sortMethodStatus",
-                    defSP.getInt("sortMethodStatus", 0)
-            );
-            generalSettingsIntJSONArray.put(generalSettingsIntJSONObject);
-            finalOutputJsonObject.put("generalSettings_int", generalSettingsIntJSONArray);
-            // Int 结束
-
-            // 通用设置转出 结束
-
-            // 一键冻结、一键解冻、离开冻结列表 开始
-            JSONArray oneKeyListJSONArray = new JSONArray();
-            JSONObject oneKeyListJSONObject = new JSONObject();
-            oneKeyListJSONObject.put(
-                    "okff",
-                    appPreferences.getString(getString(R.string.sAutoFreezeApplicationList), "")
-            );
-            oneKeyListJSONObject.put(
-                    "okuf",
-                    appPreferences.getString(getString(R.string.sOneKeyUFApplicationList), "")
-            );
-            oneKeyListJSONObject.put(
-                    "foq",
-                    appPreferences.getString(getString(R.string.sFreezeOnceQuit), "")
-            );
-            oneKeyListJSONArray.put(oneKeyListJSONObject);
-            finalOutputJsonObject.put("oneKeyList", oneKeyListJSONArray);
-            // 一键冻结、一键解冻、离开冻结列表 结束
-
-            // 安装应用请求、URI 请求白名单 开始
-            finalOutputJsonObject.put("uriAutoAllowPkgs_allows", generateUriAutoAllowPkgsJSONArray());
-            finalOutputJsonObject.put("installPkgs_autoAllowPkgs_allows", generateInstallPkgsAutoAllowPkgsJSONArray());
-            // 安装应用请求、URI 请求白名单 结束
-
-            // 计划任务 - 时间 开始
-            finalOutputJsonObject.put("userTimeScheduledTasks", generateUserTimeTasksJSONArray());
-            // 计划任务 - 时间 结束
-
-            // 计划任务 - 触发器 开始
-            finalOutputJsonObject.put("userTriggerScheduledTasks", generateUserTriggerTasksJSONArray());
-            // 计划任务 - 触发器 结束
-
-            // 用户自定分类（我的列表） 开始
-            finalOutputJsonObject.put("userDefinedCategories", generateUserDefinedCategoriesJSONArray());
-            // 用户自定分类（我的列表） 结束
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return GZipUtils.gzipCompress(finalOutputJsonObject.toString());
-    }
-
-    private JSONArray generateUserTimeTasksJSONArray() throws JSONException {
-        JSONArray userTimeScheduledTasksJSONArray = new JSONArray();
-        SQLiteDatabase db = openOrCreateDatabase("scheduledTasks", MODE_PRIVATE, null);
-        db.execSQL(
-                "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
-        );
-        Cursor cursor =
-                db.query("tasks", null, null, null,
-                        null, null, null);
-        if (cursor.moveToFirst()) {
-            boolean ifContinue = true;
-            while (ifContinue) {
-                JSONObject oneUserTimeScheduledTaskJSONObject = new JSONObject();
-                oneUserTimeScheduledTaskJSONObject.put("hour",
-                        cursor.getInt(cursor.getColumnIndex("hour")));
-                oneUserTimeScheduledTaskJSONObject.put("minutes",
-                        cursor.getInt(cursor.getColumnIndex("minutes")));
-                oneUserTimeScheduledTaskJSONObject.put("enabled",
-                        cursor.getInt(cursor.getColumnIndex("enabled")));
-                oneUserTimeScheduledTaskJSONObject.put("label",
-                        cursor.getString(cursor.getColumnIndex("label")));
-                oneUserTimeScheduledTaskJSONObject.put("task",
-                        cursor.getString(cursor.getColumnIndex("task")));
-                oneUserTimeScheduledTaskJSONObject.put("repeat",
-                        cursor.getString(cursor.getColumnIndex("repeat")));
-                userTimeScheduledTasksJSONArray.put(oneUserTimeScheduledTaskJSONObject);
-                ifContinue = cursor.moveToNext();
-            }
-        }
-        cursor.close();
-        db.close();
-        return userTimeScheduledTasksJSONArray;
-    }
-
-    private JSONArray generateUserTriggerTasksJSONArray() throws JSONException {
-        JSONArray userTriggerScheduledTasksJSONArray = new JSONArray();
-        SQLiteDatabase db = openOrCreateDatabase("scheduledTriggerTasks", MODE_PRIVATE, null);
-        db.execSQL(
-                "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
-        );
-        Cursor cursor =
-                db.query("tasks", null, null, null,
-                        null, null, null);
-        if (cursor.moveToFirst()) {
-            boolean ifContinue = true;
-            while (ifContinue) {
-                JSONObject oneUserTriggerScheduledTaskJSONObject = new JSONObject();
-                oneUserTriggerScheduledTaskJSONObject.put("tgextra",
-                        cursor.getString(cursor.getColumnIndex("tgextra")));
-                oneUserTriggerScheduledTaskJSONObject.put("enabled",
-                        cursor.getInt(cursor.getColumnIndex("enabled")));
-                oneUserTriggerScheduledTaskJSONObject.put("label",
-                        cursor.getString(cursor.getColumnIndex("label")));
-                oneUserTriggerScheduledTaskJSONObject.put("task",
-                        cursor.getString(cursor.getColumnIndex("task")));
-                oneUserTriggerScheduledTaskJSONObject.put("tg",
-                        cursor.getString(cursor.getColumnIndex("tg")));
-                userTriggerScheduledTasksJSONArray.put(oneUserTriggerScheduledTaskJSONObject);
-                ifContinue = cursor.moveToNext();
-            }
-        }
-        cursor.close();
-        db.close();
-        return userTriggerScheduledTasksJSONArray;
-    }
-
-    private JSONArray generateUserDefinedCategoriesJSONArray() throws JSONException {
-        JSONArray userDefinedCategoriesJSONArray = new JSONArray();
-        SQLiteDatabase db = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null);
-        db.execSQL(
-                "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
-        );
-        Cursor cursor =
-                db.query(
-                        "categories", new String[]{"label", "packages"},
-                        null, null, null,
-                        null, null
-                );
-        if (cursor.moveToFirst()) {
-            boolean ifContinue = true;
-            while (ifContinue) {
-                JSONObject oneUserDefinedCategoriesJSONObject = new JSONObject();
-                oneUserDefinedCategoriesJSONObject.put("label",
-                        cursor.getString(cursor.getColumnIndex("label")));
-                oneUserDefinedCategoriesJSONObject.put("packages",
-                        cursor.getString(cursor.getColumnIndex("packages")));
-                userDefinedCategoriesJSONArray.put(oneUserDefinedCategoriesJSONObject);
-                ifContinue = cursor.moveToNext();
-            }
-        }
-        cursor.close();
-        db.close();
-        return userDefinedCategoriesJSONArray;
-    }
-
-    private JSONArray generateUriAutoAllowPkgsJSONArray() throws JSONException {
-        JSONArray userDefinedCategoriesJSONArray = new JSONArray();
-        JSONObject oneUserDefinedCategoriesJSONObject = new JSONObject();
-        AppPreferences ap = new AppPreferences(this);
-        oneUserDefinedCategoriesJSONObject.put(
-                "lists",
-                BackupUtils.convertSharedPreference(ap, "uriAutoAllowPkgs_allows", "")
-        );
-        userDefinedCategoriesJSONArray.put(oneUserDefinedCategoriesJSONObject);
-        return userDefinedCategoriesJSONArray;
-    }
-
-    private JSONArray generateInstallPkgsAutoAllowPkgsJSONArray() throws JSONException {
-        JSONArray userDefinedCategoriesJSONArray = new JSONArray();
-        JSONObject oneUserDefinedCategoriesJSONObject = new JSONObject();
-        AppPreferences ap = new AppPreferences(this);
-        oneUserDefinedCategoriesJSONObject.put(
-                "lists",
-                BackupUtils.convertSharedPreference(ap, "installPkgs_autoAllowPkgs_allows", "")
-        );
-        userDefinedCategoriesJSONArray.put(oneUserDefinedCategoriesJSONObject);
-        return userDefinedCategoriesJSONArray;
     }
 
 //    先把文本方式稳定下来，再决定是否做 QRCode
