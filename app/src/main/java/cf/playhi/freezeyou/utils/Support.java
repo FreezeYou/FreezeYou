@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -35,8 +34,6 @@ import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys;
 import cf.playhi.freezeyou.ui.InstallPackagesActivity;
 
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.freezeOnceQuit;
-import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.openAndUFImmediately;
-import static cf.playhi.freezeyou.utils.AlertDialogUtils.buildAlertDialog;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;
 import static cf.playhi.freezeyou.utils.LauncherShortcutUtils.checkSettingsAndRequestCreateShortcut;
@@ -46,57 +43,6 @@ import static cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public final class Support {
-
-    private static void makeDialog(final String title, final String message, final Context context, final ApplicationInfo applicationInfo, final String pkgName, final String target, final String tasks, final boolean enabled, final Activity activity, final boolean finish) {
-        AlertDialog.Builder builder =
-                buildAlertDialog(context, getApplicationIcon(context, pkgName, applicationInfo, true), message, title)
-                        .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                FUFUtils.checkAndDoActivityFinish(activity, finish);
-                            }
-                        })
-                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialogInterface) {
-                                FUFUtils.checkAndDoActivityFinish(activity, finish);
-                            }
-                        });
-        if (enabled) {
-            builder.setPositiveButton(R.string.launch, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    FUFUtils.checkAndStartApp(context, pkgName, target, tasks, activity, finish);
-                }
-            });
-            builder.setNegativeButton(R.string.freeze, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    FUFUtils.processFreezeAction(context, pkgName, target, tasks, true, activity, finish);
-                }
-            });
-        } else {
-            builder.setPositiveButton(R.string.unfreeze, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    FUFUtils.processUnfreezeAction(context, pkgName, target, tasks, true, false, activity, finish);
-                }
-            });
-        }
-        builder.create().show();
-    }
-
-    public static void shortcutMakeDialog(Context context, String title, String message, final Activity activity, final ApplicationInfo applicationInfo, final String pkgName, String target, String tasks, int ot, boolean auto, boolean finish) {
-        if (openAndUFImmediately.getValue(null) && auto) {
-            if (ot == 2) {
-                FUFUtils.checkAndStartApp(context, pkgName, target, tasks, activity, finish);
-            } else {
-                FUFUtils.processUnfreezeAction(context, pkgName, target, tasks, true, true, activity, finish);//ot==1
-            }
-        } else {
-            makeDialog(title, message, context, applicationInfo, pkgName, target, tasks, ot == 2, activity, finish);
-        }
-    }
 
     public static void checkAddOrRemove(Context context, String pkgNames, String pkgName, String oneKeyName) {
         if (existsInOneKeyList(pkgNames, pkgName)) {
@@ -294,7 +240,7 @@ public final class Support {
                             break;
                         case R.id.main_sca_menu_disableAEnable:
                             if (!(context.getString(R.string.notAvailable).equals(name))) {
-                                context.startActivity(new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false));
+                                context.startActivity(new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("fromShortcut", false));
                             }
                             break;
                         case R.id.main_sca_menu_createDisEnableShortCut:

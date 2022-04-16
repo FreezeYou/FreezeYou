@@ -1,50 +1,190 @@
 package cf.playhi.freezeyou;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.ActivityManager;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
+import android.app.AlertDialog;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+
+import androidx.lifecycle.ViewModelProvider;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.viewmodel.DialogData;
+import cf.playhi.freezeyou.viewmodel.FreezeActivityViewModel;
+import cf.playhi.freezeyou.viewmodel.PlayAnimatorData;
 
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.showInRecents;
-import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.needConfirmWhenFreezeUseShortcutAutoFUF;
-import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.openImmediatelyAfterUnfreezeUseShortcutAutoFUF;
-import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.shortcutAutoFUF;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
-import static cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen;
-import static cf.playhi.freezeyou.utils.FUFUtils.checkRootFrozen;
-import static cf.playhi.freezeyou.utils.FUFUtils.processFreezeAction;
-import static cf.playhi.freezeyou.utils.FUFUtils.processUnfreezeAction;
-import static cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus;
-import static cf.playhi.freezeyou.utils.Support.shortcutMakeDialog;
+import static cf.playhi.freezeyou.utils.FUFUtils.checkAndStartApp;
+import static cf.playhi.freezeyou.utils.FUFUtils.showFUFRelatedToast;
 import static cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 // Needs to be retained for compatibility
 // with old FreezeYou structures and settings.
 public class Freeze extends FreezeYouBaseActivity {
-    private Intent mStartedIntent;
-    private String mPkgName;
-    private boolean mAutoRun;
+    private FreezeActivityViewModel viewModel;
+    private ImageView applicationIconImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this, true);
         super.onCreate(savedInstanceState);
-        loadStartedIntentAndPkgName();
+        initApplicationIconImageView();
+        viewModel = new ViewModelProvider(this).get(FreezeActivityViewModel.class);
+        viewModel.getPkgName().observe(this, pkgName -> {
+            setUnlockLogoPkgName(pkgName);
+            updateTaskDescription(pkgName);
+        });
+        viewModel.getToastStringId().observe(this, id -> showToast(this, id));
+        viewModel.getExecuteResult().observe(this, result -> {
+            showFUFRelatedToast(this, result);
+            finish();
+        });
+        viewModel.getFinishMe().observe(this, finishMe -> {
+            if (finishMe) finish();
+        });
+        viewModel.getPlayAnimator().observe(this, this::onPlayAnimator);
+        viewModel.getShowDialog().observe(this, this::buildAndShowFUFDialog);
+        viewModel.loadStartedIntentAndPkgName(getIntent());
+    }
+
+    private void onPlayAnimator(PlayAnimatorData playAnimatorData) {
+        applicationIconImageView.setImageDrawable(
+                getApplicationIcon(
+                        this,
+                        playAnimatorData.getPkgName(),
+                        getApplicationInfoFromPkgName(playAnimatorData.getPkgName(), this),
+                        false
+                )
+        );
+        if (playAnimatorData.getFreezing()) {
+            onFreezeStart();
+        } else {
+            onUnfreezeStart();
+        }
+    }
+
+    private void updateTaskDescription(String pkgName) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            setTaskDescription(
+                    new ActivityManager.TaskDescription(
+                            getApplicationLabel(
+                                    this,
+                                    null,
+                                    null,
+                                    pkgName
+                            )
+                                    + " - "
+                                    + getString(R.string.app_name),
+                            getBitmapFromDrawable(
+                                    getApplicationIcon(
+                                            this,
+                                            pkgName,
+                                            getApplicationInfoFromPkgName(
+                                                    pkgName,
+                                                    this
+                                            ),
+                                            false
+                                    )
+                            )
+                    )
+            );
+        }
+    }
+
+    private void initApplicationIconImageView() {
+        getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        ImageView imageView = new ImageView(this);
+        imageView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(480, 480);
+        imageView.setLayoutParams(layoutParams);
+        ((FrameLayout) findViewById(android.R.id.content)).addView(imageView);
+        applicationIconImageView = imageView;
+    }
+
+    private void onUnfreezeStart() {
+        ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(
+                applicationIconImageView, "alpha", 0.2f, 1f);
+        // TODO: Dynamic duration
+        fadeAnim.setDuration(1000);
+        fadeAnim.setInterpolator(new DecelerateInterpolator());
+        ObjectAnimator scaleXAnim = ObjectAnimator.ofFloat(
+                applicationIconImageView, View.SCALE_X, 0.6f, 1f);
+        scaleXAnim.setDuration(1000);
+        scaleXAnim.setInterpolator(new OvershootInterpolator());
+        ObjectAnimator scaleYAnim = ObjectAnimator.ofFloat(
+                applicationIconImageView, View.SCALE_Y, 0.6f, 1f);
+        scaleYAnim.setDuration(1000);
+        scaleYAnim.setInterpolator(new OvershootInterpolator());
+        AnimatorSet animatorSet = new AnimatorSet();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ValueAnimator greyAnim = ValueAnimator.ofFloat(0f, 1f);
+            greyAnim.addUpdateListener(animation -> {
+                float animatedValue = (float) animation.getAnimatedValue();
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.setSaturation(animatedValue);
+                applicationIconImageView.setColorFilter(new ColorMatrixColorFilter(matrix));
+            });
+            greyAnim.setDuration(1000);
+            greyAnim.setInterpolator(new OvershootInterpolator());
+            animatorSet.play(greyAnim).with(fadeAnim).with(scaleXAnim).with(scaleYAnim);
+        } else {
+            animatorSet.play(fadeAnim).with(scaleXAnim).with(scaleYAnim);
+        }
+        animatorSet.start();
+    }
+
+    private void onFreezeStart() {
+        ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(
+                applicationIconImageView, "alpha", 1f, 0f);
+        // TODO: Dynamic duration
+        fadeAnim.setDuration(1000);
+        fadeAnim.setInterpolator(new DecelerateInterpolator());
+        ObjectAnimator scaleXAnim = ObjectAnimator.ofFloat(
+                applicationIconImageView, View.SCALE_X, 1f, 0.6f);
+        scaleXAnim.setDuration(1000);
+        scaleXAnim.setInterpolator(new OvershootInterpolator());
+        ObjectAnimator scaleYAnim = ObjectAnimator.ofFloat(
+                applicationIconImageView, View.SCALE_Y, 1f, 0.6f);
+        scaleYAnim.setDuration(1000);
+        scaleYAnim.setInterpolator(new OvershootInterpolator());
+        AnimatorSet animatorSet = new AnimatorSet();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ValueAnimator greyAnim = ValueAnimator.ofFloat(1f, 0f);
+            greyAnim.addUpdateListener(animation -> {
+                float animatedValue = (float) animation.getAnimatedValue();
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.setSaturation(animatedValue);
+                applicationIconImageView.setColorFilter(new ColorMatrixColorFilter(matrix));
+            });
+            greyAnim.setDuration(1000);
+            greyAnim.setInterpolator(new OvershootInterpolator());
+            animatorSet.play(greyAnim).with(fadeAnim).with(scaleXAnim).with(scaleYAnim);
+        } else {
+            animatorSet.play(fadeAnim).with(scaleXAnim).with(scaleYAnim);
+        }
+        animatorSet.start();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!isLocked()) go();
+        if (!isLocked()) viewModel.go();
     }
 
     @Override
@@ -53,107 +193,56 @@ public class Freeze extends FreezeYouBaseActivity {
         if (!isLocked()) finish();
     }
 
-    private void loadStartedIntentAndPkgName() {
-        mStartedIntent = getIntent();
-
-        if ("freezeyou".equals(mStartedIntent.getScheme())) {
-            Uri dataUri = mStartedIntent.getData();
-            mPkgName = (dataUri == null) ? null : dataUri.getQueryParameter("pkgName");
-            mAutoRun = false;
-        } else {
-            mPkgName = mStartedIntent.getStringExtra("pkgName");
-            mAutoRun = mStartedIntent.getBooleanExtra("auto", true);
-        }
-
-        setUnlockLogoPkgName(mPkgName);
-    }
-
-    private void go() {
-        if (mStartedIntent != null) {
-            String target = mStartedIntent.getStringExtra("target");
-            String tasks = mStartedIntent.getStringExtra("tasks");
-
-            if (mPkgName == null) {
-                showToast(getApplicationContext(), R.string.invalidArguments);
-                Freeze.this.finish();
-            } else if ("".equals(mPkgName)) {
-                showToast(getApplicationContext(), R.string.invalidArguments);
-                Freeze.this.finish();
-            }
-
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            if (mAutoRun && sp.getBoolean(shortcutAutoFUF.name(), shortcutAutoFUF.defaultValue())) {
-                if (realGetFrozenStatus(this, mPkgName, getPackageManager())) {
-                    processUnfreezeAction(
-                            this, mPkgName, target, tasks, true,
-                            sp.getBoolean(
-                                    openImmediatelyAfterUnfreezeUseShortcutAutoFUF.name(),
-                                    openImmediatelyAfterUnfreezeUseShortcutAutoFUF.defaultValue()
-                            ),
-                            this, true);
-                } else {
-                    if (sp.getBoolean(
-                            needConfirmWhenFreezeUseShortcutAutoFUF.name(),
-                            needConfirmWhenFreezeUseShortcutAutoFUF.defaultValue())
-                    ) {
-                        processDialog(mPkgName, target, tasks, false, 2);
-                    } else {
-                        processFreezeAction(this, mPkgName, target, tasks,
-                                true, this, true);
-                    }
-                }
-            } else if ((!checkRootFrozen(Freeze.this, mPkgName, null))
-                    && (!checkMRootFrozen(Freeze.this, mPkgName))) {
-                processDialog(mPkgName, target, tasks, mAutoRun, 2);
-            } else {
-                processDialog(mPkgName, target, tasks, mAutoRun, 1);
-            }
-            if (Build.VERSION.SDK_INT >= 21) {
-                setTaskDescription(
-                        new ActivityManager.TaskDescription(
-                                getApplicationLabel(
-                                        this,
-                                        null,
-                                        null,
-                                        mPkgName)
-                                        + " - "
-                                        + getString(R.string.app_name),
-                                getBitmapFromDrawable(
-                                        getApplicationIcon(
-                                                this,
-                                                mPkgName,
-                                                getApplicationInfoFromPkgName(
-                                                        mPkgName,
-                                                        this
-                                                ),
-                                                false)
-                                )
-                        )
-                );
-            }
-        }
-    }
-
-    private void processDialog(String pkgName, String target, String tasks, boolean auto, int ot) {
-        shortcutMakeDialog(
-                Freeze.this,
-                getApplicationLabel(Freeze.this, null, null, pkgName),
-                getString(R.string.chooseDetailAction),
-                Freeze.this,
-                getApplicationInfoFromPkgName(pkgName, this),
-                pkgName,
-                target,
-                tasks,
-                ot,
-                auto,
-                true);
-    }
-
     @Override
     public void finish() {
         if (Build.VERSION.SDK_INT >= 21 && !showInRecents.getValue(null)) {
             finishAndRemoveTask();
         }
         super.finish();
+    }
+
+    private void buildAndShowFUFDialog(DialogData data) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setIcon(
+                        getApplicationIcon(
+                                this,
+                                data.getPkgName(),
+                                getApplicationInfoFromPkgName(data.getPkgName(), this),
+                                true
+                        )
+                )
+                .setMessage(getString(R.string.chooseDetailAction))
+                .setTitle(
+                        getApplicationLabel(
+                                this,
+                                null,
+                                null,
+                                data.getPkgName()
+                        )
+                )
+                .setNeutralButton(R.string.cancel, (dialogInterface, i) -> finish())
+                .setOnCancelListener(dialogInterface -> finish());
+        if (data.getFrozen()) {
+            builder.setPositiveButton(R.string.unfreeze, (dialogInterface, i) ->
+                    viewModel.fufAction(
+                            data.getPkgName(), data.getTarget(), data.getTasks(),
+                            false, true
+                    )
+            );
+        } else {
+            builder.setPositiveButton(R.string.launch, (dialogInterface, i) ->
+                    checkAndStartApp(
+                            this, data.getPkgName(), data.getTarget(),
+                            data.getTasks(), null, false
+                    )
+            );
+            builder.setNegativeButton(R.string.freeze, (dialogInterface, i) ->
+                    viewModel.fufAction(
+                            data.getPkgName(), data.getTarget(), data.getTasks(),
+                            false, false
+                    )
+            );
+        }
+        builder.show();
     }
 }

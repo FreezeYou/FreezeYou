@@ -10,13 +10,13 @@ import cf.playhi.freezeyou.utils.FUFUtils.isSystemApp
 import cf.playhi.freezeyou.utils.ProcessUtils.fAURoot
 
 open class FUFSinglePackage(
-    private val mContext: Context,
-    private val mSinglePackageName: String,
-    private val mActionMode: Int,
-    private val mAPIMode: Int
+    protected val mContext: Context,
+    protected val mSinglePackageName: String,
+    protected val mActionMode: Int,
+    protected val mAPIMode: Int
 ) {
 
-    fun commit(): Int {
+    open fun commit(): Int {
         if (mSinglePackageName.isBlank()) return ERROR_SINGLE_PACKAGE_NAME_IS_BLANK
 
         return when (mAPIMode) {

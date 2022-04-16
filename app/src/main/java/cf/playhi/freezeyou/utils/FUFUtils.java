@@ -170,7 +170,7 @@ public final class FUFUtils {
         if (currentPackage == null) currentPackage = " ";
         if ((!"cf.playhi.freezeyou".equals(pkgName))) {
             if (actionMode == ACTION_MODE_FREEZE &&
-                    isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, pkgName)) {
+                    isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(pkgName)) {
                 checkAndShowAppStillNotifyingToast(context, pkgName);
             } else if (actionMode == ACTION_MODE_FREEZE && currentPackage.equals(pkgName)) {
                 checkAndShowAppIsForegroundApplicationToast(context, pkgName);
@@ -234,7 +234,7 @@ public final class FUFUtils {
                 if (freeze) {
                     for (String aPkgNameList : pkgNameList) {
                         if ((!"cf.playhi.freezeyou".equals(aPkgNameList))) {
-                            if (isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(context, aPkgNameList)) {
+                            if (isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(aPkgNameList)) {
                                 checkAndShowAppStillNotifyingToast(context, aPkgNameList);
                             } else if (currentPackage.equals(aPkgNameList)) {
                                 checkAndShowAppIsForegroundApplicationToast(context, aPkgNameList);
@@ -373,7 +373,7 @@ public final class FUFUtils {
         return false;
     }
 
-    public static boolean isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(Context context, String pkgName) {
+    public static boolean isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(String pkgName) {
         if (Build.VERSION.SDK_INT >= 21) {
             return avoidFreezeNotifyingApplications.getValue(null) && isAppStillNotifying(pkgName);
         } else {
@@ -458,6 +458,15 @@ public final class FUFUtils {
         }
         return (tmp != PackageManager.COMPONENT_ENABLED_STATE_DEFAULT) &&
                 (tmp != PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
+    }
+
+    /**
+     * @param packageName 应用包名
+     * @return true 则已冻结
+     */
+    public static boolean realGetFrozenStatus(Context context, String packageName) {
+        return checkMRootFrozen(context, packageName)
+                || checkRootFrozen(context, packageName, context.getPackageManager());
     }
 
     /**
@@ -570,6 +579,58 @@ public final class FUFUtils {
                 showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
                         context, context.getString(R.string.unknownError));
                 return false;
+        }
+    }
+
+    public static void showFUFRelatedToast(Context context, int resultCode) {
+        switch (resultCode) {
+            case ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT:
+                if (!lesserToast.getValue(null))
+                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                            context, context.getString(R.string.unknownResult_probablySuccess));
+                return;
+            case ERROR_NO_ERROR_SUCCESS:
+                if (!lesserToast.getValue(null))
+                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                            context, context.getString(R.string.success));
+                return;
+            case ERROR_SINGLE_PACKAGE_NAME_IS_BLANK:
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.packageNameIsEmpty));
+                return;
+            case ERROR_DEVICE_ANDROID_VERSION_TOO_LOW:
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.sysVerLow));
+                return;
+            case ERROR_NO_ROOT_PERMISSION:
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.noRootPermission));
+                return;
+            case ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM:
+            case ERROR_PROFILE_OWNER_EXECUTE_FAILED_FROM_SYSTEM:
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.executeFailedFromSystem));
+                return;
+            case ERROR_NOT_DEVICE_POLICY_MANAGER:
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.isNotDevicePolicyManager));
+                return;
+            case ERROR_NOT_PROFILE_OWNER:
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.isNotProfileOwner));
+                return;
+            case ERROR_NO_SUCH_API_MODE:
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.noSuchApiMode));
+                return;
+            case ERROR_NOT_SYSTEM_APP:
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.isNotSystemApp));
+                return;
+            case ERROR_OTHER:
+            default:
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                        context, context.getString(R.string.unknownError));
         }
     }
 

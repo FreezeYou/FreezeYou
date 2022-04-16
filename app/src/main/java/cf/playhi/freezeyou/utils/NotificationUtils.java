@@ -78,7 +78,7 @@ public final class NotificationUtils {
                                         ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
                                         : PendingIntent.FLAG_UPDATE_CURRENT);
             } else {
-                resultIntent = new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("auto", false);
+                resultIntent = new Intent(context, Freeze.class).putExtra("pkgName", pkgName).putExtra("fromShortcut", false);
                 resultPendingIntent =
                         PendingIntent.getActivity(
                                 context, mId, resultIntent,
