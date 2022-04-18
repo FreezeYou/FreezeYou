@@ -12,8 +12,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -118,19 +118,19 @@ public class Freeze extends FreezeYouBaseActivity {
     }
 
     private void onUnfreezeStart() {
+        long animDuration = viewModel.getAverageTimeCosts();
         ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(
                 applicationIconImageView, "alpha", 0.2f, 1f);
-        // TODO: Dynamic duration
-        fadeAnim.setDuration(1000);
+        fadeAnim.setDuration(animDuration);
         fadeAnim.setInterpolator(new DecelerateInterpolator());
         ObjectAnimator scaleXAnim = ObjectAnimator.ofFloat(
                 applicationIconImageView, View.SCALE_X, 0.6f, 1f);
-        scaleXAnim.setDuration(1000);
-        scaleXAnim.setInterpolator(new OvershootInterpolator());
+        scaleXAnim.setDuration(animDuration);
+        scaleXAnim.setInterpolator(new AccelerateDecelerateInterpolator());
         ObjectAnimator scaleYAnim = ObjectAnimator.ofFloat(
                 applicationIconImageView, View.SCALE_Y, 0.6f, 1f);
-        scaleYAnim.setDuration(1000);
-        scaleYAnim.setInterpolator(new OvershootInterpolator());
+        scaleYAnim.setDuration(animDuration);
+        scaleYAnim.setInterpolator(new AccelerateDecelerateInterpolator());
         AnimatorSet animatorSet = new AnimatorSet();
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             ValueAnimator greyAnim = ValueAnimator.ofFloat(0f, 1f);
@@ -140,8 +140,8 @@ public class Freeze extends FreezeYouBaseActivity {
                 matrix.setSaturation(animatedValue);
                 applicationIconImageView.setColorFilter(new ColorMatrixColorFilter(matrix));
             });
-            greyAnim.setDuration(1000);
-            greyAnim.setInterpolator(new OvershootInterpolator());
+            greyAnim.setDuration(animDuration);
+            greyAnim.setInterpolator(new AccelerateDecelerateInterpolator());
             animatorSet.play(greyAnim).with(fadeAnim).with(scaleXAnim).with(scaleYAnim);
         } else {
             animatorSet.play(fadeAnim).with(scaleXAnim).with(scaleYAnim);
@@ -150,19 +150,19 @@ public class Freeze extends FreezeYouBaseActivity {
     }
 
     private void onFreezeStart() {
+        long animDuration = viewModel.getAverageTimeCosts();
         ObjectAnimator fadeAnim = ObjectAnimator.ofFloat(
                 applicationIconImageView, "alpha", 1f, 0f);
-        // TODO: Dynamic duration
-        fadeAnim.setDuration(1000);
+        fadeAnim.setDuration(animDuration);
         fadeAnim.setInterpolator(new DecelerateInterpolator());
         ObjectAnimator scaleXAnim = ObjectAnimator.ofFloat(
                 applicationIconImageView, View.SCALE_X, 1f, 0.6f);
-        scaleXAnim.setDuration(1000);
-        scaleXAnim.setInterpolator(new OvershootInterpolator());
+        scaleXAnim.setDuration(animDuration);
+        scaleXAnim.setInterpolator(new AccelerateDecelerateInterpolator());
         ObjectAnimator scaleYAnim = ObjectAnimator.ofFloat(
                 applicationIconImageView, View.SCALE_Y, 1f, 0.6f);
-        scaleYAnim.setDuration(1000);
-        scaleYAnim.setInterpolator(new OvershootInterpolator());
+        scaleYAnim.setDuration(animDuration);
+        scaleYAnim.setInterpolator(new AccelerateDecelerateInterpolator());
         AnimatorSet animatorSet = new AnimatorSet();
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             ValueAnimator greyAnim = ValueAnimator.ofFloat(1f, 0f);
@@ -172,8 +172,8 @@ public class Freeze extends FreezeYouBaseActivity {
                 matrix.setSaturation(animatedValue);
                 applicationIconImageView.setColorFilter(new ColorMatrixColorFilter(matrix));
             });
-            greyAnim.setDuration(1000);
-            greyAnim.setInterpolator(new OvershootInterpolator());
+            greyAnim.setDuration(animDuration);
+            greyAnim.setInterpolator(new AccelerateDecelerateInterpolator());
             animatorSet.play(greyAnim).with(fadeAnim).with(scaleXAnim).with(scaleYAnim);
         } else {
             animatorSet.play(fadeAnim).with(scaleXAnim).with(scaleYAnim);

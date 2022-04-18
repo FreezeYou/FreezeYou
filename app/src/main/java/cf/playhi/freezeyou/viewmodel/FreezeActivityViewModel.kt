@@ -2,6 +2,7 @@ package cf.playhi.freezeyou.viewmodel
 
 import android.app.Application
 import android.content.Intent
+import android.os.Parcelable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,14 +11,18 @@ import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.ACTION_MODE_FREEZE
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.ACTION_MODE_UNFREEZE
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.ERROR_NO_ERROR_SUCCESS
 import cf.playhi.freezeyou.fuf.FreezeYouFUFSinglePackage
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.openAndUFImmediately
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.*
+import cf.playhi.freezeyou.storage.mmkv.AverageTimeCostsMMKVStorage
 import cf.playhi.freezeyou.utils.FUFUtils.checkAndStartApp
 import cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
+import java.util.*
 
 class FreezeActivityViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -32,6 +37,7 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
     private var mShowDialog: MutableLiveData<DialogData?> = MutableLiveData()
     private var mPlayAnimator: MutableLiveData<PlayAnimatorData?> = MutableLiveData()
     private var mExecuteResult: MutableLiveData<Int> = MutableLiveData()
+    private var mAverageTimeCosts: Long = 500
 
     fun getPkgName(): LiveData<String> {
         return mPkgName
@@ -57,6 +63,10 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
         return mExecuteResult
     }
 
+    fun getAverageTimeCosts(): Long {
+        return mAverageTimeCosts
+    }
+
     fun loadStartedIntentAndPkgName(startedIntent: Intent) {
         mStartedIntent = startedIntent
         if ("freezeyou" == mStartedIntent.scheme) {
@@ -73,13 +83,19 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
 
     fun go() {
         mPkgName.value.let {
-            val target = mTarget;
-            val tasks = mTasks;
+            val target = mTarget
+            val tasks = mTasks
             if (it.isNullOrEmpty() || it == getApplication<Application>().packageName) {
                 mToastStringId.value = R.string.invalidArguments
                 mFinishMe.value = true
                 return
             }
+            val frozen = realGetFrozenStatus(getApplication(), it, null)
+            mAverageTimeCosts = AverageTimeCostsMMKVStorage().getParcelable(
+                if (frozen) "Unfreeze" else "Freeze",
+                AverageTime::class.java,
+                AverageTime()
+            )?.averageTimeCost?.let { cost -> if (cost < 200L) 200 else cost } ?: 500
 
             val sp = PreferenceManager.getDefaultSharedPreferences(getApplication<Application>())
             if (mIsFromShortcut && sp.getBoolean(
@@ -87,7 +103,7 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
                     shortcutAutoFUF.defaultValue()
                 )
             ) {
-                if (realGetFrozenStatus(getApplication(), it, null)) {
+                if (frozen) {
                     fufAction(
                         it, target, tasks, sp.getBoolean(
                             openImmediatelyAfterUnfreezeUseShortcutAutoFUF.name,
@@ -117,8 +133,8 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
                     it,
                     target,
                     tasks,
-                    realGetFrozenStatus(getApplication(), it, null),
-                    ignoreAutoRun = false
+                    frozen,
+                    !mIsFromShortcut
                 )
             }
         }
@@ -135,8 +151,7 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
             if (frozen) {
                 fufAction(pkgName, target, tasks, runImmediately = true, frozen = true)
             } else {
-                mPlayAnimator.value = PlayAnimatorData(pkgName, false)
-                checkAndStartApp(getApplication(), pkgName, target, tasks, null, false);
+                checkAndStartApp(getApplication(), pkgName, target, tasks, null, false)
             }
         } else {
             mShowDialog.value = DialogData(pkgName, target, tasks, frozen, true)
@@ -152,16 +167,44 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
     ) {
         mPlayAnimator.value = PlayAnimatorData(pkgName, !frozen)
         viewModelScope.launch(Dispatchers.IO) {
-            mExecuteResult.postValue(
-                FreezeYouFUFSinglePackage(
-                    getApplication(),
-                    pkgName,
-                    if (frozen) ACTION_MODE_UNFREEZE else ACTION_MODE_FREEZE,
-                    askRun = true,
-                    runImmediately = runImmediately,
-                    tasks = tasks,
-                    target = target
-                ).commit()
+            val startTime: Long = Date().time
+            val result = FreezeYouFUFSinglePackage(
+                getApplication(),
+                pkgName,
+                if (frozen) ACTION_MODE_UNFREEZE else ACTION_MODE_FREEZE,
+                askRun = true,
+                runImmediately = runImmediately,
+                tasks = tasks,
+                target = target
+            ).commit()
+            when (result) {
+                ERROR_NO_ERROR_SUCCESS, ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT -> {
+                    recordTimeCost((Date().time - startTime), frozen)
+                }
+            }
+            mExecuteResult.postValue(result)
+        }
+    }
+
+    private fun recordTimeCost(cost: Long, frozen: Boolean) {
+        val key = if (frozen) "Unfreeze" else "Freeze"
+        AverageTimeCostsMMKVStorage().getParcelable(
+            key,
+            AverageTime::class.java,
+            AverageTime()
+        )?.let {
+            AverageTimeCostsMMKVStorage().putParcelable(
+                key,
+                AverageTime(
+                    it.timeCosts.let { costs ->
+                        if (costs.size >= 5) {
+                            costs.removeFirst()
+                        }
+                        costs.addLast(cost)
+                        costs
+                    },
+                    it.timeCosts.average().toLong()
+                )
             )
         }
     }
@@ -179,3 +222,9 @@ data class PlayAnimatorData(
     val pkgName: String,
     val freezing: Boolean
 )
+
+@Parcelize
+data class AverageTime(
+    val timeCosts: LinkedList<Long> = LinkedList(),
+    val averageTimeCost: Long = 500
+) : Parcelable
