@@ -17,7 +17,6 @@ import cf.playhi.freezeyou.fuf.FreezeYouFUFSinglePackage
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.openAndUFImmediately
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.*
 import cf.playhi.freezeyou.storage.mmkv.AverageTimeCostsMMKVStorage
-import cf.playhi.freezeyou.utils.FUFUtils.checkAndStartApp
 import cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,7 +35,7 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
     private var mFinishMe: MutableLiveData<Boolean> = MutableLiveData(false)
     private var mShowDialog: MutableLiveData<DialogData?> = MutableLiveData()
     private var mPlayAnimator: MutableLiveData<PlayAnimatorData?> = MutableLiveData()
-    private var mExecuteResult: MutableLiveData<Int> = MutableLiveData()
+    private var mExecuteResult: MutableLiveData<ExecuteResult> = MutableLiveData()
     private var mAverageTimeCosts: Long = 500
 
     fun getPkgName(): LiveData<String> {
@@ -59,7 +58,7 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
         return mPlayAnimator
     }
 
-    fun getExecuteResult(): LiveData<Int> {
+    fun getExecuteResult(): LiveData<ExecuteResult> {
         return mExecuteResult
     }
 
@@ -151,7 +150,8 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
             if (frozen) {
                 fufAction(pkgName, target, tasks, runImmediately = true, frozen = true)
             } else {
-                checkAndStartApp(getApplication(), pkgName, target, tasks, null, false)
+                checkAndStartTaskAndTargetAndActivityOfUnfrozenApp(pkgName, target, tasks)
+                mFinishMe.postValue(true)
             }
         } else {
             mShowDialog.value = DialogData(pkgName, target, tasks, frozen, true)
@@ -168,21 +168,22 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
         mPlayAnimator.value = PlayAnimatorData(pkgName, !frozen)
         viewModelScope.launch(Dispatchers.IO) {
             val startTime: Long = Date().time
-            val result = FreezeYouFUFSinglePackage(
+            val freezeYouFUFSinglePackage = FreezeYouFUFSinglePackage(
                 getApplication(),
                 pkgName,
                 if (frozen) ACTION_MODE_UNFREEZE else ACTION_MODE_FREEZE,
-                askRun = true,
+                needAskRun = frozen,
                 runImmediately = runImmediately,
                 tasks = tasks,
                 target = target
-            ).commit()
+            )
+            val result = freezeYouFUFSinglePackage.commit()
             when (result) {
-                ERROR_NO_ERROR_SUCCESS, ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT -> {
+                ERROR_NO_ERROR_SUCCESS, ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT ->
                     recordTimeCost((Date().time - startTime), frozen)
-                }
             }
-            mExecuteResult.postValue(result)
+            mExecuteResult.postValue(ExecuteResult(result, freezeYouFUFSinglePackage))
+            mFinishMe.postValue(true)
         }
     }
 
@@ -208,6 +209,25 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
             )
         }
     }
+
+    fun checkAndStartTaskAndTargetAndActivityOfUnfrozenApp(data: DialogData): Int {
+        return checkAndStartTaskAndTargetAndActivityOfUnfrozenApp(
+            data.pkgName,
+            data.target,
+            data.tasks
+        )
+    }
+
+    private fun checkAndStartTaskAndTargetAndActivityOfUnfrozenApp(
+        pkgName: String,
+        target: String?,
+        tasks: String?
+    ): Int {
+        return FreezeYouFUFSinglePackage.checkAndStartTaskAndTargetAndActivityOfUnfrozenApp(
+            getApplication(), pkgName, target, tasks
+        )
+    }
+
 }
 
 data class DialogData(
@@ -221,6 +241,11 @@ data class DialogData(
 data class PlayAnimatorData(
     val pkgName: String,
     val freezing: Boolean
+)
+
+data class ExecuteResult(
+    val result: Int,
+    val freezeYouFUFSinglePackage: FreezeYouFUFSinglePackage
 )
 
 @Parcelize

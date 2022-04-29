@@ -10,6 +10,9 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.io.DataOutputStream;
 
 import cf.playhi.freezeyou.DeviceAdminReceiver;
@@ -26,6 +29,7 @@ import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_LEGACY_AUTO
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_MROOT_DPM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_DISABLE_ENABLE;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.API_FREEZEYOU_ROOT_UNHIDE_HIDE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_CANNOT_FIND_THE_LAUNCH_INTENT_OR_UNFREEZE_FAILED;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_DEVICE_ANDROID_VERSION_TOO_LOW;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NOT_DEVICE_POLICY_MANAGER;
@@ -35,9 +39,13 @@ import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ERROR_CAUGHT_UNK
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ERROR_SUCCESS;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_ROOT_PERMISSION;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_SUCH_API_MODE;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_NO_SUFFICIENT_PERMISSION_TO_START_THIS_ACTIVITY;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_OPERATION_ON_FREEZEYOU_IS_NOT_ALLOWED;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_OTHER;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_PROFILE_OWNER_EXECUTE_FAILED_FROM_SYSTEM;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_SINGLE_PACKAGE_NAME_IS_BLANK;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_USER_SET_NOT_ALLOWED_TO_FREEZE_FOREGROUND_APPLICATION;
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ERROR_USER_SET_NOT_ALLOWED_TO_FREEZE_NOTIFYING_APPLICATION;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.avoidFreezeForegroundApplications;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.avoidFreezeNotifyingApplications;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.createQuickFUFNotiAfterUnfrozen;
@@ -582,56 +590,74 @@ public final class FUFUtils {
         }
     }
 
-    public static void showFUFRelatedToast(Context context, int resultCode) {
+    @Nullable
+    public static String getFUFRelatedToastString(Context context, int resultCode) {
+        return getFUFRelatedToastString(context, resultCode, lesserToast.getValue(null));
+    }
+
+    @Nullable
+    public static String getFUFRelatedToastString(Context context, int resultCode, boolean showUnnecessaryToast) {
         switch (resultCode) {
             case ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT:
-                if (!lesserToast.getValue(null))
-                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-                            context, context.getString(R.string.unknownResult_probablySuccess));
-                return;
+                return showUnnecessaryToast
+                        ? null
+                        : getPreProcessedFUFResultToastString(
+                        context, context.getString(R.string.unknownResult_probablySuccess));
             case ERROR_NO_ERROR_SUCCESS:
-                if (!lesserToast.getValue(null))
-                    showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-                            context, context.getString(R.string.success));
-                return;
+                return showUnnecessaryToast
+                        ? null
+                        : getPreProcessedFUFResultToastString(
+                        context, context.getString(R.string.success));
             case ERROR_SINGLE_PACKAGE_NAME_IS_BLANK:
-                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                return getPreProcessedFUFResultToastString(
                         context, context.getString(R.string.packageNameIsEmpty));
-                return;
             case ERROR_DEVICE_ANDROID_VERSION_TOO_LOW:
-                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                return getPreProcessedFUFResultToastString(
                         context, context.getString(R.string.sysVerLow));
-                return;
             case ERROR_NO_ROOT_PERMISSION:
-                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                return getPreProcessedFUFResultToastString(
                         context, context.getString(R.string.noRootPermission));
-                return;
             case ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM:
             case ERROR_PROFILE_OWNER_EXECUTE_FAILED_FROM_SYSTEM:
-                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                return getPreProcessedFUFResultToastString(
                         context, context.getString(R.string.executeFailedFromSystem));
-                return;
             case ERROR_NOT_DEVICE_POLICY_MANAGER:
-                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                return getPreProcessedFUFResultToastString(
                         context, context.getString(R.string.isNotDevicePolicyManager));
-                return;
             case ERROR_NOT_PROFILE_OWNER:
-                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                return getPreProcessedFUFResultToastString(
                         context, context.getString(R.string.isNotProfileOwner));
-                return;
             case ERROR_NO_SUCH_API_MODE:
-                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                return getPreProcessedFUFResultToastString(
                         context, context.getString(R.string.noSuchApiMode));
-                return;
             case ERROR_NOT_SYSTEM_APP:
-                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                return getPreProcessedFUFResultToastString(
                         context, context.getString(R.string.isNotSystemApp));
-                return;
+            case ERROR_OPERATION_ON_FREEZEYOU_IS_NOT_ALLOWED:
+                return getPreProcessedFUFResultToastString(
+                        context, context.getString(R.string.operationOnFreezeYouIsNotAllowed));
+            case ERROR_USER_SET_NOT_ALLOWED_TO_FREEZE_FOREGROUND_APPLICATION:
+                return getPreProcessedFUFResultToastString(
+                        context, context.getString(R.string.theAppIsCurrentlyTheForegroundApp));
+            case ERROR_USER_SET_NOT_ALLOWED_TO_FREEZE_NOTIFYING_APPLICATION:
+                return getPreProcessedFUFResultToastString(
+                        context, context.getString(R.string.theAppHasNotificationInTheNotificationBar));
+            case ERROR_NO_SUFFICIENT_PERMISSION_TO_START_THIS_ACTIVITY:
+                return getPreProcessedFUFResultToastString(
+                        context, context.getString(R.string.insufficientPermission));
+            case ERROR_CANNOT_FIND_THE_LAUNCH_INTENT_OR_UNFREEZE_FAILED:
+                return getPreProcessedFUFResultToastString(
+                        context, context.getString(R.string.unrootedOrCannotFindTheLaunchIntent));
             case ERROR_OTHER:
             default:
-                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                return getPreProcessedFUFResultToastString(
                         context, context.getString(R.string.unknownError));
         }
+    }
+
+    @NonNull
+    private static String getPreProcessedFUFResultToastString(Context context, String message) {
+        return String.format(context.getString(R.string.executionResult_colon_message), message);
     }
 
     private static void showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(Context context, String message) {

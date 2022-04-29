@@ -20,17 +20,18 @@ import android.widget.ImageView;
 import androidx.lifecycle.ViewModelProvider;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.fuf.FUFSinglePackage;
 import cf.playhi.freezeyou.viewmodel.DialogData;
 import cf.playhi.freezeyou.viewmodel.FreezeActivityViewModel;
 import cf.playhi.freezeyou.viewmodel.PlayAnimatorData;
 
+import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_UNFREEZE;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.showInRecents;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
 import static cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgName;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
-import static cf.playhi.freezeyou.utils.FUFUtils.checkAndStartApp;
-import static cf.playhi.freezeyou.utils.FUFUtils.showFUFRelatedToast;
+import static cf.playhi.freezeyou.utils.FUFUtils.getFUFRelatedToastString;
 import static cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
@@ -51,10 +52,20 @@ public class Freeze extends FreezeYouBaseActivity {
             updateTaskDescription(pkgName);
         });
         viewModel.getToastStringId().observe(this, id -> showToast(this, id));
-        viewModel.getExecuteResult().observe(this, result -> {
-            showFUFRelatedToast(this, result);
-            finish();
-        });
+        viewModel.getExecuteResult().observe(this, result ->
+                showToast(
+                        this,
+                        getFUFRelatedToastString(
+                                this,
+                                result.getFreezeYouFUFSinglePackage().getActionMode() == ACTION_MODE_UNFREEZE
+                                        ?
+                                        result.getFreezeYouFUFSinglePackage()
+                                                .checkAndStartTaskAndTargetAndActivity(result.getResult())
+                                        :
+                                        result.getResult()
+                        )
+                )
+        );
         viewModel.getFinishMe().observe(this, finishMe -> {
             if (finishMe) finish();
         });
@@ -230,12 +241,14 @@ public class Freeze extends FreezeYouBaseActivity {
                     )
             );
         } else {
-            builder.setPositiveButton(R.string.launch, (dialogInterface, i) ->
-                    checkAndStartApp(
-                            this, data.getPkgName(), data.getTarget(),
-                            data.getTasks(), null, false
-                    )
-            );
+            builder.setPositiveButton(R.string.launch, (dialogInterface, i) -> {
+                int result = viewModel.checkAndStartTaskAndTargetAndActivityOfUnfrozenApp(data);
+                if (result != FUFSinglePackage.ERROR_NO_ERROR_SUCCESS
+                        && result != FUFSinglePackage.ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT) {
+                    showToast(this, getFUFRelatedToastString(this, result));
+                }
+                finish();
+            });
             builder.setNegativeButton(R.string.freeze, (dialogInterface, i) ->
                     viewModel.fufAction(
                             data.getPkgName(), data.getTarget(), data.getTasks(),

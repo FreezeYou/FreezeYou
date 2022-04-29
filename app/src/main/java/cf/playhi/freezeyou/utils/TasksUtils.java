@@ -383,6 +383,10 @@ public final class TasksUtils {
 
     }
 
+    /**
+     * As {@link #runTask} contains {@link ToastUtils#showToast} related function,
+     * this method should run on UI thread.
+     */
     public static void onUFApplications(Context context, String pkgNameString) {
 
         DataStatisticsUtils.addUFreezeTimes(context, pkgNameString);
@@ -413,6 +417,10 @@ public final class TasksUtils {
         db.close();
     }
 
+    /**
+     * As {@link #runTask} contains {@link ToastUtils#showToast} related function,
+     * this method should run on UI thread.
+     */
     public static void onFApplications(Context context, String pkgNameString) {
 
         DataStatisticsUtils.addFreezeTimes(context, pkgNameString);
