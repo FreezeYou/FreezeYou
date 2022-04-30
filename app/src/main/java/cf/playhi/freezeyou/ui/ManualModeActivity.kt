@@ -1,21 +1,22 @@
 package cf.playhi.freezeyou.ui
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
+import androidx.activity.viewModels
 import cf.playhi.freezeyou.R
+import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
-import cf.playhi.freezeyou.app.FreezeYouBaseActivity
-import cf.playhi.freezeyou.fuf.FUFSinglePackage
-import cf.playhi.freezeyou.utils.FUFUtils.preProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess
+import cf.playhi.freezeyou.viewmodel.ManualModeActivityViewModel
 
 class ManualModeActivity : FreezeYouBaseActivity() {
+
+    private val viewModel: ManualModeActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         processSetTheme(this)
@@ -32,10 +33,12 @@ class ManualModeActivity : FreezeYouBaseActivity() {
             resources.getStringArray(R.array.selectFUFModeSelection),
             resources.getStringArray(R.array.selectFUFModeSelectionValues)
         )
+        packageNameEditText.setText(viewModel.getCurrentPackageName())
         packageNameEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
+                viewModel.setCurrentPackageName(s.toString())
                 if (s.isEmpty()) {
                     disableButton.isEnabled = false
                     enableButton.isEnabled = false
@@ -45,30 +48,37 @@ class ManualModeActivity : FreezeYouBaseActivity() {
                 }
             }
         })
+        viewModel.getSelectedModeCheckedPosition().observe(this) {
+            selectFUFModeButton.text =
+                if (it < 0 || it >= modeSelections[0].size) {
+                    getString(R.string.selectFUFMode)
+                } else {
+                    modeSelections[0][it]
+                }
+        }
         selectFUFModeButton.setOnClickListener {
             AlertDialog.Builder(this@ManualModeActivity)
                 .setTitle(R.string.selectFUFMode)
                 .setSingleChoiceItems(
                     modeSelections[0],
-                    selectedModeCheckedPosition
+                    viewModel.getSelectedModeCheckedPosition().value ?: -1
                 ) { dialog: DialogInterface, which: Int ->
-                    selectedModeCheckedPosition = which
-                    selectedMode = modeSelections[1][which].toInt()
-                    selectFUFModeButton.text = modeSelections[0][which]
+                    viewModel.setSelectedModeCheckedPosition(which)
+                    viewModel.setSelectedMode(modeSelections[1][which].toInt())
                     dialog.dismiss()
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
         }
         disableButton.setOnClickListener {
-            processFUFOperation(
+            viewModel.processFUFOperation(
                 packageNameEditText.text.toString(),
                 context,
                 true
             )
         }
         enableButton.setOnClickListener {
-            processFUFOperation(
+            viewModel.processFUFOperation(
                 packageNameEditText.text.toString(),
                 context,
                 false
@@ -76,21 +86,4 @@ class ManualModeActivity : FreezeYouBaseActivity() {
         }
     }
 
-    private fun processFUFOperation(pkgName: String, context: Context, freeze: Boolean) {
-        preProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
-            context,
-            FUFSinglePackage(
-                context,
-                pkgName,
-                if (freeze) FUFSinglePackage.ACTION_MODE_FREEZE else FUFSinglePackage.ACTION_MODE_UNFREEZE,
-                selectedMode
-            ).commit(),
-            true
-        )
-    }
-
-    companion object {
-        private var selectedMode = -1
-        private var selectedModeCheckedPosition = -1
-    }
 }

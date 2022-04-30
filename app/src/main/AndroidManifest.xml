@@ -259,7 +259,6 @@
         </activity>
         <activity
             android:name=".ui.ManualModeActivity"
-            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize|keyboard|keyboardHidden|mcc|mnc|navigation"
             android:label="@string/manualMode"
             android:theme="@style/AppTheme.Dark.Default" />
         <activity
