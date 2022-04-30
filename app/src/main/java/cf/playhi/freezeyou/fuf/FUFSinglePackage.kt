@@ -19,6 +19,10 @@ open class FUFSinglePackage(
     open suspend fun commit(): Int {
         if (singlePackageName.isBlank()) return ERROR_SINGLE_PACKAGE_NAME_IS_BLANK
 
+        if ("cf.playhi.freezeyou" == singlePackageName) {
+            return ERROR_OPERATION_ON_FREEZEYOU_IS_NOT_ALLOWED
+        }
+
         return when (apiMode) {
             @Suppress("DEPRECATION")
             API_FREEZEYOU_LEGACY_AUTO ->
@@ -71,20 +75,17 @@ open class FUFSinglePackage(
             return ERROR_NO_ERROR_SUCCESS
         }
 
-        if ("cf.playhi.freezeyou" != singlePackageName) {
-            return if (getDevicePolicyManager(context).setApplicationHidden(
-                    getComponentName(context),
-                    singlePackageName,
-                    hidden
-                )
-            ) {
-                ERROR_NO_ERROR_SUCCESS
-            } else {
-                ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM
-            }
+        return if (getDevicePolicyManager(context).setApplicationHidden(
+                getComponentName(context),
+                singlePackageName,
+                hidden
+            )
+        ) {
+            ERROR_NO_ERROR_SUCCESS
+        } else {
+            ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM
         }
 
-        return ERROR_OTHER
     }
 
     private fun pureExecuteAPIRootAction(): Int {
@@ -103,23 +104,21 @@ open class FUFSinglePackage(
 
         var returnValue = ERROR_OTHER
         val enable = actionMode == ACTION_MODE_UNFREEZE
-        if ("cf.playhi.freezeyou" != singlePackageName) {
-            try {
-                val exitValue = fAURoot(singlePackageName, enable, hideMode)
-                returnValue = if (exitValue == 0) {
-                    ERROR_NO_ERROR_SUCCESS
-                } else {
-                    ERROR_OTHER
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                val eMsg = e.message
-                if (eMsg != null &&
-                    (eMsg.toLowerCase().contains("permission denied")
-                            || eMsg.toLowerCase().contains("not found"))
-                ) {
-                    returnValue = ERROR_NO_ROOT_PERMISSION
-                }
+        try {
+            val exitValue = fAURoot(singlePackageName, enable, hideMode)
+            returnValue = if (exitValue == 0) {
+                ERROR_NO_ERROR_SUCCESS
+            } else {
+                ERROR_OTHER
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            val eMsg = e.message
+            if (eMsg != null &&
+                (eMsg.contains("permission denied", true)
+                        || eMsg.contains("not found", true))
+            ) {
+                returnValue = ERROR_NO_ROOT_PERMISSION
             }
         }
         return returnValue
@@ -129,58 +128,46 @@ open class FUFSinglePackage(
 
         if (Build.VERSION.SDK_INT < 18) return ERROR_DEVICE_ANDROID_VERSION_TOO_LOW
         if (!isSystemApp(context)) return ERROR_NOT_SYSTEM_APP
-        var returnValue = ERROR_OTHER
         val freeze = actionMode == ACTION_MODE_FREEZE
-        if ("cf.playhi.freezeyou" != singlePackageName) {
-            context.packageManager.setApplicationEnabledSetting(
-                singlePackageName,
-                if (freeze)
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED
-                else
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                0
-            )
-            returnValue = ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT
-        }
-        return returnValue
+        context.packageManager.setApplicationEnabledSetting(
+            singlePackageName,
+            if (freeze)
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED
+            else
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            0
+        )
+        return ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT
     }
 
     private fun pureExecuteAPISystemAppDisabledUserAction(): Int {
 
         if (!isSystemApp(context)) return ERROR_NOT_SYSTEM_APP
-        var returnValue = ERROR_OTHER
         val freeze = actionMode == ACTION_MODE_FREEZE
-        if ("cf.playhi.freezeyou" != singlePackageName) {
-            context.packageManager.setApplicationEnabledSetting(
-                singlePackageName,
-                if (freeze)
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER
-                else
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                0
-            )
-            returnValue = ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT
-        }
-        return returnValue
+        context.packageManager.setApplicationEnabledSetting(
+            singlePackageName,
+            if (freeze)
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER
+            else
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            0
+        )
+        return ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT
     }
 
     private fun pureExecuteAPISystemAppDisabledAction(): Int {
 
         if (!isSystemApp(context)) return ERROR_NOT_SYSTEM_APP
-        var returnValue = ERROR_OTHER
         val freeze = actionMode == ACTION_MODE_FREEZE
-        if ("cf.playhi.freezeyou" != singlePackageName) {
-            context.packageManager.setApplicationEnabledSetting(
-                singlePackageName,
-                if (freeze)
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-                else
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                0
-            )
-            returnValue = ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT
-        }
-        return returnValue
+        context.packageManager.setApplicationEnabledSetting(
+            singlePackageName,
+            if (freeze)
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+            else
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            0
+        )
+        return ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT
     }
 
     private fun pureExecuteAPIProfileOwnerAction(): Int {
@@ -196,20 +183,17 @@ open class FUFSinglePackage(
             return ERROR_NO_ERROR_SUCCESS
         }
 
-        if ("cf.playhi.freezeyou" != singlePackageName) {
-            return if (getDevicePolicyManager(context).setApplicationHidden(
-                    getComponentName(context),
-                    singlePackageName,
-                    hidden
-                )
-            ) {
-                ERROR_NO_ERROR_SUCCESS
-            } else {
-                ERROR_PROFILE_OWNER_EXECUTE_FAILED_FROM_SYSTEM
-            }
+        return if (getDevicePolicyManager(context).setApplicationHidden(
+                getComponentName(context),
+                singlePackageName,
+                hidden
+            )
+        ) {
+            ERROR_NO_ERROR_SUCCESS
+        } else {
+            ERROR_PROFILE_OWNER_EXECUTE_FAILED_FROM_SYSTEM
         }
 
-        return ERROR_OTHER
     }
 
     companion object {

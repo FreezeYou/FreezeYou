@@ -43,9 +43,6 @@ class FreezeYouFUFSinglePackage(
      * In most cases, we should call [checkAndStartTaskAndTargetAndActivity] after the method returns.
      */
     override suspend fun commit(): Int {
-        if ("cf.playhi.freezeyou" == singlePackageName) {
-            return ERROR_OPERATION_ON_FREEZEYOU_IS_NOT_ALLOWED
-        }
         if (actionMode == ACTION_MODE_FREEZE) {
             if (avoidFreezeForegroundApplications.getValue()
                 && MainApplication.currentPackage.equals(singlePackageName)

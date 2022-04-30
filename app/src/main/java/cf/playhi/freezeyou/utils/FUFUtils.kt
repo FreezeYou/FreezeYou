@@ -33,10 +33,7 @@ object FUFUtils {
         activity: Activity?,
         finish: Boolean
     ) {
-        if (runImmediately || DefaultMultiProcessMMKVStorageBooleanKeys.openImmediately.getValue(
-                null
-            )
-        ) {
+        if (runImmediately || DefaultMultiProcessMMKVStorageBooleanKeys.openImmediately.getValue()) {
             checkAndStartApp(context, pkgName, target, tasks, activity, finish)
         } else {
             if (context.getString(R.string.onlyUnfreeze) != target) {
@@ -157,10 +154,7 @@ object FUFUtils {
     ): Int {
         var returnValue = 999
         var currentPackage: String? = " "
-        if (DefaultMultiProcessMMKVStorageBooleanKeys.avoidFreezeForegroundApplications.getValue(
-                null
-            )
-        ) {
+        if (DefaultMultiProcessMMKVStorageBooleanKeys.avoidFreezeForegroundApplications.getValue()) {
             currentPackage = MainApplication.currentPackage
         }
         if (currentPackage == null) currentPackage = " "
@@ -231,10 +225,7 @@ object FUFUtils {
     ) {
         if (pkgNameList != null) {
             var currentPackage: String? = " "
-            if (DefaultMultiProcessMMKVStorageBooleanKeys.avoidFreezeForegroundApplications.getValue(
-                    null
-                )
-            ) {
+            if (DefaultMultiProcessMMKVStorageBooleanKeys.avoidFreezeForegroundApplications.getValue()) {
                 currentPackage = MainApplication.currentPackage
             }
             if (currentPackage == null) currentPackage = " "
@@ -310,7 +301,7 @@ object FUFUtils {
                             checkAndCreateFUFQuickNotification(context, aPkgNameList)
                         }
                     }
-                    if (!lesserToast.getValue(null)) {
+                    if (!lesserToast.getValue()) {
                         ToastUtils.showToast(context, R.string.executed)
                     }
                 } else {
@@ -388,7 +379,7 @@ object FUFUtils {
                     }
                 }
                 sendStatusChangedBroadcast(context)
-                if (!lesserToast.getValue(null)) {
+                if (!lesserToast.getValue()) {
                     ToastUtils.showToast(context, R.string.executed)
                 }
             }
@@ -420,9 +411,8 @@ object FUFUtils {
     @JvmStatic
     fun isAvoidFreezeNotifyingApplicationsEnabledAndAppStillNotifying(pkgName: String?): Boolean {
         return if (Build.VERSION.SDK_INT >= 21) {
-            DefaultMultiProcessMMKVStorageBooleanKeys.avoidFreezeNotifyingApplications.getValue(null) && isAppStillNotifying(
-                pkgName
-            )
+            DefaultMultiProcessMMKVStorageBooleanKeys.avoidFreezeNotifyingApplications.getValue()
+                    && isAppStillNotifying(pkgName)
         } else {
             false
         }
@@ -607,7 +597,7 @@ object FUFUtils {
 
     @JvmStatic
     fun checkAndCreateFUFQuickNotification(context: Context?, pkgName: String?) {
-        if (DefaultMultiProcessMMKVStorageBooleanKeys.createQuickFUFNotiAfterUnfrozen.getValue(null)) {
+        if (DefaultMultiProcessMMKVStorageBooleanKeys.createQuickFUFNotiAfterUnfrozen.getValue()) {
             NotificationUtils.createFUFQuickNotification(
                 context, pkgName, R.drawable.ic_notification,
                 ApplicationIconUtils.getBitmapFromDrawable(
@@ -714,7 +704,7 @@ object FUFUtils {
     ): String? {
         return when (resultCode) {
             FUFSinglePackage.ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT -> {
-                if (showUnnecessaryToast == false || lesserToast.getValue(null))
+                if (showUnnecessaryToast == false || lesserToast.getValue())
                     null
                 else
                     getPreProcessedFUFResultToastString(
@@ -722,7 +712,7 @@ object FUFUtils {
                     )
             }
             FUFSinglePackage.ERROR_NO_ERROR_SUCCESS -> {
-                if (showUnnecessaryToast == false || lesserToast.getValue(null))
+                if (showUnnecessaryToast == false || lesserToast.getValue())
                     null
                 else
                     getPreProcessedFUFResultToastString(
