@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="cf.playhi.freezeyou">
 
+    <uses-sdk tools:overrideLibrary="rikka.shizuku.provider, rikka.shizuku.api, rikka.shizuku.shared, rikka.shizuku.aidl"/>
+
     <uses-feature
         android:name="android.hardware.bluetooth"
         android:required="false" />
@@ -751,6 +753,13 @@
             android:name="com.tencent.mmkv.MMKVContentProvider"
             android:authorities="cf.playhi.freezeyou.MMKVContentProvider"
             android:exported="false" />
+        <provider
+            android:name="rikka.shizuku.ShizukuProvider"
+            android:authorities="${applicationId}.shizuku"
+            android:enabled="true"
+            android:exported="true"
+            android:multiprocess="false"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
     </application>
 
 </manifest>

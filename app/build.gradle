@@ -10,7 +10,7 @@ android {
         minSdkVersion 16
         targetSdk 31
         versionCode 148
-        versionName '11.2.148.20220409-t148-20220430-1-gh'
+        versionName '11.2.148.20220409-t148-20220430-1-gh-alpha'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -34,8 +34,8 @@ android {
 
     bundle {
         language {
-             enableSplit = false
-         }
+            enableSplit = false
+        }
     }
 }
 
@@ -67,7 +67,11 @@ dependencies {
 
     implementation "androidx.preference:preference:1.2.0"
 
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.6.0'
+
+    def shizuku_version = '12.1.0'
+    implementation "dev.rikka.shizuku:api:$shizuku_version"
+    implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
 

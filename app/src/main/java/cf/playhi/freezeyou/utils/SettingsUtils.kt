@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Build
 import android.provider.Settings
 import cf.playhi.freezeyou.R
@@ -14,6 +15,9 @@ import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_MROOT_DP
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_MROOT_PROFILE_OWNER
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_ROOT_DISABLE_ENABLE
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_ROOT_UNHIDE_HIDE
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED
+import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE_USER
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER
@@ -25,6 +29,7 @@ import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.mainActivityPattern
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.organizationName
 import cf.playhi.freezeyou.utils.ToastUtils.showToast
+import rikka.shizuku.Shizuku
 
 object SettingsUtils {
 
@@ -135,6 +140,21 @@ object SettingsUtils {
                     API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE ->
                         if (!FUFUtils.isSystemApp(context)) {
                             showToast(context, R.string.insufficientPermission)
+                        }
+                    API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED,
+                    API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE_USER,
+                    API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE ->
+                        try {
+                            if (Shizuku.isPreV11()) {
+                                showToast(context, "Shizuku version is too low.")
+                            } else if (Shizuku.checkSelfPermission() != PERMISSION_GRANTED){
+                                if (!Shizuku.shouldShowRequestPermissionRationale()) {
+                                    Shizuku.requestPermission(-1)
+                                }
+                            }
+                        } catch (e:Exception) {
+                            e.printStackTrace()
+                            showToast(context, "Shizuku not installed or other exception.")
                         }
                     else -> showToast(context, R.string.unknown)
                 }

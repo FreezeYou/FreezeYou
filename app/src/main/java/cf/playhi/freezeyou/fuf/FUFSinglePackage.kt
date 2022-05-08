@@ -1,13 +1,18 @@
 package cf.playhi.freezeyou.fuf
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.IBinder
+import android.system.Os
 import cf.playhi.freezeyou.DeviceAdminReceiver.getComponentName
 import cf.playhi.freezeyou.utils.DevicePolicyManagerUtils.*
 import cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen
 import cf.playhi.freezeyou.utils.FUFUtils.isSystemApp
 import cf.playhi.freezeyou.utils.ProcessUtils.fAURoot
+import rikka.shizuku.ShizukuBinderWrapper
+import rikka.shizuku.SystemServiceHelper
 
 open class FUFSinglePackage(
     open val context: Context,
@@ -41,6 +46,10 @@ open class FUFSinglePackage(
                 pureExecuteAPISystemAppDisabledUntilUsedAction()
             API_FREEZEYOU_SYSTEM_APP_ENABLE_DISABLE_USER ->
                 pureExecuteAPISystemAppDisabledUserAction()
+            API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE,
+            API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED,
+            API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE_USER ->
+                pureExecuteAPIShizukuAction()
             else ->
                 ERROR_NO_SUCH_API_MODE
         }
@@ -196,6 +205,58 @@ open class FUFSinglePackage(
 
     }
 
+    private fun pureExecuteAPIShizukuAction(): Int {
+
+        if (Build.VERSION.SDK_INT < 21) return ERROR_DEVICE_ANDROID_VERSION_TOO_LOW
+
+        try {
+            val freeze = actionMode == ACTION_MODE_FREEZE
+
+            @SuppressLint("PrivateApi")
+            val cls = Class.forName("android.content.pm.IPackageManager\$Stub")
+                .getMethod("asInterface", IBinder::class.java)
+                .invoke(null, ShizukuBinderWrapper(SystemServiceHelper.getSystemService("package")))
+            cls::class.java.getMethod(
+                "setApplicationEnabledSetting",
+                String::class.java, // packageName
+                Int::class.java, // newState
+                Int::class.java, // flags
+                Int::class.java, // userId
+                String::class.java // callingPackage
+            ).invoke(
+                cls,
+                singlePackageName,
+                if (freeze) {
+                    when (apiMode) {
+                        API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED ->
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED
+                        API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE_USER ->
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER
+                        API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE ->
+                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                        else ->
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                    }
+                } else {
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                },
+                0,
+                /**
+                 * .../private/android_filesystem_config.h
+                 * #define AID_USER 100000        /* \T\O\D\O: switch users over to AID_USER_OFFSET */
+                 * #define AID_USER_OFFSET 100000 /* offset for uid ranges for each user */
+                 */
+                Os.getuid() / 10000,
+                "cf.playhi.freezeyou"
+            )
+            return ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return ERROR_OTHER
+        }
+
+    }
+
     companion object {
         const val ACTION_MODE_FREEZE = 0
         const val ACTION_MODE_UNFREEZE = 1
@@ -261,6 +322,21 @@ open class FUFSinglePackage(
          * 使用 FreezeYou 的 免ROOT (Profile Owner) 模式
          */
         const val API_FREEZEYOU_MROOT_PROFILE_OWNER = 7
+
+        /**
+         * 使用 FreezeYou 的借助 Shizuku 的 System App (DISABLE_UNTIL_USED) 模式
+         */
+        const val API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED = 8
+
+        /**
+         * 使用 FreezeYou 的借助 Shizuku 的 System App (DISABLE_USER) 模式
+         */
+        const val API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE_USER = 9
+
+        /**
+         * 使用 FreezeYou 的借助 Shizuku 的 System App (DISABLE) 模式
+         */
+        const val API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE = 10
 
     }
 }
