@@ -421,6 +421,9 @@
         <item>系统应用（Disable 模式）</item>
         <item>系统应用（Disable_User 模式）</item>
         <item>系统应用（Disable_Until_Used 模式）</item>
+        <item>Shizuku (Disable Mode)</item>
+        <item>Shizuku (Disable_User Mode)</item>
+        <item>Shizuku (Disable_Until_Used Mode)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
         <item>暗色</item>
