@@ -370,7 +370,6 @@
     <string name="verifyToContinue">验证以继续</string>
     <string name="authenticationFailed">验证失败</string>
     <string name="authenticationError_colon">验证出错：%1$s</string>
-    <string name="correspondingAndAvailableWebsiteUrlLanguageCode">zh-CN</string>
     <string name="forceStop">强行停止</string>
     <string name="unfrozenUA">未冻用应</string>
     <string name="lastInstall">最近安装</string>
@@ -453,6 +452,9 @@
         <item>系统应用（DISABLE模式）</item>
         <item>系统应用（DISABLE_USER模式）</item>
         <item>系统应用（DISABLE_UNTIL_USED模式）</item>
+        <item>Shizuku (Disable Mode)</item>
+        <item>Shizuku (Disable_User Mode)</item>
+        <item>Shizuku (Disable_Until_Used Mode)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
         <item>暗色</item>
