@@ -447,6 +447,9 @@
         <item>System App (Disable Mode)</item>
         <item>System App (Disable_User Mode)</item>
         <item>System App (Disable_Until_Used Mode)</item>
+        <item>Shizuku (Disable Mode)</item>
+        <item>Shizuku (Disable_User Mode)</item>
+        <item>Shizuku (Disable_Until_Used Mode)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
         <item>Темна тема</item>
