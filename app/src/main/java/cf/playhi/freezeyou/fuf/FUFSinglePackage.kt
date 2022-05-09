@@ -13,6 +13,7 @@ import cf.playhi.freezeyou.utils.FUFUtils.isSystemApp
 import cf.playhi.freezeyou.utils.ProcessUtils.fAURoot
 import rikka.shizuku.ShizukuBinderWrapper
 import rikka.shizuku.SystemServiceHelper
+import java.lang.reflect.InvocationTargetException
 
 open class FUFSinglePackage(
     open val context: Context,
@@ -207,7 +208,7 @@ open class FUFSinglePackage(
 
     private fun pureExecuteAPIShizukuAction(): Int {
 
-        if (Build.VERSION.SDK_INT < 21) return ERROR_DEVICE_ANDROID_VERSION_TOO_LOW
+        if (Build.VERSION.SDK_INT < 23) return ERROR_DEVICE_ANDROID_VERSION_TOO_LOW
 
         try {
             val freeze = actionMode == ACTION_MODE_FREEZE
@@ -246,15 +247,22 @@ open class FUFSinglePackage(
                  * #define AID_USER 100000        /* \T\O\D\O: switch users over to AID_USER_OFFSET */
                  * #define AID_USER_OFFSET 100000 /* offset for uid ranges for each user */
                  */
-                Os.getuid() / 10000,
+                Os.getuid() / 100000,
                 "cf.playhi.freezeyou"
             )
             return ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT
+        } catch (e: InvocationTargetException) {
+            e.printStackTrace()
+            if (e.cause is SecurityException) {
+                return ERROR_INSUFFICIENT_PERMISSION
+            }
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+            return ERROR_INSUFFICIENT_PERMISSION
         } catch (e: Exception) {
             e.printStackTrace()
-            return ERROR_OTHER
         }
-
+        return ERROR_OTHER
     }
 
     companion object {
@@ -277,6 +285,7 @@ open class FUFSinglePackage(
         const val ERROR_USER_SET_NOT_ALLOWED_TO_FREEZE_NOTIFYING_APPLICATION = -13
         const val ERROR_NO_SUFFICIENT_PERMISSION_TO_START_THIS_ACTIVITY = -14
         const val ERROR_CANNOT_FIND_THE_LAUNCH_INTENT_OR_UNFREEZE_FAILED = -15
+        const val ERROR_INSUFFICIENT_PERMISSION = -16
 
         /**
          * 使用 FreezeYou 的 自动（免ROOT(DPM)/ROOT(DISABLE)） 模式

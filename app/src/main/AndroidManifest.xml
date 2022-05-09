@@ -3,7 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="cf.playhi.freezeyou">
 
-    <uses-sdk tools:overrideLibrary="rikka.shizuku.provider, rikka.shizuku.api, rikka.shizuku.shared, rikka.shizuku.aidl"/>
+    <uses-sdk tools:overrideLibrary="
+        rikka.shizuku.aidl,
+        rikka.shizuku.api,
+        rikka.shizuku.provider,
+        rikka.shizuku.shared" />
 
     <uses-feature
         android:name="android.hardware.bluetooth"

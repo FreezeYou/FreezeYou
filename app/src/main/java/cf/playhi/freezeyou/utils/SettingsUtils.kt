@@ -144,17 +144,21 @@ object SettingsUtils {
                     API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE_UNTIL_USED,
                     API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE_USER,
                     API_FREEZEYOU_SHIZUKU_SYSTEM_APP_ENABLE_DISABLE ->
-                        try {
-                            if (Shizuku.isPreV11()) {
-                                showToast(context, "Shizuku version is too low.")
-                            } else if (Shizuku.checkSelfPermission() != PERMISSION_GRANTED){
-                                if (!Shizuku.shouldShowRequestPermissionRationale()) {
-                                    Shizuku.requestPermission(-1)
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                            showToast(context, context.getString(R.string.sysVerLow))
+                        } else {
+                            try {
+                                if (Shizuku.isPreV11()) {
+                                    showToast(context, R.string.shizukuVersionIsTooLow)
+                                } else if (Shizuku.checkSelfPermission() != PERMISSION_GRANTED) {
+                                    if (!Shizuku.shouldShowRequestPermissionRationale()) {
+                                        Shizuku.requestPermission(-1)
+                                    }
                                 }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                showToast(context, R.string.shizukuIsNotInstalledOrOtherExceptions)
                             }
-                        } catch (e:Exception) {
-                            e.printStackTrace()
-                            showToast(context, "Shizuku not installed or other exception.")
                         }
                     else -> showToast(context, R.string.unknown)
                 }

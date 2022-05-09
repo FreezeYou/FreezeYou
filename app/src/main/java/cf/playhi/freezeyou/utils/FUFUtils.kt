@@ -650,7 +650,8 @@ object FUFUtils {
                 )
                 false
             }
-            FUFSinglePackage.ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM, FUFSinglePackage.ERROR_PROFILE_OWNER_EXECUTE_FAILED_FROM_SYSTEM -> {
+            FUFSinglePackage.ERROR_DPM_EXECUTE_FAILED_FROM_SYSTEM,
+            FUFSinglePackage.ERROR_PROFILE_OWNER_EXECUTE_FAILED_FROM_SYSTEM -> {
                 showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
                     context, context.getString(R.string.executeFailedFromSystem)
                 )
@@ -677,6 +678,12 @@ object FUFUtils {
             FUFSinglePackage.ERROR_NOT_SYSTEM_APP -> {
                 showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
                     context, context.getString(R.string.isNotSystemApp)
+                )
+                false
+            }
+            FUFSinglePackage.ERROR_INSUFFICIENT_PERMISSION -> {
+                showPreProcessFUFResultAndShowToastAndReturnIfResultBelongsSuccess(
+                    context, context.getString(R.string.insufficientPermission)
                 )
                 false
             }
@@ -764,6 +771,7 @@ object FUFUtils {
                 getPreProcessedFUFResultToastString(
                     context, context.getString(R.string.theAppHasNotificationInTheNotificationBar)
                 )
+            FUFSinglePackage.ERROR_INSUFFICIENT_PERMISSION,
             FUFSinglePackage.ERROR_NO_SUFFICIENT_PERMISSION_TO_START_THIS_ACTIVITY ->
                 getPreProcessedFUFResultToastString(
                     context, context.getString(R.string.insufficientPermission)
