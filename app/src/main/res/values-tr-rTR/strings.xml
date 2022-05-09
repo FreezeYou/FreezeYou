@@ -370,7 +370,6 @@
     <string name="verifyToContinue">Devam etmek için doğrulayın</string>
     <string name="authenticationFailed">Kimlik doğrulama başarısız</string>
     <string name="authenticationError_colon">Doğrulama hatası: %1$s</string>
-    <string name="correspondingAndAvailableWebsiteUrlLanguageCode">tr-TR</string>
     <string name="forceStop">Durmaya zorla</string>
     <string name="unfrozenUA">Çözülmüş Kullanıcı Uygulaması</string>
     <string name="lastInstall">Son Yüklenen</string>
@@ -452,6 +451,9 @@
         <item>Sistem Uygulaması (Devre Dışı Bırakma Modu)</item>
         <item>Sistem Uygulaması (Disable_User Modu)</item>
         <item>Sistem Uygulaması (Disable_Until_Used Modu)</item>
+        <item>Shizuku (Disable Mode)</item>
+        <item>Shizuku (Disable_User Mode)</item>
+        <item>Shizuku (Disable_Until_Used Mode)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
         <item>Koyu</item>
