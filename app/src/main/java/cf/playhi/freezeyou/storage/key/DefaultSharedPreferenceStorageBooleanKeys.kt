@@ -42,24 +42,6 @@ enum class DefaultSharedPreferenceStorageBooleanKeys : AbstractKey<Boolean> {
         override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_COMMON
     },
 
-    shortcutAutoFUF {
-        override fun defaultValue(): Boolean = false
-        override fun titleTextStringId(): Int = R.string.shortcutAutoFUF
-        override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_FREEZE_AND_UNFREEZE
-    },
-
-    needConfirmWhenFreezeUseShortcutAutoFUF {
-        override fun defaultValue(): Boolean = false
-        override fun titleTextStringId(): Int = R.string.needCfmWhenFreeze
-        override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_FREEZE_AND_UNFREEZE
-    },
-
-    openImmediatelyAfterUnfreezeUseShortcutAutoFUF {
-        override fun defaultValue(): Boolean = true
-        override fun titleTextStringId(): Int = R.string.openImmediatelyAfterUF
-        override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_FREEZE_AND_UNFREEZE
-    },
-
     firstIconEnabled {
         override fun defaultValue(): Boolean = false
         override fun titleTextStringId(): Int = -1

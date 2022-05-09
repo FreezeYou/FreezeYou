@@ -7,15 +7,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.ACTION_MODE_FREEZE
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.ACTION_MODE_UNFREEZE
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT
 import cf.playhi.freezeyou.fuf.FUFSinglePackage.Companion.ERROR_NO_ERROR_SUCCESS
 import cf.playhi.freezeyou.fuf.FreezeYouFUFSinglePackage
-import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.openAndUFImmediately
-import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.*
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.*
 import cf.playhi.freezeyou.storage.mmkv.AverageTimeCostsMMKVStorage
 import cf.playhi.freezeyou.utils.FUFUtils.realGetFrozenStatus
 import kotlinx.coroutines.Dispatchers
@@ -96,26 +94,17 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
                 AverageTime()
             )?.averageTimeCost?.let { cost -> if (cost < 200L) 200 else cost } ?: 500
 
-            val sp = PreferenceManager.getDefaultSharedPreferences(getApplication<Application>())
-            if (mIsFromShortcut && sp.getBoolean(
-                    shortcutAutoFUF.name,
-                    shortcutAutoFUF.defaultValue()
-                )
-            ) {
+            if (mIsFromShortcut && shortcutAutoFUF.getValue()) {
                 if (frozen) {
                     fufAction(
-                        it, target, tasks, sp.getBoolean(
-                            openImmediatelyAfterUnfreezeUseShortcutAutoFUF.name,
-                            openImmediatelyAfterUnfreezeUseShortcutAutoFUF.defaultValue()
-                        ),
+                        it,
+                        target,
+                        tasks,
+                        openImmediatelyAfterUnfreezeUseShortcutAutoFUF.getValue(),
                         true
                     )
                 } else {
-                    if (sp.getBoolean(
-                            needConfirmWhenFreezeUseShortcutAutoFUF.name,
-                            needConfirmWhenFreezeUseShortcutAutoFUF.defaultValue()
-                        )
-                    ) {
+                    if (needConfirmWhenFreezeUseShortcutAutoFUF.getValue()) {
                         checkOpenAndUFImmediately(
                             it,
                             target,
@@ -182,8 +171,8 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
                 ERROR_NO_ERROR_SUCCESS, ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT ->
                     recordTimeCost((Date().time - startTime), frozen)
             }
-            mExecuteResult.postValue(ExecuteResult(result, freezeYouFUFSinglePackage))
             mFinishMe.postValue(true)
+            mExecuteResult.postValue(ExecuteResult(result, freezeYouFUFSinglePackage))
         }
     }
 

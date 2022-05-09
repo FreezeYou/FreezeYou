@@ -8,8 +8,7 @@ import androidx.annotation.NonNull
 import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.service.ScreenLockOneKeyFreezeService
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys
-import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.enableAuthentication
-import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.tryDelApkAfterInstalled
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.*
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.languagePref
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.selectFUFMode
@@ -42,6 +41,7 @@ class MainApplication : Application() {
             checkAndMigrateAppIconDataPreference()
             checkAndMigrateEnableAuthenticationPreferenceDataToMMKV()
             checkAndMigrateMultiProcessPreferenceDataToMMKV()
+            checkAndMigrateKeySAFUFAndNCWFUSAFUFAndOIAUUSAFUF()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -258,7 +258,7 @@ class MainApplication : Application() {
                     + "migrateSomePreferenceDataFromSharedPreferenceToTrayForFurtherMigrateToMMKV.lock"
         )
         if (!migrateLock.exists()) {
-            val sp = PreferenceManager.getDefaultSharedPreferences(this@MainApplication);
+            val sp = PreferenceManager.getDefaultSharedPreferences(this@MainApplication)
             AppPreferences(this).run {
                 put(
                     languagePref.name,
@@ -276,6 +276,32 @@ class MainApplication : Application() {
                         tryDelApkAfterInstalled.defaultValue()
                     )
                 )
+            }
+            migrateLock.createNewFile()
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun checkAndMigrateKeySAFUFAndNCWFUSAFUFAndOIAUUSAFUF() {
+        val migrateLock = File(
+            filesDir.absolutePath + File.separator
+                    + "migrateKeySAFUFAndNCWFUSAFUFAndOIAUUSAFUF.lock"
+        )
+        if (!migrateLock.exists()) {
+            DefaultMultiProcessMMKVStorage().run {
+                val three = arrayOf(
+                    shortcutAutoFUF,
+                    needConfirmWhenFreezeUseShortcutAutoFUF,
+                    openImmediatelyAfterUnfreezeUseShortcutAutoFUF
+                )
+                three.forEach { key ->
+                    putBoolean(
+                        key.name,
+                        PreferenceManager.getDefaultSharedPreferences(this@MainApplication)
+                            .getBoolean(key.name, key.defaultValue())
+                    )
+                }
+                sync()
             }
             migrateLock.createNewFile()
         }
