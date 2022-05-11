@@ -370,6 +370,7 @@
     <string name="verifyToContinue">Подтвердите для продолжения</string>
     <string name="authenticationFailed">Помилка автентифікації</string>
     <string name="authenticationError_colon">Помилка автентифікації: %1$s</string>
+    <string name="correspondingAndAvailableWebsiteUrlLanguageCode">ru-UA</string>
     <string name="forceStop">Примусова зупинка</string>
     <string name="unfrozenUA">Незаморожені користувацькі</string>
     <string name="lastInstall">Нещодавно встановлені</string>
@@ -451,6 +452,9 @@
         <item>Системное (режим DISABLE)</item>
         <item>Системное (режим Disable_User)</item>
         <item>Системное (режим Disable_Until_Used)</item>
+        <item>Shizuku (Disable Mode)</item>
+        <item>Shizuku (Disable_User Mode)</item>
+        <item>Shizuku (Disable_Until_Used Mode)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
         <item>Темна тема</item>

@@ -372,6 +372,7 @@
     <string name="verifyToContinue">Подтвердите для продолжения</string>
     <string name="authenticationFailed">Сбой аутентификации</string>
     <string name="authenticationError_colon">Ошибка аутентификации: %1$s</string>
+    <string name="correspondingAndAvailableWebsiteUrlLanguageCode">ru-RU</string>
     <string name="forceStop">Принудительная остановка</string>
     <string name="unfrozenUA">Незамороженые пользовательские</string>
     <string name="lastInstall">Недавно установленные</string>
@@ -453,6 +454,9 @@
         <item>Системное (режим DISABLE)</item>
         <item>Системное (режим Disable_User)</item>
         <item>Системное (режим Disable_Until_Used)</item>
+        <item>Shizuku (Disable Mode)</item>
+        <item>Shizuku (Disable_User Mode)</item>
+        <item>Shizuku (Disable_Until_Used Mode)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
         <item>Темная тема</item>

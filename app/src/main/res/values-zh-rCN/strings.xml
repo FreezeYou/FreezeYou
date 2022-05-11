@@ -385,6 +385,11 @@
     <string name="selfRevokeProfileOwnerSummary">如果被设定为配置文件所有者（Profile-Owner），需要解除后才能正常卸载本应用程序。</string>
     <string name="isNotProfileOwner">不是配置文件所有者（Profile Owner）</string>
     <string name="getBackupData">获得备份数据</string>
+    <string name="theAppHasNotificationInTheNotificationBar">应用程序在通知栏中有通知</string>
+    <string name="theAppIsCurrentlyTheForegroundApp">应用程序是当前的前台应用程序</string>
+    <string name="operationOnFreezeYouIsNotAllowed">不允许对自冻执行此操作</string>
+    <string name="shizukuVersionIsTooLow">Shizuku 的版本过低</string>
+    <string name="shizukuIsNotInstalledOrOtherExceptions">Shizuku 尚未安装或其他异常</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
