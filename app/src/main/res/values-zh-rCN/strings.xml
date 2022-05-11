@@ -370,6 +370,7 @@
     <string name="verifyToContinue">验证以继续</string>
     <string name="authenticationFailed">验证失败</string>
     <string name="authenticationError_colon">验证出错：%1$s</string>
+    <string name="correspondingAndAvailableWebsiteUrlLanguageCode">zh-CN</string>
     <string name="forceStop">强行停止</string>
     <string name="unfrozenUA">未冻用应</string>
     <string name="lastInstall">最近安装</string>
@@ -384,6 +385,11 @@
     <string name="selfRevokeProfileOwnerSummary">如果被设定为配置文件所有者（Profile-Owner），需要解除后才能正常卸载本应用程序。</string>
     <string name="isNotProfileOwner">不是配置文件所有者（Profile Owner）</string>
     <string name="getBackupData">获得备份数据</string>
+    <string name="theAppHasNotificationInTheNotificationBar">应用程序在通知栏中有通知</string>
+    <string name="theAppIsCurrentlyTheForegroundApp">应用程序是当前的前台应用程序</string>
+    <string name="operationOnFreezeYouIsNotAllowed">不允许对自冻执行此操作</string>
+    <string name="shizukuVersionIsTooLow">Shizuku 的版本过低</string>
+    <string name="shizukuIsNotInstalledOrOtherExceptions">Shizuku 尚未安装或其他异常</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
@@ -452,9 +458,9 @@
         <item>系统应用（DISABLE模式）</item>
         <item>系统应用（DISABLE_USER模式）</item>
         <item>系统应用（DISABLE_UNTIL_USED模式）</item>
-        <item>Shizuku (Disable Mode)</item>
-        <item>Shizuku (Disable_User Mode)</item>
-        <item>Shizuku (Disable_Until_Used Mode)</item>
+        <item>Shizuku (Disable模式)</item>
+        <item>Shizuku (Disable_User模式)</item>
+        <item>Shizuku (Disable_Until_Used模式)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
         <item>暗色</item>
