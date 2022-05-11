@@ -372,6 +372,7 @@
     <string name="verifyToContinue">Подтвердите для продолжения</string>
     <string name="authenticationFailed">Сбой аутентификации</string>
     <string name="authenticationError_colon">Ошибка аутентификации: %1$s</string>
+    <string name="correspondingAndAvailableWebsiteUrlLanguageCode">ru-RU</string>
     <string name="forceStop">Принудительная остановка</string>
     <string name="unfrozenUA">Незамороженые пользовательские</string>
     <string name="lastInstall">Недавно установленные</string>
