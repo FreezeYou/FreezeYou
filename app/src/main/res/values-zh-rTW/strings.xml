@@ -353,8 +353,26 @@
     <string name="displayListDivider">显示列表的分割线</string>
     <string name="appearance">外观</string>
     <string name="createQuickFUFNotiAfterUnfrozen">解冻后创建相应的快捷通知</string>
+    <string name="executionResult_colon_message">執行結果：%1$s</string>
+    <string name="unknownError">不明錯誤</string>
+    <string name="packageNameIsNull">軟體包名稱爲空</string>
+    <string name="packageNameIsEmpty">軟體包名爲空</string>
+    <string name="unlock">解鎖</string>
+    <string name="security">安全</string>
+    <string name="enableAuthentication">啟用身份驗證</string>
+    <string name="authentication">驗證</string>
+    <string name="verifyToContinue">驗證以繼續</string>
+    <string name="authenticationFailed">驗證失敗</string>
+    <string name="authenticationError_colon">驗證錯誤：%1$s</string>
     <string name="correspondingAndAvailableWebsiteUrlLanguageCode">zh-TW</string>
     <string name="forceStop">強制停止</string>
+    <string name="lastInstall">近期安裝</string>
+    <string name="lastUpdate">近期更新</string>
+    <string name="alphabetical">字母順序</string>
+    <string name="refresh">刷新</string>
+    <string name="gotoStore">前往應用市場</string>
+    <string name="getBackupData">獲得備份檔案</string>
+    <string name="shizukuVersionIsTooLow">使用的 Shizuku 版本太舊</string>
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
         <item>僅已凍結</item>
