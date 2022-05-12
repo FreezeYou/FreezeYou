@@ -293,9 +293,19 @@ public class Main extends FreezeYouBaseActivity {
 
         final Context applicationContext = getApplicationContext();
 
+        moreSettingsImageButton.setOnLongClickListener(v -> {
+            if (moreSettingsImageButton.getAlpha() == 0.2f) {
+                moreSettingsImageButton.setAlpha(1f);
+            } else {
+                moreSettingsImageButton.setAlpha(0.2f);
+            }
+            return true;
+        });
+
         moreSettingsImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                moreSettingsImageButton.setAlpha(1f);
                 PopupMenu popupMenu = new PopupMenu(Main.this, v);
                 popupMenu.inflate(R.menu.menu);
                 onPrepareMainOptionsMenu(popupMenu.getMenu());

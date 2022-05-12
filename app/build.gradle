@@ -3,14 +3,14 @@ apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'kotlin-parcelize'
 
 android {
-    compileSdk 31
+    compileSdk 32
     buildToolsVersion '32.0.0'
     defaultConfig {
         applicationId "cf.playhi.freezeyou"
         minSdkVersion 16
-        targetSdk 31
+        targetSdk 32
         versionCode 148
-        versionName '11.2.148.20220409-t148-20220509-1-gh'
+        versionName '11.2.148.20220409-t149-20220512-1-gh'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -73,7 +73,7 @@ dependencies {
     implementation "dev.rikka.shizuku:api:$shizuku_version"
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
 
 //    implementation 'com.google.zxing:core:3.3.3' 先把文本方式稳定下来，再做 QRCode
 

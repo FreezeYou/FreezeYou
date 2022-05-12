@@ -16,6 +16,7 @@ import com.tencent.mmkv.MMKV;
 import java.util.Date;
 import java.util.Locale;
 
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys;
 import cf.playhi.freezeyou.ui.AppLockActivity;
 
 import static cf.playhi.freezeyou.utils.AuthenticationUtils.isAuthenticationEnabled;
@@ -36,7 +37,8 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
             String locale = getLocalString(newBase);
             Configuration configuration = new Configuration();
             configuration.setLocale(
-                    "Default".equals(locale) ? Locale.getDefault() : Locale.forLanguageTag(locale)
+                    DefaultMultiProcessMMKVStorageStringKeys.languagePref.defaultValue().equals(locale)
+                            ? Locale.getDefault() : Locale.forLanguageTag(locale)
             );
             Context context = newBase.createConfigurationContext(configuration);
             super.attachBaseContext(context);

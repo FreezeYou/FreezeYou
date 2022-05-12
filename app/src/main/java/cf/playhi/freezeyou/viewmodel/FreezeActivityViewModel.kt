@@ -171,8 +171,8 @@ class FreezeActivityViewModel(application: Application) : AndroidViewModel(appli
                 ERROR_NO_ERROR_SUCCESS, ERROR_NO_ERROR_CAUGHT_UNKNOWN_RESULT ->
                     recordTimeCost((Date().time - startTime), frozen)
             }
-            mFinishMe.postValue(true)
             mExecuteResult.postValue(ExecuteResult(result, freezeYouFUFSinglePackage))
+            mFinishMe.postValue(true)
         }
     }
 

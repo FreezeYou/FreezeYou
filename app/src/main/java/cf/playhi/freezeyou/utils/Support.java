@@ -22,6 +22,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 
+import androidx.annotation.NonNull;
+
 import net.grandcentrix.tray.AppPreferences;
 
 import java.util.HashMap;
@@ -324,8 +326,9 @@ public final class Support {
         resources.updateConfiguration(config, dm);
     }
 
+    @NonNull
     public static String getLocalString(Context context) {
-        String s = DefaultMultiProcessMMKVStorageStringKeys.languagePref.getValue(null);
+        String s = DefaultMultiProcessMMKVStorageStringKeys.languagePref.getValue(context);
 
         if (s == null) {
             s = "Default";
