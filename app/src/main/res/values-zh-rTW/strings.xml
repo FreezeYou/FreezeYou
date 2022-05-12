@@ -354,6 +354,7 @@
     <string name="appearance">外观</string>
     <string name="createQuickFUFNotiAfterUnfrozen">解冻后创建相应的快捷通知</string>
     <string name="correspondingAndAvailableWebsiteUrlLanguageCode">zh-TW</string>
+    <string name="forceStop">強制停止</string>
     <string-array name="launchModeSelection">
         <item>顯示全部</item>
         <item>僅已凍結</item>
