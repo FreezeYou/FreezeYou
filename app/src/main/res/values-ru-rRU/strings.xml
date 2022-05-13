@@ -383,9 +383,15 @@
     <string name="bluetoothPermissionIsNotGranted">Связанное разрешение Bluetooth не предоставлено</string>
     <string name="mayCannotUseScheduledTaskToEnableOrDisableBluetooth">Возможно, не удастся использовать запланированные задачи для включения или отключения Bluetooth</string>
     <string name="gotoStore">Перейти в магазин приложений</string>
-    <string name="selfRevokeProfileOwner">Отключить режим без-ROOT</string>
-    <string name="selfRevokeProfileOwnerSummary">Если вы включили режим без-ROOT, вам необходимо отключить его перед удалением FreezeYou!</string>
-    <string name="isNotProfileOwner">Это не профиль владельца</string>
+    <string name="selfRevokeProfileOwner">Отключить режим владелец устройства</string>
+    <string name="selfRevokeProfileOwnerSummary">Если вы включили режим владелец устройства, вам необходимо отключить его перед удалением FreezeYou.</string>
+    <string name="isNotProfileOwner">Это не профиль владельца устройства</string>
+    <string name="getBackupData">Получить резервные данные</string>
+    <string name="theAppHasNotificationInTheNotificationBar">Приложение имеет уведомления в панели уведомлений</string>
+    <string name="theAppIsCurrentlyTheForegroundApp">В настоящее время приложение является приложением переднего плана</string>
+    <string name="operationOnFreezeYouIsNotAllowed">Операция на FreezeYou не разрешена</string>
+    <string name="shizukuVersionIsTooLow">Версия Shizuku устарела</string>
+    <string name="shizukuIsNotInstalledOrOtherExceptions">Shizuku не установлен или другие исключения</string>
     <string-array name="launchModeSelection">
         <item>Показать все</item>
         <item>Замороженые</item>
@@ -454,9 +460,9 @@
         <item>Системное (режим DISABLE)</item>
         <item>Системное (режим Disable_User)</item>
         <item>Системное (режим Disable_Until_Used)</item>
-        <item>Shizuku (Disable Mode)</item>
-        <item>Shizuku (Disable_User Mode)</item>
-        <item>Shizuku (Disable_Until_Used Mode)</item>
+        <item>Shizuku (режим отключения)</item>
+        <item>Shizuku (режим Disable_User)</item>
+        <item>Shizuku (режим Disable_Until_Used)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
         <item>Темная тема</item>
