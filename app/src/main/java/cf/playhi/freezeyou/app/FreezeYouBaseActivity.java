@@ -37,7 +37,7 @@ public class FreezeYouBaseActivity extends AppCompatActivity {
             String locale = getLocalString(newBase);
             Configuration configuration = new Configuration();
             configuration.setLocale(
-                    DefaultMultiProcessMMKVStorageStringKeys.languagePref.defaultValue().equals(locale)
+                    DefaultMultiProcessMMKVStorageStringKeys.languagePref.defaultValue().equalsIgnoreCase(locale)
                             ? Locale.getDefault() : Locale.forLanguageTag(locale)
             );
             Context context = newBase.createConfigurationContext(configuration);

@@ -331,7 +331,7 @@ public final class Support {
         String s = DefaultMultiProcessMMKVStorageStringKeys.languagePref.getValue(context);
 
         if (s == null) {
-            s = "Default";
+            s = DefaultMultiProcessMMKVStorageStringKeys.languagePref.defaultValue();
         }
 
         return s;
