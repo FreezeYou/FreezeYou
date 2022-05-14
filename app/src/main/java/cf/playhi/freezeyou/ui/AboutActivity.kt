@@ -89,10 +89,21 @@ class AboutActivity : FreezeYouBaseActivity() {
                             )
                             .setTitle(R.string.contactUs)
                             .setPositiveButton(R.string.okay, null)
-                            .setNeutralButton(
+                            .setNegativeButton(
                                 R.string.addQQGroup
                             ) { _: DialogInterface?, _: Int ->
                                 joinQQGroup(this@AboutActivity)
+                            }
+                            .setNeutralButton(
+                                R.string.more
+                            ) { _: DialogInterface?, _: Int ->
+                                requestOpenWebSite(
+                                    this@AboutActivity,
+                                    String.format(
+                                        "https://www.zidon.net/%1\$s/about/contactUs.html",
+                                        getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)
+                                    )
+                                )
                             }
                             .show()
                     }
