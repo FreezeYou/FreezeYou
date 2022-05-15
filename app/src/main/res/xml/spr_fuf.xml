@@ -2,6 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <Preference
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
+        app:title="@string/manageUriAutoAllow">
+        <intent
+            android:targetClass="cf.playhi.freezeyou.ui.UriAutoAllowManageActivity"
+            android:targetPackage="cf.playhi.freezeyou" />
+    </Preference>
     <ListPreference
         app:defaultValue="0"
         app:entries="@array/selectFUFModeSelection"
@@ -72,13 +80,11 @@
         app:singleLineTitle="false"
         app:title="@string/shortCutOneKeyFreezeAdditionalOptions"
         app:useSimpleSummaryProvider="true" />
-    <Preference
+    <CheckBoxPreference
+        app:defaultValue="true"
         app:iconSpaceReserved="false"
+        app:key="playFUFAnimations"
         app:singleLineTitle="false"
-        app:title="@string/manageUriAutoAllow">
-        <intent
-            android:targetClass="cf.playhi.freezeyou.ui.UriAutoAllowManageActivity"
-            android:targetPackage="cf.playhi.freezeyou" />
-    </Preference>
+        app:title="@string/playFUFAnimations" />
 
 </PreferenceScreen>

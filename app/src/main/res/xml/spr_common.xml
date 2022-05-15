@@ -35,9 +35,18 @@
         app:defaultValue="true"
         app:iconSpaceReserved="false"
         app:key="showInRecents"
+        app:disableDependentsState="false"
         app:singleLineTitle="false"
         app:summary="@string/mayHaveNoEffectsL"
         app:title="@string/showInRecents" />
+    <CheckBoxPreference
+        app:dependency="showInRecents"
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
+        app:key="includeFUFActivityInRecents"
+        app:singleLineTitle="false"
+        app:summary="@string/mayHaveNoEffectsL"
+        app:title="@string/includeFUFActivityInRecents" />
     <CheckBoxPreference
         app:defaultValue="false"
         app:iconSpaceReserved="false"

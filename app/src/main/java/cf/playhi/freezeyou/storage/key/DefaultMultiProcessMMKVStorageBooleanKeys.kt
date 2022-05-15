@@ -54,6 +54,12 @@ enum class DefaultMultiProcessMMKVStorageBooleanKeys : AbstractMMKVKey<Boolean> 
         override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_COMMON
     },
 
+    includeFUFActivityInRecents {
+        override fun defaultValue(): Boolean = false
+        override fun titleTextStringId(): Int = R.string.includeFUFActivityInRecents
+        override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_COMMON
+    },
+
     lesserToast {
         override fun defaultValue(): Boolean = false
         override fun titleTextStringId(): Int = R.string.lesserToast
@@ -99,6 +105,12 @@ enum class DefaultMultiProcessMMKVStorageBooleanKeys : AbstractMMKVKey<Boolean> 
     openImmediatelyAfterUnfreezeUseShortcutAutoFUF {
         override fun defaultValue(): Boolean = true
         override fun titleTextStringId(): Int = R.string.openImmediatelyAfterUF
+        override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_FREEZE_AND_UNFREEZE
+    },
+
+    playFUFAnimations {
+        override fun defaultValue(): Boolean = true
+        override fun titleTextStringId(): Int = R.string.playFUFAnimations
         override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_FREEZE_AND_UNFREEZE
     },
 

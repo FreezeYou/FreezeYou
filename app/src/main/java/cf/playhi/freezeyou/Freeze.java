@@ -26,6 +26,8 @@ import cf.playhi.freezeyou.viewmodel.FreezeActivityViewModel;
 import cf.playhi.freezeyou.viewmodel.PlayAnimatorData;
 
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_UNFREEZE;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.includeFUFActivityInRecents;
+import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.playFUFAnimations;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.showInRecents;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable;
@@ -45,7 +47,7 @@ public class Freeze extends FreezeYouBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         processSetTheme(this, true);
         super.onCreate(savedInstanceState);
-        initApplicationIconImageView();
+        if (playFUFAnimations.getValue(null)) initApplicationIconImageView();
         viewModel = new ViewModelProvider(this).get(FreezeActivityViewModel.class);
         viewModel.getPkgName().observe(this, pkgName -> {
             setUnlockLogoPkgName(pkgName);
@@ -75,6 +77,7 @@ public class Freeze extends FreezeYouBaseActivity {
     }
 
     private void onPlayAnimator(PlayAnimatorData playAnimatorData) {
+        if (applicationIconImageView == null) return;
         applicationIconImageView.setImageDrawable(
                 getApplicationIcon(
                         this,
@@ -206,10 +209,14 @@ public class Freeze extends FreezeYouBaseActivity {
 
     @Override
     public void finish() {
-        if (Build.VERSION.SDK_INT >= 21 && !showInRecents.getValue(null)) {
+        if (Build.VERSION.SDK_INT >= 21
+                &&
+                (!showInRecents.getValue(null)
+                        || !includeFUFActivityInRecents.getValue(null))) {
             finishAndRemoveTask();
+        } else {
+            super.finish();
         }
-        super.finish();
     }
 
     private void buildAndShowFUFDialog(DialogData data) {
