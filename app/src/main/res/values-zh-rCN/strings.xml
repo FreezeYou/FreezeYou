@@ -390,6 +390,8 @@
     <string name="operationOnFreezeYouIsNotAllowed">不允许对自冻执行此操作</string>
     <string name="shizukuVersionIsTooLow">Shizuku 的版本过低</string>
     <string name="shizukuIsNotInstalledOrOtherExceptions">Shizuku 尚未安装或其他异常</string>
+    <string name="includeFUFActivityInRecents">在最近任务中包括冻结与解冻活动</string>
+    <string name="playFUFAnimations">播放冻结与解冻动画</string>
     <string-array name="launchModeSelection">
         <item>显示全部</item>
         <item>仅已冻结</item>
