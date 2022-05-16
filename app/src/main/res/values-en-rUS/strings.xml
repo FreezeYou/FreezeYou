@@ -390,6 +390,8 @@
     <string name="operationOnFreezeYouIsNotAllowed">Operation on FreezeYou is not allowed</string>
     <string name="shizukuVersionIsTooLow">Shizuku version is too low</string>
     <string name="shizukuIsNotInstalledOrOtherExceptions">Shizuku is not installed or other exceptions</string>
+    <string name="includeFUFActivityInRecents">Include freeze and unfreeze activity in recents</string>
+    <string name="playFUFAnimations">Play freeze and unfreeze animations</string>
     <string-array name="launchModeSelection">
         <item>Show All</item>
         <item>Frozen only</item>
