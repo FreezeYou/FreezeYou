@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou.ui;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -17,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
@@ -40,6 +40,7 @@ import cf.playhi.freezeyou.utils.InstallPackagesUtils;
 import cf.playhi.freezeyou.utils.MoreUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 
+import static cf.playhi.freezeyou.app.FreezeYouAlertDialogBuilderKt.FreezeYouAlertDialogBuilder;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.notAllowInstallWhenIsObsd;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.tryToAvoidUpdateWhenUsing;
 import static cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel;
@@ -532,7 +533,7 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
                                                         final Uri packageUri,
                                                         final PackageInfo processedPackageInfo,
                                                         final boolean preDefinedTryToAvoidUpdateWhenUsing) {
-        AlertDialog.Builder adbd = new AlertDialog.Builder(InstallPackagesActivity.this);
+        AlertDialog.Builder adbd = FreezeYouAlertDialogBuilder(InstallPackagesActivity.this);
         adbd.setMessage(R.string.installPerimisionCheckFailed_ifContinue);
         adbd.setTitle(R.string.notice);
         adbd.setPositiveButton(R.string.yes, (dialog, which) -> {

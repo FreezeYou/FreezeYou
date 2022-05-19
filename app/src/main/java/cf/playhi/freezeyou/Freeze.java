@@ -4,7 +4,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.ActivityManager;
-import android.app.AlertDialog;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.ColorDrawable;
@@ -17,6 +16,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
@@ -25,6 +25,7 @@ import cf.playhi.freezeyou.viewmodel.DialogData;
 import cf.playhi.freezeyou.viewmodel.FreezeActivityViewModel;
 import cf.playhi.freezeyou.viewmodel.PlayAnimatorData;
 
+import static cf.playhi.freezeyou.app.FreezeYouAlertDialogBuilderKt.FreezeYouAlertDialogBuilder;
 import static cf.playhi.freezeyou.fuf.FUFSinglePackage.ACTION_MODE_UNFREEZE;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.includeFUFActivityInRecents;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.playFUFAnimations;
@@ -220,7 +221,7 @@ public class Freeze extends FreezeYouBaseActivity {
     }
 
     private void buildAndShowFUFDialog(DialogData data) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+        AlertDialog.Builder builder = FreezeYouAlertDialogBuilder(this)
                 .setIcon(
                         getApplicationIcon(
                                 this,

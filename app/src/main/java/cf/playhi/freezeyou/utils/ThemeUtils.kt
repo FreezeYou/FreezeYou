@@ -48,6 +48,9 @@ internal object ThemeUtils {
      */
     @JvmStatic
     fun getThemeSecondDot(@NonNull context: Context): Int {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return R.drawable.shapedot_colorbackground
+        }
         val string = getUiTheme(context)
         return if (string != null) {
             when (string) {
@@ -83,10 +86,19 @@ internal object ThemeUtils {
     fun getUiTheme(@NonNull context: Context): String? {
         return if (allowFollowSystemAutoSwitchDarkMode.getValue()) {
             if (isSystemDarkModeEnabled(context))
-                if ("dark" == themeOfAutoSwitchDarkMode.getValue())
-                    "black"
-                else
-                    "deepBlack"
+                when (themeOfAutoSwitchDarkMode.getValue()) {
+                    "dark" -> "black"
+                    "black" -> "deepBlack"
+                    else -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+                            && uiStyleSelection.getValue() == uiStyleSelection.defaultValue()
+                        ) {
+                            uiStyleSelection.defaultValue()
+                        } else {
+                            "black"
+                        }
+                    }
+                }
             else uiStyleSelection.getValue()
         } else {
             uiStyleSelection.getValue()
@@ -144,7 +156,7 @@ internal object ThemeUtils {
                     "red" -> context.setTheme(if (isDialog) R.style.AppTheme_Light_Dialog_Red else R.style.AppTheme_Light_Red)
                     "deepBlack" -> context.setTheme(if (isDialog) R.style.AppTheme_Dark_Dialog_Black else R.style.AppTheme_Dark_Black)
                     "white" -> context.setTheme(if (isDialog) R.style.AppTheme_Light_Dialog_White else R.style.AppTheme_Light_White)
-                    else -> context.setTheme(if (isDialog) R.style.AppTheme_Light_Dialog_White else R.style.AppTheme_Light_White)
+                    else -> context.setTheme(if (isDialog) R.style.AppTheme_Default_Dialog else R.style.AppTheme_Default)
                 }
             }
         } catch (e: Exception) {

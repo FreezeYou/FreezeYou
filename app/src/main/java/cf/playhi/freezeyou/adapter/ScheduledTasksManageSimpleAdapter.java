@@ -5,9 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
-import androidx.appcompat.widget.SwitchCompat;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -15,14 +14,11 @@ import java.util.Map;
 import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
-import static cf.playhi.freezeyou.utils.ThemeUtils.getThemeSecondDot;
-
 public class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
 
     private final Context mContext;
     private final ArrayList<Map<String, Object>> mTasksList;
     private final ArrayList<Integer> mIdIndexArrayList;
-    private final int mLabelTextColor;
 
     public ScheduledTasksManageSimpleAdapter(
             Context context, ArrayList<Map<String, Object>> list,
@@ -32,12 +28,6 @@ public class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
         mTasksList = list;
         mContext = context;
         mIdIndexArrayList = idIndexArrayList;
-
-        mLabelTextColor =
-                getThemeSecondDot(mContext) == R.drawable.shapedotblack ?
-                        mContext.getResources().getColor(android.R.color.white) :
-                        mContext.getResources().getColor(android.R.color.black);
-
     }
 
     public boolean replaceAllInFormerArrayList(ArrayList<Map<String, Object>> list) {
@@ -55,10 +45,7 @@ public class ScheduledTasksManageSimpleAdapter extends SimpleAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
 
-        TextView label = view.findViewById(R.id.stma_label);
-        label.setTextColor(mLabelTextColor);
-
-        SwitchCompat sc = view.findViewById(R.id.stma_switch);
+        SwitchMaterial sc = view.findViewById(R.id.stma_switch);
         sc.setOnCheckedChangeListener((buttonView, isChecked) -> {
             final String timeS = (String) mTasksList.get(position).get("time");
             mTasksList.get(position).put("enabled", isChecked);

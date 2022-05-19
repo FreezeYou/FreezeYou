@@ -5,7 +5,7 @@
     android:background="@drawable/applist_selector"
     android:padding="10dp">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/stma_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,9 +15,10 @@
         android:layout_toStartOf="@id/stma_switch"
         android:layout_toLeftOf="@id/stma_switch"
         android:singleLine="true"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/stma_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,9 +28,9 @@
         android:layout_toStartOf="@id/stma_switch"
         android:layout_toLeftOf="@id/stma_switch"
         android:singleLine="true"
-        android:textSize="14sp" />
+        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"  />
 
-    <androidx.appcompat.widget.SwitchCompat
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/stma_switch"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

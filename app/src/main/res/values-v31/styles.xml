@@ -2,12 +2,24 @@
 <resources>
 
     <style name="Base.V31.AppTheme.SplashScreen" parent="Base.V14.AppTheme.SplashScreen">
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_new_round_foreground_animation</item>
+        <item name="android:windowSplashScreenAnimatedIcon">
+            @drawable/ic_launcher_new_round_foreground_animation
+        </item>
         <item name="android:windowSplashScreenAnimationDuration">500</item>
         <item name="android:windowSplashScreenBackground">?attr/colorControlNormal</item>
         <item name="android:windowSplashScreenIconBackgroundColor">#2962FF</item>
     </style>
 
     <style name="Base.AppTheme.SplashScreen" parent="Base.V31.AppTheme.SplashScreen" />
+
+    <style name="AppTheme.Default" parent="Theme.Material3.DynamicColors.DayNight" />
+
+    <style name="AppTheme.Default.Dialog" parent="Theme.Material3.DynamicColors.DayNight">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowElevation">@dimen/abc_floating_window_z</item>
+    </style>
 
 </resources>

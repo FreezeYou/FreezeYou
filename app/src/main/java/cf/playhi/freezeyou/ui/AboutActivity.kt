@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import cf.playhi.freezeyou.R
+import cf.playhi.freezeyou.app.FreezeYouAlertDialogBuilder
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.utils.MoreUtils.joinQQGroup
 import cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite
@@ -72,7 +73,7 @@ class AboutActivity : FreezeYouBaseActivity() {
                     )
                     4 -> requestOpenWebSite(this@AboutActivity, "https://www.zidon.net")
                     5 -> {
-                        AlertDialog.Builder(this@AboutActivity)
+                        FreezeYouAlertDialogBuilder(this@AboutActivity)
                             .setMessage(
                                 String.format(
                                     getString(R.string.email_colon),
@@ -132,7 +133,7 @@ class AboutActivity : FreezeYouBaseActivity() {
         }
 
         aboutAppName.setOnClickListener {
-            AlertDialog.Builder(this@AboutActivity)
+            FreezeYouAlertDialogBuilder(this@AboutActivity)
                 .setTitle(
                     String.format(
                         getString(R.string.welcomeToUseAppName),

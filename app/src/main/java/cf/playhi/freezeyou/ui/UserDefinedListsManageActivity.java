@@ -1,6 +1,5 @@
 package cf.playhi.freezeyou.ui;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +11,8 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 
+import androidx.appcompat.app.AlertDialog;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,13 +20,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import cf.playhi.freezeyou.utils.GZipUtils;
 import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity;
+import cf.playhi.freezeyou.utils.GZipUtils;
 
+import static cf.playhi.freezeyou.app.FreezeYouAlertDialogBuilderKt.FreezeYouAlertDialogBuilder;
+import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;
 import static cf.playhi.freezeyou.utils.ThemeUtils.processActionBar;
 import static cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme;
-import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;
 import static cf.playhi.freezeyou.utils.ToastUtils.showToast;
 
 public class UserDefinedListsManageActivity extends FreezeYouBaseActivity {
@@ -138,7 +140,7 @@ public class UserDefinedListsManageActivity extends FreezeYouBaseActivity {
                     break;
                 case R.id.udlmna_sca_menu_delete:
                     AlertDialog.Builder builder =
-                            new AlertDialog.Builder(UserDefinedListsManageActivity.this);
+                            FreezeYouAlertDialogBuilder(UserDefinedListsManageActivity.this);
                     builder.setTitle(R.string.plsConfirm);
                     builder.setMessage(R.string.askIfDel);
                     builder.setPositiveButton(

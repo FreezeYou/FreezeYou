@@ -28,7 +28,7 @@
         app:title="@string/allowFollowSystemAutoSwitchDarkMode" />
     <ListPreference
         app:useSimpleSummaryProvider="true"
-        app:defaultValue="dark"
+        app:defaultValue="default"
         app:entries="@array/themeOfAutoSwitchDarkModeEntries"
         app:entryValues="@array/themeOfAutoSwitchDarkModeEntryValues"
         app:iconSpaceReserved="false"

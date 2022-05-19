@@ -79,6 +79,7 @@ import cf.playhi.freezeyou.utils.LauncherShortcutUtils;
 import cf.playhi.freezeyou.utils.ServiceUtils;
 import cf.playhi.freezeyou.utils.TasksUtils;
 
+import static cf.playhi.freezeyou.app.FreezeYouAlertDialogBuilderKt.FreezeYouAlertDialogBuilder;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.lesserToast;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.showInRecents;
 import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.cacheApplicationsIcons;
@@ -1594,7 +1595,7 @@ public class Main extends FreezeYouBaseActivity {
             return;
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = FreezeYouAlertDialogBuilder(this);
         builder.setIcon(R.mipmap.ic_launcher_new_round);
         builder.setTitle(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)));
         builder.setMessage(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)));
@@ -2157,7 +2158,7 @@ public class Main extends FreezeYouBaseActivity {
 
     private void showAddNewUserDefinedClassificationDialog() {
         final EditText vmUserDefinedNameAlertDialogEditText = new EditText(this);
-        AlertDialog.Builder vmUserDefinedNameAlertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder vmUserDefinedNameAlertDialog = FreezeYouAlertDialogBuilder(this);
         vmUserDefinedNameAlertDialog.setTitle(R.string.label);
         vmUserDefinedNameAlertDialog.setView(vmUserDefinedNameAlertDialogEditText);
         vmUserDefinedNameAlertDialog.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {

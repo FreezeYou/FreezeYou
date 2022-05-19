@@ -1,7 +1,6 @@
 package cf.playhi.freezeyou.utils;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +22,7 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -35,6 +35,7 @@ import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys;
 import cf.playhi.freezeyou.ui.InstallPackagesActivity;
 
+import static cf.playhi.freezeyou.app.FreezeYouAlertDialogBuilderKt.FreezeYouAlertDialogBuilder;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.freezeOnceQuit;
 import static cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon;
 import static cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard;
@@ -139,7 +140,7 @@ public final class Support {
                     switch (item.getItemId()) {
                         case R.id.main_sca_menu_userDefined_newClassification:
                             final EditText vmUserDefinedNameAlertDialogEditText = new EditText(activity);
-                            AlertDialog.Builder vmUserDefinedNameAlertDialog = new AlertDialog.Builder(activity);
+                            AlertDialog.Builder vmUserDefinedNameAlertDialog = FreezeYouAlertDialogBuilder(activity);
                             vmUserDefinedNameAlertDialog.setTitle(R.string.label);
                             vmUserDefinedNameAlertDialog.setView(vmUserDefinedNameAlertDialogEditText);
                             vmUserDefinedNameAlertDialog.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {

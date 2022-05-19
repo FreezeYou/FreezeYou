@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleAdapter;
 
-import androidx.appcompat.widget.SwitchCompat;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,7 +52,7 @@ public class BackupImportChooserActivitySwitchSimpleAdapter extends SimpleAdapte
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
-        SwitchCompat s = view.findViewById(R.id.bica_list_item_switch);
+        SwitchMaterial s = view.findViewById(R.id.bica_list_item_switch);
 
         if (s != null) {
 

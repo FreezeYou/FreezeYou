@@ -19,7 +19,7 @@ enum class DefaultMultiProcessMMKVStorageStringKeys : AbstractMMKVKey<String?> {
     },
 
     themeOfAutoSwitchDarkMode {
-        override fun defaultValue(): String = "dark"
+        override fun defaultValue(): String = "default"
         override fun valueStringId(): Int = -1
         override fun titleTextStringId(): Int = R.string.themeOfAutoSwitchDarkMode
         override fun category(): Int = CATEGORY_SETTINGS or CATEGORY_SETTINGS_APPEARANCE

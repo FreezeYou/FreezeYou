@@ -562,10 +562,12 @@
         <item>8</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
+        <item>Default</item>
         <item>Dark</item>
         <item>Black</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntryValues" translatable="false">
+        <item>default</item>
         <item>dark</item>
         <item>black</item>
     </string-array>

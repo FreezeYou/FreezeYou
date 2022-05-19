@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.activity.viewModels
 import cf.playhi.freezeyou.R
+import cf.playhi.freezeyou.app.FreezeYouAlertDialogBuilder
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
@@ -57,7 +58,7 @@ class ManualModeActivity : FreezeYouBaseActivity() {
                 }
         }
         selectFUFModeButton.setOnClickListener {
-            AlertDialog.Builder(this@ManualModeActivity)
+            FreezeYouAlertDialogBuilder(this@ManualModeActivity)
                 .setTitle(R.string.selectFUFMode)
                 .setSingleChoiceItems(
                     modeSelections[0],

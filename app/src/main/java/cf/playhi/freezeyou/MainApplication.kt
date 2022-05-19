@@ -16,6 +16,7 @@ import cf.playhi.freezeyou.storage.mmkv.DefaultMultiProcessMMKVStorage
 import cf.playhi.freezeyou.utils.OneKeyListUtils
 import cf.playhi.freezeyou.utils.ServiceUtils
 import com.getkeepsafe.relinker.ReLinker
+import com.google.android.material.color.DynamicColors
 import com.tencent.mmkv.MMKV
 import net.grandcentrix.tray.AppPreferences
 import java.io.File
@@ -45,6 +46,7 @@ class MainApplication : Application() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        DynamicColors.applyToActivitiesIfAvailable(this)
         checkAndStartScreenLockOneKeyFreezeService()
     }
 
