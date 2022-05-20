@@ -456,6 +456,7 @@
         <item>Shizuku (Disable_Until_Used Mode)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
+        <item>Default</item>
         <item>Koyu</item>
         <item>Siyah</item>
     </string-array>

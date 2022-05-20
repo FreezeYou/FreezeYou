@@ -465,6 +465,7 @@
         <item>Shizuku (Disable_Until_Used Mode)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
+        <item>Default</item>
         <item>Dark</item>
         <item>Black</item>
     </string-array>

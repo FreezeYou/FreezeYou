@@ -463,6 +463,7 @@
         <item>Shizuku (режим Disable_Until_Used)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
+        <item>По умолчанию</item>
         <item>Темна тема</item>
         <item>Чорна тема</item>
     </string-array>

@@ -79,7 +79,7 @@
     <string name="createDisEnableShortCut">Створити ярлик заморозка / розморозка</string>
     <string name="iconAEntry">Іконки і вхід</string>
     <string name="dialEntry">Використовуйте клавіатуру для введення</string>
-    <string name="dialEntry_Ex">*#*#73393968#*#* (*#*#FreezeYou#*#*) (більшість пристроїв Android підтримують)</string>
+    <string name="dialEntry_Ex">*#*#373393968#*#* (*#*#FreezeYou#*#*) (більшість пристроїв Android підтримують)</string>
     <string name="ciFinishedToast">Відправлено, будь ласка, дочекайтеся оновлення лаунчера, або перезапустіть його.</string>
     <string name="ifUploadCrashLog">Виявлено log збою, котрий стався раніше. Ви хочете відправити цей лог розробнику програми?</string>
     <string name="search">Пошук</string>
@@ -379,6 +379,18 @@
     <string name="themeOfAutoSwitchDarkMode">Стиль інтерфейсу для автоматичного перемикання темного режиму</string>
     <string name="bluetoothPermissionIsNotGranted">Пов\'язаний дозвіл Bluetooth не надано</string>
     <string name="mayCannotUseScheduledTaskToEnableOrDisableBluetooth">Можливо, не вдасться використати заплановані завдання для ввімкнення або вимкнення Bluetooth</string>
+    <string name="gotoStore">Перейти до магазину</string>
+    <string name="selfRevokeProfileOwner">Надати дозвіл власника профілю</string>
+    <string name="selfRevokeProfileOwnerSummary">Якщо налаштовано режим власника профілю, нам потрібно відключити його перед видаленням програми.</string>
+    <string name="isNotProfileOwner">Це не власник профілю</string>
+    <string name="getBackupData">Отримати резервні копії даних</string>
+    <string name="theAppHasNotificationInTheNotificationBar">Додаток має сповіщення на панелі сповіщень</string>
+    <string name="theAppIsCurrentlyTheForegroundApp">Додаток в даний час є активним додатком</string>
+    <string name="operationOnFreezeYouIsNotAllowed">Операція у FreezeYou не дозволена</string>
+    <string name="shizukuVersionIsTooLow">Версія Shizuku застаріла</string>
+    <string name="shizukuIsNotInstalledOrOtherExceptions">Shizuku не встановлено або інші винятки</string>
+    <string name="includeFUFActivityInRecents">Включати заморозка та розморозка в меню Нещодавні</string>
+    <string name="playFUFAnimations">Увімкнути анімацію заморозки та розморозки</string>
     <string-array name="launchModeSelection">
         <item>Показати все</item>
         <item>Заморожено</item>
@@ -440,19 +452,20 @@
     </string-array>
     <string-array name="selectFUFModeSelection">
         <item>без-ROOT (режим DPM)</item>
-        <item>No-root (Profile Owner Mode)</item>
-        <item>ROOT (Hide Mode)</item>
-        <item>ROOT (Disable Mode)</item>
-        <item>Legacy (Auto DPM or Disable Mode)</item>
-        <item>System App (Disable Mode)</item>
-        <item>System App (Disable_User Mode)</item>
-        <item>System App (Disable_Until_Used Mode)</item>
-        <item>Shizuku (Disable Mode)</item>
-        <item>Shizuku (Disable_User Mode)</item>
-        <item>Shizuku (Disable_Until_Used Mode)</item>
+        <item>Без-root (режим власника профілю)</item>
+        <item>ROOT (режим приховування)</item>
+        <item>ROOT (режим відключення)</item>
+        <item>Legacy (Автоматичний DPM або режим відключення)</item>
+        <item>Системний (режим відключення)</item>
+        <item>Системний (режим DISABLE_USER)</item>
+        <item>Системний (режим DISABLE_UNTIL_USED)</item>
+        <item>Shizuku (режим відключення)</item>
+        <item>Shizuku (режим Disable_User)</item>
+        <item>Shizuku (режим Disable_Until_Used)</item>
     </string-array>
     <string-array name="themeOfAutoSwitchDarkModeEntries">
-        <item>Темна тема</item>
-        <item>Чорна тема</item>
+        <item>За замовчуванням</item>
+        <item>Темна</item>
+        <item>Чорна</item>
     </string-array>
 </resources>
