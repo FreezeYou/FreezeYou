@@ -79,7 +79,7 @@
     <string name="createDisEnableShortCut">Создать ярлык заморозка/разморозка</string>
     <string name="iconAEntry">Иконки и вход</string>
     <string name="dialEntry">Используйте клавиатуру для ввода</string>
-    <string name="dialEntry_Ex">*#*#73393968#*#* (*#*#FreezeYou#*#*) (большинство устройств Android поддерживают)</string>
+    <string name="dialEntry_Ex">*#*#373393968#*#* (*#*#FreezeYou#*#*) (большинство устройств Android поддерживают)</string>
     <string name="ciFinishedToast">Отправлено, пожалуйста, дождитесь обновления лаунчера, или перезапустите его.</string>
     <string name="ifUploadCrashLog">Обнаружен log произошедшего сбоя. Вы хотите отправить этот лог разработчику приложения ?</string>
     <string name="search">Поиск</string>
