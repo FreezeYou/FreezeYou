@@ -79,7 +79,7 @@
     <string name="createDisEnableShortCut">Создать ярлык заморозка/разморозка</string>
     <string name="iconAEntry">Иконки и вход</string>
     <string name="dialEntry">Используйте клавиатуру для ввода</string>
-    <string name="dialEntry_Ex">*#*#373393968#*#* (*#*#FreezeYou#*#*) (большинство устройств Android поддерживают)</string>
+    <string name="dialEntry_Ex">*#*#373393968#*#* (*#*#FreezeYou#*#*) (поддерживается на большинстве Android устройств)</string>
     <string name="ciFinishedToast">Отправлено, пожалуйста, дождитесь обновления лаунчера, или перезапустите его.</string>
     <string name="ifUploadCrashLog">Обнаружен log произошедшего сбоя. Вы хотите отправить этот лог разработчику приложения ?</string>
     <string name="search">Поиск</string>
@@ -392,6 +392,8 @@
     <string name="operationOnFreezeYouIsNotAllowed">Операция на FreezeYou не разрешена</string>
     <string name="shizukuVersionIsTooLow">Версия Shizuku устарела</string>
     <string name="shizukuIsNotInstalledOrOtherExceptions">Shizuku не установлен или другие исключения</string>
+    <string name="includeFUFActivityInRecents">Добавить активити заморозки и разморозки в недавних приложениях</string>
+    <string name="playFUFAnimations">Включить анимацию заморозки и разморозки</string>
     <string-array name="launchModeSelection">
         <item>Показать все</item>
         <item>Замороженые</item>
