@@ -28,6 +28,7 @@ import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys.
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBooleanKeys.enableInstallPkgFunc
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.mainActivityPattern
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.organizationName
+import cf.playhi.freezeyou.utils.FUFUtils.checkAndEnableShizukuMultiProcessSupport
 import cf.playhi.freezeyou.utils.ToastUtils.showToast
 import rikka.shizuku.Shizuku
 
@@ -151,9 +152,18 @@ object SettingsUtils {
                                 if (Shizuku.isPreV11()) {
                                     showToast(context, R.string.shizukuVersionIsTooLow)
                                 } else if (Shizuku.checkSelfPermission() != PERMISSION_GRANTED) {
-                                    if (!Shizuku.shouldShowRequestPermissionRationale()) {
+                                    if (Shizuku.shouldShowRequestPermissionRationale()) {
+                                        showToast(context, R.string.insufficientPermission)
+                                    } else {
+                                        Shizuku.addRequestPermissionResultListener { _, grantResult ->
+                                            if (grantResult == PERMISSION_GRANTED){
+                                                checkAndEnableShizukuMultiProcessSupport(context)
+                                            }
+                                        }
                                         Shizuku.requestPermission(-1)
                                     }
+                                } else {
+                                    checkAndEnableShizukuMultiProcessSupport(context)
                                 }
                             } catch (e: Exception) {
                                 e.printStackTrace()

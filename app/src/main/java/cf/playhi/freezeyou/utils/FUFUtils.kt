@@ -16,9 +16,11 @@ import cf.playhi.freezeyou.fuf.FUFSinglePackage
 import cf.playhi.freezeyou.service.FUFService
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.lesserToast
+import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys
 import cf.playhi.freezeyou.ui.AskRunActivity
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import rikka.shizuku.ShizukuProvider
 import java.io.DataOutputStream
 import java.util.*
 
@@ -803,5 +805,16 @@ object FUFUtils {
             context,
             String.format(context.getString(R.string.executionResult_colon_message), message)
         )
+    }
+
+    fun checkAndEnableShizukuMultiProcessSupport(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+            && ("10" == DefaultMultiProcessMMKVStorageStringKeys.selectFUFMode.getValue()
+                    || "9" == DefaultMultiProcessMMKVStorageStringKeys.selectFUFMode.getValue()
+                    || "8" == DefaultMultiProcessMMKVStorageStringKeys.selectFUFMode.getValue())
+        ) {
+            ShizukuProvider.enableMultiProcessSupport(false)
+            ShizukuProvider.requestBinderForNonProviderProcess(context)
+        }
     }
 }
