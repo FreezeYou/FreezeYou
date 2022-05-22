@@ -78,10 +78,16 @@ object SettingsUtils {
                 }
             }
             organizationName ->
-                DevicePolicyManagerUtils.checkAndSetOrganizationName(
-                    context,
-                    sharedPreferences.getString(key, null)
-                )
+                // Although we checked `isProfileOwnerApp` and `isDeviceOwnerApp`,
+                // we still get exceptions on some OPPT devices.
+                try {
+                    DevicePolicyManagerUtils.checkAndSetOrganizationName(
+                        context,
+                        sharedPreferences.getString(key, null)
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             avoidFreezeNotifyingApplications -> {
                 if (Build.VERSION.SDK_INT >= 21) {
                     val enabledNotificationListeners = Settings.Secure.getString(
@@ -156,7 +162,7 @@ object SettingsUtils {
                                         showToast(context, R.string.insufficientPermission)
                                     } else {
                                         Shizuku.addRequestPermissionResultListener { _, grantResult ->
-                                            if (grantResult == PERMISSION_GRANTED){
+                                            if (grantResult == PERMISSION_GRANTED) {
                                                 checkAndEnableShizukuMultiProcessSupport(context)
                                             }
                                         }

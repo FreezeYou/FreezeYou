@@ -79,7 +79,7 @@ public final class DevicePolicyManagerUtils {
     }
 
     public static void checkAndSetOrganizationName(Context context, @Nullable String name) {
-        if (Build.VERSION.SDK_INT >= 24 && isDeviceOwner(context))
+        if (Build.VERSION.SDK_INT >= 24 && (isDeviceOwner(context) || isProfileOwner(context)))
             getDevicePolicyManager(context).setOrganizationName(
                     DeviceAdminReceiver.getComponentName(context), name);
     }
