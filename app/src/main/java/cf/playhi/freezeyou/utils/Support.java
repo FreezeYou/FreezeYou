@@ -19,10 +19,10 @@ import android.util.DisplayMetrics;
 import android.view.SubMenu;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
 
 import net.grandcentrix.tray.AppPreferences;
 

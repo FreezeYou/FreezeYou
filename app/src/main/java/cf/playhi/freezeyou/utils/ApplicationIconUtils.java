@@ -9,6 +9,7 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
@@ -26,8 +27,11 @@ import static cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageBool
 public final class ApplicationIconUtils {
 
     /**
-     * Drawable转Bitmap
-     * 最初参考 http://www.cnblogs.com/zhou2016/p/6281678.html
+     * Drawable 转 Bitmap<p>
+     * 最初参考 http://www.cnblogs.com/zhou2016/p/6281678.html<p>
+     * 后续参考 https://stackoverflow.com/a/10600736/10011687
+     * <p>
+     * 待切至 Kotlin 后可换用 DrawableKt.toBitmap()，但仍需注意 Intrinsic == -1 的情况
      *
      * @param drawable drawable
      * @return Bitmap
@@ -36,15 +40,25 @@ public final class ApplicationIconUtils {
         if (drawable == null) {
             return Bitmap.createBitmap(144, 144, Bitmap.Config.ARGB_8888);
         } else {
-            try {
-                return ((BitmapDrawable) drawable).getBitmap();
-            } catch (Exception e) {
-                Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-                Canvas canvas = new Canvas(bitmap);
-                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-                drawable.draw(canvas);
-                return bitmap;
+            if (drawable instanceof BitmapDrawable) {
+                Bitmap bm = ((BitmapDrawable) drawable).getBitmap();
+                if (bm != null) {
+                    return bm;
+                }
             }
+
+            int width = drawable.getIntrinsicWidth(), height = drawable.getIntrinsicHeight();
+            Rect oldBounds = drawable.copyBounds();
+            Bitmap bitmap;
+            if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+                bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+            } else {
+                bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            }
+            drawable.setBounds(0, 0, width, height);
+            drawable.draw(new Canvas(bitmap));
+            drawable.setBounds(oldBounds);
+            return bitmap;
         }
     }
 

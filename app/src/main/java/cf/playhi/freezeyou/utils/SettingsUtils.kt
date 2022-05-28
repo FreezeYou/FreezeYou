@@ -87,6 +87,7 @@ object SettingsUtils {
                     )
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    showToast(context, R.string.failed)
                 }
             avoidFreezeNotifyingApplications -> {
                 if (Build.VERSION.SDK_INT >= 21) {

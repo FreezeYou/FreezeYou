@@ -45,7 +45,7 @@
                     android:id="@+id/lscaga_package_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.8"
                     android:text="..."
                     tools:ignore="HardcodedText" />
             </LinearLayout>
@@ -116,7 +116,7 @@
                     android:id="@+id/lscaga_target_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.8"
                     android:text="..."
                     tools:ignore="HardcodedText" />
             </LinearLayout>

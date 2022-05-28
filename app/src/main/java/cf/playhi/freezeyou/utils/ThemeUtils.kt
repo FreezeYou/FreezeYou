@@ -90,9 +90,7 @@ internal object ThemeUtils {
                     "dark" -> "black"
                     "black" -> "deepBlack"
                     else -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-                            && uiStyleSelection.getValue() == uiStyleSelection.defaultValue()
-                        ) {
+                        if (isMaterial3Theme()) {
                             uiStyleSelection.defaultValue()
                         } else {
                             "black"
@@ -162,5 +160,11 @@ internal object ThemeUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    @JvmStatic
+    fun isMaterial3Theme(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+                && uiStyleSelection.getValue() == uiStyleSelection.defaultValue()
     }
 }
