@@ -1986,6 +1986,13 @@ public class Main extends FreezeYouBaseActivity {
                             }
                         }).start();
                         return true;
+                    case R.id.menu_vM_userDefined:
+                        addUserDefinedCategoriesTo(item.getSubMenu(),
+                                R.id.menu_vM_userDefined_menuGroup,
+                                R.id.menu_vM_userDefined_newClassification,
+                                0
+                        );
+                        return true;
                     case R.id.menu_update:
                         checkUpdate(Main.this);
                         return true;
