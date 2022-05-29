@@ -14,10 +14,10 @@ import android.provider.Settings;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import cf.playhi.freezeyou.service.FUFService;
 import cf.playhi.freezeyou.Freeze;
 import cf.playhi.freezeyou.R;
 import cf.playhi.freezeyou.receiver.NotificationDeletedReceiver;
+import cf.playhi.freezeyou.service.FUFService;
 
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.notificationBarDisableClickDisappear;
 import static cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.notificationBarDisableSlideOut;

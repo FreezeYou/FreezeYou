@@ -284,9 +284,11 @@ public class UriFreezeActivity extends FreezeYouBaseActivity {
         obsdAlertDialog.show();
         Window w = obsdAlertDialog.getWindow();
         if (w != null) {
-            View v = (View) w.findViewById(android.R.id.custom).getParent();
+            View v = (View) w.findViewById(android.R.id.custom);
             if (v != null) {
-                v.setMinimumHeight(0);
+                View p = (View) v.getParent();
+                if (p != null)
+                    p.setMinimumHeight(0);
             }
         }
     }

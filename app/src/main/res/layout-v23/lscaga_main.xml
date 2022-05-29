@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -43,7 +44,7 @@
 
                 <Button
                     android:id="@+id/lscaga_package_button"
-                    style="@android:style/Widget.Material.Button.Colored"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
@@ -86,7 +87,7 @@
                 android:background="@color/realTranslucent"
                 android:contentDescription="@string/icon"
                 android:scaleType="fitCenter"
-                android:src="@drawable/grid_add" />
+                app:srcCompat="@drawable/grid_add" />
 
             <TextView
                 android:id="@+id/lscaga_target_textView"
@@ -115,7 +116,7 @@
 
                 <Button
                     android:id="@+id/lscaga_target_button"
-                    style="@android:style/Widget.Material.Button.Colored"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
@@ -179,7 +180,7 @@
 
         <Button
             android:id="@+id/lscaga_cancel_button"
-            style="@android:style/Widget.Material.Button.Colored"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -187,7 +188,7 @@
 
         <Button
             android:id="@+id/lscaga_generate_button"
-            style="@android:style/Widget.Material.Button.Colored"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -195,7 +196,7 @@
 
         <Button
             android:id="@+id/lscaga_simulate_button"
-            style="@android:style/Widget.Material.Button.Colored"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

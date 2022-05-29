@@ -6,6 +6,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ import static cf.playhi.freezeyou.utils.FUFUtils.checkRootFrozen;
 
 // Needs to be retained for compatibility
 // with old FreezeYou structures and settings.
-public class GetDisabledApplications extends Activity {
+public class GetDisabledApplications extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

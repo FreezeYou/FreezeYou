@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -79,7 +80,7 @@
         android:background="@drawable/shapedotblack"
         android:contentDescription="@string/add"
         android:elevation="6dp"
-        android:src="@drawable/ic_action_add"
+        app:srcCompat="@drawable/ic_action_add"
         android:stateListAnimator="@animator/fab_animator" />
 
 </merge>

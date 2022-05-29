@@ -16,8 +16,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 
 import net.grandcentrix.tray.AppPreferences;
@@ -522,9 +522,11 @@ public class InstallPackagesActivity extends FreezeYouBaseActivity {
         installPackagesAlertDialog.show();
         Window w = installPackagesAlertDialog.getWindow();
         if (w != null) {
-            View v = (View) w.findViewById(android.R.id.custom).getParent();
+            View v = (View) w.findViewById(android.R.id.custom);
             if (v != null) {
-                v.setMinimumHeight(0);
+                View p = (View) v.getParent();
+                if (p != null)
+                    p.setMinimumHeight(0);
             }
         }
     }

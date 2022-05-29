@@ -20,7 +20,7 @@
 
         <Button
             android:id="@+id/manualMode_selectFUFMode_button"
-            style="@android:style/Widget.Material.Button.Colored"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/selectFUFMode" />
@@ -32,7 +32,7 @@
 
             <Button
                 android:id="@+id/manualMode_disable_button"
-                style="@android:style/Widget.Material.Button.Colored"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -41,7 +41,7 @@
 
             <Button
                 android:id="@+id/manualMode_enable_button"
-                style="@android:style/Widget.Material.Button.Colored"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

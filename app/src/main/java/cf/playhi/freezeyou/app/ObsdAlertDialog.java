@@ -1,8 +1,9 @@
 package cf.playhi.freezeyou.app;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.view.MotionEvent;
+
+import androidx.appcompat.app.AlertDialog;
 
 public class ObsdAlertDialog extends AlertDialog {
     private boolean isObsd;

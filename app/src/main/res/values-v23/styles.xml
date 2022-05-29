@@ -9,13 +9,13 @@
     <style name="Base.AppTheme.Dark.Black" parent="Base.V23.AppTheme.Dark.Black" />
 
     <style name="Base.V23.AppTheme.Dark.Black" parent="Base.V21.AppTheme.Dark">
-        <item name="android:colorBackgroundFloating">@android:color/black</item>
+        <item name="colorBackgroundFloating">@android:color/black</item>
     </style>
 
     <style name="Base.AppTheme.Dark.Dialog.Black" parent="Base.V23.AppTheme.Dark.Dialog" />
 
     <style name="Base.V23.AppTheme.Dark.Dialog" parent="Base.V14.AppTheme.Dark.Dialog">
-        <item name="android:colorBackgroundFloating">@android:color/black</item>
+        <item name="colorBackgroundFloating">@android:color/black</item>
     </style>
 
 </resources>

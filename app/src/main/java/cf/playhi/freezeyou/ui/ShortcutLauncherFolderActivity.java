@@ -150,9 +150,11 @@ public class ShortcutLauncherFolderActivity extends FreezeYouBaseActivity implem
         dialog = alertDialog;
         Window w = alertDialog.getWindow();
         if (w != null) {
-            View v = (View) w.findViewById(android.R.id.custom).getParent();
+            View v = (View) w.findViewById(android.R.id.custom);
             if (v != null) {
-                v.setMinimumHeight(0);
+                View p = (View) v.getParent();
+                if (p != null)
+                    p.setMinimumHeight(0);
             }
         }
     }
@@ -257,9 +259,11 @@ public class ShortcutLauncherFolderActivity extends FreezeYouBaseActivity implem
             AlertDialog alertDialog = builder.show();
             Window w = alertDialog.getWindow();
             if (w != null) {
-                View v1 = (View) w.findViewById(android.R.id.custom).getParent();
+                View v1 = (View) w.findViewById(android.R.id.custom);
                 if (v1 != null) {
-                    v1.setMinimumHeight(0);
+                    View p = (View) v1.getParent();
+                    if (p != null)
+                        p.setMinimumHeight(0);
                 }
             }
         });

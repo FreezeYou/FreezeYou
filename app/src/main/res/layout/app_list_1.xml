@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,7 +14,7 @@
         android:layout_margin="5dp"
         android:contentDescription="Icon"
         android:scaleType="fitCenter"
-        android:src="@mipmap/ic_launcher"
+        app:srcCompat="@mipmap/ic_launcher"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -60,6 +61,6 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="20dp"
         android:contentDescription="@string/more"
-        android:src="@drawable/shapedotwhite" />
+        app:srcCompat="@drawable/shapedotwhite" />
 
 </RelativeLayout>

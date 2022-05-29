@@ -41,7 +41,7 @@
         android:contentDescription="@string/status"
         android:padding="8dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_done"
+        app:srcCompat="@drawable/ic_done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/adgli_linearLayout"
