@@ -390,6 +390,8 @@
     <string name="operationOnFreezeYouIsNotAllowed">Операция на FreezeYou не разрешена</string>
     <string name="shizukuVersionIsTooLow">Версия Shizuku устарела</string>
     <string name="shizukuIsNotInstalledOrOtherExceptions">Shizuku не установлен или другие исключения</string>
+    <string name="includeFUFActivityInRecents">Добавить активити заморозки и разморозки в недавних приложениях</string>
+    <string name="playFUFAnimations">Включить анимацию заморозки и разморозки</string>
     <string-array name="launchModeSelection">
         <item>Показати все</item>
         <item>Заморожено</item>
