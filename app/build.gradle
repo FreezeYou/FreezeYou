@@ -10,7 +10,7 @@ android {
         minSdkVersion 16
         targetSdk 32
         versionCode 151
-        versionName '11.5.151.20220530-gh'
+        versionName '11.5.151.20220530-t152-20221127-1-gh'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -37,11 +37,12 @@ android {
             enableSplit = false
         }
     }
+    namespace 'cf.playhi.freezeyou'
 }
 
 dependencies {
     implementation fileTree(include: ['*.aar'], dir: 'libs') // Contains MMKV & Tray
-    implementation "com.getkeepsafe.relinker:relinker:1.4.4"
+    implementation 'com.getkeepsafe.relinker:relinker:1.4.5'
 
     implementation "androidx.activity:activity:1.4.0"
     implementation "androidx.activity:activity-ktx:1.4.0"
@@ -69,11 +70,11 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.6.0'
 
-    def shizuku_version = '12.1.0'
+    def shizuku_version = '12.2.0'
     implementation "dev.rikka.shizuku:api:$shizuku_version"
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
 //    implementation 'com.google.zxing:core:3.3.3' 先把文本方式稳定下来，再做 QRCode
 

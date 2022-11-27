@@ -12,6 +12,7 @@ import cf.playhi.freezeyou.utils.FUFUtils.checkMRootFrozen
 import cf.playhi.freezeyou.utils.FUFUtils.isSystemApp
 import cf.playhi.freezeyou.utils.ProcessUtils.fAURoot
 import rikka.shizuku.ShizukuBinderWrapper
+import rikka.shizuku.ShizukuProvider
 import rikka.shizuku.SystemServiceHelper
 import java.lang.reflect.InvocationTargetException
 
@@ -211,6 +212,7 @@ open class FUFSinglePackage(
         if (Build.VERSION.SDK_INT < 23) return ERROR_DEVICE_ANDROID_VERSION_TOO_LOW
 
         try {
+            ShizukuProvider.requestBinderForNonProviderProcess(context)
             val freeze = actionMode == ACTION_MODE_FREEZE
 
             @SuppressLint("PrivateApi")
