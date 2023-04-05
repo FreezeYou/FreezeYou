@@ -1,0 +1,27 @@
+<ul>
+<li>Risparmio energetico! Nessuna ricarica frequente! ⚡️</li>
+<li>Accelerare! Nessuna animazione rigida! 💨</li>
+<li>Fate silenzio! Nessuna notifica non necessaria! 🔇</li>
+<li>Disabilita (o abilita) alcune app terribili ma utili per migliorare la velocità e la durata della batteria del tuo dispositivo.</li>
+</ul>
+
+<h3>Caratteristiche</h3>
+
+<ul>
+<li>Supporta NoRoot(DPM), Root(HIDE), Root(DISABLE), System App(DISABLE), System App(DISABLE_USER), System App(DISABLE_UNTIL_USED) mode</li>
+<li>Supporta attività pianificate</li>
+<li>Supporta attività a tempo</li>
+<li>Supporta l'attività di attivazione</li>
+<li>Supporta attività ritardata</li>
+<li>Supporta il blocco di un tasto</li>
+<li>Supporta lo sblocco di un tasto</li>
+<li>Supporta il blocco in stand-bye</li>
+<li>Supporta la visualizzazione per categoria</li>
+<li>Supporta i riquadri di notifica per il blocco, lo sblocco e il blocco dello schermo con un tasto</li>
+<li>Supporta il blocco automatico dopo il blocco dello schermo</li>
+<li>Supporta molti tipi di scorciatoie per il funzionamento</li>
+<li>Supporta molti modi per bloccare e sbloccare</li>
+<li>Supporta il cambiamento dello stile dell'interfaccia</li>
+<li>Supporta il backup e il ripristino</li>
+<li>E molte altre funzioni!</li>
+</ul>
