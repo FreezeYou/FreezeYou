@@ -521,8 +521,8 @@
         <item>Default</item>
         <item>English</item>
         <item>English (US)</item>
-        <item>Русский (Россия)</item>
-        <item>Українська(Україна)</item>
+        <item>Русский</item>
+        <item>Українська</item>
         <item>中文（中国大陆）</item>
         <item>中文（中國臺灣）</item>
     </string-array>
