@@ -968,6 +968,169 @@ class Main : FreezeYouBaseActivity() {
                 }
             })
         }
+
+        mMainActivityAppListFragment!!.setOnAppListItemClickListener { _, view, i, _ ->
+            val map =
+                (mMainActivityAppListFragment!!.getAppListAdapter() as MainAppListSimpleAdapter)
+                    .getStoredArrayList()[i]
+            val name = map["Name"] as String?
+            val pkgName = map["PackageName"] as String?
+            if (name != null && pkgName != null && getString(R.string.notAvailable) != name) {
+                when (appListViewOnClickMode) {
+                    APPListViewOnClickMode_chooseAction -> {
+                        showChooseActionPopupMenu(this@Main, this@Main, view, pkgName, name)
+                    }
+                    APPListViewOnClickMode_autoUFOrFreeze -> {
+                        if (realGetFrozenStatus(this@Main, pkgName, null)) {
+                            processUnfreezeAction(
+                                this@Main, pkgName, null, null,
+                                false, false, null, false
+                            )
+                        } else {
+                            processFreezeAction(
+                                this@Main, pkgName, null, null,
+                                false, null, false
+                            )
+                        }
+                    }
+                    APPListViewOnClickMode_freezeImmediately -> {
+                        if (!realGetFrozenStatus(this@Main, pkgName, null)) {
+                            processFreezeAction(
+                                this@Main, pkgName, null, null,
+                                false, null, false
+                            )
+                        } else {
+                            if (!lesserToast.getValue(null)) {
+                                showToast(this@Main, R.string.freezeCompleted)
+                            }
+                        }
+                    }
+                    APPListViewOnClickMode_UFImmediately -> {
+                        if (realGetFrozenStatus(this@Main, pkgName, null)) {
+                            processUnfreezeAction(
+                                this@Main, pkgName, null, null,
+                                false, false, null, false
+                            )
+                        } else {
+                            if (!lesserToast.getValue(null)) {
+                                showToast(this@Main, R.string.UFCompleted)
+                            }
+                        }
+                    }
+                    APPListViewOnClickMode_UFAndRun -> {
+                        if (realGetFrozenStatus(this@Main, pkgName, null)) {
+                            processUnfreezeAction(
+                                this@Main, pkgName, null, null,
+                                true, false, null, false
+                            )
+                        } else {
+                            if (!lesserToast.getValue(null)) {
+                                showToast(this@Main, R.string.UFCompleted)
+                            }
+                            askRun(
+                                this@Main, pkgName, null,
+                                null, false, null, false
+                            )
+                        }
+                    }
+                    APPListViewOnClickMode_autoUFOrFreezeAndRun -> {
+                        if (realGetFrozenStatus(this@Main, pkgName, null)) {
+                            processUnfreezeAction(
+                                this@Main, pkgName, null, null,
+                                true, false, null, false
+                            )
+                        } else {
+                            processFreezeAction(
+                                this@Main, pkgName, null, null,
+                                false, null, false
+                            )
+                        }
+                    }
+                    APPListViewOnClickMode_addToOFList -> {
+                        showToast(
+                            this@Main,
+                            if (addToOneKeyList(
+                                    this@Main,
+                                    getString(R.string.sAutoFreezeApplicationList),
+                                    pkgName
+                                )
+                            ) R.string.added else R.string.failed
+                        )
+                    }
+                    APPListViewOnClickMode_removeFromOFList -> {
+                        showToast(
+                            this@Main,
+                            if (removeFromOneKeyList(
+                                    this@Main,
+                                    getString(R.string.sAutoFreezeApplicationList),
+                                    pkgName
+                                )
+                            ) R.string.removed else R.string.failed
+                        )
+                    }
+                    APPListViewOnClickMode_addToOUFList -> {
+                        showToast(
+                            this@Main,
+                            if (addToOneKeyList(
+                                    this@Main,
+                                    getString(R.string.sOneKeyUFApplicationList),
+                                    pkgName
+                                )
+                            ) R.string.added else R.string.failed
+                        )
+                    }
+                    APPListViewOnClickMode_removeFromOUFList -> {
+                        showToast(
+                            this@Main,
+                            if (removeFromOneKeyList(
+                                    this@Main,
+                                    getString(R.string.sOneKeyUFApplicationList),
+                                    pkgName
+                                )
+                            ) R.string.removed else R.string.failed
+                        )
+                    }
+                    APPListViewOnClickMode_addToFOQList -> {
+                        showToast(
+                            this@Main,
+                            if (addToOneKeyList(
+                                    this@Main,
+                                    getString(R.string.sFreezeOnceQuit),
+                                    pkgName
+                                )
+                            ) R.string.added else R.string.failed
+                        )
+                    }
+                    APPListViewOnClickMode_removeFromFOQList -> {
+                        showToast(
+                            this@Main,
+                            if (removeFromOneKeyList(
+                                    this@Main,
+                                    getString(R.string.sFreezeOnceQuit),
+                                    pkgName
+                                )
+                            ) R.string.removed else R.string.failed
+                        )
+                    }
+                    APPListViewOnClickMode_createFUFShortcut -> {
+                        checkSettingsAndRequestCreateShortcut(
+                            name,
+                            pkgName,
+                            getApplicationIcon(
+                                this@Main,
+                                pkgName,
+                                getApplicationInfoFromPkgName(pkgName, this@Main),
+                                false
+                            ),
+                            Freeze::class.java,
+                            "FreezeYou! $pkgName",
+                            this@Main
+                        )
+                    }
+                    else -> {}
+                }
+            }
+        }
     }
 
     private fun generateListForCategory(base64Label: String) {
