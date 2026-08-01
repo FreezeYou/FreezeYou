@@ -49,7 +49,7 @@ class AccessibilityService : android.accessibilityservice.AccessibilityService()
                 ) {
                     return
                 }
-                val className = accessibilityEvent.className.toString()
+                val className = accessibilityEvent.className?.toString() ?: return
                 if ("android.inputmethodservice.SoftInputWindow" == className
                     || "com.miui.misound.playervolume.MiuiVolumeDialogImpl\$CustomDialog" == className // MIUI 音质音效：声音助手 - 多应用媒体音调节浮窗
                 ) {

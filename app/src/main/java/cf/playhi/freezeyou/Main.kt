@@ -63,7 +63,6 @@ import cf.playhi.freezeyou.utils.OneKeyListUtils.removeFromOneKeyList
 import cf.playhi.freezeyou.utils.Support.showChooseActionPopupMenu
 import cf.playhi.freezeyou.utils.ThemeUtils.getThemeDot
 import cf.playhi.freezeyou.utils.ThemeUtils.getThemeSecondDot
-import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
 import cf.playhi.freezeyou.utils.ToastUtils.showToast
 import cf.playhi.freezeyou.utils.VersionUtils.checkUpdate
@@ -362,12 +361,13 @@ class Main : FreezeYouBaseActivity() {
             "OS" -> {
                 for (i in 0 until size) {
                     packageInfo1 = packageInfo[i]
-                    if (packageInfo1.applicationInfo!!.flags and ApplicationInfo.FLAG_SYSTEM == ApplicationInfo.FLAG_SYSTEM) {
+                    val appInfo = packageInfo1.applicationInfo ?: continue
+                    if (appInfo.flags and ApplicationInfo.FLAG_SYSTEM == ApplicationInfo.FLAG_SYSTEM) {
                         val keyValuePair = processAppStatus(
                             getApplicationLabel(
                                 applicationContext,
                                 packageManager,
-                                packageInfo1.applicationInfo,
+                                appInfo,
                                 packageInfo1.packageName
                             ),
                             packageInfo1.packageName,
@@ -385,12 +385,13 @@ class Main : FreezeYouBaseActivity() {
             "OU" -> {
                 for (i in 0 until size) {
                     packageInfo1 = packageInfo[i]
-                    if (packageInfo1.applicationInfo!!.flags and ApplicationInfo.FLAG_SYSTEM != ApplicationInfo.FLAG_SYSTEM) {
+                    val appInfo = packageInfo1.applicationInfo ?: continue
+                    if (appInfo.flags and ApplicationInfo.FLAG_SYSTEM != ApplicationInfo.FLAG_SYSTEM) {
                         val keyValuePair = processAppStatus(
                             getApplicationLabel(
                                 applicationContext,
                                 packageManager,
-                                packageInfo1.applicationInfo,
+                                appInfo,
                                 packageInfo1.packageName
                             ),
                             packageInfo1.packageName,
@@ -408,12 +409,13 @@ class Main : FreezeYouBaseActivity() {
             "UFU" -> {
                 for (i in 0 until size) {
                     packageInfo1 = packageInfo[i]
-                    if (packageInfo1.applicationInfo!!.flags and ApplicationInfo.FLAG_SYSTEM != ApplicationInfo.FLAG_SYSTEM) {
+                    val appInfo = packageInfo1.applicationInfo ?: continue
+                    if (appInfo.flags and ApplicationInfo.FLAG_SYSTEM != ApplicationInfo.FLAG_SYSTEM) {
                         val keyValuePair = processAppStatus(
                             getApplicationLabel(
                                 applicationContext,
                                 packageManager,
-                                packageInfo1.applicationInfo,
+                                appInfo,
                                 packageInfo1.packageName
                             ),
                             packageInfo1.packageName,
@@ -441,169 +443,43 @@ class Main : FreezeYouBaseActivity() {
                 SORT_BY_UF_ASCENDING -> {
                     setSortByDefault(AppList)
                     val ufTimesMap = getUFreezeTimesMap()
-                    AppList.sortWith { m0: Map<String, Any?>, m1: Map<String, Any?> ->
-                        val s0 = Base64.encodeToString(
-                            (m0["PackageName"] as String).toByteArray(),
-                            Base64.DEFAULT
-                        )
-                        val s1 = Base64.encodeToString(
-                            (m1["PackageName"] as String).toByteArray(),
-                            Base64.DEFAULT
-                        )
-                        if (ufTimesMap.containsKey(s0) || ufTimesMap.containsKey(s1)) {
-                            if (ufTimesMap.containsKey(s0) && ufTimesMap.containsKey(s1)) {
-                                ufTimesMap[s0]!!.compareTo(ufTimesMap[s1]!!)
-                            } else if (ufTimesMap.containsKey(s0) && ufTimesMap[s0]!! > 0) {
-                                1
-                            } else if (ufTimesMap.containsKey(s1) && ufTimesMap[s1]!! > 0) {
-                                -1
-                            } else {
-                                0
-                            }
-                        } else {
-                            0
-                        }
+                    AppList.sortWith { m0, m1 ->
+                        compareByTimesMap(m0, m1, ufTimesMap, descending = false)
                     }
                 }
                 SORT_BY_UF_DESCENDING -> {
                     setSortByDefault(AppList)
                     val uFreezeTimesMapTimesMap = getUFreezeTimesMap()
-                    AppList.sortWith { m0: Map<String, Any?>, m1: Map<String, Any?> ->
-                        val s0 = Base64.encodeToString(
-                            (m0["PackageName"] as String).toByteArray(),
-                            Base64.DEFAULT
-                        )
-                        val s1 = Base64.encodeToString(
-                            (m1["PackageName"] as String).toByteArray(),
-                            Base64.DEFAULT
-                        )
-                        if (uFreezeTimesMapTimesMap.containsKey(s0) || uFreezeTimesMapTimesMap.containsKey(
-                                s1
-                            )
-                        ) {
-                            if (uFreezeTimesMapTimesMap.containsKey(s0) && uFreezeTimesMapTimesMap.containsKey(
-                                    s1
-                                )
-                            ) {
-                                uFreezeTimesMapTimesMap[s1]!!.compareTo(uFreezeTimesMapTimesMap[s0]!!)
-                            } else if (uFreezeTimesMapTimesMap.containsKey(s0) && uFreezeTimesMapTimesMap[s0]!! > 0) {
-                                -1
-                            } else if (uFreezeTimesMapTimesMap.containsKey(s1) && uFreezeTimesMapTimesMap[s1]!! > 0) {
-                                1
-                            } else {
-                                0
-                            }
-                        } else {
-                            0
-                        }
+                    AppList.sortWith { m0, m1 ->
+                        compareByTimesMap(m0, m1, uFreezeTimesMapTimesMap, descending = true)
                     }
                 }
                 SORT_BY_FF_ASCENDING -> {
                     setSortByDefault(AppList)
                     val freezeTimesMap = getFreezeTimesMap()
-                    AppList.sortWith { m0: Map<String, Any?>, m1: Map<String, Any?> ->
-                        val s0 = Base64.encodeToString(
-                            (m0["PackageName"] as String).toByteArray(),
-                            Base64.DEFAULT
-                        )
-                        val s1 = Base64.encodeToString(
-                            (m1["PackageName"] as String).toByteArray(),
-                            Base64.DEFAULT
-                        )
-                        if (freezeTimesMap.containsKey(s0) || freezeTimesMap.containsKey(s1)) {
-                            if (freezeTimesMap.containsKey(s0) && freezeTimesMap.containsKey(s1)) {
-                                freezeTimesMap[s0]!!.compareTo(freezeTimesMap[s1]!!)
-                            } else if (freezeTimesMap.containsKey(s0) && freezeTimesMap[s0]!! > 0) {
-                                1
-                            } else if (freezeTimesMap.containsKey(s1) && freezeTimesMap[s1]!! > 0) {
-                                -1
-                            } else {
-                                0
-                            }
-                        } else {
-                            0
-                        }
+                    AppList.sortWith { m0, m1 ->
+                        compareByTimesMap(m0, m1, freezeTimesMap, descending = false)
                     }
                 }
                 SORT_BY_FF_DESCENDING -> {
                     setSortByDefault(AppList)
                     val freezeTimesMap1 = getFreezeTimesMap()
-                    AppList.sortWith { m0: Map<String, Any?>, m1: Map<String, Any?> ->
-                        val s0 = Base64.encodeToString(
-                            (m0["PackageName"] as String).toByteArray(),
-                            Base64.DEFAULT
-                        )
-                        val s1 = Base64.encodeToString(
-                            (m1["PackageName"] as String).toByteArray(),
-                            Base64.DEFAULT
-                        )
-                        if (freezeTimesMap1.containsKey(s0) || freezeTimesMap1.containsKey(s1)) {
-                            if (freezeTimesMap1.containsKey(s0) && freezeTimesMap1.containsKey(s1)) {
-                                freezeTimesMap1[s1]!!.compareTo(freezeTimesMap1[s0]!!)
-                            } else if (freezeTimesMap1.containsKey(s0) && freezeTimesMap1[s0]!! > 0) {
-                                -1
-                            } else if (freezeTimesMap1.containsKey(s1) && freezeTimesMap1[s1]!! > 0) {
-                                1
-                            } else {
-                                0
-                            }
-                        } else {
-                            0
-                        }
+                    AppList.sortWith { m0, m1 ->
+                        compareByTimesMap(m0, m1, freezeTimesMap1, descending = true)
                     }
                 }
                 SORT_BY_US_ASCENDING -> {
                     setSortByDefault(AppList)
                     val useTimesMap1 = getUseTimesMap()
-                    AppList.sortWith { m0: Map<String, Any?>, m1: Map<String, Any?> ->
-                        val s0 = Base64.encodeToString(
-                            (m0["PackageName"] as String).toByteArray(),
-                            Base64.DEFAULT
-                        )
-                        val s1 = Base64.encodeToString(
-                            (m1["PackageName"] as String).toByteArray(),
-                            Base64.DEFAULT
-                        )
-                        if (useTimesMap1.containsKey(s0) || useTimesMap1.containsKey(s1)) {
-                            if (useTimesMap1.containsKey(s0) && useTimesMap1.containsKey(s1)) {
-                                useTimesMap1[s0]!!.compareTo(useTimesMap1[s1]!!)
-                            } else if (useTimesMap1.containsKey(s0) && useTimesMap1[s0]!! > 0) {
-                                1
-                            } else if (useTimesMap1.containsKey(s1) && useTimesMap1[s1]!! > 0) {
-                                -1
-                            } else {
-                                0
-                            }
-                        } else {
-                            0
-                        }
+                    AppList.sortWith { m0, m1 ->
+                        compareByTimesMap(m0, m1, useTimesMap1, descending = false)
                     }
                 }
                 SORT_BY_US_DESCENDING -> {
                     setSortByDefault(AppList)
                     val useTimesMap = getUseTimesMap()
-                    AppList.sortWith { m0: Map<String, Any?>, m1: Map<String, Any?> ->
-                        val s0 = Base64.encodeToString(
-                            (m0["PackageName"] as String).toByteArray(),
-                            Base64.DEFAULT
-                        )
-                        val s1 = Base64.encodeToString(
-                            (m1["PackageName"] as String).toByteArray(),
-                            Base64.DEFAULT
-                        )
-                        if (useTimesMap.containsKey(s0) || useTimesMap.containsKey(s1)) {
-                            if (useTimesMap.containsKey(s0) && useTimesMap.containsKey(s1)) {
-                                useTimesMap[s1]!!.compareTo(useTimesMap[s0]!!)
-                            } else if (useTimesMap.containsKey(s0) && useTimesMap[s0]!! > 0) {
-                                -1
-                            } else if (useTimesMap.containsKey(s1) && useTimesMap[s1]!! > 0) {
-                                1
-                            } else {
-                                0
-                            }
-                        } else {
-                            0
-                        }
+                    AppList.sortWith { m0, m1 ->
+                        compareByTimesMap(m0, m1, useTimesMap, descending = true)
                     }
                 }
                 SORT_BY_ALPHABETICAL -> {
@@ -619,13 +495,13 @@ class Main : FreezeYouBaseActivity() {
                 SORT_BY_LAST_INSTALLED -> {
                     setSortByDefault(AppList)
                     AppList.sortWith { m0: Map<String, Any?>, m1: Map<String, Any?> ->
-                        (- (m0["InstallTime"] as Long)).compareTo(m1["InstallTime"] as Long)
+                        (m1["InstallTime"] as Long).compareTo(m0["InstallTime"] as Long)
                     }
                 }
                 SORT_BY_LAST_UPDATED -> {
                     setSortByDefault(AppList)
                     AppList.sortWith { m0: Map<String, Any?>, m1: Map<String, Any?> ->
-                        (- (m0["UpdateTime"] as Long)).compareTo(m1["UpdateTime"] as Long)
+                        (m1["UpdateTime"] as Long).compareTo(m0["UpdateTime"] as Long)
                     }
                 }
                 SORT_BY_NO -> {}
@@ -634,9 +510,11 @@ class Main : FreezeYouBaseActivity() {
         }
         if (isFinishing) return
         runOnUiThread {
-            val adapter = mMainActivityAppListFragment!!.setAppListAdapter(
+            val fragment = mMainActivityAppListFragment ?: return@runOnUiThread
+            // Clone so search/filter mutations cannot clear the master AppList.
+            val adapter = fragment.setAppListAdapter(
                 this@Main,
-                AppList as ArrayList<MutableMap<String, Any?>>,
+                ArrayList(AppList),
                 selectedPackages
             )
             searchEditText.addTextChangedListener(object : TextWatcher {
@@ -649,12 +527,14 @@ class Main : FreezeYouBaseActivity() {
                 }
 
                 override fun onTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {
-                    if (TextUtils.isEmpty(charSequence)) {
-                        adapter!!.replaceAllInFormerArrayList(AppList)
+                    if (adapter == null) return
+                    val query = charSequence?.toString().orEmpty()
+                    if (query.isEmpty()) {
+                        adapter.replaceAllInFormerArrayList(AppList)
                     } else {
-                        adapter!!.replaceAllInFormerArrayList(
+                        adapter.replaceAllInFormerArrayList(
                             processListFilter(
-                                charSequence!!,
+                                query,
                                 AppList as ArrayList<Map<String, Any?>>
                             ) as List<MutableMap<String, Any?>>
                         )
@@ -669,7 +549,7 @@ class Main : FreezeYouBaseActivity() {
             mainLoadingProgressTextView.visibility = View.GONE
             linearLayout.visibility = View.GONE
             appListFragmentContainer.visibility = View.VISIBLE
-            mMainActivityAppListFragment!!.setMultiChoiceModeListener(object :
+            fragment.setMultiChoiceModeListener(object :
                 AbsListView.MultiChoiceModeListener {
                 override fun onItemCheckedStateChanged(
                     actionMode: ActionMode,
@@ -677,10 +557,12 @@ class Main : FreezeYouBaseActivity() {
                     l: Long,
                     b: Boolean
                 ) {
+                    val mainAdapter =
+                        fragment.getAppListAdapter() as? MainAppListSimpleAdapter ?: return
                     val pkgName =
-                        ((mMainActivityAppListFragment!!.getAppListAdapter() as MainAppListSimpleAdapter?)!!.getStoredArrayList()[i])["PackageName"] as String?
+                        mainAdapter.getStoredArrayList().getOrNull(i)?.get("PackageName") as? String
                     if (needProcessOnItemCheckedStateChanged) {
-                        if (selectedPackages.contains(pkgName)) {
+                        if (pkgName != null && selectedPackages.contains(pkgName)) {
                             selectedPackages.remove(pkgName)
                         } else {
                             if (pkgName != null) {
@@ -688,9 +570,9 @@ class Main : FreezeYouBaseActivity() {
                             }
                         }
                         needProcessOnItemCheckedStateChanged = false
-                        mMainActivityAppListFragment!!.setItemChecked(i, true)
+                        fragment.setItemChecked(i, true)
                         actionMode.title = selectedPackages.size.toString()
-                        adapter!!.notifyDataSetChanged()
+                        adapter?.notifyDataSetChanged()
                     } else {
                         needProcessOnItemCheckedStateChanged = true
                     }
@@ -705,10 +587,12 @@ class Main : FreezeYouBaseActivity() {
                     try {
                         val addToUserDefinedSubMenu =
                             menu.findItem(R.id.list_menu_groupItem_addToUserDefined).subMenu
+                                ?: return false
                         val removeFromUserDefinedSubMenu =
                             menu.findItem(R.id.list_menu_groupItem_removeFromUserDefined).subMenu
-                        addToUserDefinedSubMenu!!.clear() // 清空先前产生的数据
-                        removeFromUserDefinedSubMenu!!.clear()
+                                ?: return false
+                        addToUserDefinedSubMenu.clear() // 清空先前产生的数据
+                        removeFromUserDefinedSubMenu.clear()
                         addToUserDefinedSubMenu.add(
                             R.id.list_menu_groupItem_addToUserDefined_menuGroup,
                             R.id.list_menu_groupItem_addToUserDefined_newClassification,
@@ -842,11 +726,11 @@ class Main : FreezeYouBaseActivity() {
                     }
                     when (menuItem.itemId) {
                         R.id.list_menu_selectAll -> {
-                            val adpt = mMainActivityAppListFragment!!.getAppListAdapter()
-                            if (adpt is MainAppListSimpleAdapter) {
+                            val adpt = fragment.getAppListAdapter() as? MainAppListSimpleAdapter
+                            if (adpt != null) {
                                 for (i in 0 until adpt.count) {
                                     val pkg =
-                                        (adpt as MainAppListSimpleAdapter).getStoredArrayList()[i]["PackageName"] as String?
+                                        adpt.getStoredArrayList().getOrNull(i)?.get("PackageName") as? String
                                     if (pkg != null && !selectedPackages.contains(pkg)) {
                                         selectedPackages.add(pkg)
                                     }
@@ -857,11 +741,11 @@ class Main : FreezeYouBaseActivity() {
                             return true
                         }
                         R.id.list_menu_selectUnselected -> {
-                            val adapt = mMainActivityAppListFragment!!.getAppListAdapter()
-                            if (adapt is MainAppListSimpleAdapter) {
+                            val adapt = fragment.getAppListAdapter() as? MainAppListSimpleAdapter
+                            if (adapt != null) {
                                 for (i in 0 until adapt.count) {
                                     val pkg =
-                                        (adapt as MainAppListSimpleAdapter).getStoredArrayList()[i]["PackageName"] as String?
+                                        adapt.getStoredArrayList().getOrNull(i)?.get("PackageName") as? String
                                     if (pkg != null) {
                                         if (selectedPackages.contains(pkg)) {
                                             selectedPackages.remove(pkg)
@@ -969,10 +853,10 @@ class Main : FreezeYouBaseActivity() {
             })
         }
 
-        mMainActivityAppListFragment!!.setOnAppListItemClickListener { _, view, i, _ ->
+        mMainActivityAppListFragment?.setOnAppListItemClickListener { _, view, i, _ ->
             val map =
-                (mMainActivityAppListFragment!!.getAppListAdapter() as MainAppListSimpleAdapter)
-                    .getStoredArrayList()[i]
+                (mMainActivityAppListFragment?.getAppListAdapter() as? MainAppListSimpleAdapter)
+                    ?.getStoredArrayList()?.getOrNull(i) ?: return@setOnAppListItemClickListener
             val name = map["Name"] as String?
             val pkgName = map["PackageName"] as String?
             if (name != null && pkgName != null && getString(R.string.notAvailable) != name) {
@@ -1155,25 +1039,25 @@ class Main : FreezeYouBaseActivity() {
 
     private fun onPrepareMainOptionsMenu(menu: Menu) {
         try {
-            val vmUserDefinedSubMenu = menu.findItem(R.id.menu_vM_userDefined).subMenu
+            val vmUserDefinedSubMenu = menu.findItem(R.id.menu_vM_userDefined).subMenu ?: return
             val createUserDefinedShortcutSubMenu =
-                menu.findItem(R.id.menu_createUserDefinedShortcut).subMenu
+                menu.findItem(R.id.menu_createUserDefinedShortcut).subMenu ?: return
             val forceStopUserDefinedShortcutSubMenu =
-                menu.findItem(R.id.menu_forceStopUserDefinedShortcut).subMenu
+                menu.findItem(R.id.menu_forceStopUserDefinedShortcut).subMenu ?: return
             addUserDefinedCategoriesTo(
-                vmUserDefinedSubMenu!!,
+                vmUserDefinedSubMenu,
                 R.id.menu_vM_userDefined_menuGroup,
                 R.id.menu_vM_userDefined_newClassification,
                 0
             )
             addUserDefinedCategoriesTo(
-                createUserDefinedShortcutSubMenu!!,
+                createUserDefinedShortcutSubMenu,
                 R.id.menu_createUserDefinedShortcut_menuGroup,
                 R.id.menu_createUserDefinedShortcut_newClassification,
                 0x2AAAAAAA
             )
             addUserDefinedCategoriesTo(
-                forceStopUserDefinedShortcutSubMenu!!,
+                forceStopUserDefinedShortcutSubMenu,
                 R.id.menu_forceStopUserDefinedShortcut_menuGroup,
                 R.id.menu_forceStopUserDefinedShortcut_newClassification,
                 0x55555555
@@ -1215,7 +1099,7 @@ class Main : FreezeYouBaseActivity() {
                         checkSettingsAndRequestCreateShortcut(
                             title,
                             "CATEGORY" + Base64.encodeToString(title.toByteArray(), Base64.DEFAULT),
-                            resources.getDrawable(R.mipmap.ic_launcher_round)!!,
+                            shortcutIconDrawable(R.mipmap.ic_launcher_round),
                             Main::class.java,
                             "Category " + Base64.encodeToString(title.toByteArray(), Base64.DEFAULT),
                             this
@@ -1239,7 +1123,7 @@ class Main : FreezeYouBaseActivity() {
                                 title.toByteArray(),
                                 Base64.DEFAULT
                             ),
-                            resources.getDrawable(R.mipmap.ic_launcher_round)!!,
+                            shortcutIconDrawable(R.mipmap.ic_launcher_round),
                             ForceStop::class.java,
                             "ForceStopCategory " + Base64.encodeToString(
                                 title.toByteArray(),
@@ -1258,7 +1142,7 @@ class Main : FreezeYouBaseActivity() {
                 checkSettingsAndRequestCreateShortcut(
                     getString(R.string.oneKeyFreeze),
                     "cf.playhi.freezeyou.extra.fuf",
-                    resources.getDrawable(R.mipmap.ic_launcher_round)!!,
+                    shortcutIconDrawable(R.mipmap.ic_launcher_round),
                     OneKeyFreeze::class.java,
                     "OneKeyFreeze",
                     this
@@ -1270,7 +1154,7 @@ class Main : FreezeYouBaseActivity() {
                 checkSettingsAndRequestCreateShortcut(
                     getString(R.string.oneKeyUF),
                     "cf.playhi.freezeyou.extra.fuf",
-                    resources.getDrawable(R.mipmap.ic_launcher_round)!!,
+                    shortcutIconDrawable(R.mipmap.ic_launcher_round),
                     OneKeyUF::class.java,
                     "OneKeyUF",
                     this
@@ -1282,7 +1166,7 @@ class Main : FreezeYouBaseActivity() {
                 checkSettingsAndRequestCreateShortcut(
                     getString(R.string.oneKeyLockScreen),
                     "cf.playhi.freezeyou.extra.oklock",
-                    resources.getDrawable(R.drawable.screenlock)!!,
+                    shortcutIconDrawable(R.drawable.screenlock),
                     OneKeyScreenLockImmediatelyActivity::class.java,
                     "OneKeyLockScreen",
                     this
@@ -1294,7 +1178,7 @@ class Main : FreezeYouBaseActivity() {
                 checkSettingsAndRequestCreateShortcut(
                     getString(R.string.onlyFrozen),
                     "OF",
-                    resources.getDrawable(R.mipmap.ic_launcher_round)!!,
+                    shortcutIconDrawable(R.mipmap.ic_launcher_round),
                     Main::class.java,
                     "OF",
                     this
@@ -1306,7 +1190,7 @@ class Main : FreezeYouBaseActivity() {
                 checkSettingsAndRequestCreateShortcut(
                     getString(R.string.onlyUF),
                     "UF",
-                    resources.getDrawable(R.mipmap.ic_launcher_round)!!,
+                    shortcutIconDrawable(R.mipmap.ic_launcher_round),
                     Main::class.java,
                     "UF",
                     this
@@ -1318,7 +1202,7 @@ class Main : FreezeYouBaseActivity() {
                 checkSettingsAndRequestCreateShortcut(
                     getString(R.string.onlyOnekey),
                     "OO",
-                    resources.getDrawable(R.mipmap.ic_launcher_round)!!,
+                    shortcutIconDrawable(R.mipmap.ic_launcher_round),
                     Main::class.java,
                     "OO",
                     this
@@ -1330,7 +1214,7 @@ class Main : FreezeYouBaseActivity() {
                 checkSettingsAndRequestCreateShortcut(
                     getString(R.string.oneKeyUF),
                     "OOU",
-                    resources.getDrawable(R.mipmap.ic_launcher_round)!!,
+                    shortcutIconDrawable(R.mipmap.ic_launcher_round),
                     Main::class.java,
                     "OOU",
                     this
@@ -1342,7 +1226,7 @@ class Main : FreezeYouBaseActivity() {
                 checkSettingsAndRequestCreateShortcut(
                     getString(R.string.freezeOnceQuit),
                     "FOQ",
-                    resources.getDrawable(R.mipmap.ic_launcher_round)!!,
+                    shortcutIconDrawable(R.mipmap.ic_launcher_round),
                     Main::class.java,
                     "FOQ",
                     this
@@ -1354,7 +1238,7 @@ class Main : FreezeYouBaseActivity() {
                 checkSettingsAndRequestCreateShortcut(
                     getString(R.string.onlySA),
                     "OS",
-                    resources.getDrawable(R.mipmap.ic_launcher_round)!!,
+                    shortcutIconDrawable(R.mipmap.ic_launcher_round),
                     Main::class.java,
                     "OS",
                     this
@@ -1366,7 +1250,7 @@ class Main : FreezeYouBaseActivity() {
                 checkSettingsAndRequestCreateShortcut(
                     getString(R.string.onlyUA),
                     "OU",
-                    resources.getDrawable(R.mipmap.ic_launcher_round)!!,
+                    shortcutIconDrawable(R.mipmap.ic_launcher_round),
                     Main::class.java,
                     "OU",
                     this
@@ -1378,7 +1262,7 @@ class Main : FreezeYouBaseActivity() {
                 checkSettingsAndRequestCreateShortcut(
                     getString(R.string.unfrozenUA),
                     "UFU",
-                    resources.getDrawable(R.mipmap.ic_launcher_round)!!,
+                    shortcutIconDrawable(R.mipmap.ic_launcher_round),
                     Main::class.java,
                     "UFU",
                     this
@@ -1451,12 +1335,14 @@ class Main : FreezeYouBaseActivity() {
                 return true
             }
             R.id.menu_vM_userDefined -> {
-                addUserDefinedCategoriesTo(
-                    item.subMenu!!,
-                    R.id.menu_vM_userDefined_menuGroup,
-                    R.id.menu_vM_userDefined_newClassification,
-                    0
-                )
+                item.subMenu?.let { subMenu ->
+                    addUserDefinedCategoriesTo(
+                        subMenu,
+                        R.id.menu_vM_userDefined_menuGroup,
+                        R.id.menu_vM_userDefined_newClassification,
+                        0
+                    )
+                }
                 return true
             }
             R.id.menu_update -> {
@@ -1725,7 +1611,7 @@ class Main : FreezeYouBaseActivity() {
             filter.addAction("cf.playhi.freezeyou.action.packageStatusChanged")
             ContextCompat.registerReceiver(
                 this,
-                updateFrozenStatusBroadcastReceiver!!,
+                updateFrozenStatusBroadcastReceiver,
                 filter,
                 ContextCompat.RECEIVER_NOT_EXPORTED
             )
@@ -1763,15 +1649,15 @@ class Main : FreezeYouBaseActivity() {
         } else {
             isGridMode = "grid" == mainPattern
         }
-        if (mMainActivityAppListFragment == null) {
-            mMainActivityAppListFragment = MainActivityAppListFragment()
-            mMainActivityAppListFragment!!.setUseGridMode(isGridMode)
+        val appListFragment = mMainActivityAppListFragment ?: MainActivityAppListFragment().also {
+            it.setUseGridMode(isGridMode)
+            mMainActivityAppListFragment = it
         }
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.add(
             R.id.main_appList_fragmentContainer_frameLayout,
-            mMainActivityAppListFragment!!
+            appListFragment
         )
         fragmentTransaction.commit()
         val initThread = Thread {
@@ -1808,14 +1694,14 @@ class Main : FreezeYouBaseActivity() {
         packageName: String,
         packageManager: PackageManager?
     ) {
-        keyValuePair["isFrozen"] = getFrozenStatus(packageName, packageManager!!)
+        keyValuePair["isFrozen"] = getFrozenStatus(packageName, packageManager)
     }
 
     /**
      * @param packageName 应用包名
      * @return 资源 Id
      */
-    private fun getFrozenStatus(packageName: String, packageManager: PackageManager): Int {
+    private fun getFrozenStatus(packageName: String, packageManager: PackageManager?): Int {
         return if (realGetFrozenStatus(
                 this@Main,
                 packageName,
@@ -1963,56 +1849,51 @@ class Main : FreezeYouBaseActivity() {
     }
 
     private fun updateFrozenStatus() {
-        if (mMainActivityAppListFragment == null) {
-            return
-        }
-        val adapter = mMainActivityAppListFragment!!.getAppListAdapter()
-        if (adapter is MainAppListSimpleAdapter) {
-            val pm = packageManager
-            val count = adapter.count
-            for (i in 0 until count) {
-                val hm = (adapter as MainAppListSimpleAdapter).getStoredArrayList()[i]
-                val pkgName = hm["PackageName"] as String?
-                val applicationInfo = getApplicationInfoFromPkgName(pkgName, this)
+        val adapter =
+            mMainActivityAppListFragment?.getAppListAdapter() as? MainAppListSimpleAdapter ?: return
+        val pm = packageManager
+        val count = adapter.count
+        for (i in 0 until count) {
+            val hm = adapter.getStoredArrayList().getOrNull(i) ?: continue
+            val pkgName = hm["PackageName"] as? String ?: continue
+            val applicationInfo = getApplicationInfoFromPkgName(pkgName, this)
 
-                //检查是否已卸载
-                if (applicationInfo == null) {
-                    hm["Name"] = getString(R.string.uninstalled)
-                    break
-                }
+            //检查是否已卸载
+            if (applicationInfo == null) {
+                hm["Name"] = getString(R.string.uninstalled)
+                break
+            }
 
-                //更新冻结状态信息
-                if (hm["isFrozen"] as Int != getFrozenStatus(pkgName!!, pm)) {
+            //更新冻结状态信息
+            if (hm["isFrozen"] as? Int != getFrozenStatus(pkgName, pm)) {
+                //更新冻结状态点
+                processFrozenStatus(hm, pkgName, pm)
 
-                    //更新冻结状态点
-                    processFrozenStatus(hm, pkgName, pm)
-
-                    //更新图标
-                    if (isGridMode) {
-                        hm["Img"] =
-                            if (realGetFrozenStatus(this, pkgName, pm)) BitmapDrawable(
-                                resources,
-                                getGrayBitmap(
-                                    getBitmapFromDrawable(
-                                        getApplicationIcon(
-                                            this,
-                                            pkgName,
-                                            applicationInfo,
-                                            false
-                                        )
+                //更新图标
+                if (isGridMode) {
+                    hm["Img"] =
+                        if (realGetFrozenStatus(this, pkgName, pm)) BitmapDrawable(
+                            resources,
+                            getGrayBitmap(
+                                getBitmapFromDrawable(
+                                    getApplicationIcon(
+                                        this,
+                                        pkgName,
+                                        applicationInfo,
+                                        false
                                     )
                                 )
-                            ) else getApplicationIcon(
-                                this@Main,
-                                pkgName,
-                                applicationInfo,
-                                true
                             )
-                    }
+                        ) else getApplicationIcon(
+                            this@Main,
+                            pkgName,
+                            applicationInfo,
+                            true
+                        )
                 }
             }
-            adapter.notifyDataSetChanged()
         }
+        adapter.notifyDataSetChanged()
     }
 
     private fun saveOnClickFunctionStatus(status: Int) {
@@ -2096,6 +1977,41 @@ class Main : FreezeYouBaseActivity() {
                 (t1["PackageName"] as String)
             )
         }
+    }
+
+    /**
+     * Compare two apps by a times map (usage / freeze / unfreeze counts).
+     * Ascending: smaller counts first; missing or zero counts sort first among sparse entries
+     * matching the previous Java behavior.
+     */
+    private fun compareByTimesMap(
+        m0: Map<String, Any?>,
+        m1: Map<String, Any?>,
+        timesMap: Map<String, Int>,
+        descending: Boolean
+    ): Int {
+        val s0 = Base64.encodeToString(
+            (m0["PackageName"] as String).toByteArray(),
+            Base64.DEFAULT
+        )
+        val s1 = Base64.encodeToString(
+            (m1["PackageName"] as String).toByteArray(),
+            Base64.DEFAULT
+        )
+        val t0 = timesMap[s0]
+        val t1 = timesMap[s1]
+        return when {
+            t0 != null && t1 != null ->
+                if (descending) t1.compareTo(t0) else t0.compareTo(t1)
+            t0 != null && t0 > 0 -> if (descending) -1 else 1
+            t1 != null && t1 > 0 -> if (descending) 1 else -1
+            else -> 0
+        }
+    }
+
+    private fun shortcutIconDrawable(resId: Int): Drawable {
+        return ContextCompat.getDrawable(this, resId)
+            ?: resources.getDrawable(resId, theme)
     }
 
     private fun checkIfNeedAskFirstTimeSetupAndShowDialog() {
