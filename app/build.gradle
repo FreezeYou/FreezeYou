@@ -13,7 +13,25 @@ android {
         versionName '12.0.154-nightly-20260801'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    // On some CI runners (e.g. GitHub ubuntu-latest), AGP's default debug keystore
+    // creation uses multi-process locking (JvmWideVariable) and crashes with an NPE
+    // when cgroup controllers are unavailable. Point debug signing at a pre-created
+    // keystore via CI_DEBUG_KEYSTORE so ValidateSigningTask skips that path.
+    signingConfigs {
+        debug {
+            def ciDebugKeystore = System.getenv("CI_DEBUG_KEYSTORE")
+            if (ciDebugKeystore != null && !ciDebugKeystore.isEmpty()) {
+                storeFile file(ciDebugKeystore)
+                storePassword 'android'
+                keyAlias 'androiddebugkey'
+                keyPassword 'android'
+            }
+        }
+    }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             shrinkResources true

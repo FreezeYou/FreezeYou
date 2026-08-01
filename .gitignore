@@ -12,3 +12,4 @@
 /.idea/caches
 /.idea
 .kotlin
+/.ci/

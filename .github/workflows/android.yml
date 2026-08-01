@@ -22,16 +22,26 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      # AGP may place the debug keystore under XDG_CONFIG_HOME (~/.config/.android)
-      # on Ubuntu 24.04 runners; that path is not writable unless created first.
-      # See: https://github.com/firebase/snippets-android/issues/602
-      - name: Prepare debug keystore directories
+      # AGP ValidateSigningTask always runs multi-process locking for the *default*
+      # debug keystore path, which NPEs on some runners (cgroup anyController=null).
+      # Use a project-local CI keystore with the usual debug credentials instead.
+      - name: Create CI debug keystore
         run: |
-          mkdir -p "$HOME/.android"
-          mkdir -p "$HOME/.config/.android"
+          mkdir -p "$GITHUB_WORKSPACE/.ci"
+          keytool -genkeypair \
+            -keystore "$GITHUB_WORKSPACE/.ci/debug.keystore" \
+            -storepass android \
+            -alias androiddebugkey \
+            -keypass android \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US"
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
+        env:
+          CI_DEBUG_KEYSTORE: ${{ github.workspace }}/.ci/debug.keystore
         run: ./gradlew assembleDebug --stacktrace
