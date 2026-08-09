@@ -8,8 +8,8 @@ android {
         applicationId = "cf.playhi.freezeyou"
         minSdk = 23
         targetSdk = 33
-        versionCode = 154
-        versionName = '12.0.154-nightly-20260801'
+        versionCode = 155
+        versionName = '12.0.155-nightly-20260809'
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     // On some CI runners (e.g. GitHub ubuntu-latest), AGP's default debug keystore
@@ -63,7 +63,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.aar'], dir: 'libs') // Contains Tray
-    implementation 'com.tencent:mmkv:2.4.0'
+    implementation 'com.tencent:mmkv:2.4.1'
     implementation 'com.getkeepsafe.relinker:relinker:1.4.5'
 
     def activity_version = "1.13.0"
