@@ -1,17 +1,16 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'kotlin-parcelize'
 
 android {
-    compileSdk 37
-    buildToolsVersion '37.0.0'
+    compileSdk = 37
+    buildToolsVersion = '37.0.0'
     defaultConfig {
-        applicationId "cf.playhi.freezeyou"
-        minSdkVersion 23
-        targetSdk 33
-        versionCode 154
-        versionName '12.0.154-nightly-20260801'
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        applicationId = "cf.playhi.freezeyou"
+        minSdk = 23
+        targetSdk = 33
+        versionCode = 154
+        versionName = '12.0.154-nightly-20260801'
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     // On some CI runners (e.g. GitHub ubuntu-latest), AGP's default debug keystore
     // creation uses multi-process locking (JvmWideVariable) and crashes with an NPE
@@ -21,38 +20,34 @@ android {
         debug {
             def ciDebugKeystore = System.getenv("CI_DEBUG_KEYSTORE")
             if (ciDebugKeystore != null && !ciDebugKeystore.isEmpty()) {
-                storeFile file(ciDebugKeystore)
-                storePassword 'android'
-                keyAlias 'androiddebugkey'
-                keyPassword 'android'
+                storeFile = file(ciDebugKeystore)
+                storePassword = 'android'
+                keyAlias = 'androiddebugkey'
+                keyPassword = 'android'
             }
         }
     }
     buildTypes {
         debug {
-            signingConfig signingConfigs.debug
+            signingConfig = signingConfigs.debug
         }
         release {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            shrinkResources true
-            minifyEnabled true
-            zipAlignEnabled true
+            shrinkResources = true
+            minifyEnabled = true
+            zipAlignEnabled = true
         }
     }
     productFlavors {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     buildFeatures {
-        viewBinding true
+        viewBinding = true
     }
 
     bundle {
@@ -60,9 +55,9 @@ android {
             enableSplit = false
         }
     }
-    namespace 'cf.playhi.freezeyou'
+    namespace = 'cf.playhi.freezeyou'
     lint {
-        abortOnError false
+        abortOnError = false
     }
 }
 
