@@ -4,11 +4,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.ListView
-import android.widget.SimpleAdapter
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.HorizontalDivider
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon
@@ -17,6 +16,8 @@ import cf.playhi.freezeyou.utils.ApplicationInfoUtils.getApplicationInfoFromPkgN
 import cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel
 import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
+import cf.playhi.freezeyou.ui.compose.AppListItem
+import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
 import java.util.*
 
 class SelectTargetActivityActivity : FreezeYouBaseActivity() {
@@ -24,7 +25,6 @@ class SelectTargetActivityActivity : FreezeYouBaseActivity() {
         processSetTheme(this)
         super.onCreate(savedInstanceState)
         processActionBar(supportActionBar)
-        setContentView(R.layout.staa_main)
         init()
     }
 
@@ -83,43 +83,30 @@ class SelectTargetActivityActivity : FreezeYouBaseActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                val adapter = SimpleAdapter(
-                    this@SelectTargetActivityActivity,
-                    arrayList,
-                    R.layout.staa_main_item,
-                    arrayOf("Img", "Label", "Name"),
-                    intArrayOf(
-                        R.id.staa_main_item_imageView,
-                        R.id.staa_main_item_textView,
-                        R.id.staa_main_item_subtitle_textView
-                    )
-                )
-                adapter.setViewBinder { view: View?, data: Any?, _: String? ->
-                    if (view is ImageView && data is Drawable) {
-                        view.setImageDrawable(data)
-                        true
-                    } else {
-                        false
+                setContent {
+                    FreezeYouTheme {
+                        LazyColumn {
+                            items(arrayList) { item ->
+                                val name = item["Name"] as String? ?: ""
+                                val label = item["Label"] as String? ?: ""
+                                val drawable = item["Img"] as Drawable?
+                                AppListItem(drawable, label, name) {
+                                    val icon = drawable?.let(::getBitmapFromDrawable)
+                                    setResult(
+                                        RESULT_OK,
+                                        Intent()
+                                            .putExtra("name", name)
+                                            .putExtra("icon", icon)
+                                            .putExtra("label", label)
+                                            .putExtra("id", "FreezeYou!$pkgName $name")
+                                    )
+                                    finish()
+                                }
+                                HorizontalDivider()
+                            }
+                        }
                     }
                 }
-                val staaMainListView = findViewById<ListView>(R.id.staa_main_listView)
-                staaMainListView.adapter = adapter
-                staaMainListView.onItemClickListener =
-                    AdapterView.OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
-                        val name = arrayList[position]["Name"] as String?
-                        val label = arrayList[position]["Label"] as String?
-                        val drawable = arrayList[position]["Img"] as Drawable?
-                        val icon = if (drawable == null) null else getBitmapFromDrawable(drawable)
-                        setResult(
-                            RESULT_OK,
-                            Intent()
-                                .putExtra("name", name)
-                                .putExtra("icon", icon)
-                                .putExtra("label", label)
-                                .putExtra("id", "FreezeYou!$pkgName $name")
-                        )
-                        finish()
-                    }
             }
         }
     }

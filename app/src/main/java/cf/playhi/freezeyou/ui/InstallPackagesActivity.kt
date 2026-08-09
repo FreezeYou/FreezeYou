@@ -24,6 +24,7 @@ import cf.playhi.freezeyou.service.InstallPackagesService
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.notAllowInstallWhenIsObsd
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.tryToAvoidUpdateWhenUsing
 import cf.playhi.freezeyou.utils.*
+import cf.playhi.freezeyou.ui.compose.alwaysAllowView
 import cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
 import cf.playhi.freezeyou.utils.ToastUtils.showToast
@@ -309,16 +310,16 @@ open class InstallPackagesActivity : FreezeYouBaseActivity() {
         processedPackageInfo: PackageInfo?
     ) {
         val installPackagesAlertDialog = ObsdAlertDialog(this)
+        var autoAllowChecked = false
         if (install == 1) {
-            //Init CheckBox
-            val checkBoxView = View.inflate(this, R.layout.ipa_dialog_checkbox, null)
-            val checkBox = checkBoxView.findViewById<CheckBox>(R.id.ipa_dialog_checkBox)
-            if (fromPkgLabel == ILLEGALPKGNAME) {
-                checkBox.visibility = View.GONE
-            } else {
-                checkBox.text = String.format(getString(R.string.alwaysAllow_name), fromPkgLabel)
+            if (fromPkgLabel != ILLEGALPKGNAME) {
+                installPackagesAlertDialog.setView(
+                    alwaysAllowView(
+                        this,
+                        String.format(getString(R.string.alwaysAllow_name), fromPkgLabel)
+                    ) { autoAllowChecked = it }
+                )
             }
-            installPackagesAlertDialog.setView(checkBoxView)
         }
         when (install) {
             0 -> installPackagesAlertDialog.setTitle(R.string.uninstall)
@@ -362,9 +363,7 @@ open class InstallPackagesActivity : FreezeYouBaseActivity() {
                     .create().show()
             } else {
                 if (install == 1) {
-                    val checkBox =
-                        (dialog as ObsdAlertDialog).findViewById<CheckBox>(R.id.ipa_dialog_checkBox)
-                    if (checkBox != null && checkBox.isChecked) {
+                    if (autoAllowChecked) {
                         val sp = AppPreferences(this@InstallPackagesActivity)
                         val originData = sp.getString("installPkgs_autoAllowPkgs_allows", "")
                         val originDataList = MoreUtils.convertToList(originData, ",")
@@ -458,9 +457,7 @@ open class InstallPackagesActivity : FreezeYouBaseActivity() {
                         .create().show()
                 } else {
                     if (install == 1) {
-                        val checkBox =
-                            (dialog as ObsdAlertDialog).findViewById<CheckBox>(R.id.ipa_dialog_checkBox)
-                        if (checkBox != null && checkBox.isChecked) {
+                        if (autoAllowChecked) {
                             val sp = AppPreferences(this@InstallPackagesActivity)
                             val originData = sp.getString("installPkgs_autoAllowPkgs_allows", "")
                             val originDataList = MoreUtils.convertToList(originData, ",")

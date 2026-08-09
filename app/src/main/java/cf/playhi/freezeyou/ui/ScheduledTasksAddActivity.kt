@@ -7,14 +7,27 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ImageButton
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.ActionBar
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.fragment.app.FragmentContainerView
 import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.TriggerTasksService
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.ui.fragment.STAAFragment
 import cf.playhi.freezeyou.ui.fragment.STAATriggerFragment
+import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
 import cf.playhi.freezeyou.utils.*
 import cf.playhi.freezeyou.utils.AccessibilityUtils.isAccessibilitySettingsOn
 import cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings
@@ -33,7 +46,6 @@ class ScheduledTasksAddActivity : FreezeYouBaseActivity(), OnSharedPreferenceCha
     override fun onCreate(savedInstanceState: Bundle?) {
         processSetTheme(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.stma_add)
         id = intent.getIntExtra("id", -5)
         isTimeTask = intent.getBooleanExtra("time", true)
         val actionBar = supportActionBar
@@ -42,6 +54,34 @@ class ScheduledTasksAddActivity : FreezeYouBaseActivity(), OnSharedPreferenceCha
             actionBar.title = intent.getStringExtra("label")
         }
         init()
+        setContent {
+            FreezeYouTheme {
+                Box(Modifier.fillMaxSize()) {
+                    AndroidView(
+                        factory = { context ->
+                            FragmentContainerView(context).apply {
+                                this.id = R.id.scheduled_task_preferences_container
+                                if (supportFragmentManager.findFragmentById(this.id) == null) {
+                                    supportFragmentManager.beginTransaction()
+                                        .replace(
+                                            this.id,
+                                            if (isTimeTask) STAAFragment() else STAATriggerFragment()
+                                        )
+                                        .commitNow()
+                                }
+                            }
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    FloatingActionButton(
+                        onClick = ::saveTask,
+                        modifier = Modifier.align(Alignment.BottomEnd).padding(25.dp)
+                    ) {
+                        Icon(painterResource(R.drawable.ic_save), stringResource(R.string.save))
+                    }
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -159,11 +199,6 @@ class ScheduledTasksAddActivity : FreezeYouBaseActivity(), OnSharedPreferenceCha
 
     private fun init() {
         prepareData(id)
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.staa_sp, if (isTimeTask) STAAFragment() else STAATriggerFragment())
-            .commit()
-        prepareSaveButton(id)
     }
 
     private fun prepareData(id: Int) {
@@ -258,21 +293,15 @@ class ScheduledTasksAddActivity : FreezeYouBaseActivity(), OnSharedPreferenceCha
         }
     }
 
-    private fun prepareSaveButton(id: Int) {
-        val saveButton = findViewById<ImageButton>(R.id.staa_saveButton)
-        saveButton.setBackgroundResource(R.drawable.oval_ripple)
-        saveButton.setOnClickListener {
-            val defaultSharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(applicationContext)
-            if (isTimeTask) {
-                if (saveTimeTaskData(defaultSharedPreferences, id)) {
-                    finish()
-                }
-            } else {
-                if (saveTriggerTaskData(defaultSharedPreferences, id)) {
-                    finish()
-                }
+    private fun saveTask() {
+        val defaultSharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        if (isTimeTask) {
+            if (saveTimeTaskData(defaultSharedPreferences, id)) {
+                finish()
             }
+        } else if (saveTriggerTaskData(defaultSharedPreferences, id)) {
+            finish()
         }
     }
 

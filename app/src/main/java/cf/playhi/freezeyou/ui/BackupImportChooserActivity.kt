@@ -2,10 +2,24 @@ package cf.playhi.freezeyou.ui
 
 import android.os.Bundle
 import android.util.Base64
-import android.widget.Button
-import android.widget.ListView
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import cf.playhi.freezeyou.R
-import cf.playhi.freezeyou.adapter.BackupImportChooserActivitySwitchSimpleAdapter
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageStringKeys
@@ -15,17 +29,20 @@ import cf.playhi.freezeyou.utils.BackupUtils
 import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
 import cf.playhi.freezeyou.utils.ToastUtils
+import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
 import org.json.JSONException
 import org.json.JSONObject
 
 class BackupImportChooserActivity : FreezeYouBaseActivity() {
     private val keyToStringIdValuePair = HashMap<String, String>()
+    private val selectedItems = mutableStateMapOf<Int, Boolean>()
+    private var importObject: JSONObject? = null
+    private var importItems: List<MutableMap<String, String>> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         processSetTheme(this)
         super.onCreate(savedInstanceState)
         processActionBar(supportActionBar)
-        setContentView(R.layout.bica_main)
         onCreateInit()
     }
 
@@ -35,7 +52,6 @@ class BackupImportChooserActivity : FreezeYouBaseActivity() {
             finish()
             return
         }
-        val mainListView = findViewById<ListView>(R.id.bica_main_listView)
         val titleAndSpKeyArrayList = ArrayList<MutableMap<String, String>>()
         generateKeyToStringIdValuePair()
         val jsonContentString = intent.getStringExtra("jsonObjectString")
@@ -69,33 +85,75 @@ class BackupImportChooserActivity : FreezeYouBaseActivity() {
                 }
             }
         }
-        val adapter = BackupImportChooserActivitySwitchSimpleAdapter(
-            this,
-            jsonObject,
-            titleAndSpKeyArrayList,
-            R.layout.bica_list_item,
-            arrayOf("title"),
-            intArrayOf(R.id.bica_list_item_switch)
-        )
-        mainListView.adapter = adapter
-        processButtons()
+        importObject = jsonObject?.let { JSONObject(it.toString()) }
+        importItems = titleAndSpKeyArrayList
+        titleAndSpKeyArrayList.indices.forEach { selectedItems[it] = true }
+        setContent {
+            FreezeYouTheme {
+                Column(Modifier.fillMaxSize()) {
+                    LazyColumn(Modifier.fillMaxWidth().weight(1f)) {
+                        itemsIndexed(importItems) { index, item ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(10.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(item["title"].orEmpty(), Modifier.weight(1f))
+                                Switch(
+                                    checked = selectedItems[index] != false,
+                                    enabled = item["category"] != "Failed!",
+                                    onCheckedChange = { selectedItems[index] = it }
+                                )
+                            }
+                            HorizontalDivider()
+                        }
+                    }
+                    Row(Modifier.fillMaxWidth().padding(10.dp)) {
+                        Button(onClick = { finish() }, modifier = Modifier.weight(1f)) {
+                            Text(stringResource(R.string.cancel))
+                        }
+                        Button(
+                            onClick = {
+                                BackupUtils.importContents(
+                                    applicationContext,
+                                    this@BackupImportChooserActivity,
+                                    getFinalImportObject()
+                                )
+                                ToastUtils.showToast(this@BackupImportChooserActivity, R.string.finish)
+                                finish()
+                            },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(stringResource(R.string.finish))
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    private fun processButtons() {
-        val bicaFinishButton = findViewById<Button>(R.id.bica_finish_button)
-        val bicaCancelButton = findViewById<Button>(R.id.bica_cancel_button)
-        bicaCancelButton.setOnClickListener { finish() }
-        bicaFinishButton.setOnClickListener {
-            val mainListView = findViewById<ListView>(R.id.bica_main_listView)
-            val adapter =
-                mainListView.adapter as BackupImportChooserActivitySwitchSimpleAdapter
-            BackupUtils.importContents(
-                applicationContext,
-                this@BackupImportChooserActivity, adapter.getFinalList()
-            )
-            ToastUtils.showToast(this@BackupImportChooserActivity, R.string.finish)
-            finish()
+    private fun getFinalImportObject(): JSONObject {
+        val jsonObject = importObject ?: return JSONObject()
+        importItems.forEachIndexed { index, itemData ->
+            if (selectedItems[index] != false) return@forEachIndexed
+            val category = itemData["category"] ?: return@forEachIndexed
+            val key = itemData["spKey"] ?: return@forEachIndexed
+            val array = jsonObject.optJSONArray(category) ?: return@forEachIndexed
+            when (category) {
+                "generalSettings_boolean", "generalSettings_string",
+                "generalSettings_int", "oneKeyList" -> array.optJSONObject(0)?.remove(key)
+                "userTimeScheduledTasks", "userTriggerScheduledTasks",
+                "userDefinedCategories" -> {
+                    for (arrayIndex in 0 until array.length()) {
+                        val value = array.optJSONObject(arrayIndex) ?: continue
+                        if (key == value.optString("i", "-1")) value.put("doNotImport", true)
+                    }
+                }
+                "uriAutoAllowPkgs_allows", "installPkgs_autoAllowPkgs_allows" -> {
+                    jsonObject.remove(category)
+                }
+            }
         }
+        return jsonObject
     }
 
     private fun generateKeyToStringIdValuePair() {

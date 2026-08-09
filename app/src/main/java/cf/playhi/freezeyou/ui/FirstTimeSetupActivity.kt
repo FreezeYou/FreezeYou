@@ -1,29 +1,58 @@
 package cf.playhi.freezeyou.ui
 
 import android.os.Bundle
-import android.widget.Button
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.fragment.app.FragmentContainerView
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.ui.fragment.FirstTimeSetupFragment
+import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
 
 class FirstTimeSetupActivity : FreezeYouBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         processSetTheme(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.first_time_setup_main)
         val actionBar = supportActionBar
         actionBar?.hide()
-        init()
-    }
-
-    private fun init() {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.first_time_setup_main_frameLayout, FirstTimeSetupFragment())
-            .commit()
-        val firstTimeSetupMainNextButton =
-            findViewById<Button>(R.id.first_time_setup_main_next_button)
-        firstTimeSetupMainNextButton.setOnClickListener { finish() }
+        setContent {
+            FreezeYouTheme {
+                Column(Modifier.fillMaxSize().padding(20.dp)) {
+                    Text(
+                        text = stringResource(R.string.quickSetup),
+                        fontSize = 34.sp,
+                        maxLines = 1,
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp)
+                    )
+                    AndroidView(
+                        factory = { context ->
+                            FragmentContainerView(context).apply {
+                                id = R.id.first_time_setup_container
+                                if (supportFragmentManager.findFragmentById(id) == null) {
+                                    supportFragmentManager.beginTransaction()
+                                        .replace(id, FirstTimeSetupFragment())
+                                        .commitNow()
+                                }
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth().weight(1f)
+                    )
+                    Button(onClick = { finish() }, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.finish))
+                    }
+                }
+            }
+        }
     }
 }

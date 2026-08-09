@@ -2,8 +2,21 @@ package cf.playhi.freezeyou.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.utils.BackupUtils.getExportContent
@@ -12,6 +25,10 @@ import cf.playhi.freezeyou.utils.GZipUtils
 import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
 import cf.playhi.freezeyou.utils.ToastUtils
+import cf.playhi.freezeyou.ui.compose.ActionButton
+import cf.playhi.freezeyou.ui.compose.EqualButtons
+import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
+import cf.playhi.freezeyou.ui.compose.SectionDivider
 
 class BackupMainActivity : FreezeYouBaseActivity() {
     //    Camera mCamera = null; 先把文本方式稳定下来，再做 QRCode
@@ -19,45 +36,48 @@ class BackupMainActivity : FreezeYouBaseActivity() {
         processSetTheme(this)
         super.onCreate(savedInstanceState)
         processActionBar(supportActionBar)
-        setContentView(R.layout.bma_main)
-        onCreateInit()
-    }
-
-    private fun onCreateInit() {
-        initButtons()
-    }
-
-    private fun initButtons() {
-        val bmaMainExportButton = findViewById<Button>(R.id.bma_main_export_button)
-        val bmaMainImportButton = findViewById<Button>(R.id.bma_main_import_button)
-        val bmaMainCopyButton = findViewById<Button>(R.id.bma_main_copy_button)
-        val bmaMainPasteButton = findViewById<Button>(R.id.bma_main_paste_button)
-        bmaMainExportButton.setOnClickListener {
-            val editText = findViewById<EditText>(R.id.bma_main_inputAndoutput_editText)
-            editText.setText(GZipUtils.gzipCompress(getExportContent(applicationContext)))
-            editText.selectAll()
-        }
-        bmaMainImportButton.setOnClickListener {
-            val editText = findViewById<EditText>(R.id.bma_main_inputAndoutput_editText)
-            startActivity(
-                Intent(this@BackupMainActivity, BackupImportChooserActivity::class.java)
-                    .putExtra(
-                        "jsonObjectString",
-                        GZipUtils.gzipDecompress(editText.text.toString())
+        setContent {
+            FreezeYouTheme {
+                var content by remember { mutableStateOf("") }
+                Column(
+                    Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)
+                ) {
+                    EqualButtons {
+                        ActionButton(getString(android.R.string.copy)) {
+                            val copied = ClipboardUtils.copyToClipboard(applicationContext, content)
+                            ToastUtils.showToast(
+                                this@BackupMainActivity,
+                                if (copied) R.string.success else R.string.failed
+                            )
+                        }
+                        ActionButton(getString(android.R.string.paste)) {
+                            content = ClipboardUtils.getClipboardItemText(applicationContext).toString()
+                        }
+                    }
+                    EqualButtons {
+                        ActionButton(stringResource(R.string.expt)) {
+                            content = GZipUtils.gzipCompress(getExportContent(applicationContext))
+                        }
+                        ActionButton(stringResource(R.string.impt)) {
+                            startActivity(
+                                Intent(
+                                    this@BackupMainActivity,
+                                    BackupImportChooserActivity::class.java
+                                ).putExtra(
+                                    "jsonObjectString",
+                                    GZipUtils.gzipDecompress(content)
+                                )
+                            )
+                        }
+                    }
+                    SectionDivider()
+                    OutlinedTextField(
+                        value = content,
+                        onValueChange = { content = it },
+                        modifier = Modifier.fillMaxWidth()
                     )
-            )
-        }
-        bmaMainCopyButton.setOnClickListener {
-            val editText = findViewById<EditText>(R.id.bma_main_inputAndoutput_editText)
-            if (ClipboardUtils.copyToClipboard(applicationContext, editText.text.toString())) {
-                ToastUtils.showToast(this@BackupMainActivity, R.string.success)
-            } else {
-                ToastUtils.showToast(this@BackupMainActivity, R.string.failed)
+                }
             }
-        }
-        bmaMainPasteButton.setOnClickListener {
-            val editText = findViewById<EditText>(R.id.bma_main_inputAndoutput_editText)
-            editText.setText(ClipboardUtils.getClipboardItemText(applicationContext))
         }
     }
 }

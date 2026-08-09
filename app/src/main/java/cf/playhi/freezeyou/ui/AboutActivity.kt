@@ -3,15 +3,29 @@ package cf.playhi.freezeyou.ui
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.TextView
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.app.FreezeYouAlertDialogBuilder
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
+import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
 import cf.playhi.freezeyou.utils.MoreUtils.joinQQGroup
 import cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite
 import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
@@ -23,145 +37,130 @@ class AboutActivity : FreezeYouBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         processSetTheme(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.about)
         processActionBar(supportActionBar)
+        setContent { FreezeYouTheme { AboutScreen() } }
+    }
 
-        val aboutSlogan = findViewById<TextView>(R.id.about_slogan)
-        val aboutListView = findViewById<ListView>(R.id.about_listView)
-        val aboutAppName = findViewById<TextView>(R.id.about_appName)
-
-        aboutListView.adapter =
-            ArrayAdapter(
-                this@AboutActivity,
-                android.R.layout.simple_list_item_1,
-                arrayOf(
-                    resources.getString(R.string.hToUse),
-                    resources.getString(R.string.faq),
-                    resources.getString(R.string.helpTranslate),
-                    resources.getString(R.string.thanksList),
-                    resources.getString(R.string.visitWebsite),
-                    resources.getString(R.string.contactUs),
-                    resources.getString(R.string.update),
-                    resources.getString(R.string.thirdPartyOpenSourceLicenses),
-                    "V${VersionUtils.getVersionName(applicationContext)}(${VersionUtils.getVersionCode(applicationContext)})"
+    @Composable
+    private fun AboutScreen() {
+        val entries = listOf(
+            stringResource(R.string.hToUse),
+            stringResource(R.string.faq),
+            stringResource(R.string.helpTranslate),
+            stringResource(R.string.thanksList),
+            stringResource(R.string.visitWebsite),
+            stringResource(R.string.contactUs),
+            stringResource(R.string.update),
+            stringResource(R.string.thirdPartyOpenSourceLicenses),
+            "V${VersionUtils.getVersionName(applicationContext)}" +
+                "(${VersionUtils.getVersionCode(applicationContext)})"
+        )
+        Column(Modifier.fillMaxSize().padding(5.dp)) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(50.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.app_name),
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().clickable { showWelcomeDialog() }
                 )
-            )
-
-        aboutListView.onItemClickListener =
-            OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
-                when (position) {
-                    0 -> requestOpenWebSite(
-                        this@AboutActivity,
-                        "https://www.zidon.net/${getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)}/guide/how-to-use.html"
-                    )
-                    1 -> requestOpenWebSite(
-                        this@AboutActivity, String.format(
-                            "https://www.zidon.net/%1\$s/faq/",
-                            getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)
+                Text(
+                    text = "V ${VersionUtils.getVersionCode(this@AboutActivity)}",
+                    color = androidx.compose.ui.graphics.Color.Gray,
+                    fontStyle = FontStyle.Italic,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().clickable {
+                        requestOpenWebSite(
+                            this@AboutActivity,
+                            "https://www.zidon.net/" +
+                                "${getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)}/changelog/"
                         )
-                    )
-                    2 -> requestOpenWebSite(
-                        this@AboutActivity,
-                        "https://github.com/FreezeYou/FreezeYou/blob/master/README_Translation.md"
-                    )
-                    3 -> requestOpenWebSite(
-                        this@AboutActivity, String.format(
-                            "https://www.zidon.net/%1\$s/thanks/",
-                            getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)
-                        )
-                    )
-                    4 -> requestOpenWebSite(this@AboutActivity, "https://www.zidon.net")
-                    5 -> {
-                        FreezeYouAlertDialogBuilder(this@AboutActivity)
-                            .setMessage(
-                                String.format(
-                                    getString(R.string.email_colon),
-                                    "contact@zidon.net"
-                                ) + System.getProperty("line.separator")
-                                        + String.format(
-                                    getString(R.string.telegramGroup_colon),
-                                    "t.me/FreezeYou"
-                                ) + System.getProperty("line.separator")
-                                        + String.format(
-                                    getString(R.string.qqGroup_colon),
-                                    "704086494"
-                                )
-                            )
-                            .setTitle(R.string.contactUs)
-                            .setPositiveButton(R.string.okay, null)
-                            .setNegativeButton(
-                                R.string.addQQGroup
-                            ) { _: DialogInterface?, _: Int ->
-                                joinQQGroup(this@AboutActivity)
-                            }
-                            .setNeutralButton(
-                                R.string.more
-                            ) { _: DialogInterface?, _: Int ->
-                                requestOpenWebSite(
-                                    this@AboutActivity,
-                                    String.format(
-                                        "https://www.zidon.net/%1\$s/about/contactUs.html",
-                                        getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)
-                                    )
-                                )
-                            }
-                            .show()
                     }
-                    6 -> VersionUtils.checkUpdate(this@AboutActivity)
-                    7 -> requestOpenWebSite(
-                        this@AboutActivity,
-                        "https://freezeyou.playhi.net/ThirdPartyOpenSourceLicenses.html"
+                )
+            }
+            LazyColumn(Modifier.fillMaxSize()) {
+                itemsIndexed(entries) { index, label ->
+                    Text(
+                        text = label,
+                        modifier = Modifier.fillMaxWidth()
+                            .clickable { onEntryClick(index) }
+                            .padding(horizontal = 16.dp, vertical = 14.dp)
                     )
-                    8 -> showToast(
-                        this@AboutActivity,
-                        "V" + VersionUtils.getVersionName(this@AboutActivity) + "(" + VersionUtils.getVersionCode(
-                            this@AboutActivity
-                        ) + ")"
-                    )
+                    HorizontalDivider()
                 }
             }
+        }
+    }
 
-        aboutSlogan.text = String.format("V %s", VersionUtils.getVersionCode(this@AboutActivity))
-        aboutSlogan.setOnClickListener {
-            requestOpenWebSite(
-                this@AboutActivity, String.format(
-                    "https://www.zidon.net/%1\$s/changelog/",
-                    getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)
-                )
+    private fun onEntryClick(position: Int) {
+        when (position) {
+            0 -> requestOpenWebSite(
+                this,
+                "https://www.zidon.net/${getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)}/guide/how-to-use.html"
+            )
+            1 -> requestOpenWebSite(
+                this,
+                "https://www.zidon.net/${getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)}/faq/"
+            )
+            2 -> requestOpenWebSite(
+                this,
+                "https://github.com/FreezeYou/FreezeYou/blob/master/README_Translation.md"
+            )
+            3 -> requestOpenWebSite(
+                this,
+                "https://www.zidon.net/${getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)}/thanks/"
+            )
+            4 -> requestOpenWebSite(this, "https://www.zidon.net")
+            5 -> showContactDialog()
+            6 -> VersionUtils.checkUpdate(this)
+            7 -> requestOpenWebSite(
+                this,
+                "https://freezeyou.playhi.net/ThirdPartyOpenSourceLicenses.html"
+            )
+            8 -> showToast(
+                this,
+                "V${VersionUtils.getVersionName(this)}(${VersionUtils.getVersionCode(this)})"
             )
         }
+    }
 
-        aboutAppName.setOnClickListener {
-            FreezeYouAlertDialogBuilder(this@AboutActivity)
-                .setTitle(
-                    String.format(
-                        getString(R.string.welcomeToUseAppName),
-                        getString(R.string.app_name)
-                    )
+    private fun showContactDialog() {
+        val newline = System.lineSeparator()
+        FreezeYouAlertDialogBuilder(this)
+            .setMessage(
+                String.format(getString(R.string.email_colon), "contact@zidon.net") + newline +
+                    String.format(getString(R.string.telegramGroup_colon), "t.me/FreezeYou") + newline +
+                    String.format(getString(R.string.qqGroup_colon), "704086494")
+            )
+            .setTitle(R.string.contactUs)
+            .setPositiveButton(R.string.okay, null)
+            .setNegativeButton(R.string.addQQGroup) { _: DialogInterface?, _: Int ->
+                joinQQGroup(this)
+            }
+            .setNeutralButton(R.string.more) { _: DialogInterface?, _: Int ->
+                requestOpenWebSite(
+                    this,
+                    "https://www.zidon.net/${getString(R.string.correspondingAndAvailableWebsiteUrlLanguageCode)}/about/contactUs.html"
                 )
-                .setIcon(R.mipmap.ic_launcher_new_round)
-                .setMessage(
-                    String.format(
-                        getString(R.string.welcomeToUseAppName),
-                        getString(R.string.app_name)
-                    )
-                )
-                .setNegativeButton(
-                    R.string.importConfig
-                ) { _: DialogInterface?, _: Int ->
-                    startActivity(
-                        Intent(applicationContext, BackupMainActivity::class.java)
-                    )
-                }
-                .setPositiveButton(
-                    R.string.quickSetup
-                ) { _: DialogInterface?, _: Int ->
-                    startActivity(
-                        Intent(applicationContext, FirstTimeSetupActivity::class.java)
-                    )
-                }
-                .setNeutralButton(R.string.okay, null)
-                .show()
-        }
+            }
+            .show()
+    }
+
+    private fun showWelcomeDialog() {
+        FreezeYouAlertDialogBuilder(this)
+            .setTitle(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)))
+            .setIcon(R.mipmap.ic_launcher_new_round)
+            .setMessage(String.format(getString(R.string.welcomeToUseAppName), getString(R.string.app_name)))
+            .setNegativeButton(R.string.importConfig) { _: DialogInterface?, _: Int ->
+                startActivity(Intent(applicationContext, BackupMainActivity::class.java))
+            }
+            .setPositiveButton(R.string.quickSetup) { _: DialogInterface?, _: Int ->
+                startActivity(Intent(applicationContext, FirstTimeSetupActivity::class.java))
+            }
+            .setNeutralButton(R.string.okay, null)
+            .show()
     }
 }

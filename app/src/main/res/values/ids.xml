@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="first_time_setup_container" type="id" />
+    <item name="main_app_list_container" type="id" />
+    <item name="scheduled_task_preferences_container" type="id" />
+</resources>

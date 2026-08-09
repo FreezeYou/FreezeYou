@@ -10,9 +10,15 @@ import android.widget.AdapterView
 import android.widget.GridView
 import android.widget.ListAdapter
 import android.widget.ListView
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.adapter.MainAppListSimpleAdapter
+import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
 
 class MainActivityAppListFragment : Fragment() {
     private var mUseGridMode = false
@@ -27,35 +33,46 @@ class MainActivityAppListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view: View
-        if (mUseGridMode) {
-            view = inflater.inflate(R.layout.main_app_grid_fragment, container, false)
-            mAppListGridView = view.findViewById(R.id.main_appList_gridView)
-            if (mOnItemClickListener != null) mAppListGridView!!.onItemClickListener =
-                mOnItemClickListener
-            if (mOnItemLongClickListener != null) mAppListGridView!!.onItemLongClickListener =
-                mOnItemLongClickListener
-            if (mMultiChoiceModeListener != null) mAppListGridView!!.setMultiChoiceModeListener(
-                mMultiChoiceModeListener
-            )
-            if (mAppListAdapter != null) mAppListGridView!!.adapter = mAppListAdapter
-            mAppListGridView!!.choiceMode = AbsListView.CHOICE_MODE_MULTIPLE_MODAL
-            mAppListGridView!!.columnWidth =
-                (resources.getDimension(android.R.dimen.app_icon_size) * 1.6).toInt()
-        } else {
-            view = inflater.inflate(R.layout.main_app_list_fragment, container, false)
-            mAppListListView = view.findViewById(R.id.main_appList_listView)
-            if (mOnItemClickListener != null) mAppListListView!!.onItemClickListener =
-                mOnItemClickListener
-            if (mOnItemLongClickListener != null) mAppListListView!!.onItemLongClickListener =
-                mOnItemLongClickListener
-            if (mMultiChoiceModeListener != null) mAppListListView!!.setMultiChoiceModeListener(
-                mMultiChoiceModeListener
-            )
-            if (mAppListAdapter != null) mAppListListView!!.adapter = mAppListAdapter
+    ): View = ComposeView(requireContext()).apply {
+        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        setContent {
+            FreezeYouTheme {
+                AndroidView(
+                    factory = { context ->
+                        if (mUseGridMode) {
+                            GridView(context).apply {
+                                mAppListGridView = this
+                                onItemClickListener = mOnItemClickListener
+                                onItemLongClickListener = mOnItemLongClickListener
+                                mMultiChoiceModeListener?.let(::setMultiChoiceModeListener)
+                                adapter = mAppListAdapter
+                                choiceMode = AbsListView.CHOICE_MODE_MULTIPLE_MODAL
+                                columnWidth =
+                                    (resources.getDimension(android.R.dimen.app_icon_size) * 1.6).toInt()
+                                numColumns = GridView.AUTO_FIT
+                                stretchMode = GridView.STRETCH_SPACING_UNIFORM
+                                verticalSpacing = (6 * resources.displayMetrics.density).toInt()
+                                isFastScrollEnabled = true
+                                gravity = android.view.Gravity.CENTER
+                            }
+                        } else {
+                            ListView(context).apply {
+                                mAppListListView = this
+                                onItemClickListener = mOnItemClickListener
+                                onItemLongClickListener = mOnItemLongClickListener
+                                mMultiChoiceModeListener?.let(::setMultiChoiceModeListener)
+                                adapter = mAppListAdapter
+                                choiceMode = AbsListView.CHOICE_MODE_MULTIPLE_MODAL
+                                divider = null
+                                dividerHeight = 0
+                                isFastScrollEnabled = true
+                            }
+                        }
+                    },
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
-        return view
     }
 
     fun setUseGridMode(b: Boolean) {
@@ -112,12 +129,7 @@ class MainActivityAppListFragment : Fragment() {
                 context,
                 appList,
                 selectedPackages,
-                if (mUseGridMode) R.layout.main_grid_main_item else R.layout.app_list_1,
-                arrayOf("Img", "Name", "PackageName", "isFrozen"),
-                if (mUseGridMode) intArrayOf(
-                    R.id.mgmi_imageView,
-                    R.id.mgmi_textView
-                ) else intArrayOf(R.id.img, R.id.name, R.id.pkgName, R.id.isFrozen)
+                mUseGridMode
             )
         }
         val activity = activity

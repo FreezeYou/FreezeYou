@@ -2,17 +2,34 @@ package cf.playhi.freezeyou.ui
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.Button
-import android.widget.EditText
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.app.FreezeYouAlertDialogBuilder
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
 import cf.playhi.freezeyou.viewmodel.ManualModeActivityViewModel
+import cf.playhi.freezeyou.ui.compose.ActionButton
+import cf.playhi.freezeyou.ui.compose.EqualButtons
+import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
 
 class ManualModeActivity : FreezeYouBaseActivity() {
 
@@ -21,68 +38,68 @@ class ManualModeActivity : FreezeYouBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         processSetTheme(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.manualmode)
         processActionBar(supportActionBar)
-
-        val packageNameEditText = findViewById<EditText>(R.id.manualMode_packageNameEditText)
-        val selectFUFModeButton = findViewById<Button>(R.id.manualMode_selectFUFMode_button)
-        val disableButton = findViewById<Button>(R.id.manualMode_disable_button)
-        val enableButton = findViewById<Button>(R.id.manualMode_enable_button)
         val context = applicationContext
         val modeSelections = arrayOf(
             resources.getStringArray(R.array.selectFUFModeSelection),
             resources.getStringArray(R.array.selectFUFModeSelectionValues)
         )
-        packageNameEditText.setText(viewModel.getCurrentPackageName())
-        packageNameEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable) {
-                viewModel.setCurrentPackageName(s.toString())
-                if (s.isEmpty()) {
-                    disableButton.isEnabled = false
-                    enableButton.isEnabled = false
-                } else {
-                    disableButton.isEnabled = true
-                    enableButton.isEnabled = true
+        var selectedPosition by mutableIntStateOf(
+            viewModel.getSelectedModeCheckedPosition().value ?: -1
+        )
+        viewModel.getSelectedModeCheckedPosition().observe(this) {
+            selectedPosition = it
+        }
+        setContent {
+            FreezeYouTheme {
+                var packageName by remember { mutableStateOf(viewModel.getCurrentPackageName()) }
+                Column(
+                    Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(5.dp)
+                ) {
+                    OutlinedTextField(
+                        value = packageName,
+                        onValueChange = {
+                            packageName = it
+                            viewModel.setCurrentPackageName(it)
+                        },
+                        label = { Text(stringResource(R.string.packageName)) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Button(
+                        onClick = {
+                            FreezeYouAlertDialogBuilder(this@ManualModeActivity)
+                                .setTitle(R.string.selectFUFMode)
+                                .setSingleChoiceItems(
+                                    modeSelections[0], selectedPosition
+                                ) { dialog: DialogInterface, which: Int ->
+                                    viewModel.setSelectedModeCheckedPosition(which)
+                                    viewModel.setSelectedMode(modeSelections[1][which].toInt())
+                                    dialog.dismiss()
+                                }
+                                .setNegativeButton(R.string.cancel, null)
+                                .show()
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            if (selectedPosition in modeSelections[0].indices) {
+                                modeSelections[0][selectedPosition]
+                            } else {
+                                stringResource(R.string.selectFUFMode)
+                            }
+                        )
+                    }
+                    EqualButtons {
+                        ActionButton(stringResource(R.string.freeze), packageName.isNotEmpty()) {
+                            viewModel.processFUFOperation(packageName, context, true)
+                        }
+                        ActionButton(stringResource(R.string.unfreeze), packageName.isNotEmpty()) {
+                            viewModel.processFUFOperation(packageName, context, false)
+                        }
+                    }
                 }
             }
-        })
-        viewModel.getSelectedModeCheckedPosition().observe(this) {
-            selectFUFModeButton.text =
-                if (it < 0 || it >= modeSelections[0].size) {
-                    getString(R.string.selectFUFMode)
-                } else {
-                    modeSelections[0][it]
-                }
-        }
-        selectFUFModeButton.setOnClickListener {
-            FreezeYouAlertDialogBuilder(this@ManualModeActivity)
-                .setTitle(R.string.selectFUFMode)
-                .setSingleChoiceItems(
-                    modeSelections[0],
-                    viewModel.getSelectedModeCheckedPosition().value ?: -1
-                ) { dialog: DialogInterface, which: Int ->
-                    viewModel.setSelectedModeCheckedPosition(which)
-                    viewModel.setSelectedMode(modeSelections[1][which].toInt())
-                    dialog.dismiss()
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
-        }
-        disableButton.setOnClickListener {
-            viewModel.processFUFOperation(
-                packageNameEditText.text.toString(),
-                context,
-                true
-            )
-        }
-        enableButton.setOnClickListener {
-            viewModel.processFUFOperation(
-                packageNameEditText.text.toString(),
-                context,
-                false
-            )
         }
     }
 

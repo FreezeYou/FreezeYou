@@ -1,180 +1,159 @@
 package cf.playhi.freezeyou.ui
 
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Base64
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ListView
-import android.widget.ProgressBar
-import android.widget.SimpleAdapter
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.PopupMenu
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.app.FreezeYouAlertDialogBuilder
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
-import cf.playhi.freezeyou.utils.GZipUtils
+import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
 import cf.playhi.freezeyou.utils.ClipboardUtils.copyToClipboard
+import cf.playhi.freezeyou.utils.GZipUtils
 import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
 import cf.playhi.freezeyou.utils.ToastUtils.showToast
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.util.*
 
 class UserDefinedListsManageActivity : FreezeYouBaseActivity() {
+    private data class UserList(val id: Int, val title: String, val packages: String)
+
+    private var lists by mutableStateOf<List<UserList>>(emptyList())
+    private var expandedId by mutableIntStateOf(-1)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         processSetTheme(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.udlma_main)
         processActionBar(supportActionBar)
         loadUserDefinedLists()
-    }
-
-    private fun loadUserDefinedLists() {
-        val listsDataArrayList = ArrayList<MutableMap<String, Any?>>()
-        val userDefinedListsDb =
-            openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null)
-        userDefinedListsDb.execSQL(
-            "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
-        )
-        val cursor = userDefinedListsDb.query(
-            "categories",
-            arrayOf("label", "_id", "packages"),
-            null,
-            null,
-            null,
-            null,
-            null
-        )
-        if (cursor.moveToFirst()) {
-            for (i in 0 until cursor.count) {
-                val hm: MutableMap<String, Any?> = HashMap()
-                val id = cursor.getInt(cursor.getColumnIndexOrThrow("_id"))
-                val title = String(
-                    Base64.decode(
-                        cursor.getString(
-                            cursor.getColumnIndexOrThrow("label")
-                        ), Base64.DEFAULT
-                    )
-                )
-                val packages = cursor.getString(cursor.getColumnIndexOrThrow("packages"))
-                hm["id"] = id
-                hm["title"] = title
-                hm["packages"] = packages
-                listsDataArrayList.add(hm)
-                cursor.moveToNext()
-            }
-        }
-        cursor.close()
-        userDefinedListsDb.close()
-        displayUserDefinedLists(listsDataArrayList)
-    }
-
-    private fun displayUserDefinedLists(listsDataArrayList: ArrayList<MutableMap<String, Any?>>) {
-        val progressBar = findViewById<ProgressBar>(R.id.udlmam_progressBar)
-        val listView = findViewById<ListView>(R.id.udlmam_listView)
-        val simpleAdapter = SimpleAdapter(
-            this,
-            listsDataArrayList,
-            R.layout.udlma_list_item,
-            arrayOf("title", "packages"),
-            intArrayOf(R.id.udlmali_title_textView, R.id.udlmali_subTitle_textView)
-        )
-        listView.adapter = simpleAdapter
-        listView.onItemClickListener =
-            AdapterView.OnItemClickListener { _: AdapterView<*>?, view: View?, position: Int, _: Long ->
-                val itemDataHashMap = simpleAdapter.getItem(position)
-                if (itemDataHashMap is MutableMap<*, *>) {
-                    val title = itemDataHashMap["title"] as String?
-                    if (title != null) {
-                        showListViewOnItemClickPopupMenu(
-                            view!!,
-                            title,
-                            itemDataHashMap as MutableMap<String, Any?>
-                        )
+        setContent {
+            FreezeYouTheme {
+                LazyColumn(Modifier.fillMaxSize()) {
+                    items(lists, key = { it.id }) { item ->
+                        Box {
+                            Column(
+                                Modifier.fillMaxWidth()
+                                    .clickable { expandedId = item.id }
+                                    .padding(horizontal = 16.dp, vertical = 10.dp)
+                            ) {
+                                Text(item.title)
+                                Text(item.packages)
+                            }
+                            DropdownMenu(
+                                expanded = expandedId == item.id,
+                                onDismissRequest = { expandedId = -1 }
+                            ) {
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.copyAlias)) },
+                                    onClick = { expandedId = -1; copyId(item) }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.share)) },
+                                    onClick = { expandedId = -1; share(item) }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.delete)) },
+                                    onClick = { expandedId = -1; confirmDelete(item) }
+                                )
+                            }
+                        }
+                        HorizontalDivider()
                     }
                 }
             }
-        progressBar.visibility = View.GONE
+        }
     }
 
-    private fun showListViewOnItemClickPopupMenu(
-        view: View,
-        title: String,
-        itemDataHashMap: MutableMap<String, Any?>
-    ) {
-        val popup = PopupMenu(this@UserDefinedListsManageActivity, view)
-        popup.inflate(R.menu.udlmna_single_choose_action)
-        popup.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.udlmna_sca_menu_copyId -> if (copyToClipboard(
-                        applicationContext,
-                        Base64.encodeToString(title.toByteArray(), Base64.DEFAULT)
-                    )
-                ) {
-                    showToast(applicationContext, R.string.success)
-                } else {
-                    showToast(applicationContext, R.string.failed)
-                }
-                R.id.udlmna_sca_menu_share -> try {
-                    val finalOutputJsonObject = JSONObject()
-                    val userDefinedCategoriesJSONArray = JSONArray()
-                    val oneUserDefinedCategoriesJSONObject = JSONObject()
-                    oneUserDefinedCategoriesJSONObject.put(
-                        "label",
-                        Base64.encodeToString(title.toByteArray(), Base64.DEFAULT)
-                    )
-                    oneUserDefinedCategoriesJSONObject.put(
-                        "packages",
-                        itemDataHashMap["packages"]
-                    )
-                    userDefinedCategoriesJSONArray.put(oneUserDefinedCategoriesJSONObject)
-                    finalOutputJsonObject.put(
-                        "userDefinedCategories",
-                        userDefinedCategoriesJSONArray
-                    )
-                    var shareIntent = Intent()
-                    shareIntent.action = Intent.ACTION_SEND
-                    shareIntent.type = "text/plain"
-                    shareIntent.putExtra(
-                        Intent.EXTRA_TEXT,
-                        GZipUtils.gzipCompress(finalOutputJsonObject.toString())
-                    )
-                    shareIntent = Intent.createChooser(shareIntent, getString(R.string.share))
-                    startActivity(shareIntent)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    showToast(this@UserDefinedListsManageActivity, R.string.failed)
-                }
-                R.id.udlmna_sca_menu_delete -> {
-                    val builder =
-                        FreezeYouAlertDialogBuilder(this@UserDefinedListsManageActivity)
-                    builder.setTitle(R.string.plsConfirm)
-                    builder.setMessage(R.string.askIfDel)
-                    builder.setPositiveButton(
-                        R.string.yes
-                    ) { _, _ -> deleteUserDefinedListById(itemDataHashMap["id"] as Int) }
-                    builder.setNegativeButton(R.string.no, null)
-                    builder.show()
-                }
-                else -> {}
-            }
-            true
+    private fun loadUserDefinedLists() {
+        val database = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null)
+        database.execSQL(
+            "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+        )
+        val cursor = database.query(
+            "categories", arrayOf("label", "_id", "packages"),
+            null, null, null, null, null
+        )
+        val result = mutableListOf<UserList>()
+        while (cursor.moveToNext()) {
+            result += UserList(
+                id = cursor.getInt(cursor.getColumnIndexOrThrow("_id")),
+                title = String(
+                    Base64.decode(cursor.getString(cursor.getColumnIndexOrThrow("label")), Base64.DEFAULT)
+                ),
+                packages = cursor.getString(cursor.getColumnIndexOrThrow("packages"))
+            )
         }
-        popup.show()
+        cursor.close()
+        database.close()
+        lists = result
+    }
+
+    private fun copyId(item: UserList) {
+        val copied = copyToClipboard(
+            applicationContext,
+            Base64.encodeToString(item.title.toByteArray(), Base64.DEFAULT)
+        )
+        showToast(applicationContext, if (copied) R.string.success else R.string.failed)
+    }
+
+    private fun share(item: UserList) {
+        try {
+            val category = JSONObject().apply {
+                put("label", Base64.encodeToString(item.title.toByteArray(), Base64.DEFAULT))
+                put("packages", item.packages)
+            }
+            val output = JSONObject().put("userDefinedCategories", JSONArray().put(category))
+            val shareIntent = Intent.createChooser(
+                Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, GZipUtils.gzipCompress(output.toString()))
+                },
+                getString(R.string.share)
+            )
+            startActivity(shareIntent)
+        } catch (exception: JSONException) {
+            exception.printStackTrace()
+            showToast(this, R.string.failed)
+        }
+    }
+
+    private fun confirmDelete(item: UserList) {
+        FreezeYouAlertDialogBuilder(this)
+            .setTitle(R.string.plsConfirm)
+            .setMessage(R.string.askIfDel)
+            .setPositiveButton(R.string.yes) { _, _ -> deleteUserDefinedListById(item.id) }
+            .setNegativeButton(R.string.no, null)
+            .show()
     }
 
     private fun deleteUserDefinedListById(id: Int) {
-        val userDefinedListsDb =
-            openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null)
-        userDefinedListsDb.execSQL(
+        val database = openOrCreateDatabase("userDefinedCategories", MODE_PRIVATE, null)
+        database.execSQL(
             "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
         )
-        userDefinedListsDb.delete("categories", "_id = $id", null)
-        userDefinedListsDb.close()
+        database.delete("categories", "_id = ?", arrayOf(id.toString()))
+        database.close()
         loadUserDefinedLists()
     }
 }

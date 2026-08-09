@@ -10,70 +10,90 @@ import android.os.PowerManager
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
-import android.widget.SimpleAdapter
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import cf.playhi.freezeyou.viewmodel.AutoDiagnosisViewModel
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.utils.ThemeUtils.processActionBar
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
-import cf.playhi.freezeyou.databinding.AutodiagnosisBinding
+import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
+import cf.playhi.freezeyou.ui.compose.ResourceDrawableImage
 import cf.playhi.freezeyou.utils.AccessibilityUtils.openAccessibilitySettings
 import cf.playhi.freezeyou.utils.MoreUtils.requestOpenWebSite
 import cf.playhi.freezeyou.utils.NotificationUtils.startAppNotificationSettingsSystemActivity
 import cf.playhi.freezeyou.utils.VersionUtils.checkUpdate
 
 class AutoDiagnosisActivity : FreezeYouBaseActivity() {
-    private lateinit var binding: AutodiagnosisBinding
     private val viewModel: AutoDiagnosisViewModel by viewModels()
+    private var loadingProgress by mutableIntStateOf(-1)
+    private var problems by mutableStateOf<List<Map<String, Any>>>(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         processSetTheme(this)
         super.onCreate(savedInstanceState)
-        binding = AutodiagnosisBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         processActionBar(supportActionBar)
-
-        viewModel.getLoadingProgress().observe(this) {
-            binding.adgProgressBar.visibility = View.VISIBLE
-            if (it == -1) {
-                binding.adgListView.adapter = null
-                binding.adgProgressBar.isIndeterminate = true
-            } else {
-                binding.adgProgressBar.isIndeterminate = false
-
-                if (Build.VERSION.SDK_INT >= 24) {
-                    binding.adgProgressBar.setProgress(it, true)
-                } else {
-                    binding.adgProgressBar.progress = it
-                }
-                if (it == 100) {
-                    binding.adgProgressBar.visibility = View.GONE
-                    binding.adgListView.adapter = SimpleAdapter(
-                        this,
-                        viewModel.getProblemsList().value,
-                        R.layout.adg_list_item,
-                        arrayOf("title", "sTitle", "status", "id"),
-                        intArrayOf(
-                            R.id.adgli_title_textView,
-                            R.id.adgli_subTitle_textView,
-                            R.id.adgli_status_imageView
+        setContent {
+            FreezeYouTheme {
+                Column(Modifier.fillMaxSize()) {
+                    when {
+                        loadingProgress < 0 -> LinearProgressIndicator(Modifier.fillMaxWidth())
+                        loadingProgress < 100 -> LinearProgressIndicator(
+                            progress = { loadingProgress / 100f },
+                            modifier = Modifier.fillMaxWidth()
                         )
-                    )
+                    }
+                    LazyColumn(Modifier.fillMaxSize()) {
+                        items(problems) { problem ->
+                            Column(
+                                modifier = Modifier.fillMaxWidth()
+                                    .clickable { handleProblem(problem["id"] as? String) }
+                                    .padding(10.dp)
+                            ) {
+                                Text(problem["title"].toString())
+                                Text(problem["sTitle"].toString())
+                                ResourceDrawableImage(
+                                    resourceId = problem["status"] as Int,
+                                    contentDescription = null,
+                                    modifier = Modifier.align(Alignment.End)
+                                )
+                            }
+                            HorizontalDivider()
+                        }
+                    }
                 }
             }
         }
 
-        binding.adgListView.onItemClickListener =
-            OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
-                val s =
-                    (binding.adgListView.adapter?.getItem(position) as Map<*, *>?)?.get("id") as String?
-                if (s != null) {
-                    when (s) {
+        viewModel.getLoadingProgress().observe(this) {
+            loadingProgress = it
+            if (it < 0) problems = emptyList()
+            if (it == 100) {
+                problems = viewModel.getProblemsList().value.orEmpty().toList()
+            }
+        }
+    }
+
+    private fun handleProblem(id: String?) {
+        when (id) {
                         "-30" -> checkUpdate(this@AutoDiagnosisActivity)
                         "1" -> openAccessibilitySettings(this@AutoDiagnosisActivity)
                         "2" -> {
@@ -133,9 +153,7 @@ class AutoDiagnosisActivity : FreezeYouBaseActivity() {
                                 startActivity(intent)
                             }
                         }
-                    }
-                }
-            }
+        }
     }
 
     override fun onResume() {

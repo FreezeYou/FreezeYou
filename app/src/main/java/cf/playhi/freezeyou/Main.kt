@@ -17,19 +17,34 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
 import android.util.Base64
 import android.view.*
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
 import android.widget.*
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.PopupMenu
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.adapter.MainAppListSimpleAdapter
 import cf.playhi.freezeyou.app.FreezeYouAlertDialogBuilder
@@ -43,6 +58,7 @@ import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.
 import cf.playhi.freezeyou.storage.key.DefaultSharedPreferenceStorageStringKeys.mainActivityPattern
 import cf.playhi.freezeyou.ui.*
 import cf.playhi.freezeyou.ui.fragment.MainActivityAppListFragment
+import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
 import cf.playhi.freezeyou.utils.*
 import cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon
 import cf.playhi.freezeyou.utils.ApplicationIconUtils.getBitmapFromDrawable
@@ -88,11 +104,17 @@ class Main : FreezeYouBaseActivity() {
     private var shortcutsCount = 0
     private var isGridMode = false
     private var mMainActivityAppListFragment: MainActivityAppListFragment? = null
+    private var mainLoading by mutableStateOf(true)
+    private var mainLoadingMessage by mutableIntStateOf(R.string.loadingPkgList)
+    private var showMainCaution by mutableStateOf(true)
+    private var searchQuery by mutableStateOf("")
+    private var mainFragmentReady by mutableStateOf(false)
+    private var masterAppList = ArrayList<MutableMap<String, Any?>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         processSetTheme(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main)
+        setContent { FreezeYouTheme { MainScreen() } }
         try {
             manageCrashLog()
         } catch (e: Exception) {
@@ -177,6 +199,80 @@ class Main : FreezeYouBaseActivity() {
         return onMainOptionsItemSelected(item)
     }
 
+    @androidx.compose.runtime.Composable
+    private fun MainScreen() {
+        Box(Modifier.fillMaxSize()) {
+            Column(Modifier.fillMaxSize()) {
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = {
+                        searchQuery = it
+                        applySearchFilter()
+                    },
+                    label = { Text(stringResource(R.string.search)) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                val fragmentIsReady = mainFragmentReady
+                AndroidView(
+                    factory = { context ->
+                        androidx.fragment.app.FragmentContainerView(context).apply {
+                            id = R.id.main_app_list_container
+                        }
+                    },
+                    update = { container ->
+                        val fragment = mMainActivityAppListFragment
+                        if (fragmentIsReady && fragment != null && !fragment.isAdded) {
+                            supportFragmentManager.beginTransaction()
+                                .replace(container.id, fragment)
+                                .commitNowAllowingStateLoss()
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth().weight(1f)
+                )
+            }
+            if (mainLoading) {
+                Box(
+                    Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.06f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        if (showMainCaution) {
+                            Text(stringResource(R.string.alertT1), Modifier.padding(10.dp))
+                        }
+                        CircularProgressIndicator()
+                        Text(stringResource(mainLoadingMessage), Modifier.padding(top = 8.dp))
+                    }
+                }
+            }
+            FloatingActionButton(
+                onClick = {
+                    openOptionsMenu()
+                },
+                modifier = Modifier.align(Alignment.BottomEnd).padding(25.dp)
+            ) {
+                Icon(painterResource(R.drawable.ic_action_add), stringResource(R.string.add))
+            }
+        }
+    }
+
+    private fun applySearchFilter() {
+        val adapter =
+            mMainActivityAppListFragment?.getAppListAdapter() as? MainAppListSimpleAdapter ?: return
+        adapter.replaceAllInFormerArrayList(filteredMasterAppList())
+    }
+
+    private fun filteredMasterAppList(): ArrayList<MutableMap<String, Any?>> {
+        if (searchQuery.isEmpty()) return ArrayList(masterAppList)
+        @Suppress("UNCHECKED_CAST")
+        return ArrayList(
+            processListFilter(
+                searchQuery,
+                ArrayList(masterAppList as List<Map<String, Any?>>)
+            ) as List<MutableMap<String, Any?>>
+        )
+    }
+
     private fun generateList(filter: String) {
         generateList(filter, currentSortRule)
     }
@@ -188,69 +284,13 @@ class Main : FreezeYouBaseActivity() {
     private fun generateList(filter: String, sortRule: Int) {
         currentFilter = filter
         currentSortRule = sortRule
-        val appListFragmentContainer =
-            findViewById<FrameLayout>(R.id.main_appList_fragmentContainer_frameLayout)
-        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
-        val mainCautionTextView = findViewById<TextView>(R.id.main_caution_textView)
-        val mainLoadingProgressTextView = findViewById<TextView>(R.id.main_loading_progress_textView)
-        val linearLayout = findViewById<FrameLayout>(R.id.layout2)
         val AppList = ArrayList<MutableMap<String, Any?>>()
-        val searchEditText = findViewById<EditText>(R.id.search_editText)
-        val moreSettingsImageButton = findViewById<ImageButton>(R.id.main_moreSettings_button)
         val applicationContext = applicationContext
-        moreSettingsImageButton.setOnLongClickListener {
-            if (moreSettingsImageButton.alpha == 0.2f) {
-                moreSettingsImageButton.alpha = 1f
-            } else {
-                moreSettingsImageButton.alpha = 0.2f
-            }
-            true
-        }
-        moreSettingsImageButton.setOnClickListener {
-            moreSettingsImageButton.alpha = 1f
-            val popupMenu = PopupMenu(this@Main, it)
-            popupMenu.inflate(R.menu.menu)
-            onPrepareMainOptionsMenu(popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener { item -> onMainOptionsItemSelected(item) }
-            popupMenu.setOnDismissListener {
-                val animation = RotateAnimation(
-                    45f,
-                    0f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f
-                )
-                animation.duration = 300
-                animation.repeatMode = RotateAnimation.REVERSE
-                animation.fillAfter = true
-                moreSettingsImageButton.startAnimation(animation)
-            }
-            val animation = RotateAnimation(
-                0f,
-                45f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f
-            )
-            animation.duration = 300
-            animation.repeatMode = RotateAnimation.REVERSE
-            animation.fillAfter = true
-            moreSettingsImageButton.startAnimation(animation)
-            popupMenu.show()
-        }
         if (isFinishing) return
         runOnUiThread {
-            moreSettingsImageButton.setBackgroundResource(R.drawable.oval_ripple)
-            linearLayout.visibility = View.VISIBLE
-            progressBar.visibility = View.VISIBLE
-            mainLoadingProgressTextView.visibility = View.VISIBLE
-            appListFragmentContainer.visibility = View.GONE
-            mainLoadingProgressTextView.setText(R.string.loadingPkgList)
-            if (noCaution.getValue(applicationContext)) {
-                mainCautionTextView.visibility = View.GONE
-            }
+            mainLoading = true
+            mainLoadingMessage = R.string.loadingPkgList
+            showMainCaution = !noCaution.getValue(applicationContext)
         }
         try {
             customThemeDisabledDot = getThemeDot(this@Main)
@@ -261,7 +301,7 @@ class Main : FreezeYouBaseActivity() {
         var packageInfo1: PackageInfo
         val packageManager = applicationContext.packageManager
         val packageInfo =
-            packageManager.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES)
+            packageManager.getInstalledPackages(PackageManager.MATCH_UNINSTALLED_PACKAGES)
         val size = packageInfo.size
         val saveIconCache = cacheApplicationsIcons.getValue(applicationContext)
         when (filter) {
@@ -436,7 +476,7 @@ class Main : FreezeYouBaseActivity() {
             }
         }
         if (isFinishing) return
-        runOnUiThread { mainLoadingProgressTextView.setText(R.string.sorting) }
+        runOnUiThread { mainLoadingMessage = R.string.sorting }
         if (AppList.isNotEmpty()) {
             when (sortRule) {
                 SORT_BY_DEFAULT -> setSortByDefault(AppList)
@@ -512,43 +552,15 @@ class Main : FreezeYouBaseActivity() {
         runOnUiThread {
             val fragment = mMainActivityAppListFragment ?: return@runOnUiThread
             // Clone so search/filter mutations cannot clear the master AppList.
+            masterAppList = ArrayList(AppList)
             val adapter = fragment.setAppListAdapter(
                 this@Main,
-                ArrayList(AppList),
+                filteredMasterAppList(),
                 selectedPackages
             )
-            searchEditText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    charSequence: CharSequence,
-                    i: Int,
-                    i1: Int,
-                    i2: Int
-                ) {
-                }
-
-                override fun onTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {
-                    if (adapter == null) return
-                    val query = charSequence?.toString().orEmpty()
-                    if (query.isEmpty()) {
-                        adapter.replaceAllInFormerArrayList(AppList)
-                    } else {
-                        adapter.replaceAllInFormerArrayList(
-                            processListFilter(
-                                query,
-                                AppList as ArrayList<Map<String, Any?>>
-                            ) as List<MutableMap<String, Any?>>
-                        )
-                    }
-                }
-
-                override fun afterTextChanged(editable: Editable) {}
-            })
-            mainLoadingProgressTextView.setText(R.string.finish)
-            progressBar.visibility = View.GONE
-            mainCautionTextView.visibility = View.GONE
-            mainLoadingProgressTextView.visibility = View.GONE
-            linearLayout.visibility = View.GONE
-            appListFragmentContainer.visibility = View.VISIBLE
+            mainLoadingMessage = R.string.finish
+            mainLoading = false
+            showMainCaution = false
             fragment.setMultiChoiceModeListener(object :
                 AbsListView.MultiChoiceModeListener {
                 override fun onItemCheckedStateChanged(
@@ -1649,17 +1661,10 @@ class Main : FreezeYouBaseActivity() {
         } else {
             isGridMode = "grid" == mainPattern
         }
-        val appListFragment = mMainActivityAppListFragment ?: MainActivityAppListFragment().also {
+        mMainActivityAppListFragment = mMainActivityAppListFragment ?: MainActivityAppListFragment().also {
             it.setUseGridMode(isGridMode)
-            mMainActivityAppListFragment = it
         }
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.add(
-            R.id.main_appList_fragmentContainer_frameLayout,
-            appListFragment
-        )
-        fragmentTransaction.commit()
+        mainFragmentReady = true
         val initThread = Thread {
             var mode = intent.getStringExtra("pkgName") // 快捷方式提供
             if (mode == null) {
@@ -1757,7 +1762,7 @@ class Main : FreezeYouBaseActivity() {
             var installTime = 0L
             var updateTime = 0L
             try {
-                val pi = packageManager.getPackageInfo(aPkg, PackageManager.GET_UNINSTALLED_PACKAGES)
+                val pi = packageManager.getPackageInfo(aPkg, PackageManager.MATCH_UNINSTALLED_PACKAGES)
                 installTime = pi.firstInstallTime
                 updateTime = pi.lastUpdateTime
             } catch (e: PackageManager.NameNotFoundException) {

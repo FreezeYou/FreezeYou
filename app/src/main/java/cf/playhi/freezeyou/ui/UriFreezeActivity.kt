@@ -12,6 +12,7 @@ import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.app.ObsdAlertDialog
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys.notAllowInstallWhenIsObsd
 import cf.playhi.freezeyou.utils.*
+import cf.playhi.freezeyou.ui.compose.alwaysAllowView
 import cf.playhi.freezeyou.utils.ApplicationLabelUtils.getApplicationLabel
 import cf.playhi.freezeyou.utils.ThemeUtils.processSetTheme
 import net.grandcentrix.tray.AppPreferences
@@ -74,6 +75,7 @@ class UriFreezeActivity : FreezeYouBaseActivity() {
         val suitableForAutoAllow = mode != MODE_FUF
         val isFrozen = FUFUtils.realGetFrozenStatus(this, pkgName, packageManager)
         val obsdAlertDialog = ObsdAlertDialog(this)
+        var autoAllowChecked = false
         var refererPackageLabel: String
         val refererPackage: String
         @Suppress("DEPRECATION")
@@ -117,19 +119,14 @@ class UriFreezeActivity : FreezeYouBaseActivity() {
             ) {
                 doSuitableForAutoAllowAllow(mode, pkgName, isFrozen)
             }
-            //Init CheckBox
-            val checkBoxView = View.inflate(
-                this,
-                R.layout.ufa_dialog_checkbox,
-                null
-            ) //https://stackoverflow.com/questions/9763643/how-to-add-a-check-box-to-an-alert-dialog
-            val checkBox = checkBoxView.findViewById<CheckBox>(R.id.ufa_dialog_checkBox)
-            if (refererPackageLabel == ILLEGALPKGNAME) {
-                checkBox.visibility = View.GONE
-            } else {
-                checkBox.text = String.format(getString(R.string.alwaysAllow_name), refererPackageLabel)
+            if (refererPackageLabel != ILLEGALPKGNAME) {
+                obsdAlertDialog.setView(
+                    alwaysAllowView(
+                        this,
+                        String.format(getString(R.string.alwaysAllow_name), refererPackageLabel)
+                    ) { autoAllowChecked = it }
+                )
             }
-            obsdAlertDialog.setView(checkBoxView)
         }
         obsdAlertDialog.setTitle(R.string.plsConfirm)
         val message = StringBuilder()
@@ -182,9 +179,7 @@ class UriFreezeActivity : FreezeYouBaseActivity() {
                     }
                     .create().show()
             } else {
-                val checkBox =
-                    dialog.findViewById<CheckBox>(R.id.ufa_dialog_checkBox)
-                if (checkBox != null && checkBox.isChecked) {
+                if (autoAllowChecked) {
                     val sp = AppPreferences(this@UriFreezeActivity)
                     val originData = sp.getString("uriAutoAllowPkgs_allows", "")
                     val originDataList = MoreUtils.convertToList(originData, ",")
