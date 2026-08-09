@@ -1,1 +1,1 @@
-Light weight app freezer without ROOT
+Freeze apps without ROOT
