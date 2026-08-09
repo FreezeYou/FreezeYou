@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.core.os.ConfigurationCompat
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.ui.compose.AppListItem
@@ -63,11 +64,12 @@ class FUFLauncherShortcutCreator : FreezeYouBaseActivity() {
         }
         setContent {
             FreezeYouTheme {
-                val locale = LocalConfiguration.current.locales[0]
+                val locale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0]
+                    ?: Locale.ROOT
                 val query = search.lowercase(locale)
                 val displayed = if (query.isEmpty()) applications else applications.filter {
-                    it.name.lowercase(Locale.ROOT).contains(query) ||
-                        it.packageName.lowercase(Locale.ROOT).contains(query)
+                    it.name.lowercase(locale).contains(query) ||
+                        it.packageName.lowercase(locale).contains(query)
                 }
                 Column(Modifier.fillMaxSize()) {
                     OutlinedTextField(
@@ -86,7 +88,6 @@ class FUFLauncherShortcutCreator : FreezeYouBaseActivity() {
                                 subtitle = app.packageName,
                                 statusIcon = app.statusIcon
                             ) { selectApp(app, folderName) }
-                            HorizontalDivider()
                         }
                     }
                 }
@@ -98,8 +99,14 @@ class FUFLauncherShortcutCreator : FreezeYouBaseActivity() {
     private fun loadApplications() {
         Thread {
             val packageManager = applicationContext.packageManager
+            val matchUninstalled = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                PackageManager.MATCH_UNINSTALLED_PACKAGES
+            } else {
+                @Suppress("DEPRECATION")
+                PackageManager.GET_UNINSTALLED_PACKAGES
+            }
             val result = packageManager
-                .getInstalledApplications(PackageManager.MATCH_UNINSTALLED_PACKAGES)
+                .getInstalledApplications(matchUninstalled)
                 .mapNotNull { processAppStatus(it, packageManager) }
                 .sortedBy { it.packageName }
             runOnUiThread {

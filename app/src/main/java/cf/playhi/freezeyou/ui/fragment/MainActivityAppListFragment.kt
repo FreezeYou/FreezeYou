@@ -10,13 +10,7 @@ import android.widget.AdapterView
 import android.widget.GridView
 import android.widget.ListAdapter
 import android.widget.ListView
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
-import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.adapter.MainAppListSimpleAdapter
 import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
 
@@ -29,54 +23,52 @@ class MainActivityAppListFragment : Fragment() {
     private var mAppListGridView: GridView? = null
     private var mAppListListView: ListView? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mUseGridMode = arguments?.getBoolean(ARG_GRID_MODE) ?: mUseGridMode
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = ComposeView(requireContext()).apply {
-        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        setContent {
-            FreezeYouTheme {
-                AndroidView(
-                    factory = { context ->
-                        if (mUseGridMode) {
-                            GridView(context).apply {
-                                mAppListGridView = this
-                                onItemClickListener = mOnItemClickListener
-                                onItemLongClickListener = mOnItemLongClickListener
-                                mMultiChoiceModeListener?.let(::setMultiChoiceModeListener)
-                                adapter = mAppListAdapter
-                                choiceMode = AbsListView.CHOICE_MODE_MULTIPLE_MODAL
-                                columnWidth =
-                                    (resources.getDimension(android.R.dimen.app_icon_size) * 1.6).toInt()
-                                numColumns = GridView.AUTO_FIT
-                                stretchMode = GridView.STRETCH_SPACING_UNIFORM
-                                verticalSpacing = (6 * resources.displayMetrics.density).toInt()
-                                isFastScrollEnabled = true
-                                gravity = android.view.Gravity.CENTER
-                            }
-                        } else {
-                            ListView(context).apply {
-                                mAppListListView = this
-                                onItemClickListener = mOnItemClickListener
-                                onItemLongClickListener = mOnItemLongClickListener
-                                mMultiChoiceModeListener?.let(::setMultiChoiceModeListener)
-                                adapter = mAppListAdapter
-                                choiceMode = AbsListView.CHOICE_MODE_MULTIPLE_MODAL
-                                divider = null
-                                dividerHeight = 0
-                                isFastScrollEnabled = true
-                            }
-                        }
-                    },
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
+    ): View = if (mUseGridMode) {
+        GridView(requireContext()).apply {
+            mAppListGridView = this
+            bindListBehavior(this)
+            columnWidth = (resources.getDimension(android.R.dimen.app_icon_size) * 1.6).toInt()
+            numColumns = GridView.AUTO_FIT
+            stretchMode = GridView.STRETCH_SPACING_UNIFORM
+            verticalSpacing = (6 * resources.displayMetrics.density).toInt()
+            gravity = android.view.Gravity.CENTER
         }
+    } else {
+        ListView(requireContext()).apply {
+            mAppListListView = this
+            bindListBehavior(this)
+            divider = null
+            dividerHeight = 0
+        }
+    }
+
+    private fun bindListBehavior(view: AbsListView) {
+        view.onItemClickListener = mOnItemClickListener
+        view.onItemLongClickListener = mOnItemLongClickListener
+        mMultiChoiceModeListener?.let(view::setMultiChoiceModeListener)
+        view.adapter = mAppListAdapter
+        view.choiceMode = AbsListView.CHOICE_MODE_MULTIPLE_MODAL
+        view.isFastScrollEnabled = true
+    }
+
+    override fun onDestroyView() {
+        mAppListGridView = null
+        mAppListListView = null
+        super.onDestroyView()
     }
 
     fun setUseGridMode(b: Boolean) {
         mUseGridMode = b
+        arguments = (arguments ?: Bundle()).apply { putBoolean(ARG_GRID_MODE, b) }
     }
 
     fun setOnAppListItemClickListener(listener: AdapterView.OnItemClickListener?) {
@@ -161,5 +153,9 @@ class MainActivityAppListFragment : Fragment() {
                 mAppListListView!!.setItemChecked(position, value)
             }
         }
+    }
+
+    private companion object {
+        const val ARG_GRID_MODE = "grid-mode"
     }
 }

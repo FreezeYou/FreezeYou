@@ -19,19 +19,23 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.view.*
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
 import android.widget.*
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.appcompat.widget.PopupMenu
 import androidx.compose.foundation.background
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -39,9 +43,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
@@ -110,10 +116,14 @@ class Main : FreezeYouBaseActivity() {
     private var searchQuery by mutableStateOf("")
     private var mainFragmentReady by mutableStateOf(false)
     private var masterAppList = ArrayList<MutableMap<String, Any?>>()
+    private var mainFragmentContainer: androidx.fragment.app.FragmentContainerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         processSetTheme(this)
         super.onCreate(savedInstanceState)
+        searchQuery = savedInstanceState?.getString(STATE_SEARCH_QUERY).orEmpty()
+        mMainActivityAppListFragment = supportFragmentManager
+            .findFragmentByTag(MAIN_LIST_FRAGMENT_TAG) as? MainActivityAppListFragment
         setContent { FreezeYouTheme { MainScreen() } }
         try {
             manageCrashLog()
@@ -121,6 +131,11 @@ class Main : FreezeYouBaseActivity() {
             e.printStackTrace()
             checkIfNeedAskFirstTimeSetupAndShowDialog()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(STATE_SEARCH_QUERY, searchQuery)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
@@ -203,32 +218,52 @@ class Main : FreezeYouBaseActivity() {
     private fun MainScreen() {
         Box(Modifier.fillMaxSize()) {
             Column(Modifier.fillMaxSize()) {
-                OutlinedTextField(
+                BasicTextField(
                     value = searchQuery,
                     onValueChange = {
                         searchQuery = it
                         applySearchFilter()
                     },
-                    label = { Text(stringResource(R.string.search)) },
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 14.dp),
+                    decorationBox = { innerTextField ->
+                        Box {
+                            if (searchQuery.isEmpty()) {
+                                Text(
+                                    stringResource(R.string.search),
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                                )
+                            }
+                            innerTextField()
+                        }
+                    }
                 )
                 val fragmentIsReady = mainFragmentReady
                 AndroidView(
                     factory = { context ->
                         androidx.fragment.app.FragmentContainerView(context).apply {
                             id = R.id.main_app_list_container
+                            mainFragmentContainer = this
+                            addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+                                override fun onViewAttachedToWindow(view: View) {
+                                    attachMainListFragment()
+                                }
+
+                                override fun onViewDetachedFromWindow(view: View) = Unit
+                            })
                         }
                     },
                     update = { container ->
-                        val fragment = mMainActivityAppListFragment
-                        if (fragmentIsReady && fragment != null && !fragment.isAdded) {
-                            supportFragmentManager.beginTransaction()
-                                .replace(container.id, fragment)
-                                .commitNowAllowingStateLoss()
+                        if (fragmentIsReady && container.isAttachedToWindow) {
+                            container.post(::attachMainListFragment)
                         }
                     },
                     modifier = Modifier.fillMaxWidth().weight(1f)
+                        .alpha(if (mainLoading) 0f else 1f)
                 )
             }
             if (mainLoading) {
@@ -238,22 +273,85 @@ class Main : FreezeYouBaseActivity() {
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         if (showMainCaution) {
-                            Text(stringResource(R.string.alertT1), Modifier.padding(10.dp))
+                            Text(
+                                stringResource(R.string.alertT1),
+                                Modifier.padding(10.dp),
+                                fontWeight = FontWeight.Bold
+                            )
                         }
-                        CircularProgressIndicator()
-                        Text(stringResource(mainLoadingMessage), Modifier.padding(top = 8.dp))
+                        CircularProgressIndicator(Modifier.size(80.dp))
+                        Text(
+                            stringResource(mainLoadingMessage),
+                            Modifier.padding(top = 8.dp).alpha(0.6f)
+                        )
                     }
                 }
             }
-            FloatingActionButton(
-                onClick = {
-                    openOptionsMenu()
+            AndroidView(
+                factory = { context ->
+                    AppCompatImageButton(context).apply {
+                        setImageResource(R.drawable.ic_action_add)
+                        setBackgroundResource(R.drawable.oval_ripple)
+                        contentDescription = getString(R.string.add)
+                        elevation = 6.dp.value * resources.displayMetrics.density
+                        setOnLongClickListener {
+                            alpha = if (alpha == 0.2f) 1f else 0.2f
+                            true
+                        }
+                        setOnClickListener { anchor -> showMainPopupMenu(anchor) }
+                    }
                 },
-                modifier = Modifier.align(Alignment.BottomEnd).padding(25.dp)
-            ) {
-                Icon(painterResource(R.drawable.ic_action_add), stringResource(R.string.add))
-            }
+                modifier = Modifier.align(Alignment.BottomEnd).padding(25.dp).size(55.dp)
+            )
         }
+    }
+
+    private fun attachMainListFragment() {
+        val container = mainFragmentContainer ?: return
+        if (!container.isAttachedToWindow || supportFragmentManager.isStateSaved) return
+        val restored = supportFragmentManager.findFragmentByTag(MAIN_LIST_FRAGMENT_TAG)
+            as? MainActivityAppListFragment
+            ?: supportFragmentManager.findFragmentById(container.id)
+                as? MainActivityAppListFragment
+        if (restored != null) {
+            mMainActivityAppListFragment = restored
+            return
+        }
+        val fragment = mMainActivityAppListFragment ?: return
+        if (!fragment.isAdded) {
+            supportFragmentManager.beginTransaction()
+                .replace(container.id, fragment, MAIN_LIST_FRAGMENT_TAG)
+                .commit()
+        }
+    }
+
+    private fun showMainPopupMenu(anchor: View) {
+        anchor.alpha = 1f
+        val popupMenu = PopupMenu(this, anchor).apply {
+            inflate(R.menu.menu)
+            onPrepareMainOptionsMenu(menu)
+            setOnMenuItemClickListener(::onMainOptionsItemSelected)
+            setOnDismissListener { animateMainMenuButton(anchor, 45f, 0f) }
+        }
+        animateMainMenuButton(anchor, 0f, 45f)
+        popupMenu.show()
+    }
+
+    private fun animateMainMenuButton(view: View, from: Float, to: Float) {
+        view.startAnimation(
+            RotateAnimation(
+                from,
+                to,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+            ).apply {
+                duration = 300
+                repeatMode = RotateAnimation.REVERSE
+                fillAfter = true
+            }
+        )
     }
 
     private fun applySearchFilter() {
@@ -2134,6 +2232,8 @@ class Main : FreezeYouBaseActivity() {
     }
 
     companion object {
+        private const val MAIN_LIST_FRAGMENT_TAG = "main-app-list"
+        private const val STATE_SEARCH_QUERY = "main-search-query"
         private const val APPListViewOnClickMode_chooseAction = 0
         private const val APPListViewOnClickMode_autoUFOrFreeze = 1
         private const val APPListViewOnClickMode_freezeImmediately = 2

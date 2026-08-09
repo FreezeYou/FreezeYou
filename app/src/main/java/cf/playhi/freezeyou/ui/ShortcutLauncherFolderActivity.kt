@@ -8,11 +8,14 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.Window
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -64,6 +67,9 @@ open class ShortcutLauncherFolderActivity : FreezeYouBaseActivity(), OnSharedPre
 
     override fun onCreate(savedInstanceState: Bundle?) {
         processSetTheme(this, Intent.ACTION_CREATE_SHORTCUT == intent.action)
+        if (Intent.ACTION_CREATE_SHORTCUT != intent.action) {
+            supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+        }
         super.onCreate(savedInstanceState)
         registerFolderListener(intent.getStringExtra("UUID"))
         if (Intent.ACTION_CREATE_SHORTCUT == intent.action) showCreateShortcut() else showFolder()
@@ -135,7 +141,6 @@ open class ShortcutLauncherFolderActivity : FreezeYouBaseActivity(), OnSharedPre
     @OptIn(ExperimentalFoundationApi::class)
     @androidx.compose.runtime.Composable
     private fun FolderScreen(uuid: String, preferences: SharedPreferences) {
-        val anchor = LocalView.current
         Column(Modifier.fillMaxSize().padding(20.dp)) {
             Text(
                 text = folderName,
@@ -151,27 +156,36 @@ open class ShortcutLauncherFolderActivity : FreezeYouBaseActivity(), OnSharedPre
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(folderItems, key = { it.packageName }) { item ->
-                    Column(
-                        modifier = Modifier.combinedClickable(
-                            onClick = { openFolderItem(item, uuid) },
-                            onLongClick = {
-                                if (item.packageName != ADD_PACKAGE) {
-                                    Support.showChooseActionPopupMenu(
-                                        this@ShortcutLauncherFolderActivity,
-                                        this@ShortcutLauncherFolderActivity,
-                                        anchor,
-                                        item.packageName,
-                                        item.label,
-                                        true,
-                                        preferences
-                                    )
+                    var itemAnchor by remember { mutableStateOf<View?>(null) }
+                    Box {
+                        Column(
+                            modifier = Modifier.combinedClickable(
+                                onClick = { openFolderItem(item, uuid) },
+                                onLongClick = {
+                                    if (item.packageName != ADD_PACKAGE) {
+                                        itemAnchor?.let { anchor ->
+                                            Support.showChooseActionPopupMenu(
+                                                this@ShortcutLauncherFolderActivity,
+                                                this@ShortcutLauncherFolderActivity,
+                                                anchor,
+                                                item.packageName,
+                                                item.label,
+                                                true,
+                                                preferences
+                                            )
+                                        }
+                                    }
                                 }
-                            }
-                        ).padding(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        DrawableImage(item.icon, item.label, Modifier.size(52.dp))
-                        Text(item.label, maxLines = 1, textAlign = TextAlign.Center)
+                            ).padding(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            DrawableImage(item.icon, item.label, Modifier.size(52.dp))
+                            Text(item.label, maxLines = 1, textAlign = TextAlign.Center)
+                        }
+                        AndroidView(
+                            factory = { context -> View(context).also { itemAnchor = it } },
+                            modifier = Modifier.align(Alignment.Center).size(1.dp)
+                        )
                     }
                 }
             }
@@ -203,8 +217,6 @@ open class ShortcutLauncherFolderActivity : FreezeYouBaseActivity(), OnSharedPre
     }
 
     private fun showFolder() {
-        @Suppress("DEPRECATION")
-        requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
         val uuid = intent.getStringExtra("UUID")
         if (uuid == null) {
             showToast(this, R.string.failed)

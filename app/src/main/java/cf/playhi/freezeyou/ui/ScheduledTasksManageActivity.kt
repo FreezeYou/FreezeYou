@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,11 +14,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Switch
@@ -28,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -87,7 +89,14 @@ open class ScheduledTasksManageActivity : FreezeYouBaseActivity() {
                 LazyColumn(Modifier.fillMaxSize()) {
                     items(tasks, key = { "${it.isTimeTask}-${it.id}" }) { task ->
                         Row(
-                            modifier = Modifier.fillMaxWidth().combinedClickable(
+                            modifier = Modifier.fillMaxWidth()
+                                .background(
+                                    if (taskKey(task) in selectedTaskIds) {
+                                        Color.Gray.copy(alpha = 0.25f)
+                                    } else {
+                                        Color.Transparent
+                                    }
+                                ).combinedClickable(
                                 onClick = {
                                     if (selectedTaskIds.isEmpty()) editTask(task) else toggleSelection(task)
                                 },
@@ -104,7 +113,6 @@ open class ScheduledTasksManageActivity : FreezeYouBaseActivity() {
                                 onCheckedChange = { setTaskEnabled(task, it) }
                             )
                         }
-                        HorizontalDivider()
                     }
                 }
             }
@@ -115,16 +123,41 @@ open class ScheduledTasksManageActivity : FreezeYouBaseActivity() {
             ) {
                 AnimatedVisibility(showAddChoices) {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        SmallFloatingActionButton(onClick = { addTask(true) }) {
-                            Icon(painterResource(R.drawable.ic_add_alarm), stringResource(R.string.time))
+                        SmallFloatingActionButton(
+                            onClick = { addTask(true) },
+                            modifier = Modifier.size(35.dp),
+                            containerColor = Color(0xFFF5F5F5)
+                        ) {
+                            Icon(
+                                painterResource(R.drawable.ic_add_alarm),
+                                stringResource(R.string.time),
+                                tint = Color.Unspecified
+                            )
                         }
-                        SmallFloatingActionButton(onClick = { addTask(false) }) {
-                            Icon(painterResource(R.drawable.ic_explore), stringResource(R.string.add))
+                        SmallFloatingActionButton(
+                            onClick = { addTask(false) },
+                            modifier = Modifier.size(35.dp),
+                            containerColor = Color(0xFFF5F5F5)
+                        ) {
+                            Icon(
+                                painterResource(R.drawable.ic_explore),
+                                stringResource(R.string.add),
+                                tint = Color.Unspecified
+                            )
                         }
                     }
                 }
-                FloatingActionButton(onClick = { showAddChoices = !showAddChoices }) {
-                    Icon(painterResource(R.drawable.ic_action_add), stringResource(R.string.add))
+                FloatingActionButton(
+                    onClick = { showAddChoices = !showAddChoices },
+                    modifier = Modifier.size(55.dp),
+                    containerColor = Color.Black,
+                    contentColor = Color.White
+                ) {
+                    Icon(
+                        painterResource(R.drawable.ic_action_add),
+                        stringResource(R.string.add),
+                        tint = Color.Unspecified
+                    )
                 }
             }
         }
@@ -234,7 +267,11 @@ open class ScheduledTasksManageActivity : FreezeYouBaseActivity() {
             arrayOf(task.id.toString())
         )
         database.close()
-        if (task.isTimeTask) TasksUtils.checkTimeTasks(this)
+        if (task.isTimeTask) {
+            TasksUtils.checkTimeTasks(this)
+        } else {
+            TasksUtils.checkTriggerTasks(this)
+        }
         tasks = tasks.map { if (it == task) it.copy(enabled = enabled) else it }
     }
 

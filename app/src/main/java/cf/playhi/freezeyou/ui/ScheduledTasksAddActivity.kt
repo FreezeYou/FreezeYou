@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.ActionBar
 import androidx.compose.foundation.layout.Box
@@ -61,14 +62,15 @@ class ScheduledTasksAddActivity : FreezeYouBaseActivity(), OnSharedPreferenceCha
                         factory = { context ->
                             FragmentContainerView(context).apply {
                                 this.id = R.id.scheduled_task_preferences_container
-                                if (supportFragmentManager.findFragmentById(this.id) == null) {
-                                    supportFragmentManager.beginTransaction()
-                                        .replace(
-                                            this.id,
-                                            if (isTimeTask) STAAFragment() else STAATriggerFragment()
-                                        )
-                                        .commitNow()
-                                }
+                                addOnAttachStateChangeListener(
+                                    object : View.OnAttachStateChangeListener {
+                                        override fun onViewAttachedToWindow(view: View) {
+                                            attachPreferencesFragment()
+                                        }
+
+                                        override fun onViewDetachedFromWindow(view: View) = Unit
+                                    }
+                                )
                             }
                         },
                         modifier = Modifier.fillMaxSize()
@@ -82,6 +84,22 @@ class ScheduledTasksAddActivity : FreezeYouBaseActivity(), OnSharedPreferenceCha
                 }
             }
         }
+    }
+
+    private fun attachPreferencesFragment() {
+        if (supportFragmentManager.isStateSaved) return
+        if (supportFragmentManager.findFragmentByTag(PREFERENCES_FRAGMENT_TAG) != null ||
+            supportFragmentManager.findFragmentById(R.id.scheduled_task_preferences_container) != null
+        ) {
+            return
+        }
+        supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.scheduled_task_preferences_container,
+                if (isTimeTask) STAAFragment() else STAATriggerFragment(),
+                PREFERENCES_FRAGMENT_TAG
+            )
+            .commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -541,5 +559,9 @@ class ScheduledTasksAddActivity : FreezeYouBaseActivity(), OnSharedPreferenceCha
         super.onPause()
         PreferenceManager.getDefaultSharedPreferences(applicationContext)
             .unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    private companion object {
+        const val PREFERENCES_FRAGMENT_TAG = "scheduled-task-preferences"
     }
 }

@@ -122,7 +122,6 @@ class LauncherShortcutConfirmAndGenerateActivity : FreezeYouBaseActivity() {
             PickerField(
                 value = selectedPackage,
                 label = stringResource(R.string.application),
-                onValueChange = { selectedPackage = it },
                 onPick = ::startSelectPackageActivityForResult
             )
             OutlinedTextField(
@@ -140,7 +139,6 @@ class LauncherShortcutConfirmAndGenerateActivity : FreezeYouBaseActivity() {
             PickerField(
                 value = target,
                 label = stringResource(R.string.target),
-                onValueChange = { target = it },
                 onPick = { startSelectTargetActivityForResult(selectedPackage) }
             )
             OutlinedTextField(
@@ -167,13 +165,13 @@ class LauncherShortcutConfirmAndGenerateActivity : FreezeYouBaseActivity() {
     private fun PickerField(
         value: String,
         label: String,
-        onValueChange: (String) -> Unit,
         onPick: () -> Unit
     ) {
         Row(Modifier.fillMaxWidth()) {
             OutlinedTextField(
                 value = value,
-                onValueChange = onValueChange,
+                onValueChange = {},
+                readOnly = true,
                 label = { Text(label) },
                 modifier = Modifier.weight(1f)
             )

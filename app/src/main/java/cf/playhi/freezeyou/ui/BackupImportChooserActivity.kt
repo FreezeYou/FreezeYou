@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateMapOf
@@ -104,7 +103,6 @@ class BackupImportChooserActivity : FreezeYouBaseActivity() {
                                     onCheckedChange = { selectedItems[index] = it }
                                 )
                             }
-                            HorizontalDivider()
                         }
                     }
                     Row(Modifier.fillMaxWidth().padding(10.dp)) {

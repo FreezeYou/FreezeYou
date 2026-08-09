@@ -7,7 +7,6 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.HorizontalDivider
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.app.FreezeYouBaseActivity
 import cf.playhi.freezeyou.utils.ApplicationIconUtils.getApplicationIcon
@@ -102,7 +101,6 @@ class SelectTargetActivityActivity : FreezeYouBaseActivity() {
                                     )
                                     finish()
                                 }
-                                HorizontalDivider()
                             }
                         }
                     }

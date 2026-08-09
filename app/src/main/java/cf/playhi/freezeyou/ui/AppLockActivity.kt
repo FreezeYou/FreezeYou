@@ -13,11 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -74,14 +70,10 @@ class AppLockActivity : FreezeYouBaseActivity() {
                         )
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        IconButton(onClick = ::authenticate, modifier = Modifier.size(96.dp)) {
-                            Icon(
-                                imageVector = Icons.Default.Lock,
-                                contentDescription = stringResource(R.string.unlock),
-                                modifier = Modifier.size(64.dp)
-                            )
-                        }
-                        Button(onClick = ::authenticate, modifier = Modifier.padding(bottom = 20.dp)) {
+                        TextButton(
+                            onClick = ::authenticate,
+                            modifier = Modifier.padding(bottom = 20.dp)
+                        ) {
                             Text(stringResource(R.string.unlock))
                         }
                     }

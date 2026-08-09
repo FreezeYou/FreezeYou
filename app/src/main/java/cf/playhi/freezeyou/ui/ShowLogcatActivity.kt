@@ -5,7 +5,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,12 +34,17 @@ class ShowLogcatActivity : FreezeYouBaseActivity() {
         var logContent by mutableStateOf(getString(R.string.loading___))
         setContent {
             FreezeYouTheme {
-                OutlinedTextField(
-                    value = logContent,
-                    onValueChange = { logContent = it },
-                    modifier = Modifier.fillMaxSize().padding(10.dp),
-                    textStyle = androidx.compose.ui.text.TextStyle(fontSize = 12.sp)
-                )
+                val scrollState = rememberScrollState()
+                LaunchedEffect(logContent) {
+                    scrollState.scrollTo(scrollState.maxValue)
+                }
+                SelectionContainer {
+                    Text(
+                        text = logContent,
+                        modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(10.dp),
+                        fontSize = 12.sp
+                    )
+                }
             }
         }
 

@@ -1,6 +1,7 @@
 package cf.playhi.freezeyou.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,11 +40,15 @@ class FirstTimeSetupActivity : FreezeYouBaseActivity() {
                         factory = { context ->
                             FragmentContainerView(context).apply {
                                 id = R.id.first_time_setup_container
-                                if (supportFragmentManager.findFragmentById(id) == null) {
-                                    supportFragmentManager.beginTransaction()
-                                        .replace(id, FirstTimeSetupFragment())
-                                        .commitNow()
-                                }
+                                addOnAttachStateChangeListener(
+                                    object : View.OnAttachStateChangeListener {
+                                        override fun onViewAttachedToWindow(view: View) {
+                                            attachSetupFragment()
+                                        }
+
+                                        override fun onViewDetachedFromWindow(view: View) = Unit
+                                    }
+                                )
                             }
                         },
                         modifier = Modifier.fillMaxWidth().weight(1f)
@@ -54,5 +59,25 @@ class FirstTimeSetupActivity : FreezeYouBaseActivity() {
                 }
             }
         }
+    }
+
+    private fun attachSetupFragment() {
+        if (supportFragmentManager.isStateSaved) return
+        if (supportFragmentManager.findFragmentByTag(SETUP_FRAGMENT_TAG) != null ||
+            supportFragmentManager.findFragmentById(R.id.first_time_setup_container) != null
+        ) {
+            return
+        }
+        supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.first_time_setup_container,
+                FirstTimeSetupFragment(),
+                SETUP_FRAGMENT_TAG
+            )
+            .commit()
+    }
+
+    private companion object {
+        const val SETUP_FRAGMENT_TAG = "first-time-setup"
     }
 }

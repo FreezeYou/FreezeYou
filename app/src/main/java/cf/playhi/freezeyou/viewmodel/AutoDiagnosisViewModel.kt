@@ -216,7 +216,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                 generateHashMap(
                     getApplication<Application>().getString(R.string.noMRootPermission),
                     getApplication<Application>().getString(R.string.someFuncMayRestrict),
-                    "-3",
+                    "-4",
                     R.drawable.ic_done
                 )
             )
@@ -225,7 +225,7 @@ class AutoDiagnosisViewModel(application: Application) : AndroidViewModel(applic
                 generateHashMap(
                     getApplication<Application>().getString(R.string.noMRootPermission),
                     getApplication<Application>().getString(R.string.someFuncMayRestrict),
-                    "-3",
+                    "-4",
                     R.drawable.ic_warning
                 )
             )

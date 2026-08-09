@@ -43,14 +43,14 @@ class BackupMainActivity : FreezeYouBaseActivity() {
                     Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)
                 ) {
                     EqualButtons {
-                        ActionButton(getString(android.R.string.copy)) {
+                        ActionButton(stringResource(android.R.string.copy)) {
                             val copied = ClipboardUtils.copyToClipboard(applicationContext, content)
                             ToastUtils.showToast(
                                 this@BackupMainActivity,
                                 if (copied) R.string.success else R.string.failed
                             )
                         }
-                        ActionButton(getString(android.R.string.paste)) {
+                        ActionButton(stringResource(android.R.string.paste)) {
                             content = ClipboardUtils.getClipboardItemText(applicationContext).toString()
                         }
                     }
