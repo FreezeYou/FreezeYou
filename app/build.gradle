@@ -3,6 +3,12 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 android {
+    dependenciesInfo {
+        // Omit dependency metadata from distributed artifacts (see issue #239).
+        includeInApk = false
+        includeInBundle = false
+    }
+
     compileSdk = 37
     buildToolsVersion = '37.0.0'
     defaultConfig {
