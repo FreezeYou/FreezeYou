@@ -1,11 +1,21 @@
 # Android releases
 
-The [Android release workflow](workflows/release.yml) builds and attaches a signed
-APK whenever a GitHub release or prerelease is published. It checks out the release
-event's commit, builds `:app:assembleRelease`, signs and verifies the APK, and uploads:
+The [Android release workflow](workflows/release.yml) builds and attaches signed
+APKs whenever a GitHub release or prerelease is published. It checks out the release
+event's commit, builds `:app:assembleRelease`, signs and verifies the APKs, and uploads:
 
-- `app-release.apk`, preserving the existing release asset name.
-- `app-release.apk.sha256`, a SHA-256 checksum for the signed APK.
+| APK | Supported architectures |
+| --- | --- |
+| `app-universal-release.apk` | Both `arm64-v8a` and `x86_64`. |
+| `app-arm64-v8a-release.apk` | 64-bit ARM only. |
+| `app-x86_64-release.apk` | 64-bit x86 only. |
+| `app-release.apk` | An identical copy of the signed universal APK, preserving the existing download name. |
+
+Each APK has a matching `.apk.sha256` checksum file. All variants use the same
+application ID, version code, version name, and signing key. Users who are unsure
+which architecture to choose can download `app-release.apk` or the universal APK.
+The universal APK covers the two supported 64-bit architectures; MMKV 2.x does not
+support 32-bit `armeabi-v7a` or `x86`.
 
 Release titles, notes, and prerelease status remain under the maintainer's control.
 Normal pushes and pull requests continue to use the separate Android CI workflow.
@@ -14,12 +24,13 @@ Normal pushes and pull requests continue to use the separate Android CI workflow
 
 The workflow uses two jobs, each on a separate GitHub-hosted virtual machine:
 
-- **Build unsigned APK** checks out the release source and runs Gradle with a
+- **Build unsigned APKs** checks out the release source and runs Gradle with a
   read-only repository token. It has no release environment or signing secrets.
-  It uploads only the unsigned APK as an Actions artifact, retained for seven days.
-- **Sign and publish APK** uses the `release` environment. It downloads that exact
+  It uploads only the three unsigned APKs as one Actions artifact, retained for seven days.
+- **Sign and publish APKs** uses the `release` environment. It downloads that exact
   artifact by ID from the same workflow run and fails if its digest does not match.
-  It installs signing tools on its fresh runner, signs and verifies the APK, and
+  It installs signing tools on its fresh runner, requires all three expected APKs,
+  signs and verifies each one, copies the universal APK to `app-release.apk`, and
   uploads the release assets. It does not check out project code, run Gradle, or
   restore build caches.
 
@@ -92,10 +103,11 @@ with your repository's review and access rules.
 3. Create a release on GitHub using a tag at that commit (the existing naming style
    is `V11.5(151)`), write the notes, and choose prerelease if appropriate.
 4. Click **Publish release**. After the build, approve the `release` environment
-   deployment if required. The APK and checksum appear after the **Android
+   deployment if required. The APKs and checksums appear after the **Android
    release** run succeeds; they are not available immediately when publishing.
 
-The tag must include the workflow. The JDK version matches
+The tag must include the workflow and the ABI split configuration in `app/build.gradle`.
+The JDK version matches
 `gradle/gradle-daemon-jvm.properties`; the SDK platform and build-tools version in
 the workflow must be updated alongside the corresponding settings in `app/build.gradle`.
 
@@ -111,7 +123,7 @@ Re-running only the signing job reuses the successful build's artifact ID. If th
 artifact has expired after seven days, re-run all jobs or start a new manual run.
 Re-running all jobs creates a new artifact for that attempt.
 
-Successful retries replace only `app-release.apk` and `app-release.apk.sha256` via
+Successful retries replace the four APKs listed above and their checksum files via
 `gh release upload --clobber`. Other assets and release notes are retained.
 
 If immutable releases are enabled, GitHub does not allow assets to be added after

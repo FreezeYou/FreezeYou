@@ -52,6 +52,23 @@ android {
     productFlavors {
     }
 
+    splits {
+        abi {
+            enable true
+            reset()
+            // MMKV 2.x provides native libraries only for these 64-bit ABIs.
+            include 'arm64-v8a', 'x86_64'
+            universalApk true
+        }
+    }
+
+    packaging {
+        jniLibs {
+            // Universal APKs otherwise retain incomplete 32-bit library sets from dependencies.
+            excludes += ['lib/armeabi-v7a/**', 'lib/x86/**']
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
