@@ -28,6 +28,9 @@
 ## 翻译 Translation
 * 直接访问 [Crowdin(https://crwd.in/freezeyou)](https://crwd.in/freezeyou) 参与翻译即可，感谢您的贡献！:heart:
 
+## 发布 Release
+* [Automated Android releases: signing setup and publishing](.github/RELEASING.md)
+
 ## 联系我们 Contact Us
 * 邮箱: <contact@zidon.net> 或 <hiplayhi@playhi.net> 或 <qt_playhi@163.com>
 * Telegram Group: <https://t.me/FreezeYou>

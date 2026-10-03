@@ -1,0 +1,170 @@
+name: Android release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag of an existing GitHub release to build
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-release-${{ github.event.release.tag_name || inputs.tag }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+  # Keep these in sync with compileSdk and buildToolsVersion in app/build.gradle.
+  ANDROID_SDK_PLATFORM: android-37.0
+  ANDROID_BUILD_TOOLS: '37.0.0'
+
+jobs:
+  build:
+    name: Build unsigned APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    outputs:
+      artifact-id: ${{ steps.upload.outputs.artifact-id }}
+
+    steps:
+      - name: Check release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git check-ref-format "refs/tags/$RELEASE_TAG"
+          immutable=$(gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json isImmutable --jq '.isImmutable')
+          if [[ "$immutable" == "true" ]]; then
+            echo "::error::This release is immutable; assets must be attached to a draft before publishing. See .github/RELEASING.md."
+            exit 1
+          fi
+
+      - name: Checkout release source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          # Published releases use the event's commit; manual runs resolve only tags.
+          ref: ${{ github.event_name == 'release' && github.sha || format('refs/tags/{0}', inputs.tag) }}
+          persist-credentials: false
+
+      - name: Set up JDK 18
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
+        with:
+          distribution: temurin
+          java-version: '18'
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4
+        with:
+          packages: platform-tools platforms;${{ env.ANDROID_SDK_PLATFORM }} build-tools;${{ env.ANDROID_BUILD_TOOLS }}
+
+      - name: Build release APK
+        run: |
+          chmod +x ./gradlew
+          ./gradlew :app:assembleRelease --no-daemon --no-configuration-cache --stacktrace
+
+      - name: Pass unsigned APK to signing job
+        id: upload
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: unsigned-release-apk-${{ github.run_attempt }}
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+
+  sign-and-publish:
+    name: Sign and publish APK
+    needs: build
+    # A separate GitHub-hosted VM isolates signing from build processes and caches.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: release
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check artifact ID
+        env:
+          UNSIGNED_APK_ARTIFACT_ID: ${{ needs.build.outputs.artifact-id }}
+        run: |
+          if [[ ! "$UNSIGNED_APK_ARTIFACT_ID" =~ ^[0-9]+$ ]]; then
+            echo "::error::The build did not provide a single unsigned APK artifact ID."
+            exit 1
+          fi
+
+      # Download only this build's artifact. Do not check out or execute project code.
+      - name: Download unsigned APK
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          artifact-ids: ${{ needs.build.outputs.artifact-id }}
+          path: ${{ runner.temp }}/unsigned-apk
+          digest-mismatch: error
+
+      - name: Set up JDK 18 for signing
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
+        with:
+          distribution: temurin
+          java-version: '18'
+
+      - name: Install signing tools from Android SDK
+        # Use the SDK manager on the fresh runner, without restoring any build cache.
+        run: '"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "build-tools;$ANDROID_BUILD_TOOLS"'
+
+      - name: Sign and verify release APK
+        env:
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        run: |
+          for secret in RELEASE_KEYSTORE_BASE64 RELEASE_STORE_PASSWORD RELEASE_KEY_ALIAS RELEASE_KEY_PASSWORD; do
+            if [[ -z "${!secret}" ]]; then
+              echo "::error::Missing secret in the release environment: $secret. See .github/RELEASING.md."
+              exit 1
+            fi
+          done
+
+          build_tools="$ANDROID_HOME/build-tools/$ANDROID_BUILD_TOOLS"
+          unsigned_apk="$RUNNER_TEMP/unsigned-apk/app-release-unsigned.apk"
+          test -s "$unsigned_apk"
+          test ! -L "$unsigned_apk"
+          "$build_tools/zipalign" -c 4 "$unsigned_apk"
+
+          keystore="$RUNNER_TEMP/freezeyou-release.keystore"
+          trap 'rm -f "$keystore"' EXIT
+          umask 077
+          printf '%s' "$RELEASE_KEYSTORE_BASE64" | base64 --decode > "$keystore"
+
+          mkdir -p "$RUNNER_TEMP/release-assets"
+          "$build_tools/apksigner" sign \
+            --ks "$keystore" \
+            --ks-key-alias "$RELEASE_KEY_ALIAS" \
+            --ks-pass env:RELEASE_STORE_PASSWORD \
+            --key-pass env:RELEASE_KEY_PASSWORD \
+            --v4-signing-enabled false \
+            --out "$RUNNER_TEMP/release-assets/app-release.apk" \
+            "$unsigned_apk"
+          "$build_tools/apksigner" verify --verbose --print-certs "$RUNNER_TEMP/release-assets/app-release.apk"
+          cd "$RUNNER_TEMP/release-assets"
+          sha256sum app-release.apk > app-release.apk.sha256
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "$RELEASE_TAG" \
+            "$RUNNER_TEMP/release-assets/app-release.apk" \
+            "$RUNNER_TEMP/release-assets/app-release.apk.sha256" \
+            --repo "$GITHUB_REPOSITORY" \
+            --clobber
