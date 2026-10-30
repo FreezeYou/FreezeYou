@@ -1,6 +1,6 @@
 package cf.playhi.freezeyou
 
-import android.app.admin.DeviceAdminReceiver
+import android.app.admin.DeviceAdminReceiver as FrameworkDeviceAdminReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -8,7 +8,10 @@ import cf.playhi.freezeyou.utils.ToastUtils.showToast
 
 // Needs to be retained for compatibility
 // with old FreezeYou structures and settings.
-open class DeviceAdminReceiver : DeviceAdminReceiver() {
+// The framework type is aliased. An explicit import of the same simple name
+// makes DeviceAdminReceiver::class resolve to android.app.admin.DeviceAdminReceiver,
+// so DevicePolicyManager rejects the component as "No active admin".
+open class DeviceAdminReceiver : FrameworkDeviceAdminReceiver() {
     override fun onEnabled(context: Context, intent: Intent) {
 //        showToast(context, R.string.activated);
     }
