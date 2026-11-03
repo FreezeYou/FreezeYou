@@ -44,6 +44,8 @@ class MainAppListSimpleAdapter(
         when (val icon = item["Img"]) {
             is Bitmap -> holder.icon.setImageBitmap(icon)
             is Drawable -> holder.icon.setImageDrawable(icon)
+            // Empty one-key and category lists store android.R.drawable as an Int.
+            is Int -> holder.icon.setImageResource(icon)
             else -> holder.icon.setImageDrawable(null)
         }
         holder.name.text = item["Name"].toString()

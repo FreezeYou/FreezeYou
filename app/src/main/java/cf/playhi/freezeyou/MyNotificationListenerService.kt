@@ -20,17 +20,24 @@ class MyNotificationListenerService : NotificationListenerService() {
     override fun onListenerConnected() {
         super.onListenerConnected()
         mListenerConnected = true
-        statusBarNotifications = activeNotifications
+        snapshotActiveNotifications()
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        if (mListenerConnected) statusBarNotifications = activeNotifications
+        if (mListenerConnected) snapshotActiveNotifications()
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         super.onNotificationRemoved(sbn)
-        if (mListenerConnected) statusBarNotifications = activeNotifications
+        if (mListenerConnected) snapshotActiveNotifications()
+    }
+
+    // API 23–27 can return null. The explicit nullable type keeps Kotlin from
+    // inserting a null check that would kill the listener callback.
+    private fun snapshotActiveNotifications() {
+        val notifications: Array<StatusBarNotification>? = activeNotifications
+        statusBarNotifications = notifications ?: emptyArray()
     }
 
     override fun onBind(intent: Intent): IBinder? {
