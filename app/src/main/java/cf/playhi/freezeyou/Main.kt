@@ -105,7 +105,7 @@ class Main : FreezeYouBaseActivity() {
     private var updateFrozenStatusBroadcastReceiver: BroadcastReceiver? = null
     private var currentFilter = "all"
     private var currentSortRule = SORT_BY_DEFAULT
-    private var needProcessOnItemCheckedStateChanged = true
+    private var changingSelectionInBulk = false
     private var shortcutsCompleted = true
     private var shortcutsCount = 0
     private var isGridMode = false
@@ -676,28 +676,21 @@ class Main : FreezeYouBaseActivity() {
                 AbsListView.MultiChoiceModeListener {
                 override fun onItemCheckedStateChanged(
                     actionMode: ActionMode,
-                    i: Int,
-                    l: Long,
-                    b: Boolean
+                    position: Int,
+                    id: Long,
+                    checked: Boolean
                 ) {
                     val mainAdapter =
                         fragment.getAppListAdapter() as? MainAppListSimpleAdapter ?: return
-                    val pkgName =
-                        mainAdapter.getStoredArrayList().getOrNull(i)?.get("PackageName") as? String
-                    if (needProcessOnItemCheckedStateChanged) {
-                        if (pkgName != null && selectedPackages.contains(pkgName)) {
-                            selectedPackages.remove(pkgName)
-                        } else {
-                            if (pkgName != null) {
-                                selectedPackages.add(pkgName)
-                            }
-                        }
-                        needProcessOnItemCheckedStateChanged = false
-                        fragment.setItemChecked(i, true)
-                        actionMode.title = getString(R.string.selected_apps, selectedPackages.size)
-                        adapter?.notifyDataSetChanged()
+                    val pkgName = mainAdapter.getStoredArrayList().getOrNull(position)?.get("PackageName") as? String ?: return
+                    if (checked) {
+                        if (pkgName !in selectedPackages) selectedPackages.add(pkgName)
                     } else {
-                        needProcessOnItemCheckedStateChanged = true
+                        selectedPackages.remove(pkgName)
+                    }
+                    if (!changingSelectionInBulk) {
+                        actionMode.title = getString(R.string.selected_apps, selectedPackages.size)
+                        mainAdapter.notifyDataSetChanged()
                     }
                 }
 
@@ -851,38 +844,24 @@ class Main : FreezeYouBaseActivity() {
                         }
                     }
                     when (menuItem.itemId) {
-                        R.id.list_menu_selectAll -> {
-                            val adpt = fragment.getAppListAdapter() as? MainAppListSimpleAdapter
-                            if (adpt != null) {
-                                for (i in 0 until adpt.count) {
-                                    val pkg =
-                                        adpt.getStoredArrayList().getOrNull(i)?.get("PackageName") as? String
-                                    if (pkg != null && !selectedPackages.contains(pkg)) {
-                                        selectedPackages.add(pkg)
-                                    }
-                                }
-                                actionMode.title = getString(R.string.selected_apps, selectedPackages.size)
-                                adpt.notifyDataSetChanged()
+                        R.id.list_menu_selectAll, R.id.list_menu_selectUnselected -> {
+                            val current = fragment.getAppListAdapter() as? MainAppListSimpleAdapter ?: return true
+                            val previouslySelected = selectedPackages.toSet()
+                            val (checked, unchecked) = (0 until current.count).partition {
+                                (current.getItem(it)["PackageName"] as? String) in previouslySelected
                             }
-                            return true
-                        }
-                        R.id.list_menu_selectUnselected -> {
-                            val adapt = fragment.getAppListAdapter() as? MainAppListSimpleAdapter
-                            if (adapt != null) {
-                                for (i in 0 until adapt.count) {
-                                    val pkg =
-                                        adapt.getStoredArrayList().getOrNull(i)?.get("PackageName") as? String
-                                    if (pkg != null) {
-                                        if (selectedPackages.contains(pkg)) {
-                                            selectedPackages.remove(pkg)
-                                        } else {
-                                            selectedPackages.add(pkg)
-                                        }
-                                    }
+                            changingSelectionInBulk = true
+                            try {
+                                // Selecting first keeps ActionMode alive when inverting a partial selection.
+                                unchecked.forEach { fragment.setItemChecked(it, true) }
+                                if (menuItem.itemId == R.id.list_menu_selectUnselected) {
+                                    checked.forEach { fragment.setItemChecked(it, false) }
                                 }
-                                actionMode.title = getString(R.string.selected_apps, selectedPackages.size)
-                                adapt.notifyDataSetChanged()
+                            } finally {
+                                changingSelectionInBulk = false
                             }
+                            actionMode.title = getString(R.string.selected_apps, selectedPackages.size)
+                            current.notifyDataSetChanged()
                             return true
                         }
                         R.id.list_menu_addToOneKeyFreezeList -> {

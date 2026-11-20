@@ -110,10 +110,14 @@ object BackupUtils {
                             INTEGER -> intTitles[key]
                             else -> listTitles[key]
                         } ?: continue
+                        val value = record.opt(key)
                         val valid = when (section) {
-                            BOOLEAN -> record.opt(key) is Boolean
-                            INTEGER -> record.opt(key) is Int
-                            else -> record.opt(key) is String
+                            BOOLEAN -> value is Boolean
+                            INTEGER -> value is Int
+                            STRING -> value is String &&
+                                    (key != DefaultMultiProcessMMKVStorageStringKeys.selectFUFMode.name ||
+                                            value in context.resources.getStringArray(R.array.selectFUFModeSelectionValues))
+                            else -> value is String
                         }
                         if (valid) items.add(RestoreItem(section, key, context.getString(title), record))
                         else invalid++
