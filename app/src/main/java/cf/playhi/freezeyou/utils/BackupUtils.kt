@@ -2,8 +2,7 @@ package cf.playhi.freezeyou.utils
 
 import android.app.Activity
 import android.content.Context
-import android.content.SharedPreferences
-import android.database.sqlite.SQLiteDatabase
+import android.content.ContentValues
 import androidx.preference.PreferenceManager
 import cf.playhi.freezeyou.R
 import cf.playhi.freezeyou.storage.key.DefaultMultiProcessMMKVStorageBooleanKeys
@@ -25,372 +24,202 @@ object BackupUtils {
         return appPreferences.getString(key, defValue)
     }
 
-    private fun importStringSharedPreference(
-        context: Context, activity: Activity?, jsonObject: JSONObject,
-        sp: SharedPreferences, key: String
-    ) {
-        sp.edit().putString(key, jsonObject.optString(key, "")).apply()
-        if (activity != null) {
-            SettingsUtils.checkPreferenceData(context, activity, sp, key)
+    internal data class RestoreItem(val section: String, val key: String, val title: String, val record: JSONObject) {
+        val sectionLabel: Int get() = when (section) {
+            TIME, TRIGGER -> R.string.scheduledTasks
+            CATEGORY -> R.string.myCustomization
+            ONE_KEY -> R.string.app_list_label
+            URI_ALLOW, INSTALL_ALLOW -> R.string.allow_list_label
+            else -> R.string.moreSettings
         }
     }
 
-    private fun importBooleanSharedPreference(
-        context: Context, activity: Activity?, jsonObject: JSONObject,
-        sp: SharedPreferences, key: String
-    ) {
-        sp.edit().putBoolean(key, jsonObject.optBoolean(key, false)).apply()
-        if (activity != null) {
-            SettingsUtils.checkPreferenceData(context, activity, sp, key)
-        }
-    }
+    internal data class RestorePlan(val items: List<RestoreItem>, val invalidCount: Int)
 
-    private fun importIntSharedPreference(
-        context: Context, activity: Activity?, jsonObject: JSONObject,
-        sp: SharedPreferences, key: String
-    ) {
-        sp.edit().putInt(key, jsonObject.optInt(key, 0)).apply()
-        if (activity != null) {
-            SettingsUtils.checkPreferenceData(context, activity, sp, key)
-        }
-    }
+    private const val TIME_TABLE = "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+    private const val TRIGGER_TABLE = "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+    private const val CATEGORY_TABLE = "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
 
-    private fun importUserTimeTasksJSONArray(context: Context, jsonObject: JSONObject): Boolean {
-        val userTimeScheduledTasksJSONArray = jsonObject.optJSONArray("userTimeScheduledTasks")
-            ?: return false
-        val db = context.openOrCreateDatabase("scheduledTasks", Context.MODE_PRIVATE, null)
-        db.execSQL(
-            "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
-        )
-        var isCompletelySuccess = true
-        var oneUserTimeScheduledTaskJSONObject: JSONObject?
-        for (i in 0 until userTimeScheduledTasksJSONArray.length()) {
-            try {
-                oneUserTimeScheduledTaskJSONObject = userTimeScheduledTasksJSONArray.optJSONObject(i)
-                if (oneUserTimeScheduledTaskJSONObject == null) {
-                    isCompletelySuccess = false
-                    continue
-                }
-                if (oneUserTimeScheduledTaskJSONObject.optBoolean("doNotImport", false)) {
-                    continue
-                }
-                db.execSQL(
-                    "insert into tasks(_id,hour,minutes,repeat,enabled,label,task,column1,column2) values(null,"
-                            + oneUserTimeScheduledTaskJSONObject.getInt("hour") + ","
-                            + oneUserTimeScheduledTaskJSONObject.getInt("minutes") + ","
-                            + "'" + oneUserTimeScheduledTaskJSONObject.getString("repeat") + "'" + ","
-                            + oneUserTimeScheduledTaskJSONObject.getInt("enabled") + ","
-                            + "'" + oneUserTimeScheduledTaskJSONObject.getString("label") + "'" + ","
-                            + "'" + oneUserTimeScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
-                )
-            } catch (e: JSONException) {
-                isCompletelySuccess = false
-            }
-        }
-        db.close()
-        TasksUtils.checkTimeTasks(context)
-        return isCompletelySuccess
-    }
+    private const val TIME = "userTimeScheduledTasks"
+    private const val TRIGGER = "userTriggerScheduledTasks"
+    private const val CATEGORY = "userDefinedCategories"
+    private const val URI_ALLOW = "uriAutoAllowPkgs_allows"
+    private const val INSTALL_ALLOW = "installPkgs_autoAllowPkgs_allows"
+    private const val BOOLEAN = "generalSettings_boolean"
+    private const val STRING = "generalSettings_string"
+    private const val INTEGER = "generalSettings_int"
+    private const val ONE_KEY = "oneKeyList"
 
-    private fun importUserTriggerTasksJSONArray(context: Context, jsonObject: JSONObject): Boolean {
-        val userTriggerScheduledTasksJSONArray = jsonObject.optJSONArray("userTriggerScheduledTasks")
-            ?: return false
-        val db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null)
-        db.execSQL(
-            "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
-        )
-        var oneUserTriggerScheduledTaskJSONObject: JSONObject?
-        var isCompletelySuccess = true
-        for (i in 0 until userTriggerScheduledTasksJSONArray.length()) {
-            try {
-                oneUserTriggerScheduledTaskJSONObject =
-                    userTriggerScheduledTasksJSONArray.optJSONObject(i)
-                if (oneUserTriggerScheduledTaskJSONObject == null) {
-                    isCompletelySuccess = false
-                    continue
-                }
-                if (oneUserTriggerScheduledTaskJSONObject.optBoolean("doNotImport", false)) {
-                    continue
-                }
-                db.execSQL(
-                    "insert into tasks(_id,tg,tgextra,enabled,label,task,column1,column2) VALUES (null,"
-                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tg") + "'" + ","
-                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("tgextra") + "'" + ","
-                            + oneUserTriggerScheduledTaskJSONObject.getInt("enabled") + ","
-                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("label") + "'" + ","
-                            + "'" + oneUserTriggerScheduledTaskJSONObject.getString("task") + "'" + ",'','')"
-                )
-            } catch (e: JSONException) {
-                isCompletelySuccess = false
-            }
-        }
-        db.close()
-        TasksUtils.checkTriggerTasks(context)
-        return isCompletelySuccess
-    }
+    // These settings require explicit user interaction on the receiving device.
+    private val excludedBooleans = setOf("firstIconEnabled", "secondIconEnabled", "thirdIconEnabled", "enableAuthentication")
+    private val booleanTitles = DefaultSharedPreferenceStorageBooleanKeys.values().associate { it.name to it.titleTextStringId() } +
+            DefaultMultiProcessMMKVStorageBooleanKeys.values().associate { it.name to it.titleTextStringId() }
+    private val stringTitles = DefaultSharedPreferenceStorageStringKeys.values().associate { it.name to it.titleTextStringId() } +
+            DefaultMultiProcessMMKVStorageStringKeys.values().associate { it.name to it.titleTextStringId() }
+    private val intTitles = mapOf("onClickFunctionStatus" to R.string.onClickFunctionStatus, "sortMethodStatus" to R.string.sortMethodStatus)
+    private val listTitles = mapOf("okff" to R.string.oneKeyFreezeList, "okuf" to R.string.oneKeyUFList, "foq" to R.string.freezeOnceQuitList)
+    private val listKeys = mapOf("okff" to R.string.sAutoFreezeApplicationList, "okuf" to R.string.sOneKeyUFApplicationList, "foq" to R.string.sFreezeOnceQuit)
 
-    private fun importUserDefinedCategoriesJSONArray(
-        context: Context,
-        jsonObject: JSONObject
-    ): Boolean {
-        val userDefinedCategoriesJSONArray = jsonObject.optJSONArray("userDefinedCategories")
-            ?: return false
-        val db = context.openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null)
-        db.execSQL(
-            "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
-        )
-        val existedLabels = ArrayList<String>()
-        val cursor = db.query("categories", arrayOf("label"), null, null, null, null, null)
-        if (cursor.moveToFirst()) {
-            for (i in 0 until cursor.count) {
-                existedLabels.add(cursor.getString(cursor.getColumnIndexOrThrow("label")))
-                cursor.moveToNext()
-            }
-        }
-        cursor.close()
-        var oneUserDefinedCategoriesJSONObject: JSONObject?
-        var isCompletelySuccess = true
-        for (i in 0 until userDefinedCategoriesJSONArray.length()) {
-            try {
-                oneUserDefinedCategoriesJSONObject =
-                    userDefinedCategoriesJSONArray.optJSONObject(i)
-                if (oneUserDefinedCategoriesJSONObject == null) {
-                    isCompletelySuccess = false
-                    continue
-                }
-                if (oneUserDefinedCategoriesJSONObject.optBoolean("doNotImport", false)) {
-                    continue
-                }
-                val label = oneUserDefinedCategoriesJSONObject.getString("label")
-                if (existedLabels.contains(label)) {
-                    db.execSQL(
-                        "update categories set packages = '"
-                                + oneUserDefinedCategoriesJSONObject.getString("packages")
-                                + "' where label = '" + label + "';"
-                    )
-                } else {
-                    db.execSQL(
-                        "insert into categories(_id,label,packages) VALUES ( "
-                                + null + ",'"
-                                + label + "','"
-                                + oneUserDefinedCategoriesJSONObject.getString("packages") + "');"
-                    )
-                }
-            } catch (e: JSONException) {
-                isCompletelySuccess = false
-            }
-        }
-        db.close()
-        return isCompletelySuccess
-    }
-
-    private fun importOneKeyLists(
-        context: Context,
-        jsonObject: JSONObject,
-        appPreferences: AppPreferences
-    ): Boolean {
-        val array = jsonObject.optJSONArray("oneKeyList") ?: return false
-        val oneKeyListJSONObject = array.optJSONObject(0) ?: return false
-        importOneKeyListsFromProcessedJSONObject(
-            context, oneKeyListJSONObject, appPreferences
-        )
-        return true
-    }
-
-    private fun importOneKeyListsFromProcessedJSONObject(
-        context: Context, oneKeyListJSONObject: JSONObject, appPreferences: AppPreferences
-    ) {
-        val it = oneKeyListJSONObject.keys()
-        var s: String
-        while (it.hasNext()) {
-            s = it.next()
-            when (s) {
-                "okff" -> appPreferences.put(
-                    context.getString(R.string.sAutoFreezeApplicationList),
-                    oneKeyListJSONObject.optString("okff")
-                )
-                "okuf" -> appPreferences.put(
-                    context.getString(R.string.sOneKeyUFApplicationList),
-                    oneKeyListJSONObject.optString("okuf")
-                )
-                "foq" -> appPreferences.put(
-                    context.getString(R.string.sFreezeOnceQuit),
-                    oneKeyListJSONObject.optString("foq")
-                )
-                else -> {}
-            }
-        }
-    }
-
-    private fun importIntSharedPreferences(
-        context: Context, activity: Activity?,
-        jsonObject: JSONObject, defSP: SharedPreferences
-    ): Boolean {
-        // Int 开始
-        val array = jsonObject.optJSONArray("generalSettings_int") ?: return false
-        val generalSettingsIntJSONObject = array.optJSONObject(0) ?: return false
-        importIntSharedPreferencesFromProcessedJSONObject(
-            context, activity, generalSettingsIntJSONObject, defSP
-        )
-        // Int 结束
-        return true
-    }
-
-    private fun importIntSharedPreferencesFromProcessedJSONObject(
-        context: Context, activity: Activity?,
-        generalSettingsIntJSONObject: JSONObject, defSP: SharedPreferences
-    ) {
-        val it = generalSettingsIntJSONObject.keys()
-        var s: String
-        while (it.hasNext()) {
-            s = it.next()
-            when (s) {
-                "onClickFunctionStatus", "sortMethodStatus" -> importIntSharedPreference(
-                    context, activity, generalSettingsIntJSONObject, defSP, s
-                )
-                else -> {}
-            }
-        }
-    }
-
-    private fun importStringSharedPreferences(
-        context: Context, activity: Activity?,
-        jsonObject: JSONObject, defSP: SharedPreferences
-    ): Boolean {
-        // String 开始
-        val array = jsonObject.optJSONArray("generalSettings_string") ?: return false
-        val generalSettingsStringJSONObject = array.optJSONObject(0) ?: return false
-        importStringSharedPreferencesFromProcessedJSONObject(
-            context, activity, generalSettingsStringJSONObject, defSP
-        )
-        // String 结束
-        return true
-    }
-
-    private fun importStringSharedPreferencesFromProcessedJSONObject(
-        context: Context, activity: Activity?, generalSettingsStringJSONObject: JSONObject,
-        defSP: SharedPreferences
-    ) {
-        val it = generalSettingsStringJSONObject.keys()
-        var s: String?
-        while (it.hasNext()) {
-            s = it.next() ?: continue
-            var key: cf.playhi.freezeyou.storage.key.AbstractKey<String?>? = null
-            try {
-                key = DefaultSharedPreferenceStorageStringKeys.valueOf(s)
-            } catch (ignored: IllegalArgumentException) {
-            }
-            if (key == null) {
-                try {
-                    key = DefaultMultiProcessMMKVStorageStringKeys.valueOf(s)
-                } catch (ignored: IllegalArgumentException) {
-                }
-            }
-            if (key == null) continue
-            importStringSharedPreference(
-                context, activity, generalSettingsStringJSONObject, defSP, s
-            )
-        }
-    }
-
-    private fun importBooleanSharedPreferences(
-        context: Context, activity: Activity?,
-        jsonObject: JSONObject, defSP: SharedPreferences
-    ): Boolean {
-        // boolean 开始
-        val array = jsonObject.optJSONArray("generalSettings_boolean") ?: return false
-        val generalSettingsBooleanJSONObject = array.optJSONObject(0) ?: return false
-        importBooleanSharedPreferencesFromProcessedJSONObject(
-            context, activity, generalSettingsBooleanJSONObject, defSP
-        )
-        // boolean 结束
-        return true
-    }
-
-    private fun importBooleanSharedPreferencesFromProcessedJSONObject(
-        context: Context, activity: Activity?,
-        generalSettingsBooleanJSONObject: JSONObject, defSP: SharedPreferences
-    ) {
-        val it = generalSettingsBooleanJSONObject.keys()
-        var s: String?
-        while (it.hasNext()) {
-            s = it.next() ?: continue
-            if (DefaultSharedPreferenceStorageBooleanKeys.firstIconEnabled.name == s || DefaultSharedPreferenceStorageBooleanKeys.secondIconEnabled.name == s || DefaultSharedPreferenceStorageBooleanKeys.thirdIconEnabled.name == s || DefaultMultiProcessMMKVStorageBooleanKeys.enableAuthentication.name == s) {
+    internal fun readRestorePlan(context: Context, data: JSONObject): RestorePlan {
+        val items = mutableListOf<RestoreItem>()
+        var invalid = 0
+        for (section in data.keys()) {
+            if (section !in setOf(BOOLEAN, STRING, INTEGER, ONE_KEY, TIME, TRIGGER, CATEGORY, URI_ALLOW, INSTALL_ALLOW)) continue
+            val records = data.optJSONArray(section)
+            if (records == null) {
+                invalid++
                 continue
             }
-            var key: cf.playhi.freezeyou.storage.key.AbstractKey<Boolean>? = null
-            try {
-                key = DefaultSharedPreferenceStorageBooleanKeys.valueOf(s)
-            } catch (ignored: IllegalArgumentException) {
-            }
-            if (key == null) {
-                try {
-                    key = DefaultMultiProcessMMKVStorageBooleanKeys.valueOf(s)
-                } catch (ignored: IllegalArgumentException) {
+            val indexed = section == TIME || section == TRIGGER || section == CATEGORY
+            val count = if (indexed) records.length() else 1
+            for (index in 0 until count) {
+                val record = records.optJSONObject(index)
+                if (record == null) {
+                    invalid++
+                    continue
+                }
+                if (indexed && record.optBoolean("doNotImport")) continue
+                when (section) {
+                    TIME, TRIGGER, CATEGORY -> {
+                        val values = recordValues(section, record)
+                        if (values == null) {
+                            invalid++
+                            continue
+                        }
+                        val label = values.getAsString("label")
+                        val title = if (section == CATEGORY) {
+                            try {
+                                String(android.util.Base64.decode(label, android.util.Base64.DEFAULT), Charsets.UTF_8)
+                            } catch (_: IllegalArgumentException) {
+                                invalid++
+                                continue
+                            }
+                        } else label
+                        items.add(RestoreItem(section, index.toString(), title, record))
+                    }
+                    URI_ALLOW, INSTALL_ALLOW -> {
+                        if (record.opt("lists") is String) {
+                            val title = if (section == URI_ALLOW) R.string.uriAutoAllowList else R.string.ipaAutoAllowList
+                            items.add(RestoreItem(section, section, context.getString(title), record))
+                        } else invalid++
+                    }
+                    else -> for (key in record.keys()) {
+                        val title = when (section) {
+                            BOOLEAN -> booleanTitles[key]?.takeUnless { key in excludedBooleans }
+                            STRING -> stringTitles[key]
+                            INTEGER -> intTitles[key]
+                            else -> listTitles[key]
+                        } ?: continue
+                        val valid = when (section) {
+                            BOOLEAN -> record.opt(key) is Boolean
+                            INTEGER -> record.opt(key) is Int
+                            else -> record.opt(key) is String
+                        }
+                        if (valid) items.add(RestoreItem(section, key, context.getString(title), record))
+                        else invalid++
+                    }
                 }
             }
-            if (key == null) continue
-            importBooleanSharedPreference(
-                context, activity, generalSettingsBooleanJSONObject, defSP, s
-            )
         }
+        return RestorePlan(items, invalid)
     }
 
-    private fun importUriAutoAllowPkgsJSONArray(jsonObject: JSONObject, ap: AppPreferences): Boolean {
-        val array = jsonObject.optJSONArray("uriAutoAllowPkgs_allows") ?: return false
-        val jObj = array.optJSONObject(0) ?: return false
-        return ap.put("uriAutoAllowPkgs_allows", jObj.optString("lists"))
+    private fun recordValues(section: String, record: JSONObject): ContentValues? {
+        val strings = when (section) {
+            CATEGORY -> listOf("label", "packages")
+            TIME -> listOf("label", "task", "repeat")
+            else -> listOf("label", "task", "tg", "tgextra")
+        }
+        val values = ContentValues()
+        for (key in strings) {
+            val value = record.opt(key) as? String ?: return null
+            values.put(key, value)
+        }
+        if (section != CATEGORY) {
+            values.put("enabled", record.opt("enabled") as? Int ?: return null)
+            values.put("column1", "")
+            values.put("column2", "")
+        }
+        if (section == TIME) {
+            values.put("hour", (record.opt("hour") as? Int)?.takeIf { it in 0..23 } ?: return null)
+            values.put("minutes", (record.opt("minutes") as? Int)?.takeIf { it in 0..59 } ?: return null)
+        }
+        return values
     }
 
-    private fun importInstallPkgsAutoAllowPkgsJSONArray(
-        jsonObject: JSONObject,
-        ap: AppPreferences
-    ): Boolean {
-        val array = jsonObject.optJSONArray("installPkgs_autoAllowPkgs_allows") ?: return false
-        val jObj = array.optJSONObject(0) ?: return false
-        return ap.put("installPkgs_autoAllowPkgs_allows", jObj.optString("lists"))
-    }
-
-    @JvmStatic
-    fun importContents(context: Context, activity: Activity?, jsonObject: JSONObject) {
-        val defSP = PreferenceManager.getDefaultSharedPreferences(context)
-        val appPreferences = AppPreferences(context)
-        val jsonKeysIterator = jsonObject.keys()
-        while (jsonKeysIterator.hasNext()) {
-            when (jsonKeysIterator.next()) {
-                "generalSettings_boolean" -> importBooleanSharedPreferences(
-                    context,
-                    activity,
-                    jsonObject,
-                    defSP
-                )
-                "generalSettings_string" -> importStringSharedPreferences(
-                    context,
-                    activity,
-                    jsonObject,
-                    defSP
-                )
-                "generalSettings_int" -> importIntSharedPreferences(
-                    context,
-                    activity,
-                    jsonObject,
-                    defSP
-                )
-                "oneKeyList" -> importOneKeyLists(context, jsonObject, appPreferences)
-                "userTimeScheduledTasks" -> importUserTimeTasksJSONArray(context, jsonObject)
-                "userTriggerScheduledTasks" -> importUserTriggerTasksJSONArray(context, jsonObject)
-                "userDefinedCategories" -> importUserDefinedCategoriesJSONArray(context, jsonObject)
-                "uriAutoAllowPkgs_allows" -> importUriAutoAllowPkgsJSONArray(
-                    jsonObject,
-                    appPreferences
-                )
-                "installPkgs_autoAllowPkgs_allows" -> importInstallPkgsAutoAllowPkgsJSONArray(
-                    jsonObject,
-                    appPreferences
-                )
-                else -> {}
+    internal fun restoreSelected(activity: Activity, items: List<RestoreItem>): Int {
+        val context = activity.applicationContext
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val tray = AppPreferences(context)
+        var applied = 0
+        for ((section, group) in items.groupBy { it.section }) {
+            try {
+                when (section) {
+                    TIME, TRIGGER, CATEGORY -> {
+                        applied += restoreRecords(context, section, group)
+                        if (section == TIME) TasksUtils.checkTimeTasks(context)
+                        if (section == TRIGGER) TasksUtils.checkTriggerTasks(context)
+                    }
+                    ONE_KEY, URI_ALLOW, INSTALL_ALLOW -> for (item in group) {
+                        val success = if (section == ONE_KEY) {
+                            tray.put(context.getString(listKeys.getValue(item.key)), item.record.getString(item.key))
+                        } else tray.put(section, item.record.getString("lists"))
+                        if (success) applied++
+                    }
+                    else -> {
+                        val edit = prefs.edit()
+                        for (item in group) {
+                            when (section) {
+                                BOOLEAN -> edit.putBoolean(item.key, item.record.getBoolean(item.key))
+                                STRING -> edit.putString(item.key, item.record.getString(item.key))
+                                INTEGER -> edit.putInt(item.key, item.record.getInt(item.key))
+                            }
+                        }
+                        if (edit.commit()) {
+                            for (item in group) {
+                                try {
+                                    SettingsUtils.checkPreferenceData(context, activity, prefs, item.key)
+                                    applied++
+                                } catch (e: RuntimeException) {
+                                    android.util.Log.w("BackupRestore", "Could not apply preference", e)
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (e: RuntimeException) {
+                android.util.Log.w("BackupRestore", "Could not finish restoring $section", e)
             }
         }
+        return applied
+    }
+
+    private fun restoreRecords(context: Context, section: String, items: List<RestoreItem>): Int {
+        val database = when (section) {
+            TIME -> "scheduledTasks"
+            TRIGGER -> "scheduledTriggerTasks"
+            else -> "userDefinedCategories"
+        }
+        context.openOrCreateDatabase(database, Context.MODE_PRIVATE, null).use { db ->
+            val table = if (section == CATEGORY) "categories" else "tasks"
+            db.execSQL(when (section) {
+                TIME -> TIME_TABLE
+                TRIGGER -> TRIGGER_TABLE
+                else -> CATEGORY_TABLE
+            })
+            db.beginTransaction()
+            try {
+                for (item in items) {
+                    val values = requireNotNull(recordValues(section, item.record))
+                    if (section == CATEGORY && db.update(table, values, "label = ?", arrayOf(values.getAsString("label"))) > 0) continue
+                    db.insertOrThrow(table, null, values)
+                }
+                db.setTransactionSuccessful()
+            } finally {
+                db.endTransaction()
+            }
+        }
+        return items.size
     }
 
     @JvmStatic
@@ -511,7 +340,7 @@ object BackupUtils {
         val userTimeScheduledTasksJSONArray = JSONArray()
         val db = context.openOrCreateDatabase("scheduledTasks", Context.MODE_PRIVATE, null)
         db.execSQL(
-            "create table if not exists tasks(_id integer primary key autoincrement,hour integer(2),minutes integer(2),repeat varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+            TIME_TABLE
         )
         val cursor = db.query(
             "tasks", null, null, null,
@@ -559,7 +388,7 @@ object BackupUtils {
         val userTriggerScheduledTasksJSONArray = JSONArray()
         val db = context.openOrCreateDatabase("scheduledTriggerTasks", Context.MODE_PRIVATE, null)
         db.execSQL(
-            "create table if not exists tasks(_id integer primary key autoincrement,tg varchar,tgextra varchar,enabled integer(1),label varchar,task varchar,column1 varchar,column2 varchar)"
+            TRIGGER_TABLE
         )
         val cursor = db.query(
             "tasks", null, null, null,
@@ -603,7 +432,7 @@ object BackupUtils {
         val userDefinedCategoriesJSONArray = JSONArray()
         val db = context.openOrCreateDatabase("userDefinedCategories", Context.MODE_PRIVATE, null)
         db.execSQL(
-            "create table if not exists categories(_id integer primary key autoincrement,label varchar,packages varchar)"
+            CATEGORY_TABLE
         )
         val cursor = db.query(
             "categories", arrayOf("label", "packages"),

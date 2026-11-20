@@ -12,9 +12,9 @@ import android.widget.ListAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import cf.playhi.freezeyou.adapter.MainAppListSimpleAdapter
-import cf.playhi.freezeyou.ui.compose.FreezeYouTheme
 
 class MainActivityAppListFragment : Fragment() {
+    private var bottomInset = 0
     private var mUseGridMode = false
     private var mOnItemClickListener: AdapterView.OnItemClickListener? = null
     private var mOnItemLongClickListener: AdapterView.OnItemLongClickListener? = null
@@ -58,12 +58,19 @@ class MainActivityAppListFragment : Fragment() {
         view.adapter = mAppListAdapter
         view.choiceMode = AbsListView.CHOICE_MODE_MULTIPLE_MODAL
         view.isFastScrollEnabled = true
+        view.clipToPadding = false
+        view.setPadding(0, 0, 0, bottomInset)
     }
 
     override fun onDestroyView() {
         mAppListGridView = null
         mAppListListView = null
         super.onDestroyView()
+    }
+
+    fun setBottomInset(inset: Int) {
+        bottomInset = inset
+        (mAppListGridView ?: mAppListListView)?.setPadding(0, 0, 0, inset)
     }
 
     fun setUseGridMode(b: Boolean) {

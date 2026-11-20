@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_matching_apps">没有匹配的应用</string>
+    <string name="search_apps">搜索应用</string>
+    <string name="app_actions">操作</string>
+    <string name="actions_with_mode">操作\n%1$s</string>
+    <string name="on_tap">点按时</string>
+    <string name="on_tap_value">点按时：%1$s</string>
+    <string name="settings_and_help">设置与帮助</string>
+    <string name="filter_apps">筛选</string>
+    <string name="app_unfrozen">未冻结</string>
+    <string name="app_accessible_label">%1$s，%2$s，%3$s</string>
+    <string name="restore_from_backup">从备份恢复</string>
+    <string name="restore_result">已恢复 %1$d 项，已跳过 %2$d 项。</string>
+    <string name="backup_invalid">无法读取备份。请检查备份文本后重试。</string>
+    <string name="backup_no_items">此备份没有可恢复的项目。</string>
+    <string name="backup_text">备份文本</string>
+    <string name="create_backup">创建备份</string>
+    <string name="review_restore">选择要恢复的项目</string>
+    <string name="app_list_label">应用列表</string>
+    <string name="allow_list_label">允许名单</string>
+    <string name="create_shortcut">创建快捷方式</string>
+    <string name="choose_application">选择应用</string>
+    <string name="change_icon">更改快捷方式图标</string>
+    <string name="advanced_options">显示高级选项</string>
+    <string name="hide_advanced">收起高级选项</string>
+    <string name="run_now">立即运行</string>
+    <string name="shortcut_target">目标：%1$s</string>
+    <string name="list_membership">所属列表</string>
+    <string name="select_apps">选择应用以批量操作</string>
+    <string name="run_one_key">执行一键操作</string>
+    <string name="selected_apps">已选 %1$d 项</string>
+    <plurals name="restore_items">
+        <item quantity="one">恢复 %1$d 项</item>
+        <item quantity="other">恢复 %1$d 项</item>
+    </plurals>
+    <!-- Indexed by the saved app-list tap mode. -->
+    <string-array name="app_tap_cues">
+        <item>点按选择操作</item>
+        <item>点按切换冻结</item>
+        <item>点按冻结</item>
+        <item>点按解冻</item>
+        <item>点按加入冻结列表</item>
+        <item>点按移出冻结列表</item>
+        <item>点按加入解冻列表</item>
+        <item>点按移出解冻列表</item>
+        <item>点按加入离开冻结</item>
+        <item>点按移出离开冻结</item>
+        <item>点按解冻并运行</item>
+        <item>点按切换并运行</item>
+        <item>点按创建快捷方式</item>
+    </string-array>
+</resources>

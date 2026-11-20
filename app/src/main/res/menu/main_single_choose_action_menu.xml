@@ -2,9 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/main_sca_menu_createDisEnableShortCut"
-        android:title="@string/createDisEnableShortCut" />
-    <item
         android:id="@+id/main_sca_menu_disableAEnable"
         android:title="@string/disableAEnable" />
 
@@ -12,7 +9,10 @@
         android:id="@+id/main_sca_menu_forceStop"
         android:title="@string/forceStop" />
 
-    <item android:title="@string/addToRemoveFrom">
+    <item
+        android:id="@+id/main_sca_menu_appDetail"
+        android:title="@string/appDetail" />
+    <item android:title="@string/list_membership">
         <menu>
             <item
                 android:id="@+id/main_sca_userDefined"
@@ -41,11 +41,15 @@
     </item>
 
     <item
+        android:id="@+id/main_sca_menu_createDisEnableShortCut"
+        android:title="@string/createDisEnableShortCut" />
+    <item
         android:id="@+id/main_sca_menu_copyPkgName"
         android:title="@string/copyPkgName" />
     <item
-        android:id="@+id/main_sca_menu_appDetail"
-        android:title="@string/appDetail" />
+        android:id="@+id/main_sca_menu_select"
+        android:title="@string/select_apps" />
+
     <item
         android:id="@+id/main_sca_menu_removeFromTheList"
         android:title="@string/remove" />

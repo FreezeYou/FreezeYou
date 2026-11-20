@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_matching_apps">沒有符合的應用程式</string>
+    <string name="search_apps">搜尋應用程式</string>
+    <string name="app_actions">操作</string>
+    <string name="actions_with_mode">操作\n%1$s</string>
+    <string name="on_tap">點按時</string>
+    <string name="on_tap_value">點按時：%1$s</string>
+    <string name="settings_and_help">設定與說明</string>
+    <string name="filter_apps">篩選</string>
+    <string name="app_unfrozen">未凍結</string>
+    <string name="app_accessible_label">%1$s，%2$s，%3$s</string>
+    <string name="restore_from_backup">從備份還原</string>
+    <string name="restore_result">已還原 %1$d 項，已略過 %2$d 項。</string>
+    <string name="backup_invalid">無法讀取備份。請檢查備份文字後再試一次。</string>
+    <string name="backup_no_items">此備份沒有可還原的項目。</string>
+    <string name="backup_text">備份文字</string>
+    <string name="create_backup">建立備份</string>
+    <string name="review_restore">選擇要還原的項目</string>
+    <string name="app_list_label">應用程式清單</string>
+    <string name="allow_list_label">允許清單</string>
+    <string name="create_shortcut">建立捷徑</string>
+    <string name="choose_application">選擇應用程式</string>
+    <string name="change_icon">更改捷徑圖示</string>
+    <string name="advanced_options">顯示進階選項</string>
+    <string name="hide_advanced">收起進階選項</string>
+    <string name="run_now">立即執行</string>
+    <string name="shortcut_target">目標：%1$s</string>
+    <string name="list_membership">所屬清單</string>
+    <string name="select_apps">選擇應用程式以批次操作</string>
+    <string name="run_one_key">執行一鍵操作</string>
+    <string name="selected_apps">已選 %1$d 項</string>
+    <plurals name="restore_items">
+        <item quantity="one">還原 %1$d 項</item>
+        <item quantity="other">還原 %1$d 項</item>
+    </plurals>
+    <!-- Indexed by the saved app-list tap mode. -->
+    <string-array name="app_tap_cues">
+        <item>點按選擇操作</item>
+        <item>點按切換凍結</item>
+        <item>點按凍結</item>
+        <item>點按解凍</item>
+        <item>點按加入凍結清單</item>
+        <item>點按移出凍結清單</item>
+        <item>點按加入解凍清單</item>
+        <item>點按移出解凍清單</item>
+        <item>點按加入離開凍結</item>
+        <item>點按移出離開凍結</item>
+        <item>點按解凍並執行</item>
+        <item>點按切換並執行</item>
+        <item>點按建立捷徑</item>
+    </string-array>
+</resources>

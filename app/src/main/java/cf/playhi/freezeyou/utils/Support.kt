@@ -66,9 +66,10 @@ object Support {
         activity: Activity,
         view: View,
         pkgName: String,
-        name: String
+        name: String,
+        onSelect: (() -> Unit)? = null
     ) {
-        showChooseActionPopupMenu(context, activity, view, pkgName, name, false, null)
+        generateChooseActionPopupMenu(context, activity, view, pkgName, name, false, null, onSelect).show()
     }
 
     @JvmStatic
@@ -99,10 +100,12 @@ object Support {
         pkgName: String,
         name: String,
         canRemoveItem: Boolean,
-        folderPkgListSp: SharedPreferences?
+        folderPkgListSp: SharedPreferences?,
+        onSelect: (() -> Unit)? = null
     ): PopupMenu {
         val popup = PopupMenu(context, view)
         popup.inflate(R.menu.main_single_choose_action_menu)
+        popup.menu.findItem(R.id.main_sca_menu_select).isVisible = onSelect != null
         val vmUserDefinedSubMenu = popup.menu.findItem(R.id.main_sca_userDefined).subMenu
         vmUserDefinedSubMenu!!.clear()
         vmUserDefinedSubMenu.add(
@@ -270,6 +273,7 @@ object Support {
                 }
             }
             when (item.itemId) {
+                R.id.main_sca_menu_select -> onSelect?.invoke()
                 R.id.main_sca_menu_forceStop -> if (context.getString(R.string.notAvailable) != name) {
                     context.startActivity(
                         Intent(context, ForceStop::class.java).putExtra(

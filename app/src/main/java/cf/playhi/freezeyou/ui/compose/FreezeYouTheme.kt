@@ -31,7 +31,7 @@ private fun Context.themeColor(@AttrRes attribute: Int, fallback: Color): Color 
 }
 
 @Composable
-fun FreezeYouTheme(content: @Composable () -> Unit) {
+fun FreezeYouTheme(readableControls: Boolean = false, content: @Composable () -> Unit) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     val dark = configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
@@ -47,10 +47,19 @@ fun FreezeYouTheme(content: @Composable () -> Unit) {
         android.R.attr.textColorPrimary,
         if (dark) Color.White else Color.Black
     )
-    val onPrimary = if (primary.luminance() > 0.5f) Color.Black else Color.White
+    // Controls used as text and outlines need contrast against the user's chosen background.
+    val controlColor = if (readableControls) {
+        listOf(primary, accent, onSurface).firstOrNull {
+            val a = it.luminance()
+            val b = background.luminance()
+            (maxOf(a, b) + 0.05f) / (minOf(a, b) + 0.05f) >= 4.5f
+        } ?: onSurface
+    } else primary
+    val onPrimary = if (controlColor.luminance() > (if (readableControls) 0.179f else 0.5f)) Color.Black else Color.White
+    val useDarkScheme = if (readableControls) background.luminance() < 0.179f else dark
     val colorScheme = when {
-        dark -> darkColorScheme(
-            primary = primary,
+        useDarkScheme -> darkColorScheme(
+            primary = controlColor,
             onPrimary = onPrimary,
             secondary = accent,
             background = background,
@@ -59,7 +68,7 @@ fun FreezeYouTheme(content: @Composable () -> Unit) {
             onSurface = onSurface
         )
         else -> lightColorScheme(
-            primary = primary,
+            primary = controlColor,
             onPrimary = onPrimary,
             secondary = accent,
             background = background,

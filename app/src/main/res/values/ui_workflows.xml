@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_matching_apps">No matching apps</string>
+    <string name="search_apps">Search apps</string>
+    <string name="app_actions">Actions</string>
+    <string name="actions_with_mode">Actions\n%1$s</string>
+    <string name="on_tap">On tap</string>
+    <string name="on_tap_value">On tap: %1$s</string>
+    <string name="settings_and_help">Settings and help</string>
+    <string name="filter_apps">Filter</string>
+    <string name="app_unfrozen">Unfrozen</string>
+    <string name="app_accessible_label">%1$s, %2$s, %3$s</string>
+    <string name="restore_from_backup">Restore from backup</string>
+    <string name="restore_result">Restored: %1$d. Skipped: %2$d.</string>
+    <string name="backup_invalid">This backup could not be read. Check the backup text and try again.</string>
+    <string name="backup_no_items">This backup contains no items to restore.</string>
+    <string name="backup_text">Backup text</string>
+    <string name="create_backup">Create backup</string>
+    <string name="review_restore">Review items to restore</string>
+    <string name="app_list_label">App list</string>
+    <string name="allow_list_label">Allowlist</string>
+    <string name="create_shortcut">Create shortcut</string>
+    <string name="choose_application">Choose application</string>
+    <string name="change_icon">Change shortcut icon</string>
+    <string name="advanced_options">Show advanced options</string>
+    <string name="hide_advanced">Hide advanced options</string>
+    <string name="run_now">Run now</string>
+    <string name="shortcut_target">Target: %1$s</string>
+    <string name="list_membership">List membership</string>
+    <string name="select_apps">Select apps</string>
+    <string name="run_one_key">Run one-key action</string>
+    <string name="selected_apps">%1$d selected</string>
+    <plurals name="restore_items">
+        <item quantity="one">Restore %1$d item</item>
+        <item quantity="other">Restore %1$d items</item>
+    </plurals>
+    <!-- Indexed by the saved app-list tap mode. -->
+    <string-array name="app_tap_cues">
+        <item>Tap to choose</item>
+        <item>Tap toggles freeze</item>
+        <item>Tap freezes</item>
+        <item>Tap unfreezes</item>
+        <item>Tap adds to freeze list</item>
+        <item>Tap removes from freeze list</item>
+        <item>Tap adds to unfreeze list</item>
+        <item>Tap removes from unfreeze list</item>
+        <item>Tap adds to freeze-on-exit</item>
+        <item>Tap removes from freeze-on-exit</item>
+        <item>Tap unfreezes and runs</item>
+        <item>Tap toggles and runs</item>
+        <item>Tap creates a shortcut</item>
+    </string-array>
+</resources>

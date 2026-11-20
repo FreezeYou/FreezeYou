@@ -10,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.BaseAdapter
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import cf.playhi.freezeyou.R
+import cf.playhi.freezeyou.utils.ThemeUtils
 
 class MainAppListSimpleAdapter(
     private val context: Context,
@@ -50,7 +52,17 @@ class MainAppListSimpleAdapter(
         }
         holder.name.text = item["Name"].toString()
         holder.packageName?.text = item["PackageName"].toString()
-        holder.status?.setImageResource(item["isFrozen"] as? Int ?: 0)
+        val status = item["isFrozen"] as? Int
+        val frozen = status == ThemeUtils.getThemeDot(context)
+        holder.status.apply {
+            visibility = if (frozen) View.VISIBLE else View.GONE
+            if (frozen) setImageResource(requireNotNull(status))
+        }
+        root.contentDescription = if (status == null) holder.name.text else context.getString(
+            R.string.app_accessible_label, holder.name.text,
+            context.getString(if (frozen) R.string.frozen else R.string.app_unfrozen),
+            item["PackageName"]
+        )
         root.setBackgroundResource(
             if (item["PackageName"] in checkedPackages) {
                 R.color.translucentGreyBackground
@@ -72,7 +84,7 @@ class MainAppListSimpleAdapter(
             )
         }
         val icon = ImageView(context).apply {
-            contentDescription = "Icon"
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             scaleType = ImageView.ScaleType.FIT_CENTER
         }
         root.addView(icon, LinearLayout.LayoutParams(dp(40), dp(40)).apply {
@@ -80,8 +92,8 @@ class MainAppListSimpleAdapter(
         })
 
         val labels = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
-        val name = marqueeTextView(18f).apply { setTypeface(typeface, Typeface.BOLD) }
-        val packageName = marqueeTextView(12f)
+        val name = labelView(18f).apply { setTypeface(typeface, Typeface.BOLD) }
+        val packageName = labelView(12f)
         labels.addView(name, LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
@@ -93,7 +105,7 @@ class MainAppListSimpleAdapter(
         root.addView(labels, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
 
         val status = ImageView(context).apply {
-            contentDescription = context.getString(R.string.status)
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             scaleType = ImageView.ScaleType.FIT_CENTER
         }
         root.addView(status, LinearLayout.LayoutParams(dp(10), dp(10)).apply {
@@ -115,25 +127,30 @@ class MainAppListSimpleAdapter(
             )
         }
         val icon = ImageView(context).apply {
-            contentDescription = context.getString(R.string.appDetail)
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             scaleType = ImageView.ScaleType.FIT_CENTER
         }
-        val name = marqueeTextView(12f).apply { gravity = Gravity.CENTER_HORIZONTAL }
-        root.addView(icon, LinearLayout.LayoutParams(iconSize, iconSize))
+        val name = labelView(12f).apply { gravity = Gravity.CENTER_HORIZONTAL }
+        val iconFrame = FrameLayout(context)
+        iconFrame.addView(icon, FrameLayout.LayoutParams(iconSize, iconSize))
+        val status = ImageView(context).apply {
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        }
+        iconFrame.addView(status, FrameLayout.LayoutParams(dp(10), dp(10), Gravity.BOTTOM or Gravity.END))
+        root.addView(iconFrame, LinearLayout.LayoutParams(iconSize, iconSize))
         root.addView(name, LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         ))
-        root.tag = Holder(icon, name, null, null)
+        root.tag = Holder(icon, name, null, status)
         return root
     }
 
-    private fun marqueeTextView(textSizeSp: Float) = TextView(context).apply {
+    private fun labelView(textSizeSp: Float) = TextView(context).apply {
+        importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         textSize = textSizeSp
-        isSingleLine = true
-        ellipsize = TextUtils.TruncateAt.MARQUEE
-        marqueeRepeatLimit = -1
-        isSelected = true
+        maxLines = 2
+        ellipsize = TextUtils.TruncateAt.END
     }
 
     private fun dp(value: Int): Int = (value * density + 0.5f).toInt()
@@ -142,6 +159,6 @@ class MainAppListSimpleAdapter(
         val icon: ImageView,
         val name: TextView,
         val packageName: TextView?,
-        val status: ImageView?
+        val status: ImageView
     )
 }

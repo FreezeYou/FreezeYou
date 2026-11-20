@@ -19,15 +19,14 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.view.*
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
 import android.widget.*
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatImageButton
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.PopupMenu
 import androidx.compose.foundation.background
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,7 +34,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -43,9 +41,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -99,7 +97,9 @@ import java.util.*
 // with old FreezeYou structures and settings.
 class Main : FreezeYouBaseActivity() {
     private val selectedPackages = ArrayList<String>()
-    private var appListViewOnClickMode = APPListViewOnClickMode_chooseAction
+    private var appListViewOnClickMode by mutableIntStateOf(APPListViewOnClickMode_chooseAction)
+    private var selectingApps by mutableStateOf(false)
+    private var listBottomInset = 0
     private var customThemeDisabledDot = R.drawable.shapedotblue
     private var customThemeEnabledDot = R.drawable.shapedotblack
     private var updateFrozenStatusBroadcastReceiver: BroadcastReceiver? = null
@@ -114,6 +114,7 @@ class Main : FreezeYouBaseActivity() {
     private var mainLoadingMessage by mutableIntStateOf(R.string.loadingPkgList)
     private var showMainCaution by mutableStateOf(true)
     private var searchQuery by mutableStateOf("")
+    private var noSearchMatches by mutableStateOf(false)
     private var mainFragmentReady by mutableStateOf(false)
     private var masterAppList = ArrayList<MutableMap<String, Any?>>()
     private var mainFragmentContainer: androidx.fragment.app.FragmentContainerView? = null
@@ -124,6 +125,7 @@ class Main : FreezeYouBaseActivity() {
         searchQuery = savedInstanceState?.getString(STATE_SEARCH_QUERY).orEmpty()
         mMainActivityAppListFragment = supportFragmentManager
             .findFragmentByTag(MAIN_LIST_FRAGMENT_TAG) as? MainActivityAppListFragment
+        installSearchBar()
         setContent { FreezeYouTheme { MainScreen() } }
         try {
             manageCrashLog()
@@ -214,34 +216,39 @@ class Main : FreezeYouBaseActivity() {
         return onMainOptionsItemSelected(item)
     }
 
+    private fun installSearchBar() {
+        val bar = supportActionBar ?: return
+        val search = SearchView(bar.themedContext).apply {
+            setIconifiedByDefault(false)
+            queryHint = getString(R.string.search_apps)
+            maxWidth = Int.MAX_VALUE
+            setQuery(searchQuery, false)
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(query: String): Boolean {
+                    searchQuery = query
+                    applySearchFilter()
+                    return true
+                }
+
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    clearFocus()
+                    return true
+                }
+            })
+            clearFocus()
+        }
+        bar.setDisplayShowTitleEnabled(false)
+        bar.setDisplayShowHomeEnabled(false)
+        bar.setDisplayShowCustomEnabled(true)
+        bar.setCustomView(search, ActionBar.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        ))
+    }
+
     @androidx.compose.runtime.Composable
     private fun MainScreen() {
         Box(Modifier.fillMaxSize()) {
             Column(Modifier.fillMaxSize()) {
-                BasicTextField(
-                    value = searchQuery,
-                    onValueChange = {
-                        searchQuery = it
-                        applySearchFilter()
-                    },
-                    singleLine = true,
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.onBackground
-                    ),
-                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 14.dp),
-                    decorationBox = { innerTextField ->
-                        Box {
-                            if (searchQuery.isEmpty()) {
-                                Text(
-                                    stringResource(R.string.search),
-                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                                )
-                            }
-                            innerTextField()
-                        }
-                    }
-                )
                 val fragmentIsReady = mainFragmentReady
                 AndroidView(
                     factory = { context ->
@@ -287,22 +294,43 @@ class Main : FreezeYouBaseActivity() {
                     }
                 }
             }
-            AndroidView(
-                factory = { context ->
-                    AppCompatImageButton(context).apply {
-                        setImageResource(R.drawable.ic_action_add)
-                        setBackgroundResource(R.drawable.oval_ripple)
-                        contentDescription = getString(R.string.add)
-                        elevation = 6.dp.value * resources.displayMetrics.density
-                        setOnLongClickListener {
-                            alpha = if (alpha == 0.2f) 1f else 0.2f
-                            true
+            if (!mainLoading && noSearchMatches) {
+                Text(stringResource(R.string.no_matching_apps), Modifier.align(Alignment.Center))
+            }
+            if (!selectingApps) {
+                val mode = tapOptions[appListViewOnClickMode]
+                val label = if (mode == null || appListViewOnClickMode == APPListViewOnClickMode_chooseAction) {
+                    stringResource(R.string.app_actions)
+                } else {
+                    val cue = resources.getStringArray(R.array.app_tap_cues)[appListViewOnClickMode]
+                    stringResource(R.string.actions_with_mode, cue)
+                }
+                AndroidView(
+                    factory = { context ->
+                        AppCompatButton(context).apply {
+                            isAllCaps = false
+                            val palette = context.obtainStyledAttributes(intArrayOf(androidx.appcompat.R.attr.colorPrimary))
+                            val color = try { palette.getColor(0, currentTextColor) } finally { palette.recycle() }
+                            backgroundTintList = android.content.res.ColorStateList.valueOf(color)
+                            setTextColor(if (androidx.core.graphics.ColorUtils.calculateLuminance(color) > 0.179)
+                                android.graphics.Color.BLACK else android.graphics.Color.WHITE)
+                            maxLines = 3
+                            maxWidth = (190 * resources.displayMetrics.density).toInt()
+                            ellipsize = android.text.TextUtils.TruncateAt.END
+                            setOnClickListener(::showMainPopupMenu)
+                            setOnLongClickListener {
+                                alpha = if (alpha == 0.2f) 1f else 0.2f
+                                true
+                            }
                         }
-                        setOnClickListener { anchor -> showMainPopupMenu(anchor) }
-                    }
-                },
-                modifier = Modifier.align(Alignment.BottomEnd).padding(25.dp).size(55.dp)
-            )
+                    },
+                    update = { it.text = label },
+                    modifier = Modifier.align(Alignment.BottomEnd).onSizeChanged {
+                        listBottomInset = it.height
+                        mMainActivityAppListFragment?.setBottomInset(it.height)
+                    }.padding(horizontal = 12.dp, vertical = 6.dp)
+                )
+            }
         }
     }
 
@@ -331,33 +359,16 @@ class Main : FreezeYouBaseActivity() {
             inflate(R.menu.menu)
             onPrepareMainOptionsMenu(menu)
             setOnMenuItemClickListener(::onMainOptionsItemSelected)
-            setOnDismissListener { animateMainMenuButton(anchor, 45f, 0f) }
         }
-        animateMainMenuButton(anchor, 0f, 45f)
         popupMenu.show()
-    }
-
-    private fun animateMainMenuButton(view: View, from: Float, to: Float) {
-        view.startAnimation(
-            RotateAnimation(
-                from,
-                to,
-                Animation.RELATIVE_TO_SELF,
-                0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f
-            ).apply {
-                duration = 300
-                repeatMode = RotateAnimation.REVERSE
-                fillAfter = true
-            }
-        )
     }
 
     private fun applySearchFilter() {
         val adapter =
             mMainActivityAppListFragment?.getAppListAdapter() as? MainAppListSimpleAdapter ?: return
-        adapter.replaceAllInFormerArrayList(filteredMasterAppList())
+        val filtered = filteredMasterAppList()
+        noSearchMatches = searchQuery.isNotEmpty() && filtered.isEmpty()
+        adapter.replaceAllInFormerArrayList(filtered)
     }
 
     private fun filteredMasterAppList(): ArrayList<MutableMap<String, Any?>> {
@@ -651,9 +662,11 @@ class Main : FreezeYouBaseActivity() {
             val fragment = mMainActivityAppListFragment ?: return@runOnUiThread
             // Clone so search/filter mutations cannot clear the master AppList.
             masterAppList = ArrayList(AppList)
+            val filtered = filteredMasterAppList()
+            noSearchMatches = searchQuery.isNotEmpty() && filtered.isEmpty()
             val adapter = fragment.setAppListAdapter(
                 this@Main,
-                filteredMasterAppList(),
+                filtered,
                 selectedPackages
             )
             mainLoadingMessage = R.string.finish
@@ -681,7 +694,7 @@ class Main : FreezeYouBaseActivity() {
                         }
                         needProcessOnItemCheckedStateChanged = false
                         fragment.setItemChecked(i, true)
-                        actionMode.title = selectedPackages.size.toString()
+                        actionMode.title = getString(R.string.selected_apps, selectedPackages.size)
                         adapter?.notifyDataSetChanged()
                     } else {
                         needProcessOnItemCheckedStateChanged = true
@@ -689,6 +702,9 @@ class Main : FreezeYouBaseActivity() {
                 }
 
                 override fun onCreateActionMode(actionMode: ActionMode, menu: Menu): Boolean {
+                    selectingApps = true
+                    supportActionBar?.customView?.apply { clearFocus(); visibility = View.GONE }
+                    mMainActivityAppListFragment?.setBottomInset(0)
                     this@Main.menuInflater.inflate(R.menu.multichoicemenu, menu)
                     return true
                 }
@@ -845,7 +861,7 @@ class Main : FreezeYouBaseActivity() {
                                         selectedPackages.add(pkg)
                                     }
                                 }
-                                actionMode.title = selectedPackages.size.toString()
+                                actionMode.title = getString(R.string.selected_apps, selectedPackages.size)
                                 adpt.notifyDataSetChanged()
                             }
                             return true
@@ -864,7 +880,7 @@ class Main : FreezeYouBaseActivity() {
                                         }
                                     }
                                 }
-                                actionMode.title = selectedPackages.size.toString()
+                                actionMode.title = getString(R.string.selected_apps, selectedPackages.size)
                                 adapt.notifyDataSetChanged()
                             }
                             return true
@@ -957,6 +973,9 @@ class Main : FreezeYouBaseActivity() {
                 }
 
                 override fun onDestroyActionMode(actionMode: ActionMode) {
+                    selectingApps = false
+                    supportActionBar?.customView?.visibility = View.VISIBLE
+                    mMainActivityAppListFragment?.setBottomInset(listBottomInset)
                     selectedPackages.clear()
                     adapter?.notifyDataSetChanged()
                 }
@@ -972,7 +991,9 @@ class Main : FreezeYouBaseActivity() {
             if (name != null && pkgName != null && getString(R.string.notAvailable) != name) {
                 when (appListViewOnClickMode) {
                     APPListViewOnClickMode_chooseAction -> {
-                        showChooseActionPopupMenu(this@Main, this@Main, view, pkgName, name)
+                        showChooseActionPopupMenu(this@Main, this@Main, view, pkgName, name) {
+                            mMainActivityAppListFragment?.setItemChecked(i, true)
+                        }
                     }
                     APPListViewOnClickMode_autoUFOrFreeze -> {
                         if (realGetFrozenStatus(this@Main, pkgName, null)) {
@@ -1148,6 +1169,10 @@ class Main : FreezeYouBaseActivity() {
     }
 
     private fun onPrepareMainOptionsMenu(menu: Menu) {
+        tapOptions[appListViewOnClickMode]?.let { (id, label) ->
+            menu.findItem(id)?.isChecked = true
+            menu.findItem(R.id.menu_tap_behavior)?.title = getString(R.string.on_tap_value, getString(label))
+        }
         try {
             val vmUserDefinedSubMenu = menu.findItem(R.id.menu_vM_userDefined).subMenu ?: return
             val createUserDefinedShortcutSubMenu =
@@ -1178,6 +1203,13 @@ class Main : FreezeYouBaseActivity() {
     }
 
     private fun onMainOptionsItemSelected(item: MenuItem): Boolean {
+        val tapOption = tapOptions.entries.find { it.value.first == item.itemId }
+        if (tapOption != null) {
+            appListViewOnClickMode = tapOption.key
+            saveOnClickFunctionStatus(appListViewOnClickMode)
+            invalidateOptionsMenu()
+            return true
+        }
         when (item.groupId) {
             R.id.menu_vM_userDefined_menuGroup -> {
                 return when (item.itemId) {
@@ -1473,71 +1505,6 @@ class Main : FreezeYouBaseActivity() {
                 )
                 return true
             }
-            R.id.menu_onClickFunc_autoUFOrFreeze -> {
-                appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreeze
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
-            R.id.menu_onClickFunc_freezeImmediately -> {
-                appListViewOnClickMode = APPListViewOnClickMode_freezeImmediately
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
-            R.id.menu_onClickFunc_UFImmediately -> {
-                appListViewOnClickMode = APPListViewOnClickMode_UFImmediately
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
-            R.id.menu_onClickFunc_chooseAction -> {
-                appListViewOnClickMode = APPListViewOnClickMode_chooseAction
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
-            R.id.menu_onClickFunc_addToFOQList -> {
-                appListViewOnClickMode = APPListViewOnClickMode_addToFOQList
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
-            R.id.menu_onClickFunc_addToOFList -> {
-                appListViewOnClickMode = APPListViewOnClickMode_addToOFList
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
-            R.id.menu_onClickFunc_addToOUFList -> {
-                appListViewOnClickMode = APPListViewOnClickMode_addToOUFList
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
-            R.id.menu_onClickFunc_removeFromFOQList -> {
-                appListViewOnClickMode = APPListViewOnClickMode_removeFromFOQList
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
-            R.id.menu_onClickFunc_removeFromOFList -> {
-                appListViewOnClickMode = APPListViewOnClickMode_removeFromOFList
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
-            R.id.menu_onClickFunc_removeFromOUFList -> {
-                appListViewOnClickMode = APPListViewOnClickMode_removeFromOUFList
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
-            R.id.menu_onClickFunc_UFAndRun -> {
-                appListViewOnClickMode = APPListViewOnClickMode_UFAndRun
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
-            R.id.menu_onClickFunc_autoUFOrFreezeAndRun -> {
-                appListViewOnClickMode = APPListViewOnClickMode_autoUFOrFreezeAndRun
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
-            R.id.menu_onClickFunc_createFUFShortcut -> {
-                appListViewOnClickMode = APPListViewOnClickMode_createFUFShortcut
-                saveOnClickFunctionStatus(appListViewOnClickMode)
-                return true
-            }
             R.id.menu_sB_default -> {
                 Thread { generateList(currentFilter, SORT_BY_DEFAULT) }.start()
                 saveSortMethodStatus(SORT_BY_DEFAULT)
@@ -1762,6 +1729,7 @@ class Main : FreezeYouBaseActivity() {
         mMainActivityAppListFragment = mMainActivityAppListFragment ?: MainActivityAppListFragment().also {
             it.setUseGridMode(isGridMode)
         }
+        mMainActivityAppListFragment?.setBottomInset(listBottomInset)
         mainFragmentReady = true
         val initThread = Thread {
             var mode = intent.getStringExtra("pkgName") // 快捷方式提供
@@ -1958,13 +1926,14 @@ class Main : FreezeYouBaseActivity() {
         val count = adapter.count
         for (i in 0 until count) {
             val hm = adapter.getStoredArrayList().getOrNull(i) ?: continue
+            if (hm["isFrozen"] == null) continue
             val pkgName = hm["PackageName"] as? String ?: continue
             val applicationInfo = getApplicationInfoFromPkgName(pkgName, this)
 
             //检查是否已卸载
             if (applicationInfo == null) {
                 hm["Name"] = getString(R.string.uninstalled)
-                break
+                continue
             }
 
             //更新冻结状态信息
@@ -2247,6 +2216,22 @@ class Main : FreezeYouBaseActivity() {
         private const val APPListViewOnClickMode_UFAndRun = 10
         private const val APPListViewOnClickMode_autoUFOrFreezeAndRun = 11
         private const val APPListViewOnClickMode_createFUFShortcut = 12
+        private val tapOptions = mapOf(
+            APPListViewOnClickMode_autoUFOrFreeze to (R.id.menu_onClickFunc_autoUFOrFreeze to R.string.autoUFOrFreeze),
+            APPListViewOnClickMode_freezeImmediately to (R.id.menu_onClickFunc_freezeImmediately to R.string.freezeImmediately),
+            APPListViewOnClickMode_UFImmediately to (R.id.menu_onClickFunc_UFImmediately to R.string.UFImmediately),
+            APPListViewOnClickMode_chooseAction to (R.id.menu_onClickFunc_chooseAction to R.string.chooseAction),
+            APPListViewOnClickMode_addToFOQList to (R.id.menu_onClickFunc_addToFOQList to R.string.addToFreezeOnceQuit),
+            APPListViewOnClickMode_addToOFList to (R.id.menu_onClickFunc_addToOFList to R.string.addToOneKeyList),
+            APPListViewOnClickMode_addToOUFList to (R.id.menu_onClickFunc_addToOUFList to R.string.addToOneKeyUFList),
+            APPListViewOnClickMode_removeFromFOQList to (R.id.menu_onClickFunc_removeFromFOQList to R.string.removeFromFreezeOnceQuit),
+            APPListViewOnClickMode_removeFromOFList to (R.id.menu_onClickFunc_removeFromOFList to R.string.removeFromOneKeyList),
+            APPListViewOnClickMode_removeFromOUFList to (R.id.menu_onClickFunc_removeFromOUFList to R.string.removeFromOneKeyUFList),
+            APPListViewOnClickMode_UFAndRun to (R.id.menu_onClickFunc_UFAndRun to R.string.UFAndRun),
+            APPListViewOnClickMode_autoUFOrFreezeAndRun to (R.id.menu_onClickFunc_autoUFOrFreezeAndRun to R.string.autoUFOrFreezeAndRun),
+            APPListViewOnClickMode_createFUFShortcut to (R.id.menu_onClickFunc_createFUFShortcut to R.string.createDisEnableShortCut)
+        )
+
         private const val SORT_BY_DEFAULT = 0
         private const val SORT_BY_NO = 1
         private const val SORT_BY_UF_ASCENDING = 2
